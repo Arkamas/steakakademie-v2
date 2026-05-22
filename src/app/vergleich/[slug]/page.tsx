@@ -7,6 +7,9 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ProductCard from '@/components/affiliate/ProductCard';
+import MDXProductCard from '@/components/mdx/MDXProductCard';
+import MDXComparisonTable from '@/components/mdx/MDXComparisonTable';
+import MDXBuyingGuideBlock from '@/components/mdx/MDXBuyingGuideBlock';
 import { getProductsByCategory } from '@/lib/products';
 import { Calendar, ChevronRight, RotateCcw, FlaskConical } from 'lucide-react';
 
@@ -73,6 +76,9 @@ const mdxComponents = {
     <strong className="font-bold text-text-primary" {...props}>{children}</strong>
   ),
   hr: () => <hr className="border-border-subtle my-10" />,
+  MDXProductCard,
+  MDXComparisonTable,
+  MDXBuyingGuideBlock,
   a: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
     const isAffiliate = href?.startsWith('/go/');
     return (

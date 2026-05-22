@@ -27,7 +27,10 @@ export type ProductCategory =
   | 'fleisch'
   | 'gewuerze'
   | 'sous-vide'
-  | 'buecher';
+  | 'buecher'
+  | 'oberhitzegrill'
+  | 'dry-ager'
+  | 'kuechenmaschine';
 
 export interface Product {
   id: string;

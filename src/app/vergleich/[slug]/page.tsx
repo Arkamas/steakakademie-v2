@@ -36,6 +36,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [{ url: vergleich.image, alt: vergleich.imageAlt }],
       type: 'article',
     },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [vergleich.image],
+    },
   };
 }
 
@@ -99,7 +105,16 @@ export default function VergleichPage({ params }: Props) {
   if (!vergleich) notFound();
 
   const MDXContent = useMDXComponent(vergleich.body.code);
-  const thermometer = getProductsByCategory('thermometer');
+
+  // Derive product category from slug — avoids hardcoded thermometer on all Vergleich pages
+  const slugCategoryMap: Record<string, Parameters<typeof getProductsByCategory>[0]> = {
+    'premium-fleischthermometer': 'thermometer',
+    'oberhitzegrill-vergleich': 'oberhitzegrill',
+    'dry-aging-kuehlschrank-vergleich': 'dry-ager',
+    'kuechenmaschine-vergleich': 'kuechenmaschine',
+  };
+  const pageCategory = slugCategoryMap[params.slug] ?? 'thermometer';
+  const sidebarProducts = getProductsByCategory(pageCategory);
 
   const schema = {
     '@context': 'https://schema.org',
@@ -131,11 +146,21 @@ export default function VergleichPage({ params }: Props) {
     })),
   } : null;
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Start', item: 'https://steakakademie.de' },
+      { '@type': 'ListItem', position: 2, name: 'Vergleiche', item: 'https://steakakademie.de/kategorie/vergleich' },
+      { '@type': 'ListItem', position: 3, name: vergleich.title.split(':')[0], item: `https://steakakademie.de${vergleich.url}` },
+    ],
+  };
+
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: vergleich.title,
-    itemListElement: thermometer.slice(0, 5).map((p, i) => ({
+    itemListElement: sidebarProducts.slice(0, 5).map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       name: p.name,
@@ -159,6 +184,7 @@ export default function VergleichPage({ params }: Props) {
       <Header />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
 
       <main>
@@ -239,7 +265,7 @@ export default function VergleichPage({ params }: Props) {
             </article>
 
             <aside className="space-y-6">
-              {thermometer.slice(0, 3).map((product) => (
+              {sidebarProducts.slice(0, 3).map((product) => (
                 <ProductCard key={product.id} product={product} variant="sidebar" />
               ))}
 

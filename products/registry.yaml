@@ -188,7 +188,7 @@
 - id: ankarsrum-assistent-original
   name: "Ankarsrum Assistent Original 6230"
   brand: "Ankarsrum"
-  category: zubehoer
+  category: kuechenmaschine
   price: 749
   affiliateUrl: "https://www.otto.de/p/ankarsrum-kuechenmaschine-1500-w-handgefertigt-mit-liebe-zum-detail-rezeptbuch-S0A9H09Q/"
   provider: other
@@ -298,3 +298,217 @@
   badge: "Premium-Pick"
   lastChecked: "2026-05-22"
   recommended: true
+
+# ── OBERHITZEGRILLS ───────────────────────────────────────────────────────────
+# Beefer-Modelle: direkt über beefer.de verlinkt (kein öffentl. Affiliate-Programm bekannt)
+# Amazon-ASINs: vor Deploy auf amazon.de verifizieren — Suche nach Produktname → ASIN aus dp/BXXXXXXXXX entnehmen
+# Otto.de listet Beefer ONE Pro ab €829 — alternative Affiliate-Quelle prüfen
+
+- id: beefer-pro-ii
+  name: "Beefer Pro II"
+  brand: "Beefer"
+  category: oberhitzegrill
+  price: 799
+  affiliateUrl: "https://beefer.de/shop/beefer-pro-ii/"
+  provider: other
+  # amazonAsin: TBD — auf amazon.de suchen: "Beefer Pro II"
+  rating: 4.5
+  ratingCount: 420
+  description: "Der neue Standard für Oberhitzegrills 2026 — 800°C keramischer Brenner, Ein-Hand-Höhenverstellung"
+  pros:
+    - "800°C Oberhitze — identische Maillard-Reaktion wie im Steakhouse"
+    - "Ein-Hand-Höhenverstellung für präzise Abstandskontrolle"
+    - "Edelstahl komplett — spülmaschinenfeste Einzelteile"
+  cons:
+    - "Gasgerät (Propan) — Flaschenwechsel erforderlich"
+    - "Nur Oberhitze — kein klassisches Grillprinzip"
+  badge: "Testsieger 2026"
+  lastChecked: "2026-05-22"
+  recommended: true
+
+- id: beefer-xl-ii
+  name: "Beefer XL II"
+  brand: "Beefer"
+  category: oberhitzegrill
+  price: 1499
+  affiliateUrl: "https://beefer.de/shop/beefer-xl-ii/"
+  provider: other
+  # amazonAsin: TBD — auf amazon.de suchen: "Beefer XL II"
+  rating: 4.7
+  ratingCount: 180
+  description: "Die Profi-Version — 2/3 GN-Format, zwei unabhängige Brenner, für Cuts bis 2 kg"
+  pros:
+    - "Zwei unabhängig regelbare Infrarot-Brenner — Tomahawk, Cote de Boeuf, ganze Fische"
+    - "2/3 GN Grillfläche — Steakhouse-tauglich"
+    - "3,5 kW — schneller auf Temperatur als Pro II"
+  cons:
+    - "Hoher Preis"
+    - "Groß und schwer — braucht festen Stellplatz"
+  badge: "Profi-Wahl"
+  lastChecked: "2026-05-22"
+  recommended: false
+
+- id: ebeefer-pro-ii
+  name: "E-Beefer Pro II"
+  brand: "Beefer"
+  category: oberhitzegrill
+  price: 799
+  affiliateUrl: "https://beefer.de/shop/e-beefer-pro-ii/"
+  provider: other
+  # amazonAsin: TBD — auf amazon.de suchen: "E-Beefer Pro II"
+  rating: 4.4
+  ratingCount: 95
+  description: "800°C Oberhitze aus der Steckdose — für Innenräume geprüft, kein Gas nötig"
+  pros:
+    - "800°C aus 220V — kein Gas, keine Gasflasche"
+    - "Innenraum-zertifiziert (GS-geprüft) — Küche, Balkon, Mietwohnung"
+    - "In 5 Minuten betriebsbereit"
+  cons:
+    - "Kabel-Pflicht — Reichweite auf Kabelsteckdose begrenzt"
+    - "Etwas langsamer auf Temperatur als Gas-Beefer"
+  badge: "Beste Innenraum-Option"
+  lastChecked: "2026-05-22"
+  recommended: false
+
+- id: caso-steakchef-1500
+  name: "Caso SteakChef 1500"
+  brand: "Caso"
+  category: oberhitzegrill
+  price: 280
+  affiliateUrl: "https://www.amazon.de/s?k=Caso+SteakChef+1500&tag=steakakademie-21"
+  provider: amazon
+  # amazonAsin: TBD — vor Deploy verifizieren
+  rating: 4.2
+  ratingCount: 3100
+  description: "Günstigster elektrischer Einstieg — kein Gas, 600°C, für Wohnungen geeignet"
+  pros:
+    - "Elektrisch — kein Gas, kein Flaschenwechsel, für Mietwohnungen"
+    - "1500W Quarzglas-Heizelement — erreicht 600°C"
+    - "Spülmaschinengeeignete Abtropfschale"
+  cons:
+    - "600°C statt 800°C — Kruste weniger intensiv als Gas-Beefer"
+    - "Kabel-Pflicht — weniger flexibel"
+  badge: "Günstigster Einstieg"
+  lastChecked: "2026-05-22"
+  recommended: false
+
+# ── DRY AGER ──────────────────────────────────────────────────────────────────
+# Preise verifiziert: dry-ager.com, Mai 2026
+# Amazon-ASINs: vor Deploy auf amazon.de verifizieren — Suche "DRY AGER DX 500 Premium S"
+
+- id: dry-ager-dx500
+  name: "DRY AGER DX 500 Premium S"
+  brand: "DRY AGER"
+  category: dry-ager
+  price: 2295
+  affiliateUrl: "https://www.dry-ager.com/shop/dry-ager-reifekuehlschrank-dx500/"
+  provider: other
+  # amazonAsin: TBD — auf amazon.de suchen: "DRY AGER DX 500 Premium S"
+  rating: 4.7
+  ratingCount: 420
+  description: "Das Referenzgerät — 20 kg Kapazität, HumiControl®, SmartAging®, UV-Sterilisation"
+  pros:
+    - "HumiControl® 40–90% — aktive Feuchtigkeitsregelung ohne Wasseranschluss"
+    - "SmartAging® automatisiert den Reifeprozess mit Erfolgsgarantie"
+    - "UV-Sterilisationsbox — aktiver Schimmelschutz"
+    - "0,1°C-Temperaturschritte, elektronisch geregelt"
+  cons:
+    - "Hoher Anschaffungspreis (€2.295)"
+    - "Dauerbetrieb — nicht für saisonale Nutzung wirtschaftlich"
+  badge: "Referenzgerät"
+  lastChecked: "2026-05-22"
+  recommended: true
+
+- id: dry-ager-dx1000
+  name: "DRY AGER DX 1000 Premium S"
+  brand: "DRY AGER"
+  category: dry-ager
+  price: 4195
+  affiliateUrl: "https://www.dry-ager.com/shop/dry-ager-reifekuehlschrank/"
+  provider: other
+  # amazonAsin: TBD — auf amazon.de suchen: "DRY AGER DX 1000 Premium S"
+  rating: 4.8
+  ratingCount: 145
+  description: "Die Profi-Variante — bis 100 kg, 435 L netto, für Restaurants und ambitionierte Gastronomen"
+  pros:
+    - "Bis 100 kg / 435 L — halbes Rind oder mehrere volle Rücken gleichzeitig"
+    - "Abschließbare Tür mit Alarm — für semi-professionellen Einsatz"
+    - "10 Jahre Kompressorgarantie"
+  cons:
+    - "€4.195 — für die meisten Hobbyköche kein sinnvoller Invest"
+    - "165 cm hoch, 70 cm breit — benötigt festen kühlen Stellplatz"
+  badge: "Semi-Profi"
+  lastChecked: "2026-05-22"
+  recommended: false
+
+- id: caso-dryed-master-63
+  name: "Caso DryAged Master 63"
+  brand: "Caso"
+  category: dry-ager
+  price: 999
+  priceMin: 849
+  priceMax: 1099
+  affiliateUrl: "https://www.amazon.de/s?k=Caso+DryAged+Master+63&tag=steakakademie-21"
+  provider: amazon
+  # amazonAsin: TBD — vor Deploy verifizieren
+  rating: 4.3
+  ratingCount: 890
+  description: "Günstigster Einstieg mit echter Klimakontrolle — 63 Liter, für 1–2 ganze Rücken"
+  pros:
+    - "Günstigster echter Reifeschrank mit Temperatur- und Feuchtigkeitsregelung"
+    - "63 Liter — 1–2 Rücken oder 4–6 Steaks gleichzeitig"
+    - "Deutlich günstiger als DRY AGER"
+  cons:
+    - "Weniger präzise (±1°C vs. ±0,1°C beim DRY AGER)"
+    - "Kein UV-Licht — kein aktiver Schimmelschutz"
+  badge: "Preis-Leistung"
+  lastChecked: "2026-05-22"
+  recommended: false
+
+# ── KÜCHENMASCHINEN ───────────────────────────────────────────────────────────
+# Preise verifiziert: kitchenaid.de, Mai 2026
+# Amazon-ASINs: vor Deploy auf amazon.de verifizieren
+
+- id: kitchenaid-artisan-4-8
+  name: "KitchenAid Artisan 4,8 L"
+  brand: "KitchenAid"
+  category: kuechenmaschine
+  price: 459
+  affiliateUrl: "https://www.amazon.de/s?k=KitchenAid+Artisan+5KSM125&tag=steakakademie-21"
+  provider: amazon
+  # amazonAsin: TBD — Modell 5KSM125EMH, auf amazon.de verifizieren
+  rating: 4.7
+  ratingCount: 8200
+  description: "Der Küchenmaschinen-Klassiker — 4,8 L Schüssel, kippbarer Motorkopf, 10 Stufen"
+  pros:
+    - "Bewährtes Design seit 60+ Jahren — Zuverlässigkeit über Generationen"
+    - "Riesiges Zubehör-Ökosystem — Fleischwolf, Nudelvorsatz, Getreidemühle"
+    - "Ideal für Brotteige, Marinaden, Hackfleisch-Mischungen"
+  cons:
+    - "Kein selbstregulierender Motor bei zu hartem Teig"
+    - "Schwer — ca. 11 kg, kein spontanes Verstauen"
+  badge: "Klassiker"
+  lastChecked: "2026-05-22"
+  recommended: true
+
+- id: kitchenaid-artisan-5-6
+  name: "KitchenAid Artisan 5,6 L"
+  brand: "KitchenAid"
+  category: kuechenmaschine
+  price: 899
+  affiliateUrl: "https://www.amazon.de/s?k=KitchenAid+Artisan+5KSM60&tag=steakakademie-21"
+  provider: amazon
+  # amazonAsin: TBD — Modell 5KSM60SPXEER, auf amazon.de verifizieren
+  rating: 4.8
+  ratingCount: 2100
+  description: "Größere Bowl-Lift-Variante — für Partymengen und regelmäßige Großproduktion"
+  pros:
+    - "5,6 L Schüssel — doppelte Brotteig-Menge, Catering-tauglich"
+    - "Bowl-Lift-System — stabiler bei schweren Teigen"
+    - "Vollständig kompatibel mit KitchenAid Zubehör-Ökosystem"
+  cons:
+    - "Deutlich teurer als 4,8 L Variante"
+    - "Noch schwerer und größer"
+  badge: null
+  lastChecked: "2026-05-22"
+  recommended: false

@@ -1,7 +1,7 @@
-import type { NextConfig } from 'next';
 import { withContentlayer } from 'next-contentlayer2';
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
   images: {
     formats: ['image/avif', 'image/webp'],

@@ -1,7 +1,5 @@
-import type { Config } from 'tailwindcss';
-import typography from '@tailwindcss/typography';
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -11,7 +9,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Editorial Ember Design System
         'brand-gold': '#F5A623',
         'brand-fire': '#B43C00',
         'surface-base': '#FAF8F5',
@@ -23,9 +20,13 @@ const config: Config = {
         'border-strong': '#0D0D0D',
       },
       fontFamily: {
-        serif: ['Playfair Display Variable', 'Georgia', 'serif'],
-        body: ['Source Serif 4 Variable', 'Georgia', 'serif'],
-        sans: ['DM Sans Variable', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
+        body: ['Source Serif 4', 'Georgia', 'serif'],
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+      },
+      maxWidth: {
+        editorial: '1280px',
+        content: '720px',
       },
       typography: {
         DEFAULT: {
@@ -41,19 +42,11 @@ const config: Config = {
             '--tw-prose-quote-borders': '#F5A623',
             '--tw-prose-captions': '#6B6B6B',
             '--tw-prose-code': '#B43C00',
-            '--tw-prose-th-borders': '#E8E3DB',
-            '--tw-prose-td-borders': '#E8E3DB',
-            fontFamily: 'Source Serif 4 Variable, Georgia, serif',
+            fontFamily: 'Source Serif 4, Georgia, serif',
             fontSize: '1.125rem',
             lineHeight: '1.75',
-            h2: {
-              fontFamily: 'Playfair Display Variable, Georgia, serif',
-              fontWeight: '700',
-            },
-            h3: {
-              fontFamily: 'Playfair Display Variable, Georgia, serif',
-              fontWeight: '600',
-            },
+            h2: { fontFamily: 'Playfair Display, Georgia, serif', fontWeight: '700' },
+            h3: { fontFamily: 'Playfair Display, Georgia, serif', fontWeight: '600' },
             a: {
               textDecoration: 'underline',
               textDecorationColor: '#F5A623',
@@ -68,13 +61,7 @@ const config: Config = {
           },
         },
       },
-      maxWidth: {
-        editorial: '1280px',
-        content: '720px',
-      },
     },
   },
-  plugins: [typography],
+  plugins: [require('@tailwindcss/typography')],
 };
-
-export default config;

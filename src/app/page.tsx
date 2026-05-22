@@ -56,7 +56,7 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     url: '/methoden/reverse-sear',
     title: 'Reverse Sear: Warum diese Methode alles andere schlägt',
     excerpt:
-      'Erst niedrig garen, dann kurz scharf anbraten — Reverse Sear erzeugt die perfekte Kruste bei exakter Kerntemperatur. So geht's Schritt für Schritt.',
+      'Erst niedrig garen, dann kurz scharf anbraten — Reverse Sear erzeugt die perfekte Kruste bei exakter Kerntemperatur. Schritt für Schritt erklärt.',
     image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80',
     imageAlt: 'Steak wird mit Reverse Sear Methode gegart',
     category: 'Grilltechniken',

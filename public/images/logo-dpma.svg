@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" role="img" aria-label="Steakakademie">
+
+  <!-- White background for DPMA upload -->
+  <rect width="800" height="800" fill="#FFFFFF"/>
+
+  <!-- Flame icon — centered, large -->
+  <g transform="translate(268, 60)">
+    <path d="M 132 430
+             C 60 395, 28 310, 46 220
+             C 59 152, 106 100, 106 100
+             C 92 162, 136 208, 150 240
+             C 147 176, 176 116, 202 66
+             C 218 30, 232 0, 232 0
+             C 226 68, 258 120, 268 178
+             C 290 120, 282 56, 282 56
+             C 328 118, 336 204, 310 282
+             C 284 364, 224 428, 168 436
+             C 154 438, 140 436, 132 430 Z"
+          fill="#B43C00"/>
+    <path d="M 162 388
+             C 118 354, 114 292, 134 234
+             C 150 190, 184 162, 184 162
+             C 174 208, 202 242, 210 268
+             C 208 210, 236 174, 256 144
+             C 268 186, 264 248, 246 290
+             C 268 246, 266 196, 266 196
+             C 296 238, 292 304, 262 348
+             C 236 386, 194 404, 166 396
+             C 164 394, 162 390, 162 388 Z"
+          fill="#F5A623" opacity="0.88"/>
+  </g>
+
+  <!-- STEAKAKADEMIE wordmark — stacked -->
+  <text
+    x="400" y="570"
+    font-family="Georgia, 'Palatino Linotype', serif"
+    font-size="88"
+    font-weight="700"
+    fill="#0D0D0D"
+    letter-spacing="6"
+    text-anchor="middle">STEAK</text>
+
+  <!-- Gold line -->
+  <rect x="110" y="585" width="580" height="3.5" fill="#F5A623"/>
+
+  <!-- AKADEMIE -->
+  <text
+    x="400" y="640"
+    font-family="Georgia, 'Palatino Linotype', serif"
+    font-size="40"
+    font-weight="400"
+    fill="#0D0D0D"
+    letter-spacing="22"
+    text-anchor="middle">AKADEMIE</text>
+
+  <!-- Fine print tagline (optional, entfernbar) -->
+  <text
+    x="400" y="700"
+    font-family="Georgia, 'Palatino Linotype', serif"
+    font-size="18"
+    font-weight="400"
+    fill="#888888"
+    letter-spacing="6"
+    text-anchor="middle">BBQ · FLEISCH · WISSEN</text>
+
+</svg>

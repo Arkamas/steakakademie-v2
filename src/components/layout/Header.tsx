@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Search, Menu, X, ChevronDown, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import AnimatedLogo from './AnimatedLogo';
 
 const NAV_CATEGORIES = [
   {
@@ -104,11 +105,7 @@ export default function Header() {
             {/* Center: Logo */}
             <div className="flex-1 flex justify-center">
               <Link href="/" aria-label="Steakakademie Startseite">
-                <span
-                  className="font-serif font-black text-[2rem] sm:text-[2.5rem] tracking-[-0.02em] text-text-primary hover:text-brand-fire transition-colors duration-200 select-none leading-none"
-                >
-                  Steakakademie
-                </span>
+                <AnimatedLogo size={44} showWordmark={true} />
               </Link>
             </div>
 

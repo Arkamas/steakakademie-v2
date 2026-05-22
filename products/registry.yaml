@@ -1,0 +1,209 @@
+# Steakakademie Produkt-Registry
+# Format: id, name, brand, category, price, affiliateUrl, provider, ...
+# WICHTIG: Vor dem Publish alle affiliateUrl Platzhalter durch echte Affiliate-Links ersetzen
+# Letzte Prüfung: 2026-05-22
+
+# ── THERMOMETER ──────────────────────────────────────────────────────────────
+
+- id: meater-plus
+  name: "MEATER Plus"
+  brand: "MEATER"
+  category: thermometer
+  price: 129
+  affiliateUrl: "https://amzn.to/PLACEHOLDER_MEATER_PLUS"
+  provider: amazon
+  amazonAsin: "B07VBK2D44"
+  rating: 4.5
+  ratingCount: 8420
+  description: "Funk-Thermometer ohne Kabel, App-gesteuert, Bluetooth + WiFi"
+  pros:
+    - "Komplett kabellos — kein Kabel mehr am Smoker"
+    - "App führt dich durch die komplette Garzeit"
+    - "WiFi-Reichweite bis 50m"
+  cons:
+    - "App erforderlich (kein Display)"
+    - "Akku-Ladestation als Schwachstelle"
+  badge: "Testsieger"
+  lastChecked: "2026-05-22"
+  recommended: true
+
+- id: thermapen-one
+  name: "Thermapen ONE"
+  brand: "Thermoworks"
+  category: thermometer
+  price: 89
+  affiliateUrl: "https://amzn.to/PLACEHOLDER_THERMAPEN"
+  provider: amazon
+  amazonAsin: "B09VB7PD1G"
+  rating: 4.8
+  ratingCount: 3210
+  description: "Schnellstes Sofortlesethermometer — 1 Sekunde Messzeit"
+  pros:
+    - "1-Sekunden-Ablesung — schnellstes Thermometer"
+    - "Kalibriert auf ±0,4°C Genauigkeit"
+    - "Drehbares Display, wasserdicht"
+  cons:
+    - "Kein Funk/Wireless"
+    - "Nur ein Sensor"
+  badge: "Genauigkeitssieger"
+  lastChecked: "2026-05-22"
+  recommended: false
+
+- id: inkbird-ibt-4xs
+  name: "Inkbird IBT-4XS"
+  brand: "Inkbird"
+  category: thermometer
+  price: 39
+  affiliateUrl: "https://amzn.to/PLACEHOLDER_INKBIRD"
+  provider: amazon
+  amazonAsin: "B073WT2BLP"
+  rating: 4.3
+  ratingCount: 12400
+  description: "4-Kanal Bluetooth-Thermometer, ideal für Einsteiger"
+  pros:
+    - "4 Sonden gleichzeitig"
+    - "Günstig und zuverlässig"
+    - "Gutes Preis-Leistungs-Verhältnis"
+  cons:
+    - "Nur Bluetooth, keine WiFi"
+    - "App-Design veraltet"
+  badge: "Preis-Leistung"
+  lastChecked: "2026-05-22"
+  recommended: false
+
+# ── GRILLS ───────────────────────────────────────────────────────────────────
+
+- id: weber-master-touch-57
+  name: "Weber Master-Touch GBS 57 cm"
+  brand: "Weber"
+  category: grill
+  price: 329
+  affiliateUrl: "https://www.santosgrills.de/p/PLACEHOLDER"
+  provider: santosgrills
+  rating: 4.7
+  ratingCount: 2800
+  description: "Der beste Einsteiger-Kugelgrill — Weber-Qualität, GBS-System"
+  pros:
+    - "GBS — Gourmet BBQ System kompatibel"
+    - "Bewährte Weber-Qualität"
+    - "Einfache Temperaturkontrolle"
+  cons:
+    - "Kein Thermometer im Deckel"
+    - "Weber-Zubehör teuer"
+  badge: "Bester Einsteiger-Grill"
+  lastChecked: "2026-05-22"
+  recommended: true
+
+- id: kamado-joe-classic-iii
+  name: "Kamado Joe Classic III"
+  brand: "Kamado Joe"
+  category: grill
+  price: 1799
+  priceMin: 1599
+  priceMax: 1899
+  affiliateUrl: "https://www.grillfuerst.de/PLACEHOLDER"
+  provider: grillfuerst
+  rating: 4.8
+  ratingCount: 890
+  description: "Premium Keramikgrill — der Rolls Royce unter den Kugelgrills"
+  pros:
+    - "Außergewöhnliche Temperaturstabilität"
+    - "SlōRoller Einsatz für echtes Low & Slow"
+    - "Kontrollfire-Lüfter-System"
+  cons:
+    - "Sehr schwer (Aufstellungsort ist fix)"
+    - "Teuer in Anschaffung"
+  badge: "Premium-Wahl"
+  lastChecked: "2026-05-22"
+  recommended: false
+
+# ── MESSER ────────────────────────────────────────────────────────────────────
+
+- id: wuesthof-classic-kochmesser-20
+  name: "Wüsthof Classic Kochmesser 20 cm"
+  brand: "Wüsthof"
+  category: messer
+  price: 149
+  affiliateUrl: "https://amzn.to/PLACEHOLDER_WUESTHOF"
+  provider: amazon
+  amazonAsin: "B00009ZK08"
+  rating: 4.8
+  ratingCount: 4200
+  description: "Das verlässlichste deutsche Kochmesser — lebenslange Haltbarkeit"
+  pros:
+    - "Geschmiedet — lebenslange Haltbarkeit"
+    - "Perfekte Balance, ergonomischer Griff"
+    - "Scharf ab Werk, nachschleifbar"
+  cons:
+    - "Kein Santoku-Profil"
+    - "Preis"
+  badge: "Redaktionsempfehlung"
+  lastChecked: "2026-05-22"
+  recommended: true
+
+# ── SOUS-VIDE ─────────────────────────────────────────────────────────────────
+
+- id: anova-precision-cooker-3
+  name: "Anova Precision Cooker 3.0"
+  brand: "Anova"
+  category: sous-vide
+  price: 229
+  affiliateUrl: "https://amzn.to/PLACEHOLDER_ANOVA"
+  provider: amazon
+  rating: 4.5
+  ratingCount: 1800
+  description: "Der Standard für Sous-vide zu Hause — präzise auf 0,1°C"
+  pros:
+    - "Genauigkeit ±0,1°C"
+    - "WiFi + Bluetooth App-Steuerung"
+    - "Stille Pumpe"
+  cons:
+    - "App erforderlich für erweiterte Funktionen"
+  badge: null
+  lastChecked: "2026-05-22"
+  recommended: true
+
+# ── GEWÜRZE ───────────────────────────────────────────────────────────────────
+
+- id: ankerkraut-magic-dust
+  name: "Ankerkraut Magic Dust"
+  brand: "Ankerkraut"
+  category: gewuerze
+  price: 12
+  affiliateUrl: "https://www.ankerkraut.de/PLACEHOLDER"
+  provider: ankerkraut
+  rating: 4.6
+  ratingCount: 9800
+  description: "Der klassische BBQ-Rub für Ribs, Pulled Pork und alles dazwischen"
+  pros:
+    - "Ausgewogene Süße-Rauch-Balance"
+    - "Großer 230g Streuer"
+    - "Vielseitig einsetzbar"
+  cons:
+    - "Nicht für Purists die alles selber mixen"
+  badge: "Bestseller"
+  lastChecked: "2026-05-22"
+  recommended: true
+
+# ── FLEISCH ───────────────────────────────────────────────────────────────────
+
+- id: otto-gourmet-wagyu-box
+  name: "Wagyu Steak Box — 4× 200g"
+  brand: "Otto Gourmet"
+  category: fleisch
+  price: 89
+  affiliateUrl: "https://www.otto-gourmet.de/PLACEHOLDER"
+  provider: otto-gourmet
+  rating: 4.8
+  ratingCount: 340
+  description: "Premium Wagyu aus australischer Zucht, BMS 6–8"
+  pros:
+    - "Zertifiziertes Wagyu BMS 6–8"
+    - "Vakuumverpackt, Versand mit Trockeneis"
+    - "Transparente Herkunft"
+  cons:
+    - "Mindestbestellwert 49€"
+    - "Lieferzeit 2–3 Werktage"
+  badge: "Premium-Pick"
+  lastChecked: "2026-05-22"
+  recommended: true

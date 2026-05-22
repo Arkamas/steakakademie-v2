@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,opsz,wght@0,5..1200,400..900;1,5..1200,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── BASE ──────────────────────────────────────────────────────────────────── */
+
+:root {
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-body: 'Source Serif 4', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --color-gold: #F5A623;
+  --color-fire: #B43C00;
+  --surface-base: #FAF8F5;
+}
+
+html {
+  background-color: var(--surface-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--surface-base);
+  color: #0D0D0D;
+  font-family: var(--font-sans);
+}
+
+/* ── EDITORIAL TYPOGRAPHY ───────────────────────────────────────────────────── */
+
+.font-serif { font-family: var(--font-serif); }
+.font-body { font-family: var(--font-body); }
+.font-sans { font-family: var(--font-sans); }
+
+/* ── CATEGORY LABEL ─────────────────────────────────────────────────────────── */
+
+.category-label {
+  @apply text-xs font-sans font-bold tracking-widest uppercase text-brand-fire;
+}
+
+/* ── ARTICLE TITLE HOVER ────────────────────────────────────────────────────── */
+
+.article-title-link {
+  transition: color 0.15s ease;
+}
+.article-title-link:hover {
+  color: var(--color-fire);
+}
+
+/* ── AFFILIATE BUTTON (Brand Gold — EXCLUSIVE use) ───────────────────────────── */
+
+.btn-affiliate {
+  @apply inline-flex items-center gap-2 bg-brand-gold text-white font-sans font-bold text-sm tracking-wide px-5 py-2.5 transition-all duration-150;
+}
+.btn-affiliate:hover {
+  @apply bg-[#d4891a];
+}
+
+/* ── SECTION DIVIDER ────────────────────────────────────────────────────────── */
+
+.section-divider {
+  @apply border-t-2 border-text-primary mb-6 mt-2;
+}
+
+/* ── AD BANNER PLACEHOLDER ─────────────────────────────────────────────────── */
+
+.ad-placeholder {
+  @apply flex items-center justify-center bg-border-subtle/50 text-text-muted text-xs font-sans tracking-widest uppercase;
+}
+
+/* ── SELECTION ──────────────────────────────────────────────────────────────── */
+
+::selection {
+  background-color: #F5A62340;
+  color: #0D0D0D;
+}
+
+/* ── FOCUS ──────────────────────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* ── SCROLLBAR ──────────────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--surface-base); }
+  ::-webkit-scrollbar-thumb { background: #E8E3DB; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #C8C3BB; }
+}

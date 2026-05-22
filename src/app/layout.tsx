@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import MarcoWidget from '@/components/ai/MarcoWidget';
+import ClarityScript from '@/components/analytics/ClarityScript';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -59,6 +60,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-surface-base antialiased">
         {children}
         <MarcoWidget />
+        <ClarityScript />
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}

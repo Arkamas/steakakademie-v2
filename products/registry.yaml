@@ -71,6 +71,72 @@
   lastChecked: "2026-05-22"
   recommended: false
 
+- id: meater-2-plus
+  name: "MEATER 2 Plus"
+  brand: "MEATER"
+  category: thermometer
+  price: 249
+  affiliateUrl: "https://www.amazon.de/dp/B0C7WHK8XL/?tag=steakakademie-21"
+  provider: amazon
+  amazonAsin: "B0C7WHK8XL"
+  rating: 4.6
+  ratingCount: 3840
+  description: "4 kabellose Sonden gleichzeitig — der professionelle MEATER für Partys und Long Cooks"
+  pros:
+    - "4 kabellose Sonden gleichzeitig — kein Kabelchaos"
+    - "Erweiterte MEATER Link WiFi-Reichweite"
+    - "Bamboo-Ladestation mit 100h Akku"
+  cons:
+    - "Höchster Preis in der Kategorie"
+    - "Vollständig app-abhängig (kein Display)"
+  badge: "Profi-Wahl"
+  lastChecked: "2026-05-22"
+  recommended: false
+
+- id: thermoworks-signals
+  name: "ThermoWorks Signals"
+  brand: "ThermoWorks"
+  category: thermometer
+  price: 229
+  affiliateUrl: "https://www.amazon.de/dp/B07Y5K91HK/?tag=steakakademie-21"
+  provider: amazon
+  amazonAsin: "B07Y5K91HK"
+  rating: 4.7
+  ratingCount: 1240
+  description: "4-Kanal WiFi + Bluetooth Profi-Thermometer mit Display — das Referenzgerät der Pitmaster"
+  pros:
+    - "4 Kanäle gleichzeitig, WiFi + Bluetooth"
+    - "Eigenes Display — keine App-Pflicht"
+    - "±0,5°C Genauigkeit über gesamten Messbereich"
+  cons:
+    - "Kabelsonden (kein Funk)"
+    - "Preislich die teuerste Option"
+  badge: "Pitmaster-Wahl"
+  lastChecked: "2026-05-22"
+  recommended: false
+
+- id: inkbird-ibbq-4t
+  name: "Inkbird IBBQ-4T"
+  brand: "Inkbird"
+  category: thermometer
+  price: 79
+  affiliateUrl: "https://www.amazon.de/dp/B08SFLPW66/?tag=steakakademie-21"
+  provider: amazon
+  amazonAsin: "B08SFLPW66"
+  rating: 4.4
+  ratingCount: 6200
+  description: "WiFi-Thermometer mit 4 Sonden — vollständige WiFi-Reichweite zum Einstiegspreis"
+  pros:
+    - "WiFi-Reichweite (nicht nur Bluetooth)"
+    - "4 Sonden gleichzeitig, USB-C Akku"
+    - "Bestes Preis-Leistungs-Verhältnis der Kategorie"
+  cons:
+    - "Kein eigenes Display (nur App)"
+    - "App-Design weniger poliert als MEATER"
+  badge: "Preis-Leistung"
+  lastChecked: "2026-05-22"
+  recommended: false
+
 # ── GRILLS ───────────────────────────────────────────────────────────────────
 
 - id: weber-master-touch-57

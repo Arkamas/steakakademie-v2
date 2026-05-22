@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import MarcoWidget from '@/components/ai/MarcoWidget';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -57,6 +58,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col bg-surface-base antialiased">
         {children}
+        <MarcoWidget />
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}

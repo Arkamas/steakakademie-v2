@@ -10,8 +10,11 @@
     "postbuild": "next-sitemap"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^1.2.12",
+    "@emotion/is-prop-valid": "^1.4.0",
     "@next/third-parties": "^14.2.29",
     "@tailwindcss/typography": "^0.5.19",
+    "ai": "^4.3.19",
     "clsx": "^2.1.1",
     "contentlayer2": "^0.5.3",
     "date-fns": "^3.6.0",

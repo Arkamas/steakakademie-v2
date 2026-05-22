@@ -183,6 +183,31 @@
   lastChecked: "2026-05-22"
   recommended: false
 
+# ── KÜCHENMASCHINEN ───────────────────────────────────────────────────────────
+
+- id: ankarsrum-assistent-original
+  name: "Ankarsrum Assistent Original 6230"
+  brand: "Ankarsrum"
+  category: zubehoer
+  price: 749
+  affiliateUrl: "https://www.otto.de/p/ankarsrum-kuechenmaschine-1500-w-handgefertigt-mit-liebe-zum-detail-rezeptbuch-S0A9H09Q/"
+  provider: other
+  rating: 4.7
+  ratingCount: 180
+  description: "Schwedische Premium-Küchenmaschine — 1500W, handgefertigt, 60+ Jahre Tradition"
+  pros:
+    - "1500W Motor — schafft auch große Brotteige und Fleischfarce"
+    - "Schwedische Handarbeit — 60+ Jahre bewährte Konstruktion"
+    - "Rührschüssel 7L — ideal für BBQ-Marinaden en masse"
+  cons:
+    - "Hoher Anschaffungspreis"
+    - "Großes Gerät — braucht festen Stellplatz"
+  badge: "Premium-Pick"
+  lastChecked: "2026-05-22"
+  recommended: false
+  # image: — wird nachgerüstet via Amazon PA-API sobald ASIN verifiziert
+  # amazonAsin: — prüfen: amazon.de/s?k=Ankarsrum+Assistent+Original+6230
+
 # ── MESSER ────────────────────────────────────────────────────────────────────
 
 - id: wuesthof-classic-kochmesser-20

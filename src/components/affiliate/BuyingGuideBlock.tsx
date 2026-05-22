@@ -4,6 +4,15 @@ import { ExternalLink, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
 
+function BrandInitials({ brand }: { brand: string }) {
+  const initials = brand.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+  return (
+    <div className="h-24 w-24 sm:h-28 sm:w-28 flex items-center justify-center bg-surface-base border border-border-subtle" aria-hidden="true">
+      <span className="font-serif font-bold text-2xl text-brand-gold">{initials}</span>
+    </div>
+  );
+}
+
 interface BuyingGuideBlockProps {
   product: Product;
   title: string;
@@ -27,8 +36,8 @@ export default function BuyingGuideBlock({
       )}
     >
       <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
-        {product.image && (
-          <div className="shrink-0 flex justify-center sm:justify-start">
+        <div className="shrink-0 flex justify-center sm:justify-start">
+          {product.image ? (
             <Image
               src={product.image}
               alt={product.name}
@@ -36,8 +45,10 @@ export default function BuyingGuideBlock({
               height={100}
               className="object-contain h-24 w-24 sm:h-28 sm:w-28"
             />
-          </div>
-        )}
+          ) : (
+            <BrandInitials brand={product.brand} />
+          )}
+        </div>
 
         <div className="flex-1 min-w-0">
           {/* "Selbst getestet" trust badge */}

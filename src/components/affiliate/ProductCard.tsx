@@ -4,6 +4,40 @@ import { ExternalLink, Star, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
 
+/** Zeigt Brand-Initialen wenn kein Produktbild vorhanden — PA-API-ready */
+function ProductImagePlaceholder({
+  brand,
+  size = 'md',
+}: {
+  brand: string;
+  size?: 'sm' | 'md' | 'lg';
+}) {
+  const initials = brand
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+
+  const sizeClasses = {
+    sm: 'h-14 w-14 text-sm',
+    md: 'h-28 w-28 text-xl',
+    lg: 'h-36 w-36 text-2xl',
+  };
+
+  return (
+    <div
+      className={cn(
+        'flex items-center justify-center rounded-none bg-surface-base border border-border-subtle',
+        sizeClasses[size]
+      )}
+      aria-hidden="true"
+    >
+      <span className="font-serif font-bold text-brand-gold">{initials}</span>
+    </div>
+  );
+}
+
 interface ProductCardProps {
   product: Product;
   variant?: 'default' | 'compact' | 'sidebar';
@@ -41,8 +75,8 @@ export default function ProductCard({
           </span>
         </div>
 
-        {product.image && (
-          <div className="mb-3 flex justify-center">
+        <div className="mb-3 flex justify-center">
+          {product.image ? (
             <Image
               src={product.image}
               alt={product.name}
@@ -50,8 +84,10 @@ export default function ProductCard({
               height={120}
               className="object-contain h-28"
             />
-          </div>
-        )}
+          ) : (
+            <ProductImagePlaceholder brand={product.brand} size="md" />
+          )}
+        </div>
 
         <h3 className="font-sans font-bold text-sm text-text-primary mb-1 line-clamp-2">
           {product.name}
@@ -110,7 +146,7 @@ export default function ProductCard({
             {rank}
           </span>
         )}
-        {product.image && (
+        {product.image ? (
           <Image
             src={product.image}
             alt={product.name}
@@ -118,6 +154,8 @@ export default function ProductCard({
             height={60}
             className="object-contain h-14 w-14 shrink-0"
           />
+        ) : (
+          <ProductImagePlaceholder brand={product.brand} size="sm" />
         )}
         <div className="flex-1 min-w-0">
           <h3 className="font-sans font-bold text-sm text-text-primary line-clamp-1">
@@ -155,8 +193,8 @@ export default function ProductCard({
         </div>
       )}
 
-      {product.image && (
-        <div className="p-6 flex justify-center bg-surface-base">
+      <div className="p-6 flex justify-center bg-surface-base">
+        {product.image ? (
           <Image
             src={product.image}
             alt={product.name}
@@ -164,8 +202,10 @@ export default function ProductCard({
             height={160}
             className="object-contain h-36"
           />
-        </div>
-      )}
+        ) : (
+          <ProductImagePlaceholder brand={product.brand} size="lg" />
+        )}
+      </div>
 
       <div className="p-5">
         <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-brand-fire mb-1 block">

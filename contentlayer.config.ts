@@ -135,6 +135,7 @@ export const Vergleich = defineDocumentType(() => ({
     testDuration: { type: 'string' },
     seoTitle: { type: 'string' },
     seoDescription: { type: 'string' },
+    faq: { type: 'json' },
   },
   computedFields: {
     slug: {

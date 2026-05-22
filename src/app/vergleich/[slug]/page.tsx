@@ -73,6 +73,19 @@ const mdxComponents = {
     <strong className="font-bold text-text-primary" {...props}>{children}</strong>
   ),
   hr: () => <hr className="border-border-subtle my-10" />,
+  a: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+    const isAffiliate = href?.startsWith('/go/');
+    return (
+      <a
+        href={href}
+        rel={isAffiliate ? 'sponsored noopener' : undefined}
+        className="text-brand-fire hover:underline"
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  },
 };
 
 export default function VergleichPage({ params }: Props) {
@@ -102,10 +115,45 @@ export default function VergleichPage({ params }: Props) {
     },
   };
 
+  const faqSchema = vergleich.faq ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: (vergleich.faq as Array<{ question: string; answer: string }>).map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  } : null;
+
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: vergleich.title,
+    itemListElement: thermometer.slice(0, 5).map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: p.name,
+      url: `https://steakakademie.de/go/${p.id}`,
+      item: {
+        '@type': 'Product',
+        name: p.name,
+        brand: { '@type': 'Brand', name: p.brand },
+        offers: { '@type': 'Offer', price: p.price, priceCurrency: 'EUR', url: p.affiliateUrl },
+        aggregateRating: p.rating ? {
+          '@type': 'AggregateRating',
+          ratingValue: p.rating,
+          reviewCount: p.ratingCount ?? 1,
+        } : undefined,
+      },
+    })),
+  };
+
   return (
     <>
       <Header />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
+      {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
 
       <main>
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">

@@ -10,7 +10,7 @@
   brand: "MEATER"
   category: thermometer
   price: 129
-  affiliateUrl: "https://amzn.to/PLACEHOLDER_MEATER_PLUS"
+  affiliateUrl: "https://www.amazon.de/dp/B07VBK2D44/?tag=steakakademie-21"
   provider: amazon
   amazonAsin: "B07VBK2D44"
   rating: 4.5
@@ -32,7 +32,7 @@
   brand: "Thermoworks"
   category: thermometer
   price: 89
-  affiliateUrl: "https://amzn.to/PLACEHOLDER_THERMAPEN"
+  affiliateUrl: "https://www.amazon.de/dp/B09VB7PD1G/?tag=steakakademie-21"
   provider: amazon
   amazonAsin: "B09VB7PD1G"
   rating: 4.8
@@ -54,7 +54,7 @@
   brand: "Inkbird"
   category: thermometer
   price: 39
-  affiliateUrl: "https://amzn.to/PLACEHOLDER_INKBIRD"
+  affiliateUrl: "https://www.amazon.de/dp/B073WT2BLP/?tag=steakakademie-21"
   provider: amazon
   amazonAsin: "B073WT2BLP"
   rating: 4.3
@@ -124,7 +124,7 @@
   brand: "Wüsthof"
   category: messer
   price: 149
-  affiliateUrl: "https://amzn.to/PLACEHOLDER_WUESTHOF"
+  affiliateUrl: "https://www.amazon.de/dp/B00009ZK08/?tag=steakakademie-21"
   provider: amazon
   amazonAsin: "B00009ZK08"
   rating: 4.8
@@ -148,7 +148,7 @@
   brand: "Anova"
   category: sous-vide
   price: 229
-  affiliateUrl: "https://amzn.to/PLACEHOLDER_ANOVA"
+  affiliateUrl: "https://www.amazon.de/s?k=Anova+Precision+Cooker+3&tag=steakakademie-21"
   provider: amazon
   rating: 4.5
   ratingCount: 1800

@@ -129,14 +129,14 @@ export default function Header() {
                   className="object-contain"
                   priority
                 />
-                <div className="flex flex-col leading-none select-none">
+                <span className="flex flex-col leading-none select-none">
                   <span className="font-serif font-black text-text-light" style={{ fontSize: '19px', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
                     Steak
                   </span>
                   <span className="font-serif font-normal text-text-light/50 uppercase" style={{ fontSize: '8.5px', letterSpacing: '0.16em', lineHeight: 1.3 }}>
                     Akademie
                   </span>
-                </div>
+                </span>
               </Link>
             </div>
 

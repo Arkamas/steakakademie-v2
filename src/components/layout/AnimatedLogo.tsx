@@ -73,7 +73,7 @@ export default function AnimatedLogo({
   ];
 
   return (
-    <div className={`flex items-center gap-3 ${className}`} aria-label="Steakakademie">
+    <span className={`flex items-center gap-3 ${className}`} aria-label="Steakakademie">
       <svg
         viewBox="0 0 500 500"
         width={size}
@@ -273,7 +273,7 @@ export default function AnimatedLogo({
 
       {/* ── Optional wordmark ─────────────────────────────────────────────── */}
       {showWordmark && (
-        <div className="flex flex-col leading-none select-none">
+        <span className="flex flex-col leading-none select-none">
           <span
             className="font-serif font-black text-text-light"
             style={{ fontSize: size * 0.44, letterSpacing: '-0.01em', lineHeight: 1.1 }}
@@ -286,8 +286,8 @@ export default function AnimatedLogo({
           >
             Akademie
           </span>
-        </div>
+        </span>
       )}
-    </div>
+    </span>
   );
 }

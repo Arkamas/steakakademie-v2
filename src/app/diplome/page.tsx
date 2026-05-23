@@ -103,18 +103,24 @@ export default function DiplomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
+                href="/diplome/simulation"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-[#b07020] transition-colors"
+              >
+                🎓 System kennenlernen →
+              </Link>
+              <Link
                 href="/diplome/urkunde"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition-colors"
               >
                 📜 Urkunde per Post — 3 €
               </Link>
-              <Link
-                href="/manifest"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border-subtle text-text-muted font-sans text-sm hover:border-brand-gold/30 hover:text-text-primary transition-colors"
-              >
-                Das Steak-Manifest →
-              </Link>
             </div>
+            <Link
+              href="/manifest"
+              className="inline-block text-xs font-sans text-text-muted/50 hover:text-text-muted transition-colors"
+            >
+              Das Steak-Manifest →
+            </Link>
           </div>
         </section>
 

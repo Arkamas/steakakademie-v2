@@ -198,11 +198,39 @@ export const Persoenlichkeit = defineDocumentType(() => ({
   },
 }));
 
+// ── GLOSSAR ───────────────────────────────────────────────────────────────────
+
+export const Glossar = defineDocumentType(() => ({
+  name: 'Glossar',
+  filePathPattern: 'glossar/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title:           { type: 'string', required: true },
+    slug:            { type: 'string', required: true },
+    category:        { type: 'string', required: true },
+    shortDefinition: { type: 'string', required: true },
+    publishedAt:     { type: 'date',   required: true },
+    seoTitle:        { type: 'string' },
+    seoDescription:  { type: 'string' },
+  },
+  computedFields: {
+    url: {
+      type: 'string',
+      resolve: (doc) => `/glossar/${doc._raw.flattenedPath.replace('glossar/', '')}`,
+    },
+    formattedDate: {
+      type: 'string',
+      resolve: (doc) =>
+        format(parseISO(doc.publishedAt), 'd. MMMM yyyy', { locale: de }),
+    },
+  },
+}));
+
 // ── SOURCE ────────────────────────────────────────────────────────────────────
 
 export default makeSource({
   contentDirPath: 'content',
-  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit],
+  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit, Glossar],
   mdx: {
     // rehype / remark plugins can be added here later
   },

@@ -23,7 +23,7 @@ const FOOTER_LINKS = {
   ],
   Akademie: [
     { label: 'Grillmeister-Diplome', href: '/diplome' },
-    { label: 'Marco — KI-Guide', href: '/autoren/marco' },
+    { label: 'Marco, der Pitmaster', href: '/autoren/marco' },
     { label: 'Jonas', href: '/autoren/jonas' },
     { label: 'Elena', href: '/autoren/elena' },
     { label: 'Über uns', href: '/ueber-uns' },

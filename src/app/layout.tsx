@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import MarcoWidget from '@/components/ai/MarcoWidget';
 import ClarityScript from '@/components/analytics/ClarityScript';
+import PlausibleScript from '@/components/analytics/PlausibleScript';
+import ExitIntent from '@/components/ui/ExitIntent';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
 import './globals.css';
 
@@ -70,7 +72,9 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-surface-base antialiased">
         {children}
         <MarcoWidget />
+        <ExitIntent />
         <ClarityScript />
+        <PlausibleScript />
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}

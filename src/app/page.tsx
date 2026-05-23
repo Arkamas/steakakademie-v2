@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ChevronRight, Flame, BookOpen, Thermometer, Award } from 'lucide-react';
 import Header from '@/components/layout/Header';
@@ -27,7 +27,7 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     imageAlt: 'Perfekt gebratenes Ribeye Steak auf einem Holzbrett',
     category: 'Cuts & Fleischkunde',
     categorySlug: 'cuts',
-    author: 'Marco — Der Meister',
+    author: 'Marco, der Pitmaster',
     authorSlug: 'marco',
     formattedDate: '20. Mai 2026',
     readingTime: 12,
@@ -59,7 +59,7 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     imageAlt: 'Steak wird mit Reverse Sear Methode gegart',
     category: 'Grilltechniken',
     categorySlug: 'grilltechniken',
-    author: 'Marco — Der Meister',
+    author: 'Marco, der Pitmaster',
     authorSlug: 'marco',
     formattedDate: '15. Mai 2026',
     readingTime: 10,
@@ -107,7 +107,7 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     imageAlt: 'Thermometer misst Kerntemperatur eines Steaks',
     category: 'Wissen',
     categorySlug: 'wissen',
-    author: 'Marco — Der Meister',
+    author: 'Marco, der Pitmaster',
     authorSlug: 'marco',
     formattedDate: '8. Mai 2026',
     readingTime: 7,
@@ -193,7 +193,7 @@ export default function HomePage() {
               <div className="mt-10 flex items-center gap-5">
                 <div className="h-px w-16 bg-border-strong/25" />
                 <cite className="font-sans text-xs tracking-[0.22em] uppercase text-text-muted not-italic">
-                  Marco — Der Meister
+                  Marco, der Pitmaster
                 </cite>
               </div>
             </div>

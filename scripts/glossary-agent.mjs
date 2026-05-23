@@ -349,7 +349,19 @@ async function main() {
 
   if (!process.env.ANTHROPIC_API_KEY) {
     console.log(c.yellow('\n⚠  ANTHROPIC_API_KEY nicht gesetzt — Generierung übersprungen.'))
-    await buildTermsIndex()
+    const termsIndex = await buildTermsIndex()
+    if (doLink && contentFiles.length > 0) {
+      console.log(`\n${c.dim('🔗')} Auto-Verlinkung in Content-Dateien...`)
+      let totalLinks = 0
+      for (const file of contentFiles) {
+        const n = await autoLinkInFile(file, termsIndex)
+        if (n > 0) {
+          console.log(`  ${c.dim(basename(file))}: ${c.green(`+${n} Link${n !== 1 ? 's' : ''}`)}`)
+          totalLinks += n
+        }
+      }
+      console.log(`  Gesamt: ${c.bold(String(totalLinks))} neue Links gesetzt\n`)
+    }
     console.log()
     process.exit(0)
   }

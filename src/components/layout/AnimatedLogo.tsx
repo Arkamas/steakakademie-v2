@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 interface AnimatedLogoProps {
@@ -20,27 +21,31 @@ export default function AnimatedLogo({
   className = '',
 }: AnimatedLogoProps) {
   const reducedMotion = useReducedMotion();
+  // Prevent hydration mismatch: animations only activate after client mount
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  const animate = mounted && !reducedMotion;
 
   // ── Flame animation keyframes ─────────────────────────────────────────────
-  const outerFlameAnim = reducedMotion ? {} : {
+  const outerFlameAnim = animate ? {
     animate: {
       scaleY: [1, 1.06, 0.97, 1.04, 1],
       scaleX: [1, 0.97, 1.03, 0.98, 1],
       y:      [0, -3,    1,    -2,   0],
     },
     transition: { duration: 1.8, repeat: Infinity, ease: 'easeInOut' as const },
-  };
+  } : {};
 
-  const middleFlameAnim = reducedMotion ? {} : {
+  const middleFlameAnim = animate ? {
     animate: {
       scaleY: [1, 1.09, 0.95, 1.06, 1],
       scaleX: [1, 0.95, 1.04, 0.96, 1],
       y:      [0, -5,    2,   -3,   0],
     },
     transition: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' as const },
-  };
+  } : {};
 
-  const coreFlameAnim = reducedMotion ? {} : {
+  const coreFlameAnim = animate ? {
     animate: {
       scaleY:  [1,   1.12, 0.93, 1.08, 1],
       scaleX:  [1,   0.93, 1.06, 0.94, 1],
@@ -48,17 +53,17 @@ export default function AnimatedLogo({
       opacity: [0.9, 1,    0.85,  1,   0.9],
     },
     transition: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' as const },
-  };
+  } : {};
 
-  const ringPulse = reducedMotion ? {} : {
+  const ringPulse = animate ? {
     animate: { opacity: [0.5, 1, 0.5] },
     transition: { duration: 2, repeat: Infinity, ease: 'easeInOut' as const },
-  };
+  } : {};
 
-  const glowAnim = reducedMotion ? {} : {
+  const glowAnim = animate ? {
     animate: { opacity: [0.4, 0.85, 0.4], ry: [100, 125, 100] },
     transition: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' as const },
-  };
+  } : {};
 
   // Three smoke wisps with staggered timing
   const wisps = [
@@ -104,7 +109,7 @@ export default function AnimatedLogo({
               numOctaves="3"
               result="noise"
             >
-              {!reducedMotion && (
+              {animate && (
                 <animate
                   attributeName="baseFrequency"
                   values="0.022;0.028;0.022"
@@ -172,7 +177,7 @@ export default function AnimatedLogo({
         </text>
 
         {/* ── Smoke wisps ──────────────────────────────────────────────────── */}
-        {!reducedMotion && wisps.map((w, i) => (
+        {animate && wisps.map((w, i) => (
           <motion.ellipse
             key={i}
             cx={w.cx} cy={105}
@@ -270,13 +275,13 @@ export default function AnimatedLogo({
       {showWordmark && (
         <div className="flex flex-col leading-none select-none">
           <span
-            className="font-serif font-black text-text-primary"
+            className="font-serif font-black text-text-light"
             style={{ fontSize: size * 0.44, letterSpacing: '-0.01em', lineHeight: 1.1 }}
           >
             Steak
           </span>
           <span
-            className="font-serif font-normal text-text-muted uppercase"
+            className="font-serif font-normal text-text-light/50 uppercase"
             style={{ fontSize: size * 0.19, letterSpacing: '0.16em', lineHeight: 1.3 }}
           >
             Akademie

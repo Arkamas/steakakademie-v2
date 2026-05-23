@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import MarcoWidget from '@/components/ai/MarcoWidget';
 import ClarityScript from '@/components/analytics/ClarityScript';
+import { organizationSchema, websiteSchema } from '@/lib/schema';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -56,6 +57,15 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Global Schema.org — Organization + WebSite + SearchAction */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
+        />
       </head>
       <body className="min-h-screen flex flex-col bg-surface-base antialiased">
         {children}

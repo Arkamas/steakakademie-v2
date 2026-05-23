@@ -4,7 +4,6 @@ import { ExternalLink, Star, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
 
-/** Zeigt Brand-Initialen wenn kein Produktbild vorhanden — PA-API-ready */
 function ProductImagePlaceholder({
   brand,
   size = 'md',
@@ -28,7 +27,7 @@ function ProductImagePlaceholder({
   return (
     <div
       className={cn(
-        'flex items-center justify-center rounded-none bg-surface-base border border-border-subtle',
+        'flex items-center justify-center bg-surface-base border border-border-subtle',
         sizeClasses[size]
       )}
       aria-hidden="true"
@@ -46,15 +45,29 @@ interface ProductCardProps {
 }
 
 const PROVIDER_LABELS: Record<string, string> = {
-  amazon: 'Amazon',
-  'otto-gourmet': 'Otto Gourmet',
-  santosgrills: 'Santosgrills',
-  grillfuerst: 'Grillfürst',
-  ankerkraut: 'Ankerkraut',
-  albers: 'Albers Food',
-  'meater-direct': 'MEATER Shop',
-  other: 'Händler',
+  amazon:        'Amazon',
+  'otto-gourmet':'Otto Gourmet',
+  santosgrills:  'Santosgrills',
+  grillfuerst:   'Grillfürst',
+  ankerkraut:    'Ankerkraut',
+  albers:        'Albers Food',
+  'meater-direct':'MEATER Shop',
+  other:         'Händler',
 };
+
+function StarRow({ rating }: { rating: number }) {
+  return (
+    <div className="flex items-center gap-1">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star
+          key={i}
+          size={12}
+          className={i < Math.round(rating) ? 'fill-brand-gold text-brand-gold' : 'text-border-subtle fill-border-subtle'}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function ProductCard({
   product,
@@ -68,14 +81,14 @@ export default function ProductCard({
   // ── SIDEBAR VARIANT ────────────────────────────────────────────────────
   if (variant === 'sidebar') {
     return (
-      <div className={cn('bg-white border border-border-subtle p-4', className)}>
+      <div className={cn('bg-surface-card border border-border-subtle p-4', className)}>
         <div className="border-t-2 border-brand-gold -mt-4 mb-4 pt-3">
           <span className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-brand-fire">
             Empfehlung
           </span>
         </div>
 
-        <div className="mb-3 flex justify-center">
+        <div className="mb-3 flex justify-center bg-surface-base p-3">
           {product.image ? (
             <Image
               src={product.image}
@@ -94,21 +107,15 @@ export default function ProductCard({
         </h3>
 
         {product.badge && (
-          <span className="inline-block text-[10px] font-sans font-bold tracking-wide uppercase bg-brand-gold/10 text-brand-fire px-2 py-0.5 mb-2">
+          <span className="inline-block text-[10px] font-sans font-bold tracking-wide uppercase bg-brand-gold/15 text-brand-gold px-2 py-0.5 mb-2">
             {product.badge}
           </span>
         )}
 
         {product.rating && (
-          <div className="flex items-center gap-1 mb-2">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                size={12}
-                className={i < Math.round(product.rating!) ? 'fill-brand-gold text-brand-gold' : 'text-border-subtle'}
-              />
-            ))}
-            <span className="text-xs font-sans text-text-muted ml-1">
+          <div className="flex items-center gap-2 mb-2">
+            <StarRow rating={product.rating} />
+            <span className="text-xs font-sans text-text-muted">
               {product.rating.toFixed(1)}
             </span>
           </div>
@@ -142,18 +149,20 @@ export default function ProductCard({
     return (
       <div className={cn('flex items-center gap-4 py-3 border-b border-border-subtle', className)}>
         {rank && (
-          <span className="font-serif text-2xl font-bold text-border-subtle w-6 shrink-0">
+          <span className="font-serif text-2xl font-bold text-brand-gold/30 w-6 shrink-0">
             {rank}
           </span>
         )}
         {product.image ? (
-          <Image
-            src={product.image}
-            alt={product.name}
-            width={60}
-            height={60}
-            className="object-contain h-14 w-14 shrink-0"
-          />
+          <div className="bg-surface-card p-1 shrink-0">
+            <Image
+              src={product.image}
+              alt={product.name}
+              width={60}
+              height={60}
+              className="object-contain h-14 w-14"
+            />
+          </div>
         ) : (
           <ProductImagePlaceholder brand={product.brand} size="sm" />
         )}
@@ -173,7 +182,7 @@ export default function ProductCard({
           </p>
           <Link
             href={affiliateHref}
-            className="inline-flex items-center gap-1 bg-brand-gold text-white font-sans text-[11px] font-bold tracking-wide px-3 py-1.5 hover:bg-[#d4891a] transition-colors"
+            className="inline-flex items-center gap-1 bg-brand-fire text-white font-sans text-[11px] font-bold tracking-wide px-3 py-1.5 hover:bg-[#cc4412] transition-colors"
             rel="nofollow noopener"
             target="_blank"
           >
@@ -186,9 +195,9 @@ export default function ProductCard({
 
   // ── DEFAULT VARIANT ─────────────────────────────────────────────────────
   return (
-    <div className={cn('bg-white border border-border-subtle overflow-hidden', className)}>
+    <div className={cn('bg-surface-card border border-border-subtle overflow-hidden', className)}>
       {product.badge && (
-        <div className="bg-brand-gold text-white text-[10px] font-sans font-bold tracking-[0.15em] uppercase px-4 py-1.5 text-center">
+        <div className="bg-brand-gold text-ink text-[10px] font-sans font-bold tracking-[0.15em] uppercase px-4 py-1.5 text-center">
           {product.badge}
         </div>
       )}
@@ -216,14 +225,8 @@ export default function ProductCard({
         </h3>
 
         {product.rating && (
-          <div className="flex items-center gap-1.5 mb-3">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                size={14}
-                className={i < Math.round(product.rating!) ? 'fill-brand-gold text-brand-gold' : 'text-border-subtle fill-border-subtle'}
-              />
-            ))}
+          <div className="flex items-center gap-2 mb-3">
+            <StarRow rating={product.rating} />
             <span className="text-sm font-sans text-text-secondary">
               {product.rating.toFixed(1)}
               {product.ratingCount && (
@@ -251,7 +254,7 @@ export default function ProductCard({
               : `${product.price} €`}
           </p>
           {product.recommended && (
-            <span className="text-[10px] font-sans font-bold tracking-wide uppercase text-text-muted border border-border-subtle px-2 py-1">
+            <span className="text-[10px] font-sans font-bold tracking-wide uppercase text-brand-gold border border-brand-gold/30 px-2 py-1">
               Unsere Wahl
             </span>
           )}

@@ -11,6 +11,7 @@ import MDXProductCard from '@/components/mdx/MDXProductCard';
 import MDXComparisonTable from '@/components/mdx/MDXComparisonTable';
 import MDXBuyingGuideBlock from '@/components/mdx/MDXBuyingGuideBlock';
 import { getProductsByCategory } from '@/lib/products';
+import { articleSchema, breadcrumbSchema, comparisonPageSchema, faqSchema } from '@/lib/schema';
 import { Calendar, ChevronRight, RotateCcw, FlaskConical } from 'lucide-react';
 
 interface Props {
@@ -47,19 +48,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const mdxComponents = {
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary mt-10 mb-4 leading-tight border-b border-border-subtle pb-3" {...props}>{children}</h2>
+    <h2
+      className="font-serif text-2xl sm:text-3xl font-bold text-text-light mt-12 mb-5 leading-tight pb-3"
+      style={{ borderBottom: '1px solid rgba(200,136,42,0.2)' }}
+      {...props}
+    >
+      {children}
+    </h2>
   ),
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h3 className="font-serif text-xl font-bold text-text-primary mt-8 mb-3" {...props}>{children}</h3>
+    <h3 className="font-serif text-xl font-bold text-text-light mt-9 mb-3" {...props}>{children}</h3>
   ),
   p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-    <p className="font-body text-[1.0625rem] leading-[1.8] text-text-primary mb-5" {...props}>{children}</p>
+    <p className="font-body text-[1.0625rem] leading-[1.85] text-text-light/75 mb-5" {...props}>{children}</p>
   ),
   ul: ({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
-    <ul className="list-disc list-outside ml-5 space-y-2 mb-5 font-body text-[1.0625rem]" {...props}>{children}</ul>
+    <ul className="list-disc list-outside ml-5 space-y-2 mb-5 font-body text-[1.0625rem] text-text-light/75" {...props}>{children}</ul>
   ),
   ol: ({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) => (
-    <ol className="list-decimal list-outside ml-5 space-y-2 mb-5 font-body text-[1.0625rem]" {...props}>{children}</ol>
+    <ol className="list-decimal list-outside ml-5 space-y-2 mb-5 font-body text-[1.0625rem] text-text-light/75" {...props}>{children}</ol>
   ),
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
     <div className="overflow-x-auto mb-6 -mx-4 sm:mx-0">
@@ -67,21 +74,31 @@ const mdxComponents = {
     </div>
   ),
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
-    <thead className="bg-text-primary text-white" {...props}>{children}</thead>
+    <thead style={{ backgroundColor: '#0D0D0D' }} {...props}>{children}</thead>
   ),
   th: ({ children, ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) => (
-    <th className="px-4 py-3 text-left text-[11px] font-bold tracking-[0.1em] uppercase" {...props}>{children}</th>
+    <th className="px-4 py-3 text-left text-[11px] font-bold tracking-[0.1em] uppercase text-brand-gold" {...props}>{children}</th>
   ),
   td: ({ children, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) => (
-    <td className="px-4 py-3 border-b border-border-subtle text-text-secondary" {...props}>{children}</td>
+    <td className="px-4 py-3 border-b border-border-subtle text-text-light/70" style={{ borderBottomColor: 'rgba(61,34,16,0.6)' }} {...props}>{children}</td>
   ),
   blockquote: ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
-    <blockquote className="border-l-4 border-brand-gold pl-5 my-6 font-body text-lg italic text-text-secondary" {...props}>{children}</blockquote>
+    <blockquote
+      className="relative border-l-[3px] pl-6 my-8 font-body text-lg italic text-text-light/75"
+      style={{
+        borderLeftColor: '#C8882A',
+        background: 'linear-gradient(135deg, rgba(200,136,42,0.06) 0%, transparent 70%)',
+        padding: '1.5rem 1.5rem 1.5rem 2rem',
+      }}
+      {...props}
+    >
+      {children}
+    </blockquote>
   ),
   strong: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
-    <strong className="font-bold text-text-primary" {...props}>{children}</strong>
+    <strong className="font-bold text-text-light" {...props}>{children}</strong>
   ),
-  hr: () => <hr className="border-border-subtle my-10" />,
+  hr: () => <hr style={{ borderColor: 'rgba(200,136,42,0.2)' }} className="my-10" />,
   MDXProductCard,
   MDXComparisonTable,
   MDXBuyingGuideBlock,
@@ -91,7 +108,7 @@ const mdxComponents = {
       <a
         href={href}
         rel={isAffiliate ? 'sponsored noopener' : undefined}
-        className="text-brand-fire hover:underline"
+        className="text-brand-fire font-medium hover:text-brand-gold transition-colors"
         {...props}
       >
         {children}
@@ -106,135 +123,132 @@ export default function VergleichPage({ params }: Props) {
 
   const MDXContent = useMDXComponent(vergleich.body.code);
 
-  // Derive product category from slug — avoids hardcoded thermometer on all Vergleich pages
   const slugCategoryMap: Record<string, Parameters<typeof getProductsByCategory>[0]> = {
     'premium-fleischthermometer': 'thermometer',
-    'oberhitzegrill-vergleich': 'oberhitzegrill',
+    'oberhitzegrill-vergleich':   'oberhitzegrill',
     'dry-aging-kuehlschrank-vergleich': 'dry-ager',
-    'kuechenmaschine-vergleich': 'kuechenmaschine',
+    'kuechenmaschine-vergleich':  'kuechenmaschine',
   };
   const pageCategory = slugCategoryMap[params.slug] ?? 'thermometer';
   const sidebarProducts = getProductsByCategory(pageCategory);
 
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+  const articleSch = articleSchema({
     headline: vergleich.title,
     description: vergleich.excerpt,
     image: vergleich.image,
     datePublished: vergleich.publishedAt,
     dateModified: vergleich.updatedAt ?? vergleich.publishedAt,
-    author: {
-      '@type': 'Person',
-      name: vergleich.author,
-      url: `https://steakakademie.de/autoren/${vergleich.authorSlug}`,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Steakakademie',
-      url: 'https://steakakademie.de',
-    },
-  };
+    authorName: vergleich.author,
+    authorSlug: vergleich.authorSlug,
+    url: vergleich.url,
+  });
 
-  const faqSchema = vergleich.faq ? {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: (vergleich.faq as Array<{ question: string; answer: string }>).map((item) => ({
-      '@type': 'Question',
-      name: item.question,
-      acceptedAnswer: { '@type': 'Answer', text: item.answer },
-    })),
-  } : null;
-
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Start', item: 'https://steakakademie.de' },
-      { '@type': 'ListItem', position: 2, name: 'Vergleiche', item: 'https://steakakademie.de/kategorie/vergleich' },
-      { '@type': 'ListItem', position: 3, name: vergleich.title.split(':')[0], item: `https://steakakademie.de${vergleich.url}` },
-    ],
-  };
-
-  const itemListSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: vergleich.title,
-    itemListElement: sidebarProducts.slice(0, 5).map((p, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
+  const comparisonSch = comparisonPageSchema({
+    pageTitle: vergleich.title,
+    pageUrl: vergleich.url,
+    products: sidebarProducts.map((p) => ({
       name: p.name,
-      url: `https://steakakademie.de/go/${p.id}`,
-      item: {
-        '@type': 'Product',
-        name: p.name,
-        brand: { '@type': 'Brand', name: p.brand },
-        offers: { '@type': 'Offer', price: p.price, priceCurrency: 'EUR', url: p.affiliateUrl },
-        aggregateRating: p.rating ? {
-          '@type': 'AggregateRating',
-          ratingValue: p.rating,
-          reviewCount: p.ratingCount ?? 1,
-        } : undefined,
-      },
+      description: p.description ?? '',
+      brand: p.brand,
+      sku: p.amazonAsin,
+      price: p.price,
+      affiliateUrl: p.affiliateUrl,
+      rating: p.rating,
+      ratingCount: p.ratingCount,
+      badge: p.badge,
+      pros: p.pros,
+      cons: p.cons,
     })),
-  };
+  });
+
+  const breadcrumbSch = breadcrumbSchema([
+    { name: 'Vergleiche', url: '/vergleich' },
+    { name: vergleich.title.split(':')[0], url: vergleich.url },
+  ]);
+
+  const faqSch = vergleich.faq
+    ? faqSchema(vergleich.faq as Array<{ question: string; answer: string }>)
+    : null;
 
   return (
     <>
       <Header />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSch) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(comparisonSch) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSch) }} />
+      {faqSch && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSch) }} />}
 
       <main>
+        {/* Breadcrumb */}
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-brand-fire transition-colors">Start</Link>
+          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/45" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
             <ChevronRight size={12} />
-            <Link href="/kategorie/vergleich" className="hover:text-brand-fire transition-colors">Vergleiche</Link>
+            <Link href="/kategorie/vergleich" className="hover:text-brand-gold transition-colors">Vergleiche</Link>
             <ChevronRight size={12} />
-            <span className="text-text-primary">{vergleich.title.split(':')[0]}</span>
+            <span className="text-text-light/65">{vergleich.title.split(':')[0]}</span>
           </nav>
         </div>
 
-        <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
+
             <article>
-              <header className="mb-8">
+              {/* Article header */}
+              <header className="mb-10">
                 <span className="category-label">Vergleich &amp; Test</span>
-                <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary mt-2 mb-4 leading-tight">
+                <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-text-light mt-3 mb-5 leading-tight">
                   {vergleich.title}
                 </h1>
-                <p className="font-body text-lg text-text-secondary leading-relaxed mb-5">{vergleich.excerpt}</p>
+                <p className="font-body text-lg text-text-light/75 leading-relaxed mb-6">
+                  {vergleich.excerpt}
+                </p>
 
+                {/* Test-Metadata — Redaktionelle Gold-Karte */}
                 {(vergleich.testedCount || vergleich.testDuration) && (
-                  <div className="flex flex-wrap gap-4 mb-5 p-4 bg-surface-base border border-border-subtle">
+                  <div
+                    className="flex flex-wrap gap-6 mb-6 p-5"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(200,136,42,0.09) 0%, rgba(232,80,24,0.03) 100%)',
+                      border: '1px solid rgba(200,136,42,0.22)',
+                    }}
+                  >
                     {vergleich.testedCount && (
-                      <div className="flex items-center gap-2 text-sm font-sans">
-                        <FlaskConical size={16} className="text-brand-fire" />
-                        <span className="text-text-muted">Getestet:</span>
-                        <span className="font-bold text-text-primary">{vergleich.testedCount} Modelle</span>
+                      <div className="flex items-center gap-3 text-sm font-sans">
+                        <FlaskConical size={18} className="text-brand-gold" />
+                        <div>
+                          <span className="text-text-light/50 text-xs block tracking-wide">Getestet</span>
+                          <span className="font-bold text-text-light text-base">{vergleich.testedCount} Modelle</span>
+                        </div>
                       </div>
                     )}
                     {vergleich.testDuration && (
-                      <div className="flex items-center gap-2 text-sm font-sans">
-                        <Calendar size={16} className="text-brand-fire" />
-                        <span className="text-text-muted">Testdauer:</span>
-                        <span className="font-bold text-text-primary">{vergleich.testDuration}</span>
+                      <div className="flex items-center gap-3 text-sm font-sans">
+                        <Calendar size={18} className="text-brand-gold" />
+                        <div>
+                          <span className="text-text-light/50 text-xs block tracking-wide">Testdauer</span>
+                          <span className="font-bold text-text-light text-base">{vergleich.testDuration}</span>
+                        </div>
                       </div>
                     )}
                   </div>
                 )}
 
-                <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-muted pb-5 border-b border-border-subtle">
-                  <Link href={`/autoren/${vergleich.authorSlug}`} className="flex items-center gap-1.5 hover:text-brand-fire transition-colors">
-                    <div className="w-6 h-6 bg-border-subtle rounded-full" />
+                {/* Author meta */}
+                <div
+                  className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/45 pb-6"
+                  style={{ borderBottom: '1px solid rgba(200,136,42,0.15)' }}
+                >
+                  <Link href={`/autoren/${vergleich.authorSlug}`} className="flex items-center gap-2 hover:text-brand-gold transition-colors">
+                    <div className="w-6 h-6 rounded-full" style={{ background: 'rgba(200,136,42,0.2)' }} />
                     {vergleich.author}
                   </Link>
-                  <span className="flex items-center gap-1"><Calendar size={12} />{vergleich.formattedDate}</span>
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={12} />
+                    {vergleich.formattedDate}
+                  </span>
                   {vergleich.updatedAt && (
-                    <span className="flex items-center gap-1 text-brand-fire font-medium">
+                    <span className="flex items-center gap-1.5 text-brand-gold font-medium">
                       <RotateCcw size={12} />
                       Aktualisiert: {new Date(vergleich.updatedAt).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' })}
                     </span>
@@ -242,46 +256,71 @@ export default function VergleichPage({ params }: Props) {
                 </div>
               </header>
 
-              <div className="mb-8 overflow-hidden">
-                <Image src={vergleich.image} alt={vergleich.imageAlt} width={800} height={500} className="w-full aspect-[16/9] object-cover" priority />
-                <p className="text-xs font-sans text-text-muted mt-2 italic">{vergleich.imageAlt}</p>
+              {/* Hero image — Cinéma */}
+              <div className="cinema-frame mb-3 aspect-[16/9]">
+                <Image
+                  src={vergleich.image}
+                  alt={vergleich.imageAlt}
+                  width={800}
+                  height={500}
+                  className="w-full h-full object-cover"
+                  priority
+                />
               </div>
+              <p className="text-xs font-sans text-text-light/40 mb-10 italic">
+                {vergleich.imageAlt}
+              </p>
 
+              {/* MDX content */}
               <div className="max-w-content">
                 <MDXContent components={mdxComponents} />
               </div>
 
-              <div className="mt-10 p-5 bg-surface-base border border-border-subtle flex gap-4">
-                <div className="w-14 h-14 bg-border-subtle rounded-full shrink-0" />
+              {/* Author box */}
+              <div
+                className="mt-12 p-6 flex gap-5"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(200,136,42,0.06) 0%, transparent 70%)',
+                  border: '1px solid rgba(200,136,42,0.15)',
+                }}
+              >
+                <div className="w-14 h-14 rounded-full shrink-0" style={{ background: 'rgba(200,136,42,0.15)' }} />
                 <div>
-                  <Link href={`/autoren/${vergleich.authorSlug}`} className="font-sans font-bold text-sm text-text-primary hover:text-brand-fire transition-colors">
+                  <Link
+                    href={`/autoren/${vergleich.authorSlug}`}
+                    className="font-sans font-bold text-sm text-text-light hover:text-brand-gold transition-colors"
+                  >
                     {vergleich.author}
                   </Link>
-                  <p className="text-xs font-sans text-text-muted mt-1 leading-relaxed">
+                  <p className="text-xs font-sans text-text-light/55 mt-1.5 leading-relaxed">
                     Alle getesteten Produkte wurden selbst gekauft und über mehrere Wochen im Praxiseinsatz getestet.
                   </p>
                 </div>
               </div>
             </article>
 
+            {/* Sidebar — Redaktionelle Karten */}
             <aside className="space-y-6">
               {sidebarProducts.slice(0, 3).map((product) => (
                 <ProductCard key={product.id} product={product} variant="sidebar" />
               ))}
 
-              <div className="bg-white border border-border-subtle p-5">
+              <div className="bg-surface-card border border-border-subtle p-5">
                 <div className="border-t-2 border-brand-gold -mt-5 mb-4 pt-4">
                   <h3 className="font-sans font-bold text-sm text-text-primary">Verwandte Guides</h3>
                 </div>
-                <ul className="space-y-2">
+                <ul>
                   {[
                     { label: 'Kerntemperaturen Guide', href: '/wissen/kerntemperaturen' },
-                    { label: 'Reverse Sear Methode', href: '/methoden/reverse-sear' },
-                    { label: 'Ribeye Guide', href: '/cuts/ribeye' },
-                    { label: 'Brisket Guide', href: '/cuts/brisket' },
+                    { label: 'Reverse Sear Methode',   href: '/methoden/reverse-sear' },
+                    { label: 'Ribeye Guide',            href: '/cuts/ribeye' },
+                    { label: 'Brisket Guide',           href: '/cuts/brisket' },
                   ].map(({ label, href }) => (
                     <li key={href}>
-                      <Link href={href} className="flex items-center justify-between text-sm font-sans text-text-secondary hover:text-brand-fire transition-colors group py-1.5 border-b border-border-subtle/50">
+                      <Link
+                        href={href}
+                        className="flex items-center justify-between text-sm font-sans text-text-secondary hover:text-brand-fire transition-colors group py-3 border-b border-border-subtle/50 last:border-0"
+                      >
                         {label}
                         <ChevronRight size={13} className="opacity-0 group-hover:opacity-100 transition-opacity text-brand-fire" />
                       </Link>
@@ -290,6 +329,7 @@ export default function VergleichPage({ params }: Props) {
                 </ul>
               </div>
             </aside>
+
           </div>
         </div>
       </main>

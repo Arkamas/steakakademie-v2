@@ -4,91 +4,218 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── BASE ──────────────────────────────────────────────────────────────────── */
+/* ── HIGH-TECH & SMOKE — Wolkige Dunkelheit + Redaktionelle Licht-Inseln ── */
 
 :root {
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-body: 'Source Serif 4', Georgia, serif;
-  --font-sans: 'DM Sans', system-ui, sans-serif;
-  --color-gold: #F5A623;
-  --color-fire: #B43C00;
-  --surface-base: #FAF8F5;
+  --font-serif:         'Playfair Display', Georgia, serif;
+  --font-body:          'Source Serif 4', Georgia, serif;
+  --font-sans:          'DM Sans', system-ui, sans-serif;
+
+  /* Brand-Palette */
+  --color-gold:         #C8882A;   /* Whiskey-Gold — Akzente */
+  --color-ember:        #E85018;   /* Glut-Orange — CTA */
+  --color-parchment:    #F0E8D8;   /* Haupttext auf dunklem Grund */
+  --color-bourbon:      #1C1008;   /* Tiefes Dunkelbraun */
+
+  /* Hintergründe */
+  --page-bg-center:     #2D2218;
+  --page-bg-edge:       #120C07;
+  --surface-editorial:  #FAF6EF;   /* Redaktionelle Weiß-Karte */
 }
 
+/* Fallback-Farbe für Crawler & Old Browsers */
 html {
-  background-color: var(--surface-base);
+  background-color: #120C07;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
+/* Atmosphärischer Radial-Gradient — das Bourbon-Feeling */
 body {
-  background-color: var(--surface-base);
-  color: #0D0D0D;
+  background: radial-gradient(circle at center, #2D2218 0%, #120C07 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #F0E8D8;
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* ── EDITORIAL TYPOGRAPHY ───────────────────────────────────────────────────── */
+/* ── TYPOGRAFIE-UTILITIES ──────────────────────────────────────────────── */
 
 .font-serif { font-family: var(--font-serif); }
-.font-body { font-family: var(--font-body); }
-.font-sans { font-family: var(--font-sans); }
+.font-body  { font-family: var(--font-body); }
+.font-sans  { font-family: var(--font-sans); }
 
-/* ── CATEGORY LABEL ─────────────────────────────────────────────────────────── */
+/* ── CATEGORY LABEL ──────────────────────────────────────────────────── */
 
 .category-label {
-  @apply text-xs font-sans font-bold tracking-widest uppercase text-brand-fire;
+  @apply text-xs font-sans font-bold tracking-widest uppercase;
+  color: var(--color-ember);
 }
 
-/* ── ARTICLE TITLE HOVER ────────────────────────────────────────────────────── */
+/* ── ARTICLE TITLE HOVER ─────────────────────────────────────────────── */
 
 .article-title-link {
-  transition: color 0.15s ease;
+  transition: color 0.2s ease;
 }
 .article-title-link:hover {
-  color: var(--color-fire);
+  color: var(--color-gold);
 }
 
-/* ── AFFILIATE BUTTON (Brand Gold — EXCLUSIVE use) ───────────────────────────── */
+/* ── AFFILIATE-BUTTON — Glut-Orange CTA ─────────────────────────────── */
 
 .btn-affiliate {
-  @apply inline-flex items-center gap-2 bg-brand-gold text-white font-sans font-bold text-sm tracking-wide px-5 py-2.5 transition-all duration-150;
+  @apply inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-5 py-3 transition-all duration-200;
+  background-color: var(--color-ember);
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
 }
 .btn-affiliate:hover {
-  @apply bg-[#d4891a];
+  background-color: #cc4412;
+  box-shadow: 0 4px 24px rgba(232, 80, 24, 0.45);
+  transform: translateY(-1px);
 }
 
-/* ── SECTION DIVIDER ────────────────────────────────────────────────────────── */
+/* ── GOLD-BUTTON (sekundäre CTA) ─────────────────────────────────────── */
+
+.btn-gold {
+  @apply inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-5 py-3 transition-all duration-200;
+  background-color: var(--color-gold);
+  color: #1C1008;
+  -webkit-font-smoothing: antialiased;
+}
+.btn-gold:hover {
+  background-color: #b07020;
+  box-shadow: 0 4px 24px rgba(200, 136, 42, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ── CINEMA FRAME — cinématische FLUX-Bild-Container ─────────────────── */
+
+.cinema-frame {
+  position: relative;
+  overflow: hidden;
+  background-color: #0a0604;
+}
+.cinema-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 40%, rgba(18, 12, 7, 0.55) 78%, rgba(18, 12, 7, 0.88) 100%),
+    linear-gradient(90deg, rgba(18, 12, 7, 0.18) 0%, transparent 18%, transparent 82%, rgba(18, 12, 7, 0.18) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.cinema-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(200, 136, 42, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+.cinema-frame img {
+  transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              filter 0.45s ease;
+  filter: brightness(0.86) contrast(1.07) saturate(0.82);
+}
+.cinema-frame:hover img {
+  transform: scale(1.04);
+  filter: brightness(0.9) contrast(1.05) saturate(0.88);
+}
+
+/* ── EDITORIAL CARD — helle Magazin-Insel auf dunklem Grund ─────────── */
+
+.editorial-card {
+  background-color: var(--surface-editorial);
+  color: var(--color-bourbon);
+}
+
+/* ── QUOTE BOX ───────────────────────────────────────────────────────── */
+
+.quote-box {
+  position: relative;
+  padding: 2rem 2rem 2rem 2.75rem;
+  border-left: 3px solid var(--color-gold);
+  background: linear-gradient(
+    135deg,
+    rgba(200, 136, 42, 0.08) 0%,
+    rgba(232, 80, 24, 0.03) 55%,
+    transparent 100%
+  );
+  margin: 2.5rem 0;
+}
+.quote-box::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.5rem;
+  left: 0.75rem;
+  font-family: var(--font-serif);
+  font-size: 7rem;
+  line-height: 1;
+  color: var(--color-gold);
+  opacity: 0.12;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── SECTION DIVIDER ─────────────────────────────────────────────────── */
 
 .section-divider {
-  @apply border-t-2 border-text-primary mb-6 mt-2;
+  @apply mb-6 mt-2;
+  border-top: 1px solid rgba(200, 136, 42, 0.22);
 }
 
-/* ── AD BANNER PLACEHOLDER ─────────────────────────────────────────────────── */
+/* ── GOLD STAT-ZAHL ──────────────────────────────────────────────────── */
+
+.stat-number {
+  font-family: var(--font-serif);
+  color: var(--color-gold);
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ── AD PLACEHOLDER ──────────────────────────────────────────────────── */
 
 .ad-placeholder {
-  @apply flex items-center justify-center bg-border-subtle/50 text-text-muted text-xs font-sans tracking-widest uppercase;
+  @apply flex items-center justify-center text-xs font-sans tracking-widest uppercase;
+  background: rgba(200, 136, 42, 0.04);
+  color: rgba(200, 136, 42, 0.4);
+  border: 1px solid rgba(200, 136, 42, 0.1);
 }
 
-/* ── SELECTION ──────────────────────────────────────────────────────────────── */
+/* ── SCHARFE NAV-SCHRIFT (kein Anti-Alias-Schleier auf dunkel) ──────── */
+
+nav a, header button, .nav-sharp {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── SELECTION ───────────────────────────────────────────────────────── */
 
 ::selection {
-  background-color: #F5A62340;
-  color: #0D0D0D;
+  background-color: rgba(200, 136, 42, 0.28);
+  color: #F0E8D8;
 }
 
-/* ── FOCUS ──────────────────────────────────────────────────────────────────── */
+/* ── FOCUS ───────────────────────────────────────────────────────────── */
 
 :focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 3px;
 }
 
-/* ── SCROLLBAR ──────────────────────────────────────────────────────────────── */
+/* ── SCROLLBAR ───────────────────────────────────────────────────────── */
 
 @media (min-width: 768px) {
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: var(--surface-base); }
-  ::-webkit-scrollbar-thumb { background: #E8E3DB; border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: #C8C3BB; }
+  ::-webkit-scrollbar        { width: 8px; }
+  ::-webkit-scrollbar-track  { background: #120C07; }
+  ::-webkit-scrollbar-thumb  { background: #3D2210; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #5A3A18; }
 }

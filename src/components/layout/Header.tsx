@@ -4,38 +4,54 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Search, Menu, X, ChevronDown, Flame } from 'lucide-react';
+// Flame kept for Diplome CTA button
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import AnimatedLogo from './AnimatedLogo';
 
 const NAV_CATEGORIES = [
   {
     name: 'Grilltechniken',
-    slug: 'grilltechniken',
-    sub: ['Direkt & Indirekt', 'Reverse Sear', 'Räuchern', 'Sous-vide'],
+    href: '/methoden',
+    sub: [
+      { label: 'Reverse Sear', href: '/methoden/reverse-sear' },
+      { label: 'Direkt & Indirekt', href: '/methoden' },
+      { label: 'Räuchern', href: '/methoden' },
+      { label: 'Sous-vide', href: '/methoden' },
+    ],
   },
   {
     name: 'Cuts & Fleischkunde',
-    slug: 'cuts',
-    sub: ['Ribeye', 'Brisket', 'Pulled Pork', 'Tomahawk', 'Dry Aged'],
-  },
-  {
-    name: 'Rezepte',
-    slug: 'rezepte',
-    sub: [],
-  },
-  {
-    name: 'Ausrüstung',
-    slug: 'ausruestung',
-    sub: ['Grills & Smoker', 'Thermometer', 'Messer', 'Zubehör'],
+    href: '/cuts',
+    sub: [
+      { label: 'Ribeye', href: '/cuts/ribeye' },
+      { label: 'Brisket', href: '/cuts/brisket' },
+      { label: 'Pulled Pork', href: '/cuts' },
+      { label: 'Tomahawk', href: '/cuts' },
+    ],
   },
   {
     name: 'Wissen',
-    slug: 'wissen',
-    sub: ['Kerntemperaturen', 'Marmorierung', 'Reifung', 'BBQ-Lexikon'],
+    href: '/wissen',
+    sub: [
+      { label: 'Kerntemperaturen', href: '/wissen/kerntemperaturen' },
+      { label: 'Maillard-Reaktion', href: '/wissen' },
+      { label: 'Dry-Aging & Reifung', href: '/wissen' },
+      { label: 'Marmorierung', href: '/wissen' },
+    ],
+  },
+  {
+    name: 'Ausrüstung',
+    href: '/vergleich',
+    sub: [
+      { label: 'Fleischthermometer', href: '/vergleich/premium-fleischthermometer' },
+      { label: 'Oberhitzegrills', href: '/vergleich/oberhitzegrill-vergleich' },
+      { label: 'Dry-Ager', href: '/vergleich/dry-aging-kuehlschrank-vergleich' },
+      { label: 'Küchenmaschinen', href: '/vergleich/kuechenmaschine-vergleich' },
+    ],
   },
   {
     name: 'Diplome',
-    slug: 'diplome',
+    href: '/diplome',
     sub: [],
   },
 ];
@@ -73,17 +89,17 @@ export default function Header() {
   return (
     <>
       {/* Top-Bar */}
-      <div className="bg-text-primary text-white text-[10px] font-sans font-semibold tracking-[0.15em] uppercase text-center py-2 px-4">
+      <div className="bg-surface-dark border-b border-brand-gold/20 text-[10px] font-sans font-semibold tracking-[0.15em] uppercase text-center py-2 px-4 text-text-light/60">
         Grillmeister-Diplome — 5 Stufen · Bronze bis Meister
-        <Link href="/diplome" className="ml-3 underline underline-offset-2 hover:text-brand-gold transition-colors">
+        <Link href="/diplome" className="ml-3 text-brand-gold/80 underline underline-offset-2 hover:text-brand-gold transition-colors">
           Jetzt starten →
         </Link>
       </div>
 
       <header
         className={cn(
-          'bg-white border-b border-border-subtle sticky top-0 z-50 transition-shadow duration-200',
-          scrolled && 'shadow-[0_2px_12px_rgba(0,0,0,0.08)]'
+          'bg-surface-dark border-b border-brand-gold/15 sticky top-0 z-50 transition-all duration-200',
+          scrolled && 'shadow-[0_4px_32px_rgba(0,0,0,0.45),0_1px_0_rgba(200,136,42,0.15)]'
         )}
       >
         {/* Main header row */}
@@ -94,7 +110,7 @@ export default function Header() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="w-8 h-8 flex items-center justify-center bg-brand-fire text-white hover:bg-[#912e00] transition-colors shrink-0"
+                className="w-8 h-8 flex items-center justify-center bg-brand-fire text-white hover:bg-[#cc4412] transition-colors shrink-0"
                 aria-label={mobileOpen ? 'Menü schließen' : 'Menü öffnen'}
                 aria-expanded={mobileOpen}
               >
@@ -104,8 +120,23 @@ export default function Header() {
 
             {/* Center: Logo */}
             <div className="flex-1 flex justify-center">
-              <Link href="/" aria-label="Steakakademie Startseite">
-                <AnimatedLogo size={44} showWordmark={true} />
+              <Link href="/" aria-label="Steakakademie Startseite" className="flex items-center gap-3">
+                <Image
+                  src="/images/logo-emblem.svg"
+                  alt="Steakakademie"
+                  width={48}
+                  height={48}
+                  className="object-contain"
+                  priority
+                />
+                <div className="flex flex-col leading-none select-none">
+                  <span className="font-serif font-black text-text-light" style={{ fontSize: '19px', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
+                    Steak
+                  </span>
+                  <span className="font-serif font-normal text-text-light/50 uppercase" style={{ fontSize: '8.5px', letterSpacing: '0.16em', lineHeight: 1.3 }}>
+                    Akademie
+                  </span>
+                </div>
               </Link>
             </div>
 
@@ -113,20 +144,20 @@ export default function Header() {
             <div className="flex items-center gap-1 sm:gap-2">
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="p-2 text-text-primary hover:text-brand-fire transition-colors"
+                className="p-2 text-text-light/60 hover:text-brand-gold transition-colors"
                 aria-label="Suche öffnen"
               >
                 <Search size={18} />
               </button>
               <Link
                 href="/vergleich/fleischthermometer"
-                className="hidden sm:block text-[11px] font-sans font-bold tracking-[0.12em] uppercase text-text-primary hover:text-brand-fire transition-colors px-2"
+                className="hidden sm:block text-[11px] font-sans font-bold tracking-[0.12em] uppercase text-white hover:text-brand-gold transition-colors px-2 nav-sharp"
               >
                 Tests
               </Link>
               <Link
                 href="/diplome"
-                className="hidden sm:flex items-center gap-1.5 bg-brand-gold text-white font-sans text-[11px] font-bold tracking-[0.12em] uppercase px-3 py-2 hover:bg-[#d4891a] transition-colors"
+                className="hidden sm:flex items-center gap-1.5 bg-brand-gold text-ink font-sans text-[11px] font-bold tracking-[0.12em] uppercase px-3 py-2 hover:bg-[#b07020] transition-colors"
               >
                 <Flame size={12} />
                 Diplome
@@ -137,28 +168,28 @@ export default function Header() {
 
         {/* Search bar */}
         {searchOpen && (
-          <div className="border-t border-border-subtle bg-[#F7F4F0]">
+          <div className="border-t border-brand-gold/15 bg-surface-elevated">
             <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-3">
               <form onSubmit={handleSearch} className="flex items-center gap-3">
-                <Search size={16} className="text-text-muted shrink-0" />
+                <Search size={16} className="text-text-light/40 shrink-0" />
                 <input
                   ref={searchRef}
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Brisket, Thermometer, Reverse Sear …"
-                  className="flex-1 bg-transparent text-sm font-sans text-text-primary placeholder:text-text-muted outline-none border-b border-border-subtle pb-1 focus:border-brand-fire transition-colors"
+                  className="flex-1 bg-transparent text-sm font-sans text-text-light placeholder:text-text-light/40 outline-none border-b border-text-light/20 pb-1 focus:border-brand-gold transition-colors"
                 />
                 <button
                   type="submit"
-                  className="text-[11px] font-bold tracking-[0.12em] uppercase font-sans text-brand-fire hover:text-[#912e00] transition-colors"
+                  className="text-[11px] font-bold tracking-[0.12em] uppercase font-sans text-brand-fire hover:text-[#cc4412] transition-colors"
                 >
                   Suchen
                 </button>
                 <button
                   type="button"
                   onClick={() => setSearchOpen(false)}
-                  className="text-text-muted hover:text-text-primary transition-colors"
+                  className="text-text-light/40 hover:text-text-light transition-colors"
                 >
                   <X size={16} />
                 </button>
@@ -168,22 +199,22 @@ export default function Header() {
         )}
 
         {/* Category nav — desktop */}
-        <nav className="border-t border-border-subtle hidden md:block" aria-label="Hauptnavigation">
+        <nav className="border-t border-brand-gold/15 hidden md:block" aria-label="Hauptnavigation">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
             <ul className="flex items-center justify-center">
               {NAV_CATEGORIES.map((cat) => {
                 const isActive =
-                  pathname === `/kategorie/${cat.slug}` ||
-                  pathname.startsWith(`/kategorie/${cat.slug}/`);
+                  pathname === cat.href ||
+                  pathname.startsWith(`${cat.href}/`);
                 return (
-                  <li key={cat.slug} className="group relative">
+                  <li key={cat.href} className="group relative">
                     <Link
-                      href={`/kategorie/${cat.slug}`}
+                      href={cat.href}
                       className={cn(
                         'flex items-center gap-1 px-3 py-3 text-[11px] font-sans font-bold tracking-[0.1em] uppercase transition-colors duration-150 border-b-2',
                         isActive
                           ? 'text-brand-fire border-brand-fire'
-                          : 'text-text-primary border-transparent hover:text-brand-fire'
+                          : 'text-white border-transparent hover:text-brand-gold hover:border-brand-gold/40'
                       )}
                     >
                       {cat.name}
@@ -197,14 +228,14 @@ export default function Header() {
 
                     {/* Dropdown */}
                     {cat.sub.length > 0 && (
-                      <div className="absolute top-full left-0 bg-white border border-border-subtle shadow-lg min-w-[200px] z-50 opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-all duration-150 translate-y-1 group-hover:translate-y-0">
+                      <div className="absolute top-full left-0 bg-surface-elevated border border-brand-gold/15 shadow-[0_8px_32px_rgba(0,0,0,0.45)] min-w-[200px] z-50 opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-all duration-150 translate-y-1 group-hover:translate-y-0">
                         {cat.sub.map((sub) => (
                           <Link
-                            key={sub}
-                            href={`/kategorie/${cat.slug}`}
-                            className="block px-4 py-2.5 text-xs font-sans text-text-secondary hover:text-brand-fire hover:bg-surface-base transition-colors border-b border-border-subtle/50 last:border-0"
+                            key={sub.href + sub.label}
+                            href={sub.href}
+                            className="block px-4 py-2.5 text-xs font-sans text-text-light/70 hover:text-brand-gold hover:bg-surface-dark transition-colors border-b border-brand-gold/10 last:border-0"
                           >
-                            {sub}
+                            {sub.label}
                           </Link>
                         ))}
                       </div>
@@ -219,17 +250,17 @@ export default function Header() {
 
       {/* Mobile menu overlay */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-40 bg-white overflow-y-auto md:hidden pt-16">
+        <div className="fixed inset-0 z-40 bg-surface-dark overflow-y-auto md:hidden pt-16">
           <div className="p-6">
-            <p className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted mb-4">
+            <p className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-light/40 mb-4">
               Kategorien
             </p>
             <ul className="space-y-0">
               {NAV_CATEGORIES.map((cat) => (
-                <li key={cat.slug}>
+                <li key={cat.href}>
                   <Link
-                    href={`/kategorie/${cat.slug}`}
-                    className="block py-4 border-b border-border-subtle font-serif text-xl text-text-primary hover:text-brand-fire transition-colors"
+                    href={cat.href}
+                    className="block py-4 border-b border-brand-gold/15 font-serif text-xl text-text-light hover:text-brand-gold transition-colors"
                   >
                     {cat.name}
                   </Link>
@@ -239,13 +270,13 @@ export default function Header() {
             <div className="mt-8 space-y-4">
               <Link
                 href="/vergleich/fleischthermometer"
-                className="block text-sm font-sans font-semibold text-text-secondary hover:text-brand-fire transition-colors"
+                className="block text-sm font-sans font-semibold text-text-light/60 hover:text-brand-gold transition-colors"
               >
                 Produkttests &amp; Vergleiche
               </Link>
               <Link
                 href="/diplome"
-                className="inline-flex items-center gap-2 bg-brand-gold text-white font-sans text-sm font-bold tracking-wide uppercase px-5 py-3 hover:bg-[#d4891a] transition-colors"
+                className="inline-flex items-center gap-2 bg-brand-gold text-ink font-sans text-sm font-bold tracking-wide uppercase px-5 py-3 hover:bg-[#b07020] transition-colors"
               >
                 <Flame size={14} />
                 Grillmeister-Diplome starten

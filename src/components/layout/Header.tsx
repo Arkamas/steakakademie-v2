@@ -120,13 +120,13 @@ export default function Header() {
 
             {/* Center: Logo */}
             <div className="flex-1 flex justify-center">
-              <Link href="/" aria-label="Steakakademie Startseite" className="flex items-center gap-3">
+              <Link href="/" aria-label="Steakakademie Startseite" className="flex items-center gap-2">
                 <Image
-                  src="/images/logo-emblem.svg"
+                  src="/images/logo-barrel.jpg"
                   alt="Steakakademie"
-                  width={48}
-                  height={48}
-                  className="object-contain"
+                  width={52}
+                  height={52}
+                  className="rounded-full object-cover"
                   priority
                 />
                 <span className="flex flex-col leading-none select-none">

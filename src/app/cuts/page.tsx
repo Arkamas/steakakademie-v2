@@ -1,193 +1,263 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronRight, Beef } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { allCuts } from 'contentlayer/generated';
-import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
+import BeefDiagram from '@/components/cuts/BeefDiagram';
+import { CUTS } from '@/lib/cuts-data';
 
-export const metadata: Metadata = {
-  title: 'Cuts & Fleischkunde — Ribeye, Brisket, Tomahawk im Detail',
-  description:
-    'Fleischkunde für Grillmeister: Ribeye, Brisket, Pulled Pork, Tomahawk. Marmorierung, Faserverlauf, optimale Garstufen und Kerntemperaturen je Cut — wissenschaftlich fundiert.',
-  alternates: { canonical: 'https://steakakademie.de/cuts' },
-  openGraph: {
-    title: 'Cuts & Fleischkunde | Steakakademie',
-    description: 'Ribeye, Brisket, Tomahawk & Co. — Marmorierung, Faserverlauf und Kerntemperaturen aller Cuts.',
-    url: 'https://steakakademie.de/cuts',
-    type: 'website',
-  },
+const MARBLING_LABEL: Record<number, string> = {
+  1: 'Minimal',
+  2: 'Gering',
+  3: 'Mittel',
+  4: 'Hoch',
+  5: 'Außergewöhnlich',
 };
 
-const CUTS_FEATURED = [
-  {
-    slug: 'ribeye',
-    name: 'Ribeye / Entrecôte',
-    kicker: 'König der Steaks',
-    excerpt:
-      'Hohe Marmorierung (BMS 4–9+), Longissimus-dorsi-Muskel, intramuskuläres Fett ab 5 % — der Ribeye-Kappe verdankt dieser Cut sein charakteristisches Aroma und die butterweiche Textur.',
-    tags: ['Marmorierung', 'BMS', 'Intramuskuläres Fett', 'Kerntemperatur 54 °C'],
-    kerntemp: '54 °C (medium rare)',
-  },
-  {
-    slug: 'brisket',
-    name: 'Brisket (Rinderbrust)',
-    kicker: 'Texas BBQ Klassiker',
-    excerpt:
-      'Kollagenreich (Bindegewebe 8–12 %), plateauphase bei 68–76 °C durch Kollagen-Gelatinisierung. 12–18 Stunden Low & Slow bei 107–121 °C — Texas Crutch als Plateauüberbrückung.',
-    tags: ['Plateauphase', 'Kollagen', 'Low & Slow', 'Texas Crutch'],
-    kerntemp: '88–96 °C',
-  },
-];
-
-export default function CutsIndexPage() {
-  const collectionSch = collectionPageSchema(
-    'Cuts & Fleischkunde — Ribeye, Brisket & Co.',
-    '/cuts',
-    'Fleischkunde für Grillmeister: Marmorierung, Faserverlauf, Kerntemperaturen und optimale Garstufen aller wichtigen Cuts.',
+function MarblingBar({ level }: { level: number }) {
+  return (
+    <div className="flex gap-1.5">
+      {[1, 2, 3, 4, 5].map(i => (
+        <div
+          key={i}
+          className="flex-1 h-2 transition-colors duration-300"
+          style={{ background: i <= level ? '#C8882A' : '#2a1a0a' }}
+        />
+      ))}
+    </div>
   );
-  const breadcrumbSch = breadcrumbSchema([{ name: 'Cuts & Fleischkunde', url: '/cuts' }]);
+}
 
-  const publishedCuts = allCuts ?? [];
+function PriceLevel({ level }: { level: number }) {
+  return (
+    <span className="font-mono tracking-tight">
+      {[1, 2, 3, 4, 5].map(i => (
+        <span key={i} style={{ color: i <= level ? '#C8882A' : '#2a1a0a' }}>€</span>
+      ))}
+    </span>
+  );
+}
+
+export default function CutsPage() {
+  const [selectedId, setSelectedId] = useState<string>('rib');
+  const selectedCut = CUTS.find(c => c.id === selectedId) ?? CUTS[1];
 
   return (
     <>
       <Header />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSch) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSch) }} />
+      <main className="min-h-screen bg-surface-base">
 
-      <main className="bg-surface-base">
-        {/* Silo-Header */}
+        {/* Header */}
         <section className="bg-surface-dark border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
             <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
-              <span className="text-text-light/65">Cuts & Fleischkunde</span>
+              <span className="text-text-light/65">Cut-Explorer</span>
             </nav>
             <div className="max-w-2xl">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Warenkunde & Anatomie
+                Steakakademie · Cut-Explorer
               </span>
-              <h1 className="font-serif text-4xl lg:text-5xl font-bold text-text-light leading-tight mb-5">
-                Cuts & Fleischkunde
+              <h1 className="font-serif text-4xl lg:text-5xl font-bold text-text-light leading-tight mb-4">
+                Das Rind von innen
               </h1>
               <p className="font-body text-lg text-text-light/70 leading-relaxed">
-                Jeder Cut ist anders — Faserverlauf, Kollagengehalt, intramuskuläres Fett und
-                Muskelarbeit bestimmen, wie du das Fleisch zubereitest, bei welcher Kerntemperatur
-                du es vom Grill nimmst und warum manche Cuts 18 Stunden brauchen, andere 90 Sekunden.
+                Klicke auf eine Region und erfahre alles über den Cut — von der Anatomie
+                bis zur perfekten Zubereitung.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Featured Cuts */}
-        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
-          <h2 className="font-serif text-2xl font-bold text-text-primary mb-2">Die wichtigsten Cuts</h2>
-          <p className="text-sm font-sans text-text-muted mb-10">
-            Von der Anatomie bis zur optimalen Kerntemperatur — fundierte Fleischkunde für jeden Cut.
-          </p>
+        {/* Diagram + Detail */}
+        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {CUTS_FEATURED.map((cut) => {
-              const content = publishedCuts.find((c) => c.slug === cut.slug);
-              return (
-                <Link
-                  key={cut.slug}
-                  href={`/cuts/${cut.slug}`}
-                  className="group block bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-all duration-200 p-6"
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <span className="text-[10px] font-sans font-bold tracking-[0.14em] uppercase text-brand-fire">
-                      {cut.kicker}
-                    </span>
-                    <span className="text-[10px] font-sans font-semibold text-brand-gold/80 bg-surface-base px-2 py-0.5 border border-brand-gold/20">
-                      {cut.kerntemp}
-                    </span>
+          {/* SVG Diagram */}
+          <div className="mb-10 border border-brand-gold/15 overflow-hidden bg-[#0D0D0D]">
+            <BeefDiagram cuts={CUTS} selectedId={selectedId} onSelect={setSelectedId} />
+          </div>
+
+          {/* Detail Panel */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedCut.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+              className="border border-brand-gold/20 bg-surface-dark overflow-hidden"
+            >
+              {/* Panel header */}
+              <div className="px-6 sm:px-8 py-6 border-b border-brand-gold/15 flex items-center gap-4">
+                <span className="text-5xl" role="img" aria-label={selectedCut.nameDE}>
+                  {selectedCut.emoji}
+                </span>
+                <div>
+                  <div className="flex items-baseline gap-3 flex-wrap">
+                    <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light">
+                      {selectedCut.nameDE}
+                    </h2>
+                    <span className="text-text-light/40 text-sm italic">{selectedCut.nameEN}</span>
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-text-primary group-hover:text-brand-gold transition-colors mb-3">
-                    {cut.name}
-                  </h3>
-                  <p className="text-sm font-body text-text-secondary leading-relaxed mb-4">
-                    {cut.excerpt}
+                  <p className="text-brand-gold/70 text-sm font-sans mt-0.5">{selectedCut.region}</p>
+                </div>
+              </div>
+
+              {/* Panel body */}
+              <div className="grid grid-cols-1 lg:grid-cols-3">
+
+                {/* Left — description + cuts + methods */}
+                <div className="lg:col-span-2 px-6 sm:px-8 py-6 space-y-6 border-r border-brand-gold/10">
+
+                  <p className="font-body text-text-light/75 text-base leading-relaxed">
+                    {selectedCut.description}
                   </p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {cut.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] font-sans text-text-muted bg-surface-base px-2 py-0.5 border border-border-subtle">
-                        {tag}
+
+                  <div>
+                    <h3 className="text-[10px] font-sans font-bold text-brand-fire uppercase tracking-[0.18em] mb-3">
+                      Cuts aus dieser Region
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedCut.cuts.map(cut => (
+                        <span
+                          key={cut}
+                          className="px-3 py-1 bg-surface-elevated border border-brand-gold/20 text-text-light/70 text-sm font-sans"
+                        >
+                          {cut}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-[10px] font-sans font-bold text-brand-fire uppercase tracking-[0.18em] mb-3">
+                      Zubereitungsmethoden
+                    </h3>
+                    <ul className="space-y-2">
+                      {selectedCut.methods.map(method => (
+                        <li key={method} className="flex items-start gap-2.5 text-text-light/60 text-sm font-body">
+                          <span className="text-brand-gold mt-0.5 shrink-0">›</span>
+                          <span>{method}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Right — stats */}
+                <div className="px-6 sm:px-8 py-6 space-y-6">
+
+                  <div>
+                    <h3 className="text-[10px] font-sans font-bold text-brand-fire uppercase tracking-[0.18em] mb-2">
+                      Marmorierung
+                    </h3>
+                    <MarblingBar level={selectedCut.marbling} />
+                    <p className="text-text-light/40 text-xs mt-1.5 font-sans">
+                      {MARBLING_LABEL[selectedCut.marbling]}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-[10px] font-sans font-bold text-brand-fire uppercase tracking-[0.18em] mb-2">
+                      Garstufe
+                    </h3>
+                    <p className="text-text-light text-sm font-body leading-relaxed">
+                      {selectedCut.donenessRecommended}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-[10px] font-sans font-bold text-brand-fire uppercase tracking-[0.18em] mb-2">
+                      Preis-Niveau
+                    </h3>
+                    <PriceLevel level={selectedCut.price} />
+                  </div>
+
+                  <div className="border border-brand-gold/20 bg-surface-elevated p-4">
+                    <h3 className="text-[10px] font-sans font-bold text-brand-fire uppercase tracking-[0.18em] mb-3">
+                      Im Steak-Diplom
+                    </h3>
+                    <div className="flex items-baseline gap-2 mb-3">
+                      <span className="font-serif text-2xl font-bold text-brand-gold">
+                        Level {selectedCut.diplomLevel}
                       </span>
+                      <span className="text-text-light/40 text-sm font-sans">{selectedCut.diplomLevelName}</span>
+                    </div>
+                    <Link
+                      href="/diplome"
+                      className="block text-center text-[11px] font-sans font-bold tracking-[0.1em] uppercase py-2 px-4 border border-brand-gold/40 text-brand-gold hover:bg-brand-gold/10 transition-colors"
+                    >
+                      Zum Diplom →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </section>
+
+        {/* All cuts grid */}
+        <section className="border-t border-border-subtle py-14 px-4">
+          <div className="max-w-editorial mx-auto">
+            <h2 className="font-serif text-2xl font-bold text-text-primary mb-2 text-center">
+              Alle Regionen
+            </h2>
+            <p className="text-text-muted text-sm font-sans text-center mb-10">
+              Klicke auf eine Karte um zum Diagramm zu springen
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+              {CUTS.map(cut => (
+                <button
+                  key={cut.id}
+                  onClick={() => {
+                    setSelectedId(cut.id);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className={`text-left p-4 border transition-all duration-200 ${
+                    selectedId === cut.id
+                      ? 'bg-surface-elevated border-brand-gold/50 shadow-lg'
+                      : 'bg-surface-card border-border-subtle hover:border-brand-gold/30 hover:bg-surface-elevated'
+                  }`}
+                >
+                  <span className="text-3xl block mb-2">{cut.emoji}</span>
+                  <h3 className="font-serif font-bold text-text-primary text-sm leading-tight">{cut.nameDE}</h3>
+                  <p className="text-text-muted text-xs mt-0.5 font-sans">{cut.nameEN}</p>
+                  <div className="mt-2 flex gap-1">
+                    {[1, 2, 3, 4, 5].map(i => (
+                      <div
+                        key={i}
+                        className="h-1 flex-1"
+                        style={{ background: i <= cut.marbling ? '#C8882A' : '#DDD0BC' }}
+                      />
                     ))}
                   </div>
-                  {content && (
-                    <div className="flex items-center gap-1.5 text-xs font-sans text-brand-fire font-semibold">
-                      <Beef size={13} />
-                      Zum Cut-Guide
-                      <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  )}
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Semantische Tiefe — Warenkunde-Glossar */}
-          <div className="bg-surface-card border border-border-subtle p-8 mb-12">
-            <h2 className="font-serif text-2xl font-bold text-text-primary mb-5">
-              Fleischkunde-Grundlagen: Was jeden Cut definiert
-            </h2>
-            <div className="font-body text-text-secondary leading-relaxed space-y-5 text-[1.0625rem]">
-              <p>
-                <strong className="text-text-primary">Intramuskuläres Fett (IMF)</strong> — auch Marmorierung genannt —
-                ist das Fett innerhalb der Muskelfasern. Es bestimmt Saftigkeit, Aromatransport und Schmelzpunkt.
-                Beim Ribeye mit BMS 7–9 liegt der IMF-Anteil bei 8–12 %; bei einem Wagyu-A5 bis 30 %.
-                Je mehr IMF, desto niedriger die optimale Kerntemperatur — Wagyu schmilzt bereits bei 42 °C
-                intramuskulär, ein Standardribeye braucht 54 °C für dasselbe Mundgefühl.
-              </p>
-              <p>
-                <strong className="text-text-primary">Kollagen und Bindegewebe</strong> entscheiden über
-                die Zubereitungsmethode. Cuts aus stark beanspruchten Muskeln (Brust, Schulter, Haxe)
-                enthalten 8–15 % Kollagen. Kollagen denaturiert erst ab 70 °C und wandelt sich zwischen
-                80–90 °C zu Gelatine um — das ist der Grund, warum Brisket 88–96 °C Kerntemperatur braucht
-                und 12–18 Stunden bei niedrigen Temperaturen gegart wird.
-              </p>
-              <p>
-                <strong className="text-text-primary">Faserverlauf und Schnittrichtung</strong> sind beim
-                Servieren entscheidend. Gegen den Faserverlauf geschnittenes Fleisch verkürzt die
-                Faserlänge auf 2–3 mm — Kauaufwand sinkt um 40–60 %. Beim Flank Steak, Skirt und
-                Brisket Point ist das Schneiden quer zum Faserverlauf absolut kritisch.
-              </p>
-            </div>
-          </div>
-
-          {/* Cross-Silo-Links */}
-          <div className="pt-8 border-t border-border-subtle">
-            <div className="flex items-center gap-3 mb-6">
-              <Beef size={16} className="text-brand-gold" />
-              <h3 className="font-sans text-xs font-bold tracking-[0.14em] uppercase text-text-muted">
-                Verwandtes Wissen
-              </h3>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {[
-                { label: 'Kerntemperaturen Guide', href: '/wissen/kerntemperaturen' },
-                { label: 'Marmorierung & BMS-Skala', href: '/wissen' },
-                { label: 'Dry-Aging: Enzyme & Reifung', href: '/wissen' },
-                { label: 'Reverse Sear Methode', href: '/methoden/reverse-sear' },
-                { label: 'Fleischthermometer im Test', href: '/vergleich/premium-fleischthermometer' },
-                { label: 'Oberhitzegrill für Kruste', href: '/vergleich/oberhitzegrill-vergleich' },
-              ].map(({ label, href }) => (
-                <Link
-                  key={label}
-                  href={href}
-                  className="text-sm font-sans text-text-secondary hover:text-brand-fire transition-colors flex items-center gap-1.5 py-2"
-                >
-                  <ChevronRight size={11} className="text-brand-gold/50 shrink-0" />
-                  {label}
-                </Link>
+                </button>
               ))}
             </div>
           </div>
         </section>
+
+        {/* CTA */}
+        <section className="border-t border-border-subtle py-14 px-4 text-center bg-surface-dark">
+          <p className="text-text-light/40 text-sm font-sans mb-2">
+            Wissen allein reicht nicht.
+          </p>
+          <h3 className="font-serif text-2xl font-bold text-text-light mb-6">
+            Werde zum Master of Steak.
+          </h3>
+          <Link
+            href="/diplome"
+            className="inline-flex items-center gap-2 px-8 py-4 border border-brand-gold/60 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/10 transition-colors"
+          >
+            Zum Diplom-System
+            <ChevronRight size={14} />
+          </Link>
+        </section>
+
       </main>
       <Footer />
     </>

@@ -1,1 +1,330 @@
-[]
+[
+  {
+    "term": "Kerntemperatur-Kontrolle",
+    "slug": "kerntemperatur-kontrolle"
+  },
+  {
+    "term": "Kollagen-Transformation",
+    "slug": "kollagen-transformation"
+  },
+  {
+    "term": "Nassbeize / Wet Brining",
+    "slug": "wet-brining"
+  },
+  {
+    "term": "Wettkampf-Grillmeister",
+    "slug": "wettkampf-grillmeister"
+  },
+  {
+    "term": "Wettbewerbs-Pitmaster",
+    "slug": "wettbewerbs-pitmaster"
+  },
+  {
+    "term": "Wettbewerbs-Strategie",
+    "slug": "wettbewerbs-strategie"
+  },
+  {
+    "term": "Enzymatische Reifung",
+    "slug": "enzymatische-reifung"
+  },
+  {
+    "term": "Fleischwolf-Qualität",
+    "slug": "fleischwolf-qualitaet"
+  },
+  {
+    "term": "Infrarot-Thermometer",
+    "slug": "infrarot-thermometer"
+  },
+  {
+    "term": "Intramuskuläres Fett",
+    "slug": "intramuskulaeres-fett"
+  },
+  {
+    "term": "Fleischwolf-Aufsatz",
+    "slug": "fleischwolf-aufsatz"
+  },
+  {
+    "term": "Kerntemperatur-Ziel",
+    "slug": "kerntemperatur-ziel"
+  },
+  {
+    "term": "Kollagen-Umwandlung",
+    "slug": "kollagen-umwandlung"
+  },
+  {
+    "term": "Maillard-Intensität",
+    "slug": "maillard-intensitaet"
+  },
+  {
+    "term": "Smoker-Enthusiasten",
+    "slug": "smoker-enthusiasten"
+  },
+  {
+    "term": "Wagyu-Zubereitungen",
+    "slug": "wagyu-zubereitungen"
+  },
+  {
+    "term": "Wettkampf-Pitmaster",
+    "slug": "wettkampf-pitmaster"
+  },
+  {
+    "term": "Wettkampf-Standards",
+    "slug": "wettkampf-standards"
+  },
+  {
+    "term": "Brisket-Evangelium",
+    "slug": "brisket-evangelium"
+  },
+  {
+    "term": "Fleischthermometer",
+    "slug": "fleischthermometer"
+  },
+  {
+    "term": "Carryover Cooking",
+    "slug": "carryover-cooking"
+  },
+  {
+    "term": "Maillard-Reaktion",
+    "slug": "maillard-reaktion"
+  },
+  {
+    "term": "Smoker-Monitoring",
+    "slug": "smoker-monitoring"
+  },
+  {
+    "term": "Smoker-Temperatur",
+    "slug": "smoker-temp"
+  },
+  {
+    "term": "Smoker-Temperatur",
+    "slug": "smoker-temperatur"
+  },
+  {
+    "term": "Brine (Salzlake)",
+    "slug": "brine"
+  },
+  {
+    "term": "Infrarot-Brenner",
+    "slug": "infrarot-brenner"
+  },
+  {
+    "term": "Wagyu-Kreuzungen",
+    "slug": "wagyu-kreuzungen"
+  },
+  {
+    "term": "Wagyu-Zertifikat",
+    "slug": "wagyu-zertifikat"
+  },
+  {
+    "term": "Gusseisenpfanne",
+    "slug": "gusseisenpfanne"
+  },
+  {
+    "term": "Kollagen-Anteil",
+    "slug": "kollagen-anteil"
+  },
+  {
+    "term": "Maillard-Aromen",
+    "slug": "maillard-aromen"
+  },
+  {
+    "term": "Brisket-Rezept",
+    "slug": "brisket-rezept"
+  },
+  {
+    "term": "Brisket-Smoker",
+    "slug": "brisket-smoker"
+  },
+  {
+    "term": "Kerntemperatur",
+    "slug": "kerntemperatur"
+  },
+  {
+    "term": "Oberhitzegrill",
+    "slug": "oberhitzegrill"
+  },
+  {
+    "term": "Packer-Brisket",
+    "slug": "packer-brisket"
+  },
+  {
+    "term": "Smoker-Designs",
+    "slug": "smoker-designs"
+  },
+  {
+    "term": "Wettkampf-Team",
+    "slug": "wettkampf-team"
+  },
+  {
+    "term": "Dry-Aged Beef",
+    "slug": "dry-aged"
+  },
+  {
+    "term": "Maillard-Zone",
+    "slug": "maillard-zone"
+  },
+  {
+    "term": "Offset-Smoker",
+    "slug": "offset-smoker"
+  },
+  {
+    "term": "Smoker-Finish",
+    "slug": "smoker-finish"
+  },
+  {
+    "term": "Wagyu-Brisket",
+    "slug": "wagyu-brisket"
+  },
+  {
+    "term": "Wagyu-Pioneer",
+    "slug": "wagyu-pioneer"
+  },
+  {
+    "term": "Wettkampf-BBQ",
+    "slug": "wettkampf-bbq"
+  },
+  {
+    "term": "Bark-Bildung",
+    "slug": "bark-bildung"
+  },
+  {
+    "term": "Brisket-Buns",
+    "slug": "brisket-buns"
+  },
+  {
+    "term": "Brisket-Test",
+    "slug": "brisket-test"
+  },
+  {
+    "term": "Marmorierung",
+    "slug": "marmorierung"
+  },
+  {
+    "term": "Plateauphase",
+    "slug": "plateauphase"
+  },
+  {
+    "term": "Reverse Sear",
+    "slug": "reverse-sear"
+  },
+  {
+    "term": "Rub-Mischung",
+    "slug": "rub-mischung"
+  },
+  {
+    "term": "Smoke-Flavor",
+    "slug": "smoke-flavor"
+  },
+  {
+    "term": "Smoker-Setup",
+    "slug": "smoker-setup"
+  },
+  {
+    "term": "Texas Crutch",
+    "slug": "texas-crutch"
+  },
+  {
+    "term": "Wagyu-Burger",
+    "slug": "wagyu-burger"
+  },
+  {
+    "term": "Wagyu-Hotdog",
+    "slug": "wagyu-hotdog"
+  },
+  {
+    "term": "Wagyu-Kenner",
+    "slug": "wagyu-kenner"
+  },
+  {
+    "term": "Wagyu-Rinder",
+    "slug": "wagyu-rinder"
+  },
+  {
+    "term": "Wagyu-Wissen",
+    "slug": "wagyu-wissen"
+  },
+  {
+    "term": "Bark-Killer",
+    "slug": "bark-killer"
+  },
+  {
+    "term": "Dry Brining",
+    "slug": "dry-brining"
+  },
+  {
+    "term": "Hackfleisch",
+    "slug": "hackfleisch"
+  },
+  {
+    "term": "Pelletgrill",
+    "slug": "pelletgrill"
+  },
+  {
+    "term": "Smoker-Fans",
+    "slug": "smoker-fans"
+  },
+  {
+    "term": "Smoker-Long",
+    "slug": "smoker-long"
+  },
+  {
+    "term": "Smoker-Test",
+    "slug": "smoker-test"
+  },
+  {
+    "term": "Wagyu-Zucht",
+    "slug": "wagyu-zucht"
+  },
+  {
+    "term": "Low & Slow",
+    "slug": "low-slow"
+  },
+  {
+    "term": "Packer-Cut",
+    "slug": "packer-cut"
+  },
+  {
+    "term": "Smoke Ring",
+    "slug": "smoke-ring"
+  },
+  {
+    "term": "Wagyu-Farm",
+    "slug": "wagyu-farm"
+  },
+  {
+    "term": "BMS-Score",
+    "slug": "bms-score"
+  },
+  {
+    "term": "Dry Aging",
+    "slug": "dry-aging"
+  },
+  {
+    "term": "Myoglobin",
+    "slug": "myoglobin"
+  },
+  {
+    "term": "Sous-vide",
+    "slug": "sous-vide"
+  },
+  {
+    "term": "Kollagen",
+    "slug": "kollagen"
+  },
+  {
+    "term": "Kamado",
+    "slug": "kamado"
+  },
+  {
+    "term": "Stall",
+    "slug": "stall"
+  },
+  {
+    "term": "Bark",
+    "slug": "bark"
+  },
+  {
+    "term": "Rub",
+    "slug": "rub"
+  }
+]

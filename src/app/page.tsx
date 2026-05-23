@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Flame, BookOpen, Thermometer, Award } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -134,41 +135,64 @@ export default function HomePage() {
 
       <main>
 
-        {/* ── HERO — 3-Spalten Editorial ──────────────────────────────────── */}
-        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[55%_25%_20%] gap-6 lg:gap-10">
-
-            <div className="lg:border-r lg:pr-10" style={{ borderColor: 'rgba(200,136,42,0.15)' }}>
-              <ArticleCard article={heroArticle} variant="hero" />
-            </div>
-
-            <div className="lg:border-r lg:pr-8" style={{ borderColor: 'rgba(200,136,42,0.15)' }}>
-              <div className="space-y-6">
-                {sideArticles.slice(0, 3).map((article, i) => (
-                  <div key={article.slug}>
-                    <ArticleCard article={article} variant="small" />
-                    {i < 2 && <div className="mt-6" style={{ borderTop: '1px solid rgba(200,136,42,0.12)' }} />}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <ArticleCard article={featureArticle} variant="medium" />
+        {/* ── HERO — Full-Bleed 70vh ────────────────────────────────────── */}
+        <section className="hero-fullbleed" style={{ height: '70vh', minHeight: '520px' }}>
+          <Image
+            src="/images/hero-ribeye.png"
+            alt="Premium Ribeye Steak auf glühenden Holzkohleglut — Steakakademie"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover hero-fullbleed-image"
+          />
+          <div className="hero-fullbleed-overlay" />
+          <div className="hero-fullbleed-content">
+            <div className="max-w-editorial mx-auto w-full px-4 sm:px-6 lg:px-8 pb-14 lg:pb-20">
+              <Link href={heroArticle.url} className="group block max-w-3xl">
+                <span className="category-label mb-4 block">{heroArticle.category}</span>
+                <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text-light leading-[1.08] mb-5 group-hover:text-brand-gold transition-colors duration-300">
+                  {heroArticle.title}
+                </h1>
+                <p className="font-body text-lg text-text-light/65 leading-relaxed mb-7 max-w-2xl">
+                  {heroArticle.excerpt}
+                </p>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-sans text-text-light/45">
+                  <span>{heroArticle.author}</span>
+                  <span className="text-brand-gold/40">·</span>
+                  <span>{heroArticle.readingTime} min Lesezeit</span>
+                  <span className="text-brand-gold/40">·</span>
+                  <span>{heroArticle.formattedDate}</span>
+                </div>
+              </Link>
             </div>
           </div>
         </section>
 
-        {/* ── MANIFESTO — Redaktionelle Weiß-Karte ─────────────────────────── */}
+        {/* ── SECONDARY ARTICLES — unter dem Hero ──────────────────────── */}
+        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {sideArticles.map((article) => (
+              <ArticleCard key={article.slug} article={article} variant="medium" />
+            ))}
+          </div>
+        </section>
+
+        {/* ── MANIFESTO — Dunkle Ember-Karte ──────────────────────────────── */}
         <section className="py-8 sm:py-12">
           <div className="max-w-[820px] mx-auto px-4 sm:px-6">
-            {/* Die helle Magazin-Insel bricht aus der dunklen Atmosphäre */}
-            <div className="bg-surface-base px-10 sm:px-16 py-12 sm:py-16 relative">
-              {/* Dekorative Gold-Linien oben */}
+            <div
+              className="px-10 sm:px-16 py-12 sm:py-16 relative"
+              style={{
+                background: 'radial-gradient(ellipse 110% 140% at 50% 35%, #2D2218 0%, #17100B 100%)',
+                borderRadius: '4px',
+                border: '1px solid rgba(200,136,42,0.12)',
+              }}
+            >
+              {/* Dekorative Gold-Linien */}
               <div className="flex items-center gap-5 mb-10">
-                <div className="h-px flex-1 bg-border-strong/30" />
+                <div className="h-px flex-1 bg-brand-gold/20" />
                 <span className="font-sans text-[10px] tracking-[0.35em] uppercase text-text-muted">Manifest</span>
-                <div className="h-px flex-1 bg-border-strong/30" />
+                <div className="h-px flex-1 bg-brand-gold/20" />
               </div>
 
               {/* Großes dekoratives Anführungszeichen */}
@@ -176,11 +200,11 @@ export default function HomePage() {
                 <span
                   aria-hidden
                   className="absolute -top-8 -left-4 font-serif select-none pointer-events-none"
-                  style={{ fontSize: '8rem', lineHeight: 1, color: 'rgba(200,136,42,0.12)', fontStyle: 'italic' }}
+                  style={{ fontSize: '8rem', lineHeight: 1, color: 'rgba(200,136,42,0.10)', fontStyle: 'italic' }}
                 >
                   &ldquo;
                 </span>
-                <blockquote className="relative font-serif text-2xl sm:text-3xl lg:text-[2rem] font-bold italic text-text-primary leading-[1.4]">
+                <blockquote className="relative font-serif text-2xl sm:text-3xl lg:text-[2rem] font-bold italic text-text-light leading-[1.4]">
                   Feuer ist Geduld. Rauch ist Zeit.
                   <br />
                   Das perfekte Steak ist keine Technik —
@@ -191,7 +215,7 @@ export default function HomePage() {
 
               {/* Attributierung */}
               <div className="mt-10 flex items-center gap-5">
-                <div className="h-px w-16 bg-border-strong/25" />
+                <div className="h-px w-16 bg-brand-gold/25" />
                 <cite className="font-sans text-xs tracking-[0.22em] uppercase text-text-muted not-italic">
                   Marco, der Pitmaster
                 </cite>
@@ -275,7 +299,7 @@ export default function HomePage() {
 
         {/* ── TOP-PRODUKTE — Redaktionelle Weiß-Insel ─────────────────────── */}
         {recommendedProducts.length > 0 && (
-          <section className="bg-surface-base py-14 my-4" style={{ borderTop: '1px solid rgba(200,136,42,0.15)', borderBottom: '1px solid rgba(200,136,42,0.15)' }}>
+          <section className="bg-surface-card py-14 my-4" style={{ borderTop: '1px solid rgba(200,136,42,0.15)', borderBottom: '1px solid rgba(200,136,42,0.15)' }}>
             <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">

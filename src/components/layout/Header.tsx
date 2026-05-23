@@ -35,8 +35,8 @@ const NAV_CATEGORIES = [
     sub: [
       { label: 'Kerntemperaturen', href: '/wissen/kerntemperaturen' },
       { label: 'Maillard-Reaktion', href: '/wissen' },
-      { label: 'Dry-Aging & Reifung', href: '/wissen' },
-      { label: 'Marmorierung', href: '/wissen' },
+      { label: 'Dry-Aging & Reifung', href: '/aging' },
+      { label: 'Persönlichkeiten', href: '/persoenlichkeiten' },
     ],
   },
   {

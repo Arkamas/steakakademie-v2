@@ -154,11 +154,55 @@ export const Vergleich = defineDocumentType(() => ({
   },
 }));
 
+// ── PERSOENLICHKEITEN ─────────────────────────────────────────────────────────
+
+export const Persoenlichkeit = defineDocumentType(() => ({
+  name: 'Persoenlichkeit',
+  filePathPattern: 'persoenlichkeiten/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title: { type: 'string', required: true },
+    excerpt: { type: 'string', required: true },
+    publishedAt: { type: 'date', required: true },
+    updatedAt: { type: 'date' },
+    author: { type: 'string', required: true },
+    authorSlug: { type: 'string', required: true },
+    nationality: { type: 'string', required: true },
+    category: { type: 'string', required: true },
+    born: { type: 'string' },
+    claim: { type: 'string', required: true },
+    image: { type: 'string', required: true },
+    imageAlt: { type: 'string', required: true },
+    website: { type: 'string' },
+    instagram: { type: 'string' },
+    tags: { type: 'list', of: { type: 'string' } },
+    featured: { type: 'boolean', default: false },
+    sortOrder: { type: 'number', default: 99 },
+    seoTitle: { type: 'string' },
+    seoDescription: { type: 'string' },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => doc._raw.flattenedPath.replace('persoenlichkeiten/', ''),
+    },
+    url: {
+      type: 'string',
+      resolve: (doc) => `/persoenlichkeiten/${doc._raw.flattenedPath.replace('persoenlichkeiten/', '')}`,
+    },
+    formattedDate: {
+      type: 'string',
+      resolve: (doc) =>
+        format(parseISO(doc.publishedAt), 'd. MMMM yyyy', { locale: de }),
+    },
+  },
+}));
+
 // ── SOURCE ────────────────────────────────────────────────────────────────────
 
 export default makeSource({
   contentDirPath: 'content',
-  documentTypes: [Artikel, Cut, Methode, Vergleich],
+  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit],
   mdx: {
     // rehype / remark plugins can be added here later
   },

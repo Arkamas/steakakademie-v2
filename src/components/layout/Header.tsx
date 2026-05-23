@@ -110,7 +110,7 @@ export default function Header() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="w-8 h-8 flex items-center justify-center bg-brand-fire text-white hover:bg-[#cc4412] transition-colors shrink-0"
+                className="md:hidden w-8 h-8 flex items-center justify-center bg-brand-fire text-white hover:bg-[#cc4412] transition-colors shrink-0"
                 aria-label={mobileOpen ? 'Menü schließen' : 'Menü öffnen'}
                 aria-expanded={mobileOpen}
               >

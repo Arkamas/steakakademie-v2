@@ -25,25 +25,70 @@ export default function DiplomePage() {
       <Header />
       <main className="min-h-screen bg-surface-base">
 
-        {/* Header */}
-        <section className="bg-surface-dark border-b border-brand-gold/15">
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
+        {/* Hero — Leather & Fire-Forge */}
+        <section
+          className="relative border-b border-brand-gold/20 overflow-hidden"
+          style={{
+            background: [
+              'radial-gradient(ellipse 90% 50% at 50% 110%, rgba(200,136,42,0.10) 0%, transparent 68%)',
+              'radial-gradient(ellipse 60% 35% at 50% 110%, rgba(232,80,24,0.06) 0%, transparent 55%)',
+              'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px)',
+              'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(255,255,255,0.005) 8px, rgba(255,255,255,0.005) 9px)',
+              '#0F0A06',
+            ].join(', '),
+          }}
+        >
+          {/* Subtle forge-glow at bottom edge */}
+          <div
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-px"
+            style={{ background: 'linear-gradient(90deg, transparent, rgba(200,136,42,0.4), transparent)' }}
+          />
+
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center">
+            {/* Breadcrumb */}
+            <nav className="flex items-center justify-center gap-1.5 text-xs font-sans text-text-light/30 mb-10" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
-              <span className="text-text-light/65">Diplom-System</span>
+              <span className="text-text-light/50">Diplom-System</span>
             </nav>
-            <div className="max-w-2xl">
-              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Steakakademie Â· Diplom-System
-              </span>
-              <h1 className="font-serif text-4xl lg:text-5xl font-bold text-text-light leading-tight mb-4">
-                Das Steak-Diplom
-              </h1>
-              <p className="font-body text-lg text-text-light/70 leading-relaxed">
-                10 Level. Von Glut-Lehrling bis Master of Steak.
-                Jede Stufe macht dich besser am Rost.
-              </p>
+
+            {/* Kicker */}
+            <p
+              className="font-serif text-sm sm:text-base font-bold tracking-[0.22em] uppercase mb-5"
+              style={{ color: '#C8882A' }}
+            >
+              Deine Reise zum Grillmeister
+            </p>
+
+            {/* Main headline */}
+            <h1
+              className="font-serif font-bold leading-[1.08] tracking-tight mb-7 mx-auto"
+              style={{
+                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                background: 'linear-gradient(160deg, #F0E8D8 30%, #C8882A 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                maxWidth: '820px',
+              }}
+            >
+              Vom Grillen zur Kunst —<br className="hidden sm:block" /> Erwerbe dein Meisterdiplom
+            </h1>
+
+            {/* Subtitle */}
+            <p
+              className="font-serif text-base sm:text-lg leading-relaxed mx-auto"
+              style={{ color: 'rgba(200,136,42,0.75)', maxWidth: '560px' }}
+            >
+              Belege dein Fachwissen, bestehe exklusive Prüfungen und werde Teil unserer Elite.
+              Eine Ausbildung in 5 präzisen Stufen.
+            </p>
+
+            {/* Decorative rule */}
+            <div className="flex items-center justify-center gap-4 mt-10">
+              <div className="h-px w-16 bg-brand-gold/20" />
+              <div className="w-1 h-1 bg-brand-gold/40 rotate-45" />
+              <div className="h-px w-16 bg-brand-gold/20" />
             </div>
           </div>
         </section>

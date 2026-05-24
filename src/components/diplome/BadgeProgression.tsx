@@ -223,7 +223,15 @@ function ForgedStand({ medalSize }: { medalSize: number }) {
 }
 
 // ── Badge definitions ─────────────────────────────────────────────────────────
-const BADGES = [
+interface BadgeDef {
+  id: number; stufe: string; name: string; cert: string;
+  size: number; ringW: number; ringBg: string; medalBg: string;
+  highlightBg: string; castShadow: string; bevelInset: string;
+  ringInset: string; crestColor: string; labelColor: string; certColor: string;
+  isMaster?: boolean;
+}
+
+const BADGES: BadgeDef[] = [
   {
     id: 1,
     stufe: 'Stufe 1',
@@ -355,8 +363,6 @@ const BADGES = [
     certColor: 'rgba(200,140,20,0.6)',
   },
 ] as const;
-
-type BadgeDef = typeof BADGES[number];
 
 function Medal({ b }: { b: BadgeDef }) {
   const outer = b.size;

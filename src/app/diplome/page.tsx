@@ -8,16 +8,16 @@ import Footer from '@/components/layout/Footer';
 import BadgeProgression from '@/components/diplome/BadgeProgression';
 
 const LEVELS = [
-  { id: 1, name: 'Glut-Lehrling', emoji: '🔥', description: 'Grundlagen des Grillens: Temperaturzonen, direktes vs. indirektes Grillen, Sicherheit.', locked: false },
-  { id: 2, name: 'Marinier-Meister', emoji: '🧂', description: 'Die Kunst der Würzung: Dry Rubs, Marinaden, Salzen und Timing.', locked: false },
-  { id: 3, name: 'Onglet-Kenner', emoji: '🥩', description: 'Cuts & Anatomie: Welche Fleischteile sind was — und warum?', locked: true },
-  { id: 4, name: 'Dry-Ager', emoji: '🧊', description: 'Reifung & Lagerung: Wet Aging vs. Dry Aging, optimale Bedingungen.', locked: true },
-  { id: 5, name: 'Flammen-Virtuose', emoji: '🎯', description: 'Präzisions-Grillen: Kerntemperaturen, Reverse Sear, die perfekte Kruste.', locked: true },
-  { id: 6, name: 'Cuts-Experte', emoji: '🗺️', description: 'Weltreise der Cuts: Wagyu, Angus, Iberico — Herkunft & Eigenschaften.', locked: true },
-  { id: 7, name: 'Smoke-Artist', emoji: '💨', description: 'Low & Slow: Smoker, Holzarten, Smoke Rings und BBQ-Wissenschaft.', locked: true },
-  { id: 8, name: 'Thermometer-Profi', emoji: '🌡️', description: 'Die Physik des Steaks: Maillard-Reaktion, Proteinstruktur, Saftigkeit.', locked: true },
-  { id: 9, name: 'Wagyu-Sommelier', emoji: '🏅', description: 'Premium-Klasse: Marmorierung, BMS-Score, Verkostung wie ein Profi.', locked: true },
-  { id: 10, name: 'Master of Steak', emoji: '👑', description: 'Das Abschluss-Diplom. Du kennst das Steak von der Weide bis zum Teller.', locked: true },
+  { id: 1,  name: 'Glut-Lehrling',      emoji: '🔥', description: 'Grundlagen des Grillens: Temperaturzonen, direktes vs. indirektes Grillen, Sicherheit.', locked: false },
+  { id: 2,  name: 'Marinier-Meister',   emoji: '🧂', description: 'Die Kunst der Wuerzung: Dry Rubs, Marinaden, Salzen und Timing.', locked: false },
+  { id: 3,  name: 'Onglet-Kenner',      emoji: '🥩', description: 'Cuts & Anatomie: Welche Fleischteile sind was - und warum?', locked: true },
+  { id: 4,  name: 'Dry-Ager',           emoji: '🧊', description: 'Reifung & Lagerung: Wet Aging vs. Dry Aging, optimale Bedingungen.', locked: true },
+  { id: 5,  name: 'Flammen-Virtuose',   emoji: '🎯', description: 'Praezisions-Grillen: Kerntemperaturen, Reverse Sear, die perfekte Kruste.', locked: true },
+  { id: 6,  name: 'Cuts-Experte',       emoji: '🗺️', description: 'Weltreise der Cuts: Wagyu, Angus, Iberico - Herkunft & Eigenschaften.', locked: true },
+  { id: 7,  name: 'Smoke-Artist',       emoji: '💨', description: 'Low & Slow: Smoker, Holzarten, Smoke Rings und BBQ-Wissenschaft.', locked: true },
+  { id: 8,  name: 'Thermometer-Profi',  emoji: '🌡️', description: 'Die Physik des Steaks: Maillard-Reaktion, Proteinstruktur, Saftigkeit.', locked: true },
+  { id: 9,  name: 'Wagyu-Sommelier',    emoji: '🏅', description: 'Premium-Klasse: Marmorierung, BMS-Score, Verkostung wie ein Profi.', locked: true },
+  { id: 10, name: 'Master of Steak',    emoji: '👑', description: 'Das Abschluss-Diplom. Du kennst das Steak von der Weide bis zum Teller.', locked: true },
 ];
 
 export default function DiplomePage() {
@@ -26,7 +26,7 @@ export default function DiplomePage() {
       <Header />
       <main className="min-h-screen bg-surface-base">
 
-        {/* Hero � Leather & Fire-Forge */}
+        {/* Hero -- Leather & Fire-Forge */}
         <section
           className="relative border-b border-brand-gold/20 overflow-hidden"
           style={{
@@ -73,7 +73,7 @@ export default function DiplomePage() {
                 maxWidth: '820px',
               }}
             >
-              Vom Grillen zur Kunst �<br className="hidden sm:block" /> Erwerbe dein Meisterdiplom
+              Vom Grillen zur Kunst &mdash;<br className="hidden sm:block" /> Erwerbe dein Meisterdiplom
             </h1>
 
             {/* Subtitle */}
@@ -81,8 +81,8 @@ export default function DiplomePage() {
               className="font-serif text-base sm:text-lg leading-relaxed mx-auto"
               style={{ color: 'rgba(200,136,42,0.75)', maxWidth: '560px' }}
             >
-              Belege dein Fachwissen, bestehe exklusive Pr�fungen und werde Teil unserer Elite.
-              Eine Ausbildung in 5 pr�zisen Stufen.
+              Belege dein Fachwissen, bestehe exklusive Pruefungen und werde Teil unserer Elite.
+              Eine Ausbildung in 5 praezisen Stufen.
             </p>
 
             {/* Decorative rule */}
@@ -93,8 +93,8 @@ export default function DiplomePage() {
             </div>
           </div>
         </section>
-        <BadgeProgression />
 
+        <BadgeProgression />
 
         {/* Level Grid */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -123,7 +123,7 @@ export default function DiplomePage() {
                       </span>
                       {!level.locked && (
                         <span className="text-[10px] bg-brand-gold/15 text-brand-gold px-2 py-0.5 font-sans font-bold uppercase tracking-wider">
-                          Verfügbar
+                          Verfuegbar
                         </span>
                       )}
                     </div>
@@ -135,7 +135,7 @@ export default function DiplomePage() {
                     </p>
                     {!level.locked && (
                       <button className="mt-3 text-sm font-sans font-medium text-brand-gold hover:text-brand-fire transition-colors">
-                        Jetzt starten →
+                        Jetzt starten &rarr;
                       </button>
                     )}
                   </div>
@@ -154,20 +154,20 @@ export default function DiplomePage() {
                 href="/diplome/simulation"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-[#b07020] transition-colors"
               >
-                🎓 System kennenlernen →
+                System kennenlernen &rarr;
               </Link>
               <Link
                 href="/diplome/urkunde"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition-colors"
               >
-                📜 Urkunde per Post — 3 €
+                Urkunde per Post &mdash; 3 &euro;
               </Link>
             </div>
             <Link
               href="/manifest"
               className="inline-block text-xs font-sans text-text-muted/50 hover:text-text-muted transition-colors"
             >
-              Das Steak-Manifest →
+              Das Steak-Manifest &rarr;
             </Link>
           </div>
         </section>
@@ -202,7 +202,7 @@ export default function DiplomePage() {
               ))}
             </div>
             <p className="text-text-light/30 text-xs font-sans mt-4">
-              2 von 10 Levels freigeschaltet — weitere folgen
+              2 von 10 Levels freigeschaltet &mdash; weitere folgen
             </p>
           </div>
         </section>

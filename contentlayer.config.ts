@@ -263,11 +263,67 @@ export const UsaBbqStyle = defineDocumentType(() => ({
   },
 }));
 
+// ── REZEPTE ───────────────────────────────────────────────────────────────────
+
+export const Recipe = defineDocumentType(() => ({
+  name: 'Recipe',
+  filePathPattern: 'rezepte/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title:          { type: 'string',  required: true },
+    description:    { type: 'string',  required: true },
+    publishedAt:    { type: 'date',    required: true },
+    updatedAt:      { type: 'date' },
+    author:         { type: 'string',  required: true },
+    authorSlug:     { type: 'string',  required: true },
+    image:          { type: 'string',  required: true },
+    imageAlt:       { type: 'string',  required: true },
+    prepTime:       { type: 'string',  required: true }, // ISO 8601: PT30M
+    cookTime:       { type: 'string',  required: true },
+    totalTime:      { type: 'string',  required: true },
+    servings:       { type: 'number',  required: true },
+    calories:       { type: 'number' },
+    meatType:       { type: 'string',  required: true }, // z.B. "Ribeye"
+    cookingMethod:  { type: 'string',  required: true }, // z.B. "Sous-Vide"
+    difficulty:     { type: 'enum',    options: ['Einfach', 'Mittel', 'Fortgeschritten', 'Profi'], required: true },
+    keywords:       { type: 'list',    of: { type: 'string' } },
+    equipment:      { type: 'list',    of: { type: 'string' } }, // registry-Kategorien
+    ingredients:    { type: 'json',    required: true }, // [{amount, unit, name, note?}]
+    steps:          { type: 'json',    required: true }, // [{title, description, duration?, tip?}]
+    seoTitle:       { type: 'string' },
+    seoDescription: { type: 'string' },
+    // Pairing-Overrides (überschreiben automatische Selektion)
+    whiskeyName:    { type: 'string' },
+    whiskeyType:    { type: 'string' },
+    whiskeyProfile: { type: 'string' },
+    whiskeyLink:    { type: 'string' },
+    wineName:       { type: 'string' },
+    wineType:       { type: 'string' },
+    wineProfile:    { type: 'string' },
+    wineLink:       { type: 'string' },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => doc._raw.flattenedPath.replace('rezepte/', ''),
+    },
+    url: {
+      type: 'string',
+      resolve: (doc) => `/rezepte/${doc._raw.flattenedPath.replace('rezepte/', '')}`,
+    },
+    formattedDate: {
+      type: 'string',
+      resolve: (doc) =>
+        format(parseISO(doc.publishedAt), 'd. MMMM yyyy', { locale: de }),
+    },
+  },
+}));
+
 // ── SOURCE ────────────────────────────────────────────────────────────────────
 
 export default makeSource({
   contentDirPath: 'content',
-  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit, Glossar, UsaBbqStyle],
+  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe],
   mdx: {
     // rehype / remark plugins can be added here later
   },

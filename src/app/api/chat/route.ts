@@ -74,7 +74,7 @@ export async function POST(req: Request) {
     }
 
     const result = streamText({
-      model: anthropic('claude-haiku-4-5-20251001'),
+      model: anthropic('claude-3-5-haiku-20241022'),
       system: SYSTEM_PROMPT,
       messages,
       temperature: 0.7,

@@ -50,6 +50,16 @@ const NAV_CATEGORIES = [
     ],
   },
   {
+    name: 'USA-Expedition',
+    href: '/usa-expedition',
+    sub: [
+      { label: 'Texas Style', href: '/usa-expedition/texas-style' },
+      { label: 'Kansas City', href: '/usa-expedition/kansas-city' },
+      { label: 'Memphis', href: '/usa-expedition/memphis' },
+      { label: 'Carolinas', href: '/usa-expedition/carolinas' },
+    ],
+  },
+  {
     name: 'Diplome',
     href: '/diplome',
     sub: [],
@@ -128,6 +138,9 @@ export default function Header() {
                   height={52}
                   className="rounded-full object-cover"
                   priority
+                  style={{
+                    filter: 'drop-shadow(0 0 6px rgba(210,125,45,0.28)) drop-shadow(0 0 14px rgba(210,125,45,0.14))',
+                  }}
                 />
                 <span className="flex flex-col leading-none select-none">
                   <span className="font-serif font-black text-text-light" style={{ fontSize: '19px', letterSpacing: '-0.01em', lineHeight: 1.1 }}>

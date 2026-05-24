@@ -101,7 +101,7 @@ export default function WissenIndexPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {WISSEN_CLUSTER.map((item) => (
               <Link
-                key={item.href}
+                key={item.title}
                 href={item.href}
                 className="group block bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-all duration-200 p-6"
               >

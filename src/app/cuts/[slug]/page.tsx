@@ -10,6 +10,7 @@ import ProductCard from '@/components/affiliate/ProductCard';
 import { getProductsByCategory, getProductById } from '@/lib/products';
 import { cn } from '@/lib/utils';
 import { Clock, Calendar, ChevronRight, RotateCcw } from 'lucide-react';
+import BBQPairing from '@/components/article/BBQPairing';
 
 interface Props {
   params: { slug: string };
@@ -119,6 +120,7 @@ const mdxComponents = {
     </strong>
   ),
   hr: () => <hr className="border-border-subtle my-10" />,
+  BBQPairing,
 };
 
 export default function CutPage({ params }: Props) {
@@ -163,20 +165,54 @@ export default function CutPage({ params }: Props) {
       />
 
       <main>
-        {/* Breadcrumb */}
-        <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <nav
-            className="flex items-center gap-1.5 text-xs font-sans text-text-muted"
-            aria-label="Breadcrumb"
-          >
-            <Link href="/" className="hover:text-brand-fire transition-colors">Start</Link>
-            <ChevronRight size={12} />
-            <Link href="/kategorie/cuts" className="hover:text-brand-fire transition-colors">
-              Cuts &amp; Fleischkunde
-            </Link>
-            <ChevronRight size={12} />
-            <span className="text-text-primary">{cut.title.split(':')[0]}</span>
-          </nav>
+        {/* ── HERO — Full-Bleed 65vh ──────────────────────────────────────── */}
+        <div className="hero-fullbleed" style={{ height: '65vh', minHeight: '480px' }}>
+          <Image
+            src={cut.image}
+            alt={cut.imageAlt}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover hero-fullbleed-image"
+          />
+          <div className="hero-fullbleed-overlay" />
+          <div className="hero-fullbleed-content">
+            {/* Breadcrumb — oben */}
+            <div className="absolute top-0 left-0 right-0">
+              <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+                <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40" aria-label="Breadcrumb">
+                  <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
+                  <ChevronRight size={12} />
+                  <Link href="/kategorie/cuts" className="hover:text-brand-gold transition-colors">Cuts &amp; Fleischkunde</Link>
+                  <ChevronRight size={12} />
+                  <span className="text-text-light/60">{cut.title.split(':')[0]}</span>
+                </nav>
+              </div>
+            </div>
+            {/* Titel + Meta — unten */}
+            <div className="max-w-editorial mx-auto w-full px-4 sm:px-6 lg:px-8 pb-12 lg:pb-16">
+              <span className="category-label mb-3 block">Cuts &amp; Fleischkunde</span>
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-text-light leading-[1.1] mb-4 max-w-3xl">
+                {cut.title}
+              </h1>
+              <p className="font-body text-lg text-text-light/60 leading-relaxed mb-5 max-w-2xl">
+                {cut.excerpt}
+              </p>
+              <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/40">
+                <Link href={`/autoren/${cut.authorSlug}`} className="hover:text-brand-gold transition-colors">
+                  {cut.author}
+                </Link>
+                <span className="text-brand-gold/30">·</span>
+                <span className="flex items-center gap-1"><Calendar size={12} />{cut.formattedDate}</span>
+                {cut.updatedAt && (
+                  <span className="flex items-center gap-1 text-brand-fire/70">
+                    <RotateCcw size={12} />
+                    Aktualisiert
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Article layout: content + sidebar */}
@@ -185,48 +221,6 @@ export default function CutPage({ params }: Props) {
 
             {/* Main content */}
             <article>
-              {/* Header */}
-              <header className="mb-8">
-                <span className="category-label">Cuts &amp; Fleischkunde</span>
-                <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary mt-2 mb-4 leading-tight">
-                  {cut.title}
-                </h1>
-                <p className="font-body text-lg text-text-secondary leading-relaxed mb-5">
-                  {cut.excerpt}
-                </p>
-                <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-muted pb-5 border-b border-border-subtle">
-                  <Link
-                    href={`/autoren/${cut.authorSlug}`}
-                    className="flex items-center gap-1.5 hover:text-brand-fire transition-colors"
-                  >
-                    <div className="w-6 h-6 bg-border-subtle rounded-full" />
-                    {cut.author}
-                  </Link>
-                  <span className="flex items-center gap-1">
-                    <Calendar size={12} />
-                    {cut.formattedDate}
-                  </span>
-                  {cut.updatedAt && (
-                    <span className="flex items-center gap-1 text-brand-fire font-medium">
-                      <RotateCcw size={12} />
-                      Aktualisiert: {new Date(cut.updatedAt).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' })}
-                    </span>
-                  )}
-                </div>
-              </header>
-
-              {/* Hero image */}
-              <div className="mb-8 overflow-hidden">
-                <Image
-                  src={cut.image}
-                  alt={cut.imageAlt}
-                  width={800}
-                  height={500}
-                  className="w-full aspect-[16/9] object-cover"
-                  priority
-                />
-                <p className="text-xs font-sans text-text-muted mt-2 italic">{cut.imageAlt}</p>
-              </div>
 
               {/* MDX Content */}
               <div className="max-w-content">
@@ -253,7 +247,7 @@ export default function CutPage({ params }: Props) {
             {/* Sidebar */}
             <aside className="space-y-6">
               {/* Inhaltsverzeichnis */}
-              <div className="bg-white border border-border-subtle p-5 sticky top-24">
+              <div className="bg-surface-elevated border border-border-subtle p-5 sticky top-24">
                 <div className="border-t-2 border-text-primary -mt-5 mb-4 pt-4">
                   <h3 className="font-sans font-bold text-sm text-text-primary">
                     Inhalt
@@ -297,7 +291,7 @@ export default function CutPage({ params }: Props) {
               )}
 
               {/* Verwandte Guides */}
-              <div className="bg-white border border-border-subtle p-5">
+              <div className="bg-surface-elevated border border-border-subtle p-5">
                 <div className="border-t-2 border-brand-gold -mt-5 mb-4 pt-4">
                   <h3 className="font-sans font-bold text-sm text-text-primary">
                     Weiterlernen

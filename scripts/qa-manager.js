@@ -132,12 +132,12 @@ async function discoverRoutes() {
 
 function isPortOpen(port) {
   return new Promise(resolve => {
-    const s = new net.Socket();
-    s.setTimeout(800);
-    s.on('connect', () => { s.destroy(); resolve(true); });
-    s.on('error',   () => resolve(false));
-    s.on('timeout', () => resolve(false));
-    s.connect(port, '127.0.0.1');
+    const req = http.get(`http://127.0.0.1:${port}/`, { timeout: 2000 }, res => {
+      res.destroy();
+      resolve(true);
+    });
+    req.on('error', () => resolve(false));
+    req.on('timeout', () => { req.destroy(); resolve(false); });
   });
 }
 
@@ -160,7 +160,11 @@ function spawnDevServer(port) {
 
 // ─── BROWSER CHECKS ───────────────────────────────────────────────────────────
 
+// External CDN domains — CORS/network errors here are environment noise, not real bugs
+const EXTERNAL_CDN = /fonts\.gstatic\.com|fonts\.googleapis\.com|cdn\.jsdelivr\.net|unpkg\.com/;
+
 function categorise(text, type) {
+  if (EXTERNAL_CDN.test(text)) return null; // ignore external CDN errors
   if (type === 'error' || type === 'warning') {
     for (const { re, category, severity } of ERROR_PATTERNS) {
       if (re.test(text)) return { category, severity };
@@ -177,7 +181,6 @@ async function checkRoute(browser, route) {
   const page     = await browser.newPage();
 
   await page.setViewportSize(VIEWPORT);
-  await page.setExtraHTTPHeaders({ 'x-qa-scanner': '1' });
 
   // Console-Listener
   page.on('console', msg => {
@@ -200,10 +203,10 @@ async function checkRoute(browser, route) {
     });
   });
 
-  // Netzwerk-Fehler (fehlende Bilder)
+  // Netzwerk-Fehler (alle 404s von localhost)
   page.on('response', res => {
     const u = res.url();
-    if (res.status() === 404 && /\.(webp|jpg|jpeg|png|svg|woff2?)(\?|$)/.test(u)) {
+    if (res.status() === 404 && u.startsWith(BASE_URL)) {
       networkIssues.push({
         severity: 'ERROR',
         category: 'MISSING_ASSET',
@@ -218,7 +221,7 @@ async function checkRoute(browser, route) {
 
   try {
     const response = await page.goto(url, {
-      waitUntil: 'networkidle',
+      waitUntil: 'domcontentloaded',
       timeout: TIMEOUT_MS,
     });
     httpStatus = response?.status() ?? 0;

@@ -20,7 +20,7 @@
   /* Hintergründe */
   --page-bg-center:     #2D2218;
   --page-bg-edge:       #120C07;
-  --surface-editorial:  #FAF6EF;   /* Redaktionelle Weiß-Karte */
+  --surface-editorial:  #1E1410;
 }
 
 /* Fallback-Farbe für Crawler & Old Browsers */
@@ -131,8 +131,8 @@ body {
 /* ── EDITORIAL CARD — helle Magazin-Insel auf dunklem Grund ─────────── */
 
 .editorial-card {
-  background-color: var(--surface-editorial);
-  color: var(--color-bourbon);
+  background-color: #1E1410;
+  color: #E6D5C3;
 }
 
 /* ── QUOTE BOX ───────────────────────────────────────────────────────── */
@@ -209,6 +209,38 @@ nav a, header button, .nav-sharp {
 :focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 3px;
+}
+
+/* ── HERO FULL-BLEED — atmosphärischer 60-80vh Page-Hero ────────────── */
+
+.hero-fullbleed {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.hero-fullbleed-image {
+  filter: brightness(0.52) contrast(1.07) saturate(0.72);
+}
+.hero-fullbleed-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(23,16,11,0.15) 0%,
+      rgba(23,16,11,0.38) 35%,
+      rgba(23,16,11,0.78) 68%,
+      rgba(23,16,11,0.97) 88%,
+      #17100B 100%
+    );
+  pointer-events: none;
+}
+.hero-fullbleed-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 /* ── SCROLLBAR ───────────────────────────────────────────────────────── */

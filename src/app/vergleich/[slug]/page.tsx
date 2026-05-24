@@ -13,6 +13,7 @@ import MDXBuyingGuideBlock from '@/components/mdx/MDXBuyingGuideBlock';
 import { getProductsByCategory } from '@/lib/products';
 import { articleSchema, breadcrumbSchema, comparisonPageSchema, faqSchema } from '@/lib/schema';
 import { Calendar, ChevronRight, RotateCcw, FlaskConical } from 'lucide-react';
+import BBQPairing from '@/components/article/BBQPairing';
 
 interface Props {
   params: { slug: string };
@@ -99,6 +100,7 @@ const mdxComponents = {
     <strong className="font-bold text-text-light" {...props}>{children}</strong>
   ),
   hr: () => <hr style={{ borderColor: 'rgba(200,136,42,0.2)' }} className="my-10" />,
+  BBQPairing,
   MDXProductCard,
   MDXComparisonTable,
   MDXBuyingGuideBlock,

@@ -8,6 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
 import { Clock, Calendar, ChevronRight, RotateCcw, Flame } from 'lucide-react';
+import BBQPairing from '@/components/article/BBQPairing';
 
 interface Props {
   params: { slug: string };
@@ -79,6 +80,7 @@ const mdxComponents = {
     <strong className="font-bold text-text-primary" {...props}>{children}</strong>
   ),
   hr: () => <hr className="border-border-subtle my-10" />,
+  BBQPairing,
 };
 
 export default function MethodePage({ params }: Props) {
@@ -108,60 +110,71 @@ export default function MethodePage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
       <main>
-        <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-brand-fire transition-colors">Start</Link>
-            <ChevronRight size={12} />
-            <Link href="/kategorie/methoden" className="hover:text-brand-fire transition-colors">Grilltechniken</Link>
-            <ChevronRight size={12} />
-            <span className="text-text-primary">{methode.title.split(':')[0]}</span>
-          </nav>
+        {/* ── HERO — Full-Bleed 65vh ──────────────────────────────────────── */}
+        <div className="hero-fullbleed" style={{ height: '65vh', minHeight: '480px' }}>
+          <Image
+            src={methode.image}
+            alt={methode.imageAlt}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover hero-fullbleed-image"
+          />
+          <div className="hero-fullbleed-overlay" />
+          <div className="hero-fullbleed-content">
+            {/* Breadcrumb — oben */}
+            <div className="absolute top-0 left-0 right-0">
+              <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+                <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40" aria-label="Breadcrumb">
+                  <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
+                  <ChevronRight size={12} />
+                  <Link href="/kategorie/methoden" className="hover:text-brand-gold transition-colors">Grilltechniken</Link>
+                  <ChevronRight size={12} />
+                  <span className="text-text-light/60">{methode.title.split(':')[0]}</span>
+                </nav>
+              </div>
+            </div>
+            {/* Titel + Meta — unten */}
+            <div className="max-w-editorial mx-auto w-full px-4 sm:px-6 lg:px-8 pb-12 lg:pb-16">
+              <span className="category-label mb-3 block">Grilltechniken</span>
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-text-light leading-[1.1] mb-4 max-w-3xl">
+                {methode.title}
+              </h1>
+              <p className="font-body text-lg text-text-light/60 leading-relaxed mb-5 max-w-2xl">
+                {methode.excerpt}
+              </p>
+              <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/40">
+                <Link href={`/autoren/${methode.authorSlug}`} className="hover:text-brand-gold transition-colors">
+                  {methode.author}
+                </Link>
+                <span className="text-brand-gold/30">·</span>
+                <span className="flex items-center gap-1"><Calendar size={12} />{methode.formattedDate}</span>
+                {methode.difficulty && (
+                  <span className="flex items-center gap-1">
+                    <Flame size={12} className="text-brand-fire/70" />
+                    {methode.difficulty}
+                  </span>
+                )}
+                {methode.timeMinutes && (
+                  <span className="flex items-center gap-1">
+                    <Clock size={12} />
+                    {methode.timeMinutes} Min.
+                  </span>
+                )}
+                {methode.updatedAt && (
+                  <span className="flex items-center gap-1 text-brand-fire/70">
+                    <RotateCcw size={12} />
+                    Aktualisiert
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
             <article>
-              <header className="mb-8">
-                <span className="category-label">Grilltechniken</span>
-                <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary mt-2 mb-4 leading-tight">
-                  {methode.title}
-                </h1>
-                <p className="font-body text-lg text-text-secondary leading-relaxed mb-5">{methode.excerpt}</p>
-
-                {/* Meta badges */}
-                <div className="flex flex-wrap items-center gap-3 mb-5">
-                  {methode.difficulty && (
-                    <span className={cn('text-xs font-sans font-bold px-3 py-1 border rounded-full', difficultyColor[methode.difficulty] ?? 'text-text-secondary border-border-subtle')}>
-                      {methode.difficulty}
-                    </span>
-                  )}
-                  {methode.timeMinutes && (
-                    <span className="flex items-center gap-1 text-xs font-sans text-text-muted">
-                      <Clock size={12} />
-                      {methode.timeMinutes} Min.
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-muted pb-5 border-b border-border-subtle">
-                  <Link href={`/autoren/${methode.authorSlug}`} className="flex items-center gap-1.5 hover:text-brand-fire transition-colors">
-                    <div className="w-6 h-6 bg-border-subtle rounded-full" />
-                    {methode.author}
-                  </Link>
-                  <span className="flex items-center gap-1"><Calendar size={12} />{methode.formattedDate}</span>
-                  {methode.updatedAt && (
-                    <span className="flex items-center gap-1 text-brand-fire font-medium">
-                      <RotateCcw size={12} />
-                      Aktualisiert: {new Date(methode.updatedAt).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' })}
-                    </span>
-                  )}
-                </div>
-              </header>
-
-              <div className="mb-8 overflow-hidden">
-                <Image src={methode.image} alt={methode.imageAlt} width={800} height={500} className="w-full aspect-[16/9] object-cover" priority />
-                <p className="text-xs font-sans text-text-muted mt-2 italic">{methode.imageAlt}</p>
-              </div>
 
               <div className="max-w-content">
                 <MDXContent components={mdxComponents} />
@@ -181,7 +194,7 @@ export default function MethodePage({ params }: Props) {
             </article>
 
             <aside className="space-y-6">
-              <div className="bg-white border border-border-subtle p-5 sticky top-24">
+              <div className="bg-surface-elevated border border-border-subtle p-5 sticky top-24">
                 <div className="border-t-2 border-brand-fire -mt-5 mb-4 pt-4">
                   <h3 className="font-sans font-bold text-sm text-text-primary flex items-center gap-2">
                     <Flame size={14} className="text-brand-fire" /> Methoden-Info
@@ -203,7 +216,7 @@ export default function MethodePage({ params }: Props) {
                 </dl>
               </div>
 
-              <div className="bg-white border border-border-subtle p-5">
+              <div className="bg-surface-elevated border border-border-subtle p-5">
                 <div className="border-t-2 border-brand-gold -mt-5 mb-4 pt-4">
                   <h3 className="font-sans font-bold text-sm text-text-primary">Weiterlernen</h3>
                 </div>

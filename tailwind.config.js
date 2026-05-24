@@ -9,23 +9,26 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // ─ Premium Magazin — Light Mode with Dark Frame ───────────────────
+        // ─ Premium Magazin — Full Dark Mode ──────────────────────────────
         'brand-gold':       '#C8882A',   // Whiskey-Gold — accents, stars, borders
         'brand-fire':       '#E85018',   // Glut-Orange — primary CTA / affiliate
-        'ink':              '#1C1008',   // Bourbon-Dunkel — header, footer, near-black
-        // Surfaces (light magazine)
-        'surface-base':     '#FAF6EF',   // Ascheweiß — global page background
-        'surface-card':     '#F0E8D8',   // Creme — product cards, sidebars
-        'surface-elevated': '#2D2218',   // Räuchereiche — dark islands / pull quotes
-        'surface-dark':     '#1C1008',   // Bourbon — header, footer background
-        // Text (dark on light)
-        'text-primary':     '#1C1008',   // Räuchereiche — main body text
-        'text-secondary':   '#4A3728',   // Tabak-Mittel — secondary text
-        'text-muted':       '#8C7060',   // Tabak-Gedämpft — captions, meta
-        'text-light':       '#F0E8D8',   // Pergament — text on dark sections
-        // Borders (light page)
-        'border-subtle':    '#DDD0BC',   // Creme-Grenze — subtle light border
-        'border-strong':    '#C8882A',   // Gold — strong accent border
+        'ink':              '#17100B',
+
+        // Surfaces — ALL DARK now
+        'surface-base':     '#17100B',   // global page background
+        'surface-card':     '#1E1410',   // card backgrounds
+        'surface-elevated': '#2D2218',   // elevated panels
+        'surface-dark':     '#0F0A06',   // header/footer
+
+        // Text — warm on dark
+        'text-primary':     '#E6D5C3',   // main body text
+        'text-secondary':   '#C4A882',   // secondary text
+        'text-muted':       '#7A6558',   // captions/meta
+        'text-light':       '#F0E8D8',   // headings/emphasis on dark
+
+        // Borders — subtle on dark
+        'border-subtle':    '#3A2A1E',   // subtle border
+        'border-strong':    '#C8882A',   // gold border
       },
       fontFamily: {
         serif: ['Playfair Display', 'Georgia', 'serif'],
@@ -39,30 +42,30 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
-            '--tw-prose-body':          '#4A3728',
-            '--tw-prose-headings':      '#1C1008',
+            '--tw-prose-body':          '#C4A882',
+            '--tw-prose-headings':      '#E6D5C3',
             '--tw-prose-links':         '#E85018',
-            '--tw-prose-bold':          '#1C1008',
-            '--tw-prose-counters':      '#8C7060',
+            '--tw-prose-bold':          '#F0E8D8',
+            '--tw-prose-counters':      '#7A6558',
             '--tw-prose-bullets':       '#C8882A',
-            '--tw-prose-hr':            '#DDD0BC',
-            '--tw-prose-quotes':        '#1C1008',
+            '--tw-prose-hr':            '#3A2A1E',
+            '--tw-prose-quotes':        '#E6D5C3',
             '--tw-prose-quote-borders': '#C8882A',
-            '--tw-prose-captions':      '#8C7060',
+            '--tw-prose-captions':      '#7A6558',
             '--tw-prose-code':          '#E85018',
-            '--tw-prose-pre-bg':        '#F0E8D8',
+            '--tw-prose-pre-bg':        '#1E1410',
             fontFamily:  'Source Serif 4, Georgia, serif',
             fontSize:    '1.125rem',
             lineHeight:  '1.8',
             h2: {
               fontFamily: 'Playfair Display, Georgia, serif',
               fontWeight: '700',
-              color: '#1C1008',
+              color: '#E6D5C3',
             },
             h3: {
               fontFamily: 'Playfair Display, Georgia, serif',
               fontWeight: '600',
-              color: '#1C1008',
+              color: '#E6D5C3',
             },
             a: {
               textDecoration: 'underline',

@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ArticleCard from '@/components/article/ArticleCard';
 import ProductCard from '@/components/affiliate/ProductCard';
+import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
 import { getRecommendedProducts } from '@/lib/products';
 import type { ArticleMeta } from '@/types';
 
@@ -225,51 +226,7 @@ export default function HomePage() {
         </section>
 
         {/* ── DIPLOM-TEASER ─────────────────────────────────────────────────── */}
-        <section className="relative py-12 my-6 overflow-hidden border-y border-brand-gold/20">
-          <div className="absolute inset-0 bg-surface-elevated" />
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse 70% 80% at 25% 50%, rgba(232,80,24,0.07), transparent)' }}
-          />
-          <div className="relative max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-              <div className="text-center md:text-left">
-                <div className="flex items-center gap-2 justify-center md:justify-start mb-3">
-                  <Flame size={16} className="text-brand-gold" />
-                  <span className="text-[10px] font-sans font-bold tracking-[0.2em] uppercase text-brand-gold">
-                    Gamification
-                  </span>
-                </div>
-                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light mb-3 leading-tight">
-                  Zertifizierter Grillmeister werden
-                </h2>
-                <p className="font-sans text-sm text-text-light/65 max-w-lg leading-relaxed">
-                  Von Bronze bis Meister — sammle Wissen, bestehe Quizze, erhalte offizielle Diplome in 5 Stufen.
-                </p>
-              </div>
-              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-                {['🥉 Bronze', '🥈 Silber', '🥇 Gold', '💎 Platin', '🔥 Meister'].map((level) => (
-                  <div
-                    key={level}
-                    className="hidden sm:flex flex-col items-center justify-center w-14 h-14 border border-brand-gold/20 hover:border-brand-gold/40 transition-colors text-center"
-                    style={{ background: 'rgba(200,136,42,0.08)' }}
-                  >
-                    <span className="text-lg">{level.split(' ')[0]}</span>
-                    <span className="text-[9px] font-sans text-text-light/45 tracking-wide">
-                      {level.split(' ')[1]}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <Link
-                href="/diplome"
-                className="shrink-0 btn-gold font-sans text-xs font-bold tracking-[0.14em] uppercase px-7 py-3.5"
-              >
-                Jetzt starten →
-              </Link>
-            </div>
-          </div>
-        </section>
+        <DiplomaProgressSection />
 
         {/* ── KATEGORIE-SEKTIONEN ─────────────────────────────────────────────── */}
         {CATEGORY_SECTIONS.filter((s) => s.articles.length > 0).map((section) => (

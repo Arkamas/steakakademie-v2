@@ -283,7 +283,7 @@ export const Recipe = defineDocumentType(() => ({
     totalTime:      { type: 'string',  required: true },
     servings:       { type: 'number',  required: true },
     calories:       { type: 'number' },
-    kategorie:      { type: 'enum',    options: ['fleisch', 'beilagen', 'saucen-rubs', 'desserts'], required: true },
+    kategorie:      { type: 'enum',    options: ['fleisch', 'beilagen', 'saucen-rubs', 'desserts', 'wine-spirits'], required: true },
     meatType:       { type: 'string',  required: true },
     cookingMethod:  { type: 'string',  required: true },
     difficulty:     { type: 'enum',    options: ['Einfach', 'Mittel', 'Fortgeschritten', 'Profi'], required: true },

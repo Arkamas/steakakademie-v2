@@ -29,6 +29,11 @@ const KATEGORIEN: Record<string, { label: string; subtitle: string; description:
     subtitle: 'Das süße Finale',
     description: 'Vom karamellisierten Pfirsich bis zur Flammen-Ananas — Desserts, die das offene Feuer als Instrument nutzen und die Glut bis zur letzten Kohle ausreizen.',
   },
+  'wine-spirits': {
+    label: 'Wine & Spirits',
+    subtitle: 'Das perfekte Pairing',
+    description: 'Bordeaux zum Brisket, Single Malt zum Ribeye, Mezcal zum Asado — präzise Pairing-Protokolle, die erklären warum manche Kombinationen auf molekularer Ebene funktionieren.',
+  },
 };
 
 const DIFFICULTY_STYLE: Record<string, string> = {

@@ -47,6 +47,7 @@ const NAV_CATEGORIES = [
       { label: 'Beilagen & Salate', href: '/rezepte/beilagen' },
       { label: 'Saucen, Rubs & Injektionen', href: '/rezepte/saucen-rubs' },
       { label: 'Fire-Desserts', href: '/rezepte/desserts' },
+      { label: 'Wine & Spirits', href: '/rezepte/wine-spirits' },
     ],
   },
   {

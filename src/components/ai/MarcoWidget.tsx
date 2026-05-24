@@ -15,8 +15,9 @@ const SUGGESTIONS = [
   'Mein Steak ist grau geworden — was tun?',
 ];
 
-// ── Optionales Portrait — in /public/images/authors/ ablegen ─────────────────
-const MARCO_PORTRAIT = '/images/authors/marco-richter.jpg';
+// ── Bilder: Vorderseite (Portrait) + Rückseite (am Grill) ────────────────────
+const MARCO_PORTRAIT  = '/images/authors/marco-richter.jpg';
+const MARCO_BACK      = '/images/marco-back.jpg';
 
 export default function MarcoWidget() {
   const [open, setOpen] = useState(false);
@@ -136,6 +137,7 @@ export default function MarcoWidget() {
             onClosed={handleAvatarClosed}
             size="md"
             portraitSrc={MARCO_PORTRAIT}
+            backFaceSrc={MARCO_BACK}
           />
         </button>
       </div>
@@ -157,6 +159,7 @@ export default function MarcoWidget() {
                 state={avatarState}
                 size="sm"
                 portraitSrc={MARCO_PORTRAIT}
+                backFaceSrc={MARCO_BACK}
               />
               <div>
                 <p className="text-sm font-bold text-white font-sans">Marco</p>

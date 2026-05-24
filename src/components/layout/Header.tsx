@@ -116,44 +116,30 @@ export default function Header() {
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
 
-            {/* Left: Hamburger */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden w-8 h-8 flex items-center justify-center bg-brand-fire text-white hover:bg-[#cc4412] transition-colors shrink-0"
-                aria-label={mobileOpen ? 'Menü schließen' : 'Menü öffnen'}
-                aria-expanded={mobileOpen}
-              >
-                {mobileOpen ? <X size={16} /> : <Menu size={16} />}
-              </button>
-            </div>
-
-            {/* Center: Logo */}
-            <div className="flex-1 flex justify-center">
-              <Link href="/" aria-label="Steakakademie Startseite" className="flex items-center gap-2">
-                <Image
-                  src="/images/logo-barrel.jpg"
-                  alt="Steakakademie"
-                  width={52}
-                  height={52}
-                  className="rounded-full object-cover"
-                  priority
-                  style={{
-                    filter: 'drop-shadow(0 0 6px rgba(210,125,45,0.28)) drop-shadow(0 0 14px rgba(210,125,45,0.14))',
-                  }}
-                />
-                <span className="flex flex-col leading-none select-none">
-                  <span className="font-serif font-black text-text-light" style={{ fontSize: '19px', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
-                    Steak
-                  </span>
-                  <span className="font-serif font-normal text-text-light/50 uppercase" style={{ fontSize: '8.5px', letterSpacing: '0.16em', lineHeight: 1.3 }}>
-                    Akademie
-                  </span>
+            {/* Left: Logo — Marken-Anker */}
+            <Link href="/" aria-label="Steakakademie Startseite" className="flex items-center gap-2.5 shrink-0">
+              <Image
+                src="/images/logo-barrel.jpg"
+                alt="Steakakademie"
+                width={56}
+                height={56}
+                className="rounded-full object-cover"
+                priority
+                style={{
+                  filter: 'drop-shadow(0 0 8px rgba(210,125,45,0.35)) drop-shadow(0 0 18px rgba(210,125,45,0.16))',
+                }}
+              />
+              <span className="flex flex-col leading-none select-none">
+                <span className="font-serif font-black text-text-light" style={{ fontSize: '21px', letterSpacing: '-0.01em', lineHeight: 1.1 }}>
+                  Steak
                 </span>
-              </Link>
-            </div>
+                <span className="font-serif font-normal text-text-light/50 uppercase" style={{ fontSize: '9px', letterSpacing: '0.20em', lineHeight: 1.3 }}>
+                  Akademie
+                </span>
+              </span>
+            </Link>
 
-            {/* Right: Actions */}
+            {/* Right: Actions + mobile Hamburger */}
             <div className="flex items-center gap-1 sm:gap-2">
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
@@ -175,6 +161,14 @@ export default function Header() {
                 <Flame size={12} />
                 Diplome
               </Link>
+              <button
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="md:hidden w-8 h-8 flex items-center justify-center bg-brand-fire text-white hover:bg-[#cc4412] transition-colors shrink-0 ml-1"
+                aria-label={mobileOpen ? 'Menü schließen' : 'Menü öffnen'}
+                aria-expanded={mobileOpen}
+              >
+                {mobileOpen ? <X size={16} /> : <Menu size={16} />}
+              </button>
             </div>
           </div>
         </div>
@@ -214,7 +208,7 @@ export default function Header() {
         {/* Category nav — desktop */}
         <nav className="border-t border-brand-gold/15 hidden md:block" aria-label="Hauptnavigation">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
-            <ul className="flex items-center justify-center">
+            <ul className="flex items-center justify-end">
               {NAV_CATEGORIES.map((cat) => {
                 const isActive =
                   pathname === cat.href ||

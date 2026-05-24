@@ -40,6 +40,16 @@ const NAV_CATEGORIES = [
     ],
   },
   {
+    name: 'Rezepte',
+    href: '/rezepte',
+    sub: [
+      { label: 'Fleisch-Rezepte', href: '/rezepte/fleisch' },
+      { label: 'Beilagen & Salate', href: '/rezepte/beilagen' },
+      { label: 'Saucen, Rubs & Injektionen', href: '/rezepte/saucen-rubs' },
+      { label: 'Fire-Desserts', href: '/rezepte/desserts' },
+    ],
+  },
+  {
     name: 'Ausrüstung',
     href: '/vergleich',
     sub: [

@@ -278,21 +278,21 @@ export const Recipe = defineDocumentType(() => ({
     authorSlug:     { type: 'string',  required: true },
     image:          { type: 'string',  required: true },
     imageAlt:       { type: 'string',  required: true },
-    prepTime:       { type: 'string',  required: true }, // ISO 8601: PT30M
+    prepTime:       { type: 'string',  required: true },
     cookTime:       { type: 'string',  required: true },
     totalTime:      { type: 'string',  required: true },
     servings:       { type: 'number',  required: true },
     calories:       { type: 'number' },
-    meatType:       { type: 'string',  required: true }, // z.B. "Ribeye"
-    cookingMethod:  { type: 'string',  required: true }, // z.B. "Sous-Vide"
+    kategorie:      { type: 'enum',    options: ['fleisch', 'beilagen', 'saucen-rubs', 'desserts'], required: true },
+    meatType:       { type: 'string',  required: true },
+    cookingMethod:  { type: 'string',  required: true },
     difficulty:     { type: 'enum',    options: ['Einfach', 'Mittel', 'Fortgeschritten', 'Profi'], required: true },
     keywords:       { type: 'list',    of: { type: 'string' } },
-    equipment:      { type: 'list',    of: { type: 'string' } }, // registry-Kategorien
-    ingredients:    { type: 'json',    required: true }, // [{amount, unit, name, note?}]
-    steps:          { type: 'json',    required: true }, // [{title, description, duration?, tip?}]
+    equipment:      { type: 'list',    of: { type: 'string' } },
+    ingredients:    { type: 'json',    required: true },
+    steps:          { type: 'json',    required: true },
     seoTitle:       { type: 'string' },
     seoDescription: { type: 'string' },
-    // Pairing-Overrides (überschreiben automatische Selektion)
     whiskeyName:    { type: 'string' },
     whiskeyType:    { type: 'string' },
     whiskeyProfile: { type: 'string' },
@@ -305,11 +305,18 @@ export const Recipe = defineDocumentType(() => ({
   computedFields: {
     slug: {
       type: 'string',
-      resolve: (doc) => doc._raw.flattenedPath.replace('rezepte/', ''),
+      resolve: (doc) => {
+        const parts = doc._raw.flattenedPath.split('/');
+        return parts[parts.length - 1];
+      },
     },
     url: {
       type: 'string',
-      resolve: (doc) => `/rezepte/${doc._raw.flattenedPath.replace('rezepte/', '')}`,
+      resolve: (doc) => {
+        const parts = doc._raw.flattenedPath.split('/');
+        const filename = parts[parts.length - 1];
+        return `/rezepte/${doc.kategorie}/${filename}`;
+      },
     },
     formattedDate: {
       type: 'string',

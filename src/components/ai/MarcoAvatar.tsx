@@ -45,13 +45,13 @@ const ROTATIONS: Record<AvatarState, number> = {
 // ── CSS-Fallback-Animationen je State ─────────────────────────────────────────
 
 const FALLBACK_VARIANTS: Record<AvatarState, { opacity: number; scale: number }> = {
-  hidden:     { opacity: 0, scale: 0.85 },
+  hidden:     { opacity: 1, scale: 1 },    // Button immer sichtbar (Rücken am Grill)
   greeting:   { opacity: 1, scale: 1 },
   idle:       { opacity: 1, scale: 1 },
   listening:  { opacity: 1, scale: 1.04 },
   thinking:   { opacity: 1, scale: 1 },
   responding: { opacity: 1, scale: 1 },
-  farewell:   { opacity: 0.6, scale: 0.9 },
+  farewell:   { opacity: 0.7, scale: 0.95 },
 };
 
 // ── Idle-Float-Keyframes ──────────────────────────────────────────────────────

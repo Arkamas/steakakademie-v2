@@ -99,14 +99,15 @@ export default function MarcoWidget() {
       {/* Floating Button */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
         {!hasOpened && (
-          <motion.div
+          <motion.button
+            onClick={handleToggle}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="rounded-2xl border border-brand-gold/40 bg-text-primary px-4 py-2 text-xs text-brand-gold shadow-xl font-sans"
+            className="rounded-2xl border border-brand-gold/40 bg-text-primary px-4 py-2 text-xs text-brand-gold shadow-xl font-sans cursor-pointer hover:border-brand-gold/70 transition-colors"
           >
             Frag Marco — deinen BBQ-Guide 🥩
-          </motion.div>
+          </motion.button>
         )}
 
         <button

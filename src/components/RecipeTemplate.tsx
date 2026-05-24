@@ -9,6 +9,7 @@ import ProductCard from './affiliate/ProductCard';
 import type { Product } from '@/types';
 import type { RecipeIngredient } from './recipe/PortionCalculator';
 import type { RecipeStep } from './recipe/CookCoach';
+import RecipeSubmitModal from './recipe/RecipeSubmitModal';
 
 // ── Hilfsfunktionen ──────────────────────────────────────────────────────────
 
@@ -325,18 +326,8 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
               </ul>
             </div>
 
-            {/* Alle Rezepte */}
-            <div className="bg-surface-elevated border border-border-subtle p-5">
-              <div className="border-t-2 border-brand-fire -mt-5 mb-4 pt-4">
-                <h3 className="font-sans font-bold text-sm text-text-primary">Mehr Rezepte</h3>
-              </div>
-              <Link
-                href="/rezepte"
-                className="btn-affiliate w-full justify-center text-sm"
-              >
-                Alle Rezepte ansehen
-              </Link>
-            </div>
+            {/* Rezept einreichen — Teaser + Modal */}
+            <RecipeSubmitModal />
           </aside>
         </div>
       </div>

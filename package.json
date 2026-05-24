@@ -3,8 +3,11 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/seo-image-optimizer.mjs && node scripts/glossary-agent.mjs && next dev",
-    "build": "node scripts/seo-image-optimizer.mjs && node scripts/glossary-agent.mjs && next build",
+    "dev": "node scripts/recipe-agent.mjs && node scripts/seo-image-optimizer.mjs && node scripts/glossary-agent.mjs && next dev",
+    "build": "node scripts/recipe-agent.mjs && node scripts/seo-image-optimizer.mjs && node scripts/glossary-agent.mjs && next build",
+    "recipes": "node scripts/recipe-agent.mjs",
+    "recipes:force": "node scripts/recipe-agent.mjs --force",
+    "recipes:dry": "node scripts/recipe-agent.mjs --dry-run",
     "seo-images": "node scripts/seo-image-optimizer.mjs",
     "seo-images:dry": "node scripts/seo-image-optimizer.mjs --dry-run",
     "seo-images:force": "node scripts/seo-image-optimizer.mjs --force",

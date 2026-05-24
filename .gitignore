@@ -51,3 +51,8 @@ yarn-error.log*
 .env.vercel.local
 
 .env*
+
+# QA / automation artifacts
+qa-report.json
+qa-screenshots/
+content/rezepte/.recipe-cache.json

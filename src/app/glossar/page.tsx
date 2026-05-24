@@ -134,19 +134,7 @@ export default function GlossarPage() {
                     <Link
                       key={entry.slug}
                       href={entry.url}
-                      className="group block rounded-lg p-4 transition-all"
-                      style={{
-                        background: 'rgba(255,255,255,0.02)',
-                        border: '1px solid rgba(255,255,255,0.06)',
-                      }}
-                      onMouseEnter={e => {
-                        (e.currentTarget as HTMLElement).style.borderColor = 'rgba(200,136,42,0.3)';
-                        (e.currentTarget as HTMLElement).style.background = 'rgba(200,136,42,0.04)';
-                      }}
-                      onMouseLeave={e => {
-                        (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)';
-                        (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)';
-                      }}
+                      className="group block rounded-lg p-4 transition-all bg-white/[0.02] border border-white/[0.06] hover:border-brand-gold/30 hover:bg-brand-gold/[0.04]"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <span className="font-sans font-semibold text-text-light text-sm group-hover:text-brand-gold transition-colors">

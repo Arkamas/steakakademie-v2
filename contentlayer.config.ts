@@ -226,11 +226,48 @@ export const Glossar = defineDocumentType(() => ({
   },
 }));
 
+// ── USA BBQ STILE ─────────────────────────────────────────────────────────────
+
+export const UsaBbqStyle = defineDocumentType(() => ({
+  name: 'UsaBbqStyle',
+  filePathPattern: 'usa/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title:         { type: 'string', required: true },
+    region:        { type: 'string', required: true },
+    style:         { type: 'string', required: true },
+    signatureDish: { type: 'string' },
+    author:        { type: 'string', required: true },
+    authorSlug:    { type: 'string', required: true },
+    publishedAt:   { type: 'date',   required: true },
+    excerpt:       { type: 'string', required: true },
+    image:         { type: 'string', required: true },
+    imageAlt:      { type: 'string', required: true },
+    seoTitle:      { type: 'string' },
+    seoDescription:{ type: 'string' },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => doc._raw.flattenedPath.replace('usa/', ''),
+    },
+    url: {
+      type: 'string',
+      resolve: (doc) => `/usa-expedition/${doc._raw.flattenedPath.replace('usa/', '')}`,
+    },
+    formattedDate: {
+      type: 'string',
+      resolve: (doc) =>
+        format(parseISO(doc.publishedAt), 'd. MMMM yyyy', { locale: de }),
+    },
+  },
+}));
+
 // ── SOURCE ────────────────────────────────────────────────────────────────────
 
 export default makeSource({
   contentDirPath: 'content',
-  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit, Glossar],
+  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit, Glossar, UsaBbqStyle],
   mdx: {
     // rehype / remark plugins can be added here later
   },

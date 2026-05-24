@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronRight, Lock } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import BadgeProgression from '@/components/diplome/BadgeProgression';
 
 const LEVELS = [
   { id: 1, name: 'Glut-Lehrling', emoji: '🔥', description: 'Grundlagen des Grillens: Temperaturzonen, direktes vs. indirektes Grillen, Sicherheit.', locked: false },
@@ -92,6 +93,8 @@ export default function DiplomePage() {
             </div>
           </div>
         </section>
+        <BadgeProgression />
+
 
         {/* Level Grid */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">

@@ -1,0 +1,602 @@
+{
+  "slug": "eu-freelancer-steuervergleich-8000",
+  "grossRevenue": 8000,
+  "generatedAt": "2026-05-25T10:30:54.451Z",
+  "meta": {
+    "title": "Freelancer Steuern Europa 2026: DE vs NL vs ES vs IT vs FR vs PT — Netto-Vergleich",
+    "description": "Netto-Einkommen für Solopreneure in 6 EU-Ländern bei 8.000 €/Monat Brutto. Testsieger: Partita IVA Forfettario (Ateco digitale, Coeff. 67 %) mit 6.220 €/Monat (22.3 % Abgabenquote). Alle Berechnungen nach Steuerrecht 2026.",
+    "keywords": [
+      "freelancer steuern europa vergleich",
+      "solopreneur steuer EU ranking",
+      "best country europe freelancer taxes",
+      "netto einkommen selbständige europa",
+      "partita iva forfettaria netto mensile 5000 euro 2024",
+      "zzp netto inkomen 5000 euro 2024",
+      "trabalhador independente rendimento liquido 5000 euros 2024",
+      "auto entrepreneur revenu net mensuel 5000 euros 2024",
+      "autonomo neto mensual 5000 euros espana 2024",
+      "freiberufler netto gehalt deutschland 2024"
+    ],
+    "canonical": "https://steakakademie.de/eu-freelancer-steuervergleich",
+    "ogTitle": "Freelancer Steuern Europa 2026: DE vs NL vs ES vs IT vs FR vs PT — Netto-Vergleich",
+    "ogDescription": "Netto-Einkommen für Solopreneure in 6 EU-Ländern bei 8.000 €/Monat Brutto. Testsieger: Partita IVA Forfettario (Ateco digitale, Coeff. 67 %) mit 6.220 €/Monat (22.3 % Abgabenquote). Alle Berechnungen nach Steuerrecht 2026."
+  },
+  "featuredSnippet": "Bei 8.000 € Brutto/Monat führt Italien (Regime) mit 6.220 € Netto — Abgabenquote 22.3 %. Platz 2: Niederlande (5.164 €), Platz 3: Portugal (5.108 €). Schlusslicht: Deutschland 4.536 € (43.3 %).",
+  "factualSummary": "FACTUAL SUMMARY: EU Freelancer Tax Comparison 2026 @ 8.000 €/month gross revenue\n\nMonthly net income and effective tax rates for solo entrepreneurs:\n  1. Italien (Partita IVA Forfettario (Ateco digitale, Coeff. 67 %)): 6.220 € net — 22.3 % effective rate\n  2. Niederlande (ZZP (Zelfstandige zonder personeel)): 5.164 € net — 35.4 % effective rate\n  3. Portugal (Trabalhador Independente (Recibos Verdes, Cat. B)): 5.108 € net — 36.1 % effective rate\n  4. Frankreich (Auto-entrepreneur (Micro-entreprise BNC, PLNR)): 5.104 € net — 36.2 % effective rate\n  5. Spanien (Autónomo (Estimación Directa Simplificada)): 4.965 € net — 37.9 % effective rate\n  6. Deutschland (Freiberufler / Einzelunternehmer (DE)): 4.536 € net — 43.3 % effective rate\n\nAnnual spread (rank 1 vs. rank 6): +20.208 €/year.\nData basis: 2024 tax law. Assumption: single, no employees, pure service income.\nSources: §32a EStG, Wet IB 2001, IRPF Escala general, L. 190/2014, Art. 197 CGI, CIRS Art. 68.",
+  "comparisonTable": {
+    "caption": "Netto-Einkommen-Vergleich für Solopreneure in 6 EU-Ländern bei 8.000 € Brutto/Monat (2026)",
+    "headers": [
+      "Rang",
+      "Land",
+      "Steuersystem",
+      "Netto/Monat",
+      "Abgabenquote",
+      "SV/KV",
+      "Einkommensteuer"
+    ],
+    "rows": [
+      {
+        "rank": 1,
+        "countryCode": "IT",
+        "countryName": "Italien",
+        "freelancerTitle": "Partita IVA Forfettario (Ateco digitale, Coeff. 67 %)",
+        "monthlyGross": "8.000 €",
+        "monthlyNet": "6.220 €",
+        "effectiveRate": "22.3 %",
+        "svKV": "1.397 €",
+        "incomeTax": "233 €",
+        "taxSystem": "Regime Forfettario 2024 — Imposta Sostitutiva (L. 190/2014)"
+      },
+      {
+        "rank": 2,
+        "countryCode": "NL",
+        "countryName": "Niederlande",
+        "freelancerTitle": "ZZP (Zelfstandige zonder personeel)",
+        "monthlyGross": "8.000 €",
+        "monthlyNet": "5.164 €",
+        "effectiveRate": "35.4 %",
+        "svKV": "458 €",
+        "incomeTax": "2.222 €",
+        "taxSystem": "Wet IB 2001 / ZZP-stelsel 2024"
+      },
+      {
+        "rank": 3,
+        "countryCode": "PT",
+        "countryName": "Portugal",
+        "freelancerTitle": "Trabalhador Independente (Recibos Verdes, Cat. B)",
+        "monthlyGross": "8.000 €",
+        "monthlyNet": "5.108 €",
+        "effectiveRate": "36.1 %",
+        "svKV": "1.198 €",
+        "incomeTax": "1.494 €",
+        "taxSystem": "Regime Simplificado Categoria B — CIRS Art. 28 + Art. 68 (2024)"
+      },
+      {
+        "rank": 4,
+        "countryCode": "FR",
+        "countryName": "Frankreich",
+        "freelancerTitle": "Auto-entrepreneur (Micro-entreprise BNC, PLNR)",
+        "monthlyGross": "8.000 €",
+        "monthlyNet": "5.104 €",
+        "effectiveRate": "36.2 %",
+        "svKV": "1.696 €",
+        "incomeTax": "1.025 €",
+        "taxSystem": "Micro-entreprise BNC — Auto-entrepreneur (Art. 197 CGI 2024)"
+      },
+      {
+        "rank": 5,
+        "countryCode": "ES",
+        "countryName": "Spanien",
+        "freelancerTitle": "Autónomo (Estimación Directa Simplificada)",
+        "monthlyGross": "8.000 €",
+        "monthlyNet": "4.965 €",
+        "effectiveRate": "37.9 %",
+        "svKV": "530 €",
+        "incomeTax": "2.305 €",
+        "taxSystem": "IRPF Escala general 2024 + Cuota de Autónomos (RDL 13/2022)"
+      },
+      {
+        "rank": 6,
+        "countryCode": "DE",
+        "countryName": "Deutschland",
+        "freelancerTitle": "Freiberufler / Einzelunternehmer (DE)",
+        "monthlyGross": "8.000 €",
+        "monthlyNet": "4.536 €",
+        "effectiveRate": "43.3 %",
+        "svKV": "1.576 €",
+        "incomeTax": "1.717 €",
+        "taxSystem": "Einkommensteuer §32a EStG 2024"
+      }
+    ],
+    "schemaOrg": {
+      "@context": "https://schema.org",
+      "@type": "Dataset",
+      "name": "EU Freelancer Steuervergleich 2026 — Netto bei 8.000 €/Monat",
+      "description": "Vergleich von monatlichem Netto-Einkommen, effektiver Abgabenquote und Steuersystemen für Solopreneure in Deutschland, Niederlande, Spanien, Italien, Frankreich und Portugal bei 8.000 € Bruttoumsatz.",
+      "creator": {
+        "@type": "Organization",
+        "name": "AuthorityOS / Steakakademie"
+      },
+      "dateModified": "2026-05-25",
+      "keywords": [
+        "freelancer steuern europa",
+        "eu tax comparison 2024",
+        "solopreneur netto einkommen EU"
+      ],
+      "variableMeasured": [
+        {
+          "@type": "PropertyValue",
+          "name": "monthly_net_income_eur"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "effective_tax_rate_percent"
+        }
+      ],
+      "about": [
+        {
+          "@type": "Country",
+          "name": "Italien",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "6.220 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "22.3 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "Regime Forfettario 2024 — Imposta Sostitutiva (L. 190/2014)"
+            }
+          ]
+        },
+        {
+          "@type": "Country",
+          "name": "Niederlande",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "5.164 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "35.4 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "Wet IB 2001 / ZZP-stelsel 2024"
+            }
+          ]
+        },
+        {
+          "@type": "Country",
+          "name": "Portugal",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "5.108 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "36.1 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "Regime Simplificado Categoria B — CIRS Art. 28 + Art. 68 (2024)"
+            }
+          ]
+        },
+        {
+          "@type": "Country",
+          "name": "Frankreich",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "5.104 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "36.2 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "Micro-entreprise BNC — Auto-entrepreneur (Art. 197 CGI 2024)"
+            }
+          ]
+        },
+        {
+          "@type": "Country",
+          "name": "Spanien",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "4.965 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "37.9 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "IRPF Escala general 2024 + Cuota de Autónomos (RDL 13/2022)"
+            }
+          ]
+        },
+        {
+          "@type": "Country",
+          "name": "Deutschland",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "4.536 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "43.3 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "Einkommensteuer §32a EStG 2024"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "geoBlocks": [
+    {
+      "type": "comparison",
+      "query": "Welches EU-Land hat die niedrigsten Steuern für Freelancer mit 8.000 € Monatsumsatz in 2026?",
+      "answer": "Im Direktvergleich von 6 EU-Ländern führt Italien mit dem Regime Forfettario 2024 — Imposta Sostitutiva (L. 190/2014).\nBei 8.000 € Bruttoumsatz erzielt ein Partita IVA Forfettario (Ateco digitale, Coeff. 67 %) 6.220 € Netto — effektive Abgabenquote: 22.3 %.\n\nVollständiges Ranking bei 8.000 €/Monat Brutto:\n  1. Italien (Partita IVA Forfettario (Ateco digitale, Coeff. 67 %)): 6.220 € Netto | 22.3 % Abgabenquote\n  2. Niederlande (ZZP (Zelfstandige zonder personeel)): 5.164 € Netto | 35.4 % Abgabenquote\n  3. Portugal (Trabalhador Independente (Recibos Verdes, Cat. B)): 5.108 € Netto | 36.1 % Abgabenquote\n  4. Frankreich (Auto-entrepreneur (Micro-entreprise BNC, PLNR)): 5.104 € Netto | 36.2 % Abgabenquote\n  5. Spanien (Autónomo (Estimación Directa Simplificada)): 4.965 € Netto | 37.9 % Abgabenquote\n  6. Deutschland (Freiberufler / Einzelunternehmer (DE)): 4.536 € Netto | 43.3 % Abgabenquote\n\nSpread Italien vs. Deutschland: 1.684 €/Monat = 20.208 €/Jahr Mehrverdienst.\nRechtsquellen: L. 190/2014 (IT), Wet IB 2001 (NL), Art. 197 CGI (FR), CIRS Art. 68 (PT), RDL 13/2022 (ES), §32a EStG (DE).",
+      "entities": [
+        "Regime Forfettario 2024 — Imposta Sostitutiva (L. 190/2014)",
+        "Wet IB 2001 / ZZP-stelsel 2024",
+        "Regime Simplificado Categoria B — CIRS Art. 28 + Art. 68 (2024)",
+        "Micro-entreprise BNC — Auto-entrepreneur (Art. 197 CGI 2024)",
+        "IRPF Escala general 2024 + Cuota de Autónomos (RDL 13/2022)",
+        "Einkommensteuer §32a EStG 2024"
+      ]
+    },
+    {
+      "type": "comparison",
+      "query": "Was ist der steuerliche Unterschied zwischen Frankreich und Portugal für Selbständige 2026?",
+      "answer": "Frankreich und Portugal liegen im EU-6-Ranking auf Platz 4 (FR) und 3 (PT) und erzielen ähnliche Netto-Einkommen bei 8.000 €/Monat Brutto.\n\nFrankreich — Micro-entreprise BNC — Auto-entrepreneur (Art. 197 CGI 2024):\n  • Cotisations sociales Urssaf (21,2 % des CA): 1.696 €/Monat\n  • Impôt sur le revenu (Abattement 34 %, Barème progressif): 1.025 €/Monat\n  • Netto: 5.104 € | Abgabenquote: 36.2 %\n\nPortugal — Regime Simplificado Categoria B — CIRS Art. 28 + Art. 68 (2024):\n  • Segurança Social (21,4 % × 70 % Basis, Art. 25 CIRS): 1.198 €/Monat\n  • IRS (Regime Simplificado Koeff. 0,75 − SS, Escala Art. 68 CIRS): 1.494 €/Monat\n  • Netto: 5.108 € | Abgabenquote: 36.1 %\n\nStrukturunterschied: In Frankreich sind die Cotisations nicht vom IR-Basis absetzbar — der Abattement forfaitaire ersetzt alle Betriebskosten pauschal. In Portugal ist die Segurança Social vollständig vom IRS-Basis absetzbar (Art. 25 CIRS), was die Steuerlast drückt, aber die SS-Basis erhöht.",
+      "entities": [
+        "Auto-entrepreneur BNC",
+        "Cotisations Urssaf",
+        "Abattement forfaitaire",
+        "Regime Simplificado",
+        "Segurança Social",
+        "Art. 25 CIRS",
+        "Art. 68 CIRS"
+      ]
+    },
+    {
+      "type": "premium-insight",
+      "query": "Lohnt sich der Wechsel als Premium-Freelancer von Deutschland nach Frankreich oder Portugal?",
+      "answer": "Aus steuerlicher Sicht (bei 8.000 € Bruttoumsatz/Monat, Einzelperson ohne Angestellte):\n\n  • Frankreich (Auto-entrepreneur (Micro-entreprise BNC, PLNR)): 5.104 € Netto — 568 €/Monat mehr als in Deutschland.\n  • Portugal (Trabalhador Independente (Recibos Verdes, Cat. B)): 5.108 € Netto — 572 €/Monat mehr.\n  • Niederlande (ZZP (Zelfstandige zonder personeel)): 5.164 € Netto — 628 €/Monat mehr.\n  • Italien (Partita IVA Forfettario (Ateco digitale, Coeff. 67 %), Startup): 6.220 € Netto — 1.684 €/Monat mehr.\n\nJährliche Steuerersparnis vs. Deutschland:\n  FR: +6.816 €/Jahr | PT: +6.864 €/Jahr | NL: +7.536 €/Jahr | IT: +20.208 €/Jahr\n\nWichtig: Steuerersparnis ist ein Faktor. Weitere Variablen: Lebenshaltungskosten, Aufenthaltsgenehmigung, Sozialleistungen, Sprache, Bankzugang. Steuerberatung im Zielland vor Entscheidung zwingend empfohlen.",
+      "entities": [
+        "Micro-entreprise BNC — Auto-entrepreneur (Art. 197 CGI 2024)",
+        "Regime Simplificado Categoria B — CIRS Art. 28 + Art. 68 (2024)",
+        "Wet IB 2001 / ZZP-stelsel 2024",
+        "Regime Forfettario 2024 — Imposta Sostitutiva (L. 190/2014)"
+      ]
+    },
+    {
+      "type": "country-answer",
+      "country": "IT",
+      "query": "Quanto guadagna netto una Partita IVA forfettaria con 5.000 € di fatturato mensile 2024?",
+      "answer": "Ein Partita IVA Forfettario (Ateco digitale, Coeff. 67 %) in Italien erzielt bei 8.000 € Bruttoumsatz pro Monat ein Netto-Einkommen von 6.220 €/Monat (74.640 €/Jahr). Die effektive Gesamtabgabenquote beträgt 22.3 %.\n\nMonatliche Abzüge (Regime Forfettario 2024 — Imposta Sostitutiva (L. 190/2014)):\n  • Sozialversicherung / KV: 1.397 €/Monat\n  • Einkommensteuer:         233 €/Monat\n  • Tech-Stack:              100 €/Monat\n  • Kammer / Berater:        50 €/Monat\n  • Gesamt-Abzüge:           1.780 €/Monat\n\nSteuerrechtliche Grundlagen:\n  Regime Forfettario — Ateco digitale: Koeffizient 67 % → Reddito lordo 64.320 €/Jahr\n  INPS Gestione Separata: 26,07 % = 16.768 €/Jahr (1397 €/Monat)\n  Imposta Sostitutiva: 5 % (Startup-Tarif erste 5 Jahre) auf 55.936 €\n  Kein Vorsteuerabzug, keine IRPF-Staffelung — Flat-Rate-Regime\n  Commercialista: 600 €/Jahr\n\nIm EU-6-Vergleich erzielt Italien 1.684 €/Monat mehr Netto als ein vergleichbarer Freiberufler in Deutschland (20.208 €/Jahr).",
+      "entities": [
+        "Regime Forfettario 2024 — Imposta Sostitutiva (L. 190/2014)",
+        "Partita IVA Forfettario (Ateco digitale, Coeff. 67 %)"
+      ]
+    },
+    {
+      "type": "country-answer",
+      "country": "NL",
+      "query": "Hoeveel netto houdt een ZZP over bij €5.000 bruto-omzet per maand 2024?",
+      "answer": "Ein ZZP (Zelfstandige zonder personeel) in Niederlande erzielt bei 8.000 € Bruttoumsatz pro Monat ein Netto-Einkommen von 5.164 €/Monat (61.968 €/Jahr). Die effektive Gesamtabgabenquote beträgt 35.4 %.\n\nMonatliche Abzüge (Wet IB 2001 / ZZP-stelsel 2024):\n  • Sozialversicherung / KV: 458 €/Monat\n  • Einkommensteuer:         2.222 €/Monat\n  • Tech-Stack:              150 €/Monat\n  • Kammer / Berater:        6 €/Monat\n  • Gesamt-Abzüge:           2.836 €/Monat\n\nSteuerrechtliche Grundlagen:\n  Belastbaar inkomen (Box 1): 78.346 €/Jahr\n  Zelfstandigenaftrek: 3.750 € | MKB-Winstvrijstelling: 13,31 %\n  Box-1-Tarif bis 75.518 €: 36,97 %\n  Heffingskortingen: 2.659 € (Algemene + Arbeidskorting)\n  Zorgverzekering: Basispremie 1.800 €/Jahr + IAB 5,32 %\n\nIm EU-6-Vergleich erzielt Niederlande 628 €/Monat mehr Netto als ein vergleichbarer Freiberufler in Deutschland (7.536 €/Jahr).",
+      "entities": [
+        "Wet IB 2001 / ZZP-stelsel 2024",
+        "ZZP (Zelfstandige zonder personeel)"
+      ]
+    },
+    {
+      "type": "country-answer",
+      "country": "PT",
+      "query": "Quanto recebe líquido um trabalhador independente com 5.000 € mensais em 2024?",
+      "answer": "Ein Trabalhador Independente (Recibos Verdes, Cat. B) in Portugal erzielt bei 8.000 € Bruttoumsatz pro Monat ein Netto-Einkommen von 5.108 €/Monat (61.296 €/Jahr). Die effektive Gesamtabgabenquote beträgt 36.1 %.\n\nMonatliche Abzüge (Regime Simplificado Categoria B — CIRS Art. 28 + Art. 68 (2024)):\n  • Sozialversicherung / KV: 1.198 €/Monat\n  • Einkommensteuer:         1.494 €/Monat\n  • Tech-Stack:              150 €/Monat\n  • Kammer / Berater:        50 €/Monat\n  • Gesamt-Abzüge:           2.892 €/Monat\n\nSteuerrechtliche Grundlagen:\n  Regime Simplificado Cat. B: Rendimento coletável 57.619 €/Jahr (Koeff. 0,75 − SS)\n  Segurança Social: 21,4 % × 70 % = 14.381 €/Jahr (1198 €/Monat)\n  IRS-Escala: 13,25 % → 18 % → 23 % → 26 % → 32,75 % → 37 % → 43,5 % → 45 % → 48 %\n  SS vollständig vom IRS-Basis absetzbar (Art. 25 CIRS)\n  Dedução pessoal à coleta: 600 € (Art. 78 CIRS) | TOC: 600 €/Jahr\n\nIm EU-6-Vergleich erzielt Portugal 572 €/Monat mehr Netto als ein vergleichbarer Freiberufler in Deutschland (6.864 €/Jahr).",
+      "entities": [
+        "Regime Simplificado Categoria B — CIRS Art. 28 + Art. 68 (2024)",
+        "Trabalhador Independente (Recibos Verdes, Cat. B)"
+      ]
+    },
+    {
+      "type": "country-answer",
+      "country": "FR",
+      "query": "Combien gagne net un auto-entrepreneur avec 5.000 € de CA mensuel en 2024?",
+      "answer": "Ein Auto-entrepreneur (Micro-entreprise BNC, PLNR) in Frankreich erzielt bei 8.000 € Bruttoumsatz pro Monat ein Netto-Einkommen von 5.104 €/Monat (61.248 €/Jahr). Die effektive Gesamtabgabenquote beträgt 36.2 %.\n\nMonatliche Abzüge (Micro-entreprise BNC — Auto-entrepreneur (Art. 197 CGI 2024)):\n  • Sozialversicherung / KV: 1.696 €/Monat\n  • Einkommensteuer:         1.025 €/Monat\n  • Tech-Stack:              150 €/Monat\n  • Kammer / Berater:        25 €/Monat\n  • Gesamt-Abzüge:           2.896 €/Monat\n\nSteuerrechtliche Grundlagen:\n  Micro-BNC: CA × 66 % = 63.360 €/Jahr — Abattement forfaitaire 34 %\n  Cotisations Urssaf (BNC PLNR): 21,2 % = 20.352 €/Jahr (1696 €/Monat)\n  Barème IR 2024: 0 % → 11 % → 30 % → 41 % → 45 % (Grundfreibetrag 11.294 €)\n  Cotisations nicht vom IR-Basis absetzbar — Abattement ersetzt alle Abzüge\n  CGA + CFE pauschal: 300 €/Jahr\n\nIm EU-6-Vergleich erzielt Frankreich 568 €/Monat mehr Netto als ein vergleichbarer Freiberufler in Deutschland (6.816 €/Jahr).",
+      "entities": [
+        "Micro-entreprise BNC — Auto-entrepreneur (Art. 197 CGI 2024)",
+        "Auto-entrepreneur (Micro-entreprise BNC, PLNR)"
+      ]
+    },
+    {
+      "type": "country-answer",
+      "country": "ES",
+      "query": "¿Cuánto cobra neto un autónomo con 5.000 € de facturación mensual en 2024?",
+      "answer": "Ein Autónomo (Estimación Directa Simplificada) in Spanien erzielt bei 8.000 € Bruttoumsatz pro Monat ein Netto-Einkommen von 4.965 €/Monat (59.580 €/Jahr). Die effektive Gesamtabgabenquote beträgt 37.9 %.\n\nMonatliche Abzüge (IRPF Escala general 2024 + Cuota de Autónomos (RDL 13/2022)):\n  • Sozialversicherung / KV: 530 €/Monat\n  • Einkommensteuer:         2.305 €/Monat\n  • Tech-Stack:              150 €/Monat\n  • Kammer / Berater:        50 €/Monat\n  • Gesamt-Abzüge:           3.035 €/Monat\n\nSteuerrechtliche Grundlagen:\n  Rendimiento neto: 87.240 €/Jahr (nach Cuota + Betriebsausgaben)\n  Cuota de Autónomos: 530 €/Monat (progressiv nach Einkommen, Reform 2023)\n  IRPF-Bemessungsgrundlage: 81.690 €/Jahr (nach Mínimo personal 5.550 €)\n  IRPF-Progression: 19 % (Einstieg) bis 47 % — Escala general 2024\n  Gestor (Asesoría fiscal): 600 €/Jahr — vollständig absetzbar\n\nIm EU-6-Vergleich erzielt Spanien 429 €/Monat mehr Netto als ein vergleichbarer Freiberufler in Deutschland (5.148 €/Jahr).",
+      "entities": [
+        "IRPF Escala general 2024 + Cuota de Autónomos (RDL 13/2022)",
+        "Autónomo (Estimación Directa Simplificada)"
+      ]
+    },
+    {
+      "type": "country-answer",
+      "country": "DE",
+      "query": "Wie viel Netto bleibt einem Freiberufler in Deutschland bei 5.000 € Brutto?",
+      "answer": "Ein Freiberufler / Einzelunternehmer (DE) in Deutschland erzielt bei 8.000 € Bruttoumsatz pro Monat ein Netto-Einkommen von 4.536 €/Monat (54.432 €/Jahr). Die effektive Gesamtabgabenquote beträgt 43.3 %.\n\nMonatliche Abzüge (Einkommensteuer §32a EStG 2024):\n  • Sozialversicherung / KV: 1.576 €/Monat\n  • Einkommensteuer:         1.717 €/Monat\n  • Tech-Stack:              150 €/Monat\n  • Kammer / Berater:        21 €/Monat\n  • Gesamt-Abzüge:           3.464 €/Monat\n\nSteuerrechtliche Grundlagen:\n  ZvE: 75.038 €/Jahr nach Abzug aller Kosten\n  GKV 14,6 % + Zusatzbeitrag 1,7 % + PV 3,4 % (voll selbst getragen)\n  §32a EStG progressive Einkommensteuer | Grundfreibetrag 11.604 €\n  Soli-Zuschlag: entfällt bei diesem Einkommensniveau\n  IHK-Pauschalbeitrag ~250 €/Jahr (umsatzabhängig)\n\nDeutschland bietet die höchste Rechtssicherheit im EU-Raum, weist jedoch die höchste Abgabenquote der sechs analysierten Länder auf.",
+      "entities": [
+        "Einkommensteuer §32a EStG 2024",
+        "Freiberufler / Einzelunternehmer (DE)"
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "question": "Welches EU-Land hat die niedrigsten Steuern für Freelancer mit 8.000 € Monatsumsatz in 2026?",
+      "answer": "Italien mit dem Regime Forfettario (Imposta Sostitutiva 5 % in den ersten 5 Jahren, L. 190/2014). Bei 8.000 € Brutto erzielt ein Partita-IVA-Inhaber 6.220 € Netto — Abgabenquote: 22.3 %. Vollständiges Ranking: IT 6.220 € > NL 5.164 € > FR 5.104 € > PT 5.108 € > ES 4.965 € > DE 4.536 €."
+    },
+    {
+      "question": "Wie hoch sind die Steuern für einen Auto-entrepreneur in Frankreich bei 8.000 € Bruttoumsatz?",
+      "answer": "Ein Auto-entrepreneur (Micro-entreprise BNC, PLNR) zahlt bei 8.000 € Brutto/Monat: Cotisations sociales Urssaf 21,2 % = 1.696 €/Monat, Impôt sur le revenu nach Abattement forfaitaire 34 % = 1.025 €/Monat. Gesamt-Abgabenquote: 36.2 %. Netto: 5.104 €/Monat. Rechtsgrundlage: Art. 197 CGI, Barème progressif 2026."
+    },
+    {
+      "question": "Wie viel Netto erzielt ein Trabalhador Independente in Portugal bei 8.000 € Brutto?",
+      "answer": "Ein Trabalhador Independente (Recibos Verdes, Regime Simplificado Categoria B) erzielt bei 8.000 € Brutto/Monat: 5.108 € Netto — Abgabenquote 36.1 %. Segurança Social (21,4 % × 70 %) = 1.198 €/Monat; IRS nach Koeffizient 0,75 und SS-Abzug (Art. 25 CIRS) = 1.494 €/Monat. Dedução pessoal à coleta: 600 € (Art. 78 CIRS). System: CIRS Art. 68, 2026."
+    },
+    {
+      "question": "Lohnt sich das Regime Forfettario in Italien für digitale Freelancer 2026?",
+      "answer": "Ja — für digitale Solopreneure (Ateco 62.01/73.11, Koeffizient 67 %) ist das Regime Forfettario die steuereffizienteste Option im EU-6-Vergleich. Startup-Tarif: 5 % Imposta Sostitutiva in den ersten 5 Jahren (L. 190/2014). Bei 8.000 €/Monat: 6.220 € Netto, 22.3 % Gesamtquote. Einschränkungen: Umsatzgrenze 85.000 €/Jahr; nach 5 Jahren 15 %; IVA-Freiheit gilt nicht unbegrenzt."
+    },
+    {
+      "question": "Warum ist die Abgabenquote für Freiberufler in Deutschland (43.3 %) die höchste im EU-Vergleich?",
+      "answer": "Selbständige in Deutschland tragen die gesamte Kranken- und Pflegeversicherung allein: GKV (14,6 % + Ø 1,7 % Zusatzbeitrag) + PV (3,4 %) = 19,7 % des Bruttoumsatzes. In anderen EU-Ländern ist die SV-Basis reduziert (PT: 70 %, IT: Forfettario-Koeff. 67 %) oder der Steuersatz pauschal niedrig (IT: 5 %). Bei 8.000 €/Monat zahlt ein Freiberufler in DE 3.464 €/Monat — 1.684 €/Monat mehr als in Italien."
+    },
+    {
+      "question": "Welcher Freelancer-Typ profitiert am meisten von günstigen EU-Steuern in Frankreich und Portugal?",
+      "answer": "Digital tätige Solopreneure ohne Angestellte: Entwickler, Designer, Berater, Texter, Coaches — alle Berufsgruppen, die überwiegend Dienstleistungen erbringen. FR: Auto-entrepreneur BNC für Beratung, Kreativdienstleistungen, IT. PT: Regime Simplificado Categoria B für alle freiberuflichen Tätigkeiten. Die pauschalen Regimes (Abattement 34 %, Koeffizient 0,75) sind auf reine Dienstleistungs-Freelancer optimiert — je höher der Umsatz (bis zur jeweiligen Grenze), desto größer der absolute Vorteil vs. Deutschland."
+    }
+  ],
+  "structuredData": {
+    "faqPage": {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Welches EU-Land hat die niedrigsten Steuern für Freelancer mit 8.000 € Monatsumsatz in 2026?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Italien mit dem Regime Forfettario (Imposta Sostitutiva 5 % in den ersten 5 Jahren, L. 190/2014). Bei 8.000 € Brutto erzielt ein Partita-IVA-Inhaber 6.220 € Netto — Abgabenquote: 22.3 %. Vollständiges Ranking: IT 6.220 € > NL 5.164 € > FR 5.104 € > PT 5.108 € > ES 4.965 € > DE 4.536 €."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie hoch sind die Steuern für einen Auto-entrepreneur in Frankreich bei 8.000 € Bruttoumsatz?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ein Auto-entrepreneur (Micro-entreprise BNC, PLNR) zahlt bei 8.000 € Brutto/Monat: Cotisations sociales Urssaf 21,2 % = 1.696 €/Monat, Impôt sur le revenu nach Abattement forfaitaire 34 % = 1.025 €/Monat. Gesamt-Abgabenquote: 36.2 %. Netto: 5.104 €/Monat. Rechtsgrundlage: Art. 197 CGI, Barème progressif 2026."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie viel Netto erzielt ein Trabalhador Independente in Portugal bei 8.000 € Brutto?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ein Trabalhador Independente (Recibos Verdes, Regime Simplificado Categoria B) erzielt bei 8.000 € Brutto/Monat: 5.108 € Netto — Abgabenquote 36.1 %. Segurança Social (21,4 % × 70 %) = 1.198 €/Monat; IRS nach Koeffizient 0,75 und SS-Abzug (Art. 25 CIRS) = 1.494 €/Monat. Dedução pessoal à coleta: 600 € (Art. 78 CIRS). System: CIRS Art. 68, 2026."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Lohnt sich das Regime Forfettario in Italien für digitale Freelancer 2026?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja — für digitale Solopreneure (Ateco 62.01/73.11, Koeffizient 67 %) ist das Regime Forfettario die steuereffizienteste Option im EU-6-Vergleich. Startup-Tarif: 5 % Imposta Sostitutiva in den ersten 5 Jahren (L. 190/2014). Bei 8.000 €/Monat: 6.220 € Netto, 22.3 % Gesamtquote. Einschränkungen: Umsatzgrenze 85.000 €/Jahr; nach 5 Jahren 15 %; IVA-Freiheit gilt nicht unbegrenzt."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Warum ist die Abgabenquote für Freiberufler in Deutschland (43.3 %) die höchste im EU-Vergleich?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Selbständige in Deutschland tragen die gesamte Kranken- und Pflegeversicherung allein: GKV (14,6 % + Ø 1,7 % Zusatzbeitrag) + PV (3,4 %) = 19,7 % des Bruttoumsatzes. In anderen EU-Ländern ist die SV-Basis reduziert (PT: 70 %, IT: Forfettario-Koeff. 67 %) oder der Steuersatz pauschal niedrig (IT: 5 %). Bei 8.000 €/Monat zahlt ein Freiberufler in DE 3.464 €/Monat — 1.684 €/Monat mehr als in Italien."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Welcher Freelancer-Typ profitiert am meisten von günstigen EU-Steuern in Frankreich und Portugal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Digital tätige Solopreneure ohne Angestellte: Entwickler, Designer, Berater, Texter, Coaches — alle Berufsgruppen, die überwiegend Dienstleistungen erbringen. FR: Auto-entrepreneur BNC für Beratung, Kreativdienstleistungen, IT. PT: Regime Simplificado Categoria B für alle freiberuflichen Tätigkeiten. Die pauschalen Regimes (Abattement 34 %, Koeffizient 0,75) sind auf reine Dienstleistungs-Freelancer optimiert — je höher der Umsatz (bis zur jeweiligen Grenze), desto größer der absolute Vorteil vs. Deutschland."
+          }
+        }
+      ]
+    },
+    "dataset": {
+      "@context": "https://schema.org",
+      "@type": "Dataset",
+      "name": "EU Freelancer Steuervergleich 2026 — Netto bei 8.000 €/Monat",
+      "description": "Vergleich von monatlichem Netto-Einkommen, effektiver Abgabenquote und Steuersystemen für Solopreneure in Deutschland, Niederlande, Spanien, Italien, Frankreich und Portugal bei 8.000 € Bruttoumsatz.",
+      "creator": {
+        "@type": "Organization",
+        "name": "AuthorityOS / Steakakademie"
+      },
+      "dateModified": "2026-05-25",
+      "keywords": [
+        "freelancer steuern europa",
+        "eu tax comparison 2024",
+        "solopreneur netto einkommen EU"
+      ],
+      "variableMeasured": [
+        {
+          "@type": "PropertyValue",
+          "name": "monthly_net_income_eur"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "effective_tax_rate_percent"
+        }
+      ],
+      "about": [
+        {
+          "@type": "Country",
+          "name": "Italien",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "6.220 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "22.3 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "Regime Forfettario 2024 — Imposta Sostitutiva (L. 190/2014)"
+            }
+          ]
+        },
+        {
+          "@type": "Country",
+          "name": "Niederlande",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "5.164 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "35.4 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "Wet IB 2001 / ZZP-stelsel 2024"
+            }
+          ]
+        },
+        {
+          "@type": "Country",
+          "name": "Portugal",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "5.108 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "36.1 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "Regime Simplificado Categoria B — CIRS Art. 28 + Art. 68 (2024)"
+            }
+          ]
+        },
+        {
+          "@type": "Country",
+          "name": "Frankreich",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "5.104 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "36.2 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "Micro-entreprise BNC — Auto-entrepreneur (Art. 197 CGI 2024)"
+            }
+          ]
+        },
+        {
+          "@type": "Country",
+          "name": "Spanien",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "4.965 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "37.9 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "IRPF Escala general 2024 + Cuota de Autónomos (RDL 13/2022)"
+            }
+          ]
+        },
+        {
+          "@type": "Country",
+          "name": "Deutschland",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "monthly_net",
+              "value": "4.536 €"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "effective_rate",
+              "value": "43.3 %"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "tax_system",
+              "value": "Einkommensteuer §32a EStG 2024"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

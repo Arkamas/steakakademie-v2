@@ -1,7 +1,7 @@
 /**
  * AuthorityOS — Live Test Runner
  * ═══════════════════════════════════════════════════════════════
- * Validierungs-Pipeline + Steuer-Vergleich DE / NL / ES / IT
+ * Validierungs-Pipeline + Steuer-Vergleich DE / NL / ES / IT / FR / PT
  *
  * Nische:  Premium BBQ & Dry Aging Academy
  * Umsatz:  5.000 € / Monat (Bruttoumsatz angenommen)
@@ -17,6 +17,8 @@ import { ContentMatchAnalyzer }     from './services/contentMatchAnalyzer';
 import { calculateDE, calculateNL } from './services/taxCalculator';
 import { calculateES }              from './services/esEvaluator';
 import { calculateIT }              from './services/itEvaluator';
+import { calculateFR }              from './services/frEvaluator';
+import { calculatePT }              from './services/ptEvaluator';
 import type { NicheInput }          from './types/validator';
 
 // ─── Formatierung ─────────────────────────────────────────────────────────────
@@ -28,12 +30,15 @@ const W    = 64;
 const SEP  = '─'.repeat(W);
 const DSEP = '═'.repeat(W);
 
-// 4-country table constants
-// Total width: 3 + 26 + 4×16 + 3 = 96  →  inner W4 = 94
-const W4   = 94;
-const SEP4 = '─'.repeat(W4);
-const L4   = 26;   // label column
-const COL4 = 16;   // each country column
+// 6-country table constants
+// Row: '│  '(3) + rpad(L6=22) + 6×lpad(COL6=12)(72) + '  │'(3) = 100 chars
+const W6   = 98;
+const SEP6 = '─'.repeat(W6);
+const L6   = 22;   // label column
+const COL6 = 12;   // each country column
+
+const EUR6 = (n: number) =>
+  n.toLocaleString('de-DE', { maximumFractionDigits: 0 }) + ' €';
 
 const rpad = (s: string | number, n: number) => String(s).padEnd(n);
 const lpad = (s: string | number, n: number) => String(s).padStart(n);
@@ -59,26 +64,28 @@ function row(label: string, de: string, nl: string) {
   console.log('│  ' + rpad(label, L) + lpad(de, C) + lpad(nl, R) + '  │');
 }
 
-// ─── 4-Länder-Tabelle ─────────────────────────────────────────────────────────
+// ─── 6-Länder-Tabelle ─────────────────────────────────────────────────────────
 
-function section4(title: string) {
-  console.log('\n┌' + SEP4 + '┐');
-  console.log('│  ' + rpad(title, W4 - 2) + '│');
-  console.log('├' + SEP4 + '┤');
+function section6(title: string) {
+  console.log('\n┌' + SEP6 + '┐');
+  console.log('│  ' + rpad(title, W6 - 2) + '│');
+  console.log('├' + SEP6 + '┤');
 }
 
-function sectionEnd4() {
-  console.log('└' + SEP4 + '┘');
+function sectionEnd6() {
+  console.log('└' + SEP6 + '┘');
 }
 
-function row4(label: string, de: string, nl: string, es: string, it: string) {
+function row6(label: string, de: string, nl: string, es: string, it: string, fr: string, pt: string) {
   console.log(
     '│  ' +
-    rpad(label, L4) +
-    lpad(de,  COL4) +
-    lpad(nl,  COL4) +
-    lpad(es,  COL4) +
-    lpad(it,  COL4) +
+    rpad(label, L6) +
+    lpad(de,  COL6) +
+    lpad(nl,  COL6) +
+    lpad(es,  COL6) +
+    lpad(it,  COL6) +
+    lpad(fr,  COL6) +
+    lpad(pt,  COL6) +
     '  │',
   );
 }
@@ -160,61 +167,59 @@ async function main() {
   }
   sectionEnd();
 
-  // ── Steuer-Vergleich 4 Länder ─────────────────────────────────────────────────
+  // ── Steuer-Vergleich 6 Länder ─────────────────────────────────────────────────
 
   const deTax = calculateDE(MONTHLY_GROSS);
   const nlTax = calculateNL(MONTHLY_GROSS);
   const esTax = calculateES(MONTHLY_GROSS);
   const itTax = calculateIT(MONTHLY_GROSS);
+  const frTax = calculateFR(MONTHLY_GROSS);
+  const ptTax = calculatePT(MONTHLY_GROSS);
 
-  const all = [deTax, nlTax, esTax, itTax];
+  const all = [deTax, nlTax, esTax, itTax, frTax, ptTax];
 
-  section4(`STEUER-VERGLEICH @ ${EUR(MONTHLY_GROSS)} / MONAT BRUTTOUMSATZ`);
-  row4('',                          'Deutschland (DE)', 'Niederlande (NL)', 'Spanien (ES)',    'Italien (IT)');
-  row4('─'.repeat(L4),              '─'.repeat(COL4),   '─'.repeat(COL4),   '─'.repeat(COL4), '─'.repeat(COL4));
-  row4('Bruttoumsatz',
-    EUR(MONTHLY_GROSS), EUR(MONTHLY_GROSS), EUR(MONTHLY_GROSS), EUR(MONTHLY_GROSS));
-  row4('', '', '', '', '');
-  row4('── Abzüge ───────────────',
-    '─'.repeat(COL4), '─'.repeat(COL4), '─'.repeat(COL4), '─'.repeat(COL4));
-  row4('KV / SV-Beitrag',
-    EUR(-deTax.deductions.healthInsurance),
-    EUR(-nlTax.deductions.healthInsurance),
-    EUR(-esTax.deductions.healthInsurance),
-    EUR(-itTax.deductions.healthInsurance));
-  row4('Einkommensteuer',
-    EUR(-deTax.deductions.incomeTax),
-    EUR(-nlTax.deductions.incomeTax),
-    EUR(-esTax.deductions.incomeTax),
-    EUR(-itTax.deductions.incomeTax));
-  row4('Tech-Stack',
-    EUR(-deTax.deductions.techStack),
-    EUR(-nlTax.deductions.techStack),
-    EUR(-esTax.deductions.techStack),
-    EUR(-itTax.deductions.techStack));
-  row4('Kammer / Berater',
-    EUR(-deTax.deductions.chamber),
-    EUR(-nlTax.deductions.chamber),
-    EUR(-esTax.deductions.chamber),
-    EUR(-itTax.deductions.chamber));
-  row4('', '', '', '', '');
-  row4('Gesamt-Abzüge',
-    EUR(-deTax.totalDeductions),
-    EUR(-nlTax.totalDeductions),
-    EUR(-esTax.totalDeductions),
-    EUR(-itTax.totalDeductions));
-  row4('Effektive Abgabenquote',
-    PCT(deTax.effectiveRate),
-    PCT(nlTax.effectiveRate),
-    PCT(esTax.effectiveRate),
-    PCT(itTax.effectiveRate));
-  row4('─'.repeat(L4),              '─'.repeat(COL4),   '─'.repeat(COL4),   '─'.repeat(COL4), '─'.repeat(COL4));
-  row4('★  NETTO CASH-IN',
-    EUR(deTax.monthlyNet),
-    EUR(nlTax.monthlyNet),
-    EUR(esTax.monthlyNet),
-    EUR(itTax.monthlyNet));
-  sectionEnd4();
+  const D = (t: typeof deTax) => EUR6(-t.deductions.healthInsurance);
+  const sep6 = '─'.repeat(COL6);
+
+  section6(`STEUER-VERGLEICH @ ${EUR(MONTHLY_GROSS)} / MONAT BRUTTOUMSATZ`);
+  row6('',                       'DE',    'NL',    'ES',    'IT',    'FR',    'PT');
+  row6('─'.repeat(L6),           sep6,    sep6,    sep6,    sep6,    sep6,    sep6);
+  row6('Bruttoumsatz',
+    EUR6(MONTHLY_GROSS), EUR6(MONTHLY_GROSS), EUR6(MONTHLY_GROSS),
+    EUR6(MONTHLY_GROSS), EUR6(MONTHLY_GROSS), EUR6(MONTHLY_GROSS));
+  row6('', '', '', '', '', '', '');
+  row6('── Abzüge ──────────', sep6, sep6, sep6, sep6, sep6, sep6);
+  row6('KV / SV-Beitrag',
+    EUR6(-deTax.deductions.healthInsurance), EUR6(-nlTax.deductions.healthInsurance),
+    EUR6(-esTax.deductions.healthInsurance), EUR6(-itTax.deductions.healthInsurance),
+    EUR6(-frTax.deductions.healthInsurance), EUR6(-ptTax.deductions.healthInsurance));
+  row6('Einkommensteuer',
+    EUR6(-deTax.deductions.incomeTax), EUR6(-nlTax.deductions.incomeTax),
+    EUR6(-esTax.deductions.incomeTax), EUR6(-itTax.deductions.incomeTax),
+    EUR6(-frTax.deductions.incomeTax), EUR6(-ptTax.deductions.incomeTax));
+  row6('Tech-Stack',
+    EUR6(-deTax.deductions.techStack), EUR6(-nlTax.deductions.techStack),
+    EUR6(-esTax.deductions.techStack), EUR6(-itTax.deductions.techStack),
+    EUR6(-frTax.deductions.techStack), EUR6(-ptTax.deductions.techStack));
+  row6('Kammer / Berater',
+    EUR6(-deTax.deductions.chamber), EUR6(-nlTax.deductions.chamber),
+    EUR6(-esTax.deductions.chamber), EUR6(-itTax.deductions.chamber),
+    EUR6(-frTax.deductions.chamber), EUR6(-ptTax.deductions.chamber));
+  row6('', '', '', '', '', '', '');
+  row6('Gesamt-Abzüge',
+    EUR6(-deTax.totalDeductions), EUR6(-nlTax.totalDeductions),
+    EUR6(-esTax.totalDeductions), EUR6(-itTax.totalDeductions),
+    EUR6(-frTax.totalDeductions), EUR6(-ptTax.totalDeductions));
+  row6('Effektive Quote',
+    PCT(deTax.effectiveRate), PCT(nlTax.effectiveRate),
+    PCT(esTax.effectiveRate), PCT(itTax.effectiveRate),
+    PCT(frTax.effectiveRate), PCT(ptTax.effectiveRate));
+  row6('─'.repeat(L6),           sep6,    sep6,    sep6,    sep6,    sep6,    sep6);
+  row6('★  NETTO CASH-IN',
+    EUR6(deTax.monthlyNet), EUR6(nlTax.monthlyNet),
+    EUR6(esTax.monthlyNet), EUR6(itTax.monthlyNet),
+    EUR6(frTax.monthlyNet), EUR6(ptTax.monthlyNet));
+  sectionEnd6();
 
   // ── Ranking & Delta ───────────────────────────────────────────────────────────
 
@@ -224,7 +229,7 @@ async function main() {
 
   console.log('\n  ┌─ RANKING (Netto Cash-In) ──────────────────────────────────────────────────┐');
   ranked.forEach((t, i) => {
-    const medal = ['①', '②', '③', '④'][i];
+    const medal = ['①', '②', '③', '④', '⑤', '⑥'][i];
     const vsDE  = t.monthlyNet - deTax.monthlyNet;
     const tag   = vsDE > 0 ? `+${EUR(vsDE)}/Mo` : vsDE < 0 ? `${EUR(vsDE)}/Mo` : '  Basis';
     console.log(`  │  ${medal}  ${rpad(t.label, 28)}  Netto: ${lpad(EUR(t.monthlyNet), 12)}   ${lpad(tag, 16)}  │`);

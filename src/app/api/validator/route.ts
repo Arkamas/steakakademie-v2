@@ -65,7 +65,8 @@ export async function POST(req: Request) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? '127.0.0.1';
   const { allowed, retryAfterSecs } = rateLimit(ip);
 
-  if (!allowed) {
+  const isDev = process.env.NODE_ENV === 'development';
+  if (!allowed && !isDev) {
     return NextResponse.json(
       { error: 'Rate limit exceeded. Try again later.' },
       { status: 429, headers: { 'Retry-After': String(retryAfterSecs) } },

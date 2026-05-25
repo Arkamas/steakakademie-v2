@@ -151,7 +151,7 @@ export default function MarcoWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-24 right-6 z-50 flex w-[340px] flex-col border border-text-primary bg-text-primary shadow-2xl shadow-black/60 sm:w-[380px]"
+            className="fixed bottom-24 right-6 z-50 flex w-[340px] flex-col border border-white/10 bg-surface-elevated shadow-2xl shadow-black/60 sm:w-[380px]"
             style={{ maxHeight: '520px' }}
           >
             {/* Panel-Header mit Avatar */}
@@ -199,8 +199,7 @@ export default function MarcoWidget() {
                       <button
                         key={s}
                         onClick={() => handleSuggestion(s)}
-                        className="w-full border border-white/10 bg-white/5 px-3 py-2 text-left text-xs font-sans transition-colors hover:border-brand-gold/30 hover:text-white"
-                        style={{ color: 'rgba(255,255,255,0.6)' }}
+                        className="w-full border border-white/15 bg-white/8 px-3 py-2 text-left text-xs font-sans text-white/70 transition-colors hover:border-brand-gold/40 hover:bg-white/10 hover:text-white"
                       >
                         {s}
                       </button>

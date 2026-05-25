@@ -1,29 +1,41 @@
-import { type NextRequest } from 'next/server';
-import { updateSession }    from '@/lib/supabase/middleware';
-
-// Routen die ein eingeloggtes Konto erfordern
-const PROTECTED = ['/profil', '/meine-kurse'];
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  const { response, user } = await updateSession(request);
+  let response = NextResponse.next({ request: { headers: request.headers } });
 
-  const isProtected = PROTECTED.some(p =>
-    request.nextUrl.pathname.startsWith(p),
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          response.cookies.set({ name, value, ...options });
+        },
+        remove(name: string, options: CookieOptions) {
+          response.cookies.set({ name, value: '', ...options });
+        },
+      },
+    },
   );
 
-  if (isProtected && !user) {
-    const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = '/auth/login';
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user && (
+    request.nextUrl.pathname.startsWith('/meine-kurse') ||
+    request.nextUrl.pathname.startsWith('/profil')
+  )) {
+    const loginUrl = new URL('/auth/login', request.url);
     loginUrl.searchParams.set('redirectTo', request.nextUrl.pathname);
-    return Response.redirect(loginUrl);
+    return NextResponse.redirect(loginUrl);
   }
 
   return response;
 }
 
 export const config = {
-  matcher: [
-    // Alle Routen außer statische Assets und Next.js-Internals
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
+  matcher: ['/meine-kurse/:path*', '/profil/:path*'],
 };

@@ -205,8 +205,7 @@
   badge: "Premium-Pick"
   lastChecked: "2026-05-22"
   recommended: false
-  # image: — wird nachgerüstet via Amazon PA-API sobald ASIN verifiziert
-  # amazonAsin: — prüfen: amazon.de/s?k=Ankarsrum+Assistent+Original+6230
+  amazonAsin: "B06ZYMMRYR"
 
 # ── MESSER ────────────────────────────────────────────────────────────────────
 
@@ -355,7 +354,7 @@
   price: 799
   affiliateUrl: "https://beefer.de/shop/e-beefer-pro-ii/"
   provider: other
-  # amazonAsin: TBD — auf amazon.de suchen: "E-Beefer Pro II"
+  amazonAsin: "B0D94422ZG"
   rating: 4.4
   ratingCount: 95
   description: "800°C Oberhitze aus der Steckdose — für Innenräume geprüft, kein Gas nötig"
@@ -448,9 +447,9 @@
   price: 999
   priceMin: 849
   priceMax: 1099
-  affiliateUrl: "https://www.amazon.de/s?k=Caso+DryAged+Master+63&tag=steakakademie-21"
+  affiliateUrl: "https://www.amazon.de/dp/B0FK5TRLJF/?tag=steakakademie-21"
   provider: amazon
-  # amazonAsin: TBD — vor Deploy verifizieren
+  amazonAsin: "B0FK5TRLJF"
   rating: 4.3
   ratingCount: 890
   description: "Günstigster Einstieg mit echter Klimakontrolle — 63 Liter, für 1–2 ganze Rücken"
@@ -474,9 +473,9 @@
   brand: "KitchenAid"
   category: kuechenmaschine
   price: 459
-  affiliateUrl: "https://www.amazon.de/s?k=KitchenAid+Artisan+5KSM125&tag=steakakademie-21"
+  affiliateUrl: "https://www.amazon.de/dp/B0BLSM4PRW/?tag=steakakademie-21"
   provider: amazon
-  # amazonAsin: TBD — Modell 5KSM125EMH, auf amazon.de verifizieren
+  amazonAsin: "B0BLSM4PRW"
   rating: 4.7
   ratingCount: 8200
   description: "Der Küchenmaschinen-Klassiker — 4,8 L Schüssel, kippbarer Motorkopf, 10 Stufen"
@@ -496,9 +495,9 @@
   brand: "KitchenAid"
   category: kuechenmaschine
   price: 899
-  affiliateUrl: "https://www.amazon.de/s?k=KitchenAid+Artisan+5KSM60&tag=steakakademie-21"
+  affiliateUrl: "https://www.amazon.de/dp/B0CT616DGN/?tag=steakakademie-21"
   provider: amazon
-  # amazonAsin: TBD — Modell 5KSM60SPXEER, auf amazon.de verifizieren
+  amazonAsin: "B0CT616DGN"
   rating: 4.8
   ratingCount: 2100
   description: "Größere Bowl-Lift-Variante — für Partymengen und regelmäßige Großproduktion"

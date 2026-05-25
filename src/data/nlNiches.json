@@ -1,0 +1,122 @@
+[
+  {
+    "slug": "seo-specialist",
+    "title": "SEO Specialist",
+    "category": "digital-marketing",
+    "averageGrossRevenue": 6500,
+    "hourlyRate": 85,
+    "demandLevel": "hoog",
+    "targetKeyword": "seo specialist zzp",
+    "secondaryKeywords": ["freelance seo nederland", "seo consultant inhuren", "zzp seo expert"],
+    "description": "Organische vindbaarheid verhogen voor MKB en scale-ups",
+    "typicalClient": "MKB, e-commerce, scale-ups"
+  },
+  {
+    "slug": "copywriter",
+    "title": "Copywriter",
+    "category": "content",
+    "averageGrossRevenue": 4500,
+    "hourlyRate": 60,
+    "demandLevel": "hoog",
+    "targetKeyword": "copywriter zzp",
+    "secondaryKeywords": ["freelance copywriter nederland", "tekstschrijver inhuren", "zzp copywriter tarief"],
+    "description": "Conversiegerichte teksten voor web, e-mail en campagnes",
+    "typicalClient": "Marketingbureaus, e-commerce, SaaS"
+  },
+  {
+    "slug": "frontend-developer",
+    "title": "Frontend Developer",
+    "category": "tech",
+    "averageGrossRevenue": 7500,
+    "hourlyRate": 95,
+    "demandLevel": "hoog",
+    "targetKeyword": "frontend developer zzp",
+    "secondaryKeywords": ["freelance react developer nederland", "zzp frontend tarief", "react developer inhuren"],
+    "description": "React & Next.js interfaces voor product teams en agencies",
+    "typicalClient": "Tech-startups, digitale bureaus, scale-ups"
+  },
+  {
+    "slug": "personal-trainer",
+    "title": "Personal Trainer",
+    "category": "health-wellness",
+    "averageGrossRevenue": 3800,
+    "hourlyRate": 55,
+    "demandLevel": "gemiddeld",
+    "targetKeyword": "personal trainer zzp",
+    "secondaryKeywords": ["zzp personal trainer oprichten", "freelance trainer amsterdam", "personal trainer tarief nederland"],
+    "description": "1-op-1 coaching, groepslessen en online programma's",
+    "typicalClient": "Particulieren, corporate wellness, sportscholen"
+  },
+  {
+    "slug": "bbq-cateraar",
+    "title": "BBQ Cateraar",
+    "category": "food-events",
+    "averageGrossRevenue": 5000,
+    "hourlyRate": 65,
+    "demandLevel": "gemiddeld",
+    "targetKeyword": "bbq catering zzp",
+    "secondaryKeywords": ["zzp bbq cateraar starten", "bbq catering ondernemer nederland", "freelance cateraar tarief"],
+    "description": "Premium BBQ-catering voor bedrijfsevents en particuliere feesten",
+    "typicalClient": "Bedrijven, trouwpartijen, festivals"
+  },
+  {
+    "slug": "grafisch-ontwerper",
+    "title": "Grafisch Ontwerper",
+    "category": "creative",
+    "averageGrossRevenue": 4800,
+    "hourlyRate": 65,
+    "demandLevel": "hoog",
+    "targetKeyword": "grafisch ontwerper zzp",
+    "secondaryKeywords": ["freelance designer nederland", "zzp designer tarief", "grafisch ontwerper inhuren"],
+    "description": "Brand identity, print en digitale campagne-ontwerpen",
+    "typicalClient": "Bureaus, MKB, non-profit"
+  },
+  {
+    "slug": "marketingconsultant",
+    "title": "Marketingconsultant",
+    "category": "consulting",
+    "averageGrossRevenue": 6000,
+    "hourlyRate": 80,
+    "demandLevel": "hoog",
+    "targetKeyword": "marketingconsultant zzp",
+    "secondaryKeywords": ["zzp marketing consultant", "freelance marketeer nederland", "marketing adviseur inhuren"],
+    "description": "Groeistrategie, positionering en campagne-executie voor scale-ups",
+    "typicalClient": "Scale-ups, MKB, investeringsmaatschappijen"
+  },
+  {
+    "slug": "business-coach",
+    "title": "Business Coach",
+    "category": "coaching",
+    "averageGrossRevenue": 5500,
+    "hourlyRate": 95,
+    "demandLevel": "gemiddeld",
+    "targetKeyword": "business coach zzp",
+    "secondaryKeywords": ["zzp coach starten", "freelance business coach nederland", "executive coach tarief"],
+    "description": "Ondernemers en directeuren begeleiden bij groei en besluitvorming",
+    "typicalClient": "Ondernemers, DGA's, management teams"
+  },
+  {
+    "slug": "fotograaf",
+    "title": "Fotograaf",
+    "category": "creative",
+    "averageGrossRevenue": 3500,
+    "hourlyRate": 50,
+    "demandLevel": "gemiddeld",
+    "targetKeyword": "fotograaf zzp",
+    "secondaryKeywords": ["zzp fotograaf starten", "freelance fotograaf nederland", "bedrijfsfotograaf inhuren"],
+    "description": "Commerciële, event- en portretfotografie voor MKB en particulieren",
+    "typicalClient": "Bedrijven, evenementen, particulieren"
+  },
+  {
+    "slug": "interieurontwerper",
+    "title": "Interieurontwerper",
+    "category": "design",
+    "averageGrossRevenue": 4200,
+    "hourlyRate": 70,
+    "demandLevel": "laag",
+    "targetKeyword": "interieurontwerper zzp",
+    "secondaryKeywords": ["zzp interieur stylist", "freelance interieurdesigner nederland", "interieuradvies inhuren"],
+    "description": "Residentieel en commercieel interieurontwerp met 3D-visualisaties",
+    "typicalClient": "Particulieren, retail, horeca"
+  }
+]

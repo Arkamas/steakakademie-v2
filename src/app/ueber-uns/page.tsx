@@ -21,7 +21,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Uwe Yendell',
-  jobTitle: 'Koch, Marketing-Manager, KI-Berater',
+  jobTitle: 'Weber-zertifizierter Grillmeister, Koch, Marketing-Manager',
   url: 'https://steakakademie.de/ueber-uns',
   image: 'https://steakakademie.de/images/uwe-yendell.png',
   email: 'info@steakakademie.de',
@@ -32,9 +32,9 @@ const jsonLd = {
 const KOMPETENZEN = [
   {
     kicker: 'Der Koch',
-    titel: 'Handwerk vor Theorie',
+    titel: 'Weber-zertifizierter Grillmeister',
     text:
-      'Ausgebildeter Profi-Koch. Ich habe gelernt, was es heißt, unter Druck präzise zu arbeiten — Mise en place, Qualitätskontrolle, null Spielraum für Ausreden. Diese Disziplin trägt alles andere.',
+      'Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister. 8 Jahre Kursleiter an einer offiziellen Weber Grillakademie — mit allen Klassen, die das Programm umfasst. Handwerk, das ich selbst abgenommen bekommen habe, bevor ich es weitergegeben habe.',
   },
   {
     kicker: 'Der Marketing-Manager',
@@ -117,6 +117,29 @@ export default function UeberUnsPage() {
                   Profi-Koch, Marketing-Manager,<br className="hidden sm:block" /> KI-Pionier.{' '}
                   <span style={{ color: '#C8882A' }}>In dieser Reihenfolge.</span>
                 </h1>
+                {/* Weber-Credential Badge */}
+                <div className="flex items-center gap-2 mb-4">
+                  <span
+                    className="inline-flex items-center gap-1.5 font-sans text-[10px] font-bold tracking-[0.14em] uppercase px-3 py-1.5"
+                    style={{
+                      background: 'rgba(200,136,42,0.12)',
+                      color:      '#C8882A',
+                      border:     '1px solid rgba(200,136,42,0.3)',
+                    }}
+                  >
+                    ✦ Weber-zertifizierter Grillmeister
+                  </span>
+                  <span
+                    className="inline-flex items-center font-sans text-[10px] font-bold tracking-[0.14em] uppercase px-3 py-1.5"
+                    style={{
+                      background: 'rgba(200,136,42,0.06)',
+                      color:      'rgba(200,136,42,0.7)',
+                      border:     '1px solid rgba(200,136,42,0.18)',
+                    }}
+                  >
+                    8 Jahre Weber Grillakademie
+                  </span>
+                </div>
                 <p className="font-body text-base text-text-secondary leading-relaxed max-w-2xl">
                   Ich bin 59, lebe in Wuppertal, und ich habe drei Karrieren hinter mir —
                   bevor ich angefangen habe, anderen zu erklären, wie das geht.
@@ -181,11 +204,11 @@ export default function UeberUnsPage() {
           {/* Rückschläge */}
           <section className="max-w-2xl">
             <h2 className="font-serif text-2xl font-bold text-text-light mb-5">
-              Zwei Fehlschläge. Ohne Weichzeichner.
+              Was ich gelernt habe — ohne Weichzeichner.
             </h2>
             <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
-              Ich habe zwei Projekte gegen die Wand gefahren, bevor ich verstanden habe,
-              warum sie nicht funktionieren konnten.
+              Können und Geschäftsmodell sind zwei verschiedene Dinge. Ich habe beides
+              getrennt gelernt — und manchmal auf die harte Tour.
             </p>
             <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
               <strong className="text-text-light">wuppercoach.de</strong> — ein Coaching-Angebot,
@@ -194,9 +217,14 @@ export default function UeberUnsPage() {
               zurückbekommen.
             </p>
             <p className="font-body text-base text-text-secondary leading-relaxed mb-6">
-              <strong className="text-text-light">Genusskunst</strong> — ein kulinarisches
-              Konzept, das ich zu früh skaliert habe. Bevor die Grundlagen standen,
-              wollte ich wachsen. Das funktioniert nicht.
+              <strong className="text-text-light">Genusskunst</strong> — meine Eventküche,
+              in der ich 8 Jahre lang eine offizielle Weber Grillakademie betrieben habe.
+              Ich habe dort alle Grill-Kurs-Klassen unterrichtet — vom Einsteigerkurs bis zu
+              den fortgeschrittenen Programmen. Dafür habe ich die Weber-Grillmeister-Ausbildung
+              selbst absolviert und abgeschlossen. Das war echtes Handwerk, echte Verantwortung,
+              echte Teilnehmer. Was nicht funktioniert hat: das Geschäftsmodell drumherum.
+              Ich habe zu früh skaliert, bevor die Struktur stand. Das Können war real —
+              das Timing war falsch.
             </p>
             <blockquote
               className="border-l-2 pl-5 py-1"

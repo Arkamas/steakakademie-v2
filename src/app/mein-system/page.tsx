@@ -29,9 +29,7 @@ const SAULEN = [
     href:        '/ehrliches-system#saule-i',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
-    // ← Digistore24 Produkt-ID eintragen sobald Produkt angelegt:
-    // checkoutUrl: 'https://www.digistore24.com/product/XXXXXXX',
-    checkoutUrl: null as string | null,
+    checkoutUrl: 'https://www.digistore24.com/product/695894' as string | null,
   },
   {
     slug:        'steuer-matrix',
@@ -57,9 +55,7 @@ const SAULEN = [
     href:        '/ehrliches-system#saule-iii',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
-    // ← Digistore24 Produkt-ID eintragen sobald Produkt angelegt:
-    // checkoutUrl: 'https://www.digistore24.com/product/XXXXXXX',
-    checkoutUrl: null as string | null,
+    checkoutUrl: 'https://www.digistore24.com/product/695900' as string | null,
   },
 ] as const;
 

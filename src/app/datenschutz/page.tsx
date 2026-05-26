@@ -54,18 +54,19 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>3. Hosting (Vercel)</h2>
+              <h2 className={h2Class}>3. Hosting (Netlify)</h2>
               <p className="mb-3">
-                Diese Website wird bei Vercel Inc., 340 Pine Street, Suite 701, San Francisco,
-                CA 94104, USA gehostet. Beim Aufruf der Website werden automatisch Serverlog-Daten
-                gespeichert (IP-Adresse, Browsertyp, Betriebssystem, Referrer-URL, Uhrzeit des
-                Zugriffs). Diese Daten werden nicht mit anderen Datenquellen zusammengeführt.
+                Diese Website wird bei Netlify Inc., 44 Montgomery Street, Suite 300, San Francisco,
+                CA 94104, USA gehostet. Server-Standort: Europa (EU-Rechenzentrum). Beim Aufruf der
+                Website werden automatisch Serverlog-Daten gespeichert (IP-Adresse, Browsertyp,
+                Betriebssystem, Referrer-URL, Uhrzeit des Zugriffs). Diese Daten werden nicht mit
+                anderen Datenquellen zusammengeführt.
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am
                 störungsfreien Betrieb). Details:{' '}
-                <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className={linkClass}>
-                  vercel.com/legal/privacy-policy
+                <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  netlify.com/privacy
                 </a>
               </p>
             </section>

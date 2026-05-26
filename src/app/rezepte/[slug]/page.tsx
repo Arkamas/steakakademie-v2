@@ -46,8 +46,8 @@ const KATEGORIEN: Record<string, {
     label:       'Wine, Spirits & Cocktails',
     subtitle:    'Die vierte Dimension des Grillens',
     description: 'Bordeaux zum Brisket, Islay Single Malt zum Ribeye, Smoked Old Fashioned am Grill. Pairing-Protokolle, Cocktail-Rezepte und die Wissenschaft dahinter — warum manche Kombinationen auf molekularer Ebene funktionieren.',
-    heroImage:   '/images/articles/dry-aged-beef-reifeschrank.webp',
-    heroAlt:     'Dry-Aged Beef im Reifeschrank — Komplexität, die nach dem richtigen Glas verlangt',
+    heroImage:   '/images/wine-spirits-hero.webp',
+    heroAlt:     'Whisky-Gläser auf dunklem Holz — warmes Amberlicht, rauchige Atmosphäre',
   },
 };
 

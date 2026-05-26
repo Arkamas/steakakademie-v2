@@ -25,8 +25,8 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     title: 'Ribeye: Alles über Deutschlands beliebtesten Premium-Cut',
     excerpt:
       'Vom Longissimus dorsi bis zum Spinalis — wir erklären, was ein Ribeye ausmacht, wie Marmorierung bewertet wird und wie du ihn perfekt auf den Punkt bringst.',
-    image: 'https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?w=800&q=80',
-    imageAlt: 'Perfekt gebratenes Ribeye Steak auf einem Holzbrett',
+    image: '/images/articles/ribeye-premium-cut.webp',
+    imageAlt: 'Perfekt gebratenes Ribeye Steak mit sichtbarer Marmorierung auf Holzbrett',
     category: 'Cuts & Fleischkunde',
     categorySlug: 'cuts',
     author: 'Marco, der Pitmaster',
@@ -89,8 +89,8 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     title: 'Dry Aged Beef zu Hause: Was wirklich funktioniert',
     excerpt:
       'Trockengereiftes Fleisch ist kein Mythos — aber es braucht Kontrolle. Wir zeigen, was mit einem Dry-Ager für Zuhause realistisch möglich ist.',
-    image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=800&q=80',
-    imageAlt: 'Dry Aged Beef im Reifeschrank',
+    image: '/images/articles/dry-aged-beef-reifeschrank.webp',
+    imageAlt: 'Dry Aged Beef im Reifeschrank — dunkle Kruste sichtbar',
     category: 'Wissen',
     categorySlug: 'wissen',
     author: 'Elena — Die Stimme',
@@ -105,8 +105,8 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     title: 'Kerntemperaturen: Die vollständige Tabelle für jedes Fleisch',
     excerpt:
       'Von Rare bis Well Done, von Rind bis Geflügel — alle Kerntemperaturen auf einen Blick, mit Erklärung der Prozesse dahinter.',
-    image: 'https://images.unsplash.com/photo-1594043555099-aa706e44ad3f?w=800&q=80',
-    imageAlt: 'Thermometer misst Kerntemperatur eines Steaks',
+    image: '/images/articles/thermometer-test-steak-grill-2.webp',
+    imageAlt: 'Digitales Fleischthermometer misst Kerntemperatur im Steak',
     category: 'Wissen',
     categorySlug: 'wissen',
     author: 'Marco, der Pitmaster',

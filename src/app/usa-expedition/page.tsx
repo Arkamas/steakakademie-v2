@@ -123,7 +123,7 @@ const PILGRIM_ROUTES = [
     status: 'Planung 2027',
     statusColor: 'text-brand-gold',
     price: 'ab 2.490 €',
-    image: 'https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?w=800&q=80',
+    image: '/images/articles/brisket-texas-smoked.webp',
   },
   {
     id: 'bbq-belt',
@@ -135,7 +135,7 @@ const PILGRIM_ROUTES = [
     status: 'Planung 2027',
     statusColor: 'text-brand-gold',
     price: 'ab 3.290 €',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80',
+    image: '/images/articles/reverse-sear-cast-iron-steak.webp',
   },
   {
     id: 'whole-hog-south',
@@ -147,7 +147,7 @@ const PILGRIM_ROUTES = [
     status: 'Konzept',
     statusColor: 'text-text-muted',
     price: 'auf Anfrage',
-    image: 'https://images.unsplash.com/photo-1615361200141-f45040f367be?w=800&q=80',
+    image: '/images/articles/ribeye-premium-cut.webp',
   },
 ];
 
@@ -161,8 +161,8 @@ export default function UsaExpeditionPage() {
         {/* ── HERO — Full-Bleed 60vh ─────────────────────────────────────── */}
         <section className="hero-fullbleed" style={{ height: '60vh', minHeight: '480px' }}>
           <Image
-            src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=85"
-            alt="Brisket auf einem Smoker — atmosphärisches BBQ-Pitmaster-Bild aus Texas"
+            src="/images/articles/usa-expedition-smoker-hero.webp"
+            alt="Großer Offset-Smoker mit Rauch bei Sonnenuntergang — Texas BBQ Pitmaster"
             fill
             priority
             sizes="100vw"

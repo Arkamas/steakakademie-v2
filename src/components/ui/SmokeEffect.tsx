@@ -51,7 +51,7 @@ function SmokePuff({
         borderRadius: '50%',
         // Warmes Grau — passend zur dunklen BBQ-Ästhetik
         background:
-          'radial-gradient(circle at center, rgba(210,185,155,0.24) 0%, rgba(170,145,115,0.11) 45%, transparent 72%)',
+          'radial-gradient(circle at center, rgba(210,185,155,0.26) 0%, rgba(170,145,115,0.12) 45%, transparent 72%)',
         filter: `blur(${Math.round(config.size * 0.28)}px)`,
         willChange: 'transform, opacity',
       }}
@@ -59,7 +59,7 @@ function SmokePuff({
         y: [0, -320, -720, -1100],
         x: [0, driftX * 0.4, driftX, driftX * 0.7],
         scale: [0.35, 0.9, 1.7, 2.6],
-        opacity: [0, 0.83, 0.50, 0],
+        opacity: [0, 0.91, 0.55, 0],
       }}
       transition={{
         duration: config.duration,
@@ -77,7 +77,7 @@ const CONTAINER_WIDTH = 110; // px
 
 function SmokeSide({ side }: { side: 'left' | 'right' }) {
   const maskDir = side === 'left' ? 'to right' : 'to left';
-  const maskGradient = `linear-gradient(${maskDir}, rgba(0,0,0,0.99) 0%, rgba(0,0,0,0.55) 55%, transparent 100%)`;
+  const maskGradient = `linear-gradient(${maskDir}, rgba(0,0,0,1.0) 0%, rgba(0,0,0,0.61) 55%, transparent 100%)`;
 
   return (
     <div

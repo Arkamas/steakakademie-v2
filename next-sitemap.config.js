@@ -23,7 +23,7 @@ module.exports = {
   // Prioritäten nach Content-Typ
   transform: async (config, path) => {
     // Pillar Pages: höchste Priorität
-    if (path.startsWith('/cuts/') || path.startsWith('/vergleich/') || path.startsWith('/methoden/')) {
+    if (path === '/ehrliches-system' || path.startsWith('/cuts/') || path.startsWith('/vergleich/') || path.startsWith('/methoden/')) {
       return { loc: path, changefreq: 'monthly', priority: 0.9, lastmod: new Date().toISOString() };
     }
     // Artikel

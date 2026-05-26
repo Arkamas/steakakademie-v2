@@ -57,10 +57,10 @@ const PILLARS = [
     icon: '⚡',
     label: 'Agentur-Killer-Sprint',
     kicker: 'Full-Ownership in 72h',
-    tagline: 'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel.',
+    tagline: 'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Netlify.',
     bullets: [
       'Migration: Agentur-Website → GitHub-Ownership in 72h',
-      'Next.js + Vercel: vollständige Code-Kontrolle',
+      'Next.js + Netlify: vollständige Code-Kontrolle',
       'Claude Code als dein dauerhaftes Werkzeug',
       'Einmal aufgesetzt — für immer unabhängig',
     ],
@@ -304,7 +304,7 @@ export default async function EhrlichesSystemPage() {
                   <div className="mt-4">
                     {course?.published ? (
                       <Link
-                        href={`/kurse/${pillar.slug}`}
+                        href={`/${pillar.slug}`}
                         className="flex items-center gap-2 text-sm font-sans font-semibold text-brand-fire hover:gap-3 transition-all"
                       >
                         Jetzt kaufen <ArrowRight size={14} />

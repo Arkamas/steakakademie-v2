@@ -26,7 +26,7 @@ const SAULEN = [
     beschreibung:
       'Schritt-für-Schritt-System: Rechtsform wählen, Gewerbe anmelden, Domain & Hosting einrichten, erste Website live. Kein Agentur-Budget nötig.',
     Icon:        Rocket,
-    href:        '/ehrliches-system#saule-i',
+    href:        '/gruendung-sprint',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
     checkoutUrl: 'https://www.digistore24.com/product/695894' as string | null,
@@ -52,7 +52,7 @@ const SAULEN = [
     beschreibung:
       'Migration in eigene Infrastruktur: Next.js, Netlify, GitHub. Full-Ownership-Modell. KI-gesteuert. 0 % Plattform-Abzug.',
     Icon:        Zap,
-    href:        '/ehrliches-system#saule-iii',
+    href:        '/agentur-killer-sprint',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
     checkoutUrl: 'https://www.digistore24.com/product/695900' as string | null,

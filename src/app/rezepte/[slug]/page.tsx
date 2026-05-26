@@ -8,31 +8,44 @@ import Footer from '@/components/layout/Footer';
 import { allRecipes } from 'contentlayer/generated';
 import { breadcrumbSchema } from '@/lib/schema';
 
-const KATEGORIEN: Record<string, { label: string; subtitle: string; description: string }> = {
+const KATEGORIEN: Record<string, {
+  label: string; subtitle: string; description: string;
+  heroImage: string; heroAlt: string;
+}> = {
   fleisch: {
-    label: 'Fleisch-Rezepte',
-    subtitle: 'Master-Cuts',
+    label:       'Fleisch-Rezepte',
+    subtitle:    'Master-Cuts',
     description: 'Präzise Rezepte für Premium-Cuts — Ribeye, Brisket, Tomahawk und mehr. Jedes Rezept mehrfach am Grill getestet, mit exakten Gramm- und Temperaturangaben.',
+    heroImage:   '/images/articles/ribeye-premium-cut.webp',
+    heroAlt:     'Premium Ribeye-Cut auf Holzbrett',
   },
   beilagen: {
-    label: 'Beilagen & Salate',
-    subtitle: 'Das BBQ-Büfett',
+    label:       'Beilagen & Salate',
+    subtitle:    'Das BBQ-Büfett',
     description: 'Das Büfett macht das Grillen vollständig. Von der knusprigen Grillkartoffel bis zum rauchigen Coleslaw — Beilagen, die eigenständig brillieren.',
+    heroImage:   '/images/Beilagen_zu_Steak_1800x1000_6c5b974a-f29a-492b-95fb-424e0c4624d3.webp',
+    heroAlt:     'BBQ-Beilagen und Salate auf dem Grilltisch',
   },
   'saucen-rubs': {
-    label: 'Saucen, Rubs & Injektionen',
-    subtitle: 'Die geheimen Waffen',
+    label:       'Saucen, Rubs & Injektionen',
+    subtitle:    'Die geheimen Waffen',
     description: 'Kansas City BBQ Sauce, Texas Dry Rub, Buttermilch-Injektionen — die Elemente, die ein gutes Gericht zur Legende machen. Laborprotokolle statt Schätzwerte.',
+    heroImage:   '/images/articles/brisket-texas-smoked.webp',
+    heroAlt:     'Texas Brisket mit Rub-Kruste frisch vom Smoker',
   },
   desserts: {
-    label: 'Fire-Desserts',
-    subtitle: 'Das süße Finale',
+    label:       'Fire-Desserts',
+    subtitle:    'Das süße Finale',
     description: 'Vom karamellisierten Pfirsich bis zur Flammen-Ananas — Desserts, die das offene Feuer als Instrument nutzen und die Glut bis zur letzten Kohle ausreizen.',
+    heroImage:   '/images/tomahawk-hero.png',
+    heroAlt:     'Offenes Feuer am Grill — Glut für Fire-Desserts',
   },
   'wine-spirits': {
-    label: 'Wine & Spirits',
-    subtitle: 'Das perfekte Pairing',
+    label:       'Wine & Spirits',
+    subtitle:    'Das perfekte Pairing',
     description: 'Bordeaux zum Brisket, Single Malt zum Ribeye, Mezcal zum Asado — präzise Pairing-Protokolle, die erklären warum manche Kombinationen auf molekularer Ebene funktionieren.',
+    heroImage:   '/images/articles/dry-aged-beef-reifeschrank.webp',
+    heroAlt:     'Dry-Aged Beef im Reifeschrank — Komplexität die nach dem richtigen Glas verlangt',
   },
 };
 
@@ -72,6 +85,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: kat.description,
       url: `https://steakakademie.de/rezepte/${params.slug}`,
       type: 'website',
+      images: [
+        {
+          url: `https://steakakademie.de${kat.heroImage}`,
+          width: 1200,
+          height: 630,
+          alt: kat.heroAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${kat.label} | Steakakademie`,
+      description: kat.description,
+      images: [`https://steakakademie.de${kat.heroImage}`],
     },
   };
 }
@@ -97,6 +124,20 @@ export default function RezeptKategoriePage({ params }: Props) {
       <main>
         {/* Hero */}
         <section className="border-b border-border-subtle">
+          {/* Hero-Bild */}
+          <div className="relative w-full aspect-[3/1] overflow-hidden bg-surface-dark">
+            <Image
+              src={kat.heroImage}
+              alt={kat.heroAlt}
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority
+              unoptimized
+            />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(13,10,6,0.25) 0%, rgba(13,10,6,0.65) 100%)' }} />
+          </div>
+
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-14">
             <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted mb-8" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>

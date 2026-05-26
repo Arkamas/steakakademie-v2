@@ -55,7 +55,7 @@ const KATEGORIEN = [
   { value: 'beilagen',     label: 'Beilagen & Salate' },
   { value: 'saucen-rubs',  label: 'Saucen, Rubs & Injektionen' },
   { value: 'desserts',     label: 'Fire Desserts' },
-  { value: 'wine-spirits', label: 'Wine & Spirits' },
+  { value: 'wine-spirits', label: 'Wine, Spirits & Cocktails' },
 ];
 
 const SCHWIERIGKEITEN = [

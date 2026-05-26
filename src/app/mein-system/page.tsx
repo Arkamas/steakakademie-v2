@@ -19,40 +19,47 @@ export const metadata: Metadata = {
 
 const SAULEN = [
   {
-    slug:      'gruendung-sprint',
-    nummer:    'I',
-    titel:     'Gründung-Sprint',
-    untertitel: 'Idee → Gewerbeanmeldung → erste Website. In 72 Stunden.',
+    slug:        'gruendung-sprint',
+    nummer:      'I',
+    titel:       'Gründung-Sprint',
+    untertitel:  'Idee → Gewerbeanmeldung → erste Website. In 72 Stunden.',
     beschreibung:
       'Schritt-für-Schritt-System: Rechtsform wählen, Gewerbe anmelden, Domain & Hosting einrichten, erste Website live. Kein Agentur-Budget nötig.',
-    Icon:     Rocket,
-    href:     '/ehrliches-system#saule-i',
-    toolHref: null as string | null,
-    toolLabel: null as string | null,
+    Icon:        Rocket,
+    href:        '/ehrliches-system#saule-i',
+    toolHref:    null as string | null,
+    toolLabel:   null as string | null,
+    // ← Digistore24 Produkt-ID eintragen sobald Produkt angelegt:
+    // checkoutUrl: 'https://www.digistore24.com/product/XXXXXXX',
+    checkoutUrl: null as string | null,
   },
   {
-    slug:      'steuer-matrix',
-    nummer:    'II',
-    titel:     'Steuer-Matrix',
-    untertitel: 'Wieviel bleibt dir wirklich übrig? 11 Länder im Vergleich.',
+    slug:        'steuer-matrix',
+    nummer:      'II',
+    titel:       'Steuer-Matrix',
+    untertitel:  'Wieviel bleibt dir wirklich übrig? 11 Länder im Vergleich.',
     beschreibung:
       'Interaktiver Netto-Rechner für 11 Länder (DE, AT, CH, NL, FR, ES, IT, PT, GB, EE, AE). Echte Pflichtabgaben — kein Durchschnitt, keine Hochglanz-PR.',
-    Icon:     BarChart3,
-    href:     '/steuer-matrix',
-    toolHref: '/steuer-matrix/rechner' as string | null,
-    toolLabel: 'Rechner öffnen' as string | null,
+    Icon:        BarChart3,
+    href:        '/steuer-matrix',
+    toolHref:    '/steuer-matrix/rechner' as string | null,
+    toolLabel:   'Rechner öffnen' as string | null,
+    checkoutUrl: 'https://www.digistore24.com/product/695797' as string | null,
   },
   {
-    slug:      'agentur-killer-sprint',
-    nummer:    'III',
-    titel:     'Agentur-Killer-Sprint',
-    untertitel: 'Deine Website raus aus der Agentur-Abhängigkeit.',
+    slug:        'agentur-killer-sprint',
+    nummer:      'III',
+    titel:       'Agentur-Killer-Sprint',
+    untertitel:  'Deine Website raus aus der Agentur-Abhängigkeit.',
     beschreibung:
-      'Migration in eigene Infrastruktur: Next.js, Supabase, Vercel. Full-Ownership-Modell. KI-gesteuert. 0 % Plattform-Abzug.',
-    Icon:     Zap,
-    href:     '/ehrliches-system#saule-iii',
-    toolHref: null as string | null,
-    toolLabel: null as string | null,
+      'Migration in eigene Infrastruktur: Next.js, Netlify, GitHub. Full-Ownership-Modell. KI-gesteuert. 0 % Plattform-Abzug.',
+    Icon:        Zap,
+    href:        '/ehrliches-system#saule-iii',
+    toolHref:    null as string | null,
+    toolLabel:   null as string | null,
+    // ← Digistore24 Produkt-ID eintragen sobald Produkt angelegt:
+    // checkoutUrl: 'https://www.digistore24.com/product/XXXXXXX',
+    checkoutUrl: null as string | null,
   },
 ] as const;
 
@@ -287,14 +294,29 @@ export default async function MeinSystemPage() {
                         </Link>
                       ) : (
                         <>
-                          <a
-                            href={saule.href}
-                            className="flex items-center justify-center gap-2 w-full py-2.5 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
-                            style={{ background: '#C8882A', color: '#0D0A06' }}
-                          >
-                            {price ? `${eur(price)} — Freischalten` : 'Freischalten'}
-                            <ChevronRight size={13} />
-                          </a>
+                          {saule.checkoutUrl ? (
+                            /* Direkt zum Digistore24-Checkout */
+                            <a
+                              href={saule.checkoutUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-center gap-2 w-full py-2.5 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
+                              style={{ background: '#C8882A', color: '#0D0A06' }}
+                            >
+                              {price ? `${eur(price)} — Freischalten` : 'Freischalten'}
+                              <ChevronRight size={13} />
+                            </a>
+                          ) : (
+                            /* Fallback: Zur Produkt-Inhaltsseite bis Checkout-URL eingetragen */
+                            <Link
+                              href={saule.href}
+                              className="flex items-center justify-center gap-2 w-full py-2.5 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
+                              style={{ background: '#C8882A', color: '#0D0A06' }}
+                            >
+                              {price ? `${eur(price)} — Mehr erfahren` : 'Mehr erfahren'}
+                              <ChevronRight size={13} />
+                            </Link>
+                          )}
                           <p className="text-center text-[10px] font-sans text-text-muted">
                             Einmalig · Sofortzugang · Digistore24
                           </p>

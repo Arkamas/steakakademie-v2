@@ -80,8 +80,9 @@ const NAV_CATEGORIES = [
     href: '/ehrliches-system',
     sub: [
       { label: 'Gründung-Sprint', href: '/ehrliches-system#saule-i' },
-      { label: 'Steuer-Matrix', href: '/ehrliches-system#saule-ii' },
+      { label: 'Steuer-Matrix', href: '/steuer-matrix' },
       { label: 'Agentur-Killer-Sprint', href: '/ehrliches-system#saule-iii' },
+      { label: 'Mein Zugang', href: '/mein-system' },
     ],
   },
 ];

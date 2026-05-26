@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  const PROTECTED = ['/meine-kurse', '/profil', '/steuer-matrix/rechner'];
+  const PROTECTED = ['/meine-kurse', '/profil', '/steuer-matrix/rechner', '/mein-system'];
 
   if (!user && PROTECTED.some((p) => request.nextUrl.pathname.startsWith(p))) {
     const loginUrl = new URL('/auth/login', request.url);
@@ -40,5 +40,6 @@ export const config = {
     '/meine-kurse/:path*',
     '/profil/:path*',
     '/steuer-matrix/rechner/:path*',
+    '/mein-system/:path*',
   ],
 };

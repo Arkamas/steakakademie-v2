@@ -41,8 +41,8 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     title: 'Fleischthermometer Test 2026: Wir haben 8 Modelle verglichen',
     excerpt:
       'Mit kalibriertem Referenzgerät bei 5 Temperaturen gemessen. Meater Plus, Thermapen ONE und Inkbird im direkten Vergleich — klare Empfehlung für jeden Bedarf.',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-    imageAlt: 'Fleischthermometer im Einsatz beim Grillen',
+    image: '/images/articles/thermometer-test-steak-grill-1.webp',
+    imageAlt: 'Fleischthermometer-Sonde im Ribeye Steak auf dem Grill',
     category: 'Ausrüstung',
     categorySlug: 'ausruestung',
     author: 'Jonas — Der Enthusiast',
@@ -57,8 +57,8 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     title: 'Reverse Sear: Warum diese Methode alles andere schlägt',
     excerpt:
       'Erst niedrig garen, dann kurz scharf anbraten — Reverse Sear erzeugt die perfekte Kruste bei exakter Kerntemperatur. Schritt für Schritt erklärt.',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80',
-    imageAlt: 'Steak wird mit Reverse Sear Methode gegart',
+    image: '/images/articles/reverse-sear-cast-iron-steak.webp',
+    imageAlt: 'Steak in gusseiserner Pfanne mit Flammen — Reverse Sear Methode',
     category: 'Grilltechniken',
     categorySlug: 'grilltechniken',
     author: 'Marco, der Pitmaster',
@@ -73,8 +73,8 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     title: 'Brisket: Die komplette Anleitung für Low & Slow BBQ',
     excerpt:
       'Brisket ist die Königsdisziplin des BBQ. Wir erklären Flat vs. Point, Bark-Aufbau, den Stall und warum Texas-Style kein Zufall ist.',
-    image: 'https://images.unsplash.com/photo-1615361200141-f45040f367be?w=800&q=80',
-    imageAlt: 'Texas Brisket frisch vom Smoker',
+    image: '/images/articles/brisket-texas-smoked.webp',
+    imageAlt: 'Aufgeschnittenes Texas Brisket mit dunkler Bark-Kruste auf Schneidebrett',
     category: 'Cuts & Fleischkunde',
     categorySlug: 'cuts',
     author: 'Jonas — Der Enthusiast',

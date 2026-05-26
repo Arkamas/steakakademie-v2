@@ -19,12 +19,19 @@
 import { createClient } from '@supabase/supabase-js';
 import { createHmac, timingSafeEqual } from 'crypto';
 
-// Slug-Mapping: Digistore24 Produkt-ID → Supabase Course Slug
-// Eintragen sobald Produkte in Digistore24 angelegt sind
+// ─── Produkt-Mapping ──────────────────────────────────────────────────────────
+// Digistore24 Produkt-ID → Supabase Course Slug
+//
+// Wo findest du die Produkt-IDs?
+//   1. Digistore24 → Einstellungen → Produkte → dein Produkt öffnen
+//   2. In der URL steht: digistore24.com/product/XXXXXXXX
+//   3. Oder: Dashboard → Produkte → Spalte "Produkt-ID"
+//
+// Eintragen sobald Produkte angelegt sind:
 const PRODUCT_SLUG_MAP: Record<string, string> = {
-  // 'DS_PRODUCT_ID_1': 'steuer-matrix',
-  // 'DS_PRODUCT_ID_2': 'gruendung-sprint',
-  // 'DS_PRODUCT_ID_3': 'agentur-killer-sprint',
+  // '123456': 'steuer-matrix',        // Säule II — Steuer-Matrix (Preis: 197 €)
+  // '123457': 'gruendung-sprint',     // Säule I  — Gründung-Sprint
+  // '123458': 'agentur-killer-sprint', // Säule III — Agentur-Killer-Sprint
 };
 
 function verifySignature(payload: string, signature: string, secret: string): boolean {
@@ -115,11 +122,19 @@ export async function POST(req: Request) {
     bookingId = data;
 
     // Magic-Link-E-Mail versenden (Supabase Auth)
+    // redirectTo: Tool-URL wenn vorhanden, sonst allgemeiner Mitgliederbereich
+    const TOOL_REDIRECT: Record<string, string> = {
+      'steuer-matrix':        'https://steakakademie.de/steuer-matrix/rechner',
+      'gruendung-sprint':     'https://steakakademie.de/mein-system',
+      'agentur-killer-sprint': 'https://steakakademie.de/mein-system',
+    };
+    const redirectTo = TOOL_REDIRECT[courseSlug] ?? 'https://steakakademie.de/mein-system';
+
     const { error: emailError } = await supabase.auth.admin.generateLink({
       type: 'magiclink',
       email: email.toLowerCase().trim(),
       options: {
-        redirectTo: `https://steakakademie.de/steuer-matrix/rechner`,
+        redirectTo,
         data: { source: 'digistore24', course: courseSlug },
       },
     });

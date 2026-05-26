@@ -6,9 +6,13 @@ module.exports = {
   priority: 0.7,
   sitemapSize: 5000,
   exclude: [
-    '/go/*',           // Affiliate-Redirects nicht indexieren
-    '/api/*',          // API-Routen
+    '/go/*',              // Affiliate-Redirects nicht indexieren
+    '/api/*',             // API-Routen
     '/admin/*',
+    '/mein-system',       // Auth-only — nicht für Google
+    '/meine-kurse',       // Auth-only
+    '/profil',            // Auth-only
+    '/steuer-matrix/rechner', // Auth-only
   ],
   robotsTxtOptions: {
     additionalSitemaps: [],

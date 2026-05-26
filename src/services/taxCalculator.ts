@@ -28,7 +28,7 @@ export interface TaxDeductions {
 
 export interface TaxResult {
   label:            string;
-  country:          'DE' | 'NL' | 'ES' | 'IT' | 'FR' | 'PT';
+  country:          'DE' | 'NL' | 'ES' | 'IT' | 'FR' | 'PT' | 'AT' | 'CH' | 'GB' | 'EE' | 'AE';
   monthlyGross:     number;
   deductions:       TaxDeductions;
   /** Summe aller Abzüge — €/Monat */

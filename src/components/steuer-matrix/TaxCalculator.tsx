@@ -6,19 +6,33 @@ import { calculateES } from '@/services/esEvaluator';
 import { calculateFR } from '@/services/frEvaluator';
 import { calculateIT } from '@/services/itEvaluator';
 import { calculatePT } from '@/services/ptEvaluator';
+import { calculateAT } from '@/services/atEvaluator';
+import { calculateCH } from '@/services/chEvaluator';
+import { calculateGB } from '@/services/gbEvaluator';
+import { calculateEE } from '@/services/eeEvaluator';
+import { calculateAE } from '@/services/aeEvaluator';
 import { ChevronDown, Info } from 'lucide-react';
 
 // ─── Typen ────────────────────────────────────────────────────────────────────
 
-type CountryCode = 'DE' | 'NL' | 'FR' | 'ES' | 'IT' | 'PT';
+type CountryCode = 'DE' | 'NL' | 'FR' | 'ES' | 'IT' | 'PT' | 'AT' | 'CH' | 'GB' | 'EE' | 'AE';
 
-const COUNTRIES: { code: CountryCode; name: string; flag: string; system: string }[] = [
-  { code: 'DE', name: 'Deutschland',  flag: '🇩🇪', system: 'Einzelunternehmer / Freiberufler' },
-  { code: 'NL', name: 'Niederlande',  flag: '🇳🇱', system: 'ZZP (Zelfstandige)' },
-  { code: 'FR', name: 'Frankreich',   flag: '🇫🇷', system: 'Auto-entrepreneur (BNC)' },
-  { code: 'ES', name: 'Spanien',      flag: '🇪🇸', system: 'Autónomo' },
-  { code: 'IT', name: 'Italien',      flag: '🇮🇹', system: 'Regime Forfettario' },
-  { code: 'PT', name: 'Portugal',     flag: '🇵🇹', system: 'Recibos Verdes' },
+const COUNTRIES: { code: CountryCode; name: string; flag: string; system: string; group: string }[] = [
+  // DACH
+  { code: 'DE', name: 'Deutschland',  flag: '🇩🇪', system: 'Einzelunternehmer', group: 'DACH' },
+  { code: 'AT', name: 'Österreich',   flag: '🇦🇹', system: 'Einzelunternehmer / SVS', group: 'DACH' },
+  { code: 'CH', name: 'Schweiz',      flag: '🇨🇭', system: 'Selbstständigerwerbende', group: 'DACH' },
+  // EU Süd
+  { code: 'NL', name: 'Niederlande',  flag: '🇳🇱', system: 'ZZP (Zelfstandige)', group: 'EU' },
+  { code: 'FR', name: 'Frankreich',   flag: '🇫🇷', system: 'Auto-entrepreneur (BNC)', group: 'EU' },
+  { code: 'ES', name: 'Spanien',      flag: '🇪🇸', system: 'Autónomo', group: 'EU' },
+  { code: 'IT', name: 'Italien',      flag: '🇮🇹', system: 'Regime Forfettario', group: 'EU' },
+  { code: 'PT', name: 'Portugal',     flag: '🇵🇹', system: 'Recibos Verdes', group: 'EU' },
+  { code: 'EE', name: 'Estland',      flag: '🇪🇪', system: 'OÜ (e-Residency)', group: 'EU' },
+  // Englischsprachig
+  { code: 'GB', name: 'UK',           flag: '🇬🇧', system: 'Sole Trader', group: 'EN' },
+  // Steueroasen / Special
+  { code: 'AE', name: 'UAE/Dubai',    flag: '🇦🇪', system: 'Freelance Visa · 0 % ESt', group: 'Special' },
 ];
 
 const GROSS_PRESETS = [2000, 3000, 4000, 5000, 6000, 8000, 10000];
@@ -43,6 +57,11 @@ function calcFor(code: CountryCode, gross: number): TaxResult {
     case 'ES': return calculateES(gross);
     case 'IT': return calculateIT(gross);
     case 'PT': return calculatePT(gross);
+    case 'AT': return calculateAT(gross);
+    case 'CH': return calculateCH(gross);
+    case 'GB': return calculateGB(gross);
+    case 'EE': return calculateEE(gross);
+    case 'AE': return calculateAE(gross);
   }
 }
 
@@ -51,7 +70,7 @@ function calcFor(code: CountryCode, gross: number): TaxResult {
 export default function TaxCalculator() {
   const [gross, setGross] = useState(4000);
   const [inputRaw, setInputRaw] = useState('4000');
-  const [selectedCountries, setSelectedCountries] = useState<CountryCode[]>(['DE', 'NL', 'FR']);
+  const [selectedCountries, setSelectedCountries] = useState<CountryCode[]>(['DE', 'AT', 'CH', 'AE']);
   const [showNotes, setShowNotes] = useState<CountryCode | null>(null);
 
   const results = useMemo(() =>
@@ -139,24 +158,37 @@ export default function TaxCalculator() {
       {/* ── Länder-Auswahl ───────────────────────────────────────────────────── */}
       <div>
         <p className="text-xs font-sans font-bold tracking-[0.14em] uppercase text-text-muted mb-3">
-          Länder vergleichen
+          Länder vergleichen ({selectedCountries.length} ausgewählt)
         </p>
-        <div className="flex flex-wrap gap-2">
-          {COUNTRIES.map(({ code, name, flag }) => (
-            <button
-              key={code}
-              onClick={() => toggleCountry(code)}
-              className={`flex items-center gap-2 text-sm font-sans px-3 py-1.5 border transition-all ${
-                selectedCountries.includes(code)
-                  ? 'border-brand-gold text-text-primary bg-brand-gold/8'
-                  : 'border-border-subtle text-text-muted hover:border-brand-gold/40'
-              }`}
-            >
-              <span>{flag}</span>
-              <span>{name}</span>
-            </button>
-          ))}
-        </div>
+        {(['DACH', 'EU', 'EN', 'Special'] as const).map((group) => {
+          const groupLabel: Record<string, string> = {
+            DACH: 'DACH', EU: 'EU', EN: 'Englischsprachig', Special: 'Steuervorteil',
+          };
+          const groupCountries = COUNTRIES.filter((c) => c.group === group);
+          return (
+            <div key={group} className="mb-3">
+              <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-text-muted/60 mr-2">
+                {groupLabel[group]}
+              </span>
+              <div className="inline-flex flex-wrap gap-1.5 mt-1">
+                {groupCountries.map(({ code, name, flag }) => (
+                  <button
+                    key={code}
+                    onClick={() => toggleCountry(code)}
+                    className={`flex items-center gap-1.5 text-sm font-sans px-2.5 py-1 border transition-all ${
+                      selectedCountries.includes(code)
+                        ? 'border-brand-gold text-text-primary bg-brand-gold/8'
+                        : 'border-border-subtle text-text-muted hover:border-brand-gold/40'
+                    }`}
+                  >
+                    <span>{flag}</span>
+                    <span>{name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* ── Ergebnis-Karten ──────────────────────────────────────────────────── */}

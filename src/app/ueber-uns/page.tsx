@@ -1,183 +1,271 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, Flame, BookOpen, Award } from 'lucide-react';
+import Image from 'next/image';
+import { ChevronRight, ArrowRight, Mail } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Über uns — Steakakademie',
-  description: 'Steakakademie ist kein Rezept-Blog. Es ist eine Plattform für ernsthaftes BBQ-Wissen — methodisch, ehrlich, praxiserprobt.',
-  alternates: { canonical: 'https://steakakademie.de/ueber-uns' },
+  title: 'Über mich — Uwe Yendell | steakakademie.de',
+  description:
+    'Profi-Koch, Marketing-Manager, KI-Pionier. Wer hinter steakakademie.de und Das Ehrliche System steckt — und warum das relevant ist.',
+  openGraph: {
+    title: 'Über mich — Uwe Yendell',
+    description:
+      'Profi-Koch, Marketing-Manager, KI-Pionier. Wer hinter steakakademie.de steckt.',
+    images: [{ url: '/images/uwe-yendell.png', width: 800, height: 800 }],
+  },
 };
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Uwe Yendell',
+  jobTitle: 'Koch, Marketing-Manager, KI-Berater',
+  url: 'https://steakakademie.de/ueber-uns',
+  image: 'https://steakakademie.de/images/uwe-yendell.png',
+  email: 'info@steakakademie.de',
+  address: { '@type': 'PostalAddress', addressLocality: 'Wuppertal', addressCountry: 'DE' },
+  sameAs: [],
+};
+
+const KOMPETENZEN = [
+  {
+    kicker: 'Der Koch',
+    titel: 'Handwerk vor Theorie',
+    text:
+      'Ausgebildeter Profi-Koch. Ich habe gelernt, was es heißt, unter Druck präzise zu arbeiten — Mise en place, Qualitätskontrolle, null Spielraum für Ausreden. Diese Disziplin trägt alles andere.',
+  },
+  {
+    kicker: 'Der Marketing-Manager',
+    titel: '30 Jahre Marken, Zahlen, Realität',
+    text:
+      'Drei Jahrzehnte in Marketing und Vertrieb: Budgets verantwortet, Kampagnen gesteuert, Agenturen briefed und hinterfragt. Ich weiß, was Agenturen Ihnen verkaufen — und was sie Ihnen schulden.',
+  },
+  {
+    kicker: 'Der Trainer',
+    titel: 'KI als Werkzeug, nicht als Hype',
+    text:
+      'Seit den frühen GPT-3-Tagen experimentiere ich produktiv mit KI-Tools. Nicht als Tech-Enthusiast, sondern als Unternehmer, der echte Probleme lösen will. Was funktioniert, landet im System.',
+  },
+] as const;
 
 export default function UeberUnsPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <Header />
-      <main className="min-h-screen bg-surface-base">
-        <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
 
-          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted mb-8" aria-label="Breadcrumb">
+      <main className="bg-surface-base min-h-screen">
+
+        {/* ── Breadcrumb ────────────────────────────────────────────── */}
+        <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
-            <ChevronRight size={12} />
-            <span>Über uns</span>
+            <ChevronRight size={11} />
+            <span className="text-text-secondary">Über mich</span>
           </nav>
+        </div>
 
-          {/* Hero */}
-          <div className="mb-16">
-            <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-3">
-              Über die Steakakademie
-            </p>
-            <h1 className="font-serif text-4xl sm:text-5xl font-bold text-text-primary mb-6 leading-tight">
-              Wissen, das du am Grill<br className="hidden sm:block" /> tatsächlich brauchst.
-            </h1>
-            <p className="font-body text-lg text-text-secondary leading-relaxed max-w-content">
-              Steakakademie.de ist kein Rezept-Blog. Es ist eine Plattform für ernsthaftes
-              BBQ-Wissen — methodisch erarbeitet, ehrlich formuliert, immer praxiserprobt.
-              Hinter jedem Artikel steckt echter Aufwand am Grill, am Smoker, manchmal auch
-              nachts um 2 beim Brisket.
-            </p>
+        {/* ── Hero ─────────────────────────────────────────────────── */}
+        <div
+          className="mt-6 mb-12 border-b"
+          style={{
+            background:  'linear-gradient(180deg, rgba(200,136,42,0.07) 0%, transparent 100%)',
+            borderColor: 'rgba(200,136,42,0.12)',
+          }}
+        >
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+            <div className="flex flex-col md:flex-row items-start gap-10">
+
+              {/* Foto */}
+              <div className="shrink-0">
+                <div
+                  className="w-32 h-32 md:w-44 md:h-44 overflow-hidden"
+                  style={{ border: '1px solid rgba(200,136,42,0.3)' }}
+                >
+                  <Image
+                    src="/images/uwe-yendell.png"
+                    alt="Uwe Yendell"
+                    width={176}
+                    height={176}
+                    className="w-full h-full object-cover object-top"
+                    unoptimized
+                    priority
+                  />
+                </div>
+              </div>
+
+              {/* Text */}
+              <div className="flex-1">
+                <span
+                  className="inline-block font-sans text-[10px] font-bold tracking-[0.16em] uppercase px-3 py-1 mb-4"
+                  style={{
+                    background: 'rgba(200,136,42,0.14)',
+                    color:      '#C8882A',
+                    border:     '1px solid rgba(200,136,42,0.28)',
+                  }}
+                >
+                  Wer ich bin — und warum das relevant ist
+                </span>
+                <h1 className="font-serif text-3xl sm:text-4xl font-bold text-text-light leading-tight mb-4">
+                  Uwe Yendell.<br />
+                  Profi-Koch, Marketing-Manager,<br className="hidden sm:block" /> KI-Pionier.{' '}
+                  <span style={{ color: '#C8882A' }}>In dieser Reihenfolge.</span>
+                </h1>
+                <p className="font-body text-base text-text-secondary leading-relaxed max-w-2xl">
+                  Ich bin 59, lebe in Wuppertal, und ich habe drei Karrieren hinter mir —
+                  bevor ich angefangen habe, anderen zu erklären, wie das geht.
+                </p>
+              </div>
+
+            </div>
           </div>
+        </div>
+
+        {/* ── Inhalt ───────────────────────────────────────────────── */}
+        <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pb-24 space-y-16">
+
+          {/* Einstieg */}
+          <section className="max-w-2xl">
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              Das klingt nach Selbstvermarktung. Ist es auch. Aber hören Sie kurz zu,
+              warum das für Sie relevant ist.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              Die meisten Menschen, die heute Online-Kurse über Gründung, Marketing oder KI verkaufen,
+              haben eines gemeinsam: Sie erklären, was sie gelesen haben. Ich erkläre, was ich
+              gemacht habe — und was dabei schiefgelaufen ist.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed">
+              Beides ist wichtig.
+            </p>
+          </section>
+
+          {/* Dreifach-Kompetenz */}
+          <section>
+            <h2 className="font-serif text-2xl font-bold text-text-light mb-6">
+              Drei Karrieren. Eine Perspektive.
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {KOMPETENZEN.map((k) => (
+                <div
+                  key={k.kicker}
+                  className="border px-5 py-6 flex flex-col"
+                  style={{
+                    borderColor: 'rgba(200,136,42,0.18)',
+                    background:  '#1A1209',
+                  }}
+                >
+                  <span
+                    className="font-sans text-[10px] font-bold tracking-[0.14em] uppercase mb-2"
+                    style={{ color: '#C8882A' }}
+                  >
+                    {k.kicker}
+                  </span>
+                  <h3 className="font-serif text-base font-bold text-text-light mb-3">
+                    {k.titel}
+                  </h3>
+                  <p className="font-body text-sm text-text-secondary leading-relaxed flex-1">
+                    {k.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Rückschläge */}
+          <section className="max-w-2xl">
+            <h2 className="font-serif text-2xl font-bold text-text-light mb-5">
+              Zwei Fehlschläge. Ohne Weichzeichner.
+            </h2>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              Ich habe zwei Projekte gegen die Wand gefahren, bevor ich verstanden habe,
+              warum sie nicht funktionieren konnten.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              <strong className="text-text-light">wuppercoach.de</strong> — ein Coaching-Angebot,
+              das ich aufgebaut habe, ohne eine klare Positionierung zu haben. Gute Inhalte,
+              falsche Zielgruppe, kein System. Ich habe Geld und Zeit investiert und nie
+              zurückbekommen.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-6">
+              <strong className="text-text-light">Genusskunst</strong> — ein kulinarisches
+              Konzept, das ich zu früh skaliert habe. Bevor die Grundlagen standen,
+              wollte ich wachsen. Das funktioniert nicht.
+            </p>
+            <blockquote
+              className="border-l-2 pl-5 py-1"
+              style={{ borderColor: '#C8882A' }}
+            >
+              <p className="font-serif text-base italic text-text-light leading-relaxed">
+                &ldquo;Ich erzähle das nicht für Sympathie. Ich erzähle es, weil das Ehrliche System
+                aus diesen Fehlern entstanden ist — nicht aus Erfolgsgeschichten.&rdquo;
+              </p>
+            </blockquote>
+          </section>
 
           {/* Mission */}
-          <div className="border-t-2 border-text-primary pt-12 mb-16">
-            <div className="grid sm:grid-cols-3 gap-8">
-              <div>
-                <div className="w-10 h-10 flex items-center justify-center border-2 border-brand-fire text-brand-fire mb-4">
-                  <Flame size={18} />
-                </div>
-                <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3">
-                  Methodisch
-                </h2>
-                <p className="font-body text-sm text-text-secondary leading-relaxed">
-                  Kerntemperaturen, Ruhezonen, Marmorierung-Scores — wir erklären das Warum,
-                  nicht nur das Was. BBQ funktioniert besser, wenn man versteht, was passiert.
-                </p>
-              </div>
-              <div>
-                <div className="w-10 h-10 flex items-center justify-center border-2 border-brand-fire text-brand-fire mb-4">
-                  <BookOpen size={18} />
-                </div>
-                <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3">
-                  Ehrlich
-                </h2>
-                <p className="font-body text-sm text-text-secondary leading-relaxed">
-                  Keine gesponserten Testberichte. Kein Content-Marketing in Artikel-Form.
-                  Was wir empfehlen, haben wir getestet. Was wir nicht empfehlen würden,
-                  schreiben wir nicht auf.
-                </p>
-              </div>
-              <div>
-                <div className="w-10 h-10 flex items-center justify-center border-2 border-brand-fire text-brand-fire mb-4">
-                  <Award size={18} />
-                </div>
-                <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3">
-                  Praxiserprobt
-                </h2>
-                <p className="font-body text-sm text-text-secondary leading-relaxed">
-                  Kein Artikel verlässt die Redaktion, ohne dass die Theorie auch am Grill
-                  bestätigt wurde. Fehler passieren — und wenn, benennen wir sie.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Team */}
-          <div className="border-t-2 border-text-primary pt-12 mb-16">
-            <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-8">
-              Wer schreibt hier
+          <section
+            className="border px-6 sm:px-8 py-8"
+            style={{
+              borderColor: 'rgba(200,136,42,0.2)',
+              background:  'rgba(200,136,42,0.04)',
+            }}
+          >
+            <h2 className="font-serif text-2xl font-bold text-text-light mb-5">
+              Warum steakakademie.de?
             </h2>
-
-            <div className="space-y-10">
-              {/* Marco */}
-              <div className="flex flex-col sm:flex-row gap-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-brand-gold/30 to-brand-fire/20 flex items-center justify-center shrink-0">
-                  <span className="font-serif text-3xl text-text-primary">M</span>
-                </div>
-                <div>
-                  <h3 className="font-serif text-xl font-bold text-text-primary mb-1">Marco, der Pitmaster</h3>
-                  <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-3">
-                    Gründer & Chefredakteur
-                  </p>
-                  <p className="font-body text-sm text-text-secondary leading-relaxed mb-3">
-                    Marco ist der Pitmaster hinter der Steakakademie. Mit über 15 Jahren Grillpraxis,
-                    Dutzenden getesteten Cuts und einer Leidenschaft für texanisches BBQ bringt er
-                    echte Praxiserfahrung in jeden Artikel. Er testet alle Produkte selbst, bevor
-                    er sie empfiehlt — und hat für ein gutes Brisket auch schon mal eine Nachtschicht
-                    am Smoker durchgezogen.
-                  </p>
-                  <Link href="/autoren/marco" className="text-xs font-sans font-bold tracking-wide uppercase text-brand-fire hover:underline">
-                    Alle Artikel von Marco →
-                  </Link>
-                </div>
-              </div>
-
-              {/* Jonas */}
-              <div className="flex flex-col sm:flex-row gap-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-brand-gold/30 to-brand-fire/20 flex items-center justify-center shrink-0">
-                  <span className="font-serif text-3xl text-text-primary">J</span>
-                </div>
-                <div>
-                  <h3 className="font-serif text-xl font-bold text-text-primary mb-1">Jonas</h3>
-                  <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-3">
-                    BBQ-Enthusiast & Equipment-Redakteur
-                  </p>
-                  <p className="font-body text-sm text-text-secondary leading-relaxed mb-3">
-                    Jonas ist der Enthusiast im Team — immer dabei wenn neue Techniken ausprobiert
-                    werden, immer hungrig auf das nächste Experiment. Er schreibt über
-                    Einsteigerthemen, Equipment-Reviews und die kleinen Tricks, die den
-                    Unterschied machen.
-                  </p>
-                  <Link href="/autoren/jonas" className="text-xs font-sans font-bold tracking-wide uppercase text-brand-fire hover:underline">
-                    Alle Artikel von Jonas →
-                  </Link>
-                </div>
-              </div>
-
-              {/* Elena */}
-              <div className="flex flex-col sm:flex-row gap-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-brand-gold/30 to-brand-fire/20 flex items-center justify-center shrink-0">
-                  <span className="font-serif text-3xl text-text-primary">E</span>
-                </div>
-                <div>
-                  <h3 className="font-serif text-xl font-bold text-text-primary mb-1">Elena</h3>
-                  <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-3">
-                    Food Science & Redaktion
-                  </p>
-                  <p className="font-body text-sm text-text-secondary leading-relaxed mb-3">
-                    Elena bringt die wissenschaftliche Perspektive ein. Als Food-Enthusiastin mit
-                    Hintergrund in Ernährungswissenschaften schreibt sie über die Chemie hinter
-                    dem Grillen — warum die Maillard-Reaktion so faszinierend ist, was beim
-                    Dry Aging passiert und warum Salzen vor dem Grillen kein Mythos ist.
-                  </p>
-                  <Link href="/autoren/elena" className="text-xs font-sans font-bold tracking-wide uppercase text-brand-fire hover:underline">
-                    Alle Artikel von Elena →
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Diploma / CTA */}
-          <div className="border-t-2 border-text-primary pt-12">
-            <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-4">
-              Grillmeister-Diplom
-            </h2>
-            <p className="font-body text-text-secondary leading-relaxed mb-6 max-w-content">
-              Wissen ist gut — nachgewiesenes Wissen ist besser. Auf Steakakademie.de kannst
-              du dein BBQ-Wissen in einem strukturierten Lehrgang aufbauen und mit einem
-              echten Grillmeister-Diplom (Bronze bis Meister) abschließen.
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              steakakademie.de ist beides: mein Handwerk und mein System.
             </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              Das Fleisch ist echt — ich koche seit über 30 Jahren und weiß, wie ein perfektes
+              Steak entsteht. Aber die Plattform ist mehr als Rezepte. Sie ist ein Beweis,
+              dass man mit den richtigen Werkzeugen heute als Einzelperson eine professionelle
+              digitale Präsenz aufbauen kann — ohne Agentur, ohne Investoren, ohne Vorkenntnisse
+              in Webentwicklung.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed">
+              Was ich hier gelernt habe — über Gründung, Infrastruktur, KI-Tools und
+              Steueroptimierung — ist das, was ich im{' '}
+              <Link href="/ehrliches-system" className="underline" style={{ color: '#C8882A' }}>
+                Ehrlichen System
+              </Link>{' '}
+              weitergebe. Kein Hochglanz. Keine Erfolgsversprechen. Nur das, was funktioniert.
+            </p>
+          </section>
+
+          {/* CTA */}
+          <section className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <Link
-              href="/diplome"
-              className="inline-block font-sans text-sm font-bold tracking-wide uppercase px-6 py-3 bg-brand-fire text-white hover:bg-brand-fire/90 transition-colors"
+              href="/ehrliches-system"
+              className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
+              style={{ background: '#C8882A', color: '#0D0A06' }}
             >
-              Zu den Diplomen →
+              Das Ehrliche System <ArrowRight size={14} />
             </Link>
-          </div>
+            <a
+              href="mailto:info@steakakademie.de"
+              className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-80 transition-opacity"
+              style={{
+                border:     '1px solid rgba(200,136,42,0.35)',
+                color:      '#C8882A',
+                background: 'transparent',
+              }}
+            >
+              <Mail size={14} />
+              info@steakakademie.de
+            </a>
+          </section>
 
         </div>
       </main>
+
       <Footer />
     </>
   );

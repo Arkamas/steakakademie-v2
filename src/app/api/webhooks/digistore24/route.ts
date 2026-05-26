@@ -122,11 +122,12 @@ export async function POST(req: Request) {
     bookingId = data;
 
     // Magic-Link-E-Mail versenden (Supabase Auth)
-    // redirectTo: Tool-URL wenn vorhanden, sonst allgemeiner Mitgliederbereich
+    // WICHTIG: redirectTo muss auf /auth/callback?next=... zeigen (PKCE-Flow)
+    // Direktlink zum Tool würde den Code nicht exchangeen → keine Session
     const TOOL_REDIRECT: Record<string, string> = {
-      'steuer-matrix':        'https://steakakademie.de/steuer-matrix/rechner',
-      'gruendung-sprint':     'https://steakakademie.de/mein-system',
-      'agentur-killer-sprint': 'https://steakakademie.de/mein-system',
+      'steuer-matrix':         'https://steakakademie.de/auth/callback?next=/steuer-matrix/rechner',
+      'gruendung-sprint':      'https://steakakademie.de/auth/callback?next=/mein-system',
+      'agentur-killer-sprint': 'https://steakakademie.de/auth/callback?next=/mein-system',
     };
     const redirectTo = TOOL_REDIRECT[courseSlug] ?? 'https://steakakademie.de/mein-system';
 

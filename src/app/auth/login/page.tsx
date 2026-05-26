@@ -148,10 +148,8 @@ function LoginForm() {
             </form>
 
             <p className="font-sans text-xs text-text-muted text-center mt-5">
-              Noch kein Konto?{' '}
-              <Link href="/auth/register" className="text-brand-gold hover:text-text-light transition-colors">
-                Jetzt registrieren
-              </Link>
+              Noch kein Konto? Einfach E-Mail eingeben —<br />
+              dein Zugang wird automatisch erstellt.
             </p>
           </>
 

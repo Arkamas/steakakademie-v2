@@ -307,7 +307,7 @@ export default async function GruendungSprintPage() {
                   >
                     {/* Foto → /public/images/uwe-yendell.jpg */}
                     <Image
-                      src="/images/uwe-yendell.jpg"
+                      src="/images/uwe-yendell.png"
                       alt="Uwe Yendell"
                       width={128}
                       height={128}

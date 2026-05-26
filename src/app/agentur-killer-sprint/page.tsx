@@ -336,7 +336,7 @@ export default async function AgenturKillerSprintPage() {
                     style={{ border: '1px solid rgba(200,136,42,0.28)' }}
                   >
                     <Image
-                      src="/images/uwe-yendell.jpg"
+                      src="/images/uwe-yendell.png"
                       alt="Uwe Yendell"
                       width={128}
                       height={128}

@@ -29,9 +29,9 @@ import { createHmac, timingSafeEqual } from 'crypto';
 //
 // Eintragen sobald Produkte angelegt sind:
 const PRODUCT_SLUG_MAP: Record<string, string> = {
-  // '123456': 'steuer-matrix',        // Säule II — Steuer-Matrix (Preis: 197 €)
-  // '123457': 'gruendung-sprint',     // Säule I  — Gründung-Sprint
-  // '123458': 'agentur-killer-sprint', // Säule III — Agentur-Killer-Sprint
+  '695797': 'steuer-matrix',          // Säule II — Steuer-Matrix (Preis: 197 €) — DS-Produkt-ID: 695797
+  // '??????': 'gruendung-sprint',     // Säule I  — Gründung-Sprint (noch anlegen)
+  // '??????': 'agentur-killer-sprint', // Säule III — Agentur-Killer-Sprint (noch anlegen)
 };
 
 function verifySignature(payload: string, signature: string, secret: string): boolean {

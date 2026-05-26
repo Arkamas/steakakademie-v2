@@ -1,0 +1,273 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ChevronRight, Lock, BarChart3, Globe, ShieldCheck } from 'lucide-react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import { createClient } from '@/lib/supabase/server';
+
+export const metadata: Metadata = {
+  title: 'Steuer-Matrix — EU-Steuervergleich für Solo-Selbstständige',
+  description:
+    'Interaktiver Netto-Vergleich: Wieviel bleibt dir als Selbstständiger in Deutschland, Niederlanden, Frankreich, Spanien, Italien und Portugal wirklich übrig? Echte Zahlen, kein Marketing.',
+  alternates: { canonical: 'https://steakakademie.de/steuer-matrix' },
+  openGraph: {
+    title: 'Steuer-Matrix — EU-Steuervergleich | Steakakademie',
+    description: 'Datengestützte Entscheidungshilfe für Solo-Selbstständige: GmbH vs. Einzelunternehmen, 6 EU-Länder im Netto-Vergleich.',
+    url: 'https://steakakademie.de/steuer-matrix',
+    type: 'website',
+  },
+};
+
+const COUNTRIES = [
+  { flag: '🇩🇪', name: 'Deutschland', system: 'Einzelunternehmer / GmbH', highlight: 'Referenzland' },
+  { flag: '🇳🇱', name: 'Niederlande', system: 'ZZP — Zelfstandigenaftrek', highlight: 'Oft günstiger' },
+  { flag: '🇫🇷', name: 'Frankreich',  system: 'Auto-entrepreneur (BNC)', highlight: 'Pauschalsteuer' },
+  { flag: '🇪🇸', name: 'Spanien',     system: 'Autónomo',                 highlight: 'Flatrate möglich' },
+  { flag: '🇮🇹', name: 'Italien',     system: 'Regime Forfettario',       highlight: '15 % Pauschalsteuer' },
+  { flag: '🇵🇹', name: 'Portugal',    system: 'Recibos Verdes + NHR',     highlight: 'NHR-Sonderregel' },
+];
+
+const FEATURES = [
+  {
+    icon: <BarChart3 size={20} />,
+    title: 'Echte Berechnung',
+    desc: 'Kein Durchschnitt, kein "ungefähr". GKV + Einkommensteuer + Pflichtabgaben nach §32a EStG 2024 und den jeweiligen Länder-Steuergesetzen.',
+  },
+  {
+    icon: <Globe size={20} />,
+    title: '6 EU-Länder',
+    desc: 'Deutschland, Niederlande, Frankreich, Spanien, Italien, Portugal — jedes Land mit dem realistischen Steuer-Rechenmodell für Solo-Selbstständige.',
+  },
+  {
+    icon: <ShieldCheck size={20} />,
+    title: 'Kein Marketing',
+    desc: 'Keine Affiliate-Links zu Steuerberatern. Kein Upsell. Der Rechner liefert die Zahl — was du damit machst, entscheidest du.',
+  },
+];
+
+export default async function SteuerMatrixPage() {
+  // Prüfen ob User bereits Zugang hat
+  let hasAccess = false;
+  try {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data } = await supabase
+        .from('bookings')
+        .select('status, courses!inner(slug)')
+        .eq('user_id', user.id)
+        .eq('courses.slug', 'steuer-matrix')
+        .eq('status', 'active')
+        .maybeSingle();
+      hasAccess = !!data;
+    }
+  } catch { /* graceful */ }
+
+  // Preis aus Supabase
+  let price: number | null = null;
+  try {
+    const supabase = createClient();
+    const { data } = await supabase
+      .from('courses')
+      .select('price')
+      .eq('slug', 'steuer-matrix')
+      .single();
+    if (data) price = data.price;
+  } catch { /* graceful */ }
+
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Steuer-Matrix — EU-Steuervergleich',
+    applicationCategory: 'FinanceApplication',
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'EUR',
+      ...(price ? { price } : {}),
+      availability: 'https://schema.org/InStock',
+    },
+  };
+
+  return (
+    <>
+      <Header />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+
+      <main className="bg-surface-base">
+
+        {/* ── Hero ─────────────────────────────────────────────────────────────── */}
+        <section className="bg-surface-dark border-b border-brand-gold/15">
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-8" aria-label="Breadcrumb">
+              <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
+              <ChevronRight size={12} />
+              <Link href="/ehrliches-system" className="hover:text-brand-gold transition-colors">Das Ehrliche System</Link>
+              <ChevronRight size={12} />
+              <span className="text-text-light/65">Steuer-Matrix</span>
+            </nav>
+
+            <div className="max-w-3xl">
+              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
+                Säule II — Das Ehrliche System
+              </span>
+              <h1 className="font-serif text-4xl lg:text-5xl font-bold text-text-light leading-tight mb-5">
+                Steuer-Matrix
+              </h1>
+              <p className="font-serif text-xl text-text-light/80 leading-relaxed mb-4">
+                Wieviel bleibt dir als Solo-Selbstständiger wirklich übrig?
+              </p>
+              <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
+                Interaktiver Netto-Vergleich für 6 EU-Länder. Kein Steuerberater-Ersatz —
+                ein Entscheidungs-Werkzeug. Du gibst deinen Bruttoumsatz ein, das Tool
+                rechnet dir in Echtzeit vor, wo in Europa du am meisten behältst.
+              </p>
+
+              {hasAccess ? (
+                <Link
+                  href="/steuer-matrix/rechner"
+                  className="inline-flex items-center gap-2 bg-brand-gold text-surface-dark font-sans font-bold text-sm px-6 py-3 hover:bg-brand-gold/90 transition-colors"
+                >
+                  Zum Rechner <ChevronRight size={16} />
+                </Link>
+              ) : (
+                <div className="flex flex-wrap items-center gap-4">
+                  {/* Digistore24-Link — wird nach Produkt-Anlage eingetragen */}
+                  <a
+                    href="#kaufen"
+                    className="inline-flex items-center gap-2 bg-brand-gold text-surface-dark font-sans font-bold text-sm px-6 py-3 hover:bg-brand-gold/90 transition-colors"
+                  >
+                    {price
+                      ? `Jetzt kaufen — ${new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 }).format(price)}`
+                      : 'Jetzt kaufen'
+                    }
+                  </a>
+                  <span className="text-xs font-sans text-text-light/40">einmalig · sofortiger Zugang</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Länder-Übersicht ─────────────────────────────────────────────────── */}
+        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <h2 className="font-serif text-2xl font-bold text-text-primary mb-2">
+            6 Länder — ein Rechner
+          </h2>
+          <p className="font-body text-text-secondary mb-10 max-w-xl">
+            Jedes Land mit dem realistischen Pflicht-Abgaben-Modell für Solopreneure.
+          </p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {COUNTRIES.map(({ flag, name, system, highlight }) => (
+              <div key={name} className="bg-surface-card border border-border-subtle p-4">
+                <div className="text-2xl mb-2">{flag}</div>
+                <div className="font-serif text-base font-bold text-text-primary mb-0.5">{name}</div>
+                <div className="text-xs font-sans text-text-muted mb-2">{system}</div>
+                <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-brand-fire">
+                  {highlight}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Features ─────────────────────────────────────────────────────────── */}
+        <section className="border-t border-border-subtle bg-surface-dark">
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              {FEATURES.map(({ icon, title, desc }) => (
+                <div key={title}>
+                  <div className="text-brand-gold mb-3">{icon}</div>
+                  <h3 className="font-serif text-lg font-bold text-text-light mb-2">{title}</h3>
+                  <p className="font-body text-sm text-text-light/55 leading-relaxed">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Preview / Lock ───────────────────────────────────────────────────── */}
+        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="relative bg-surface-card border border-border-subtle overflow-hidden">
+
+            {/* Blurred Preview */}
+            <div className="p-6 filter blur-sm pointer-events-none select-none" aria-hidden>
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                {['🇩🇪', '🇳🇱', '🇫🇷'].map((flag, i) => (
+                  <div key={i} className="bg-surface-base border border-border-subtle p-4">
+                    <div className="text-2xl mb-2">{flag}</div>
+                    <div className="font-serif text-2xl font-bold text-brand-gold">x.xxx €</div>
+                    <div className="text-xs font-sans text-text-muted mt-1">Netto / Monat</div>
+                    <div className="mt-3 space-y-1.5">
+                      {['KV', 'Steuer', 'Abgaben'].map((l) => (
+                        <div key={l} className="flex justify-between text-xs text-text-secondary">
+                          <span>{l}</span><span>xxx €</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Lock-Overlay */}
+            {!hasAccess && (
+              <div className="absolute inset-0 flex items-center justify-center bg-surface-base/80 backdrop-blur-sm">
+                <div className="text-center p-8 max-w-md">
+                  <Lock size={32} className="text-brand-gold mx-auto mb-4" />
+                  <h3 className="font-serif text-xl font-bold text-text-primary mb-3">
+                    Zugang freischalten
+                  </h3>
+                  <p className="font-body text-sm text-text-secondary mb-6">
+                    Einmaliger Kauf — danach unbegrenzter Zugang zum interaktiven Rechner
+                    mit allen 6 Ländern und künftigen Updates.
+                  </p>
+                  <a
+                    href="#kaufen"
+                    id="kaufen"
+                    className="inline-flex items-center gap-2 bg-brand-gold text-surface-dark font-sans font-bold text-sm px-6 py-3 hover:bg-brand-gold/90 transition-colors"
+                  >
+                    {price
+                      ? `${new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 }).format(price)} — Jetzt kaufen`
+                      : 'Jetzt kaufen'
+                    }
+                    <ChevronRight size={16} />
+                  </a>
+                  <p className="mt-4 text-[11px] font-sans text-text-muted">
+                    Zahlung via Digistore24 · SEPA, Klarna, PayPal · Sofortzugang
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ── Disclaimer + Links ───────────────────────────────────────────────── */}
+        <section className="border-t border-border-subtle bg-surface-dark">
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div className="max-w-content mx-auto">
+              <p className="text-xs font-sans text-text-muted leading-relaxed mb-6">
+                ⚠️ Die Steuer-Matrix ist eine vereinfachte Entscheidungshilfe und ersetzt keine
+                individuelle Steuerberatung. Steuergesetze ändern sich. Konsultieren Sie immer
+                einen zugelassenen Steuerberater für Ihre persönliche Situation.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link href="/ehrliches-system" className="text-sm font-sans text-text-muted hover:text-brand-fire transition-colors">
+                  ← Das Ehrliche System
+                </Link>
+                <Link href="/ehrliches-system#saule-i" className="text-sm font-sans text-text-muted hover:text-brand-fire transition-colors">
+                  Säule I: Gründung-Sprint
+                </Link>
+                <Link href="/ehrliches-system#saule-iii" className="text-sm font-sans text-text-muted hover:text-brand-fire transition-colors">
+                  Säule III: Agentur-Killer-Sprint
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+      <Footer />
+    </>
+  );
+}

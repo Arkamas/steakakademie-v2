@@ -24,10 +24,9 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user && (
-    request.nextUrl.pathname.startsWith('/meine-kurse') ||
-    request.nextUrl.pathname.startsWith('/profil')
-  )) {
+  const PROTECTED = ['/meine-kurse', '/profil', '/steuer-matrix/rechner'];
+
+  if (!user && PROTECTED.some((p) => request.nextUrl.pathname.startsWith(p))) {
     const loginUrl = new URL('/auth/login', request.url);
     loginUrl.searchParams.set('redirectTo', request.nextUrl.pathname);
     return NextResponse.redirect(loginUrl);
@@ -37,5 +36,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/meine-kurse/:path*', '/profil/:path*'],
+  matcher: [
+    '/meine-kurse/:path*',
+    '/profil/:path*',
+    '/steuer-matrix/rechner/:path*',
+  ],
 };

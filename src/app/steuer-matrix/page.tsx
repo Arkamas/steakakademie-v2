@@ -6,13 +6,13 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Steuer-Matrix — EU-Steuervergleich für Solo-Selbstständige',
+  title: 'Steuer-Matrix — 23 Länder Steuervergleich für Solo-Selbstständige',
   description:
-    'Interaktiver Netto-Vergleich: Wieviel bleibt dir als Selbstständiger in Deutschland, Niederlanden, Frankreich, Spanien, Italien und Portugal wirklich übrig? Echte Zahlen, kein Marketing.',
+    'Interaktiver Netto-Vergleich: Wieviel bleibt dir als Solo-Selbstständiger in 23 Ländern wirklich übrig? Deutschland, Portugal, Niederlande und 20 weitere — echte Zahlen, kein Marketing.',
   alternates: { canonical: 'https://steakakademie.de/steuer-matrix' },
   openGraph: {
-    title: 'Steuer-Matrix — EU-Steuervergleich | Steakakademie',
-    description: 'Datengestützte Entscheidungshilfe für Solo-Selbstständige: GmbH vs. Einzelunternehmen, 6 EU-Länder im Netto-Vergleich.',
+    title: 'Steuer-Matrix — 23 Länder im Vergleich | Steakakademie',
+    description: 'Datengestützte Entscheidungshilfe für Solo-Selbstständige: 23 Länder im Netto-Vergleich. Finde heraus, wo du als Solopreneur am meisten behältst.',
     url: 'https://steakakademie.de/steuer-matrix',
     type: 'website',
   },
@@ -35,8 +35,8 @@ const FEATURES = [
   },
   {
     icon: <Globe size={20} />,
-    title: '6 EU-Länder',
-    desc: 'Deutschland, Niederlande, Frankreich, Spanien, Italien, Portugal — jedes Land mit dem realistischen Steuer-Rechenmodell für Solo-Selbstständige.',
+    title: '23 Länder',
+    desc: 'Deutschland, Portugal, Niederlande, Spanien und 19 weitere — jedes Land mit dem realistischen Steuer-Rechenmodell für Solo-Selbstständige.',
   },
   {
     icon: <ShieldCheck size={20} />,
@@ -117,9 +117,9 @@ export default async function SteuerMatrixPage() {
                 Wieviel bleibt dir als Solo-Selbstständiger wirklich übrig?
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
-                Interaktiver Netto-Vergleich für 6 EU-Länder. Kein Steuerberater-Ersatz —
-                ein Entscheidungs-Werkzeug. Du gibst deinen Bruttoumsatz ein, das Tool
-                rechnet dir in Echtzeit vor, wo in Europa du am meisten behältst.
+                Steuer-Vergleich für Solo-Selbstständige: 23 Länder. Sofort. Ohne Berater.
+                Du gibst deinen Bruttoumsatz ein — das Tool rechnet dir in Echtzeit vor,
+                wo du am meisten behältst.
               </p>
 
               {hasAccess ? (
@@ -151,7 +151,7 @@ export default async function SteuerMatrixPage() {
         {/* ── Länder-Übersicht ─────────────────────────────────────────────────── */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <h2 className="font-serif text-2xl font-bold text-text-primary mb-2">
-            6 Länder — ein Rechner
+            23 Länder — ein Rechner
           </h2>
           <p className="font-body text-text-secondary mb-10 max-w-xl">
             Jedes Land mit dem realistischen Pflicht-Abgaben-Modell für Solopreneure.
@@ -220,7 +220,7 @@ export default async function SteuerMatrixPage() {
                   </h3>
                   <p className="font-body text-sm text-text-secondary mb-6">
                     Einmaliger Kauf — danach unbegrenzter Zugang zum interaktiven Rechner
-                    mit allen 6 Ländern und künftigen Updates.
+                    mit allen 23 Ländern und künftigen Updates.
                   </p>
                   <a
                     href="#kaufen"

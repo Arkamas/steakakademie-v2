@@ -35,9 +35,9 @@ const SAULEN = [
     slug:        'steuer-matrix',
     nummer:      'II',
     titel:       'Steuer-Matrix',
-    untertitel:  'Wieviel bleibt dir wirklich übrig? 11 Länder im Vergleich.',
+    untertitel:  'Wieviel bleibt dir wirklich übrig? 23 Länder im Vergleich.',
     beschreibung:
-      'Interaktiver Netto-Rechner für 11 Länder (DE, AT, CH, NL, FR, ES, IT, PT, GB, EE, AE). Echte Pflichtabgaben — kein Durchschnitt, keine Hochglanz-PR.',
+      'Interaktiver Netto-Rechner für 23 Länder weltweit. Echte Pflichtabgaben — kein Durchschnitt, keine Hochglanz-PR.',
     Icon:        BarChart3,
     href:        '/steuer-matrix',
     toolHref:    '/steuer-matrix/rechner' as string | null,

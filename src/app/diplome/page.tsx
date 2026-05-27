@@ -146,6 +146,12 @@ export default function DiplomePage() {
 
           {/* CTA */}
           <div className="text-center mt-12 space-y-5 max-w-xl mx-auto">
+            <Link
+              href="/diplome/roadmap"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition-colors"
+            >
+              Roadmap &mdash; Was du in jeder Stufe lernst &rarr;
+            </Link>
             <p className="font-body text-text-muted text-sm">
               Erstelle dein kostenloses Konto und speichere deinen Fortschritt.
             </p>

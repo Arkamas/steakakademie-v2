@@ -43,11 +43,22 @@ export default function AgbPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 2 Vertragsschluss</h2>
-              <p>
+              <h2 className={h2Class}>§ 2 Vertragsschluss & Zahlungsabwicklung</h2>
+              <p className="mb-3">
                 Mit dem Absenden einer Bestellung oder der Anmeldung zu einem kostenpflichtigen
                 Angebot gibst du ein verbindliches Kaufangebot ab. Der Vertrag kommt mit
                 unserer Bestätigung per E-Mail zustande.
+              </p>
+              <p>
+                Die Zahlungsabwicklung für digitale Produkte (Steuer-Matrix, Agentur-Killer-Sprint,
+                Gründung-Sprint und weitere) erfolgt über <strong className="text-text-primary">Digistore24 GmbH</strong>,
+                St.-Kilian-Str. 14, 97236 Randersacker. Digistore24 agiert im Rahmen des Kaufvorgangs
+                als Zahlungsdienstleister. Die Allgemeinen Geschäftsbedingungen von Digistore24
+                gelten ergänzend und sind unter{' '}
+                <a href="https://www.digistore24.com/agb" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  digistore24.com/agb
+                </a>{' '}
+                abrufbar.
               </p>
             </section>
 
@@ -56,8 +67,8 @@ export default function AgbPage() {
               <p>
                 Alle Preise sind Endpreise in Euro inkl. gesetzlicher Mehrwertsteuer (sofern
                 anwendbar). Als Kleinunternehmer gemäß § 19 UStG kann keine Umsatzsteuer
-                ausgewiesen werden. Verfügbare Zahlungsmethoden werden beim Bestellvorgang
-                angezeigt.
+                ausgewiesen werden. Verfügbare Zahlungsmethoden (u.&nbsp;a. SEPA-Lastschrift,
+                PayPal, Klarna) werden beim Bestellvorgang über Digistore24 angezeigt.
               </p>
             </section>
 
@@ -71,12 +82,25 @@ export default function AgbPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 5 Digitale Inhalte & Kurse</h2>
+              <h2 className={h2Class}>§ 5 Digitale Inhalte — Bereitstellung & Nutzungsrechte</h2>
+              <p className="mb-3">
+                Digitale Inhalte (Kurse, interaktive Tools, Downloads, Zertifikate) werden nach
+                Zahlungseingang und Vertragsschluss unverzüglich freigeschaltet und über das
+                Nutzerkonto auf steakakademie.de zugänglich gemacht.
+              </p>
+              <p className="mb-3">
+                Die erworbenen Inhalte sind ausschließlich zur <strong className="text-text-primary">persönlichen,
+                nicht-kommerziellen Nutzung</strong> bestimmt. Insbesondere ist es untersagt:
+              </p>
+              <ul className="list-disc pl-5 space-y-1 mb-3">
+                <li>Zugangsdaten weiterzugeben oder Dritten den Zugang zu ermöglichen</li>
+                <li>Inhalte zu vervielfältigen, zu verbreiten oder öffentlich zugänglich zu machen</li>
+                <li>Inhalte ganz oder in Teilen weiterzuverkaufen oder zu lizenzieren</li>
+                <li>Inhalte zu bearbeiten und als eigene Werke zu veröffentlichen</li>
+              </ul>
               <p>
-                Digitale Inhalte (Kurse, Downloads, Zertifikate) werden nach Zahlungseingang
-                und Vertragsschluss zur Verfügung gestellt. Mit Freischaltung des digitalen
-                Inhalts erlischt das Widerrufsrecht gemäß § 356 Abs. 5 BGB, sofern du vorab
-                ausdrücklich zugestimmt hast.
+                Alle Inhalte sind urheberrechtlich geschützt. Verstöße berechtigen zur sofortigen
+                Sperrung des Nutzerkontos und können zivilrechtliche Schadensersatzansprüche begründen.
               </p>
             </section>
 
@@ -95,7 +119,82 @@ export default function AgbPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 7 Gewährleistung</h2>
+              <h2 className={h2Class}>§ 6a Widerrufsrecht (digitale Produkte)</h2>
+              <p className="mb-3">
+                Bei digitalen Inhalten, die nicht auf einem körperlichen Datenträger geliefert
+                werden, besteht grundsätzlich ein 14-tägiges Widerrufsrecht gemäß § 355 BGB.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Erlöschen des Widerrufsrechts:</strong> Stimmst
+                du beim Kaufvorgang ausdrücklich zu, dass wir mit der Ausführung des Vertrags vor
+                Ablauf der Widerrufsfrist beginnen, und bestätigst du, dass du damit dein
+                Widerrufsrecht verlierst, erlischt das Widerrufsrecht gemäß § 356 Abs. 5 BGB mit
+                der Freischaltung des digitalen Inhalts.
+              </p>
+              <p>
+                Im Rahmen des Kaufvorgangs über Digistore24 wirst du gesondert auf diesen Verzicht
+                hingewiesen und musst aktiv zustimmen. Ohne diese Zustimmung erfolgt keine
+                sofortige Freischaltung.
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>§ 7 Nutzerkonten</h2>
+              <p className="mb-3">
+                Für den Zugang zu kostenpflichtigen digitalen Inhalten ist ein Nutzerkonto auf
+                steakakademie.de erforderlich. Du bist verpflichtet, deine Zugangsdaten geheim
+                zu halten und uns unverzüglich zu informieren, wenn du einen Missbrauch deines
+                Kontos feststellst.
+              </p>
+              <p className="mb-3">
+                Wir behalten uns vor, Nutzerkonten bei Verstößen gegen diese AGB — insbesondere
+                bei unerlaubter Weitergabe von Zugangsdaten — ohne Vorankündigung zu sperren.
+                In diesem Fall besteht kein Anspruch auf Rückerstattung bereits bezahlter Beträge.
+              </p>
+              <p>
+                Du kannst dein Konto jederzeit durch Kontaktaufnahme unter{' '}
+                <a href="mailto:info@steakakademie.de" className={linkClass}>info@steakakademie.de</a>{' '}
+                löschen lassen. Mit Löschung erlischt der Zugang zu allen digitalen Inhalten.
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>§ 8 Steuer-Matrix — Haftungsausschluss für Steuerinformationen</h2>
+              <p className="mb-3">
+                Die Steuer-Matrix ist ein interaktives Berechnungstool, das auf Basis allgemein
+                zugänglicher Steuer- und Sozialversicherungsdaten vereinfachte Netto-Vergleiche
+                für Solo-Selbstständige in verschiedenen Ländern erstellt.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Die Steuer-Matrix stellt ausdrücklich keine
+                Steuerberatung dar</strong> und ersetzt nicht die individuelle Beratung durch einen
+                zugelassenen Steuerberater oder Rechtsanwalt. Die Berechnungen sind vereinfacht,
+                beruhen auf einem bestimmten Stand der Gesetzeslage und können individuelle
+                Steuertatbestände, Sonderregelungen oder aktuelle Gesetzesänderungen nicht
+                vollständig abbilden.
+              </p>
+              <p>
+                Entscheidungen über Wohnsitzverlegung, Unternehmensgründung im Ausland oder
+                steuerliche Gestaltung dürfen nicht allein auf Basis der Steuer-Matrix getroffen
+                werden. Eine Haftung für finanzielle oder steuerliche Nachteile, die aus der
+                Nutzung der Steuer-Matrix entstehen, ist ausgeschlossen.
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>§ 9 KI-gestützte Inhalte (Marco-Widget)</h2>
+              <p>
+                Auf steakakademie.de ist ein KI-Assistent ("Marco") verfügbar, der auf Basis
+                von KI-Sprachmodellen Antworten zu Grillthemen generiert. Diese Antworten sind
+                automatisch erstellt und können Fehler enthalten. Sie ersetzen keine
+                professionelle Beratung — insbesondere nicht in Fragen der Lebensmittelsicherheit,
+                Hygiene oder Gesundheit. Die Nutzung des KI-Assistenten erfolgt auf eigene
+                Verantwortung.
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>§ 10 Gewährleistung</h2>
               <p>
                 Es gelten die gesetzlichen Gewährleistungsrechte. Bei Mängeln wende dich
                 innerhalb von 2 Jahren nach Erhalt der Ware an uns.
@@ -103,17 +202,19 @@ export default function AgbPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 8 Haftungsbeschränkung</h2>
+              <h2 className={h2Class}>§ 11 Haftungsbeschränkung</h2>
               <p>
                 Für Schäden aus der Nutzung der auf dieser Website bereitgestellten
-                Informationen (Grillempfehlungen, Kerntemperaturen, Zubereitungshinweise)
-                wird keine Haftung übernommen. Alle Angaben sind nach bestem Wissen erstellt;
-                eine Garantie für Richtigkeit und Vollständigkeit wird nicht übernommen.
+                Informationen (Grillempfehlungen, Kerntemperaturen, Zubereitungshinweise,
+                Steuer-Matrix-Berechnungen, KI-Assistent-Ausgaben) wird keine Haftung
+                übernommen, soweit diese nicht auf Vorsatz oder grober Fahrlässigkeit beruhen.
+                Alle Angaben sind nach bestem Wissen erstellt; eine Garantie für Richtigkeit
+                und Vollständigkeit wird nicht übernommen.
               </p>
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 9 Anwendbares Recht</h2>
+              <h2 className={h2Class}>§ 12 Anwendbares Recht</h2>
               <p>
                 Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand ist
                 Wuppertal, sofern du Kaufmann oder juristische Person des öffentlichen

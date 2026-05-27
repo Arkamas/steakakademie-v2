@@ -1,165 +1,264 @@
 /**
- * Digistore24 IPN (Instant Payment Notification) Webhook
- * =========================================================
+ * Digistore24 IPN Webhook — v2
+ * ============================
  * POST /api/webhooks/digistore24
  *
- * Digistore24 sendet einen HMAC-SHA256-signierten POST
- * bei jedem relevanten Bestellereignis.
+ * Erwartet form-encoded Body mit Digistore-Standard-Parametern + sha_sign.
+ * Signatur-Schema (siehe docs.digistore24.com → Notifications):
+ *   1. Alle Parameter außer sha_sign alphabetisch nach Key sortieren
+ *   2. Werte mit IPN-Passphrase als Separator joinen, Passphrase ans Ende
+ *   3. SHA-512 hashen, UPPERCASE-Hex vergleichen
  *
- * Env-Variables benötigt:
- *   DIGISTORE_IPN_SECRET   — aus Digistore24 Dashboard → Zahlungsintegration → IPN
- *   SUPABASE_SERVICE_ROLE  — service_role Key (NICHT anon key!)
- *
- * Events die verarbeitet werden:
- *   order_completed  → Zugang freischalten
- *   refund           → Zugang sperren
- *   chargeback       → Zugang sperren
+ * Env benötigt:
+ *   DIGISTORE_IPN_PASSPHRASE       — aus Digistore24 → Einstellungen → IPN
+ *   SUPABASE_SERVICE_ROLE_KEY      — Service-Role (NICHT anon)
+ *   NEXT_PUBLIC_SUPABASE_URL
+ *   LOOPS_API_KEY                  — Transactional E-Mail
+ *   LOOPS_MAGIC_LINK_TEMPLATE_ID   — Template-ID des Magic-Link-Templates
  */
 
-import { createClient } from '@supabase/supabase-js';
-import { createHmac, timingSafeEqual } from 'crypto';
+export const runtime  = 'nodejs';
+export const dynamic  = 'force-dynamic';
 
-// ─── Produkt-Mapping ──────────────────────────────────────────────────────────
-// Digistore24 Produkt-ID → Supabase Course Slug
-//
-// Wo findest du die Produkt-IDs?
-//   1. Digistore24 → Einstellungen → Produkte → dein Produkt öffnen
-//   2. In der URL steht: digistore24.com/product/XXXXXXXX
-//   3. Oder: Dashboard → Produkte → Spalte "Produkt-ID"
-//
-// Eintragen sobald Produkte angelegt sind:
-const PRODUCT_SLUG_MAP: Record<string, string> = {
-  '695797': 'steuer-matrix',          // Säule II  — Steuer-Matrix        (Preis: 197 €) — DS-Produkt-ID: 695797
-  '695894': 'gruendung-sprint',       // Säule I   — Gründung-Sprint      (Preis: 297 €) — DS-Produkt-ID: 695894
-  '695900': 'agentur-killer-sprint',  // Säule III — Agentur-Killer-Sprint (Preis: 497 €) — DS-Produkt-ID: 695900
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createHash } from 'crypto';
+
+const TOOL_REDIRECT: Record<string, string> = {
+  'steuer-matrix':         'https://steakakademie.de/auth/callback?next=/steuer-matrix/rechner',
+  'gruendung-sprint':      'https://steakakademie.de/auth/callback?next=/mein-system',
+  'agentur-killer-sprint': 'https://steakakademie.de/auth/callback?next=/mein-system',
 };
 
-function verifySignature(payload: string, signature: string, secret: string): boolean {
-  try {
-    const expected = createHmac('sha256', secret).update(payload).digest('hex');
-    const expectedBuf = Buffer.from(expected, 'utf8');
-    const sigBuf = Buffer.from(signature, 'utf8');
-    if (expectedBuf.length !== sigBuf.length) return false;
-    return timingSafeEqual(expectedBuf, sigBuf);
-  } catch {
-    return false;
-  }
+const DEFAULT_REDIRECT = 'https://steakakademie.de/auth/callback?next=/mein-system';
+
+function verifyDigistoreSignature(
+  params: Record<string, string>,
+  passphrase: string,
+): boolean {
+  const received = params['sha_sign'];
+  if (!received) return false;
+  const keys   = Object.keys(params).filter((k) => k !== 'sha_sign').sort();
+  const concat = keys.map((k) => params[k]).join(passphrase) + passphrase;
+  const expected = createHash('sha512').update(concat, 'utf8').digest('hex').toUpperCase();
+  return expected === received.toUpperCase();
 }
 
 export async function POST(req: Request) {
-  const secret = process.env.DIGISTORE_IPN_SECRET;
-  if (!secret) {
-    console.error('[digistore24] DIGISTORE_IPN_SECRET not configured');
+  const passphrase = process.env.DIGISTORE_IPN_PASSPHRASE;
+  if (!passphrase) {
+    console.error('[ds-webhook] DIGISTORE_IPN_PASSPHRASE not set');
     return new Response('Server misconfiguration', { status: 500 });
   }
 
-  // Raw body für Signatur-Prüfung
   const rawBody = await req.text();
-  const signature = req.headers.get('x-ds-signature') ?? '';
+  const params  = Object.fromEntries(new URLSearchParams(rawBody));
 
-  if (!verifySignature(rawBody, signature, secret)) {
-    console.warn('[digistore24] Invalid signature — possible spoofed request');
+  if (!verifyDigistoreSignature(params, passphrase)) {
+    console.warn('[ds-webhook] signature verification failed', {
+      order_id: params.order_id,
+    });
     return new Response('Unauthorized', { status: 401 });
   }
 
-  // Payload parsen (application/x-www-form-urlencoded oder JSON)
-  let params: Record<string, string>;
-  const contentType = req.headers.get('content-type') ?? '';
-  if (contentType.includes('application/json')) {
-    params = JSON.parse(rawBody);
-  } else {
-    params = Object.fromEntries(new URLSearchParams(rawBody));
-  }
+  const event     = params.event;
+  const orderId   = params.order_id;
+  const productId = params.product_id;
+  const email     = (params.email ?? params.buyer_email ?? '').toLowerCase().trim();
 
-  const {
-    event,
-    order_id,
-    product_id,
-    buyer_email: email,
-  } = params as Record<string, string>;
-
-  if (!order_id || !email || !product_id) {
+  if (!event || !orderId || !productId || !email) {
     return new Response('Missing required fields', { status: 400 });
   }
 
-  const courseSlug = PRODUCT_SLUG_MAP[product_id];
-  if (!courseSlug) {
-    // Unbekanntes Produkt — ignorieren ohne Fehler (andere DS-Produkte möglich)
-    console.info(`[digistore24] Unknown product_id: ${product_id} — skipping`);
-    return new Response('OK', { status: 200 });
-  }
-
-  // Service-Role Client — kann RLS bypassen
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } },
   );
 
-  // Idempotenz: bereits verarbeitete Order überspringen
-  const { data: existing } = await supabase
-    .from('digistore_orders')
-    .select('id')
-    .eq('ds_order_id', order_id)
-    .eq('ds_event', event)
+  // 1) Produkt → Course Mapping aus DB
+  const { data: mapping } = await supabase
+    .from('digistore_products')
+    .select('course_id, courses(slug, title)')
+    .eq('ds_product_id', productId)
     .maybeSingle();
 
-  if (existing) {
-    console.info(`[digistore24] Duplicate event ${event} for order ${order_id} — skipped`);
-    return new Response('OK', { status: 200 });
+  const courseId    = mapping?.course_id ?? null;
+  const courseSlug  = (mapping?.courses as any)?.slug  ?? null;
+  const courseTitle = (mapping?.courses as any)?.title ?? null;
+
+  // 2) Order immer protokollieren — auch unbekannte Produkte (Forensik).
+  //    UNIQUE(ds_order_id, ds_event) garantiert Idempotenz: zweiter Aufruf → 23505.
+  const { data: orderRow, error: orderErr } = await supabase
+    .from('digistore_orders')
+    .insert({
+      ds_order_id:        orderId,
+      ds_product_id:      productId,
+      ds_email:           email,
+      ds_event:           event,
+      course_id:          courseId,
+      raw_payload:        params,
+      raw_body:           rawBody,
+      processing_status:  courseId ? 'pending' : 'failed',
+      error_message:      courseId ? null : `Unknown product_id: ${productId}`,
+    })
+    .select('id')
+    .single();
+
+  if (orderErr) {
+    if (orderErr.code === '23505') {
+      return new Response('OK (duplicate)', { status: 200 });
+    }
+    console.error('[ds-webhook] order insert failed', orderErr);
+    return new Response('Internal error', { status: 500 });
   }
 
-  let bookingId: string | null = null;
-
-  if (event === 'order_completed') {
-    const { data, error } = await supabase.rpc('grant_course_access', {
-      p_email: email.toLowerCase().trim(),
-      p_course_slug: courseSlug,
-    });
-    if (error) {
-      console.error('[digistore24] grant_course_access failed:', error);
-      return new Response('Internal error', { status: 500 });
-    }
-    bookingId = data;
-
-    // Magic-Link-E-Mail versenden (Supabase Auth)
-    // WICHTIG: redirectTo muss auf /auth/callback?next=... zeigen (PKCE-Flow)
-    // Direktlink zum Tool würde den Code nicht exchangeen → keine Session
-    const TOOL_REDIRECT: Record<string, string> = {
-      'steuer-matrix':         'https://steakakademie.de/auth/callback?next=/steuer-matrix/rechner',
-      'gruendung-sprint':      'https://steakakademie.de/auth/callback?next=/mein-system',
-      'agentur-killer-sprint': 'https://steakakademie.de/auth/callback?next=/mein-system',
-    };
-    const redirectTo = TOOL_REDIRECT[courseSlug] ?? 'https://steakakademie.de/mein-system';
-
-    const { error: emailError } = await supabase.auth.admin.generateLink({
-      type: 'magiclink',
-      email: email.toLowerCase().trim(),
-      options: {
-        redirectTo,
-        data: { source: 'digistore24', course: courseSlug },
-      },
-    });
-    if (emailError) {
-      // Nicht fatal — User kann später Magic Link anfordern
-      console.warn('[digistore24] Magic link email failed:', emailError.message);
-    }
-  } else if (event === 'refund' || event === 'chargeback') {
-    await supabase.rpc('revoke_course_access', {
-      p_email: email.toLowerCase().trim(),
-      p_course_slug: courseSlug,
-    });
+  if (!courseId) {
+    console.error('[ds-webhook] unknown product_id', productId);
+    return new Response('OK (unknown product logged)', { status: 200 });
   }
 
-  // Order loggen
-  await supabase.from('digistore_orders').insert({
-    ds_order_id:  order_id,
-    ds_product_id: product_id,
-    ds_email:     email.toLowerCase().trim(),
-    ds_event:     event,
-    course_slug:  courseSlug,
-    booking_id:   bookingId,
-    raw_payload:  params,
+  // 3) Event-Routing
+  try {
+    if (event === 'on_payment' || event === 'on_rebill_resumed') {
+      const userId      = await ensureUser(supabase, email, courseSlug);
+
+      const { data: bookingId, error: grantErr } = await supabase.rpc('grant_course_access', {
+        p_user_id:   userId,
+        p_course_id: courseId,
+      });
+      if (grantErr) throw new Error(`grant_course_access failed: ${grantErr.message}`);
+
+      await sendMagicLink(supabase, email, courseSlug, courseTitle);
+
+      await supabase
+        .from('digistore_orders')
+        .update({
+          processing_status: 'processed',
+          processed_at:      new Date().toISOString(),
+          booking_id:        bookingId,
+        })
+        .eq('id', orderRow.id);
+
+      return new Response('OK', { status: 200 });
+    }
+
+    if (event === 'on_refund' || event === 'on_chargeback') {
+      const userId = await findUserId(supabase, email);
+      if (!userId) throw new Error(`refund for unknown user: ${email}`);
+
+      const { data: count, error: revokeErr } = await supabase.rpc('revoke_course_access', {
+        p_user_id:   userId,
+        p_course_id: courseId,
+      });
+      if (revokeErr) throw new Error(`revoke_course_access failed: ${revokeErr.message}`);
+      if (count === 0) {
+        console.warn('[ds-webhook] refund had no booking to revoke', { email, courseId });
+      }
+
+      await supabase
+        .from('digistore_orders')
+        .update({
+          processing_status: 'processed',
+          processed_at:      new Date().toISOString(),
+        })
+        .eq('id', orderRow.id);
+
+      return new Response('OK', { status: 200 });
+    }
+
+    // Andere Events nur loggen (z.B. on_payment_missed)
+    await supabase
+      .from('digistore_orders')
+      .update({
+        processing_status: 'processed',
+        processed_at:      new Date().toISOString(),
+        error_message:     `event recorded, no action: ${event}`,
+      })
+      .eq('id', orderRow.id);
+
+    return new Response('OK (event recorded)', { status: 200 });
+  } catch (err: any) {
+    console.error('[ds-webhook] processing failed', err);
+    await supabase
+      .from('digistore_orders')
+      .update({
+        processing_status: 'failed',
+        error_message:     err?.message ?? 'unknown error',
+      })
+      .eq('id', orderRow.id);
+    // 500 → Digistore retried
+    return new Response('Processing failed', { status: 500 });
+  }
+}
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+async function findUserId(supabase: SupabaseClient, email: string): Promise<string | null> {
+  const { data } = await supabase.auth.admin.listUsers({ page: 1, perPage: 200 });
+  const found    = data?.users?.find((u) => u.email?.toLowerCase() === email);
+  return found?.id ?? null;
+}
+
+async function ensureUser(
+  supabase: SupabaseClient,
+  email: string,
+  courseSlug: string | null,
+): Promise<string> {
+  const existing = await findUserId(supabase, email);
+  if (existing) return existing;
+
+  const { data, error } = await supabase.auth.admin.createUser({
+    email,
+    email_confirm: true,
+    user_metadata: { source: 'digistore24', course: courseSlug ?? null },
   });
+  if (error || !data?.user) {
+    throw new Error(`createUser failed: ${error?.message}`);
+  }
+  return data.user.id;
+}
 
-  return new Response('OK', { status: 200 });
+async function sendMagicLink(
+  supabase: SupabaseClient,
+  email: string,
+  courseSlug: string | null,
+  courseTitle: string | null,
+) {
+  const redirectTo = (courseSlug && TOOL_REDIRECT[courseSlug]) ?? DEFAULT_REDIRECT;
+
+  const { data, error } = await supabase.auth.admin.generateLink({
+    type:    'magiclink',
+    email,
+    options: { redirectTo },
+  });
+  if (error || !data?.properties?.action_link) {
+    throw new Error(`magic link generation failed: ${error?.message}`);
+  }
+
+  // generateLink GENERIERT — sendet NICHT. Loops macht den Versand.
+  const apiKey     = process.env.LOOPS_API_KEY;
+  const templateId = process.env.LOOPS_MAGIC_LINK_TEMPLATE_ID;
+  if (!apiKey || !templateId) {
+    throw new Error('LOOPS_API_KEY or LOOPS_MAGIC_LINK_TEMPLATE_ID not set');
+  }
+
+  const resp = await fetch('https://app.loops.so/api/v1/transactional', {
+    method:  'POST',
+    headers: {
+      Authorization:   `Bearer ${apiKey}`,
+      'Content-Type':  'application/json',
+    },
+    body: JSON.stringify({
+      transactionalId: templateId,
+      email,
+      dataVariables: {
+        magic_link:   data.properties.action_link,
+        course_title: courseTitle ?? 'deinem Kurs',
+      },
+    }),
+  });
+  if (!resp.ok) {
+    const errBody = await resp.text();
+    throw new Error(`loops email failed (${resp.status}): ${errBody}`);
+  }
 }

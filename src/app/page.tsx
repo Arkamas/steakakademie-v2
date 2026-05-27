@@ -327,7 +327,11 @@ export default function HomePage() {
                   </button>
                 </form>
                 <p className="text-[10px] font-sans text-text-muted mt-2 text-center">
-                  Jederzeit abmeldbar. Datenschutz beachtet.
+                  Mit der Anmeldung stimmst du der Zusendung des Newsletters zu.
+                  Jederzeit abmeldbar.{' '}
+                  <Link href="/datenschutz" className="underline hover:text-text-secondary transition-colors">
+                    Datenschutz
+                  </Link>
                 </p>
               </div>
 

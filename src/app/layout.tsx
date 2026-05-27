@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { GoogleAnalytics } from '@next/third-parties/google';
 import MarcoWidget from '@/components/ai/MarcoWidget';
 import SmokeEffect from '@/components/ui/SmokeEffect';
-import ClarityScript from '@/components/analytics/ClarityScript';
 import PlausibleScript from '@/components/analytics/PlausibleScript';
+// ClarityScript: Session-Recording — nur nach Cookie-Einwilligung einbinden (TTDSG §25)
+// GoogleAnalytics: GA4 — nur nach Cookie-Einwilligung einbinden (TTDSG §25 + DSGVO)
 import ExitIntent from '@/components/ui/ExitIntent';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
 import './globals.css';
@@ -75,11 +75,8 @@ export default function RootLayout({
         <SmokeEffect />
         <MarcoWidget />
         <ExitIntent />
-        <ClarityScript />
         <PlausibleScript />
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-        )}
+        {/* GA4 + Clarity: deaktiviert bis Cookie-Consent-Banner implementiert ist */}
       </body>
     </html>
   );

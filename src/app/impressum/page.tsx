@@ -87,6 +87,21 @@ export default function ImpressumPage() {
 
             <section>
               <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3">
+                Online-Streitbeilegung (OS-Plattform)
+              </h2>
+              <p className="mb-3">
+                Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:{' '}
+                <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="text-brand-fire hover:underline">
+                  ec.europa.eu/consumers/odr
+                </a>
+              </p>
+              <p>
+                Unsere E-Mail-Adresse lautet: info@steakakademie.de
+              </p>
+            </section>
+
+            <section>
+              <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3">
                 Verbraucherstreitbeilegung / Universalschlichtungsstelle
               </h2>
               <p>

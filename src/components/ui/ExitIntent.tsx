@@ -159,7 +159,7 @@ export default function ExitIntent() {
                       {[
                         'Porträts der 50 besten Grillmeister der Welt',
                         'Techniken, die dein nächstes Grillen verändern',
-                        'Kein Spam · Jederzeit abmeldbar',
+                        'Kein Spam · Jederzeit abmeldbar · Einwilligung per Double-Opt-In',
                       ].map((item) => (
                         <li key={item} className="flex items-center gap-2 text-sm font-body text-text-secondary">
                           <div className="w-1 h-1 bg-brand-gold rounded-full shrink-0" />

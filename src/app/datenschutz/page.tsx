@@ -49,7 +49,8 @@ export default function DatenschutzPage() {
                 Die Nutzung dieser Website ist grundsätzlich ohne Angabe personenbezogener Daten
                 möglich. Soweit personenbezogene Daten erhoben werden, erfolgt dies auf freiwilliger
                 Basis. Diese Daten werden ohne deine ausdrückliche Zustimmung nicht an Dritte
-                weitergegeben, außer es ist zur Erbringung des Dienstes erforderlich.
+                weitergegeben, außer es ist zur Erbringung des Dienstes erforderlich oder gesetzlich
+                vorgeschrieben.
               </p>
             </section>
 
@@ -57,10 +58,9 @@ export default function DatenschutzPage() {
               <h2 className={h2Class}>3. Hosting (Netlify)</h2>
               <p className="mb-3">
                 Diese Website wird bei Netlify Inc., 44 Montgomery Street, Suite 300, San Francisco,
-                CA 94104, USA gehostet. Server-Standort: Europa (EU-Rechenzentrum). Beim Aufruf der
-                Website werden automatisch Serverlog-Daten gespeichert (IP-Adresse, Browsertyp,
-                Betriebssystem, Referrer-URL, Uhrzeit des Zugriffs). Diese Daten werden nicht mit
-                anderen Datenquellen zusammengeführt.
+                CA 94104, USA gehostet. Beim Aufruf der Website werden automatisch Serverlog-Daten
+                gespeichert (IP-Adresse, Browsertyp, Betriebssystem, Referrer-URL, Uhrzeit des
+                Zugriffs). Diese Daten werden nicht mit anderen Datenquellen zusammengeführt.
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am
@@ -75,9 +75,9 @@ export default function DatenschutzPage() {
               <h2 className={h2Class}>4. CDN & DNS (Cloudflare)</h2>
               <p className="mb-3">
                 Wir nutzen Cloudflare Inc., 101 Townsend St., San Francisco, CA 94107, USA als
-                DNS-Anbieter und Content Delivery Network (CDN). Dabei werden Anfragen an unsere
-                Website über Cloudflare-Server geleitet, um Sicherheit und Ladegeschwindigkeit
-                zu verbessern. Cloudflare kann dabei technische Daten (u. a. IP-Adressen) verarbeiten.
+                DNS-Anbieter und Content Delivery Network (CDN). Dabei werden Anfragen über
+                Cloudflare-Server geleitet, um Sicherheit und Ladegeschwindigkeit zu verbessern.
+                Cloudflare kann dabei technische Daten (u.&nbsp;a. IP-Adressen) verarbeiten.
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. Details:{' '}
@@ -88,16 +88,39 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>5. Newsletter & E-Mail-Benachrichtigungen (Loops)</h2>
+              <h2 className={h2Class}>5. Webanalyse (Plausible Analytics)</h2>
               <p className="mb-3">
-                Wenn du dich für unseren Newsletter anmeldest, übermittelst du deine E-Mail-Adresse
-                an Loops Software Inc. (loops.so). Loops verarbeitet diese Daten ausschließlich zur
-                Zustellung unserer E-Mails. Eine Weitergabe an Dritte findet nicht statt.
+                Diese Website nutzt Plausible Analytics der Plausible Insights OÜ, Västriku tn 2,
+                50403 Tartu, Estland. Plausible ist ein datenschutzfreundliches Analysetool, das
+                keine Cookies setzt, keine personenbezogenen Daten speichert und keine
+                geräteübergreifende Verfolgung vornimmt.
               </p>
               <p className="mb-3">
-                Die Einwilligung zur Speicherung und Nutzung deiner E-Mail-Adresse für den Versand
-                des Newsletters kann jederzeit widerrufen werden (Abmelde-Link in jedem Newsletter
-                oder per E-Mail an{' '}
+                Plausible erhebt ausschließlich aggregierte, anonyme Nutzungsstatistiken
+                (Seitenaufrufe, Herkunftsland, Gerätekategorie, Referrer). Es werden keine
+                IP-Adressen gespeichert. Eine Einwilligung nach § 25 TTDSG ist nicht erforderlich.
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der
+                Verbesserung unseres Angebots). Details:{' '}
+                <a href="https://plausible.io/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  plausible.io/privacy
+                </a>
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>6. Newsletter & E-Mail-Benachrichtigungen (Loops)</h2>
+              <p className="mb-3">
+                Wenn du dich für unseren Newsletter anmeldest, übermittelst du deine E-Mail-Adresse
+                an Loops Software Inc. (loops.so). Die Anmeldung erfolgt im Double-Opt-In-Verfahren:
+                Du erhältst eine Bestätigungs-E-Mail und wirst erst nach Klick auf den
+                Bestätigungslink in den Verteiler aufgenommen.
+              </p>
+              <p className="mb-3">
+                Loops verarbeitet diese Daten ausschließlich zur Zustellung unserer E-Mails.
+                Die Einwilligung kann jederzeit widerrufen werden (Abmelde-Link in jedem
+                Newsletter oder per E-Mail an{' '}
                 <a href="mailto:info@steakakademie.de" className={linkClass}>info@steakakademie.de</a>).
               </p>
               <p>
@@ -109,7 +132,60 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>6. KI-Chatassistent „Marco" (Anthropic)</h2>
+              <h2 className={h2Class}>7. Exit-Intent-Overlay (Newsletter-Anmeldung)</h2>
+              <p className="mb-3">
+                Diese Website zeigt nach einer bestimmten Verweildauer ein Overlay-Fenster an,
+                das zur Newsletter-Anmeldung einlädt. Das Overlay wird durch Mausbewegung in
+                Richtung Seitenrand ausgelöst und erscheint pro Browsersitzung maximal einmal
+                (technische Speicherung via sessionStorage — wird nach Schließen des Browsers
+                gelöscht, kein dauerhaftes Tracking).
+              </p>
+              <p>
+                Wenn du deine E-Mail-Adresse eingibst, gilt dasselbe wie unter Abschnitt 6
+                (Newsletter). Kein Pflichtfeld — das Overlay kann jederzeit geschlossen werden.
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>8. Nutzerkonten & Kursdaten (Supabase)</h2>
+              <p className="mb-3">
+                Für die Nutzung von kostenpflichtigen Inhalten (Kurse, Steuer-Matrix-Rechner,
+                digitale Produkte) ist ein Nutzerkonto erforderlich. Kontodaten werden bei
+                Supabase Inc. (EU-Rechenzentrum Frankfurt) gespeichert. Supabase verarbeitet
+                im Rahmen einer Auftragsverarbeitung (Art. 28 DSGVO) folgende Daten:
+              </p>
+              <ul className="list-disc pl-5 space-y-1 mb-3">
+                <li>E-Mail-Adresse und Authentifizierungsdaten</li>
+                <li>Kursbuchungen und Zugangsberechtigungen</li>
+                <li>Lernfortschritt und Diplom-Status</li>
+              </ul>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung). Details:{' '}
+                <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  supabase.com/privacy
+                </a>
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>9. Zahlungsabwicklung (Digistore24)</h2>
+              <p className="mb-3">
+                Zahlungen für digitale Produkte werden über Digistore24 GmbH abgewickelt.
+                Im Rahmen des Bestellvorgangs erhebt Digistore24 die für die Kaufabwicklung
+                erforderlichen Daten (Name, E-Mail, Zahlungsdaten). Diese Daten werden
+                ausschließlich von Digistore24 verarbeitet; wir haben keinen Zugriff auf
+                vollständige Zahlungsdaten.
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung). Details:{' '}
+                <a href="https://www.digistore24.com/datenschutz" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  digistore24.com/datenschutz
+                </a>
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>10. KI-Chatassistent „Marco" (Anthropic)</h2>
               <p className="mb-3">
                 Diese Website bietet einen KI-gestützten Chat-Assistenten an. Nachrichten, die du
                 in den Chat eingibst, werden zur Verarbeitung an Anthropic PBC, 548 Market St,
@@ -130,31 +206,38 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>7. Cookies & Local Storage</h2>
+              <h2 className={h2Class}>11. Cookies & lokale Speicherung</h2>
+              <p className="mb-3">
+                Diese Website verwendet ausschließlich technisch notwendige Speichermechanismen:
+              </p>
+              <ul className="list-disc pl-5 space-y-1 mb-3">
+                <li><strong className="text-text-primary">localStorage:</strong> Theme-Einstellung (hell/dunkel) — dauerhaft, lokal im Browser</li>
+                <li><strong className="text-text-primary">sessionStorage:</strong> Exit-Intent-Status (wurde das Overlay bereits gezeigt?) — wird nach Schließen des Browsers automatisch gelöscht</li>
+                <li><strong className="text-text-primary">Supabase Auth-Token:</strong> Für eingeloggte Nutzer — sicherer JWT-Token zur Sitzungsverwaltung</li>
+              </ul>
               <p>
-                Diese Website verwendet ausschließlich technisch notwendige Local-Storage-Einträge
-                (z. B. Theme-Einstellung). Es werden keine Tracking-Cookies, Werbe-Cookies oder
-                Analyse-Cookies gesetzt. Eine Einwilligung nach § 25 TTDSG ist daher nicht
-                erforderlich.
+                Es werden keine Tracking-Cookies, Werbe-Cookies oder Analyse-Cookies gesetzt.
+                Eine Einwilligung nach § 25 TTDSG ist für die genannten Speichermechanismen
+                nicht erforderlich, da sie ausschließlich technisch notwendig sind.
               </p>
             </section>
 
             <section>
-              <h2 className={h2Class}>8. Externe Links & Affiliate-Links</h2>
+              <h2 className={h2Class}>12. Externe Links & Affiliate-Links</h2>
               <p className="mb-3">
                 Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte
                 wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets
                 der jeweilige Anbieter oder Betreiber verantwortlich.
               </p>
               <p>
-                Produktempfehlungen können Affiliate-Links enthalten (gekennzeichnet mit *).
-                Bei einem Kauf über solche Links erhalten wir eine Provision ohne Mehrkosten
-                für dich.
+                Produktempfehlungen können Affiliate-Links enthalten (gekennzeichnet mit * oder
+                dem Hinweis „Affiliate-Link"). Bei einem Kauf über solche Links erhalten wir
+                eine Provision ohne Mehrkosten für dich.
               </p>
             </section>
 
             <section>
-              <h2 className={h2Class}>9. Deine Rechte</h2>
+              <h2 className={h2Class}>13. Deine Rechte</h2>
               <p className="mb-3">Du hast gemäß DSGVO folgende Rechte:</p>
               <ul className="list-disc list-inside space-y-1.5 mb-3">
                 <li>Auskunft über gespeicherte Daten (Art. 15 DSGVO)</li>
@@ -174,7 +257,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>10. Beschwerderecht bei der Aufsichtsbehörde</h2>
+              <h2 className={h2Class}>14. Beschwerderecht bei der Aufsichtsbehörde</h2>
               <p>
                 Du hast das Recht, dich bei der zuständigen Datenschutz-Aufsichtsbehörde
                 zu beschweren. Zuständig ist die Landesbeauftragte für Datenschutz und
@@ -184,13 +267,6 @@ export default function DatenschutzPage() {
                 </a>
               </p>
             </section>
-
-            <p className="text-sm text-text-muted pt-6 border-t border-border-subtle">
-              Erstellt mit Unterstützung von{' '}
-              <a href="https://www.e-recht24.de" target="_blank" rel="noopener noreferrer" className={linkClass}>
-                eRecht24
-              </a>
-            </p>
 
           </div>
         </div>

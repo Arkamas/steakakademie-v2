@@ -125,6 +125,16 @@ export default async function GruendungSprintPage() {
     },
   };
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://steakakademie.de' },
+      { '@type': 'ListItem', position: 2, name: 'Das Ehrliche System', item: 'https://steakakademie.de/ehrliches-system' },
+      { '@type': 'ListItem', position: 3, name: 'Gründung-Sprint', item: 'https://steakakademie.de/gruendung-sprint' },
+    ],
+  };
+
   return (
     <>
       <Header />
@@ -135,6 +145,10 @@ export default async function GruendungSprintPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <main className="bg-surface-base">

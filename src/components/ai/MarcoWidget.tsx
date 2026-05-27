@@ -5,6 +5,7 @@ import type { Message } from 'ai';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send } from 'lucide-react';
+import Link from 'next/link';
 import MarcoAvatar from './MarcoAvatar';
 import { useAvatarStateMachine } from '@/hooks/useAvatarStateMachine';
 
@@ -170,6 +171,9 @@ export default function MarcoWidget() {
                  : avatarState === 'listening'  ? 'Hört zu'
                  : 'Dein BBQ-Guide · Steakakademie'}
                 </p>
+                <p className="text-xs font-sans mt-0.5" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                  KI-Assistent · Keine Rechts- oder Gesundheitsberatung
+                </p>
               </div>
               <motion.div
                 className="ml-auto h-2 w-2 rounded-full"
@@ -192,7 +196,7 @@ export default function MarcoWidget() {
               {messages.length === 0 && (
                 <div className="space-y-3">
                   <p className="text-center text-xs font-sans" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                    Stell Marco deine BBQ-Frage
+                    Als KI-Assistent beantwortet Marco deine BBQ-Fragen
                   </p>
                   <div className="space-y-2">
                     {SUGGESTIONS.map((s) => (
@@ -267,7 +271,10 @@ export default function MarcoWidget() {
             </form>
 
             <p className="px-4 pb-3 text-center text-[10px] font-sans" style={{ color: 'rgba(255,255,255,0.2)' }}>
-              KI-Antworten können Fehler enthalten · Steakakademie.de
+              🤖 Marco ist ein KI-Assistent — keine Rechts-, Gesundheits- oder Steuerberatung.{' '}
+              <Link href="/ki-disclaimer" className="underline hover:opacity-60 transition-opacity">
+                KI-Hinweise
+              </Link>
             </p>
           </motion.div>
         )}

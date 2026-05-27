@@ -3,29 +3,29 @@ import { Flame } from 'lucide-react';
 
 const FOOTER_LINKS = {
   Wissen: [
-    { label: 'Kerntemperaturen', href: '/wissen/kerntemperaturen' },
-    { label: 'Grilltechniken', href: '/kategorie/grilltechniken' },
-    { label: 'Cuts & Fleischkunde', href: '/kategorie/cuts' },
-    { label: 'BBQ-Lexikon', href: '/wissen/lexikon' },
+    { label: 'Kerntemperaturen', href: '/temperatur-guide' },
+    { label: 'Grilltechniken', href: '/methoden' },
+    { label: 'Cuts & Fleischkunde', href: '/cuts' },
+    { label: 'BBQ-Lexikon', href: '/glossar' },
     { label: 'Reverse Sear', href: '/methoden/reverse-sear' },
   ],
   Tests: [
     { label: 'Fleischthermometer', href: '/vergleich/fleischthermometer' },
-    { label: 'Grills & Smoker', href: '/vergleich/grills' },
-    { label: 'Messer', href: '/vergleich/messer' },
-    { label: 'Alle Tests', href: '/kategorie/ausruestung' },
+    { label: 'Grills & Smoker', href: '/vergleich' },
+    { label: 'Messer', href: '/vergleich' },
+    { label: 'Alle Tests', href: '/vergleich' },
   ],
   Cuts: [
     { label: 'Ribeye', href: '/cuts/ribeye' },
     { label: 'Brisket', href: '/cuts/brisket' },
     { label: 'Pulled Pork', href: '/cuts/pulled-pork' },
-    { label: 'Alle Cuts', href: '/kategorie/cuts' },
+    { label: 'Alle Cuts', href: '/cuts' },
   ],
   Akademie: [
     { label: 'Grillmeister-Diplome', href: '/diplome' },
-    { label: 'Marco, der Pitmaster', href: '/autoren/marco' },
-    { label: 'Jonas', href: '/autoren/jonas' },
-    { label: 'Elena', href: '/autoren/elena' },
+    { label: 'Marco, der Pitmaster', href: '/autoren' },
+    { label: 'Jonas', href: '/autoren' },
+    { label: 'Elena', href: '/autoren' },
     { label: 'Über uns', href: '/ueber-uns' },
   ],
 };

@@ -1,0 +1,289 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+
+export const metadata: Metadata = {
+  title: 'KI-Disclaimer — Hinweise zu unseren KI-Assistenten | Steakakademie',
+  description:
+    'Rechtliche Hinweise zu den KI-Assistenten der Steakakademie. Leistungsumfang, Datenschutz, EU AI Act Konformität.',
+  alternates: { canonical: 'https://steakakademie.de/ki-disclaimer' },
+  robots: { index: true, follow: true },
+};
+
+export default function KiDisclaimerPage() {
+  const linkClass = 'text-brand-fire hover:underline';
+  const h2Class =
+    'font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3';
+
+  return (
+    <>
+      <Header />
+      <main className="min-h-screen bg-surface-base">
+        <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
+
+          <nav
+            className="flex items-center gap-1.5 text-xs font-sans text-text-muted mb-8"
+            aria-label="Breadcrumb"
+          >
+            <Link href="/" className="hover:text-brand-gold transition-colors">
+              Start
+            </Link>
+            <ChevronRight size={12} />
+            <span>KI-Disclaimer</span>
+          </nav>
+
+          <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
+            KI-Systeme &amp; KI-Disclaimer
+          </h1>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Mai 2026</p>
+
+          <div className="max-w-content space-y-10 font-body text-text-secondary leading-relaxed">
+
+            {/* Section 1 */}
+            <section>
+              <h2 className={h2Class}>1. Unsere KI-Assistenten</h2>
+              <p className="mb-4">
+                Auf Steakakademie.de setzen wir KI-gestützte Assistenzsysteme ein, um dir
+                kompetente Grillberatung anzubieten. Die folgende Tabelle gibt einen
+                Überblick über die eingesetzten Systeme:
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm border border-white/10">
+                  <thead>
+                    <tr className="border-b border-white/10 bg-white/5">
+                      <th className="px-4 py-2 text-left font-sans font-bold text-text-primary">
+                        Assistent
+                      </th>
+                      <th className="px-4 py-2 text-left font-sans font-bold text-text-primary">
+                        Technische Basis
+                      </th>
+                      <th className="px-4 py-2 text-left font-sans font-bold text-text-primary">
+                        Verarbeitungszweck
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-white/5">
+                      <td className="px-4 py-3">
+                        <span className="font-semibold text-text-primary">
+                          Marco „Der Meister"
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">Claude Haiku (Anthropic PBC)</td>
+                      <td className="px-4 py-3">
+                        Grillberatung: Cuts, Temperaturen, Techniken, Kaufempfehlungen
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-4 text-xs text-text-muted">
+                Marco ist eine KI-gesteuerte Persona — kein menschlicher Berater.
+                Alle Antworten werden in Echtzeit durch das KI-Modell generiert und
+                können inhaltliche Fehler enthalten.
+              </p>
+            </section>
+
+            {/* Section 2 */}
+            <section>
+              <h2 className={h2Class}>2. EU AI Act Konformität</h2>
+              <p className="mb-4">
+                Die Europäische Union hat mit dem{' '}
+                <abbr title="Verordnung (EU) 2024/1689 über Künstliche Intelligenz">
+                  EU AI Act
+                </abbr>{' '}
+                (in Kraft seit August 2024) verbindliche Anforderungen für KI-Systeme
+                eingeführt. Steakakademie.de erfüllt die relevanten Anforderungen wie folgt:
+              </p>
+              <ul className="space-y-3 mb-4">
+                <li className="flex gap-3">
+                  <span className="shrink-0 text-green-400 font-bold">✅</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Art. 52 Abs. 1 EU AI Act — Transparenzpflicht:
+                    </span>{' '}
+                    Nutzer werden deutlich darauf hingewiesen, dass sie mit einem
+                    KI-System interagieren. Marco kennzeichnet sich im Chat-Widget
+                    und in seiner Begrüßung explizit als KI-Assistent.
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="shrink-0 text-green-400 font-bold">✅</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Risikoklasse — Niedriges Risiko:
+                    </span>{' '}
+                    Das eingesetzte KI-System fällt nicht unter die Hochrisiko-KI-Systeme
+                    gemäß Art. 6 EU AI Act (Anhang III). Es handelt sich um ein
+                    allgemeines Informationsassistenz-System ohne Entscheidungsrelevanz
+                    in sensiblen Bereichen.
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="shrink-0 text-green-400 font-bold">✅</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Einsatzzweck:
+                    </span>{' '}
+                    Informationsassistenz im Bereich Grillen und BBQ. Kein automatisierter
+                    Entscheidungsprozess, keine Verarbeitung besonderer Datenkategorien
+                    (Art. 9 DSGVO), keine Auswirkungen auf Rechte oder rechtliche
+                    Positionen von Personen.
+                  </div>
+                </li>
+              </ul>
+            </section>
+
+            {/* Section 3 */}
+            <section>
+              <h2 className={h2Class}>3. Grenzen &amp; Haftungsausschluss</h2>
+              <p className="mb-4">
+                KI-Antworten von Marco sind ausdrücklich <strong className="text-text-primary">keine</strong>:
+              </p>
+              <ul className="list-disc pl-5 space-y-2 mb-4">
+                <li>
+                  <strong className="text-text-primary">Rechtsberatung</strong> im Sinne
+                  des Rechtsdienstleistungsgesetzes (§ 2 RDG) — bei rechtlichen Fragen
+                  wende dich an einen zugelassenen Rechtsanwalt.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Steuerberatung</strong> im Sinne
+                  des Steuerberatungsgesetzes (§ 3 StBerG) — bei steuerlichen Fragen
+                  wende dich an einen Steuerberater oder das zuständige Finanzamt.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Gesundheits- oder
+                  Ernährungsberatung</strong> — Informationen über Garstufen und
+                  Temperaturen ersetzen keine medizinische oder ernährungswissenschaftliche
+                  Beratung, insbesondere bei Vorerkrankungen oder besonderen
+                  Risikogruppen.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Lebensmittelsicherheits-Garantie</strong> —
+                  Angaben zu Garzeiten, Kerntemperaturen oder Hygiene dienen der
+                  Orientierung. Die Einhaltung der geltenden Lebensmittelhygiene-Vorschriften
+                  liegt in der Verantwortung des Nutzers.
+                </li>
+              </ul>
+              <p className="text-sm">
+                KI-generierte Antworten können inhaltliche Fehler, Ungenauigkeiten oder
+                veraltete Informationen enthalten. Alle Empfehlungen müssen eigenverantwortlich
+                geprüft werden. Steakakademie.de übernimmt keine Haftung für Schäden, die
+                aus der Nutzung von KI-Antworten entstehen.
+              </p>
+            </section>
+
+            {/* Section 4 */}
+            <section>
+              <h2 className={h2Class}>4. Datenschutz bei KI-Nutzung</h2>
+              <p className="mb-4">
+                Bei der Nutzung des Chat-Assistenten Marco werden folgende
+                datenschutzrelevante Verarbeitungen vorgenommen:
+              </p>
+              <ul className="space-y-3 mb-4">
+                <li className="flex gap-3">
+                  <span className="shrink-0 font-bold text-brand-gold">→</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Datenübermittlung an Anthropic (USA):
+                    </span>{' '}
+                    Eingegebene Chat-Texte werden zur KI-Verarbeitung an Anthropic PBC,
+                    548 Market Street, San Francisco, CA 94104, USA übertragen.
+                    Rechtsgrundlage für die Drittlandübermittlung: EU-Standardvertragsklauseln
+                    (SCC) gemäß Art. 46 Abs. 2 lit. c DSGVO.
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="shrink-0 font-bold text-brand-gold">→</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Keine serverseitige Speicherung:
+                    </span>{' '}
+                    Chat-Verläufe werden nicht auf Servern von Steakakademie.de gespeichert.
+                    Nach Ende der Browsersitzung sind Chat-Inhalte nicht mehr abrufbar.
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="shrink-0 font-bold text-brand-gold">→</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Keine Profilverknüpfung:
+                    </span>{' '}
+                    Chat-Eingaben werden nicht mit Nutzerprofilen, E-Mail-Adressen oder
+                    sonstigen personenbezogenen Daten verknüpft oder gespeichert.
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="shrink-0 font-bold text-brand-gold">→</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Auftragsverarbeitung:
+                    </span>{' '}
+                    Anthropic ist Auftragsverarbeiter gemäß Art. 28 DSGVO. Ein
+                    Auftragsverarbeitungsvertrag (DPA) ist mit Anthropic geschlossen.
+                    Keine Weitergabe an weitere Dritte.
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="shrink-0 font-bold text-brand-gold">→</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Rechtsgrundlage:
+                    </span>{' '}
+                    Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse: Bereitstellung
+                    des Beratungsdienstes und Verbesserung des Serviceangebots).
+                  </div>
+                </li>
+              </ul>
+              <p className="text-sm">
+                Wir empfehlen, keine sensiblen personenbezogenen Daten (Name, Adresse,
+                Gesundheitsdaten, Bankdaten) in den Chat einzugeben. Vollständige
+                Datenschutzinformationen:{' '}
+                <Link href="/datenschutz" className={linkClass}>
+                  Datenschutzerklärung
+                </Link>
+              </p>
+            </section>
+
+            {/* Section 5 */}
+            <section>
+              <h2 className={h2Class}>5. Meldung von KI-Fehlern</h2>
+              <p className="mb-3">
+                Solltest du inhaltlich fehlerhafte, irreführende oder problematische
+                KI-Antworten feststellen, bitten wir um Meldung. Dein Feedback hilft
+                uns, die Qualität des Assistenten kontinuierlich zu verbessern.
+              </p>
+              <p>
+                E-Mail:{' '}
+                <a
+                  href="mailto:pitmaster@steakakademie.de?subject=KI-Feedback"
+                  className={linkClass}
+                >
+                  pitmaster@steakakademie.de
+                </a>{' '}
+                — Betreff: „KI-Feedback"
+              </p>
+            </section>
+
+            {/* Footer nav */}
+            <div className="border-t border-white/10 pt-6 flex flex-wrap gap-4 text-sm">
+              <Link href="/datenschutz" className={linkClass}>
+                Datenschutzerklärung
+              </Link>
+              <Link href="/impressum" className={linkClass}>
+                Impressum
+              </Link>
+              <Link href="/agb" className={linkClass}>
+                AGB
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </>
+  );
+}

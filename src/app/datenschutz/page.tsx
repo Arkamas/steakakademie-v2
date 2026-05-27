@@ -185,20 +185,50 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>10. KI-Chatassistent „Marco" (Anthropic)</h2>
+              <h2 className={h2Class}>10. KI-Assistenten „Marco" (Anthropic)</h2>
               <p className="mb-3">
-                Diese Website bietet einen KI-gestützten Chat-Assistenten an. Nachrichten, die du
-                in den Chat eingibst, werden zur Verarbeitung an Anthropic PBC, 548 Market St,
-                PMB 90375, San Francisco, CA 94104, USA übermittelt. Anthropic verarbeitet diese
-                Daten zur Generierung von Antworten. Es werden keine Chateingaben dauerhaft
-                gespeichert oder mit deiner Person verknüpft.
+                Diese Website bietet den KI-Assistenten „Marco" als Chat-Widget an.
               </p>
+              <ul className="list-disc pl-5 space-y-2 mb-3">
+                <li>
+                  <strong className="text-text-primary">Zweck:</strong>{' '}
+                  Bereitstellung von Grillberatung via Chat (Cuts, Temperaturen, Techniken).
+                </li>
+                <li>
+                  <strong className="text-text-primary">Verarbeitete Daten:</strong>{' '}
+                  Eingegebene Chat-Nachrichten (temporär, keine serverseitige Speicherung
+                  nach Sitzungsende, keine Verknüpfung mit Nutzerprofilen).
+                </li>
+                <li>
+                  <strong className="text-text-primary">Empfänger / Auftragsverarbeiter:</strong>{' '}
+                  Anthropic PBC, 548 Market Street, San Francisco, CA 94104, USA
+                  (Auftragsverarbeiter gemäß Art. 28 DSGVO).
+                </li>
+                <li>
+                  <strong className="text-text-primary">Drittlandübermittlung:</strong>{' '}
+                  USA — Rechtsgrundlage: EU-Standardvertragsklauseln (SCC)
+                  gemäß Art. 46 Abs. 2 lit. c DSGVO.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Rechtsgrundlage:</strong>{' '}
+                  Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse: Bereitstellung
+                  des Beratungsdienstes).
+                </li>
+                <li>
+                  <strong className="text-text-primary">Speicherdauer:</strong>{' '}
+                  Keine serverseitige Speicherung nach Sitzungsende.
+                </li>
+              </ul>
               <p className="mb-3">
-                Wir empfehlen, keine personenbezogenen Daten in den Chat einzugeben.
+                Wir empfehlen, keine sensiblen personenbezogenen Daten in den Chat einzugeben.
+                Marco ist ein KI-Assistent — keine Rechts-, Steuer- oder Gesundheitsberatung.
               </p>
               <p>
-                Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der
-                Bereitstellung des Dienstes). Details:{' '}
+                Weitere Informationen:{' '}
+                <Link href="/ki-disclaimer" className={linkClass}>
+                  KI-Disclaimer
+                </Link>
+                {' '}· Anthropic-Datenschutz:{' '}
                 <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
                   anthropic.com/privacy
                 </a>

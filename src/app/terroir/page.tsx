@@ -14,6 +14,24 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', creator: '@steakakademie' },
 };
 
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://steakakademie.de' },
+    { '@type': 'ListItem', position: 2, name: 'Wissen', item: 'https://steakakademie.de/wissen' },
+    { '@type': 'ListItem', position: 3, name: 'Meat Terroir', item: 'https://steakakademie.de/terroir' },
+  ],
+};
+
 export default function TerroirPage() {
-  return <TerroirClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <TerroirClient />
+    </>
+  );
 }

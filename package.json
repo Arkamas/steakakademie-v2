@@ -18,7 +18,10 @@
     "r2:dry-run": "node scripts/migrate-to-r2.mjs --dry-run",
     "qa-scan": "node scripts/qa-manager.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",
@@ -46,6 +49,7 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.1052.0",
+    "@playwright/test": "^1.60.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.17.57",
     "@types/react": "^18.3.23",

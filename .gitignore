@@ -56,3 +56,7 @@ yarn-error.log*
 qa-report.json
 qa-screenshots/
 content/rezepte/.recipe-cache.json
+
+# Local Netlify folder
+.netlify
+STATUS.md

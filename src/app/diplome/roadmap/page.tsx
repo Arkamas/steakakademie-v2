@@ -787,9 +787,9 @@ function RoadmapView({
           <div className="text-[11px] font-sans tracking-[0.18em] uppercase mb-2" style={{ color: s.color }}>
             Stufe {s.id} · {s.cert}
           </div>
-          <div className="font-serif text-2xl lg:text-3xl font-bold text-text-primary mb-2">
+          <h1 className="font-serif text-2xl lg:text-3xl font-bold text-text-primary mb-2">
             {s.emoji} {s.title}
-          </div>
+          </h1>
           <div className="font-serif italic text-text-secondary mb-4 text-sm sm:text-base">
             „{s.tagline}"
           </div>
@@ -1018,9 +1018,9 @@ function ModuleView({
           <div className="text-[11px] font-sans tracking-[0.18em] uppercase mb-2" style={{ color: meta.color }}>
             Stufe {meta.stage} · {stage.cert}
           </div>
-          <div className="font-serif text-2xl lg:text-3xl font-bold text-text-primary mb-2">
+          <h1 className="font-serif text-2xl lg:text-3xl font-bold text-text-primary mb-2">
             {meta.emoji} {meta.title}
-          </div>
+          </h1>
           <div className="text-sm font-sans mb-4" style={{ color: T.textMuted }}>
             {meta.description}
           </div>

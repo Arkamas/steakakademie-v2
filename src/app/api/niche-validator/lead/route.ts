@@ -13,7 +13,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createDOIToken } from '@/app/api/newsletter/route';
+import { createDOIToken } from '@/lib/doi';
 
 const LOOPS_API_KEY = process.env.LOOPS_API_KEY;
 const DOI_TEMPLATE_ID = process.env.LOOPS_DOI_TEMPLATE_ID;

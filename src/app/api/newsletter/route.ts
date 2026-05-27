@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createHmac } from 'crypto';
+import { createDOIToken } from '@/lib/doi';
 
 /**
  * Newsletter API — Loops.so Integration mit Double-Opt-In (DOI)
@@ -26,7 +26,6 @@ import { createHmac } from 'crypto';
 
 const LOOPS_API_KEY = process.env.LOOPS_API_KEY;
 const LOOPS_API_BASE = 'https://app.loops.so/api/v1';
-const DOI_SECRET = process.env.NEWSLETTER_DOI_SECRET ?? 'dev-only-insecure-secret';
 const DOI_TEMPLATE_ID = process.env.LOOPS_DOI_TEMPLATE_ID;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://steakakademie.de';
 
@@ -39,19 +38,6 @@ const SOURCE_CONFIG: Record<string, { userGroup: string }> = {
   'homepage-banner': { userGroup: 'newsletter' },
   default: { userGroup: 'newsletter' },
 };
-
-/**
- * Erstellt einen signierten, zeitgestempelten DOI-Token.
- * Format: base64url(JSON{email,iat}) + "." + HMAC-SHA256-Signatur
- * Gültig für 48 Stunden.
- */
-export function createDOIToken(email: string): string {
-  const payload = Buffer.from(
-    JSON.stringify({ email: email.toLowerCase().trim(), iat: Date.now() }),
-  ).toString('base64url');
-  const sig = createHmac('sha256', DOI_SECRET).update(payload).digest('base64url');
-  return `${payload}.${sig}`;
-}
 
 export async function POST(req: NextRequest) {
   try {

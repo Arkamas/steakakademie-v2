@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createHmac, timingSafeEqual } from 'crypto';
+import { verifyDOIToken } from '@/lib/doi';
 
 /**
  * GET /api/newsletter/confirm?token=...
@@ -17,49 +17,7 @@ import { createHmac, timingSafeEqual } from 'crypto';
  */
 
 const LOOPS_API_KEY = process.env.LOOPS_API_KEY;
-const DOI_SECRET = process.env.NEWSLETTER_DOI_SECRET ?? 'dev-only-insecure-secret';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://steakakademie.de';
-const TOKEN_MAX_AGE_MS = 48 * 60 * 60 * 1000; // 48 Stunden
-
-interface TokenPayload {
-  email: string;
-  iat: number;
-  source?: string;
-  userGroup?: string;
-}
-
-/**
- * Verifiziert einen DOI-Token zeitkonstant.
- * Gibt das Payload-Objekt zurück oder null bei Ungültigkeit.
- */
-function verifyDOIToken(token: string): TokenPayload | null {
-  const parts = token.split('.');
-  if (parts.length !== 2) return null;
-  const [payloadB64, sig] = parts;
-
-  // HMAC prüfen (timing-safe)
-  const expectedSig = createHmac('sha256', DOI_SECRET).update(payloadB64).digest('base64url');
-  try {
-    const sigBuf = Buffer.from(sig, 'base64url');
-    const expectedBuf = Buffer.from(expectedSig, 'base64url');
-    if (sigBuf.length !== expectedBuf.length) return null;
-    if (!timingSafeEqual(sigBuf, expectedBuf)) return null;
-  } catch {
-    return null;
-  }
-
-  // Payload dekodieren und Laufzeit prüfen
-  try {
-    const payload: TokenPayload = JSON.parse(
-      Buffer.from(payloadB64, 'base64url').toString('utf-8'),
-    );
-    if (!payload.email || typeof payload.iat !== 'number') return null;
-    if (Date.now() - payload.iat > TOKEN_MAX_AGE_MS) return null;
-    return payload;
-  } catch {
-    return null;
-  }
-}
 
 export async function GET(req: NextRequest) {
   const rawToken = req.nextUrl.searchParams.get('token');

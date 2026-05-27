@@ -30,18 +30,18 @@ const COUNTRIES = [
 const FEATURES = [
   {
     icon: <BarChart3 size={20} />,
-    title: 'Echte Berechnung',
-    desc: 'Kein Durchschnitt, kein "ungefähr". GKV + Einkommensteuer + Pflichtabgaben nach §32a EStG 2024 und den jeweiligen Länder-Steuergesetzen.',
+    title: 'Was am Ende zählt',
+    desc: 'Nicht der Steuersatz — das Netto. GKV, Einkommensteuer, alle Pflichtabgaben nach geltendem Recht 2024. Du gibst deinen Umsatz ein, der Rechner zeigt dir auf den Euro, was wirklich bleibt.',
   },
   {
     icon: <Globe size={20} />,
-    title: '23 Länder',
-    desc: 'Deutschland, Portugal, Niederlande, Spanien und 19 weitere — jedes Land mit dem realistischen Steuer-Rechenmodell für Solo-Selbstständige.',
+    title: '23 Länder auf einen Blick',
+    desc: 'DE, PT, NL, ES, IT, EE, GB, AE und 15 weitere — jedes mit dem realistischen Pflichtabgaben-Modell für Solopreneure. Keine Hochglanz-Tabellen. Echte Zahlen.',
   },
   {
     icon: <ShieldCheck size={20} />,
-    title: 'Kein Marketing',
-    desc: 'Keine Affiliate-Links zu Steuerberatern. Kein Upsell. Der Rechner liefert die Zahl — was du damit machst, entscheidest du.',
+    title: 'Unser Interesse: null',
+    desc: 'Wir verdienen nichts daran, wo du am Ende lebst. Keine Provision, kein Upsell, kein versteckter Berater-Funnel. Die Zahl gehört dir — die Entscheidung auch.',
   },
 ];
 

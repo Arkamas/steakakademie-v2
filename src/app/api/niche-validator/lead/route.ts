@@ -1,21 +1,30 @@
 /**
  * POST /api/niche-validator/lead
  *
- * Captures a qualified lead from the Niche Validator tool.
- * Sends to Loops.so tagged for the AuthorityOS drip campaign,
- * with the niche analyzed as a custom attribute (used for personalization).
+ * Qualified Lead-Erfassung vom Niche Validator Tool.
+ * DOI-Flow: Bestätigungs-E-Mail → /api/newsletter/confirm?token=...
+ * Kein Eintrag in Loops ohne bestätigte Einwilligung.
+ *
+ * Benötigte Umgebungsvariablen:
+ *  LOOPS_API_KEY              — Loops.so API Key
+ *  LOOPS_DOI_TEMPLATE_ID      — Transaktionale DOI-Vorlage (selbe wie Newsletter)
+ *  NEWSLETTER_DOI_SECRET      — HMAC-Geheimnis
+ *  NEXT_PUBLIC_APP_URL        — z.B. https://steakakademie.de
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { createDOIToken } from '@/app/api/newsletter/route';
 
 const LOOPS_API_KEY = process.env.LOOPS_API_KEY;
-const LOOPS_API_URL = 'https://app.loops.so/api/v1/contacts/create';
+const DOI_TEMPLATE_ID = process.env.LOOPS_DOI_TEMPLATE_ID;
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://steakakademie.de';
 
 interface LeadPayload {
   email?: string;
   niche?: string;
   verdict?: 'Go' | 'Caution' | 'Skip';
   difficulty?: number;
+  consent?: boolean;
 }
 
 export async function POST(req: NextRequest) {
@@ -38,43 +47,49 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Niche is required.' }, { status: 400 });
   }
 
-  // Dev mode: no Loops key → just log and succeed
+  // Einwilligung muss explizit gegeben worden sein (DSGVO Art. 6 Abs. 1 lit. a)
+  if (!body.consent) {
+    return NextResponse.json({ error: 'Consent required.' }, { status: 400 });
+  }
+
+  // Dev mode: kein Loops key → simulierte Antwort
   if (!LOOPS_API_KEY) {
     console.log(
-      `[NicheValidator] DEV — would capture: ${email} | niche="${niche}" | verdict=${body.verdict ?? '?'}`,
+      `[NicheValidator] DEV — DOI-E-Mail würde gesendet: ${email} | niche="${niche}" | verdict=${body.verdict ?? '?'}`,
     );
-    return NextResponse.json({ success: true, dev: true });
+    return NextResponse.json({ success: true, doi: true, dev: true });
   }
 
-  const payload = {
-    email,
-    source: 'authorityos-niche-validator',
-    userGroup: 'authorityos_lead',
-    // Custom attributes — visible in Loops contact view, usable in templates
-    nicheValidated: niche,
-    nicheVerdict: body.verdict ?? 'Unknown',
-    nicheDifficulty: body.difficulty ?? null,
-    validatedAt: new Date().toISOString(),
-  };
+  // DOI-Token mit Niche-Metadaten generieren
+  const token = createDOIToken(email);
+  const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${encodeURIComponent(token)}`;
 
-  const res = await fetch(LOOPS_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${LOOPS_API_KEY}`,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!res.ok) {
-    const errBody = await res.json().catch(() => ({}));
-    // Existing contact → still a success for the user
-    if (res.status === 409) {
-      return NextResponse.json({ success: true, existing: true });
+  // Bestätigungs-E-Mail senden (Kontakt erst nach Klick in Loops angelegt)
+  if (DOI_TEMPLATE_ID) {
+    const txRes = await fetch('https://app.loops.so/api/v1/transactional', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${LOOPS_API_KEY}`,
+      },
+      body: JSON.stringify({
+        transactionalId: DOI_TEMPLATE_ID,
+        email,
+        dataVariables: {
+          confirmUrl,
+          source: 'authorityos-niche-validator',
+          userGroup: 'authorityos_lead',
+          nicheValidated: niche,
+          nicheVerdict: body.verdict ?? 'Unknown',
+        },
+      }),
+    });
+    if (!txRes.ok) {
+      console.error('[NicheValidator] Loops transactional error:', txRes.status);
     }
-    console.error('[NicheValidator] Loops error:', res.status, errBody);
-    return NextResponse.json({ error: 'Subscription failed.' }, { status: 500 });
+  } else {
+    console.warn('[NicheValidator] LOOPS_DOI_TEMPLATE_ID fehlt — Bestätigungs-E-Mail nicht gesendet.');
   }
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true, doi: true });
 }

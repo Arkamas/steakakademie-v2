@@ -405,7 +405,7 @@ export default async function AgenturKillerSprintPage() {
                     className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
                     style={{ background: '#C8882A', color: '#0D0A06' }}
                   >
-                    {price ? `${eur(price)} — Jetzt freischalten` : 'Jetzt freischalten'}
+                    {price ? `${eur(price)} — Jetzt kaufen` : 'Jetzt kaufen'}
                     <ArrowRight size={16} />
                   </a>
                   <p className="text-center text-[10px] font-sans text-text-muted mt-2">

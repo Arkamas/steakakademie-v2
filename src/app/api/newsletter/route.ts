@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createHmac } from 'crypto';
 
 /**
- * Newsletter API — Loops.so Integration
+ * Newsletter API — Loops.so Integration mit Double-Opt-In (DOI)
  *
- * Loops.so Onboarding-Sequenz (7 E-Mails):
+ * DOI-Flow:
+ *  1. POST /api/newsletter   → generiert signierten Token, schickt Bestätigungs-E-Mail
+ *  2. GET  /api/newsletter/confirm?token=... → verifiziert Token, legt Kontakt in Loops an
+ *
+ * Benötigte Umgebungsvariablen (Netlify):
+ *  LOOPS_API_KEY              — Loops.so API Key
+ *  LOOPS_DOI_TEMPLATE_ID      — ID der transaktionalen Bestätigungs-E-Mail in Loops
+ *  NEWSLETTER_DOI_SECRET      — HMAC-Geheimnis (min. 32 zufällige Zeichen)
+ *  NEXT_PUBLIC_APP_URL        — z.B. https://steakakademie.de
+ *
+ * Loops-Onboarding-Sequenz (7 E-Mails — erst NACH DOI-Bestätigung):
  *  Email #1 (sofort)  — Willkommen + erste Technik
  *  Email #2 (Tag 2)   — Persönlichkeits-Teaser (Aaron Franklin)
  *  Email #3 (Tag 4)   — Fehler-basierter Artikel → Steak-Rettung
@@ -11,28 +22,36 @@ import { NextRequest, NextResponse } from 'next/server';
  *  Email #5 (Tag 10)  — Social Proof Story
  *  Email #6 (Tag 14)  — Marco-Widget Adoption
  *  Email #7 (Tag 21)  — Roadmap-Teaser + Feedback-Request
- *
- * Source-Tags für Segmentierung:
- *  mid-article           → hohes Content-Engagement
- *  persoenlichkeiten-*   → Persönlichkeits-Interesse
- *  simulation-final-cta  → Höchste Konversionsbereitschaft
- *  exit-intent           → Fast abgesprungen, dann doch Subscribe
- *  footer                → Niedriges Commitment (generisch)
- *  homepage-banner       → Direkt-Besucher
  */
 
 const LOOPS_API_KEY = process.env.LOOPS_API_KEY;
-const LOOPS_API_URL = 'https://app.loops.so/api/v1/contacts/create';
+const LOOPS_API_BASE = 'https://app.loops.so/api/v1';
+const DOI_SECRET = process.env.NEWSLETTER_DOI_SECRET ?? 'dev-only-insecure-secret';
+const DOI_TEMPLATE_ID = process.env.LOOPS_DOI_TEMPLATE_ID;
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://steakakademie.de';
 
-// Map source → Loops mailing list IDs / user groups
-const SOURCE_CONFIG: Record<string, { userGroup: string; tags: string[] }> = {
-  'simulation-final-cta': { userGroup: 'high_intent', tags: ['simulation_completed', 'diplom_interest'] },
-  'exit-intent': { userGroup: 'recovered', tags: ['exit_intent', 'newsletter'] },
-  'mid-article': { userGroup: 'content_engaged', tags: ['newsletter', 'content_reader'] },
-  'footer': { userGroup: 'newsletter', tags: ['newsletter'] },
-  'homepage-banner': { userGroup: 'newsletter', tags: ['newsletter', 'homepage'] },
-  default: { userGroup: 'newsletter', tags: ['newsletter'] },
+// Map source → Loops user groups for post-confirmation segmentation
+const SOURCE_CONFIG: Record<string, { userGroup: string }> = {
+  'simulation-final-cta': { userGroup: 'high_intent' },
+  'exit-intent': { userGroup: 'recovered' },
+  'mid-article': { userGroup: 'content_engaged' },
+  'footer': { userGroup: 'newsletter' },
+  'homepage-banner': { userGroup: 'newsletter' },
+  default: { userGroup: 'newsletter' },
 };
+
+/**
+ * Erstellt einen signierten, zeitgestempelten DOI-Token.
+ * Format: base64url(JSON{email,iat}) + "." + HMAC-SHA256-Signatur
+ * Gültig für 48 Stunden.
+ */
+export function createDOIToken(email: string): string {
+  const payload = Buffer.from(
+    JSON.stringify({ email: email.toLowerCase().trim(), iat: Date.now() }),
+  ).toString('base64url');
+  const sig = createHmac('sha256', DOI_SECRET).update(payload).digest('base64url');
+  return `${payload}.${sig}`;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -42,55 +61,56 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email' }, { status: 400 });
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
-    // If no Loops API key, return success (dev mode)
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Dev-Modus: kein Loops API Key → simulierte Antwort
     if (!LOOPS_API_KEY) {
-      console.log(`[Newsletter] DEV MODE — would subscribe: ${email} (source: ${source})`);
-      return NextResponse.json({ success: true, dev: true });
+      console.log(`[Newsletter] DEV MODE — DOI-E-Mail würde gesendet: ${normalizedEmail} (source: ${source})`);
+      return NextResponse.json({ success: true, doi: true, dev: true });
     }
 
+    // DOI-Token und Bestätigungs-URL generieren
+    const token = createDOIToken(normalizedEmail);
+    const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${encodeURIComponent(token)}`;
     const config = SOURCE_CONFIG[source] ?? SOURCE_CONFIG.default;
 
-    const loopsPayload = {
-      email: email.toLowerCase().trim(),
-      source: `steakakademie-website-${source}`,
-      userGroup: config.userGroup,
-      // Custom attributes for segmentation
-      subscribeSource: source,
-      subscribeDate: new Date().toISOString(),
-      // Loops mailing lists — configure in Loops dashboard
-      mailingLists: {
-        // Replace with actual Loops mailing list IDs from dashboard
-        // cm_newsletter: true,        // Main newsletter
-        // cm_diplom_onboarding: source === 'simulation-final-cta' || source === 'mid-article',
-      },
-    };
-
-    const response = await fetch(LOOPS_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${LOOPS_API_KEY}`,
-      },
-      body: JSON.stringify(loopsPayload),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      // Loops returns 409 for existing subscribers — treat as success
-      if (response.status === 409) {
-        return NextResponse.json({ success: true, existing: true });
+    // Bestätigungs-E-Mail via Loops transactional senden (BEVOR Kontakt angelegt wird)
+    if (DOI_TEMPLATE_ID) {
+      const txRes = await fetch(`${LOOPS_API_BASE}/transactional`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${LOOPS_API_KEY}`,
+        },
+        body: JSON.stringify({
+          transactionalId: DOI_TEMPLATE_ID,
+          email: normalizedEmail,
+          dataVariables: {
+            confirmUrl,
+            source,
+            userGroup: config.userGroup,
+          },
+        }),
+      });
+      if (!txRes.ok) {
+        console.error('[Newsletter] Loops transactional error:', txRes.status, await txRes.text().catch(() => ''));
+        // Nicht als Fehler für den User melden — DOI-E-Mail-Fehler sind intern
       }
-      console.error('[Newsletter] Loops API error:', response.status, errorData);
-      return NextResponse.json({ error: 'Subscription failed' }, { status: 500 });
+    } else {
+      console.warn(
+        '[Newsletter] LOOPS_DOI_TEMPLATE_ID fehlt — Bestätigungs-E-Mail wird NICHT gesendet. ' +
+        'Transaktionale E-Mail-Vorlage in Loops anlegen und ID in Netlify eintragen.',
+      );
     }
 
-    return NextResponse.json({ success: true });
+    // Kontakt wird erst nach Bestätigung angelegt (in /api/newsletter/confirm)
+    // Dadurch: kein Eintrag in Loops ohne nachgewiesene Einwilligung (DSGVO Art. 6 + UWG §7)
+    return NextResponse.json({ success: true, doi: true });
 
   } catch (error) {
     console.error('[Newsletter] Unexpected error:', error);

@@ -27,6 +27,7 @@ export default function NicheValidator() {
   const [niche, setNiche] = useState('');
   const [stage, setStage] = useState(0);
   const [leadEmail, setLeadEmail] = useState('');
+  const [leadConsent, setLeadConsent] = useState(false);
   const [leadState, setLeadState] = useState<'idle' | 'sending' | 'success'>('idle');
 
   const { object, submit, isLoading, error, stop } = useObject({
@@ -62,6 +63,7 @@ export default function NicheValidator() {
           niche: object.niche,
           verdict: object.verdict?.decision,
           difficulty: object.difficulty?.overall,
+          consent: true,
         }),
       });
       setLeadState('success');
@@ -440,10 +442,10 @@ export default function NicheValidator() {
                       <Check size={20} className="text-brand-gold" />
                     </div>
                     <h3 className="font-serif text-xl font-bold text-text-primary mb-2">
-                      Sent.
+                      Check your inbox.
                     </h3>
                     <p className="text-sm font-body text-text-secondary max-w-sm mx-auto">
-                      Full analysis + the 7-day AuthorityOS founder series is heading to {leadEmail} right now.
+                      We sent a confirmation link to <strong>{leadEmail}</strong>. Click it to receive your analysis brief and the 7-day AuthorityOS series.
                     </p>
                   </div>
                 ) : (
@@ -457,44 +459,64 @@ export default function NicheValidator() {
                     <p className="text-sm font-body text-text-secondary mb-5 leading-relaxed">
                       Receive this full analysis as a saved brief, plus the 7-day operator series that walks through the exact steps that built steakakademie.de — applied to <span className="text-brand-gold">{a.niche}</span>.
                     </p>
-                    <form onSubmit={handleLead} className="flex flex-col sm:flex-row gap-3">
-                      <div className="relative flex-1">
-                        <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
-                        <input
-                          type="email"
-                          required
-                          value={leadEmail}
-                          onChange={e => setLeadEmail(e.target.value)}
-                          placeholder="you@domain.com"
-                          disabled={leadState === 'sending'}
+                    <form onSubmit={handleLead} className="flex flex-col gap-3">
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="relative flex-1">
+                          <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
+                          <input
+                            type="email"
+                            required
+                            value={leadEmail}
+                            onChange={e => setLeadEmail(e.target.value)}
+                            placeholder="you@domain.com"
+                            disabled={leadState === 'sending'}
+                            className="
+                              w-full bg-surface-elevated border border-border-subtle
+                              pl-10 pr-4 py-3 text-sm font-body text-text-primary
+                              placeholder:text-text-muted/55
+                              focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold/25
+                              transition-colors
+                            "
+                          />
+                        </div>
+                        <button
+                          type="submit"
+                          disabled={!leadEmail || !leadConsent || leadState === 'sending'}
                           className="
-                            w-full bg-surface-elevated border border-border-subtle
-                            pl-10 pr-4 py-3 text-sm font-body text-text-primary
-                            placeholder:text-text-muted/55
-                            focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold/25
-                            transition-colors
+                            shrink-0 bg-brand-gold hover:bg-[#b07020] active:bg-[#9a6010]
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            text-ink font-sans font-bold text-xs tracking-[0.14em] uppercase
+                            px-6 py-3 transition-colors flex items-center justify-center gap-2
                           "
-                        />
+                        >
+                          {leadState === 'sending' ? (
+                            <><Loader2 size={13} className="animate-spin" /> Sending</>
+                          ) : (
+                            <>Send brief <ArrowRight size={13} /></>
+                          )}
+                        </button>
                       </div>
-                      <button
-                        type="submit"
-                        disabled={!leadEmail || leadState === 'sending'}
-                        className="
-                          shrink-0 bg-brand-gold hover:bg-[#b07020] active:bg-[#9a6010]
-                          disabled:opacity-50 disabled:cursor-not-allowed
-                          text-ink font-sans font-bold text-xs tracking-[0.14em] uppercase
-                          px-6 py-3 transition-colors flex items-center justify-center gap-2
-                        "
-                      >
-                        {leadState === 'sending' ? (
-                          <><Loader2 size={13} className="animate-spin" /> Sending</>
-                        ) : (
-                          <>Send brief <ArrowRight size={13} /></>
-                        )}
-                      </button>
+                      {/* DSGVO-Einwilligung — Pflichtfeld vor Absenden */}
+                      <label className="flex items-start gap-2.5 cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          required
+                          checked={leadConsent}
+                          onChange={e => setLeadConsent(e.target.checked)}
+                          disabled={leadState === 'sending'}
+                          className="mt-0.5 shrink-0 w-3.5 h-3.5 accent-brand-gold cursor-pointer"
+                        />
+                        <span className="text-[11px] font-sans text-text-muted/70 leading-relaxed group-hover:text-text-muted transition-colors">
+                          I agree to receive the analysis brief and the AuthorityOS email series.
+                          Unsubscribe at any time.{' '}
+                          <a href="/datenschutz" target="_blank" rel="noopener noreferrer" className="underline hover:text-brand-gold">
+                            Privacy Policy
+                          </a>
+                        </span>
+                      </label>
                     </form>
-                    <p className="text-[10px] font-sans text-text-muted/60 mt-3">
-                      No spam · Unsubscribe in one click · Never shared
+                    <p className="text-[10px] font-sans text-text-muted/60 mt-2">
+                      Confirmation email required (double opt-in) · Never shared
                     </p>
                   </>
                 )}

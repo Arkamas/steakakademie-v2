@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import MarcoWidget from '@/components/ai/MarcoWidget';
 import SmokeEffect from '@/components/ui/SmokeEffect';
 import PlausibleScript from '@/components/analytics/PlausibleScript';
-// ClarityScript: Session-Recording — nur nach Cookie-Einwilligung einbinden (TTDSG §25)
-// GoogleAnalytics: GA4 — nur nach Cookie-Einwilligung einbinden (TTDSG §25 + DSGVO)
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+import ClarityScript from '@/components/analytics/ClarityScript';
+import CookieConsentBanner from '@/components/consent/CookieConsentBanner';
 import ExitIntent from '@/components/ui/ExitIntent';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
 import './globals.css';
@@ -73,7 +74,10 @@ export default function RootLayout({
         <MarcoWidget />
         <ExitIntent />
         <PlausibleScript />
-        {/* GA4 + Clarity: deaktiviert bis Cookie-Consent-Banner implementiert ist */}
+        {/* GA4 + Clarity: nur nach expliziter Einwilligung (TTDSG §25 + DSGVO Art. 6 I a) */}
+        <GoogleAnalytics />
+        <ClarityScript />
+        <CookieConsentBanner />
       </body>
     </html>
   );

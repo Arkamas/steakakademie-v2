@@ -60,3 +60,9 @@ content/rezepte/.recipe-cache.json
 # Local Netlify folder
 .netlify
 STATUS.md
+
+# Playwright E2E artifacts
+test-results/
+playwright-report/
+/blob-report/
+/.playwright/

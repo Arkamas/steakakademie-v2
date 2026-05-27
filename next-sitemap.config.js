@@ -1,18 +1,27 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: 'https://steakakademie.de',
-  generateRobotsTxt: true,
+  generateRobotsTxt: false,
   changefreq: 'weekly',
   priority: 0.7,
   sitemapSize: 5000,
   exclude: [
-    '/go/*',              // Affiliate-Redirects nicht indexieren
-    '/api/*',             // API-Routen
+    '/go/*',
+    '/api/*',
     '/admin/*',
-    '/mein-system',       // Auth-only — nicht für Google
-    '/meine-kurse',       // Auth-only
-    '/profil',            // Auth-only
-    '/steuer-matrix/rechner', // Auth-only
+    '/mein-system',
+    '/meine-kurse',
+    '/profil',
+    '/steuer-matrix/rechner',
+    '/auth/*',
+    '/danke/*',
+    '/diplome/urkunde',
+    '/diplome/simulation',
+    '/diplome/roadmap',
+    '/steak-beichte',
+    '/mein-protokoll',
+    '/fleischpass',
+    '/tools/*',
   ],
   robotsTxtOptions: {
     additionalSitemaps: [],

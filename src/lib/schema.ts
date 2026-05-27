@@ -22,10 +22,10 @@ export function organizationSchema() {
       height: 512,
     },
     sameAs: [
-      'https://instagram.com/steakakademie',
-      'https://tiktok.com/@steakakademie',
-      'https://youtube.com/@steakakademie',
-      'https://facebook.com/steakakademie.de',
+      'https://www.instagram.com/steakakademie',
+      'https://www.youtube.com/@steakakademie',
+      'https://www.tiktok.com/@steakakademie',
+      'https://www.facebook.com/steakakademie.de',
     ],
     contactPoint: {
       '@type': 'ContactPoint',

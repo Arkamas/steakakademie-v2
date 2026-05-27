@@ -26,7 +26,13 @@ const jsonLd = {
   image: 'https://steakakademie.de/images/uwe-yendell.png',
   email: 'info@steakakademie.de',
   address: { '@type': 'PostalAddress', addressLocality: 'Wuppertal', addressCountry: 'DE' },
-  sameAs: [],
+  sameAs: [
+    'https://www.instagram.com/steakakademie',
+    'https://www.youtube.com/@steakakademie',
+    'https://www.tiktok.com/@steakakademie',
+    'https://www.facebook.com/steakakademie.de',
+    'https://steakakademie.de',
+  ],
 };
 
 const KOMPETENZEN = [

@@ -112,6 +112,16 @@ export default async function AgenturKillerSprintPage() {
       minimumFractionDigits: 0,
     }).format(n);
 
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  };
+
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -133,6 +143,10 @@ export default async function AgenturKillerSprintPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
       <main className="bg-surface-base">

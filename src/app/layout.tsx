@@ -45,9 +45,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  alternates: {
-    canonical: 'https://steakakademie.de',
-  },
 };
 
 export default function RootLayout({

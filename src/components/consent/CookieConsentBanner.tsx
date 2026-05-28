@@ -38,20 +38,22 @@ export default function CookieConsentBanner({ onConsent }: Props) {
 
   return (
     <>
-      {/* Backdrop für Settings-Modal */}
+      {/* Backdrop für Settings-Modal — kein backdrop-blur (Mobile-Scroll-Jank) */}
       {showSettings && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-40 bg-black/80"
           onClick={() => setShowSettings(false)}
         />
       )}
 
-      {/* Haupt-Banner — fixiert am unteren Rand */}
+      {/* Haupt-Banner — fixiert am unteren Rand
+          NB: kein backdrop-blur — verursachte Scroll-Jank auf Mobile.
+          Stattdessen voll-opaker Hintergrund. */}
       <div
         role="dialog"
         aria-modal="true"
         aria-label="Cookie-Einstellungen"
-        className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#0f0f0f]/95 backdrop-blur-md shadow-2xl"
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#0f0f0f] shadow-2xl"
       >
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

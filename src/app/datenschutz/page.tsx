@@ -37,8 +37,8 @@ export default function DatenschutzPage() {
                 Stahlsberg 73<br />
                 42279 Wuppertal<br />
                 E-Mail:{' '}
-                <a href="mailto:info@steakakademie.de" className={linkClass}>
-                  info@steakakademie.de
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>
+                  pitmaster@steakakademie.de
                 </a>
               </p>
             </section>
@@ -121,7 +121,7 @@ export default function DatenschutzPage() {
                 Loops verarbeitet diese Daten ausschließlich zur Zustellung unserer E-Mails.
                 Die Einwilligung kann jederzeit widerrufen werden (Abmelde-Link in jedem
                 Newsletter oder per E-Mail an{' '}
-                <a href="mailto:info@steakakademie.de" className={linkClass}>info@steakakademie.de</a>).
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>).
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung). Details:{' '}
@@ -267,6 +267,66 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
+              <h2 className={h2Class}>12a. Schriftarten via Google Web Fonts</h2>
+              <p className="mb-3">
+                Für die einheitliche Darstellung von Schriftarten nutzen wir „Google Web Fonts"
+                der Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland
+                („Google"). Beim Aufruf einer Seite lädt dein Browser die benötigten
+                Schriftarten von Google-Servern, wodurch deine IP-Adresse an Google
+                übermittelt wird.
+              </p>
+              <p className="mb-3">
+                <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes
+                Interesse an einer ansprechenden Darstellung unseres Onlineangebots).
+              </p>
+              <p>
+                <strong>Drittlandübermittlung:</strong> Google ist nach dem EU-US Data
+                Privacy Framework zertifiziert. Weitere Informationen:{' '}
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  policies.google.com/privacy
+                </a>{' '}
+                und{' '}
+                <a href="https://developers.google.com/fonts/faq/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  developers.google.com/fonts/faq/privacy
+                </a>.
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>12b. Hosting & CDN — Netlify und Vercel</h2>
+              <p className="mb-3">
+                Diese Website wird gehostet bei <strong>Netlify, Inc.</strong>,
+                512 2nd Street, Fl 2, San Francisco, CA 94107, USA. Für einzelne
+                technische Komponenten (z. B. Edge-Funktionen, KI-Anfragen) kann
+                zusätzlich <strong>Vercel Inc.</strong>, 440 N Barranca Avenue #4133,
+                Covina, CA 91723, USA, eingesetzt werden.
+              </p>
+              <p className="mb-3">
+                Bei jedem Seitenaufruf werden technisch notwendige Daten verarbeitet
+                (IP-Adresse, Browser-Typ, Datum/Uhrzeit, aufgerufene URL, Referrer).
+                Diese Daten werden zur Bereitstellung der Website und zur Abwehr von
+                Angriffen benötigt.
+              </p>
+              <p className="mb-3">
+                <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
+                (berechtigtes Interesse am sicheren, performanten Betrieb der Website).
+              </p>
+              <p>
+                <strong>Drittlandübermittlung:</strong> Beide Anbieter sind nach dem
+                EU-US Data Privacy Framework zertifiziert; zusätzlich werden
+                EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO) verwendet.
+                Datenschutzerklärungen:{' '}
+                <a href="https://www.netlify.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  netlify.com/privacy
+                </a>{' '}
+                ·{' '}
+                <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  vercel.com/legal/privacy-policy
+                </a>.
+              </p>
+            </section>
+
+            <section>
               <h2 className={h2Class}>13. Deine Rechte</h2>
               <p className="mb-3">Du hast gemäß DSGVO folgende Rechte:</p>
               <ul className="list-disc list-inside space-y-1.5 mb-3">
@@ -280,8 +340,8 @@ export default function DatenschutzPage() {
               </ul>
               <p>
                 Wende dich dazu an:{' '}
-                <a href="mailto:info@steakakademie.de" className={linkClass}>
-                  info@steakakademie.de
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>
+                  pitmaster@steakakademie.de
                 </a>
               </p>
             </section>

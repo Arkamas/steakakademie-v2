@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Playfair_Display, Source_Serif_4, DM_Sans } from 'next/font/google';
 import MarcoWidget from '@/components/ai/MarcoWidget';
 import SmokeEffect from '@/components/ui/SmokeEffect';
 import PlausibleScript from '@/components/analytics/PlausibleScript';
@@ -8,6 +9,28 @@ import CookieConsentBanner from '@/components/consent/CookieConsentBanner';
 import ExitIntent from '@/components/ui/ExitIntent';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
 import './globals.css';
+
+// Self-hosted Google Fonts via next/font — keine externen Requests, kein DSGVO-Risiko
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-playfair',
+  weight: ['400', '500', '600', '700', '800', '900'],
+});
+
+const sourceSerif = Source_Serif_4({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-source-serif',
+  weight: ['400', '500', '600', '700'],
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-dm-sans',
+  weight: ['400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://steakakademie.de'),
@@ -54,10 +77,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de">
+    <html lang="de" className={`${playfair.variable} ${sourceSerif.variable} ${dmSans.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Global Schema.org — Organization + WebSite + SearchAction */}
         <script
           type="application/ld+json"

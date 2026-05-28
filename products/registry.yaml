@@ -10,7 +10,8 @@
   brand: "MEATER"
   category: thermometer
   price: 129
-  affiliateUrl: "https://www.amazon.de/dp/B07VBK2D44/?tag=steakakademie-21"
+  # B07VBK2D44 = altes Modell (ggf. nicht mehr aktiv auf Amazon.de) — bei 404 auf MEATER 2 Plus (meater-2-plus) umleiten
+  affiliateUrl: "https://www.amazon.de/s?k=MEATER+Plus&tag=steakakademie-21"
   provider: amazon
   amazonAsin: "B07VBK2D44"
   rating: 4.5
@@ -32,7 +33,8 @@
   brand: "Thermoworks"
   category: thermometer
   price: 89
-  affiliateUrl: "https://www.amazon.de/dp/B09VB7PD1G/?tag=steakakademie-21"
+  # Thermapen ONE: ThermoWorks verkauft primär über eigene Website — Amazon.de-ASIN ggf. nicht verfügbar
+  affiliateUrl: "https://www.amazon.de/s?k=Thermapen+ONE+Fleischthermometer&tag=steakakademie-21"
   provider: amazon
   amazonAsin: "B09VB7PD1G"
   rating: 4.8
@@ -54,7 +56,7 @@
   brand: "Inkbird"
   category: thermometer
   price: 39
-  affiliateUrl: "https://www.amazon.de/dp/B073WT2BLP/?tag=steakakademie-21"
+  affiliateUrl: "https://www.amazon.de/s?k=Inkbird+IBT-4XS+Grillthermometer&tag=steakakademie-21"
   provider: amazon
   amazonAsin: "B073WT2BLP"
   rating: 4.3
@@ -76,7 +78,7 @@
   brand: "MEATER"
   category: thermometer
   price: 249
-  affiliateUrl: "https://www.amazon.de/dp/B0C7WHK8XL/?tag=steakakademie-21"
+  affiliateUrl: "https://www.amazon.de/s?k=MEATER+2+Plus&tag=steakakademie-21"
   provider: amazon
   amazonAsin: "B0C7WHK8XL"
   rating: 4.6
@@ -98,7 +100,8 @@
   brand: "ThermoWorks"
   category: thermometer
   price: 229
-  affiliateUrl: "https://www.amazon.de/dp/B07Y5K91HK/?tag=steakakademie-21"
+  # ThermoWorks Signals: primär USA-Vertrieb — Amazon.de Verfügbarkeit prüfen
+  affiliateUrl: "https://www.amazon.de/s?k=ThermoWorks+Signals+BBQ+Thermometer&tag=steakakademie-21"
   provider: amazon
   amazonAsin: "B07Y5K91HK"
   rating: 4.7
@@ -120,7 +123,7 @@
   brand: "Inkbird"
   category: thermometer
   price: 79
-  affiliateUrl: "https://www.amazon.de/dp/B08SFLPW66/?tag=steakakademie-21"
+  affiliateUrl: "https://www.amazon.de/s?k=Inkbird+IBBQ-4T+WiFi+Thermometer&tag=steakakademie-21"
   provider: amazon
   amazonAsin: "B08SFLPW66"
   rating: 4.4
@@ -144,8 +147,9 @@
   brand: "Weber"
   category: grill
   price: 329
-  affiliateUrl: "https://www.santosgrills.de/p/PLACEHOLDER"
-  provider: santosgrills
+  # TODO: Nach Santosgrills-Affiliate-Anmeldung durch echte Partner-URL ersetzen
+  affiliateUrl: "https://www.amazon.de/s?k=Weber+Master-Touch+GBS+57+cm&tag=steakakademie-21"
+  provider: amazon
   rating: 4.7
   ratingCount: 2800
   description: "Der beste Einsteiger-Kugelgrill — Weber-Qualität, GBS-System"
@@ -167,8 +171,9 @@
   price: 1799
   priceMin: 1599
   priceMax: 1899
-  affiliateUrl: "https://www.grillfuerst.de/PLACEHOLDER"
-  provider: grillfuerst
+  # TODO: Nach Grillfürst-Affiliate-Anmeldung durch echte Partner-URL ersetzen
+  affiliateUrl: "https://www.amazon.de/s?k=Kamado+Joe+Classic+III&tag=steakakademie-21"
+  provider: amazon
   rating: 4.8
   ratingCount: 890
   description: "Premium Keramikgrill — der Rolls Royce unter den Kugelgrills"
@@ -260,8 +265,9 @@
   brand: "Ankerkraut"
   category: gewuerze
   price: 12
-  affiliateUrl: "https://www.ankerkraut.de/PLACEHOLDER"
-  provider: ankerkraut
+  # TODO: Nach Ankerkraut-Affiliate-Anmeldung durch echte Partner-URL ersetzen
+  affiliateUrl: "https://www.amazon.de/s?k=Ankerkraut+Magic+Dust&tag=steakakademie-21"
+  provider: amazon
   rating: 4.6
   ratingCount: 9800
   description: "Der klassische BBQ-Rub für Ribs, Pulled Pork und alles dazwischen"
@@ -282,7 +288,9 @@
   brand: "Otto Gourmet"
   category: fleisch
   price: 89
-  affiliateUrl: "https://www.otto-gourmet.de/PLACEHOLDER"
+  # TODO: Nach Otto-Gourmet-Affiliate-Anmeldung mit echtem Partner-Code ersetzen
+  # Direktlink auf Produkt einmalig auf otto-gourmet.de suchen + hier eintragen
+  affiliateUrl: "https://www.otto-gourmet.de/"
   provider: otto-gourmet
   rating: 4.8
   ratingCount: 340
@@ -352,7 +360,8 @@
   brand: "Beefer"
   category: oberhitzegrill
   price: 799
-  affiliateUrl: "https://beefer.de/shop/e-beefer-pro-ii/"
+  # E-Beefer auch auf Amazon.de (ASIN B0D94422ZG) — URL-Pfad auf beefer.de noch zu verifizieren
+  affiliateUrl: "https://www.amazon.de/s?k=E-Beefer+Pro+II&tag=steakakademie-21"
   provider: other
   amazonAsin: "B0D94422ZG"
   rating: 4.4

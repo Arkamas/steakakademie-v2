@@ -3,7 +3,7 @@
 # Deployment: github.com/Arkamas/steakakademie-v2 → steakakademie.de
 
 [build]
-  command = "next build"
+  command = "next build && npx next-sitemap"
   publish = ".next"
 
 [build.environment]

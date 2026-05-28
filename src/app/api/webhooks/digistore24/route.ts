@@ -1,16 +1,16 @@
 /**
- * Digistore24 IPN Webhook — v2
- * ============================
- * POST /api/webhooks/digistore24
+ * Digistore24 Webhook — v3
+ * ========================
+ * POST /api/webhooks/digistore24?token=DIGISTORE_WEBHOOK_TOKEN
  *
- * Erwartet form-encoded Body mit Digistore-Standard-Parametern + sha_sign.
- * Signatur-Schema (siehe docs.digistore24.com → Notifications):
- *   1. Alle Parameter außer sha_sign alphabetisch nach Key sortieren
- *   2. Werte mit IPN-Passphrase als Separator joinen, Passphrase ans Ende
- *   3. SHA-512 hashen, UPPERCASE-Hex vergleichen
+ * Sicherheit: Secret-Token als URL-Parameter (Digistore24 Webhook-Typ
+ * unterstützt keine sha_sign-Passphrase — nur der ältere IPN-Typ tut das).
+ *
+ * Webhook-URL in Digistore24 eintragen:
+ *   https://steakakademie.de/api/webhooks/digistore24?token=<DIGISTORE_WEBHOOK_TOKEN>
  *
  * Env benötigt:
- *   DIGISTORE_IPN_PASSPHRASE       — aus Digistore24 → Einstellungen → IPN
+ *   DIGISTORE_WEBHOOK_TOKEN        — Secret-Token in der Webhook-URL
  *   SUPABASE_SERVICE_ROLE_KEY      — Service-Role (NICHT anon)
  *   NEXT_PUBLIC_SUPABASE_URL
  *   LOOPS_API_KEY                  — Transactional E-Mail
@@ -21,7 +21,6 @@ export const runtime  = 'nodejs';
 export const dynamic  = 'force-dynamic';
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import { createHash } from 'crypto';
 
 const TOOL_REDIRECT: Record<string, string> = {
   'steuer-matrix':         'https://steakakademie.de/auth/callback?next=/steuer-matrix/rechner',
@@ -31,34 +30,23 @@ const TOOL_REDIRECT: Record<string, string> = {
 
 const DEFAULT_REDIRECT = 'https://steakakademie.de/auth/callback?next=/mein-system';
 
-function verifyDigistoreSignature(
-  params: Record<string, string>,
-  passphrase: string,
-): boolean {
-  const received = params['sha_sign'];
-  if (!received) return false;
-  const keys   = Object.keys(params).filter((k) => k !== 'sha_sign').sort();
-  const concat = keys.map((k) => params[k]).join(passphrase) + passphrase;
-  const expected = createHash('sha512').update(concat, 'utf8').digest('hex').toUpperCase();
-  return expected === received.toUpperCase();
-}
-
 export async function POST(req: Request) {
-  const passphrase = process.env.DIGISTORE_IPN_PASSPHRASE;
-  if (!passphrase) {
-    console.error('[ds-webhook] DIGISTORE_IPN_PASSPHRASE not set');
+  // Token-Verifikation via URL-Parameter
+  const url   = new URL(req.url);
+  const token = url.searchParams.get('token');
+  const expectedToken = process.env.DIGISTORE_WEBHOOK_TOKEN;
+
+  if (!expectedToken) {
+    console.error('[ds-webhook] DIGISTORE_WEBHOOK_TOKEN not set');
     return new Response('Server misconfiguration', { status: 500 });
+  }
+  if (!token || token !== expectedToken) {
+    console.warn('[ds-webhook] invalid or missing token');
+    return new Response('Unauthorized', { status: 401 });
   }
 
   const rawBody = await req.text();
   const params  = Object.fromEntries(new URLSearchParams(rawBody));
-
-  if (!verifyDigistoreSignature(params, passphrase)) {
-    console.warn('[ds-webhook] signature verification failed', {
-      order_id: params.order_id,
-    });
-    return new Response('Unauthorized', { status: 401 });
-  }
 
   const event     = params.event;
   const orderId   = params.order_id;

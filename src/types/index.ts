@@ -46,6 +46,13 @@ export interface Product {
   rating?: number;
   ratingCount?: number;
   image?: string;
+  /**
+   * "official"   = Lizenziertes Bild (Hersteller/PA-API/eigenes Foto) — keine Kennzeichnung
+   * "symbolic"   = KI-generiertes oder generisches Symbolbild — "Symbolbild"-Badge wird angezeigt
+   * Default wenn ungesetzt: "official"
+   */
+  imageType?: 'official' | 'symbolic';
+  imageAlt?: string;
   description?: string;
   pros?: string[];
   cons?: string[];

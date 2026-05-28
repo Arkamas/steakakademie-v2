@@ -83,6 +83,38 @@ export default function AffiliateDisclosurePage() {
             </section>
 
             <section>
+              <h2 className={h2Class}>Produktbilder</h2>
+              <p className="mb-3">
+                Wir nutzen drei Bildquellen, die alle rechtssicher und lizenziert sind:
+              </p>
+              <ul className="list-disc list-inside space-y-1.5 mb-3">
+                <li>
+                  <strong className="text-text-primary">Lizenzierte Original-Produktbilder</strong> —
+                  bezogen über das Amazon Product Advertising API (PA-API) oder direkt vom Hersteller
+                  freigegebene Pressebilder. Diese Bilder zeigen das Originalprodukt.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Symbolbilder</strong> — eigens für
+                  Steakakademie.de erstellte oder KI-generierte Darstellungen, die das Produkt
+                  repräsentieren, aber optisch vom Originalprodukt abweichen können. Diese
+                  sind mit dem Badge{' '}
+                  <span className="font-sans text-[10px] font-bold tracking-wider uppercase bg-black/65 text-zinc-200 border border-white/15 px-1.5 py-0.5">
+                    Symbolbild
+                  </span>{' '}
+                  klar gekennzeichnet.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Brand-Initialen-Platzhalter</strong> —
+                  wenn kein Produktbild verfügbar ist, zeigen wir die Hersteller-Initialen.
+                </li>
+              </ul>
+              <p>
+                Für die verbindliche Produktdarstellung ist immer der jeweilige Händler-Shop
+                maßgeblich, auf den der Affiliate-Link verweist.
+              </p>
+            </section>
+
+            <section>
               <h2 className={h2Class}>Fragen?</h2>
               <p>
                 Bei Fragen zu Affiliate-Links oder unserer Empfehlungspolitik erreichst du

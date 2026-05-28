@@ -4,6 +4,26 @@ import { ExternalLink, Star, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Product } from '@/types';
 
+function SymbolicBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
+  // Rechtlich relevanter Hinweis: KI-/generisches Bild, nicht das Originalprodukt
+  const cls =
+    size === 'sm'
+      ? 'text-[8px] px-1 py-[1px]'
+      : 'text-[9px] px-1.5 py-0.5';
+  return (
+    <span
+      className={cn(
+        'absolute top-1 right-1 z-10 font-sans font-bold tracking-wider uppercase',
+        'bg-black/65 text-zinc-200 border border-white/15 backdrop-blur-sm',
+        cls
+      )}
+      aria-label="Symbolbild — Originalprodukt kann optisch abweichen"
+    >
+      Symbolbild
+    </span>
+  );
+}
+
 function ProductImagePlaceholder({
   brand,
   size = 'md',
@@ -88,15 +108,18 @@ export default function ProductCard({
           </span>
         </div>
 
-        <div className="mb-3 flex justify-center bg-surface-base p-3">
+        <div className="relative mb-3 flex justify-center bg-surface-base p-3">
           {product.image ? (
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={160}
-              height={120}
-              className="object-contain h-28"
-            />
+            <>
+              <Image
+                src={product.image}
+                alt={product.imageAlt ?? product.name}
+                width={160}
+                height={120}
+                className="object-contain h-28"
+              />
+              {product.imageType === 'symbolic' && <SymbolicBadge size="md" />}
+            </>
           ) : (
             <ProductImagePlaceholder brand={product.brand} size="md" />
           )}
@@ -154,14 +177,15 @@ export default function ProductCard({
           </span>
         )}
         {product.image ? (
-          <div className="bg-surface-card p-1 shrink-0">
+          <div className="relative bg-surface-card p-1 shrink-0">
             <Image
               src={product.image}
-              alt={product.name}
+              alt={product.imageAlt ?? product.name}
               width={60}
               height={60}
               className="object-contain h-14 w-14"
             />
+            {product.imageType === 'symbolic' && <SymbolicBadge size="sm" />}
           </div>
         ) : (
           <ProductImagePlaceholder brand={product.brand} size="sm" />
@@ -202,15 +226,18 @@ export default function ProductCard({
         </div>
       )}
 
-      <div className="p-6 flex justify-center bg-surface-base">
+      <div className="relative p-6 flex justify-center bg-surface-base">
         {product.image ? (
-          <Image
-            src={product.image}
-            alt={product.name}
-            width={220}
-            height={160}
-            className="object-contain h-36"
-          />
+          <>
+            <Image
+              src={product.image}
+              alt={product.imageAlt ?? product.name}
+              width={220}
+              height={160}
+              className="object-contain h-36"
+            />
+            {product.imageType === 'symbolic' && <SymbolicBadge size="lg" />}
+          </>
         ) : (
           <ProductImagePlaceholder brand={product.brand} size="lg" />
         )}

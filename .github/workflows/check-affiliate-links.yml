@@ -41,6 +41,11 @@ jobs:
           EXIT_CODE=$?
           set -e
 
+          # Fallback: leere oder invalide JSON-Datei abfangen
+          if [ ! -s link-report.json ] || ! jq empty link-report.json 2>/dev/null; then
+            echo '{"total":0,"ok":0,"errors":1,"results":[]}' > link-report.json
+          fi
+
           echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
 
           # Zusammenfassung aus JSON extrahieren
@@ -61,7 +66,7 @@ jobs:
           echo "## 🔗 Affiliate Link Check" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          if command -v jq &> /dev/null && [ -f link-report.json ]; then
+          if command -v jq &> /dev/null && [ -s link-report.json ] && jq empty link-report.json 2>/dev/null; then
             TOTAL=$(jq '.total // 0' link-report.json)
             OK=$(jq '.ok // 0' link-report.json)
             ERRORS=$(jq '.errors // 0' link-report.json)

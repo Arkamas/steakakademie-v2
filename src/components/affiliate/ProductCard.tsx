@@ -97,6 +97,8 @@ export default function ProductCard({
 }: ProductCardProps) {
   const providerLabel = PROVIDER_LABELS[product.provider] ?? 'Händler';
   const affiliateHref = `/go/${product.id}`;
+  // imageUrl (PA-API) hat Vorrang vor image (manuell in YAML)
+  const imageSrc = product.imageUrl ?? product.image;
 
   // ── SIDEBAR VARIANT ────────────────────────────────────────────────────
   if (variant === 'sidebar') {
@@ -109,10 +111,10 @@ export default function ProductCard({
         </div>
 
         <div className="relative mb-3 flex justify-center bg-surface-base p-3">
-          {product.image ? (
+          {imageSrc ? (
             <>
               <Image
-                src={product.image}
+                src={imageSrc}
                 alt={product.imageAlt ?? product.name}
                 width={160}
                 height={120}
@@ -176,10 +178,10 @@ export default function ProductCard({
             {rank}
           </span>
         )}
-        {product.image ? (
+        {imageSrc ? (
           <div className="relative bg-surface-card p-1 shrink-0">
             <Image
-              src={product.image}
+              src={imageSrc}
               alt={product.imageAlt ?? product.name}
               width={60}
               height={60}
@@ -227,10 +229,10 @@ export default function ProductCard({
       )}
 
       <div className="relative p-6 flex justify-center bg-surface-base">
-        {product.image ? (
+        {imageSrc ? (
           <>
             <Image
-              src={product.image}
+              src={imageSrc}
               alt={product.imageAlt ?? product.name}
               width={220}
               height={160}

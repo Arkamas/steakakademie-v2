@@ -10,6 +10,10 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: '**.steakakademie.de' },
+      // Amazon PA-API Produktbilder
+      { protocol: 'https', hostname: 'm.media-amazon.com' },
+      { protocol: 'https', hostname: 'images-na.ssl-images-amazon.com' },
+      { protocol: 'https', hostname: 'images-eu.ssl-images-amazon.com' },
     ],
   },
   async headers() {

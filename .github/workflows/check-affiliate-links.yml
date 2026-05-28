@@ -37,7 +37,7 @@ jobs:
         id: check
         run: |
           set +e
-          npm run check-links:json > link-report.json 2>&1
+          npm run --silent check-links:json > link-report.json 2>npm-errors.log
           EXIT_CODE=$?
           set -e
 

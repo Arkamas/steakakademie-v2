@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 // ── Feste Puff-Konfigurationen — kein Math.random() (SSR-sicher) ─────────────
 interface PuffConfig {
@@ -111,7 +112,20 @@ function SmokeSide({ side }: { side: 'left' | 'right' }) {
 export default function SmokeEffect() {
   // Barrierefreiheit: Nutzer die Bewegung reduziert haben bekommen keinen Rauch
   const shouldReduce = useReducedMotion();
-  if (shouldReduce) return null;
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  // Performance: nur auf Desktop rendern.
+  // Auf Mobile (< 1024px) ist der Rand-Rauch kaum sichtbar, kostet aber
+  // GPU-Performance durch 16 Blur-Filter-Animationen → Scroll-Jank.
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  if (shouldReduce || !isDesktop) return null;
 
   return (
     <>

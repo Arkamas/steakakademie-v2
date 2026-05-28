@@ -25,16 +25,20 @@
 
 /* Fallback-Farbe für Crawler & Old Browsers */
 html {
-  background-color: #120C07;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-/* Atmosphärischer Radial-Gradient — das Bourbon-Feeling */
-body {
+/* Atmosphärischer Radial-Gradient — als fixed pseudo-element statt body-bg
+   Vermeidet Scroll-Jank auf Mobile durch background-attachment: fixed */
+html {
   background: radial-gradient(circle at center, #2D2218 0%, #120C07 100%);
-  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+body {
+  background: transparent;
   min-height: 100vh;
   color: #F0E8D8;
   font-family: var(--font-sans);

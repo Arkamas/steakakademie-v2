@@ -59,6 +59,8 @@ export interface Product {
   pros?: string[];
   cons?: string[];
   badge?: string; // z.B. "Testsieger", "Preis-Leistung"
+  /** Für Messer-Kategorie: premium | damast | mittelklasse | bbq-spezial */
+  segment?: string;
   lastChecked: string; // ISO date
   recommended?: boolean;
 }

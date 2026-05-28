@@ -28,6 +28,7 @@ const SILO_CATEGORIES = [
       'Funk-Thermometer, WLAN-Sonden und Sofortmessgeräte im Vergleich. Messgenauigkeit ±0,4 °C, Reichweite bis 80 m, App-Integration — hier entscheidet der Messfühler über perfekte Garstufen.',
     count: 11,
     icon: '🌡️',
+    href: undefined,
   },
   {
     slug: 'oberhitzegrill-vergleich',
@@ -37,6 +38,7 @@ const SILO_CATEGORIES = [
       'Oberhitzegrills erzeugen durch Infrarot-Brenner Temperaturen bis 850 °C — die Grundvoraussetzung für die vollständige Maillard-Reaktion, knusprige Kruste und saftigen Kern bei minimalem Zeitfenster.',
     count: 6,
     icon: '🔥',
+    href: undefined,
   },
   {
     slug: 'dry-aging-kuehlschrank-vergleich',
@@ -46,6 +48,7 @@ const SILO_CATEGORIES = [
       'Kontrolliertes Trockenreifen bei 1–3 °C, 75–85 % rel. Luftfeuchtigkeit und gezielter UVC-Entkeimung. Enzymatische Autolyse über 21–90 Tage gibt dem Fleisch seine charakteristische Nussigkeit.',
     count: 5,
     icon: '❄️',
+    href: undefined,
   },
   {
     slug: 'kuechenmaschine-vergleich',
@@ -55,6 +58,17 @@ const SILO_CATEGORIES = [
       'Für selbst gewolftes Hackfleisch, Bratwurst-Herstellung und Trockenmarinade-Verarbeitung. Leistung ab 1.200 W, Lochscheibendurchmesser 4–8 mm, Hygienesicherheit der Schneidwerke.',
     count: 4,
     icon: '⚙️',
+    href: undefined,
+  },
+  {
+    slug: 'messer-ratgeber',
+    label: 'Messer',
+    kicker: 'Deutsches Handwerk & Damast',
+    description:
+      'Kochmesser, Damast-Messer und BBQ-Tranchiermesser — von Wüsthof und Güde aus Solingen bis Miyabi aus Seki/Japan. Premium, Damast, Mittelklasse und BBQ-Spezialisten in 4 Segmenten.',
+    count: 11,
+    icon: '🔪',
+    href: '/ausruestung/messer',
   },
 ];
 
@@ -123,10 +137,11 @@ export default function VergleichIndexPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {SILO_CATEGORIES.map((cat) => {
               const content = allVergleiches.find((v) => v.slug === cat.slug);
+              const linkHref = cat.href ?? `/vergleich/${cat.slug}`;
               return (
                 <Link
                   key={cat.slug}
-                  href={`/vergleich/${cat.slug}`}
+                  href={linkHref}
                   className="group block bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-all duration-200 p-6"
                 >
                   <div className="flex items-start justify-between mb-4">
@@ -146,9 +161,9 @@ export default function VergleichIndexPage() {
                     {cat.description}
                   </p>
 
-                  {content && (
+                  {(content || cat.href) && (
                     <div className="flex items-center gap-1.5 text-xs font-sans text-brand-fire font-semibold">
-                      Zum Test
+                      {cat.href && !content ? 'Zur Übersicht' : 'Zum Test'}
                       <ChevronRight size={13} className="group-hover:translate-x-1 transition-transform" />
                     </div>
                   )}

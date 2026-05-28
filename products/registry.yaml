@@ -222,6 +222,7 @@
   name: "Wüsthof Classic Kochmesser 20 cm"
   brand: "Wüsthof"
   category: messer
+  segment: premium
   price: 149
   affiliateUrl: "https://www.amazon.de/dp/B00009ZK08/?tag=steakakademie-21"
   provider: amazon
@@ -244,6 +245,7 @@
   name: "Güde Das Messer Kochmesser 26 cm"
   brand: "Güde"
   category: messer
+  segment: premium
   price: 349
   affiliateUrl: "https://www.amazon.de/s?k=G%C3%BCde+Das+Messer+Kochmesser+26+cm&tag=steakakademie-21"
   provider: amazon
@@ -265,6 +267,7 @@
   name: "Wüsthof Classic IKON Kochmesser 20 cm"
   brand: "Wüsthof"
   category: messer
+  segment: premium
   price: 179
   affiliateUrl: "https://www.amazon.de/s?k=W%C3%BCsthof+Classic+IKON+Kochmesser+20+cm&tag=steakakademie-21"
   provider: amazon
@@ -286,6 +289,7 @@
   name: "Windmühlenmesser K5 Kochmesser 21 cm"
   brand: "Windmühlenmesser"
   category: messer
+  segment: premium
   price: 169
   affiliateUrl: "https://www.amazon.de/s?k=Windm%C3%BChlenmesser+K5+Kochmesser&tag=steakakademie-21"
   provider: amazon
@@ -309,6 +313,7 @@
   name: "Miyabi 5000MCD 67 Kochmesser 20 cm"
   brand: "Miyabi"
   category: messer
+  segment: damast
   price: 279
   affiliateUrl: "https://www.amazon.de/s?k=Miyabi+5000MCD+67+Kochmesser+20+cm&tag=steakakademie-21"
   provider: amazon
@@ -330,6 +335,7 @@
   name: "Kai Shun Classic Kochmesser 20 cm"
   brand: "Kai Shun"
   category: messer
+  segment: damast
   price: 149
   affiliateUrl: "https://www.amazon.de/s?k=Kai+Shun+Classic+Kochmesser+20+cm&tag=steakakademie-21"
   provider: amazon
@@ -351,6 +357,7 @@
   name: "Böker Core Damascus Kochmesser 20 cm"
   brand: "Böker"
   category: messer
+  segment: damast
   price: 79
   affiliateUrl: "https://www.amazon.de/s?k=B%C3%B6ker+Core+Damascus+Kochmesser+20+cm&tag=steakakademie-21"
   provider: amazon
@@ -374,6 +381,7 @@
   name: "F. Dick Premier Plus Kochmesser 21 cm"
   brand: "F. Dick"
   category: messer
+  segment: mittelklasse
   price: 99
   affiliateUrl: "https://www.amazon.de/s?k=F.+Dick+Premier+Plus+Kochmesser+21+cm&tag=steakakademie-21"
   provider: amazon
@@ -395,6 +403,7 @@
   name: "Victorinox Fibrox Pro Kochmesser 20 cm"
   brand: "Victorinox"
   category: messer
+  segment: mittelklasse
   price: 42
   affiliateUrl: "https://www.amazon.de/s?k=Victorinox+Fibrox+Pro+Kochmesser+20+cm&tag=steakakademie-21"
   provider: amazon
@@ -418,6 +427,7 @@
   name: "Wüsthof Classic Tranchiermesser 23 cm"
   brand: "Wüsthof"
   category: messer
+  segment: bbq-spezial
   price: 119
   affiliateUrl: "https://www.amazon.de/s?k=W%C3%BCsthof+Classic+Tranchiermesser+23+cm&tag=steakakademie-21"
   provider: amazon
@@ -439,6 +449,7 @@
   name: "Güde Alpha Olive Steakmesser 4er-Set"
   brand: "Güde"
   category: messer
+  segment: bbq-spezial
   price: 249
   affiliateUrl: "https://www.amazon.de/s?k=G%C3%BCde+Alpha+Olive+Steakmesser+Set&tag=steakakademie-21"
   provider: amazon

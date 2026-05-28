@@ -53,9 +53,28 @@ export default function ImpressumPage() {
 
             <section>
               <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3">
-                Redaktionell verantwortlich
+                Verantwortlich i.S.d. § 18 Abs. 2 MStV (V.i.S.d.P.)
               </h2>
-              <p>Uwe Yendell</p>
+              <p>
+                Verantwortlich für journalistisch-redaktionelle Inhalte<br />
+                gemäß § 18 Abs. 2 Medienstaatsvertrag (MStV):
+              </p>
+              <p className="mt-2">
+                Uwe Yendell<br />
+                Stahlsberg 73<br />
+                42279 Wuppertal
+              </p>
+            </section>
+
+            <section>
+              <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3">
+                Umsatzsteuer
+              </h2>
+              <p>
+                Gemäß § 19 UStG (Kleinunternehmerregelung) wird keine Umsatzsteuer
+                berechnet und ausgewiesen. Eine Umsatzsteuer-Identifikationsnummer
+                nach § 27 a UStG ist daher nicht erforderlich.
+              </p>
             </section>
 
             <section>

@@ -42,11 +42,10 @@ export default function ImpressumPage() {
                 Kontakt
               </h2>
               <p>
-                Telefon: 01520 – 879462<br />
-                Telefax: 0202 – 556436<br />
+                Telefon: 01520 1778340<br />
                 E-Mail:{' '}
-                <a href="mailto:info@steakakademie.de" className="text-brand-fire hover:underline">
-                  info@steakakademie.de
+                <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire hover:underline">
+                  pitmaster@steakakademie.de
                 </a>
               </p>
             </section>
@@ -89,16 +88,16 @@ export default function ImpressumPage() {
               <p className="mb-3">
                 <strong className="text-text-primary">Kontaktstelle für Nutzer:</strong><br />
                 E-Mail:{' '}
-                <a href="mailto:info@steakakademie.de" className="text-brand-fire hover:underline">
-                  info@steakakademie.de
+                <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire hover:underline">
+                  pitmaster@steakakademie.de
                 </a><br />
                 Sprachen: Deutsch, Englisch
               </p>
               <p>
                 <strong className="text-text-primary">Kontaktstelle für Behörden:</strong><br />
                 E-Mail:{' '}
-                <a href="mailto:info@steakakademie.de" className="text-brand-fire hover:underline">
-                  info@steakakademie.de
+                <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire hover:underline">
+                  pitmaster@steakakademie.de
                 </a><br />
                 Sprachen: Deutsch, Englisch
               </p>
@@ -115,7 +114,7 @@ export default function ImpressumPage() {
                 </a>
               </p>
               <p>
-                Unsere E-Mail-Adresse lautet: info@steakakademie.de
+                Unsere E-Mail-Adresse lautet: pitmaster@steakakademie.de
               </p>
             </section>
 

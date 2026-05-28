@@ -1,0 +1,192 @@
+name: Affiliate Link Check
+
+on:
+  schedule:
+    # Jeden Montag um 08:00 Uhr UTC (= 09:00 / 10:00 Uhr Berlin)
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+    inputs:
+      force_issue:
+        description: 'Issue auch bei 0 Fehlern erstellen (zum Testen)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  check-links:
+    name: Alle Affiliate-URLs prüfen
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      issues: write   # Für Issue-Erstellung bei Fehlern
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Affiliate-Links prüfen
+        id: check
+        run: |
+          set +e
+          npm run check-links:json > link-report.json 2>&1
+          EXIT_CODE=$?
+          set -e
+
+          echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+
+          # Zusammenfassung aus JSON extrahieren
+          if command -v jq &> /dev/null; then
+            TOTAL=$(jq '.total // 0' link-report.json 2>/dev/null || echo "?")
+            OK=$(jq '.ok // 0' link-report.json 2>/dev/null || echo "?")
+            ERRORS=$(jq '.errors // 0' link-report.json 2>/dev/null || echo "0")
+            echo "total=$TOTAL" >> $GITHUB_OUTPUT
+            echo "ok=$OK" >> $GITHUB_OUTPUT
+            echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+          else
+            echo "errors=1" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Bericht in Job-Summary schreiben
+        if: always()
+        run: |
+          echo "## 🔗 Affiliate Link Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if command -v jq &> /dev/null && [ -f link-report.json ]; then
+            TOTAL=$(jq '.total // 0' link-report.json)
+            OK=$(jq '.ok // 0' link-report.json)
+            ERRORS=$(jq '.errors // 0' link-report.json)
+
+            echo "| Status | Anzahl |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
+            echo "| ✅ OK | $OK |" >> $GITHUB_STEP_SUMMARY
+            echo "| ❌ Fehler | $ERRORS |" >> $GITHUB_STEP_SUMMARY
+            echo "| 📊 Gesamt | $TOTAL |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            if [ "$ERRORS" -gt 0 ]; then
+              echo "### Fehlerhafte Links" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              jq -r '.results[] | select(.ok == false) | "- **\(.id)** (`\(.name)`)\n  Grund: \(.reason)\n  URL: `\(.url)`\n"' \
+                link-report.json >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
+            fi
+          else
+            cat link-report.json >> $GITHUB_STEP_SUMMARY || echo "Kein Bericht verfügbar." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: GitHub Issue erstellen bei Fehlern
+        if: |
+          steps.check.outputs.exit_code != '0' ||
+          github.event.inputs.force_issue == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('link-report.json', 'utf8'));
+
+            const errorItems = report.results
+              .filter(r => !r.ok)
+              .map(r => `| \`${r.id}\` | ${r.name} | ${r.reason} | \`${r.url}\` |`)
+              .join('\n');
+
+            const now = new Date().toLocaleDateString('de-DE', {
+              timeZone: 'Europe/Berlin',
+              weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            const body = [
+              `## 🔴 ${report.errors} tote Affiliate-Link(s) gefunden`,
+              '',
+              `**Geprüft am:** ${now}`,
+              `**Gesamt:** ${report.total} | **OK:** ${report.ok} | **Fehler:** ${report.errors}`,
+              '',
+              '### Fehlerhafte URLs',
+              '',
+              '| Produkt-ID | Name | Fehler | URL |',
+              '|------------|------|--------|-----|',
+              errorItems,
+              '',
+              '### Nächste Schritte',
+              '',
+              '1. `products/registry.yaml` öffnen',
+              '2. Für jedes fehlerhafte Produkt eine funktionierende URL suchen',
+              '3. URL ersetzen + `npm run check-links` lokal testen',
+              '4. Commit + Push',
+              '',
+              '---',
+              `*Automatisch erstellt von [Affiliate Link Check](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})*`
+            ].join('\n');
+
+            // Existierendes offenes Issue suchen (keine Duplikate)
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'affiliate-link-fehler'
+            });
+
+            if (existingIssues.data.length > 0) {
+              // Bestehendes Issue aktualisieren
+              const issue = existingIssues.data[0];
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `## Aktualisierung ${now}\n\n${body}`
+              });
+              console.log(`Bestehendes Issue #${issue.number} aktualisiert.`);
+            } else {
+              // Neues Issue erstellen
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `🔴 Affiliate-Links defekt — ${report.errors} Fehler (${now})`,
+                body: body,
+                labels: ['affiliate-link-fehler']
+              });
+              console.log(`Neues Issue erstellt: #${created.data.number}`);
+            }
+
+      - name: Issue schließen wenn alle Links OK
+        if: |
+          steps.check.outputs.exit_code == '0' &&
+          github.event.inputs.force_issue != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'affiliate-link-fehler'
+            });
+
+            for (const issue of existingIssues.data) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: '✅ Alle Affiliate-Links sind wieder erreichbar. Issue wird automatisch geschlossen.'
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+                state_reason: 'completed'
+              });
+              console.log(`Issue #${issue.number} geschlossen.`);
+            }
+
+      - name: Exit mit Fehler-Code
+        if: steps.check.outputs.exit_code != '0'
+        run: exit 1

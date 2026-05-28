@@ -213,6 +213,10 @@
   amazonAsin: "B06ZYMMRYR"
 
 # ── MESSER ────────────────────────────────────────────────────────────────────
+# Segmente: Premium (>€150) | Damast | Mittleres Segment (€40–120) | BBQ-Spezial
+# Kein Zwilling/Henckels — Positionierung: deutsches Handwerk + japanische Präzision
+
+# ── Premium Segment ──────────────────────────────────────────────────────────
 
 - id: wuesthof-classic-kochmesser-20
   name: "Wüsthof Classic Kochmesser 20 cm"
@@ -233,8 +237,224 @@
     - "Kein Santoku-Profil"
     - "Preis"
   badge: "Redaktionsempfehlung"
-  lastChecked: "2026-05-22"
+  lastChecked: "2026-05-28"
   recommended: true
+
+- id: guede-das-messer-26
+  name: "Güde Das Messer Kochmesser 26 cm"
+  brand: "Güde"
+  category: messer
+  price: 349
+  affiliateUrl: "https://www.amazon.de/s?k=G%C3%BCde+Das+Messer+Kochmesser+26+cm&tag=steakakademie-21"
+  provider: amazon
+  rating: 4.9
+  ratingCount: 310
+  description: "Das ikonische Güde-Flaggschiff — 62-lagiger Damast, handgeschmiedet in Solingen seit 1910"
+  pros:
+    - "62 Lagen Damaskusstahl — außergewöhnliche Schärfe und Schnittgefühl"
+    - "Handgeschmiedet in Solingen — jedes Messer ein Einzelstück"
+    - "Ausgewogenes Gewicht — ermüdungsfreies Arbeiten auch bei großen Cuts"
+  cons:
+    - "Nur Handwäsche — kein Geschirrspüler"
+    - "Preis: kein Kompromissprodukt"
+  badge: "Solingen Flaggschiff"
+  lastChecked: "2026-05-28"
+  recommended: true
+
+- id: wuesthof-classic-ikon-20
+  name: "Wüsthof Classic IKON Kochmesser 20 cm"
+  brand: "Wüsthof"
+  category: messer
+  price: 179
+  affiliateUrl: "https://www.amazon.de/s?k=W%C3%BCsthof+Classic+IKON+Kochmesser+20+cm&tag=steakakademie-21"
+  provider: amazon
+  rating: 4.8
+  ratingCount: 2900
+  description: "Die ergonomische Weiterentwicklung des Klassikers — gleiche Klinge, komfortablerer Griff"
+  pros:
+    - "Doppelter Bolster — sicherer Pinch-Grip auch mit fettigen Händen"
+    - "Ergonomischer POM-Griff — besser geformt als Classic für lange Sessions"
+    - "Gleiche X50CrMoV15-Klinge wie Classic — bewährte Qualität"
+  cons:
+    - "Kein Santoku-Profil"
+    - "Etwas kopflastiger als das Classic-Modell"
+  badge: "Ergonomie-Upgrade"
+  lastChecked: "2026-05-28"
+  recommended: false
+
+- id: windmuehlenmesser-k5-21
+  name: "Windmühlenmesser K5 Kochmesser 21 cm"
+  brand: "Windmühlenmesser"
+  category: messer
+  price: 169
+  affiliateUrl: "https://www.amazon.de/s?k=Windm%C3%BChlenmesser+K5+Kochmesser&tag=steakakademie-21"
+  provider: amazon
+  rating: 4.7
+  ratingCount: 390
+  description: "Handgeschmiedet in Remscheid-Hasten — Kohlenstoffstahl, Tradition seit 1883"
+  pros:
+    - "Handgeschmiedet in Deutschland — kein Serienmesser, jedes Unikat"
+    - "Kohlenstoffstahl C75 — wird mit Patina schärfer und reaktiver"
+    - "Puristischer Charakter — Messer für echte Enthusiasten"
+  cons:
+    - "Kohlenstoffstahl rostet wenn er nass liegt (nach Benutzung abtrocknen)"
+    - "Pflege intensiver als Edelstahlmesser"
+  badge: "Handgeschmiedet"
+  lastChecked: "2026-05-28"
+  recommended: false
+
+# ── Damast-Messer ────────────────────────────────────────────────────────────
+
+- id: miyabi-5000mcd-67-20
+  name: "Miyabi 5000MCD 67 Kochmesser 20 cm"
+  brand: "Miyabi"
+  category: messer
+  price: 279
+  affiliateUrl: "https://www.amazon.de/s?k=Miyabi+5000MCD+67+Kochmesser+20+cm&tag=steakakademie-21"
+  provider: amazon
+  rating: 4.9
+  ratingCount: 1240
+  description: "67-Lagen Damastmantel um einen FC63 Pulverstahl-Kern — japanische Ingenieurskunst aus Seki"
+  pros:
+    - "FC63 Pulverstahl-Kern — 63 HRC, schärfer als fast alles andere"
+    - "67 Damastlagen — antibakteriell, korrosionsresistenter als einfacher Stahl"
+    - "D-Griff aus Pakkaholz — ergonomisch für Rechtshänder, schimmelresistent"
+  cons:
+    - "Spröder bei seitlicher Belastung — nicht für Knochen hacken"
+    - "Nur Handwäsche, trockene Lagerung nötig"
+  badge: "67-Lagen Damast"
+  lastChecked: "2026-05-28"
+  recommended: true
+
+- id: kai-shun-classic-20
+  name: "Kai Shun Classic Kochmesser 20 cm"
+  brand: "Kai Shun"
+  category: messer
+  price: 149
+  affiliateUrl: "https://www.amazon.de/s?k=Kai+Shun+Classic+Kochmesser+20+cm&tag=steakakademie-21"
+  provider: amazon
+  rating: 4.7
+  ratingCount: 3100
+  description: "32-lagiger Damast, VG-MAX Kern — der Klassiker für den Einstieg in japanische Messerkultur"
+  pros:
+    - "32 Damastlagen, VG-MAX Kern — 61 HRC, rasiererscharf ab Werk"
+    - "Pakkaholz-Griff — hygienisch, feuchtigkeitsresistent"
+    - "Bestes Damast-Preis-Leistungs-Verhältnis unter €200"
+  cons:
+    - "20 cm Klinge — für große Hände oder lange Cuts ggf. etwas kurz"
+    - "Nicht für Knochen oder gefrorenes Fleisch geeignet"
+  badge: "Damast Bestseller"
+  lastChecked: "2026-05-28"
+  recommended: false
+
+- id: boeker-core-damascus-20
+  name: "Böker Core Damascus Kochmesser 20 cm"
+  brand: "Böker"
+  category: messer
+  price: 79
+  affiliateUrl: "https://www.amazon.de/s?k=B%C3%B6ker+Core+Damascus+Kochmesser+20+cm&tag=steakakademie-21"
+  provider: amazon
+  rating: 4.5
+  ratingCount: 1480
+  description: "67-Lagen Damast von Böker Manufaktur Solingen — Damast-Optik zum Einstiegspreis"
+  pros:
+    - "67 Damastlagen — optisch spektakulär, Solingen-Qualität"
+    - "Micarta-Griff — robust, griffsicher auch mit fettig-nassen Händen"
+    - "Günstigster Einstieg in echten Damast aus Deutschland"
+  cons:
+    - "Kernstahl weicher als Miyabi oder Shun (58 HRC)"
+    - "Damastbild weniger ausgeprägt als bei Messer doppelten Preises"
+  badge: "Damast-Einstieg"
+  lastChecked: "2026-05-28"
+  recommended: false
+
+# ── Mittleres Segment ────────────────────────────────────────────────────────
+
+- id: fdick-premier-plus-21
+  name: "F. Dick Premier Plus Kochmesser 21 cm"
+  brand: "F. Dick"
+  category: messer
+  price: 99
+  affiliateUrl: "https://www.amazon.de/s?k=F.+Dick+Premier+Plus+Kochmesser+21+cm&tag=steakakademie-21"
+  provider: amazon
+  rating: 4.6
+  ratingCount: 4200
+  description: "Das Arbeitspferd der Profiküche — seit 1778 das Lieblingsmesser von Metzgern und Köchen"
+  pros:
+    - "X50CrMoV15 Stahl — rostfrei, einfach nachschärfbar, alltagstauglich"
+    - "Profi-bewährt in Fleischerei und Gastronomie weltweit"
+    - "Exzellente Balance zwischen Leistung und Preis"
+  cons:
+    - "56 HRC — weicher als japanische Klingen"
+    - "Design unspektakulär — reines Arbeitsmesser"
+  badge: "Profi-Standard"
+  lastChecked: "2026-05-28"
+  recommended: true
+
+- id: victorinox-fibrox-20
+  name: "Victorinox Fibrox Pro Kochmesser 20 cm"
+  brand: "Victorinox"
+  category: messer
+  price: 42
+  affiliateUrl: "https://www.amazon.de/s?k=Victorinox+Fibrox+Pro+Kochmesser+20+cm&tag=steakakademie-21"
+  provider: amazon
+  rating: 4.7
+  ratingCount: 21000
+  description: "Das meistempfohlene Einstiegsmesser der Welt — in Profiküchen auf 6 Kontinenten im Einsatz"
+  pros:
+    - "Fibrox-Griff — rutschsicher selbst mit fettig-nassen Händen"
+    - "Preis-Leistungs-Champion: Profi-Schärfe für €42"
+    - "Spülmaschinenfest — Profiküchen-Alltag ohne Sorgen"
+  cons:
+    - "Kein Damast, kein edler Look — reines Funktionsmesser"
+    - "Weicherer Stahl (56 HRC) — häufiger nachschärfen"
+  badge: "Preis-Leistungs-Sieger"
+  lastChecked: "2026-05-28"
+  recommended: false
+
+# ── BBQ-Spezial ─────────────────────────────────────────────────────────────
+
+- id: wuesthof-classic-tranchiermesser-23
+  name: "Wüsthof Classic Tranchiermesser 23 cm"
+  brand: "Wüsthof"
+  category: messer
+  price: 119
+  affiliateUrl: "https://www.amazon.de/s?k=W%C3%BCsthof+Classic+Tranchiermesser+23+cm&tag=steakakademie-21"
+  provider: amazon
+  rating: 4.8
+  ratingCount: 2100
+  description: "Das Brisket-Messer — lange, schmale Klinge für gleichmäßig dünne Scheiben bei Brisket, Roast Beef und Pulled Pork"
+  pros:
+    - "Schmale Klinge — wenig Widerstand, gleichmäßige Scheiben (4–5 mm Brisket-Ideal)"
+    - "23 cm Länge — selbst ein ganzes Brisket in einem Zug schneiden"
+    - "Wüsthof X50CrMoV15 — scharf, rostfrei, einfach zu schärfen"
+  cons:
+    - "Spezialmesser — kein Allrounder"
+    - "Für kurze Cuts (Steak, Chops) nicht nötig"
+  badge: "Brisket & Roast"
+  lastChecked: "2026-05-28"
+  recommended: false
+
+- id: guede-alpha-olive-steakmesser-set
+  name: "Güde Alpha Olive Steakmesser 4er-Set"
+  brand: "Güde"
+  category: messer
+  price: 249
+  affiliateUrl: "https://www.amazon.de/s?k=G%C3%BCde+Alpha+Olive+Steakmesser+Set&tag=steakakademie-21"
+  provider: amazon
+  rating: 4.9
+  ratingCount: 180
+  description: "Handgeschmiedete Steakmesser aus Solingen mit Olivenholz-Griff — für das perfekte Steakhaus-Erlebnis zu Hause"
+  pros:
+    - "Handgeschmiedetes Klingenblatt — jedes Messer Handarbeit aus Solingen"
+    - "Olivenholz-Griff — einzigartiges Maserungsmuster, angenehm warm in der Hand"
+    - "Zahnsäge-Klingenschliff — schneidet durch Kruste ohne Druck"
+  cons:
+    - "Olivenholz-Griff: gelegentlich einölen (Olivenöl genügt)"
+    - "Nur Handwäsche"
+  badge: "Steakhaus-Erlebnis"
+  lastChecked: "2026-05-28"
+  recommended: false
 
 # ── SOUS-VIDE ─────────────────────────────────────────────────────────────────
 

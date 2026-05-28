@@ -267,27 +267,39 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>12a. Schriftarten — lokal gehostet</h2>
-              <p>
-                Diese Website nutzt die Schriftarten Playfair Display, Source Serif 4
-                und DM Sans. Diese werden während des Build-Vorgangs auf unsere Server
-                heruntergeladen und von dort ausgeliefert — es findet <strong>keine
-                Verbindung zu Google-Servern</strong> statt. Deine IP-Adresse wird daher
+              <h2 className={h2Class}>12a. Google Web Fonts — selbst gehostet</h2>
+              <p className="mb-3">
+                Diese Website verwendet Schriftarten des Dienstes{' '}
+                <strong>Google Web Fonts</strong> (Google LLC, 1600 Amphitheatre Parkway,
+                Mountain View, CA 94043, USA). Die Einbindung erfolgt über die Next.js
+                Font Optimization (<code>next/font/google</code>): Die Schriftdateien
+                (Playfair Display, Source Serif 4, DM Sans) werden dabei <strong>einmalig
+                beim Build-Vorgang</strong> von Google-Servern heruntergeladen und
+                anschließend auf unserer eigenen Server-Infrastruktur gespeichert.
+              </p>
+              <p className="mb-3">
+                Beim Seitenaufruf werden die Schriften <strong>ausschließlich von unserem
+                Server</strong> ausgeliefert — es findet <strong>keine direkte Verbindung
+                zu Google-Servern</strong> zur Laufzeit statt. Deine IP-Adresse wird
                 nicht an Google übermittelt.
+              </p>
+              <p>
+                <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
+                (berechtigtes Interesse an einheitlicher, performanter Darstellung ohne
+                externe Abhängigkeiten zur Laufzeit).
+                Weitere Informationen:{' '}
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  policies.google.com/privacy
+                </a>.
               </p>
             </section>
 
             <section>
-              <h2 className={h2Class}>12b. Hosting & CDN — Netlify und Vercel</h2>
+              <h2 className={h2Class}>12b. Hosting — Netlify</h2>
               <p className="mb-3">
                 Diese Website wird gehostet bei <strong>Netlify, Inc.</strong>,
-                512 2nd Street, Fl 2, San Francisco, CA 94107, USA. Für einzelne
-                technische Komponenten (z. B. Edge-Funktionen, KI-Anfragen) kann
-                zusätzlich <strong>Vercel Inc.</strong>, 440 N Barranca Avenue #4133,
-                Covina, CA 91723, USA, eingesetzt werden.
-              </p>
-              <p className="mb-3">
-                Bei jedem Seitenaufruf werden technisch notwendige Daten verarbeitet
+                512 2nd Street, Fl 2, San Francisco, CA 94107, USA. Bei jedem
+                Seitenaufruf werden technisch notwendige Daten verarbeitet
                 (IP-Adresse, Browser-Typ, Datum/Uhrzeit, aufgerufene URL, Referrer).
                 Diese Daten werden zur Bereitstellung der Website und zur Abwehr von
                 Angriffen benötigt.
@@ -297,14 +309,39 @@ export default function DatenschutzPage() {
                 (berechtigtes Interesse am sicheren, performanten Betrieb der Website).
               </p>
               <p>
-                <strong>Drittlandübermittlung:</strong> Beide Anbieter sind nach dem
+                <strong>Drittlandübermittlung:</strong> Netlify ist nach dem
                 EU-US Data Privacy Framework zertifiziert; zusätzlich werden
                 EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO) verwendet.
-                Datenschutzerklärungen:{' '}
+                Datenschutzerklärung:{' '}
                 <a href="https://www.netlify.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
                   netlify.com/privacy
-                </a>{' '}
-                ·{' '}
+                </a>.
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>12c. Technische Infrastruktur — Vercel</h2>
+              <p className="mb-3">
+                Das verwendete Web-Framework Next.js wird von{' '}
+                <strong>Vercel Inc.</strong>, 440 N Barranca Avenue #4133, Covina,
+                CA&nbsp;91723, USA, entwickelt und gepflegt. Vercel stellt für Next.js
+                technische Infrastrukturdienste bereit (Build-Optimierungen,
+                Font-Optimierung, Bild-Optimierung). Bei der Auslieferung dieser Website
+                können daher technische Anfragen an Vercel-Server erfolgen.
+              </p>
+              <p className="mb-3">
+                Verarbeitet werden technisch notwendige Verbindungsdaten
+                (IP-Adresse, Zeitstempel, angeforderter Ressourcentyp).
+              </p>
+              <p className="mb-3">
+                <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
+                (berechtigtes Interesse am performanten Betrieb des Web-Frameworks).
+              </p>
+              <p>
+                <strong>Drittlandübermittlung:</strong> Vercel ist nach dem
+                EU-US Data Privacy Framework zertifiziert; zusätzlich werden
+                EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO) verwendet.
+                Datenschutzerklärung:{' '}
                 <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className={linkClass}>
                   vercel.com/legal/privacy-policy
                 </a>.

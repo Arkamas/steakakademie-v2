@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   ChevronRight, ArrowRight, ClipboardList, Cpu, Download,
@@ -8,14 +8,14 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Mein Protokoll — Dein persönlicher 8-Wochen-Grillplan | Steakakademie',
+  title: 'Mein Protokoll â€” Dein persÃ¶nlicher 8-Wochen-Grillplan | Steakakademie',
   description:
-    'Kein generischer Kurs. Ein Plan der zu deinem Grill, deiner Zeit und deinen Zielen passt — in 5 Minuten generiert. 8 Wochen, konkrete Sessions, progressive Schwierigkeit.',
+    'Kein generischer Kurs. Ein Plan der zu deinem Grill, deiner Zeit und deinen Zielen passt â€” in 5 Minuten generiert. 8 Wochen, konkrete Sessions, progressive Schwierigkeit.',
   alternates: { canonical: 'https://steakakademie.de/mein-protokoll' },
   openGraph: {
-    title: 'Mein Protokoll — Dein persönlicher 8-Wochen-Grillplan',
+    title: 'Mein Protokoll â€” Dein persÃ¶nlicher 8-Wochen-Grillplan',
     description:
-      'Fragebogen ausfüllen, KI generiert deinen Plan. Grilltyp, Erfahrungsstand, verfügbare Zeit, Ziele — dein Protokoll ist auf dich zugeschnitten, nicht auf irgendjemanden.',
+      'Fragebogen ausfÃ¼llen, KI generiert deinen Plan. Grilltyp, Erfahrungsstand, verfÃ¼gbare Zeit, Ziele â€” dein Protokoll ist auf dich zugeschnitten, nicht auf irgendjemanden.',
     url: 'https://steakakademie.de/mein-protokoll',
     type: 'website',
   },
@@ -25,20 +25,20 @@ const STEPS = [
   {
     Icon: ClipboardList,
     step: '01',
-    title: 'Fragebogen ausfüllen',
-    desc: '5 Minuten. Grilltyp, Erfahrungsstand, verfügbare Zeit pro Session, Budget, Ziele, was dich am meisten nervt. Je konkreter, desto präziser der Plan.',
+    title: 'Fragebogen ausfÃ¼llen',
+    desc: '5 Minuten. Grilltyp, Erfahrungsstand, verfÃ¼gbare Zeit pro Session, Budget, Ziele, was dich am meisten nervt. Je konkreter, desto prÃ¤ziser der Plan.',
   },
   {
     Icon: Cpu,
     step: '02',
     title: 'KI generiert deinen Plan',
-    desc: 'Das System kombiniert deine Angaben mit einem strukturierten 8-Wochen-Progressionsmodell. Kein Copy-Paste aus einem Template — ein Plan der zu dir passt.',
+    desc: 'Das System kombiniert deine Angaben mit einem strukturierten 8-Wochen-Progressionsmodell. Kein Copy-Paste aus einem Template â€” ein Plan der zu dir passt.',
   },
   {
     Icon: Download,
     step: '03',
-    title: 'Plan sofort verfügbar',
-    desc: 'Du bekommst deinen persönlichen Grillplan als strukturiertes Dokument — Woche für Woche, Session für Session, mit Cut, Technik, Temperaturziel und Erfolgskriterium.',
+    title: 'Plan sofort verfÃ¼gbar',
+    desc: 'Du bekommst deinen persÃ¶nlichen Grillplan als strukturiertes Dokument â€” Woche fÃ¼r Woche, Session fÃ¼r Session, mit Cut, Technik, Temperaturziel und Erfolgskriterium.',
   },
 ];
 
@@ -46,48 +46,48 @@ const PLAN_FEATURES = [
   {
     Icon: Flame,
     title: 'Auf deinen Grilltyp zugeschnitten',
-    desc: 'Kettle, Gas, Pellet, Kamado, Smoker — jeder Grill hat andere Stärken und andere Lernkurven. Dein Plan nutzt was du hast, nicht was ideal wäre.',
+    desc: 'Kettle, Gas, Pellet, Kamado, Smoker â€” jeder Grill hat andere StÃ¤rken und andere Lernkurven. Dein Plan nutzt was du hast, nicht was ideal wÃ¤re.',
   },
   {
     Icon: Clock,
     title: 'Realistisch in deiner Zeit',
-    desc: 'Du hast samstags 2 Stunden oder sonntags einen halben Tag? Der Plan passt sich an — keine Sessions die du nie durchführen wirst.',
+    desc: 'Du hast samstags 2 Stunden oder sonntags einen halben Tag? Der Plan passt sich an â€” keine Sessions die du nie durchfÃ¼hren wirst.',
   },
   {
     Icon: Target,
     title: 'Zielgerichtet progressiv',
-    desc: 'Woche 1 ist nie dasselbe wie Woche 8. Jede Session baut auf der letzten auf — Technik, Temperatur, Komplexität steigen gezielt.',
+    desc: 'Woche 1 ist nie dasselbe wie Woche 8. Jede Session baut auf der letzten auf â€” Technik, Temperatur, KomplexitÃ¤t steigen gezielt.',
   },
   {
     Icon: BarChart2,
     title: 'Messbare Erfolgskriterien',
-    desc: 'Jede Session hat ein konkretes Ziel: nicht "lern das Steak besser machen", sondern "Kerntemperatur 54°C bei mittlerem Ribeye, gleichmäßige Kruste auf beiden Seiten".',
+    desc: 'Jede Session hat ein konkretes Ziel: nicht "lern das Steak besser machen", sondern "Kerntemperatur 54Â°C bei mittlerem Ribeye, gleichmÃ¤ÃŸige Kruste auf beiden Seiten".',
   },
 ];
 
 const QUESTIONNAIRE_PREVIEW = [
   { label: 'Dein Grilltyp', options: ['Kugelgrill', 'Gasgrill', 'Pelletgrill', 'Kamado', 'Offset-Smoker', 'Anderes'] },
-  { label: 'Dein Erfahrungsstand', options: ['Einsteiger', 'Gelegentlich aktiv', 'Regelmäßig', 'Ambitioniert'] },
-  { label: 'Zeit pro Session', options: ['1–2 Stunden', '3–4 Stunden', 'Halber Tag', 'Flexibel'] },
-  { label: 'Dein Hauptziel', options: ['Techniken meistern', 'Bestimmten Cut perfektionieren', 'Gäste beeindrucken', 'Wettbewerb vorbereiten'] },
+  { label: 'Dein Erfahrungsstand', options: ['Einsteiger', 'Gelegentlich aktiv', 'RegelmÃ¤ÃŸig', 'Ambitioniert'] },
+  { label: 'Zeit pro Session', options: ['1â€“2 Stunden', '3â€“4 Stunden', 'Halber Tag', 'Flexibel'] },
+  { label: 'Dein Hauptziel', options: ['Techniken meistern', 'Bestimmten Cut perfektionieren', 'GÃ¤ste beeindrucken', 'Wettbewerb vorbereiten'] },
 ];
 
 const FAQ = [
   {
     q: 'Kann ich den Plan nach 8 Wochen wiederholen oder neu generieren?',
-    a: 'Ja. Du kannst den Fragebogen nach Abschluss erneut ausfüllen — auf einem höheren Niveau — und bekommst einen neuen Plan. Jeder Neudurchlauf erfordert einen neuen Kauf.',
+    a: 'Ja. Du kannst den Fragebogen nach Abschluss erneut ausfÃ¼llen â€” auf einem hÃ¶heren Niveau â€” und bekommst einen neuen Plan. Jeder Neudurchlauf erfordert einen neuen Kauf.',
   },
   {
     q: 'Was wenn mein Grill nicht in den Optionen ist?',
-    a: 'Du kannst im Fragebogen unter "Anderes" deinen Grilltyp beschreiben. Das System berücksichtigt auch ungewöhnlichere Setups wie Feuergrills, Wok-Stationen oder Tandem-Setups.',
+    a: 'Du kannst im Fragebogen unter "Anderes" deinen Grilltyp beschreiben. Das System berÃ¼cksichtigt auch ungewÃ¶hnlichere Setups wie Feuergrills, Wok-Stationen oder Tandem-Setups.',
   },
   {
     q: 'Wie detailliert ist ein Wochenplan?',
-    a: 'Jede Session enthält: den vorgeschlagenen Cut mit Gewicht, die Methode (direkt/indirekt/Reverse Sear etc.), Zieltemperaturen, Zeitplanung und das konkrete Erfolgskriterium für diese Session.',
+    a: 'Jede Session enthÃ¤lt: den vorgeschlagenen Cut mit Gewicht, die Methode (direkt/indirekt/Reverse Sear etc.), Zieltemperaturen, Zeitplanung und das konkrete Erfolgskriterium fÃ¼r diese Session.',
   },
   {
     q: 'Bekomme ich den Plan als PDF?',
-    a: 'Du erhältst deinen Plan als strukturiertes Web-Dokument mit Druckoption — übersichtlich formatiert für Küche oder Grillplatz. PDF-Export ist in Vorbereitung.',
+    a: 'Du erhÃ¤ltst deinen Plan als strukturiertes Web-Dokument mit Druckoption â€” Ã¼bersichtlich formatiert fÃ¼r KÃ¼che oder Grillplatz. PDF-Export ist in Vorbereitung.',
   },
   {
     q: 'Was wenn ich mit dem Plan nicht zufrieden bin?',
@@ -102,7 +102,7 @@ export default function MeinProtokollPage() {
 
       <main className="bg-surface-base">
 
-        {/* ── Hero ──────────────────────────────────────────────────────────── */}
+        {/* â”€â”€ Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section className="bg-surface-dark border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
             <nav
@@ -126,19 +126,19 @@ export default function MeinProtokollPage() {
                 8 Wochen. Auf dich zugeschnitten. In 5 Minuten generiert.
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
-                Kein generischer Kurs der für jeden passt und deshalb für niemanden
+                Kein generischer Kurs der fÃ¼r jeden passt und deshalb fÃ¼r niemanden
                 optimal ist. Du beantwortest 5 Fragen zu deinem Grill, deiner Zeit
-                und deinen Zielen — das System generiert deinen persönlichen
+                und deinen Zielen â€” das System generiert deinen persÃ¶nlichen
                 8-Wochen-Trainingsplan mit konkreten Sessions, Cuts und Messzielen.
               </p>
 
               <div className="flex flex-wrap items-center gap-4">
                 <a
-                  href="#kaufen"
+                  href="https://www.checkout-ds24.com/product/696396"
                   className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                   style={{ background: '#C8882A', color: '#0D0A06' }}
                 >
-                  Plan generieren — 19 € <ArrowRight size={15} />
+                  Plan generieren â€” 19 â‚¬ <ArrowRight size={15} />
                 </a>
                 <a
                   href="#wie-es-funktioniert"
@@ -152,7 +152,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* ── Problem ───────────────────────────────────────────────────────── */}
+        {/* â”€â”€ Problem â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section className="border-b border-border-subtle">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="max-w-content mx-auto">
@@ -160,31 +160,31 @@ export default function MeinProtokollPage() {
                 Das Problem
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-8">
-                Du weißt was du können willst.<br />
+                Du weiÃŸt was du kÃ¶nnen willst.<br />
                 Aber nicht in welcher Reihenfolge du dahin kommst.
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 font-body text-text-secondary leading-relaxed">
                 <div className="space-y-4">
                   <p>
-                    Du schaust Videos. Du liest Guides. Du versuchst es beim nächsten
-                    Grillen. Manchmal klappt es, manchmal nicht — aber du weißt nicht
-                    warum, und du machst nächstes Mal dasselbe.
+                    Du schaust Videos. Du liest Guides. Du versuchst es beim nÃ¤chsten
+                    Grillen. Manchmal klappt es, manchmal nicht â€” aber du weiÃŸt nicht
+                    warum, und du machst nÃ¤chstes Mal dasselbe.
                   </p>
                   <p>
-                    Kurse sind zu generisch. Was für einen Einsteiger mit Gasgrill funktioniert,
-                    ist für jemanden mit Kamado und 20 Sessions Erfahrung Zeitverschwendung.
+                    Kurse sind zu generisch. Was fÃ¼r einen Einsteiger mit Gasgrill funktioniert,
+                    ist fÃ¼r jemanden mit Kamado und 20 Sessions Erfahrung Zeitverschwendung.
                   </p>
                 </div>
                 <div className="space-y-4">
                   <p>
-                    Lernen durch Wiederholung funktioniert — aber nur wenn du die
-                    richtige Sache zur richtigen Zeit übst. Progression statt
+                    Lernen durch Wiederholung funktioniert â€” aber nur wenn du die
+                    richtige Sache zur richtigen Zeit Ã¼bst. Progression statt
                     Zufallsprinzip.
                   </p>
                   <p>
-                    Ein Plan der zu dir passt — deinem Grill, deiner Zeit, deinem
-                    Niveau — macht den Unterschied zwischen "ich grill schon seit
-                    Jahren und bin immer noch mittelmäßig" und echtem Fortschritt,
+                    Ein Plan der zu dir passt â€” deinem Grill, deiner Zeit, deinem
+                    Niveau â€” macht den Unterschied zwischen "ich grill schon seit
+                    Jahren und bin immer noch mittelmÃ¤ÃŸig" und echtem Fortschritt,
                     der messbar ist.
                   </p>
                 </div>
@@ -193,7 +193,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* ── Wie es funktioniert ───────────────────────────────────────────── */}
+        {/* â”€â”€ Wie es funktioniert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section id="wie-es-funktioniert" className="border-b border-border-subtle bg-surface-dark">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="mb-12">
@@ -201,7 +201,7 @@ export default function MeinProtokollPage() {
                 Wie es funktioniert
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-light mb-3">
-                Drei Schritte. Fünf Minuten. Acht Wochen Plan.
+                Drei Schritte. FÃ¼nf Minuten. Acht Wochen Plan.
               </h2>
             </div>
 
@@ -222,7 +222,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* ── Fragebogen-Vorschau ───────────────────────────────────────────── */}
+        {/* â”€â”€ Fragebogen-Vorschau â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section className="border-b border-border-subtle">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="max-w-content mx-auto">
@@ -266,15 +266,15 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* ── Was dein Plan enthält ─────────────────────────────────────────── */}
+        {/* â”€â”€ Was dein Plan enthÃ¤lt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section className="border-b border-border-subtle bg-surface-dark">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="mb-12">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">
-                Was dein Plan enthält
+                Was dein Plan enthÃ¤lt
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-light mb-3">
-                Nicht "lern mehr" — sondern "tu das jetzt".
+                Nicht "lern mehr" â€” sondern "tu das jetzt".
               </h2>
             </div>
 
@@ -293,14 +293,14 @@ export default function MeinProtokollPage() {
             {/* Beispiel-Session */}
             <div className="mt-10 border border-brand-gold/20 p-6" style={{ background: 'rgba(200,136,42,0.04)' }}>
               <p className="font-sans text-[10px] font-bold tracking-[0.14em] uppercase text-brand-gold mb-4">
-                Beispiel — Woche 3, Session 1
+                Beispiel â€” Woche 3, Session 1
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
                 {[
-                  { label: 'Cut', value: 'Entrecôte 300g' },
+                  { label: 'Cut', value: 'EntrecÃ´te 300g' },
                   { label: 'Methode', value: 'Reverse Sear' },
-                  { label: 'Zieltemp.', value: '54 °C Kern' },
-                  { label: 'Erfolgsziel', value: 'Gleichmäßige Garung, Kruste <90 Sek.' },
+                  { label: 'Zieltemp.', value: '54 Â°C Kern' },
+                  { label: 'Erfolgsziel', value: 'GleichmÃ¤ÃŸige Garung, Kruste <90 Sek.' },
                 ].map(({ label, value }) => (
                   <div key={label}>
                     <p className="font-sans text-[10px] font-bold tracking-[0.1em] uppercase text-text-muted mb-1">{label}</p>
@@ -312,7 +312,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* ── Preis + CTA ──────────────────────────────────────────────────── */}
+        {/* â”€â”€ Preis + CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section
           id="kaufen"
           className="border-b border-brand-gold/15"
@@ -328,17 +328,17 @@ export default function MeinProtokollPage() {
                   <h2 className="font-serif text-3xl font-bold text-text-primary">
                     Mein Protokoll
                   </h2>
-                  <p className="font-serif text-4xl font-bold text-brand-gold mt-2">19 €</p>
+                  <p className="font-serif text-4xl font-bold text-brand-gold mt-2">19 â‚¬</p>
                   <p className="text-sm font-sans text-text-muted mt-1 mb-6">
-                    Einmalig · Sofortzugang zum Fragebogen · Plan in Minuten
+                    Einmalig Â· Sofortzugang zum Fragebogen Â· Plan in Minuten
                   </p>
                   <ul className="space-y-2">
                     {[
-                      'Persönlicher 8-Wochen-Plan',
+                      'PersÃ¶nlicher 8-Wochen-Plan',
                       'Auf deinen Grilltyp & deine Zeit zugeschnitten',
                       'Jede Session mit Cut, Methode, Temperaturziel',
                       'Messbare Erfolgskriterien pro Session',
-                      'Wiederholbar — neuer Plan nach 8 Wochen',
+                      'Wiederholbar â€” neuer Plan nach 8 Wochen',
                     ].map((item) => (
                       <li key={item} className="flex items-start gap-2 text-sm font-sans text-text-secondary">
                         <ChevronRight size={13} className="text-brand-gold shrink-0 mt-0.5" />
@@ -349,17 +349,17 @@ export default function MeinProtokollPage() {
                 </div>
 
                 <div className="shrink-0 flex flex-col items-stretch sm:items-end gap-4">
-                  {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
+                  {/* Digistore24-Link â€” nach Produkt-Anlage eintragen */}
                   <a
-                    href="#kaufen"
+                    href="https://www.checkout-ds24.com/product/696396"
                     className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
                     style={{ background: '#C8882A', color: '#0D0A06' }}
                   >
-                    19 € — Plan generieren
+                    19 â‚¬ â€” Plan generieren
                     <ArrowRight size={16} />
                   </a>
                   <p className="text-center text-[10px] font-sans text-text-muted">
-                    Digistore24 · SEPA, PayPal, Kreditkarte
+                    Digistore24 Â· SEPA, PayPal, Kreditkarte
                   </p>
                 </div>
               </div>
@@ -370,7 +370,7 @@ export default function MeinProtokollPage() {
               >
                 <p className="text-xs font-sans text-text-secondary leading-relaxed">
                   <strong className="text-text-primary">Hinweis zum Widerrufsrecht:</strong>{' '}
-                  Nach Kauf und Fragebogen-Ausfüllung wird der Plan sofort generiert — digitaler
+                  Nach Kauf und Fragebogen-AusfÃ¼llung wird der Plan sofort generiert â€” digitaler
                   Inhalt, kein Widerruf nach Bereitstellung. Der Fragebogen kann vor Generierung
                   beliebig oft angepasst werden.
                 </p>
@@ -379,12 +379,12 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+        {/* â”€â”€ FAQ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section className="border-b border-border-subtle">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="max-w-content mx-auto">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Häufige Fragen
+                HÃ¤ufige Fragen
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-10">FAQ</h2>
               <div className="divide-y divide-border-subtle">
@@ -399,7 +399,7 @@ export default function MeinProtokollPage() {
           </div>
         </section>
 
-        {/* ── Navigation ───────────────────────────────────────────────────── */}
+        {/* â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <section className="bg-surface-dark">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="max-w-content mx-auto">
@@ -408,8 +408,8 @@ export default function MeinProtokollPage() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
-                  { label: 'Steak-Beichte', href: '/steak-beichte', note: 'KI-Diagnose für Grillfehler' },
-                  { label: 'Steuer-Matrix', href: '/steuer-matrix', note: '23 Länder im Netto-Vergleich' },
+                  { label: 'Steak-Beichte', href: '/steak-beichte', note: 'KI-Diagnose fÃ¼r Grillfehler' },
+                  { label: 'Steuer-Matrix', href: '/steuer-matrix', note: '23 LÃ¤nder im Netto-Vergleich' },
                   { label: 'Diplom-System', href: '/diplom', note: '10 Level BBQ-Kompetenz' },
                 ].map(({ label, href, note }) => (
                   <Link
@@ -436,3 +436,4 @@ export default function MeinProtokollPage() {
     </>
   );
 }
+

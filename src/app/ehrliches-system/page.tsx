@@ -164,10 +164,10 @@ export default async function EhrlichesSystemPage() {
         {/* ── Hero ──────────────────────────────────────────────────────────────── */}
         <section className="bg-surface-dark border-b border-brand-gold/15">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-8" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/55 mb-8" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
-              <span className="text-text-light/65">Das Ehrliche System</span>
+              <span className="text-text-light/80">Das Ehrliche System</span>
             </nav>
 
             <div className="max-w-3xl">
@@ -177,11 +177,11 @@ export default async function EhrlichesSystemPage() {
               <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold text-text-light leading-tight mb-6">
                 Das Ehrliche System
               </h1>
-              <p className="font-serif text-xl lg:text-2xl text-text-light/80 leading-relaxed mb-4">
+              <p className="font-serif text-xl lg:text-2xl text-text-light/90 leading-relaxed mb-4">
                 Ein reproduzierbares Betriebssystem für Solo-Selbstständige —<br className="hidden lg:block" />
                 entwickelt live beim Aufbau von steakakademie.de.
               </p>
-              <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
+              <p className="font-body text-base text-text-light/75 leading-relaxed mb-10 max-w-2xl">
                 Kein Hype. Keine vagen Versprechen. Keine Phantasie-Income-Screenshots. Wer ein
                 funktionierendes KI-gestütztes Web-Business aufgebaut hat, hat gleichzeitig das
                 Blueprint für alle anderen gebaut. Das hier ist dieses Blueprint.
@@ -194,7 +194,7 @@ export default async function EhrlichesSystemPage() {
                   { icon: <CheckCircle size={14} />, text: 'Kein Agentur-Modell, keine vagen Versprechen' },
                   { icon: <CheckCircle size={14} />, text: '3 eigenständig verkaufbare Säulen' },
                 ].map(({ icon, text }) => (
-                  <div key={text} className="flex items-center gap-2 text-xs font-sans text-text-light/55">
+                  <div key={text} className="flex items-center gap-2 text-xs font-sans text-text-light/70">
                     <span className="text-brand-gold">{icon}</span>
                     {text}
                   </div>
@@ -329,7 +329,7 @@ export default async function EhrlichesSystemPage() {
                 4 Einstiegsoptionen
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-light mb-3">Wie wir zusammenarbeiten</h2>
-              <p className="font-body text-text-light/60 max-w-xl">
+              <p className="font-body text-text-light/75 max-w-xl">
                 Von Selbststudium bis schlüsselfertigem Nischen-Projekt. Jedes Modell hat seinen Platz —
                 je nachdem wo du gerade stehst und was du brauchst.
               </p>
@@ -360,7 +360,7 @@ export default async function EhrlichesSystemPage() {
                     </span>
                   </div>
                   <h3 className="font-serif text-lg font-bold text-text-light mb-2">{model.label}</h3>
-                  <p className="text-sm font-body text-text-light/55">{model.desc}</p>
+                  <p className="text-sm font-body text-text-light/75">{model.desc}</p>
                 </div>
               ))}
             </div>
@@ -448,7 +448,7 @@ export default async function EhrlichesSystemPage() {
                   <Link
                     key={href}
                     href={href}
-                    className="flex items-center gap-2 text-sm font-sans text-text-light/55 hover:text-brand-fire transition-colors group py-2.5 border-b border-border-subtle/30 last:border-0"
+                    className="flex items-center gap-2 text-sm font-sans text-text-light/70 hover:text-brand-fire transition-colors group py-2.5 border-b border-border-subtle/30 last:border-0"
                   >
                     <ChevronRight size={12} className="text-brand-gold opacity-50 group-hover:opacity-100 shrink-0" />
                     {label}

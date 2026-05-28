@@ -494,8 +494,8 @@ async function main() {
   if (DRY_RUN) console.log(c.yellow('  Dry-run — keine Dateien werden geschrieben\n'))
 
   if (!process.env.ANTHROPIC_API_KEY) {
-    console.error(c.red('  ✗ ANTHROPIC_API_KEY fehlt. Trage den Key in .env.local ein.\n'))
-    process.exit(1)
+    console.warn(c.yellow('  ⚠ ANTHROPIC_API_KEY fehlt — Recipe-Agent wird übersprungen.\n'))
+    process.exit(0)
   }
 
   if (!DRY_RUN) await mkdir(REZEPTE, { recursive: true })

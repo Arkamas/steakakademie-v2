@@ -26,12 +26,17 @@
     "fetch-images:dry": "node scripts/fetch-pa-api-images.mjs --dry-run",
     "fetch-images:force": "node scripts/fetch-pa-api-images.mjs --force",
     "check-links": "node scripts/check-affiliate-links.mjs",
-    "check-links:json": "node scripts/check-affiliate-links.mjs --json"
+    "check-links:json": "node scripts/check-affiliate-links.mjs --json",
+    "cron:scout": "node scripts/cron-scout.mjs",
+    "cron:scout:dry": "node scripts/cron-scout.mjs --dry-run",
+    "cron:scout:only": "node scripts/cron-scout.mjs --scout-only",
+    "cron:scout:qof": "node scripts/cron-scout.mjs --source src_die_frau_am_grill",
+    "cron:scout:de": "node scripts/cron-scout.mjs --source src_gbaev"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",
+    "@anthropic-ai/sdk": "^0.99.0",
     "@emotion/is-prop-valid": "^1.4.0",
-    "@microsoft/clarity": "^1.0.2",
     "@netlify/blobs": "^10.7.8",
     "@next/third-parties": "^14.2.29",
     "@supabase/ssr": "^0.10.3",

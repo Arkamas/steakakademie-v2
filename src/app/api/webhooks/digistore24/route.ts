@@ -27,9 +27,24 @@ const TOOL_REDIRECT: Record<string, string> = {
   'gruendung-sprint':      'https://steakakademie.de/auth/callback?next=/mein-system',
   'agentur-killer-sprint': 'https://steakakademie.de/auth/callback?next=/mein-system',
   'mein-protokoll':        'https://steakakademie.de/auth/callback?next=/mein-protokoll/fragebogen',
+  'steak-beichte':         'https://steakakademie.de/auth/callback?next=/steak-beichte/diagnose',
 };
 
 const DEFAULT_REDIRECT = 'https://steakakademie.de/auth/callback?next=/mein-system';
+
+/**
+ * Steak-Beichte (Produkt A) — Credits-Modell (verbrauchbar, KEIN Course-Gate).
+ * Modell A: getrennte product_ids pro Stufe.
+ *   696394                          → 1 Credit (Einzeldiagnose 7€)
+ *   DIGISTORE_PRODUCT_BEICHTE_5ER   → 5 Credits (5er-Pack 25€) — von Uwe nach Anlage gesetzt
+ */
+const CREDIT_PRODUCTS: Record<string, number> = {
+  '696394': 1,
+  ...(process.env.DIGISTORE_PRODUCT_BEICHTE_5ER
+    ? { [process.env.DIGISTORE_PRODUCT_BEICHTE_5ER]: 5 }
+    : {}),
+};
+const CREDIT_COURSE_SLUG = 'steak-beichte';
 
 export async function POST(req: Request) {
   // Token-Verifikation via URL-Parameter
@@ -63,6 +78,14 @@ export async function POST(req: Request) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     { auth: { autoRefreshToken: false, persistSession: false } },
   );
+
+  // 0) Credit-Produkte (Steak-Beichte) — eigener Pfad, kein Course-Gate.
+  const creditAmount = CREDIT_PRODUCTS[productId];
+  if (creditAmount) {
+    return handleCreditProduct(supabase, {
+      event, orderId, productId, email, params, rawBody, creditAmount,
+    });
+  }
 
   // 1) Produkt → Course Mapping aus DB
   const { data: mapping } = await supabase
@@ -176,6 +199,100 @@ export async function POST(req: Request) {
       })
       .eq('id', orderRow.id);
     // 500 → Digistore retried
+    return new Response('Processing failed', { status: 500 });
+  }
+}
+
+// ─── Credit-Produkt-Handler (Steak-Beichte, Produkt A) ───────────────────────
+
+async function handleCreditProduct(
+  supabase: SupabaseClient,
+  args: {
+    event: string; orderId: string; productId: string; email: string;
+    params: Record<string, string>; rawBody: string; creditAmount: number;
+  },
+): Promise<Response> {
+  const { event, orderId, productId, email, params, rawBody, creditAmount } = args;
+
+  // Order protokollieren (course_id null — Credits sind kein Course).
+  // UNIQUE(ds_order_id, ds_event) → Idempotenz.
+  const { data: orderRow, error: orderErr } = await supabase
+    .from('digistore_orders')
+    .insert({
+      ds_order_id:       orderId,
+      ds_product_id:     productId,
+      ds_email:          email,
+      ds_event:          event,
+      course_id:         null,
+      raw_payload:       params,
+      raw_body:          rawBody,
+      processing_status: 'pending',
+      error_message:     `credit product: ${creditAmount} credit(s)`,
+    })
+    .select('id')
+    .single();
+
+  if (orderErr) {
+    if (orderErr.code === '23505') {
+      return new Response('OK (duplicate)', { status: 200 });
+    }
+    console.error('[ds-webhook] credit order insert failed', orderErr);
+    return new Response('Internal error', { status: 500 });
+  }
+
+  try {
+    if (event === 'on_payment' || event === 'on_rebill_resumed') {
+      const userId = await ensureUser(supabase, email, CREDIT_COURSE_SLUG);
+
+      const { error: grantErr } = await supabase.rpc('grant_diagnose_credits', {
+        p_user_id: userId,
+        p_amount:  creditAmount,
+      });
+      if (grantErr) throw new Error(`grant_diagnose_credits failed: ${grantErr.message}`);
+
+      await sendMagicLink(supabase, email, CREDIT_COURSE_SLUG, 'deiner Steak-Beichte');
+
+      await supabase
+        .from('digistore_orders')
+        .update({ processing_status: 'processed', processed_at: new Date().toISOString() })
+        .eq('id', orderRow.id);
+
+      return new Response('OK', { status: 200 });
+    }
+
+    if (event === 'on_refund' || event === 'on_chargeback') {
+      const userId = await findUserId(supabase, email);
+      if (!userId) throw new Error(`refund for unknown user: ${email}`);
+
+      const { error: revokeErr } = await supabase.rpc('revoke_diagnose_credits', {
+        p_user_id: userId,
+        p_amount:  creditAmount,
+      });
+      if (revokeErr) throw new Error(`revoke_diagnose_credits failed: ${revokeErr.message}`);
+
+      await supabase
+        .from('digistore_orders')
+        .update({ processing_status: 'processed', processed_at: new Date().toISOString() })
+        .eq('id', orderRow.id);
+
+      return new Response('OK', { status: 200 });
+    }
+
+    await supabase
+      .from('digistore_orders')
+      .update({
+        processing_status: 'processed',
+        processed_at:      new Date().toISOString(),
+        error_message:     `event recorded, no action: ${event}`,
+      })
+      .eq('id', orderRow.id);
+    return new Response('OK (event recorded)', { status: 200 });
+  } catch (err: any) {
+    console.error('[ds-webhook] credit processing failed', err);
+    await supabase
+      .from('digistore_orders')
+      .update({ processing_status: 'failed', error_message: err?.message ?? 'unknown error' })
+      .eq('id', orderRow.id);
     return new Response('Processing failed', { status: 500 });
   }
 }

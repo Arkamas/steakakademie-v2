@@ -48,10 +48,12 @@ CREATE INDEX IF NOT EXISTS idx_content_drafts_category
 -- RLS: nur Service-Role darf schreiben, authentifizierte User lesen approved
 ALTER TABLE public.content_drafts ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "service_full_access" ON public.content_drafts;
 CREATE POLICY "service_full_access" ON public.content_drafts
   FOR ALL
   USING (auth.role() = 'service_role');
 
+DROP POLICY IF EXISTS "read_approved" ON public.content_drafts;
 CREATE POLICY "read_approved" ON public.content_drafts
   FOR SELECT
   USING (status = 'approved');

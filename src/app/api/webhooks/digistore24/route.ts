@@ -47,6 +47,17 @@ const CREDIT_PRODUCTS: Record<string, number> = {
 };
 const CREDIT_COURSE_SLUG = 'steak-beichte';
 
+// TEMP-Diagnose (GET) — nur Booleans, niemals Werte. Nach Diagnose entfernen.
+export async function GET() {
+  return Response.json({
+    DIGISTORE_WEBHOOK_TOKEN: !!process.env.DIGISTORE_WEBHOOK_TOKEN,
+    DIGISTORE_WEBHOOK_TOKEN_len: (process.env.DIGISTORE_WEBHOOK_TOKEN || '').length,
+    LOOPS_API_KEY: !!process.env.LOOPS_API_KEY,
+    SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    LOOPS_MAGIC_LINK_TEMPLATE_ID: !!process.env.LOOPS_MAGIC_LINK_TEMPLATE_ID,
+  });
+}
+
 export async function POST(req: Request) {
   // Token-Verifikation via URL-Parameter
   const url   = new URL(req.url);

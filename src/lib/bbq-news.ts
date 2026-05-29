@@ -24,6 +24,7 @@ export interface NewsItem {
   source?: string;
   href?: string;
   featured?: boolean;
+  image?: string;   // optional — fehlt → markenkonformer Smoke-Placeholder
 }
 
 const BBQ_NEWS_CATEGORIES = ROUTE_CATEGORIES['/bbq-news'] ?? [];

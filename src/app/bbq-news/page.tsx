@@ -1,9 +1,17 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, Flame, Globe, Clock } from 'lucide-react';
+import { ChevronRight, Globe } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import BuyingGuideBlock from '@/components/affiliate/BuyingGuideBlock';
 import { getNewsItems, type NewsItem, type NewsRegion } from '@/lib/bbq-news';
+import { getRecommendedProducts } from '@/lib/products';
+import {
+  FeatureHero,
+  SecondaryFeature,
+  CompactItem,
+  TopicBand,
+} from '@/components/news/NewsLayout';
 
 export const revalidate = 3600;
 
@@ -20,12 +28,6 @@ export const metadata: Metadata = {
     images: [{ url: '/images/og-default.jpg', width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image', creator: '@steakakademie' },
-};
-
-const REGION_STYLE: Record<NewsRegion, { dot: string; label: string }> = {
-  USA: { dot: '#E85018', label: 'USA' },
-  Deutschland: { dot: '#C8882A', label: 'Deutschland' },
-  International: { dot: '#7A6558', label: 'International' },
 };
 
 function buildItemListSchema(items: NewsItem[]) {
@@ -56,10 +58,19 @@ const breadcrumbSchema = {
   ],
 };
 
+const REGION_ORDER: NewsRegion[] = ['USA', 'Deutschland', 'International'];
+
 export default async function BbqNewsPage() {
   const newsItems = await getNewsItems();
+
   const featured = newsItems.find((n) => n.featured) ?? newsItems[0];
-  const rest = newsItems.filter((n) => n.id !== featured.id);
+  const rest = newsItems.filter((n) => n.id !== featured?.id);
+
+  const mixedMain = rest[0];
+  const mixedList = rest.slice(1, 4);   // "Meistgelesen"-Rail
+  const bandItems = rest.slice(4);
+
+  const affiliate = getRecommendedProducts(1)[0];
 
   return (
     <>
@@ -70,7 +81,7 @@ export default async function BbqNewsPage() {
 
       <main>
         {/* ── Page-Header ─────────────────────────────────────────────── */}
-        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-6">
+        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
           <nav className="text-xs font-sans text-text-muted mb-5 flex items-center gap-1.5">
             <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
             <ChevronRight size={12} />
@@ -87,78 +98,57 @@ export default async function BbqNewsPage() {
           <p className="font-sans text-xs text-text-muted mt-3 max-w-2xl">
             Hinweis: Beiträge werden KI-gestützt erstellt und aufbereitet sowie redaktionell vor Veröffentlichung geprüft.
           </p>
-          <div className="section-divider mt-6" />
         </section>
 
         {/* ── Aufmacher ──────────────────────────────────────────────── */}
-        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pb-10">
-          <article
-            className="relative px-8 sm:px-12 py-10 sm:py-14"
-            style={{
-              background: 'radial-gradient(ellipse 120% 140% at 30% 20%, #2D2218 0%, #17100B 100%)',
-              border: '1px solid rgba(200,136,42,0.18)',
-              borderRadius: '4px',
-            }}
-          >
-            <div className="flex items-center gap-2 mb-4 text-xs font-sans">
-              <span className="inline-flex items-center gap-1.5 font-bold tracking-wider uppercase" style={{ color: REGION_STYLE[featured.region].dot }}>
-                <span className="w-2 h-2 rounded-full" style={{ background: REGION_STYLE[featured.region].dot }} />
-                {REGION_STYLE[featured.region].label}
-              </span>
-              <span className="text-brand-gold/40">·</span>
-              <span className="text-text-muted uppercase tracking-wider">{featured.category}</span>
-            </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-text-light leading-[1.15] mb-4 max-w-3xl">
-              {featured.href ? (
-                <Link href={featured.href} className="hover:text-brand-gold transition-colors">{featured.title}</Link>
-              ) : featured.title}
-            </h2>
-            <p className="font-body text-lg text-text-secondary leading-relaxed max-w-2xl mb-6">
-              {featured.summary}
-            </p>
-            <div className="flex items-center gap-x-4 text-xs font-sans text-text-muted">
-              <span className="inline-flex items-center gap-1.5"><Clock size={13} className="text-brand-gold/60" />{featured.date}</span>
-              {featured.source && (<><span className="text-brand-gold/30">·</span><span>{featured.source}</span></>)}
-            </div>
-          </article>
-        </section>
+        {featured && (
+          <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+            <FeatureHero item={featured} />
+          </section>
+        )}
 
-        {/* ── News-Grid ──────────────────────────────────────────────── */}
-        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {rest.map((n) => {
-              const Card = (
-                <article
-                  className="h-full flex flex-col bg-surface-card border border-border-subtle p-6 transition-all duration-200 hover:border-brand-gold/40 group"
-                >
-                  <div className="flex items-center gap-2 mb-3 text-[11px] font-sans">
-                    <span className="inline-flex items-center gap-1.5 font-bold tracking-wider uppercase" style={{ color: REGION_STYLE[n.region].dot }}>
-                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: REGION_STYLE[n.region].dot }} />
-                      {REGION_STYLE[n.region].label}
-                    </span>
-                    <span className="text-brand-gold/30">·</span>
-                    <span className="text-text-muted uppercase tracking-wider">{n.category}</span>
+        {/* ── Mixed-Density: Sekundär-Feature + Meistgelesen-Rail ─────── */}
+        {mixedMain && (
+          <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pb-14">
+            <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12">
+              <SecondaryFeature item={mixedMain} />
+              {mixedList.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="w-6 h-[3px] bg-brand-fire" />
+                    <h2 className="font-serif text-xl font-bold text-text-light">Meistgelesen</h2>
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-text-light leading-snug mb-3 group-hover:text-brand-gold transition-colors">
-                    {n.title}
-                  </h3>
-                  <p className="font-body text-sm text-text-secondary leading-relaxed mb-4 flex-1">
-                    {n.summary}
-                  </p>
-                  <div className="flex items-center justify-between text-[11px] font-sans text-text-muted pt-3 border-t border-border-subtle">
-                    <span className="inline-flex items-center gap-1.5"><Clock size={12} className="text-brand-gold/50" />{n.date}</span>
-                    {n.href && <ChevronRight size={14} className="text-brand-fire opacity-0 group-hover:opacity-100 transition-opacity" />}
-                  </div>
-                </article>
-              );
-              return n.href ? (
-                <Link key={n.id} href={n.href} className="block h-full">{Card}</Link>
-              ) : (
-                <div key={n.id} className="h-full">{Card}</div>
-              );
-            })}
-          </div>
-        </section>
+                  <div className="section-divider mb-2" />
+                  {mixedList.map((it, i) => <CompactItem key={it.id} item={it} rank={i + 1} />)}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* ── Nativer Affiliate-Block ────────────────────────────────── */}
+        {affiliate && (
+          <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pb-14">
+            <p className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-text-muted mb-3">
+              Empfehlung der Redaktion
+            </p>
+            <BuyingGuideBlock
+              product={affiliate}
+              title={`Passend zur Saison: ${affiliate.name}`}
+              summary="Worauf es bei der Anschaffung wirklich ankommt — unsere Einordnung für ambitionierte Griller."
+            />
+          </section>
+        )}
+
+        {/* ── Themen-Bänder nach Region ──────────────────────────────── */}
+        {REGION_ORDER.map((region, i) => (
+          <TopicBand
+            key={region}
+            region={region}
+            items={bandItems.filter((n) => n.region === region)}
+            alt={i % 2 === 1}
+          />
+        ))}
 
         {/* ── Hinweis / GEO-Transparenz ──────────────────────────────── */}
         <section className="bg-surface-base py-12" style={{ borderTop: '1px solid rgba(200,136,42,0.15)' }}>
@@ -171,7 +161,7 @@ export default async function BbqNewsPage() {
               verlinken wir, statt sie zu kopieren.
             </p>
             <Link href="/diplome" className="btn-gold text-xs font-bold tracking-widest uppercase">
-              <Flame size={13} /> Zum Grillmeister-Diplom
+              Zum Grillmeister-Diplom
             </Link>
           </div>
         </section>

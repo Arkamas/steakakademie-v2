@@ -49,12 +49,20 @@ const CREDIT_COURSE_SLUG = 'steak-beichte';
 
 // TEMP-Diagnose (GET) — nur Booleans, niemals Werte. Nach Diagnose entfernen.
 export async function GET() {
+  const keys = Object.keys(process.env);
   return Response.json({
+    // unsere Secrets
     DIGISTORE_WEBHOOK_TOKEN: !!process.env.DIGISTORE_WEBHOOK_TOKEN,
-    DIGISTORE_WEBHOOK_TOKEN_len: (process.env.DIGISTORE_WEBHOOK_TOKEN || '').length,
     LOOPS_API_KEY: !!process.env.LOOPS_API_KEY,
     SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-    LOOPS_MAGIC_LINK_TEMPLATE_ID: !!process.env.LOOPS_MAGIC_LINK_TEMPLATE_ID,
+    // Netlify-eigene Built-ins (zeigt, ob die Funktion ÜBERHAUPT Env hat)
+    NETLIFY: !!process.env.NETLIFY,
+    URL: !!process.env.URL,
+    SITE_NAME: !!process.env.SITE_NAME,
+    NODE_ENV: process.env.NODE_ENV || null,
+    // Gesamtzahl + Stichprobe der Key-NAMEN (keine Werte)
+    totalEnvKeys: keys.length,
+    sampleKeys: keys.filter(k => !k.startsWith('npm_')).slice(0, 25),
   });
 }
 

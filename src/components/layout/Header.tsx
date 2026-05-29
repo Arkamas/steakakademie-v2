@@ -61,6 +61,16 @@ const NAV_CATEGORIES = [
     ],
   },
   {
+    name: 'Community',
+    href: '/bbq-news',
+    sub: [
+      { label: 'BBQ-News', href: '/bbq-news' },
+      { label: 'Grillstil — Frauen & Lifestyle', href: '/grillstil' },
+      { label: 'Pflanzlich & Vegan', href: '/pflanzlich' },
+      { label: 'Persönlichkeiten', href: '/persoenlichkeiten' },
+    ],
+  },
+  {
     name: 'USA-Expedition',
     href: '/usa-expedition',
     sub: [

@@ -430,7 +430,7 @@ export default async function AgenturKillerSprintPage() {
                     href="https://www.digistore24.com/product/695900"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
+                    className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity plausible-event-name=Digistore-Checkout plausible-event-produkt=695900"
                     style={{ background: '#C8882A', color: '#0D0A06' }}
                   >
                     {price ? `${eur(price)} — Jetzt kaufen` : 'Jetzt kaufen'}

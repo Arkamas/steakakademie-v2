@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { trackEvent } from '@/components/analytics/PlausibleScript';
 import {
   Flame, ChevronRight, Lock, Check, X,
   BookOpen, Award, ArrowRight, Trophy,
@@ -95,6 +96,7 @@ export default function DiplomSimulation() {
         body: JSON.stringify({ email, source: 'simulation-final-cta' }),
       });
     } catch {}
+    trackEvent('Newsletter-Anmeldung', { source: 'simulation-final-cta' });
     setSubscribed(true);
   }
 

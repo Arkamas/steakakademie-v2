@@ -28,7 +28,7 @@ export default function ImpressumPage() {
 
             <section>
               <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3">
-                Angaben gemäß § 5 TMG
+                Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz)
               </h2>
               <p>
                 Uwe Yendell<br />

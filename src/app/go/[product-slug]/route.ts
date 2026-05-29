@@ -7,7 +7,7 @@ import { getProductById } from '@/lib/products';
  *
  * Flow:
  * 1. Produkt im Registry nachschlagen
- * 2. GA4 Event feuern (server-side via Measurement Protocol)
+ * 2. Plausible-Event feuern (server-side, cookieless — kein GA4, kein Consent nötig)
  * 3. 302 Redirect zur Affiliate-URL
  */
 export async function GET(
@@ -21,37 +21,31 @@ export async function GET(
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  // Server-side GA4 via Measurement Protocol (optional — konfigurierbar)
-  if (process.env.GA4_MEASUREMENT_ID && process.env.GA4_API_SECRET) {
-    try {
-      const clientId = request.cookies.get('_ga')?.value?.replace('GA1.1.', '') ?? 'server-side';
-      await fetch(
-        `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA4_MEASUREMENT_ID}&api_secret=${process.env.GA4_API_SECRET}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            client_id: clientId,
-            events: [
-              {
-                name: 'affiliate_click',
-                params: {
-                  product_id: product.id,
-                  product_name: product.name,
-                  product_brand: product.brand,
-                  product_category: product.category,
-                  provider: product.provider,
-                  price: product.price,
-                  currency: 'EUR',
-                },
-              },
-            ],
-          }),
-        }
-      );
-    } catch {
-      // GA4 Fehler niemals Redirect blockieren
-    }
+  // Server-side Plausible-Event — gleicher Name/Props wie Client-Tag (Dashboard mergt)
+  try {
+    const ip =
+      request.headers.get('x-nf-client-connection-ip') ??
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+      '';
+    const ua  = request.headers.get('user-agent') ?? '';
+    const ref = request.headers.get('referer') ?? request.url;
+
+    await fetch('https://plausible.io/api/event', {
+      method: 'POST',
+      headers: {
+        'Content-Type':    'application/json',
+        'User-Agent':      ua,
+        'X-Forwarded-For': ip,
+      },
+      body: JSON.stringify({
+        name:   'Affiliate-Klick',
+        domain: 'steakakademie.de',
+        url:    ref,
+        props:  { provider: product.provider, produkt: product.id },
+      }),
+    });
+  } catch {
+    // Tracking-Fehler niemals Redirect blockieren
   }
 
   // 302 Redirect mit Cache-Buster-Header

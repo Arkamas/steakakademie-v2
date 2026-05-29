@@ -296,7 +296,7 @@ export default async function MeinSystemPage() {
                               href={saule.checkoutUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-2 w-full py-2.5 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
+                              className={`flex items-center justify-center gap-2 w-full py-2.5 font-sans font-bold text-sm hover:opacity-90 transition-opacity plausible-event-name=Digistore-Checkout plausible-event-produkt=${saule.slug}`}
                               style={{ background: '#C8882A', color: '#0D0A06' }}
                             >
                               {price ? `${eur(price)} — Freischalten` : 'Freischalten'}

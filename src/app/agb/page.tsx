@@ -112,8 +112,8 @@ export default function AgbPage() {
               </p>
               <p>
                 Widerruf per E-Mail an:{' '}
-                <a href="mailto:info@steakakademie.de" className={linkClass}>
-                  info@steakakademie.de
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>
+                  pitmaster@steakakademie.de
                 </a>
               </p>
             </section>
@@ -139,6 +139,29 @@ export default function AgbPage() {
             </section>
 
             <section>
+              <h2 className={h2Class}>§ 6b Muster-Widerrufsformular</h2>
+              <p className="mb-3">
+                (Wenn du den Vertrag widerrufen willst, fülle dieses Formular aus und sende es zurück.)
+              </p>
+              <div className="border border-border-subtle bg-surface-card p-5 text-sm space-y-2">
+                <p>An: Uwe Yendell, Stahlsberg 73, 42279 Wuppertal,{' '}
+                  <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>
+                </p>
+                <p>
+                  Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über
+                  den Kauf der folgenden Waren (*) / die Erbringung der folgenden Dienstleistung (*):
+                </p>
+                <p>_______________________________________________</p>
+                <p>Bestellt am (*) / erhalten am (*): _____________</p>
+                <p>Name des/der Verbraucher(s): _________________</p>
+                <p>Anschrift des/der Verbraucher(s): _____________</p>
+                <p>Datum: _______________</p>
+                <p>Unterschrift (nur bei Mitteilung auf Papier): _____________</p>
+                <p className="text-text-muted text-xs">(*) Unzutreffendes streichen.</p>
+              </div>
+            </section>
+
+            <section>
               <h2 className={h2Class}>§ 7 Nutzerkonten</h2>
               <p className="mb-3">
                 Für den Zugang zu kostenpflichtigen digitalen Inhalten ist ein Nutzerkonto auf
@@ -153,7 +176,7 @@ export default function AgbPage() {
               </p>
               <p>
                 Du kannst dein Konto jederzeit durch Kontaktaufnahme unter{' '}
-                <a href="mailto:info@steakakademie.de" className={linkClass}>info@steakakademie.de</a>{' '}
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>{' '}
                 löschen lassen. Mit Löschung erlischt der Zugang zu allen digitalen Inhalten.
               </p>
             </section>

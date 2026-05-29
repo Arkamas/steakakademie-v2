@@ -238,7 +238,8 @@ export default function DatenschutzPage() {
             <section>
               <h2 className={h2Class}>11. Cookies & lokale Speicherung</h2>
               <p className="mb-3">
-                Diese Website verwendet ausschließlich technisch notwendige Speichermechanismen:
+                <strong className="text-text-primary">Technisch notwendige Speichermechanismen</strong>{' '}
+                (keine Einwilligung erforderlich, § 25 Abs. 2 TTDSG):
               </p>
               <ul className="list-disc pl-5 space-y-1 mb-3">
                 <li><strong className="text-text-primary">localStorage:</strong> Theme-Einstellung (hell/dunkel) — dauerhaft, lokal im Browser</li>
@@ -246,9 +247,11 @@ export default function DatenschutzPage() {
                 <li><strong className="text-text-primary">Supabase Auth-Token:</strong> Für eingeloggte Nutzer — sicherer JWT-Token zur Sitzungsverwaltung</li>
               </ul>
               <p>
-                Es werden keine Tracking-Cookies, Werbe-Cookies oder Analyse-Cookies gesetzt.
-                Eine Einwilligung nach § 25 TTDSG ist für die genannten Speichermechanismen
-                nicht erforderlich, da sie ausschließlich technisch notwendig sind.
+                <strong className="text-text-primary">Keine einwilligungspflichtigen Cookies:</strong>{' '}
+                Wir setzen keine Tracking- oder Marketing-Cookies. Die Reichweitenmessung erfolgt
+                ausschließlich über Plausible (Abschnitt 5), das cookieless arbeitet und keine
+                personenbezogenen Daten speichert. Ein Cookie-Einwilligungsbanner ist daher nicht
+                erforderlich.
               </p>
             </section>
 

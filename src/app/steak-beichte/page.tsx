@@ -354,6 +354,7 @@ export default function SteakBeichtePage() {
                   <strong className="text-text-primary">Hinweis:</strong>{' '}
                   Credits sind sofort nach Kauf verfÃ¼gbar. Kein Abo, keine automatische VerlÃ¤ngerung.
                   Zahlungsabwicklung Ã¼ber Digistore24 Â· SEPA, PayPal, Kreditkarte.
+                  Alle Preise sind Endpreise in Euro; als Kleinunternehmer gemÃ¤ÃŸ Â§ 19 UStG wird keine Umsatzsteuer ausgewiesen.
                 </p>
               </div>
             </div>

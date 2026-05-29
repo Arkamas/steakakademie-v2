@@ -71,7 +71,7 @@ const FAQ = [
   },
   {
     q: 'Bekomme ich als Original-Käufer einen Rabatt?',
-    a: 'Ja. Wenn du die Steuer-Matrix bereits gekauft hast, erhältst du im ersten Jahr 50 % Rabatt. Der Rabatt-Link wird dir per E-Mail zugeschickt — oder schreib uns unter info@steakakademie.de mit deiner Bestellnummer.',
+    a: 'Ja. Wenn du die Steuer-Matrix bereits gekauft hast, erhältst du im ersten Jahr 50 % Rabatt. Der Rabatt-Link wird dir per E-Mail zugeschickt — oder schreib uns unter pitmaster@steakakademie.de mit deiner Bestellnummer.',
   },
 ];
 
@@ -304,7 +304,7 @@ export default function SteuerMatrixLivePage() {
                     ))}
                   </ul>
                   <a
-                    href="mailto:info@steakakademie.de?subject=Steuer-Matrix LIVE Rabatt&body=Meine Bestellnummer:"
+                    href="mailto:pitmaster@steakakademie.de?subject=Steuer-Matrix LIVE Rabatt&body=Meine Bestellnummer:"
                     className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                     style={{ background: '#C8882A', color: '#0D0A06' }}
                   >
@@ -326,7 +326,8 @@ export default function SteuerMatrixLivePage() {
                     <strong className="text-text-primary">Abo-Bedingungen:</strong>{' '}
                     Jahresabrechnung. Kündigung jederzeit über dein Digistore24-Kundenkonto —
                     ohne Frist, ohne Formular. Zugang bis Ende des bezahlten Zeitraums.
-                    Keine automatische Verlängerung ohne Zustimmung.
+                    Keine automatische Verlängerung ohne Zustimmung. Alle Preise sind Endpreise
+                    in Euro; als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.
                   </p>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 ﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight, Flame, BookOpen, Thermometer, Award } from 'lucide-react';
+import { ChevronRight, Flame, BookOpen, Thermometer, Award, Newspaper } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ArticleCard from '@/components/article/ArticleCard';
@@ -117,6 +117,15 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
   },
 ];
 
+// Homepage-Teaser für /bbq-news — synchron mit NEWS_ITEMS (featured-Auswahl).
+// Agent-Output-Ziel: künftig aus derselben Quelle wie /bbq-news (Array bzw. Supabase `bbq_news`).
+const NEWS_TEASERS = [
+  { region: 'USA',         color: '#E85018', title: 'Texas-Style Brisket: Neuer Weltrekord beim Smoke-Off', date: '24. Mai 2026', href: '/bbq-news' },
+  { region: 'Deutschland', color: '#C8882A', title: 'Grillsaison 2026: Diese Cuts liegen im Trend', date: '22. Mai 2026', href: '/bbq-news' },
+  { region: 'USA',         color: '#E85018', title: 'Pellet-Smoker im Aufwind — Studie zur Rauch-Präzision', date: '20. Mai 2026', href: '/bbq-news' },
+  { region: 'International', color: '#7BA05B', title: 'Pflanzlich vom Rost: Wie Restaurants den Grill neu denken', date: '18. Mai 2026', href: '/bbq-news' },
+];
+
 const CATEGORY_SECTIONS = [
   { title: 'Grilltechniken',      slug: 'grilltechniken', articles: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'grilltechniken') },
   { title: 'Cuts & Fleischkunde', slug: 'cuts',           articles: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'cuts') },
@@ -228,6 +237,46 @@ export default function HomePage() {
         {/* ── DIPLOM-TEASER ─────────────────────────────────────────────────── */}
         <DiplomaProgressSection />
 
+        {/* ── BBQ-NEWS TEASER ──────────────────────────────────────────────── */}
+        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex items-center justify-between mb-3">
+            <Link href="/bbq-news" className="flex items-center gap-3 group">
+              <Newspaper size={20} className="text-brand-gold" />
+              <h2 className="font-serif text-2xl font-bold text-text-light group-hover:text-brand-gold transition-colors">
+                BBQ-News
+              </h2>
+            </Link>
+            <Link
+              href="/bbq-news"
+              className="flex items-center gap-1 text-xs font-sans font-bold tracking-widest uppercase text-brand-fire hover:text-brand-gold transition-colors"
+            >
+              Alle News <ChevronRight size={14} />
+            </Link>
+          </div>
+          <div className="section-divider" />
+          <p className="text-sm font-sans text-text-muted mb-8 -mt-3">
+            Aus der Grillszene USA &amp; Deutschland — kuratiert, nicht kopiert.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {NEWS_TEASERS.map((n) => (
+              <Link
+                key={n.title}
+                href={n.href}
+                className="group flex flex-col bg-surface-card border border-border-subtle p-5 transition-all duration-200 hover:border-brand-gold/40"
+              >
+                <span className="inline-flex items-center gap-2 text-[11px] font-sans font-bold tracking-wider uppercase mb-3" style={{ color: n.color }}>
+                  <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: n.color }} />
+                  {n.region}
+                </span>
+                <h3 className="font-serif text-base font-bold text-text-light leading-snug mb-3 flex-1 group-hover:text-brand-gold transition-colors">
+                  {n.title}
+                </h3>
+                <span className="text-[11px] font-sans text-text-muted">{n.date}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* ── KATEGORIE-SEKTIONEN ─────────────────────────────────────────────── */}
         {CATEGORY_SECTIONS.filter((s) => s.articles.length > 0).map((section) => (
           <section key={section.slug} className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -321,7 +370,7 @@ export default function HomePage() {
                   />
                   <button
                     type="submit"
-                    className="btn-gold w-full justify-center text-xs font-bold tracking-widest uppercase py-2.5"
+                    className="btn-gold w-full justify-center text-xs font-bold tracking-widest uppercase py-2.5 plausible-event-name=Newsletter-Anmeldung plausible-event-source=homepage-footer"
                   >
                     Anmelden
                   </button>

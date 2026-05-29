@@ -76,7 +76,7 @@ export default function BuyingGuideBlock({
 
             <Link
               href={affiliateHref}
-              className="inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-sm font-bold tracking-wide px-5 py-2.5 hover:bg-[#d4891a] transition-colors self-start sm:self-auto"
+              className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-sm font-bold tracking-wide px-5 py-2.5 hover:bg-[#d4891a] transition-colors self-start sm:self-auto plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
               rel="nofollow noopener"
               target="_blank"
             >

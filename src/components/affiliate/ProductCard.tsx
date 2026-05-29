@@ -104,9 +104,12 @@ export default function ProductCard({
   if (variant === 'sidebar') {
     return (
       <div className={cn('bg-surface-card border border-border-subtle p-4', className)}>
-        <div className="border-t-2 border-brand-gold -mt-4 mb-4 pt-3">
+        <div className="border-t-2 border-brand-gold -mt-4 mb-4 pt-3 flex items-center justify-between">
           <span className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-brand-fire">
             Empfehlung
+          </span>
+          <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">
+            Anzeige
           </span>
         </div>
 
@@ -154,7 +157,7 @@ export default function ProductCard({
 
         <Link
           href={affiliateHref}
-          className="btn-affiliate w-full justify-center text-sm mb-2"
+          className={`btn-affiliate w-full justify-center text-sm mb-2 plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
           rel="nofollow noopener"
           target="_blank"
         >
@@ -196,11 +199,16 @@ export default function ProductCard({
           <h3 className="font-sans font-bold text-sm text-text-primary line-clamp-1">
             {product.name}
           </h3>
-          {product.badge && (
-            <span className="text-[10px] font-sans font-bold uppercase text-brand-fire">
-              {product.badge}
+          <div className="flex items-center gap-2">
+            {product.badge && (
+              <span className="text-[10px] font-sans font-bold uppercase text-brand-fire">
+                {product.badge}
+              </span>
+            )}
+            <span className="text-[9px] font-sans font-bold tracking-[0.12em] uppercase text-text-muted">
+              Anzeige
             </span>
-          )}
+          </div>
         </div>
         <div className="shrink-0 text-right">
           <p className="font-sans font-bold text-sm text-text-primary mb-1.5">
@@ -208,7 +216,7 @@ export default function ProductCard({
           </p>
           <Link
             href={affiliateHref}
-            className="inline-flex items-center gap-1 bg-brand-fire text-white font-sans text-[11px] font-bold tracking-wide px-3 py-1.5 hover:bg-[#cc4412] transition-colors"
+            className={`inline-flex items-center gap-1 bg-brand-fire text-white font-sans text-[11px] font-bold tracking-wide px-3 py-1.5 hover:bg-[#cc4412] transition-colors plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
             rel="nofollow noopener"
             target="_blank"
           >
@@ -246,9 +254,14 @@ export default function ProductCard({
       </div>
 
       <div className="p-5">
-        <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-brand-fire mb-1 block">
-          {product.brand}
-        </span>
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-brand-fire">
+            {product.brand}
+          </span>
+          <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">
+            Anzeige
+          </span>
+        </div>
         <h3 className="font-sans font-bold text-lg text-text-primary mb-2 leading-snug">
           {product.name}
         </h3>
@@ -291,7 +304,7 @@ export default function ProductCard({
 
         <Link
           href={affiliateHref}
-          className="btn-affiliate w-full justify-center"
+          className={`btn-affiliate w-full justify-center plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
           rel="nofollow noopener"
           target="_blank"
         >

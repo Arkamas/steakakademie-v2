@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Flame, Check } from 'lucide-react';
+import { trackEvent } from '@/components/analytics/PlausibleScript';
 
 type State = 'idle' | 'loading' | 'success';
 
@@ -66,6 +67,7 @@ export default function ExitIntent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, source: 'exit-intent' }),
       });
+      trackEvent('Newsletter-Anmeldung', { source: 'exit-intent' });
       setState('success');
       setTimeout(() => setVisible(false), 2500);
     } catch {

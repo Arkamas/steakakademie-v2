@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Flame, Check } from 'lucide-react';
+import { trackEvent } from '@/components/analytics/PlausibleScript';
 
 type State = 'idle' | 'loading' | 'success' | 'error';
 
@@ -24,6 +25,7 @@ export default function NewsletterCapture({ context = 'BBQ-Meister' }: Newslette
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, source: `persoenlichkeiten-article-${context}` }),
       });
+      if (res.ok) trackEvent('Newsletter-Anmeldung', { source: context });
       setState(res.ok ? 'success' : 'error');
     } catch {
       setState('error');

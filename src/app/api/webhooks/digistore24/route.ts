@@ -19,7 +19,7 @@
 
 export const runtime  = 'nodejs';
 export const dynamic  = 'force-dynamic';
-// redeploy-marker: 2026-05-29 — DIGISTORE_WEBHOOK_TOKEN env aktivieren
+// redeploy-marker: 2026-05-29b — DIGISTORE_WEBHOOK_TOKEN als context=all neu gesetzt
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 

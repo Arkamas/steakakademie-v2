@@ -7,7 +7,9 @@ import Footer from '@/components/layout/Footer';
 import ArticleCard from '@/components/article/ArticleCard';
 import ProductCard from '@/components/affiliate/ProductCard';
 import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
+import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
 import { getRecommendedProducts } from '@/lib/products';
+import { getNewsItems } from '@/lib/bbq-news';
 import type { ArticleMeta } from '@/types';
 
 export const revalidate = 86400;
@@ -117,27 +119,22 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
   },
 ];
 
-// Homepage-Teaser für /bbq-news — synchron mit NEWS_ITEMS (featured-Auswahl).
-// Agent-Output-Ziel: künftig aus derselben Quelle wie /bbq-news (Array bzw. Supabase `bbq_news`).
-const NEWS_TEASERS = [
-  { region: 'USA',         color: '#E85018', title: 'Texas-Style Brisket: Neuer Weltrekord beim Smoke-Off', date: '24. Mai 2026', href: '/bbq-news' },
-  { region: 'Deutschland', color: '#C8882A', title: 'Grillsaison 2026: Diese Cuts liegen im Trend', date: '22. Mai 2026', href: '/bbq-news' },
-  { region: 'USA',         color: '#E85018', title: 'Pellet-Smoker im Aufwind — Studie zur Rauch-Präzision', date: '20. Mai 2026', href: '/bbq-news' },
-  { region: 'International', color: '#7BA05B', title: 'Pflanzlich vom Rost: Wie Restaurants den Grill neu denken', date: '18. Mai 2026', href: '/bbq-news' },
-];
-
 const CATEGORY_SECTIONS = [
   { title: 'Grilltechniken',      slug: 'grilltechniken', articles: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'grilltechniken') },
   { title: 'Cuts & Fleischkunde', slug: 'cuts',           articles: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'cuts') },
   { title: 'Wissen & Wissenschaft', slug: 'wissen',       articles: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'wissen') },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
   const recommendedProducts = getRecommendedProducts(3);
   const heroArticle    = PLACEHOLDER_ARTICLES[0];
   const sideArticles   = PLACEHOLDER_ARTICLES.slice(1, 4);
-  const featureArticle = PLACEHOLDER_ARTICLES[1];
   const latestArticles = PLACEHOLDER_ARTICLES.slice(2);
+
+  // BBQ-News-Teaser aus derselben Quelle wie /bbq-news (kein hardcoded Drift)
+  const news        = await getNewsItems();
+  const newsLead    = news[0];
+  const newsCompact = news.slice(1, 4);
 
   return (
     <>
@@ -257,24 +254,16 @@ export default function HomePage() {
           <p className="text-sm font-sans text-text-muted mb-8 -mt-3">
             Aus der Grillszene USA &amp; Deutschland — kuratiert, nicht kopiert.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {NEWS_TEASERS.map((n) => (
-              <Link
-                key={n.title}
-                href={n.href}
-                className="group flex flex-col bg-surface-card border border-border-subtle p-5 transition-all duration-200 hover:border-brand-gold/40"
-              >
-                <span className="inline-flex items-center gap-2 text-[11px] font-sans font-bold tracking-wider uppercase mb-3" style={{ color: n.color }}>
-                  <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: n.color }} />
-                  {n.region}
-                </span>
-                <h3 className="font-serif text-base font-bold text-text-light leading-snug mb-3 flex-1 group-hover:text-brand-gold transition-colors">
-                  {n.title}
-                </h3>
-                <span className="text-[11px] font-sans text-text-muted">{n.date}</span>
-              </Link>
-            ))}
-          </div>
+          {newsLead && (
+            <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12">
+              <SecondaryFeature item={newsLead} />
+              {newsCompact.length > 0 && (
+                <div>
+                  {newsCompact.map((it) => <CompactItem key={it.id} item={it} />)}
+                </div>
+              )}
+            </div>
+          )}
         </section>
 
         {/* ── KATEGORIE-SEKTIONEN ─────────────────────────────────────────────── */}

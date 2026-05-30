@@ -368,3 +368,5 @@ async function sendMagicLink(
     throw new Error(`loops email failed (${resp.status}): ${errBody}`);
   }
 }
+
+// deploy: pick up Vercel env vars

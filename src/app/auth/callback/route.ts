@@ -1,19 +1,18 @@
-import { NextResponse }       from 'next/server';
-import type { EmailOtpType }  from '@supabase/supabase-js';
-import { createClient }       from '@/lib/supabase/server';
+import { NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code       = searchParams.get('code');
   const tokenHash  = searchParams.get('token_hash');
-  const type       = searchParams.get('type') as EmailOtpType | null;
+  const type       = searchParams.get('type');
   const redirectTo = searchParams.get('next') ?? '/profil';
 
   const supabase = createClient();
 
   // 1) Magic-Link / E-Mail-OTP (admin generateLink → token_hash)
   if (tokenHash && type) {
-    const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
+    const { error } = await supabase.auth.verifyOtp({ type: type as any, token_hash: tokenHash });
     if (!error) {
       return NextResponse.redirect(`${origin}${redirectTo}`);
     }

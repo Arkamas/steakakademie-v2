@@ -19,7 +19,6 @@
 
 export const runtime  = 'nodejs';
 export const dynamic  = 'force-dynamic';
-// redeploy-marker: 2026-05-29b — DIGISTORE_WEBHOOK_TOKEN als context=all neu gesetzt
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
@@ -46,25 +45,6 @@ const CREDIT_PRODUCTS: Record<string, number> = {
     : {}),
 };
 const CREDIT_COURSE_SLUG = 'steak-beichte';
-
-// TEMP-Diagnose (GET) — nur Booleans, niemals Werte. Nach Diagnose entfernen.
-export async function GET() {
-  const keys = Object.keys(process.env);
-  return Response.json({
-    // unsere Secrets
-    DIGISTORE_WEBHOOK_TOKEN: !!process.env.DIGISTORE_WEBHOOK_TOKEN,
-    LOOPS_API_KEY: !!process.env.LOOPS_API_KEY,
-    SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-    // Netlify-eigene Built-ins (zeigt, ob die Funktion ÜBERHAUPT Env hat)
-    NETLIFY: !!process.env.NETLIFY,
-    URL: !!process.env.URL,
-    SITE_NAME: !!process.env.SITE_NAME,
-    NODE_ENV: process.env.NODE_ENV || null,
-    // Gesamtzahl + Stichprobe der Key-NAMEN (keine Werte)
-    totalEnvKeys: keys.length,
-    sampleKeys: keys.filter(k => !k.startsWith('npm_')).slice(0, 25),
-  });
-}
 
 export async function POST(req: Request) {
   // Token-Verifikation via URL-Parameter

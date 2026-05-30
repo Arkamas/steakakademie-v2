@@ -118,7 +118,7 @@ export async function POST(req: Request) {
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content }],
       maxTokens: 3500,
-      temperature: 0.5,
+      temperature: 0.3,
     });
 
     // 6) Speichern

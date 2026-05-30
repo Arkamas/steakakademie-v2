@@ -86,15 +86,15 @@ SECURITY DEFINER
 SET search_path = pg_catalog, public
 AS $$
 DECLARE
-  v_ok BOOLEAN := false;
+  v_count INTEGER;
 BEGIN
   UPDATE diagnose_credits
   SET balance = balance - 1,
       updated_at = timezone('utc', now())
   WHERE user_id = p_user_id AND balance > 0;
 
-  GET DIAGNOSTICS v_ok = ROW_COUNT;
-  RETURN v_ok > 0;
+  GET DIAGNOSTICS v_count = ROW_COUNT;
+  RETURN v_count > 0;
 END;
 $$;
 

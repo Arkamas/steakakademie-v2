@@ -331,15 +331,24 @@ async function sendMagicLink(
   courseTitle: string | null,
 ) {
   const redirectTo = (courseSlug && TOOL_REDIRECT[courseSlug]) ?? DEFAULT_REDIRECT;
+  const nextPath   = new URL(redirectTo).searchParams.get('next') ?? '/mein-system';
 
   const { data, error } = await supabase.auth.admin.generateLink({
     type:    'magiclink',
     email,
     options: { redirectTo },
   });
-  if (error || !data?.properties?.action_link) {
+  if (error || !data?.properties?.hashed_token) {
     throw new Error(`magic link generation failed: ${error?.message}`);
   }
+
+  // Eigenen Link auf unseren Callback bauen (token_hash → verifyOtp).
+  // NICHT action_link nutzen: der liefert Tokens im URL-Hash, die ein
+  // Server-Route-Handler nicht lesen kann → Login schlug fehl.
+  const magicLink =
+    `https://steakakademie.de/auth/callback` +
+    `?token_hash=${encodeURIComponent(data.properties.hashed_token)}` +
+    `&type=magiclink&next=${encodeURIComponent(nextPath)}`;
 
   // generateLink GENERIERT — sendet NICHT. Loops macht den Versand.
   const apiKey     = process.env.LOOPS_API_KEY;
@@ -358,7 +367,7 @@ async function sendMagicLink(
       transactionalId: templateId,
       email,
       dataVariables: {
-        magic_link:   data.properties.action_link,
+        magic_link:   magicLink,
         course_title: courseTitle ?? 'deinem Kurs',
       },
     }),

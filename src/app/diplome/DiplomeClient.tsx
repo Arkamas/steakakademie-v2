@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight, Lock } from 'lucide-react';
 import Header from '@/components/layout/Header';
@@ -91,6 +92,20 @@ export default function DiplomeClient() {
               <div className="h-px w-16 bg-brand-gold/20" />
               <div className="w-1 h-1 bg-brand-gold/40 rotate-45" />
               <div className="h-px w-16 bg-brand-gold/20" />
+            </div>
+
+            {/* Medaillen-Schaustück */}
+            <div className="mt-12 mx-auto" style={{ maxWidth: 620 }}>
+              <Image
+                src="/images/diplome/medals-hero.png"
+                alt="Die Grillmeister-Medaillen — Bronze, Silber, Gold, Platin, Meister"
+                width={1024}
+                height={1024}
+                priority
+                sizes="(max-width: 640px) 100vw, 620px"
+                className="w-full h-auto"
+                style={{ filter: 'drop-shadow(0 10px 34px rgba(0,0,0,0.6))' }}
+              />
             </div>
           </div>
         </section>

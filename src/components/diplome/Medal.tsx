@@ -76,21 +76,16 @@ export default function Medal({ tier, size = 60, locked = false, level, baseImag
       <circle cx="50" cy="50" r="42" fill="none" stroke={t.lo} strokeWidth="1.5" opacity="0.55" />
       <circle cx="50" cy="50" r="40" fill="none" stroke={t.hi} strokeWidth="1" opacity="0.5" />
 
-      {/* Longhorn-Emblem (geprägt) */}
-      <g stroke={t.emboss} fill={t.emboss} opacity="0.92" strokeLinecap="round" strokeLinejoin="round">
-        {/* Hörner — weite Schwung-Kurve */}
+      {/* Flammen-Emblem (Marken-Motiv, geprägt) */}
+      <g opacity="0.94">
         <path
-          d="M18 48 C 16 30, 30 24, 40 34 C 45 39, 55 39, 60 34 C 70 24, 84 30, 82 48"
-          fill="none" strokeWidth="5"
+          d="M50 24 C 56 37, 67 44, 67 57 C 67 68, 59 76, 50 76 C 41 76, 33 68, 33 57 C 33 49, 37 45, 41 50 C 40 41, 44 32, 50 24 Z"
+          fill={t.emboss}
         />
-        {/* Kopf */}
-        <path d="M50 40 C 41 40, 35 47, 35 56 C 35 66, 42 72, 50 72 C 58 72, 65 66, 65 56 C 65 47, 59 40, 50 40 Z" />
-        {/* Augen (ausgespart, heller) */}
-        <circle cx="44" cy="54" r="2.4" fill={t.hi} stroke="none" />
-        <circle cx="56" cy="54" r="2.4" fill={t.hi} stroke="none" />
-        {/* Nüstern */}
-        <ellipse cx="46.5" cy="63" rx="1.6" ry="2.2" fill={t.hi} stroke="none" />
-        <ellipse cx="53.5" cy="63" rx="1.6" ry="2.2" fill={t.hi} stroke="none" />
+        <path
+          d="M50 45 C 53 52, 59 56, 59 63 C 59 69, 55 73, 50 73 C 45 73, 41 69, 41 63 C 41 58, 44 56, 46 59 C 46 53, 48 49, 50 45 Z"
+          fill={t.hi} opacity="0.55"
+        />
       </g>
 
       {/* Glanz-Highlight */}

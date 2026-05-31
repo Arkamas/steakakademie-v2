@@ -51,7 +51,7 @@ export default function Footer() {
             </p>
             <div className="mt-5 flex items-center gap-1 text-xs font-sans text-text-light/35 tracking-widest uppercase">
               <Flame size={12} className="text-brand-gold" />
-              Seit 2024
+              Seit 2026
             </div>
           </div>
 

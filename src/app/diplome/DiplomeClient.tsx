@@ -6,6 +6,7 @@ import { ChevronRight, Lock } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import BadgeProgression from '@/components/diplome/BadgeProgression';
+import Medal, { tierForLevel } from '@/components/diplome/Medal';
 
 const LEVELS = [
   { id: 1,  name: 'Glut-Lehrling',      emoji: '🔥', description: 'Grundlagen des Grillens: Temperaturzonen, direktes vs. indirektes Grillen, Sicherheit.', locked: false },
@@ -113,8 +114,11 @@ export default function DiplomeClient() {
                 }`}
               >
                 <div className="flex items-start gap-4">
-                  <div className="text-4xl shrink-0">
-                    {level.locked ? <Lock size={28} className="text-text-muted mt-1" /> : level.emoji}
+                  <div className="shrink-0 relative">
+                    <Medal tier={tierForLevel(level.id)} level={level.id} locked={level.locked} size={60} />
+                    {level.locked && (
+                      <Lock size={16} className="text-text-muted absolute -bottom-1 -right-1 bg-surface-card rounded-full p-0.5" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">

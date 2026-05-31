@@ -86,6 +86,13 @@ export default function Footer() {
             Wenn du über sie kaufst, erhalten wir eine kleine Provision — der Preis für dich ändert sich nicht.
             Wir empfehlen nur Produkte, die wir selbst getestet haben oder für qualitativ hochwertig halten.
           </p>
+          {/* Gesetzlicher Widerrufsbutton (ab 19.06.2026) — ständig und leicht auffindbar, farblich hervorgehoben */}
+          <Link
+            href="/widerruf"
+            className="inline-flex items-center gap-1.5 mb-5 px-4 py-2 border border-brand-gold/50 text-brand-gold text-xs font-sans font-bold tracking-wide uppercase hover:bg-brand-gold/10 transition-colors"
+          >
+            Vertrag widerrufen
+          </Link>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] font-sans text-text-light/35">
             <span>© {year} Steakakademie</span>
             <Link href="/impressum" className="hover:text-text-light/60 transition-colors">Impressum</Link>

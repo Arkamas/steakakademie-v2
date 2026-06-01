@@ -149,7 +149,12 @@ export default async function PlanPage() {
                       Woche {w.week}
                     </span>
                   </div>
-                  <h2 className="font-serif text-xl font-bold text-text-primary mb-4">{w.theme}</h2>
+                  <h2 className="font-serif text-xl font-bold text-text-primary mb-2">{w.theme}</h2>
+                  {w.description && (
+                    <p className="font-body text-sm text-text-secondary leading-relaxed mb-4">
+                      {w.description}
+                    </p>
+                  )}
 
                   <div className="space-y-4">
                     {w.sessions.map((s, si) => (

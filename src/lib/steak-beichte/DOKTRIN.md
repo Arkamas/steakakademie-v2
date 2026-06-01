@@ -50,6 +50,10 @@ Alufolie abdecken". Falls Folie: nie direkt aufs Fleisch (Backpapier dazwischen)
 *Deckt ab: wann welche Methode, ab welcher Dicke, Reihenfolge.*
 **Regel:** ____________________________________________
 
+## ✅ 6b. Cut-Auswahl & Mindestdicke
+*Deckt ab: wie dick ein Cut sein muss, damit Saftigkeit erhalten bleibt.*
+**Regel:** Entrecôte / Ribeye mindestens **3,5–10 cm** dick. Zu dünn → Außenzone gart durch, bevor der Kern den Punkt erreicht → unvermeidbarer Saftverlust. (Quelle/Vorbild-Umsetzung: mf58.de — nur Sach-/Konzeptreferenz, Text nicht übernommen.)
+
 ## ⬜ 7. Salzen & Würzen — Timing
 *Deckt ab: salzen lange vorher vs. kurz vorher vs. danach; warum.*
 **Regel:** ____________________________________________

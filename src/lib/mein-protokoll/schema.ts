@@ -36,10 +36,11 @@ export const SessionSchema = z.object({
 });
 
 export const WeekSchema = z.object({
-  week:     z.number().int().min(1).max(8),
-  theme:    z.string().describe('Wochenthema, kurz, z.B. "Temperaturkontrolle"'),
-  sessions: z.array(SessionSchema).min(1).max(2).describe('1–2 Sessions, realistisch in der angegebenen Zeit'),
-  note:     z.string().describe('Kurzer Coaching-Hinweis für diese Woche, 1 Satz'),
+  week:        z.number().int().min(1).max(8),
+  theme:       z.string().describe('Wochenthema, kurz, z.B. "Temperaturkontrolle"'),
+  description: z.string().optional().describe('2–3 Sätze: worum es diese Woche geht, warum das dran ist (Bezug zum Vorwissen/Ziel) und wie man es angeht. Die Beschreibung des Wochen-Projekts — konkret, kein Fülltext. IMMER ausfüllen.'),
+  sessions:    z.array(SessionSchema).min(1).max(2).describe('1–2 Sessions, realistisch in der angegebenen Zeit'),
+  note:        z.string().describe('Kurzer Coaching-Hinweis für diese Woche, 1 Satz'),
 });
 
 export const PlanSchema = z.object({

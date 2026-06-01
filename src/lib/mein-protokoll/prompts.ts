@@ -10,6 +10,7 @@ Regeln für den Plan:
 - Erfolgskriterien sind messbar und konkret: nicht "besser werden", sondern "Kerntemperatur 54 °C bei mittlerem Ribeye, gleichmäßige Kruste in unter 90 Sekunden".
 - Berücksichtige die offene Frage (was den Nutzer am meisten nervt) — adressiere genau dieses Problem früh im Plan.
 - Temperaturen in °C, Gewichte in Gramm, Zeiten konkret.
+- Jede Woche braucht eine "description": 2–3 Sätze, die das Wochen-Projekt beschreiben — worum es geht, warum es jetzt dran ist (Bezug auf Vorwoche/Niveau/Ziel) und wie man es angeht. Konkret, nicht generisch.
 - Kein Fülltext, keine Floskeln. Jeder Satz trägt Information.`;
 
 export function buildUserPrompt(a: Answers): string {

@@ -16,6 +16,17 @@ export const dynamic = 'force-dynamic';
 
 import { createClient } from '@supabase/supabase-js';
 
+// TEMP-Diagnose: zeigt nur, OB die Env-Variablen in der deployten Function ankommen (keine Secrets).
+export async function GET() {
+  return Response.json({
+    hasApiKey: !!process.env.LOOPS_API_KEY,
+    hasTemplateId: !!process.env.LOOPS_WIDERRUF_TEMPLATE_ID,
+    templateIdTail: (process.env.LOOPS_WIDERRUF_TEMPLATE_ID ?? '').slice(-6),
+    hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+  });
+}
+
 export async function POST(req: Request) {
   let body: any;
   try { body = await req.json(); } catch { return Response.json({ error: 'Ungültige Anfrage.' }, { status: 400 }); }

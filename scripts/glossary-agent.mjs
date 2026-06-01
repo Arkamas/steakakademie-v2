@@ -66,6 +66,34 @@ const SEED_TERMS = [
   'Gusseisenpfanne',
   'Hackfleisch',
   'Fleischthermometer',
+
+  // ── Proaktives Wachstum (01.06.2026) — Fachbegriffe unabhängig vom Content ──
+  // Bereits als MDX vorhandene Begriffe überspringt der Agent via .processed.json.
+  // Cuts & Fleischkunde
+  'Tomahawk-Steak', 'T-Bone-Steak', 'Porterhouse', 'Entrecôte', 'Rib-Eye',
+  'Rumpsteak', 'Filet', 'Flank Steak', 'Skirt Steak', 'Hanger Steak', 'Onglet',
+  'Tri-Tip', 'Picanha', 'Flat Iron Steak', 'Bavette', 'Short Ribs', 'Ochsenbacke',
+  'Pulled Pork', 'Spare Ribs', 'Baby Back Ribs', 'Burnt Ends', 'Pastrami',
+  'Beef Jerky', 'Secreto', 'Presa', 'Pluma', 'Wagyu', 'Angus-Rind', 'Ibérico',
+  // Garstufen
+  'Garstufe', 'Rare', 'Medium Rare', 'Medium', 'Medium Well', 'Well Done', 'Blue Rare',
+  // Methoden & Technik
+  'Direktes Grillen', 'Indirektes Grillen', 'Zwei-Zonen-Grillen', 'Minion-Methode',
+  'Snake-Methode', '3-2-1-Methode', 'Vorwärtsgaren', 'Niedrigtemperaturgaren',
+  'Räuchern', 'Mopping', 'Wrappen', 'Rasten', 'Anzündkamin', 'Glutbett',
+  // Fleischwissenschaft
+  'Proteindenaturierung', 'Karamellisierung', 'Bindegewebe', 'Gelatinierung',
+  'Pökeln', 'Nitritpökelsalz', 'Umami', 'Fettschmelzpunkt', 'Strahlungshitze',
+  'Konvektionshitze', 'Faserrichtung', 'Wet Aging', 'Fettdeckel', 'Parieren',
+  // Ausrüstung & Holz
+  'Kugelgrill', 'Gasgrill', 'Holzkohlegrill', 'Dutch Oven', 'Plancha', 'Rotisserie',
+  'Räucherchips', 'Wood Chunks', 'Pizzastein', 'Hickory', 'Mesquite', 'Kirschholz',
+  'Apfelholz', 'Pecan-Holz',
+  // Würzen & Saucen
+  'Dry Rub', 'Marinade', 'BBQ-Sauce', 'Glaze', 'Mop-Sauce', 'Fleur de Sel',
+  'Salzkruste', 'Injektion',
+  // BBQ-Stile
+  'Texas-Style BBQ', 'Kansas City Style', 'Carolina Style', 'Santa Maria Grill',
 ]
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────

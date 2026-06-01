@@ -35,7 +35,7 @@ export async function GET(req: Request) {
     body: JSON.stringify({
       transactionalId: process.env.LOOPS_WIDERRUF_TEMPLATE_ID,
       email: 'u.yendell@gmail.com',
-      dataVariables: { datum: '01.06.2026', zeit: '08:55', order_ref: 'DIAG', product: 'Diag' },
+      dataVariables: { datum: '01.06.2026', Datum: '01.06.2026', zeit: '08:55', Zeit: '08:55', order_ref: 'DIAG', Order_ref: 'DIAG', product: 'Diag', Product: 'Diag' },
     }),
   });
   return Response.json({ ...base, loopsStatus: resp.status, loopsBody: await resp.text() });
@@ -94,10 +94,13 @@ export async function POST(req: Request) {
         body: JSON.stringify({
           transactionalId: templateId,
           email,
+          // Loops-Variablennamen sind case-sensitive → beide Schreibweisen senden,
+          // damit Template-Tippvarianten (Zeit/zeit, Datum/datum …) immer matchen.
           dataVariables: {
-            datum, zeit,
-            order_ref: orderRef || '—',
-            product:   product  || '—',
+            datum, Datum: datum,
+            zeit,  Zeit:  zeit,
+            order_ref: orderRef || '—', Order_ref: orderRef || '—',
+            product:   product  || '—', Product:   product  || '—',
           },
         }),
       });

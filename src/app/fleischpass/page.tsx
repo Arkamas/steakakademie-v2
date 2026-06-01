@@ -327,7 +327,7 @@ export default function FleischpassPage() {
                     </li>
                   </ul>
                   <a
-                    href="/auth/register"
+                    href="/auth/login"
                     className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm border transition-colors hover:border-brand-gold/50"
                     style={{ borderColor: 'rgba(200,136,42,0.3)', color: '#C8882A' }}
                   >

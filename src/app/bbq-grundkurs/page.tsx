@@ -113,7 +113,7 @@ export default function BbqGrundkursPage() {
             <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={11} />
-              <Link href="/kurse" className="hover:text-brand-gold transition-colors">Kurse</Link>
+              <Link href="/diplome" className="hover:text-brand-gold transition-colors">Kurse</Link>
               <ChevronRight size={11} />
               <span className="text-text-secondary">BBQ Grundkurs</span>
             </nav>
@@ -167,16 +167,16 @@ export default function BbqGrundkursPage() {
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
                 {/* Digistore24-Link â€” nach Produkt-Anlage eintragen */}
                 <a
-                  href="https://www.checkout-ds24.com/product/696399"
+                  href=""
                   className="inline-flex items-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
                   style={{ background: '#C8882A', color: '#0D0A06' }}
                 >
-                  79 â‚¬ â€” Jetzt sichern
+                  In Vorbereitung
                   <ArrowRight size={16} />
                 </a>
                 <div>
-                  <p className="font-sans text-sm text-text-secondary line-through">RegulÃ¤r 127 â‚¬</p>
-                  <p className="font-sans text-xs text-text-muted">Digistore24 Â· SEPA, PayPal, Kreditkarte</p>
+                  <p className="font-sans text-sm text-text-secondary">Kursinhalt wird erstellt</p>
+                  <p className="font-sans text-xs text-text-muted">Inhalt folgt in Vorbereitung</p>
                 </div>
               </div>
 
@@ -264,7 +264,7 @@ export default function BbqGrundkursPage() {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="max-w-content mx-auto">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Jetzt sichern
+                In Vorbereitung
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-2">
                 Earlybird â€” solange der Sommer lÃ¤uft.
@@ -282,12 +282,12 @@ export default function BbqGrundkursPage() {
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
                   <div>
                     <div className="flex items-baseline gap-3">
-                      <span className="font-serif text-5xl font-bold text-text-primary">79 â‚¬</span>
+                      <span className="font-serif text-5xl font-bold text-text-primary">In Vorbereitung</span>
                       <span
                         className="font-sans text-xl text-text-muted line-through decoration-brand-fire/60"
                         style={{ textDecoration: 'line-through', textDecorationColor: 'rgba(232,80,24,0.6)' }}
                       >
-                        127 â‚¬
+                        
                       </span>
                     </div>
                     <p className="font-sans text-xs text-text-muted mt-1">
@@ -299,7 +299,7 @@ export default function BbqGrundkursPage() {
                       className="inline-block font-sans text-xs font-bold tracking-[0.14em] uppercase px-3 py-1.5"
                       style={{ background: 'rgba(232,80,24,0.15)', color: '#E85018', border: '1px solid rgba(232,80,24,0.3)' }}
                     >
-                      Du sparst 48â‚¬
+                      In Aufbau
                     </span>
                   </div>
                 </div>
@@ -334,16 +334,16 @@ export default function BbqGrundkursPage() {
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                   {/* Digistore24-Link â€” nach Produkt-Anlage eintragen */}
                   <a
-                    href="https://www.checkout-ds24.com/product/696399"
+                    href=""
                     className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
                     style={{ background: '#C8882A', color: '#0D0A06' }}
                   >
-                    79 â‚¬ â€” Jetzt sichern
+                    In Vorbereitung
                     <ArrowRight size={16} />
                   </a>
                   <div className="flex items-center gap-2 text-xs font-sans text-text-muted">
                     <Star size={11} className="text-brand-gold" />
-                    Sichere Zahlung Ã¼ber Digistore24
+                    Kursinhalt in Vorbereitung
                   </div>
                 </div>
               </div>
@@ -357,7 +357,7 @@ export default function BbqGrundkursPage() {
                 <p className="text-xs font-sans text-text-secondary leading-relaxed">
                   <strong className="text-text-primary">Widerrufsrecht:</strong>{' '}
                   14 Tage ab Kauf, solange digitale Inhalte noch nicht heruntergeladen wurden.
-                  Zahlungsabwicklung Ã¼ber Digistore24 Â· SEPA, PayPal, Kreditkarte Â· USt-befreit (Â§19 UStG).
+                  Kursinhalt wird derzeit erstellt.
                 </p>
               </div>
             </div>

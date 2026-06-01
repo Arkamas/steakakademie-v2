@@ -125,7 +125,7 @@ export default function DiplomeClient() {
                 className={`border p-6 transition-all duration-300 ${
                   level.locked
                     ? 'bg-surface-card border-border-subtle opacity-50'
-                    : 'bg-surface-elevated border-brand-gold/30 hover:border-brand-gold/60 cursor-pointer'
+                    : 'bg-surface-elevated border-brand-gold/30'
                 }`}
               >
                 <div className="flex items-start gap-4">
@@ -141,8 +141,8 @@ export default function DiplomeClient() {
                         Level {level.id}
                       </span>
                       {!level.locked && (
-                        <span className="text-[10px] bg-brand-gold/15 text-brand-gold px-2 py-0.5 font-sans font-bold uppercase tracking-wider">
-                          Verfuegbar
+                        <span className="text-[10px] bg-text-muted/15 text-text-muted px-2 py-0.5 font-sans font-bold uppercase tracking-wider">
+                          In Vorbereitung
                         </span>
                       )}
                     </div>
@@ -153,9 +153,9 @@ export default function DiplomeClient() {
                       {level.description}
                     </p>
                     {!level.locked && (
-                      <button className="mt-3 text-sm font-sans font-medium text-brand-gold hover:text-brand-fire transition-colors">
-                        Jetzt starten &rarr;
-                      </button>
+                      <span className="mt-3 inline-block text-xs font-sans font-medium text-text-muted">
+                        Kursinhalt in Vorbereitung
+                      </span>
                     )}
                   </div>
                 </div>
@@ -227,7 +227,7 @@ export default function DiplomeClient() {
               ))}
             </div>
             <p className="text-text-light/30 text-xs font-sans mt-4">
-              2 von 10 Levels freigeschaltet &mdash; weitere folgen
+Diplom-System im Aufbau &mdash; Kursinhalte folgen Schritt fuer Schritt
             </p>
           </div>
         </section>

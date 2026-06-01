@@ -398,18 +398,15 @@ export default async function GruendungSprintPage() {
                   </p>
                 </div>
                 <div className="shrink-0">
-                  <a
-                    href="https://www.digistore24.com/product/695894"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity plausible-event-name=Digistore-Checkout plausible-event-produkt=695894"
-                    style={{ background: '#C8882A', color: '#0D0A06' }}
+                  <span
+                    className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base cursor-not-allowed select-none"
+                    style={{ background: 'rgba(200,136,42,0.12)', color: '#9a8a72', border: '1px solid rgba(200,136,42,0.25)' }}
+                    aria-disabled="true"
                   >
-                    {price ? `${eur(price)} — Jetzt kaufen` : 'Jetzt kaufen'}
-                    <ArrowRight size={16} />
-                  </a>
+                    In Vorbereitung
+                  </span>
                   <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Zahlungsabwicklung: Digistore24 · SEPA, PayPal, Kreditkarte
+                    Dieser Sprint wird derzeit fertiggestellt — bald buchbar.
                   </p>
                 </div>
               </div>

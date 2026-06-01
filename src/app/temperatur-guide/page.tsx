@@ -116,7 +116,7 @@ export default function TemperaturGuidePage() {
             <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40 mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
-              <Link href="/wissen" className="hover:text-brand-gold transition-colors">Wissen</Link>
+              <Link href="/methoden" className="hover:text-brand-gold transition-colors">Wissen</Link>
               <ChevronRight size={12} />
               <span className="text-text-light/65">Kerntemperaturen</span>
             </nav>

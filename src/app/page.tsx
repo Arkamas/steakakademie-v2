@@ -87,7 +87,7 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
   },
   {
     slug: 'dry-aged-beef-zu-hause',
-    url: '/artikel/dry-aged-beef-zu-hause',
+    url: '/aging',
     title: 'Dry Aged Beef zu Hause: Was wirklich funktioniert',
     excerpt:
       'Trockengereiftes Fleisch ist kein Mythos — aber es braucht Kontrolle. Wir zeigen, was mit einem Dry-Ager für Zuhause realistisch möglich ist.',
@@ -103,7 +103,7 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
   },
   {
     slug: 'kerntemperaturen-guide',
-    url: '/wissen/kerntemperaturen',
+    url: '/temperatur-guide',
     title: 'Kerntemperaturen: Die vollständige Tabelle für jedes Fleisch',
     excerpt:
       'Von Rare bis Well Done, von Rind bis Geflügel — alle Kerntemperaturen auf einen Blick, mit Erklärung der Prozesse dahinter.',

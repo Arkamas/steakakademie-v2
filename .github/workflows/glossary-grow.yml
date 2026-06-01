@@ -1,0 +1,50 @@
+name: Glossar wachsen lassen
+
+# Lässt das Glossar im Hintergrund weiterwachsen: scannt den Content auf neue
+# BBQ-Begriffe, generiert via Claude standardisierte Definitionen, committet sie
+# persistent (der Build-Lauf erzeugt sie sonst nur ephemer pro Deploy).
+on:
+  schedule:
+    - cron: '0 3 * * 0'   # Jeden Sonntag 03:00 UTC (~04:00/05:00 Berlin)
+  workflow_dispatch:        # + manuell auslösbar
+
+jobs:
+  grow-glossary:
+    name: Neue Glossar-Begriffe generieren + committen
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write       # Für Commit + Push der neuen Begriffe
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Glossar-Agent ausführen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/glossary-agent.mjs
+
+      - name: Neue Begriffe committen + pushen
+        run: |
+          if [ -z "$(git status --porcelain content/glossar)" ]; then
+            echo "## 📖 Glossar" >> $GITHUB_STEP_SUMMARY
+            echo "Keine neuen Begriffe — Content unverändert." >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          NEW=$(git status --porcelain content/glossar | grep -cE '\.mdx$' || true)
+          git config user.name  "glossary-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add content/glossar
+          git commit -m "chore(glossar): ${NEW} neue/aktualisierte Begriffe (automatisch)"
+          git push
+          echo "## 📖 Glossar gewachsen" >> $GITHUB_STEP_SUMMARY
+          echo "**${NEW}** neue/aktualisierte Begriffe committet + gepusht → löst Deploy aus." >> $GITHUB_STEP_SUMMARY

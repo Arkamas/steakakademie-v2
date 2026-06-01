@@ -166,13 +166,14 @@ export default async function PlanPage() {
                         <p className="font-sans text-[10px] font-bold tracking-[0.12em] uppercase text-text-muted mb-2">
                           Session {si + 1}
                         </p>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-2">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-2">
                           {[
                             { label: 'Cut', value: s.cut },
                             { label: 'Methode', value: s.method },
-                            { label: 'Zieltemp.', value: s.targetTemp },
+                            { label: 'Grill-/Deckeltemp.', value: s.grillTemp },
+                            { label: 'Kerntemp.', value: s.targetTemp },
                             { label: 'Zeitplanung', value: s.timePlanning },
-                          ].map(({ label, value }) => (
+                          ].filter((x) => x.value).map(({ label, value }) => (
                             <div key={label}>
                               <p className="font-sans text-[10px] font-bold tracking-[0.1em] uppercase text-text-muted mb-0.5">
                                 {label}
@@ -181,6 +182,12 @@ export default async function PlanPage() {
                             </div>
                           ))}
                         </div>
+                        {s.process && (
+                          <p className="font-body text-sm text-text-secondary leading-relaxed mb-2">
+                            <span className="font-bold text-text-primary">Ablauf: </span>
+                            {s.process}
+                          </p>
+                        )}
                         <p className="font-body text-sm text-text-secondary leading-relaxed">
                           <span className="font-bold text-text-primary">Erfolgskriterium: </span>
                           {s.successCriterion}

@@ -61,6 +61,23 @@ CUT-SPEZIFISCHE FAKTEN (geprüft — bei Diagnose berücksichtigen):
   Punkt erreicht — Saftverlust ist dann unvermeidbar. Wenn ein erkennbar zu dünnes
   Entrecôte (Foto/Beschreibung) Ursache von Trockenheit ist, nenne die Mindestdicke
   als Korrektur.
+
+METHODEN (korrekt benennen, passend zur Diagnose empfehlen):
+- Standard für Einsteiger (in DE am verbreitetsten): erst HEISS DIREKT angrillen bei
+  280–300 °C für die Kruste (Maillard), dann in den INDIREKTEN Bereich (~150–170 °C
+  Deckelthermometer) ziehen, bis die Ziel-Kerntemperatur erreicht ist, dann rasten.
+- Reverse Sear (Alternative, gut bei dicken Cuts): erst niedrig indirekt (~110–130 °C)
+  bis ~6–8 °C unter Ziel-Kern, dann kurz scharf angrillen für die Kruste.
+- Immer beide Temperaturebenen trennen: Grill-/Deckeltemperatur ≠ Kerntemperatur.
+
+GARGRADE RIND (Kerntemperatur — Orientierung):
+- rare ~50 °C · medium rare ~54 °C · medium ~57 °C · medium well ~60 °C · durch 63 °C+.
+- Diese Werte als Orientierung nutzen; bei Diagnose den Zielgrad benennen.
+
+WERKZEUG:
+- Ein digitales Kern-/Einstichthermometer ist Pflicht. Ohne gemessene Kerntemperatur
+  ist exaktes Garen Glückssache — wenn der Fehler "zu durch / zu roh" ist und kein
+  Thermometer genutzt wurde, ist das fast immer die eigentliche Ursache.
 `;
 
 export const SYSTEM_PROMPT = `Du bist der Diagnose-Profi der Steakakademie — ein lebenserfahrener Pitmaster und Profi-Koch.

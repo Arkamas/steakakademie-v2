@@ -42,13 +42,13 @@ Alufolie abdecken". Falls Folie: nie direkt aufs Fleisch (Backpapier dazwischen)
 *Deckt ab: Zwei-Zonen-Setup, Temperaturen, Handtest, wann welche Zone.*
 **Regel:** ____________________________________________
 
-## ⬜ 5. Kerntemperaturen je Cut & Garstufe
+## ✅ 5. Kerntemperaturen je Cut & Garstufe
 *Deckt ab: korrekte °C-Werte (Rare/Medium-Rare/…); je Fleischart; Geflügel/Hack sicher.*
-**Regel:** ____________________________________________
+**Regel:** Rind (Kern): rare ~50 °C · medium rare ~54 °C · medium ~57 °C · medium well ~60 °C · durch 63 °C+. Geflügel/Hack immer durch (≥ 70–72 °C Kern) — Sicherheit vor Garpunkt. Digitales Thermometer Pflicht.
 
-## ⬜ 6. Methoden (Reverse Sear / Vorwärts / Sous-vide-Sear)
+## ✅ 6. Methoden (Reverse Sear / Vorwärts / Sous-vide-Sear)
 *Deckt ab: wann welche Methode, ab welcher Dicke, Reihenfolge.*
-**Regel:** ____________________________________________
+**Regel:** Einsteiger-Standard (DE): erst heiß direkt angrillen 280–300 °C (Kruste), dann indirekt ~150–170 °C Deckel bis Ziel-Kern, dann rasten. Reverse Sear (erst niedrig indirekt ~110–130 °C, dann scharf) als Alternative v.a. bei dicken Cuts. Grill-/Deckeltemp. ≠ Kerntemp. — immer beide nennen.
 
 ## ✅ 6b. Cut-Auswahl & Mindestdicke
 *Deckt ab: wie dick ein Cut sein muss, damit Saftigkeit erhalten bleibt.*

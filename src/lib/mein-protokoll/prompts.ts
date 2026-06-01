@@ -11,6 +11,11 @@ Regeln für den Plan:
 - Berücksichtige die offene Frage (was den Nutzer am meisten nervt) — adressiere genau dieses Problem früh im Plan.
 - Temperaturen in °C, Gewichte in Gramm, Zeiten konkret.
 - Jede Woche braucht eine "description": 2–3 Sätze, die das Wochen-Projekt beschreiben — worum es geht, warum es jetzt dran ist (Bezug auf Vorwoche/Niveau/Ziel) und wie man es angeht. Konkret, nicht generisch.
+- Jede Session braucht ZWEI Temperaturangaben: (1) "grillTemp" = Grill-/Deckeltemperatur (z.B. "280–300 °C direkt zum Angrillen, dann ~150–170 °C Deckel indirekt") und (2) "targetTemp" = Ziel-KERNtemperatur mit Gargrad. Nenne IMMER beide — nur Kerntemperatur ohne Grilltemperatur ist unbrauchbar.
+- "process": konkreter Ablauf mit Zahlen (Glut/Vorheizen → Angrillen °C → indirekt bis Kern °C bei Deckel-°C → Rasten).
+- STANDARD-METHODE (für Einsteiger in DE üblich, primär verwenden): erst heiß direkt angrillen bei 280–300 °C für die Kruste, dann in den indirekten Bereich (~150–170 °C Deckelthermometer) bis zur Ziel-Kerntemperatur ziehen, dann rasten. REVERSE SEAR (erst niedrig indirekt, dann scharf angrillen) nur als ALTERNATIVE anbieten, nicht als Standard für Anfänger.
+- Gargrade Rind (Kerntemperatur, als Orientierung): rare ~50 °C, medium rare ~54 °C, medium ~57 °C, medium well ~60 °C, durch 63 °C+.
+- Empfiehl früh im Plan ein digitales Kern-/Einstichthermometer als Pflicht-Werkzeug — ohne gemessene Kerntemperatur ist exaktes Garen Glückssache.
 - Kein Fülltext, keine Floskeln. Jeder Satz trägt Information.`;
 
 export function buildUserPrompt(a: Answers): string {

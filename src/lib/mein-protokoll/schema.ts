@@ -29,8 +29,10 @@ export type Answers = z.infer<typeof AnswersSchema>;
 
 export const SessionSchema = z.object({
   cut:              z.string().describe('Cut mit Gewicht, z.B. "Entrecôte 300g"'),
-  method:           z.string().describe('Methode, z.B. "Reverse Sear", "direkt", "indirekt"'),
-  targetTemp:       z.string().describe('Zieltemperatur, z.B. "54 °C Kern"'),
+  method:           z.string().describe('Methode, z.B. "Heiß angrillen + indirekt ziehen", "Reverse Sear", "direkt"'),
+  grillTemp:        z.string().optional().describe('Grill-/Deckeltemperaturen konkret, z.B. "280–300 °C direkt zum Angrillen, danach ~150–170 °C Deckel indirekt". IMMER ausfüllen.'),
+  targetTemp:       z.string().describe('Ziel-KERNtemperatur mit Gargrad, z.B. "54 °C Kern (medium rare)"'),
+  process:          z.string().optional().describe('Ablauf in 2–4 kurzen Schritten: Glut/Vorheizen → Angrillen (°C, beide Seiten) → in indirekten Bereich (Deckel-°C) bis Kerntemperatur → Rasten. Konkret mit Zahlen. IMMER ausfüllen.'),
   timePlanning:     z.string().describe('Zeitplanung der Session, z.B. "ca. 90 Min inkl. Ruhephase"'),
   successCriterion: z.string().describe('Konkretes, messbares Erfolgskriterium für diese Session'),
 });

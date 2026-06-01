@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
+import { Fragment } from 'react';
 import Link from 'next/link';
-import { ChevronRight, ArrowRight } from 'lucide-react';
+import { ChevronRight, ArrowRight, Thermometer, Camera, ClipboardList } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 import { requireCourseAccess } from '@/lib/auth/require-course-access';
 import { PlanSchema, type Plan } from '@/lib/mein-protokoll/schema';
 import PrintButton from './PrintButton';
+import PlanNewsletter from './PlanNewsletter';
 
 export const dynamic = 'force-dynamic';
 
@@ -137,13 +139,43 @@ export default async function PlanPage() {
               </ul>
             </div>
 
+            {/* Ausrüstungs-Check (Element 1) — interne Empfehlungen, noch kein Affiliate */}
+            <div className="print:hidden mb-8 border border-border-subtle p-6">
+              <p className="font-sans text-[10px] font-bold tracking-[0.14em] uppercase text-brand-fire mb-2">
+                Ausrüstungs-Check
+              </p>
+              <p className="font-body text-sm text-text-secondary leading-relaxed mb-4 max-w-2xl">
+                Dieser Plan setzt zwei Dinge voraus: ein <strong className="text-text-primary">präzises
+                Einstichthermometer</strong> und ein <strong className="text-text-primary">vorgewärmtes
+                Holzbrett</strong> zum Rasten. Ohne sie arbeitest du mit Schätzwerten — und das ist nicht unser Stil.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/vergleich/fleischthermometer"
+                  className="inline-flex items-center gap-2 px-4 py-2 border text-sm font-sans font-bold transition-colors hover:bg-brand-gold/10"
+                  style={{ borderColor: 'rgba(200,136,42,0.6)', color: '#C8882A' }}
+                >
+                  <Thermometer size={15} /> Thermometer-Empfehlungen
+                </Link>
+                <Link
+                  href="/kategorie/ausruestung"
+                  className="inline-flex items-center gap-2 px-4 py-2 border text-sm font-sans font-bold transition-colors hover:bg-brand-gold/10"
+                  style={{ borderColor: 'rgba(200,136,42,0.6)', color: '#C8882A' }}
+                >
+                  Ausrüstung ansehen <ArrowRight size={15} />
+                </Link>
+              </div>
+              <p className="text-[10px] font-sans text-text-muted/60 mt-3">Unabhängige Empfehlungen — keine bezahlten Platzierungen.</p>
+            </div>
+
+            {/* Wochenstart-Erinnerung (Element 2) */}
+            <PlanNewsletter />
+
             {/* Wochen */}
             <div className="space-y-8">
               {plan.weeks.map((w) => (
-                <div
-                  key={w.week}
-                  className="border border-border-subtle p-6 break-inside-avoid"
-                >
+                <Fragment key={w.week}>
+                <div className="border border-border-subtle p-6 break-inside-avoid">
                   <div className="flex items-baseline gap-3 mb-1">
                     <span className="font-sans text-xs font-bold" style={{ color: 'rgba(200,136,42,0.6)' }}>
                       Woche {w.week}
@@ -202,7 +234,49 @@ export default async function PlanPage() {
                     </p>
                   )}
                 </div>
+
+                {/* Fleischpass-Teaser nach Woche 1 (Element 4) */}
+                {w.week === 1 && (
+                  <div className="print:hidden border border-brand-gold/15 bg-surface-elevated p-5 flex items-start gap-3">
+                    <ClipboardList size={18} className="text-brand-gold shrink-0 mt-0.5" />
+                    <p className="font-body text-sm text-text-secondary leading-relaxed">
+                      <strong className="text-text-primary">Session absolviert?</strong> Trag sie in deinen{' '}
+                      <Link href="/fleischpass" className="text-brand-gold font-bold hover:text-brand-fire underline">Fleischpass</Link>{' '}
+                      ein — Kerntemperatur, Methode, dein Urteil. Nach 8 Wochen zeigt dir die KI, wo du
+                      konstant bist und wo noch Luft ist. Kostenlos.
+                    </p>
+                  </div>
+                )}
+                </Fragment>
               ))}
+            </div>
+
+            {/* Steak-Beichte Cross-Sell (Element 3) */}
+            <div className="print:hidden mt-10 border border-brand-fire/25 p-6" style={{ background: 'rgba(232,80,24,0.05)' }}>
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-brand-fire/10 border border-brand-fire/25 flex items-center justify-center shrink-0">
+                  <Camera size={16} className="text-brand-fire" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-1">
+                    Wenn etwas schiefgeht
+                  </p>
+                  <p className="font-serif font-bold text-text-primary text-base mb-1.5">
+                    Läuft eine Session nicht wie geplant?
+                  </p>
+                  <p className="font-body text-sm text-text-secondary leading-relaxed mb-4 max-w-2xl">
+                    Gut. Das ist der wertvollste Datenpunkt, den du haben kannst — wenn du weißt, was
+                    schiefgelaufen ist. Foto hochladen, kurz beschreiben, KI-Diagnose in Minuten.
+                  </p>
+                  <Link
+                    href="/steak-beichte"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 font-sans text-sm font-bold transition-opacity hover:opacity-90"
+                    style={{ background: '#E85018', color: '#fff' }}
+                  >
+                    Session analysieren lassen <ArrowRight size={15} />
+                  </Link>
+                </div>
+              </div>
             </div>
 
             {/* Abschluss */}
@@ -212,16 +286,29 @@ export default async function PlanPage() {
               </p>
             </div>
 
-            <div className="print:hidden mt-10 flex flex-wrap gap-4">
+            {/* 8-Wochen-Abschluss-Framing (Element 5) */}
+            <p className="print:hidden mt-8 max-w-2xl font-body text-sm text-text-secondary leading-relaxed">
+              8 Wochen sind kein Kurs — das ist eine Gewohnheit, die du dir baust. Bist du am Ende
+              bereit fürs nächste Level, generierst du einfach einen neuen Plan auf höherem Niveau.
+            </p>
+
+            <div className="print:hidden mt-6 flex flex-wrap gap-4">
               <PrintButton />
               <Link
                 href="/mein-protokoll/fragebogen"
                 className="inline-flex items-center gap-2 px-5 py-2.5 font-sans text-sm font-bold transition-opacity hover:opacity-90"
                 style={{ background: '#C8882A', color: '#0D0A06' }}
               >
-                Neuen Plan generieren
+                Nächste Stufe: Neuen Plan generieren
               </Link>
             </div>
+
+            {/* Diplom-Hinweis (Element 6) — ehrlich, kein Button */}
+            <p className="print:hidden mt-10 pt-6 border-t border-border-subtle text-xs font-body text-text-muted leading-relaxed max-w-2xl">
+              Die Steakakademie baut gerade die <strong className="text-text-secondary">Diplom-Tracks</strong> auf —
+              strukturierte Lernpfade, die auf Plänen wie diesem aufbauen. Wer früh dabei sein will:
+              die Wochenstart-Erinnerung oben genügt, du erfährst es zuerst.
+            </p>
           </div>
         </section>
       </main>

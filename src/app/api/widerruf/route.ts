@@ -16,31 +16,6 @@ export const dynamic = 'force-dynamic';
 
 import { createClient } from '@supabase/supabase-js';
 
-// TEMP-Diagnose: zeigt nur, OB die Env-Variablen in der deployten Function ankommen (keine Secrets).
-export async function GET(req: Request) {
-  const wantSend = new URL(req.url).searchParams.get('testsend') === '1';
-  const base = {
-    hasApiKey: !!process.env.LOOPS_API_KEY,
-    hasTemplateId: !!process.env.LOOPS_WIDERRUF_TEMPLATE_ID,
-    templateIdTail: (process.env.LOOPS_WIDERRUF_TEMPLATE_ID ?? '').slice(-6),
-    hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-    hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-  };
-  if (!wantSend) return Response.json(base);
-
-  // Test-Send gegen Loops → exakte Antwort zurückgeben (zeigt Variablen-Mismatch etc.)
-  const resp = await fetch('https://app.loops.so/api/v1/transactional', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${process.env.LOOPS_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      transactionalId: process.env.LOOPS_WIDERRUF_TEMPLATE_ID,
-      email: 'u.yendell@gmail.com',
-      dataVariables: { datum: '01.06.2026', Datum: '01.06.2026', zeit: '08:55', Zeit: '08:55', order_ref: 'DIAG', Order_ref: 'DIAG', product: 'Diag', Product: 'Diag' },
-    }),
-  });
-  return Response.json({ ...base, loopsStatus: resp.status, loopsBody: await resp.text() });
-}
-
 export async function POST(req: Request) {
   let body: any;
   try { body = await req.json(); } catch { return Response.json({ error: 'Ungültige Anfrage.' }, { status: 400 }); }

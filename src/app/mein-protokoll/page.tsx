@@ -410,7 +410,7 @@ export default function MeinProtokollPage() {
                 {[
                   { label: 'Steak-Beichte', href: '/steak-beichte', note: 'KI-Diagnose fÃ¼r Grillfehler' },
                   { label: 'Steuer-Matrix', href: '/steuer-matrix', note: '23 LÃ¤nder im Netto-Vergleich' },
-                  { label: 'Diplom-System', href: '/diplom', note: '10 Level BBQ-Kompetenz' },
+                  { label: 'Diplom-System', href: '/diplome', note: '10 Level BBQ-Kompetenz' },
                 ].map(({ label, href, note }) => (
                   <Link
                     key={href}

@@ -412,7 +412,7 @@ export default function FleischpassPage() {
                 {[
                   { label: 'Mein Protokoll', href: '/mein-protokoll', note: 'Personalisierter 8-Wochen-Plan' },
                   { label: 'Steak-Beichte', href: '/steak-beichte', note: 'KI-Diagnose für Grillfehler' },
-                  { label: 'Diplom-System', href: '/diplom', note: '10 Level BBQ-Kompetenz' },
+                  { label: 'Diplom-System', href: '/diplome', note: '10 Level BBQ-Kompetenz' },
                 ].map(({ label, href, note }) => (
                   <Link
                     key={href}

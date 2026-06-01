@@ -186,7 +186,7 @@ export default function VergleichPage({ params }: Props) {
           <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/45" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
             <ChevronRight size={12} />
-            <Link href="/kategorie/vergleich" className="hover:text-brand-gold transition-colors">Vergleiche</Link>
+            <Link href="/vergleich" className="hover:text-brand-gold transition-colors">Vergleiche</Link>
             <ChevronRight size={12} />
             <span className="text-text-light/65">{vergleich.title.split(':')[0]}</span>
           </nav>

@@ -128,7 +128,7 @@ export default function MethodePage({ params }: Props) {
                 <nav className="flex items-center gap-1.5 text-xs font-sans text-text-light/40" aria-label="Breadcrumb">
                   <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
                   <ChevronRight size={12} />
-                  <Link href="/kategorie/methoden" className="hover:text-brand-gold transition-colors">Grilltechniken</Link>
+                  <Link href="/methoden" className="hover:text-brand-gold transition-colors">Grilltechniken</Link>
                   <ChevronRight size={12} />
                   <span className="text-text-light/60">{methode.title.split(':')[0]}</span>
                 </nav>

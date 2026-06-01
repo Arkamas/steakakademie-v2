@@ -32,7 +32,7 @@ export default function MesserPage() {
   const products = getProductsByCategory('messer');
 
   const breadcrumbSch = breadcrumbSchema([
-    { name: 'Ausrüstung', url: '/ausruestung' },
+    { name: 'Ausrüstung', url: '/kategorie/ausruestung' },
     { name: 'Messer', url: '/ausruestung/messer' },
   ]);
 

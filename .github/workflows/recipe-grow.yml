@@ -1,0 +1,50 @@
+name: Rezepte wachsen lassen
+
+# Lässt die Rezept-Bibliothek im Hintergrund weiterwachsen: generiert neue Rezepte
+# aus der Seed-Liste (scripts/recipe-agent.mjs), committet sie persistent (der
+# Build-Lauf erzeugt sie sonst nur ephemer pro Deploy).
+on:
+  schedule:
+    - cron: '30 3 * * 0'   # Jeden Sonntag 03:30 UTC (~30 Min nach dem Glossar-Lauf)
+  workflow_dispatch:        # + manuell auslösbar
+
+jobs:
+  grow-recipes:
+    name: Neue Rezepte generieren + committen
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Rezept-Agent ausführen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/recipe-agent.mjs
+
+      - name: Neue Rezepte committen + pushen
+        run: |
+          if [ -z "$(git status --porcelain content/rezepte)" ]; then
+            echo "## 🍖 Rezepte" >> $GITHUB_STEP_SUMMARY
+            echo "Keine neuen Rezepte — Seed-Liste unverändert/abgearbeitet." >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          NEW=$(git status --porcelain content/rezepte | grep -cE '\.mdx$' || true)
+          git config user.name  "recipe-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add content/rezepte
+          git commit -m "chore(rezepte): ${NEW} neue/aktualisierte Rezepte (automatisch)"
+          git push
+          echo "## 🍖 Rezept-Bibliothek gewachsen" >> $GITHUB_STEP_SUMMARY
+          echo "**${NEW}** neue/aktualisierte Rezepte committet + gepusht → löst Deploy aus." >> $GITHUB_STEP_SUMMARY

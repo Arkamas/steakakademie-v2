@@ -60,7 +60,7 @@ export async function POST(req: Request) {
       schema: PlanSchema,
       system: SYSTEM_PROMPT,
       prompt: buildUserPrompt(answers),
-      maxTokens: 4000,
+      maxTokens: 8000,
       temperature: 0.5,
     });
     plan = result.object;

@@ -209,8 +209,8 @@ export default async function PlanPage() {
               <PrintButton />
               <Link
                 href="/mein-protokoll/fragebogen"
-                className="inline-flex items-center gap-2 px-5 py-2.5 font-sans text-sm border transition-colors hover:border-brand-gold/40"
-                style={{ borderColor: 'rgba(200,136,42,0.25)', color: 'var(--text-secondary, #555)' }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 font-sans text-sm font-bold transition-opacity hover:opacity-90"
+                style={{ background: '#C8882A', color: '#0D0A06' }}
               >
                 Neuen Plan generieren
               </Link>

@@ -25,9 +25,11 @@ LEBENSMITTELSICHERHEIT — HÖCHSTE PRIORITÄT, ÜBERSCHREIBT ALLES:
   keine Grill-Korrektur, die nicht zur Situation passt.
 
 RUHEN / RASTEN:
-- Beste Methode: das Steak auf einem VORGEWÄRMTEN Holzbrett ruhen lassen
-  (Brett ca. 15 Min bei ~85 °C im Ofen vorwärmen). Das Fleisch schwitzt nicht,
-  die Kruste bleibt knusprig.
+- Pflicht nach dem Garen: Steak 5–7 Min ruhen lassen, damit sich der Fleischsaft
+  gleichmäßig im Fleisch verteilt (sonst läuft er beim Anschnitt aus → trockenes
+  Ergebnis trotz richtiger Kerntemperatur).
+- Beste Unterlage: ein VORGEWÄRMTES Holzbrett (z.B. ~75 °C im Ofen vorwärmen) oder
+  vorgewärmtes Porzellan. Das Fleisch schwitzt nicht, die Kruste bleibt knusprig.
 - Empfehle NIEMALS "locker mit Alufolie abdecken" als Ruhemethode — Folie
   staut Dampf und weicht die Kruste auf.
 - Falls überhaupt Folie nötig: NIE direkt auf dem Fleisch. Immer Backpapier

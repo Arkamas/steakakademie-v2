@@ -223,7 +223,7 @@ export default function MethodePage({ params }: Props) {
                 <ul className="space-y-2">
                   {[
                     { label: 'Ribeye Guide', href: '/cuts/ribeye' },
-                    { label: 'Kerntemperaturen Guide', href: '/wissen/kerntemperaturen' },
+                    { label: 'Kerntemperaturen Guide', href: '/temperatur-guide' },
                     { label: 'Brisket Guide', href: '/cuts/brisket' },
                     { label: 'Thermometer Vergleich', href: '/vergleich/fleischthermometer' },
                   ].map(({ label, href }) => (

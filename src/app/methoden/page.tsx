@@ -179,7 +179,7 @@ export default function MethodenIndexPage() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {[
-                { label: 'Kerntemperaturen: Der Guide', href: '/wissen/kerntemperaturen' },
+                { label: 'Kerntemperaturen: Der Guide', href: '/temperatur-guide' },
                 { label: 'Maillard-Reaktion verstehen', href: '/wissen' },
                 { label: 'Ribeye: Marmorierung & IMF', href: '/cuts/ribeye' },
                 { label: 'Brisket: Plateauphase', href: '/cuts/brisket' },

@@ -313,7 +313,7 @@ export default function VergleichPage({ params }: Props) {
                 </div>
                 <ul>
                   {[
-                    { label: 'Kerntemperaturen Guide', href: '/wissen/kerntemperaturen' },
+                    { label: 'Kerntemperaturen Guide', href: '/temperatur-guide' },
                     { label: 'Reverse Sear Methode',   href: '/methoden/reverse-sear' },
                     { label: 'Ribeye Guide',            href: '/cuts/ribeye' },
                     { label: 'Brisket Guide',           href: '/cuts/brisket' },

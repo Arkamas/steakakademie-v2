@@ -33,7 +33,7 @@ const NAV_CATEGORIES = [
     name: 'Wissen',
     href: '/wissen',
     sub: [
-      { label: 'Kerntemperaturen', href: '/wissen/kerntemperaturen' },
+      { label: 'Kerntemperaturen', href: '/temperatur-guide' },
       { label: 'Maillard-Reaktion', href: '/wissen' },
       { label: 'Dry-Aging & Reifung', href: '/aging' },
       { label: 'Persönlichkeiten', href: '/persoenlichkeiten' },

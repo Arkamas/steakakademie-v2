@@ -382,7 +382,7 @@ export default async function HomePage() {
                 </div>
                 <ul>
                   {[
-                    { label: 'Kerntemperaturen', href: '/wissen/kerntemperaturen', icon: Thermometer },
+                    { label: 'Kerntemperaturen', href: '/temperatur-guide', icon: Thermometer },
                     { label: 'Reverse Sear Methode', href: '/methoden/reverse-sear', icon: Flame },
                     { label: 'Ribeye Guide', href: '/cuts/ribeye', icon: BookOpen },
                     { label: 'Thermometer Test', href: '/vergleich/fleischthermometer', icon: Thermometer },

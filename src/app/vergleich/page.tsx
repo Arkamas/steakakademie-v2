@@ -213,10 +213,10 @@ export default function VergleichIndexPage() {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {[
-                    { label: 'Kerntemperaturen: Der komplette Guide', href: '/wissen/kerntemperaturen' },
-                    { label: 'Maillard-Reaktion verstehen', href: '/wissen/maillard-reaktion' },
+                    { label: 'Kerntemperaturen: Der komplette Guide', href: '/temperatur-guide' },
+                    { label: 'Maillard-Reaktion verstehen', href: '/temperatur-guide' },
                     { label: 'Reverse Sear — Methodik', href: '/methoden/reverse-sear' },
-                    { label: 'Dry-Aging: Reifung & Enzyme', href: '/wissen/dry-aging' },
+                    { label: 'Dry-Aging: Reifung & Enzyme', href: '/aging' },
                     { label: 'Ribeye: intramuskuläres Fett', href: '/cuts/ribeye' },
                     { label: 'Brisket: Kollagen & Plateauphase', href: '/cuts/brisket' },
                   ].map(({ label, href }) => (

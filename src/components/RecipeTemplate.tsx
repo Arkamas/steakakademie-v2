@@ -307,7 +307,7 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
                 {[
                   { label: 'Reverse Sear Methode', href: '/methoden/reverse-sear' },
                   { label: 'Ribeye — Der ultimative Guide', href: '/cuts/ribeye' },
-                  { label: 'Kerntemperaturen Guide', href: '/wissen/kerntemperaturen' },
+                  { label: 'Kerntemperaturen Guide', href: '/temperatur-guide' },
                   { label: 'Fleischthermometer Vergleich', href: '/vergleich/fleischthermometer' },
                 ].map(({ label, href }) => (
                   <li key={href}>

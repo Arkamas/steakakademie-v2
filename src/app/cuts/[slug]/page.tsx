@@ -300,7 +300,7 @@ export default function CutPage({ params }: Props) {
                 <ul className="space-y-2">
                   {[
                     { label: 'Reverse Sear Methode', href: '/methoden/reverse-sear' },
-                    { label: 'Kerntemperaturen Guide', href: '/wissen/kerntemperaturen' },
+                    { label: 'Kerntemperaturen Guide', href: '/temperatur-guide' },
                     { label: 'Thermometer Vergleich', href: '/vergleich/fleischthermometer' },
                     { label: 'Brisket Guide', href: '/cuts/brisket' },
                   ].map(({ label, href }) => (

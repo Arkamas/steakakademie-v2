@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 // ── Crests ────────────────────────────────────────────────────────────────────
 // Each crest uses the medal's own color family (engraved, not painted).
 
@@ -364,58 +366,28 @@ const BADGES: BadgeDef[] = [
   },
 ] as const;
 
+// Echte Münz-Renders (Bullenkopf-Design) statt der gezeichneten Gradient-Münzen.
+const TIER_FILE: Record<number, string> = {
+  1: 'bronze', 2: 'silber', 3: 'gold', 4: 'platin', 5: 'master',
+};
+
 function Medal({ b }: { b: BadgeDef }) {
   const outer = b.size;
-  const inner = outer - b.ringW * 2;
+  const file = TIER_FILE[b.id] ?? 'bronze';
 
   return (
     <div style={{ position: 'relative', width: outer, height: outer, flexShrink: 0 }}>
-      {/* Outer metallic ring */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        borderRadius: '50%',
-        background: b.ringBg,
-        boxShadow: `${b.castShadow}, ${b.ringInset}`,
-      }} />
-
-      {/* Medal face */}
-      <div style={{
-        position: 'absolute',
-        top: b.ringW, left: b.ringW,
-        width: inner, height: inner,
-        borderRadius: '50%',
-        background: b.medalBg,
-        boxShadow: b.bevelInset,
-        overflow: 'hidden',
-      }}>
-        {/* Directional specular highlight */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: b.highlightBg,
-          borderRadius: '50%',
-        }} />
-
-        {/* Inner engraved ring */}
-        <div style={{
-          position: 'absolute',
-          top: '8%', left: '8%', right: '8%', bottom: '8%',
-          borderRadius: '50%',
-          border: '1px solid rgba(255,255,255,0.08)',
-          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.4)',
-        }} />
-
-        {/* Crest */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          {b.id === 1 && <FlameStamp c={b.crestColor} />}
-          {b.id === 2 && <ForkKnifeStamp c={b.crestColor} />}
-          {b.id === 3 && <TorchShieldStamp c={b.crestColor} />}
-          {b.id === 4 && <DiamondStamp c={b.crestColor} />}
-          {b.id === 5 && <MasterCrestStamp c={b.crestColor} />}
-        </div>
-      </div>
+      <Image
+        src={`/images/diplome/medal-${file}.png`}
+        alt={`${b.cert} — ${b.name}`}
+        width={outer}
+        height={outer}
+        sizes={`${outer}px`}
+        style={{
+          width: outer, height: outer, objectFit: 'contain',
+          filter: 'drop-shadow(0 14px 30px rgba(0,0,0,0.85))',
+        }}
+      />
     </div>
   );
 }

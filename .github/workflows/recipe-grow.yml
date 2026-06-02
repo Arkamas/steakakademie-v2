@@ -12,7 +12,7 @@ jobs:
   grow-recipes:
     name: Neue Rezepte generieren + committen
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 60
     permissions:
       contents: write
     steps:

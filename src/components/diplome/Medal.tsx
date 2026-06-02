@@ -38,15 +38,25 @@ interface MedalProps {
   className?: string;
 }
 
+// Echte Münz-Renders (freigestellt, kreisrund) — ersetzen das SVG-Fallback.
+const TIER_IMAGE: Record<MedalTier, string> = {
+  bronze: '/images/diplome/medal-bronze.png',
+  silber: '/images/diplome/medal-silber.png',
+  gold:   '/images/diplome/medal-gold.png',
+  platin: '/images/diplome/medal-platin.png',
+  master: '/images/diplome/medal-master.png',
+};
+
 export default function Medal({ tier, size = 60, locked = false, level, baseImage, className }: MedalProps) {
   const t = TIERS[tier];
   const uid = `medal-${tier}`;
+  const img = baseImage ?? TIER_IMAGE[tier];
 
-  // Foto-Upgrade-Pfad: wenn echtes Render existiert, dieses nehmen.
-  if (baseImage) {
+  // Foto-Upgrade-Pfad: echtes Render bevorzugen, SVG nur als Fallback.
+  if (img) {
     return (
       <div className={className} style={{ width: size, height: size, position: 'relative', filter: locked ? 'grayscale(1) brightness(0.55)' : undefined }}>
-        <Image src={baseImage} alt={`${t.label}-Medaille`} fill sizes={`${size}px`} className="object-contain" />
+        <Image src={img} alt={`${t.label}-Medaille`} fill sizes={`${size}px`} className="object-contain" />
       </div>
     );
   }

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Clock, Flame, Users, Calendar, ChevronRight, Zap, Timer } from 'lucide-react';
 import PortionCalculator from './recipe/PortionCalculator';
 import CookCoach from './recipe/CookCoach';
+import CutBestellen from './recipe/CutBestellen';
 import BBQPairing from './article/BBQPairing';
 import ProductCard from './affiliate/ProductCard';
 import type { Product } from '@/types';
@@ -158,7 +159,9 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
 
           {/* Titel-Block */}
           <div className="max-w-editorial mx-auto w-full px-4 sm:px-6 lg:px-8 pb-12 lg:pb-16">
-            <span className="category-label mb-3 block">Rezept · {recipe.meatType}</span>
+            <span className="category-label mb-3 block">
+              Rezept · {recipe.meatType}{recipe.land ? ` · Herkunft: ${recipe.land}` : ''}
+            </span>
             <h1 className="font-serif text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-text-light leading-[1.1] mb-4 max-w-3xl">
               {recipe.title}
             </h1>
@@ -230,6 +233,9 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
               basePortions={recipe.servings}
               ingredients={ingredients}
             />
+
+            {/* Cut → Premium-Fleisch bestellen (Otto Gourmet / Albers) */}
+            <CutBestellen cut={recipe.meatType} kategorie={recipe.kategorie} />
 
             {/* MDX-Artikel (Einleitung, Wissenschaft, Tipps) */}
             <article className="max-w-content">

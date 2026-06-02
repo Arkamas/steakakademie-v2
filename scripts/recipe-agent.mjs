@@ -240,6 +240,7 @@ function buildMdx(data) {
     `kategorie: ${data.kategorie}`,
     `meatType: ${yamlStr(data.meatType)}`,
     `cookingMethod: ${yamlStr(data.cookingMethod)}`,
+    data.land ? `land: ${yamlStr(data.land)}` : null,
     `difficulty: ${yamlStr(data.difficulty)}`,
     data.keywords?.length
       ? `keywords:\n${serializeList(data.keywords)}`
@@ -301,7 +302,7 @@ function parseStructuredText(text) {
     if (kv && section !== 'body') {
       const key = kv[1], val = kv[2].trim()
       const map = {
-        TITLE: 'title', DESCRIPTION: 'description', IMAGE_ALT: 'imageAlt',
+        TITLE: 'title', DESCRIPTION: 'description', IMAGE_ALT: 'imageAlt', LAND: 'land',
         PREP_TIME: 'prepTime', COOK_TIME: 'cookTime', TOTAL_TIME: 'totalTime',
         SERVINGS: 'servings', CALORIES: 'calories',
         SEO_TITLE: 'seoTitle', SEO_DESCRIPTION: 'seoDescription',
@@ -369,6 +370,7 @@ Antworte EXAKT in diesem Format (Groß-/Kleinschreibung beachten):
 TITLE: [Titel max. 70 Zeichen]
 DESCRIPTION: [Meta-Beschreibung 120-155 Zeichen]
 IMAGE_ALT: [Was auf dem Bild zu sehen ist, max. 80 Zeichen]
+LAND: [Herkunftsland/Region des Gerichts, z.B. "USA · Texas", "Spanien", "Argentinien", "Italien" — bei deutschem Standard "Deutschland"]
 PREP_TIME: [ISO8601, z.B. PT20M]
 COOK_TIME: [ISO8601]
 TOTAL_TIME: [ISO8601]

@@ -286,6 +286,8 @@ export const Recipe = defineDocumentType(() => ({
     kategorie:      { type: 'enum',    options: ['fleisch', 'beilagen', 'saucen-rubs', 'desserts', 'wine-spirits'], required: true },
     meatType:       { type: 'string',  required: true },
     cookingMethod:  { type: 'string',  required: true },
+    land:           { type: 'string' },   // Herkunft/Land (strukturiert, für Schema.org + Filter)
+    video:          { type: 'string' },   // optional: Video-URL — Zukunftssicherung (Short-Video)
     difficulty:     { type: 'enum',    options: ['Einfach', 'Mittel', 'Fortgeschritten', 'Profi'], required: true },
     keywords:       { type: 'list',    of: { type: 'string' } },
     equipment:      { type: 'list',    of: { type: 'string' } },

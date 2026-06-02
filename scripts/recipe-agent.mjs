@@ -553,7 +553,7 @@ async function main() {
     ? seeds
     : seeds.filter(s => {
         const outFile = join(REZEPTE, `${s.slug}.mdx`)
-        return !cache[s.slug]
+        return !cache[s.slug] && !existsSync(outFile)   // Cache ODER existierende Datei → skip
       })
 
   console.log(`  ${seeds.length} Rezepte in Seed-Liste`)

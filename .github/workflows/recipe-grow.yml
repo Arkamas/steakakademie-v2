@@ -33,9 +33,14 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node scripts/recipe-agent.mjs
 
-      - name: Neue Rezepte committen + pushen
+      - name: Hero-Bilder generieren (FLUX.1 dev)
+        env:
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+        run: node scripts/recipe-images.mjs
+
+      - name: Neue Rezepte + Bilder committen + pushen
         run: |
-          if [ -z "$(git status --porcelain content/rezepte)" ]; then
+          if [ -z "$(git status --porcelain content/rezepte public/images/rezepte)" ]; then
             echo "## 🍖 Rezepte" >> $GITHUB_STEP_SUMMARY
             echo "Keine neuen Rezepte — Seed-Liste unverändert/abgearbeitet." >> $GITHUB_STEP_SUMMARY
             exit 0
@@ -43,8 +48,8 @@ jobs:
           NEW=$(git status --porcelain content/rezepte | grep -cE '\.mdx$' || true)
           git config user.name  "recipe-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add content/rezepte
-          git commit -m "chore(rezepte): ${NEW} neue/aktualisierte Rezepte (automatisch)"
+          git add content/rezepte public/images/rezepte
+          git commit -m "chore(rezepte): ${NEW} neue Rezepte + Hero-Bilder (automatisch)"
           git push
           echo "## 🍖 Rezept-Bibliothek gewachsen" >> $GITHUB_STEP_SUMMARY
           echo "**${NEW}** neue/aktualisierte Rezepte committet + gepusht → löst Deploy aus." >> $GITHUB_STEP_SUMMARY

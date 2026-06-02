@@ -328,11 +328,49 @@ export const Recipe = defineDocumentType(() => ({
   },
 }));
 
+// ── DIPLOM-LEKTIONEN (Grillmeister-Ausbildung) ───────────────────────────────
+
+export const DiplomLektion = defineDocumentType(() => ({
+  name: 'DiplomLektion',
+  filePathPattern: 'diplom-lektionen/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title:          { type: 'string', required: true },
+    stufe:          { type: 'number', required: true },   // 1–5
+    level:          { type: 'number', required: true },   // konkretes Diplom-Level (1–10)
+    order:          { type: 'number', required: true },   // Reihenfolge innerhalb der Stufe
+    lektionSlug:    { type: 'string', required: true },
+    excerpt:        { type: 'string', required: true },
+    merksatz:       { type: 'string', required: true },   // prüfungsrelevant, 1 Satz
+    publishedAt:    { type: 'date',   required: true },
+    seoTitle:       { type: 'string' },
+    seoDescription: { type: 'string' },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => {
+        const parts = doc._raw.flattenedPath.split('/');
+        return parts[parts.length - 1];
+      },
+    },
+    url: {
+      type: 'string',
+      resolve: (doc) => `/diplome/lernen/stufe-${doc.stufe}/${doc.lektionSlug}`,
+    },
+    formattedDate: {
+      type: 'string',
+      resolve: (doc) =>
+        format(parseISO(doc.publishedAt), 'd. MMMM yyyy', { locale: de }),
+    },
+  },
+}));
+
 // ── SOURCE ────────────────────────────────────────────────────────────────────
 
 export default makeSource({
   contentDirPath: 'content',
-  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe],
+  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe, DiplomLektion],
   mdx: {
     // rehype / remark plugins can be added here later
   },

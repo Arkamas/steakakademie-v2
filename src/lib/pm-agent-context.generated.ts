@@ -13,7 +13,7 @@ export interface ProjectStatus {
 }
 
 export const PROJECT_STATUS: ProjectStatus = {
-  "readinessScore": 51,
+  "readinessScore": 49,
   "completed": [
     "Email-Capture",
     "Sitemap & Robots",
@@ -74,11 +74,12 @@ export const PROJECT_STATUS: ProjectStatus = {
     "Steuer-Matrix LIVE Jahres-Abo (Produkt D)",
     "SEO-Monitor Agent (Agent 2) aufsetzen + in Routine eintragen",
     "Messerkategorie `/ausruestung/messer` — Segmentfilter (Premium / Damast / Mittelklasse)",
-    "Marco Widget Stufe 2: ElevenLabs Sprachausgabe"
+    "Meta-Pixel Datenschutz-Gate + Pixel-Status prüfen (Consent, keine PII) — vor Aktivierung"
   ],
   "open": [
     "Ribeye Pillar Page",
     "AI-Search GEO",
+    "Meta-Pixel Seiten-/Produktdaten nutzen",
     "Instagram Erstes Posting",
     "TikTok Erstes Video",
     "Email-Liste aufbauen",
@@ -86,6 +87,7 @@ export const PROJECT_STATUS: ProjectStatus = {
     "Physisches Diplom",
     "Display-Werbung",
     "Sponsoring & Partner",
+    "Meta-Pixel „Detailliertere Seiten-/Produktinfos\" aktivieren",
     "Fortschritt-Tracking",
     "Gamification",
     "\"Steak des Monats\" Challenge",
@@ -94,13 +96,11 @@ export const PROJECT_STATUS: ProjectStatus = {
     "Ribeye Deep-Dive",
     "Autoren-Profile",
     "Präzise Rezepte",
-    "Vegetarisch/Vegan BBQ",
-    "USA-Expedition Ausbau",
-    "USA & Kanada"
+    "Vegetarisch/Vegan BBQ"
   ],
   "branches": {
-    "SEO & Traffic": 58,
-    "Monetarisierung": 25,
+    "SEO & Traffic": 54,
+    "Monetarisierung": 22,
     "Auth & Community": 0,
     "Content-Strategie": 17,
     "Avatar-System": 57,
@@ -110,5 +110,5 @@ export const PROJECT_STATUS: ProjectStatus = {
     "KI-System & Automation": 38,
     "Agenten & Automation": 0
   },
-  "generatedAt": "2026-06-01T20:38:40.290Z"
+  "generatedAt": "2026-06-02T17:24:29.530Z"
 }

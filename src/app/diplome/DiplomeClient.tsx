@@ -185,7 +185,7 @@ export default function DiplomeClient() {
                 href="/diplome/urkunde"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition-colors"
               >
-                Urkunde per Post &mdash; 3 &euro;
+                Urkunde per Post &mdash; 9,99 &euro; + Porto
               </Link>
             </div>
             <Link

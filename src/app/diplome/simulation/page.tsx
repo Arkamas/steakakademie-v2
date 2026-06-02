@@ -450,7 +450,7 @@ export default function DiplomSimulation() {
                 </h2>
                 <p className="font-body text-text-light/55 text-sm mb-10 max-w-md mx-auto leading-relaxed">
                   Nach dem Abschluss-Test erhältst du dein Bronze-Zertifikat —
-                  digital zum Teilen, auf Wunsch physisch per Post (3 €).
+                  digital zum Teilen kostenlos, auf Wunsch gedruckt per Post (9,99 € + 4,99 € Porto).
                 </p>
 
                 {/* Animated diploma */}

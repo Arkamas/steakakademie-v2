@@ -74,7 +74,8 @@ export default function UrkudePage() {
             </h1>
             <p className="font-body text-lg text-text-light/60 max-w-xl leading-relaxed">
               Eine echte Urkunde im Stil des 19. Jahrhunderts — mit deinem Namen
-              und deinem Level. Für 3 € Versand direkt zu dir nach Hause.
+              und deinem Level. Die <strong className="text-text-light/80">digitale Urkunde ist kostenlos</strong>;
+              die gedruckte, postfähige Variante kommt für 9,99 € (zzgl. 4,99 € Porto) direkt zu dir nach Hause.
             </p>
           </div>
         </section>
@@ -132,11 +133,11 @@ export default function UrkudePage() {
               <div className="text-6xl mb-6">🎉</div>
               <h2 className="font-serif text-3xl font-bold text-text-light mb-4">Urkunde bestellt!</h2>
               <p className="font-body text-text-light/60 leading-relaxed mb-4">
-                Wir schicken dir deine persönliche Urkunde innerhalb von
+                Wir schicken dir deine persönliche, gedruckte Urkunde innerhalb von
                 5–7 Werktagen per Post zu.
               </p>
               <p className="text-brand-gold text-sm font-sans">
-                Versandkosten werden separat per PayPal / Überweisung angefragt.
+                Betrag 9,99 € + 4,99 € Porto (gesamt 14,98 €) wird separat per PayPal / Überweisung angefragt.
               </p>
             </motion.div>
           ) : (
@@ -148,7 +149,7 @@ export default function UrkudePage() {
               className="space-y-4 border border-brand-gold/15 bg-surface-elevated p-8"
             >
               <h2 className="font-serif text-2xl font-bold text-text-light mb-6 text-center">
-                Jetzt bestellen — 3 € Versand
+                Gedruckte Urkunde bestellen — 9,99 € + 4,99 € Porto
               </h2>
 
               <div>
@@ -195,7 +196,8 @@ export default function UrkudePage() {
               </div>
 
               <p className="text-text-light/30 text-xs font-body leading-relaxed pt-2">
-                Nach dem Absenden nehmen wir Kontakt für die Versandkosten (3 €) auf.
+                Die digitale Urkunde bleibt kostenlos. Für die gedruckte Variante nehmen wir nach dem
+                Absenden Kontakt zur Zahlung auf (9,99 € + 4,99 € Porto = 14,98 €).
                 Deine Adresse wird ausschließlich für den Versand verwendet.
               </p>
 
@@ -204,7 +206,7 @@ export default function UrkudePage() {
                 disabled={state === 'submitting'}
                 className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {state === 'submitting' ? 'Wird gesendet…' : 'Urkunde bestellen — 3 € Versand →'}
+                {state === 'submitting' ? 'Wird gesendet…' : 'Gedruckte Urkunde bestellen — 14,98 € →'}
               </button>
             </motion.form>
           )}

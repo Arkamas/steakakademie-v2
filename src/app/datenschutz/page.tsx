@@ -26,7 +26,7 @@ export default function DatenschutzPage() {
           </nav>
 
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">Datenschutzerklärung</h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Mai 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -62,6 +62,11 @@ export default function DatenschutzPage() {
                 gespeichert (IP-Adresse, Browsertyp, Betriebssystem, Referrer-URL, Uhrzeit des
                 Zugriffs). Diese Daten werden nicht mit anderen Datenquellen zusammengeführt.
               </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Server-Logs werden
+                nach spätestens <strong className="text-text-primary">30 Tagen</strong> gelöscht
+                oder anonymisiert.
+              </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am
                 störungsfreien Betrieb). Details:{' '}
@@ -78,6 +83,11 @@ export default function DatenschutzPage() {
                 DNS-Anbieter und Content Delivery Network (CDN). Dabei werden Anfragen über
                 Cloudflare-Server geleitet, um Sicherheit und Ladegeschwindigkeit zu verbessern.
                 Cloudflare kann dabei technische Daten (u.&nbsp;a. IP-Adressen) verarbeiten.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Verbindungs- und
+                Sicherheitsdaten werden von Cloudflare nur kurzfristig zur Angriffsabwehr
+                vorgehalten (in der Regel <strong className="text-text-primary">bis zu 30 Tage</strong>).
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. Details:{' '}
@@ -123,6 +133,11 @@ export default function DatenschutzPage() {
                 Newsletter oder per E-Mail an{' '}
                 <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>).
               </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Deine E-Mail-Adresse
+                bleibt gespeichert, bis du dich abmeldest bzw. die Einwilligung widerrufst —
+                danach wird sie unverzüglich aus dem aktiven Verteiler gelöscht.
+              </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung). Details:{' '}
                 <a href="https://loops.so/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
@@ -159,6 +174,12 @@ export default function DatenschutzPage() {
                 <li>Kursbuchungen und Zugangsberechtigungen</li>
                 <li>Lernfortschritt und Diplom-Status</li>
               </ul>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Konto- und
+                Kursdaten werden für die Dauer des Nutzerkontos gespeichert und nach dessen
+                Löschung innerhalb von <strong className="text-text-primary">30 Tagen</strong>{' '}
+                entfernt, soweit keine gesetzlichen Aufbewahrungspflichten entgegenstehen.
+              </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung). Details:{' '}
                 <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
@@ -175,6 +196,11 @@ export default function DatenschutzPage() {
                 erforderlichen Daten (Name, E-Mail, Zahlungsdaten). Diese Daten werden
                 ausschließlich von Digistore24 verarbeitet; wir haben keinen Zugriff auf
                 vollständige Zahlungsdaten.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Rechnungs- und
+                Buchungsdaten unterliegen den gesetzlichen Aufbewahrungsfristen
+                (§ 147 AO, § 257 HGB — 10 bzw. 6 Jahre) und werden erst nach deren Ablauf gelöscht.
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung). Details:{' '}

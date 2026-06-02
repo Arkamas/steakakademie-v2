@@ -16,7 +16,37 @@ export type AffiliateProvider =
   | 'ankerkraut'
   | 'albers'
   | 'meater-direct'
+  | 'dreisechzig-bbq'
+  | 'grill-experte'
+  | 'banggood'
   | 'other';
+
+// ── AFFILIATE-PROGRAMME ──────────────────────────────────────────────────────
+// Partnerprogramme als first-class Entität. Produkte verweisen über ihr
+// provider-Feld auf das Programm (program.providers). Quelle: products/affiliate-programs.yaml
+export type AffiliateProgramStatus =
+  | 'planned'   // geplant — noch nicht beworben
+  | 'applied'   // beworben — Freigabe ausstehend
+  | 'active';   // freigegeben & live im Einsatz
+
+export interface AffiliateProgram {
+  id: string;
+  name: string;
+  /** Abrechnungs-/Vermittlungsnetzwerk, z.B. "AWIN", "TradeTracker", "eigenes Programm" */
+  network: string;
+  /** AffiliateProvider-IDs, die zu diesem Programm gehören */
+  providers: AffiliateProvider[];
+  commission: string;        // z.B. "bis 8 %"
+  cookie: string;            // z.B. "30 Tage"
+  avgCartEur?: number | null;
+  status: AffiliateProgramStatus;
+  applyUrl?: string;         // Bewerbungs-/Programm-URL
+  focus?: string;            // Sortiment/Schwerpunkt
+  /** Erlaubte Kanäle laut Programmregeln */
+  channels?: { blog?: boolean; socialOrganic?: boolean; paidAds?: boolean | 'regeln-pruefen' };
+  note?: string;
+  disclosureNote?: string;   // Pflicht-Hinweistext für die Disclosure-Seite
+}
 
 export type ProductCategory =
   | 'thermometer'

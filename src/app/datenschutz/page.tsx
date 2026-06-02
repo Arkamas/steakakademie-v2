@@ -262,10 +262,24 @@ export default function DatenschutzPage() {
                 wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets
                 der jeweilige Anbieter oder Betreiber verantwortlich.
               </p>
-              <p>
+              <p className="mb-3">
                 Produktempfehlungen können Affiliate-Links enthalten (gekennzeichnet mit * oder
                 dem Hinweis „Affiliate-Link"). Bei einem Kauf über solche Links erhalten wir
                 eine Provision ohne Mehrkosten für dich.
+              </p>
+              <p className="mb-3">
+                Wir nehmen am <strong>Amazon Partnerprogramm</strong> teil. In Vorbereitung
+                befinden sich die Programme <strong>360° BBQ</strong> und{' '}
+                <strong>Grill-Experte.de</strong> (vermittelt über die Affiliate-Netzwerke
+                AWIN bzw. TradeTracker) sowie <strong>Banggood</strong>. Beim Klick auf einen
+                Affiliate-Link kann der jeweilige Anbieter bzw. das Netzwerk ein Cookie setzen,
+                über das ein späterer Kauf der Vermittlung zugeordnet wird (Affiliate-Tracking).
+              </p>
+              <p>
+                Affiliate-Tracking-Cookies werden <strong>erst nach deiner Einwilligung</strong>{' '}
+                im Cookie-Banner gesetzt (§ 25 TDDDG). Eine vollständige Übersicht aller
+                Partnerprogramme findest du in unserer{' '}
+                <Link href="/affiliate-disclosure" className={linkClass}>Affiliate-Disclosure</Link>.
               </p>
             </section>
 

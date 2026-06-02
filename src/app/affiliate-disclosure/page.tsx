@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { getActivePrograms, getPendingPrograms } from '@/lib/affiliate-programs';
 
 export const metadata: Metadata = {
   title: 'Affiliate-Disclosure — Steakakademie',
@@ -13,6 +14,9 @@ export const metadata: Metadata = {
 export default function AffiliateDisclosurePage() {
   const h2Class = 'font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3';
   const linkClass = 'text-brand-fire hover:underline';
+
+  const activePrograms  = getActivePrograms();
+  const pendingPrograms = getPendingPrograms();
 
   return (
     <>
@@ -48,12 +52,32 @@ export default function AffiliateDisclosurePage() {
                 Steakakademie.de nimmt an folgenden Partnerprogrammen teil:
               </p>
               <ul className="list-disc list-inside space-y-2 pl-2">
-                <li>
-                  <strong className="text-text-primary">Amazon Partnerprogramm</strong> — Alle
-                  Amazon-Links sind Affiliate-Links. Als Amazon-Partner verdiene ich an
-                  qualifizierten Verkäufen.
-                </li>
+                {activePrograms.map((p) => (
+                  <li key={p.id}>
+                    <strong className="text-text-primary">{p.name}</strong>
+                    {p.network ? ` (${p.network})` : ''} —{' '}
+                    {p.disclosureNote ??
+                      'Über diese Links gekaufte Produkte können mir eine Provision einbringen — ohne Mehrkosten für dich.'}
+                  </li>
+                ))}
               </ul>
+
+              {pendingPrograms.length > 0 && (
+                <>
+                  <p className="mt-5 mb-3">
+                    Folgende Partnerprogramme sind <strong className="text-text-primary">in Vorbereitung</strong>{' '}
+                    und noch nicht aktiv. Sobald sie live gehen, werden ihre Links wie oben gekennzeichnet:
+                  </p>
+                  <ul className="list-disc list-inside space-y-1.5 pl-2 text-text-muted">
+                    {pendingPrograms.map((p) => (
+                      <li key={p.id}>
+                        <span className="text-text-secondary">{p.name}</span>
+                        {p.network ? ` — ${p.network}` : ''}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </section>
 
             <section>

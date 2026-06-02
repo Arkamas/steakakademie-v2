@@ -18,7 +18,7 @@ export const metadata: Metadata = {
       'Alle Kerntemperaturen für Rind, Schwein, Lamm, Geflügel und Wild. Wissenschaftlich fundiert, praxiserprobt.',
     url: 'https://steakakademie.de/temperatur-guide',
     type: 'article',
-    images: [{ url: '/images/og-default.jpg', width: 1200, height: 630, alt: 'Kerntemperaturen Fleisch — Steakakademie' }],
+    images: [{ url: '/api/og', width: 1200, height: 630, alt: 'Kerntemperaturen Fleisch — Steakakademie' }],
   },
   twitter: { card: 'summary_large_image', creator: '@steakakademie' },
 };

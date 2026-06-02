@@ -20,7 +20,7 @@ export const metadata: Metadata = {
       'Kein YouTube-Chaos. Kein Trial-and-Error. Ein strukturierter Lernweg der dich in einem Sommer weiter bringt als Jahre davor.',
     url: 'https://steakakademie.de/bbq-grundkurs',
     type: 'website',
-    images: [{ url: '/images/og-default.jpg', width: 1200, height: 630, alt: 'BBQ Grundkurs â€” Steakakademie' }],
+    images: [{ url: '/api/og', width: 1200, height: 630, alt: 'BBQ Grundkurs â€” Steakakademie' }],
   },
   twitter: { card: 'summary_large_image', creator: '@steakakademie' },
 };

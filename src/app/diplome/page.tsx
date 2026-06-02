@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: 'Grillmeister-Diplom — 10 Level BBQ-Ausbildung',
     description: 'Systematisch zum Grillmeister: 10 Level, echte Urkunden, klare Progression.',
     url: 'https://steakakademie.de/diplome',
-    images: [{ url: '/images/og-default.jpg', width: 1200, height: 630 }],
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image', creator: '@steakakademie' },
 };

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     description:
       'Trends, Techniken und Produkte aus der internationalen BBQ-Welt — kuratiert und eingeordnet.',
     url: 'https://steakakademie.de/bbq-news',
-    images: [{ url: '/images/og-default.jpg', width: 1200, height: 630 }],
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image', creator: '@steakakademie' },
 };

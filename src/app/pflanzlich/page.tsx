@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     description:
       'Vegetarisch und vegan vom Grill: Portobello, Halloumi, Blumenkohl-Steak, Tofu & Gemüse — präzise erklärt.',
     url: 'https://steakakademie.de/pflanzlich',
-    images: [{ url: '/images/og-default.jpg', width: 1200, height: 630 }],
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image', creator: '@steakakademie' },
 };

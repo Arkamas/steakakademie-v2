@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     siteName: 'Steakakademie',
     images: [
       {
-        url: '/images/og-default.jpg',
+        url: '/api/og',
         width: 1200,
         height: 630,
         alt: 'Steakakademie — BBQ Wissen auf Deutsch',

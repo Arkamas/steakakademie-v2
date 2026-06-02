@@ -18,8 +18,8 @@ const KATEGORIEN: Record<string, {
     label:       'Fleisch-Rezepte',
     subtitle:    'Master-Cuts',
     description: 'Präzise Rezepte für Premium-Cuts — Ribeye, Brisket, Tomahawk und mehr. Jedes Rezept mehrfach am Grill getestet, mit exakten Gramm- und Temperaturangaben.',
-    heroImage:   '/images/articles/ribeye-premium-cut.webp',
-    heroAlt:     'Premium Ribeye-Cut auf Holzbrett',
+    heroImage:   '/images/rezepte/porterhouse-grill.jpg',
+    heroAlt:     'Gegrilltes Premium-Steak mit kräftiger Grillmarkierung auf dunklem Schiefer',
   },
   beilagen: {
     label:       'Beilagen & Salate',

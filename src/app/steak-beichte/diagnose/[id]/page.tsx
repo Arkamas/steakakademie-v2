@@ -145,6 +145,14 @@ export default async function DiagnoseResultPage({ params }: { params: { id: str
               </div>
             </Block>
 
+            <p className="mt-8 border-t border-border-subtle pt-5 font-body text-xs text-text-muted leading-relaxed max-w-2xl">
+              <strong className="text-text-secondary">Hinweis:</strong> Diese Diagnose ist eine
+              KI-generierte Einschätzung — ohne Gewähr und kein Ersatz für deine eigene Prüfung.
+              Die <strong className="text-text-secondary">Lebensmittelsicherheit liegt in deiner
+              Verantwortung</strong>; im Zweifel verdorbenes Fleisch entsorgen. Mehr im{' '}
+              <Link href="/ki-disclaimer" className="text-brand-gold hover:text-brand-fire underline">KI-Disclaimer</Link>.
+            </p>
+
             <div className="print:hidden mt-12 flex flex-wrap gap-4">
               <Link
                 href="/steak-beichte/diagnose"

@@ -286,6 +286,14 @@ export default async function PlanPage() {
               </p>
             </div>
 
+            <p className="mt-8 border-t border-border-subtle pt-5 font-body text-xs text-text-muted leading-relaxed max-w-2xl">
+              <strong className="text-text-secondary">Hinweis:</strong> Dieser Plan ist KI-generiert —
+              Temperaturen und Zeiten sind Richtwerte ohne Gewähr. Die{' '}
+              <strong className="text-text-secondary">Lebensmittelsicherheit</strong> (z. B. sichere
+              Kerntemperaturen bei Geflügel und Hack) liegt in deiner Verantwortung. Mehr im{' '}
+              <Link href="/ki-disclaimer" className="text-brand-gold hover:text-brand-fire underline">KI-Disclaimer</Link>.
+            </p>
+
             {/* 8-Wochen-Abschluss-Framing (Element 5) */}
             <p className="print:hidden mt-8 max-w-2xl font-body text-sm text-text-secondary leading-relaxed">
               8 Wochen sind kein Kurs — das ist eine Gewohnheit, die du dir baust. Bist du am Ende

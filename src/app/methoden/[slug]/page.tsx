@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
 import { Clock, Calendar, ChevronRight, RotateCcw, Flame } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
+import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 
 interface Props {
   params: { slug: string };
@@ -81,6 +82,7 @@ const mdxComponents = {
   ),
   hr: () => <hr className="border-border-subtle my-10" />,
   BBQPairing,
+  Schnelluebersicht, Achtung, ProTipp, TempBox,
 };
 
 export default function MethodePage({ params }: Props) {

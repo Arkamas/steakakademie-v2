@@ -1,7 +1,22 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
+
+// Echte Münz-Renders (Bullenkopf-Design) — füllen den Badge-Slot im Pedestal.
+function RenderBadge({ tier, alt }: { tier: string; alt: string }) {
+  return (
+    <Image
+      src={`/images/diplome/medal-${tier}.png`}
+      alt={alt}
+      fill
+      sizes="(max-width: 640px) 112px, 144px"
+      className="object-contain"
+      style={{ filter: 'drop-shadow(0 12px 26px rgba(0,0,0,0.75))' }}
+    />
+  );
+}
 
 // ─── Badge SVGs ───────────────────────────────────────────────────────────────
 
@@ -331,7 +346,7 @@ function BadgePedestal({
 
 const STUFEN = [
   {
-    badge: <BronzeBadge />,
+    badge: <RenderBadge tier="bronze" alt="Bronze-Medaille" />,
     stufe: 'Stufe 1',
     name: 'Der Funke',
     zertifikat: 'Basis-Zertifikat',
@@ -339,7 +354,7 @@ const STUFEN = [
     glowIntensity: 0.6,
   },
   {
-    badge: <SilverBadge />,
+    badge: <RenderBadge tier="silber" alt="Silber-Medaille" />,
     stufe: 'Stufe 2',
     name: 'Die Flamme bezähmen',
     zertifikat: 'Fortgeschrittenes Zertifikat',
@@ -347,7 +362,7 @@ const STUFEN = [
     glowIntensity: 0.6,
   },
   {
-    badge: <GoldBadge />,
+    badge: <RenderBadge tier="gold" alt="Gold-Medaille" />,
     stufe: 'Stufe 3',
     name: 'Hitzekontrolle',
     zertifikat: 'Profi-Zertifikat',
@@ -355,7 +370,7 @@ const STUFEN = [
     glowIntensity: 0.7,
   },
   {
-    badge: <PlatinumBadge />,
+    badge: <RenderBadge tier="platin" alt="Platin-Medaille" />,
     stufe: 'Stufe 4',
     name: 'Präzision & Geschmack',
     zertifikat: 'Experten-Zertifikat',
@@ -363,7 +378,7 @@ const STUFEN = [
     glowIntensity: 0.7,
   },
   {
-    badge: <MasterBadge />,
+    badge: <RenderBadge tier="master" alt="Meister-Medaille" />,
     stufe: 'Stufe 5',
     name: 'Der vollendete Pitmaster',
     zertifikat: 'Offizielles Akademie-Diplom',

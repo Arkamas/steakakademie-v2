@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
+import { allDiplomLektions } from 'contentlayer/generated';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
@@ -1094,8 +1095,35 @@ function ModuleView({
 function LerninhalteTab({ moduleKey, stage }: { moduleKey: ModuleKey; stage: Stage }) {
   const meta = moduleMeta[moduleKey];
 
+  const lektionen = allDiplomLektions
+    .filter((l) => l.stufe === stage.id)
+    .sort((a, b) => a.order - b.order);
+
   return (
     <div className="flex flex-col gap-6">
+      {lektionen.length > 0 && (
+        <div className="rounded-2xl p-6" style={{ background: T.panel, border: `1px solid ${meta.color}40` }}>
+          <div className="text-[11px] font-sans tracking-[0.18em] uppercase mb-3" style={{ color: meta.color }}>
+            📚 Lektionen lesen
+          </div>
+          <ol className="flex flex-col gap-1.5">
+            {lektionen.map((l) => (
+              <li key={l.lektionSlug}>
+                <Link
+                  href={l.url}
+                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors"
+                  style={{ background: `${meta.color}0C` }}
+                >
+                  <span className="text-xs font-bold w-5 shrink-0 text-center" style={{ color: meta.color }}>{l.order}</span>
+                  <span className="flex-1 text-[13px] font-sans font-semibold" style={{ color: T.text }}>{l.title}</span>
+                  <ChevronRight size={14} style={{ color: meta.color }} />
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+
       {moduleKey === 'bronze' && (
         <FeuerzoneSpiel color={meta.color} />
       )}

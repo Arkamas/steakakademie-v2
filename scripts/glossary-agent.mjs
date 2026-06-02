@@ -18,6 +18,7 @@
 import { anthropic } from '@ai-sdk/anthropic'
 import { generateText } from 'ai'
 import { readdir, readFile, writeFile, mkdir, access } from 'fs/promises'
+import YAML from 'yaml'
 import { join, extname, dirname, basename } from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
@@ -235,14 +236,19 @@ Antworte AUSSCHLIESSLICH mit gültigem JSON. Kein Markdown-Wrapper darum:
 
 function buildMdxContent(entry, slug) {
   const today = new Date().toISOString().split('T')[0]
+  // Frontmatter kanonisch via YAML.stringify — robust gegen Sonderzeichen,
+  // damit Contentlayer es zuverlässig parst (manuelles Quoting brach den Build).
+  const fm = YAML.stringify({
+    title: entry.title,
+    slug,
+    category: entry.category,
+    shortDefinition: entry.shortDefinition,
+    publishedAt: today,
+    seoTitle: `${entry.title} — BBQ-Glossar | Steakakademie`,
+    seoDescription: entry.seoDescription || entry.shortDefinition.slice(0, 155),
+  }, { lineWidth: 0 }).trimEnd()
   return `---
-title: "${escapeFrontmatter(entry.title)}"
-slug: "${slug}"
-category: "${escapeFrontmatter(entry.category)}"
-shortDefinition: "${escapeFrontmatter(entry.shortDefinition)}"
-publishedAt: "${today}"
-seoTitle: "${escapeFrontmatter(entry.title)} — BBQ-Glossar | Steakakademie"
-seoDescription: "${escapeFrontmatter(entry.seoDescription || entry.shortDefinition.slice(0, 155))}"
+${fm}
 ---
 
 ## Definition

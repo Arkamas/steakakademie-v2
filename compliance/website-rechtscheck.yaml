@@ -1,0 +1,210 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Rechtssicherheit-Agent — Check-Komponenten-Katalog (Self-Audit)
+# ─────────────────────────────────────────────────────────────────────────────
+# Wird von Agent 1 (AGB-Compliance-Scanner) + Agent 8 (Rechts-Update-Scanner)
+# gelesen. Der Agent prüft steakakademie.de gegen JEDE hier gelistete Komponente
+# und schreibt das Ergebnis in seinen Report.
+#
+# Quellen der Komponenten:
+#   - ARAG Homepagecheck (RA Dr. Fröhlich, 02.06.2026) — Punkte 1–18
+#   - Bisherige Agent-1/Agent-8-Prüfpunkte (robots.txt, Schema.org, Rechts-Updates)
+#
+# Feld-Legende:
+#   herkunft   : woher die Komponente stammt (arag-#N | agent-bestand)
+#   neu        : true = durch ARAG-Auswertung NEU in den Agenten aufgenommen
+#   pruefung   : was der Agent konkret prüft
+#   rechtsgrundlage
+#   status     : ok | fix-needed | not-applicable | monitor
+#   befund     : aktueller Stand steakakademie.de (Stand 02.06.2026)
+# Letzte Aktualisierung: 2026-06-02
+
+version: 1
+geprueftesObjekt: "https://www.steakakademie.de/"
+standComponents: "2026-06-02"
+
+komponenten:
+  - id: domain-kennzeichenrecht
+    titel: "Namens- & Kennzeichenrechte der Domain"
+    herkunft: arag-1
+    neu: true
+    pruefung: "Identität mit bestehender Marke (DPMA-Abgleich); keine Ähnlichkeitsprüfung"
+    rechtsgrundlage: "MarkenG §§ 5, 15; NamensR § 12 BGB"
+    status: ok
+    befund: "Wortmarke Steakakademie selbst angemeldet (AZ 3020262290701). Kein Fremdrecht."
+
+  - id: haftung-externe-links
+    titel: "Haftungsrisiken bei Verlinkung zu externen Seiten"
+    herkunft: arag-2
+    neu: true
+    pruefung: "Urheber-/wettbewerbsrechtliche Zulässigkeit; Haftung für verlinkte/rechtswidrige Inhalte"
+    rechtsgrundlage: "§ 8 TMG/DDG; BGH I ZR 317/01"
+    status: ok
+
+  - id: urheberrecht-texte-bilder
+    titel: "Urheberrecht bei Texten und Bildern"
+    herkunft: arag-3
+    neu: true
+    pruefung: "Nutzungsrechte aller Texte/Bilder; KI-/Eigenbilder kennzeichnen; keine Fremdfotos ohne Lizenz"
+    rechtsgrundlage: "UrhG §§ 2, 19a, 72"
+    status: ok
+    befund: "Eigen-/KI-Bilder; Symbolbild-Badge vorhanden. Affiliate-Produktbilder via PA-API/Hersteller."
+
+  - id: impressum-ddg
+    titel: "Impressum nach § 5 DDG (Erreichbarkeit 2-Klick)"
+    herkunft: arag-4
+    neu: false
+    pruefung: "Vollständigkeit § 5 DDG; Erreichbarkeit in max. 2 Klicks (BGH I ZR 228/03)"
+    rechtsgrundlage: "§ 5 DDG (ehem. TMG)"
+    status: ok
+
+  - id: dse-speicherdauer-loeschfristen
+    titel: "DSE: konkrete Speicherdauer / Löschfristen"
+    herkunft: arag-5
+    neu: true
+    pruefung: "Je Verarbeitung konkrete Speicherdauer bzw. Kriterien der Löschung angegeben"
+    rechtsgrundlage: "Art. 13 Abs. 2 lit. a DSGVO"
+    status: ok
+    befund: "BEHOBEN 02.06.2026 (Commit a8a97f2): Serverlogs/Cloudflare 30 T, Newsletter bis Widerruf, Supabase 30 T nach Kontolöschung, Digistore24 §147 AO/§257 HGB."
+
+  - id: widerrufs-rueckgaberecht
+    titel: "Widerrufs- & Rückgaberechtsbelehrung"
+    herkunft: arag-6
+    neu: true
+    pruefung: "Belehrung §§ 312 ff BGB; Widerrufsbutton ab 19.06.2026 bei kostenpflichtigen Online-Verträgen"
+    rechtsgrundlage: "§§ 312 ff BGB; Art. 246a EGBGB"
+    status: ok
+    befund: "Hinweis zum Erlöschen bei digitalen Inhalten vorhanden. Widerrufsbutton bei Scharfschaltung Verkäufe prüfen."
+
+  - id: preisangaben-pangv
+    titel: "Preisangabenverordnung (PAngV)"
+    herkunft: arag-7
+    neu: true
+    pruefung: "Gesamtpreis inkl. USt, ggf. Grundpreis, Versandkosten korrekt ausgewiesen"
+    rechtsgrundlage: "PAngV §§ 3, 4"
+    status: ok
+
+  - id: dse-ssl-tls
+    titel: "DSE: SSL/TLS-Verschlüsselung dokumentiert"
+    herkunft: arag-8
+    neu: true
+    pruefung: "Aktive TLS-Verschlüsselung + Erwähnung in der DSE"
+    rechtsgrundlage: "Art. 32 DSGVO"
+    status: ok
+
+  - id: dse-datensparsamkeit
+    titel: "DSE: Grundsatz der Datensparsamkeit"
+    herkunft: arag-9
+    neu: true
+    pruefung: "Nur erforderliche Daten; Speicherdauer/Löschfristen je Kategorie"
+    rechtsgrundlage: "Art. 5 Abs. 1 lit. c + e DSGVO"
+    status: ok
+    befund: "Mit #5-Fix erfüllt."
+
+  - id: dse-cookies-consent
+    titel: "DSE: Cookies & Einwilligung"
+    herkunft: arag-10
+    neu: false
+    pruefung: "Cookie-Doku in DSE; bei einwilligungspflichtigen Cookies Banner mit gleichwertigem Ablehnen-Button + Widerruf-Mechanismus"
+    rechtsgrundlage: "§ 25 TDDDG; Art. 7 Abs. 3 DSGVO"
+    status: not-applicable
+    befund: "Seite cookieless (nur Plausible, § 25 Abs. 2 TDDDG). DSE §11 weist Banner explizit als nicht nötig aus."
+    monitor: "WIRD PFLICHT, sobald Meta-Pixel/GA4 scharf → dann Banner (Ablehnen gleichwertig) + Footer-Link 'Privatsphäre-Einstellungen' + Cookie-Doku."
+
+  - id: dse-social-media-plugins
+    titel: "DSE: Social-Media-Plug-Ins"
+    herkunft: arag-11
+    neu: true
+    pruefung: "Datenschutzkonforme Einbindung von Social-Plug-ins (FB, X) — oder Bestätigung, dass nur Links, keine Plug-ins"
+    rechtsgrundlage: "Art. 6, 26 DSGVO"
+    status: not-applicable
+    befund: "Keine Plug-ins eingebunden, nur einfache Profil-Links."
+
+  - id: dse-eingebettete-dienste
+    titel: "DSE: eingebettete Dienste (YouTube, Maps)"
+    herkunft: arag-12
+    neu: true
+    pruefung: "Bei Embeds: Drittlandtransfer-Garantie (DPF/SCC) + Widerspruch + Anbieter-Datenschutz verlinken"
+    rechtsgrundlage: "Art. 44 ff DSGVO; § 25 TDDDG"
+    status: not-applicable
+    befund: "Keine YouTube/Maps-Embeds. 'youtube' nur als Profil-Link."
+    monitor: "WIRD PFLICHT, sobald ein Embed (z.B. YouTube-Video) eingebaut wird."
+
+  - id: dse-ip-logfiles-anonym
+    titel: "DSE: anonymisierte IP-Adressen / Logfiles"
+    herkunft: arag-13
+    neu: true
+    pruefung: "IP-Speicherung in Serverdaten/Logfiles nur anonymisiert/kurzfristig"
+    rechtsgrundlage: "Art. 5, 32 DSGVO"
+    status: ok
+
+  - id: dse-auftragsverarbeitung
+    titel: "DSE: Auftragsverarbeitung mit Dienstleistern"
+    herkunft: arag-14
+    neu: true
+    pruefung: "Alle AV-Dienstleister benannt (Hosting, CDN, DB, KI, Mail)"
+    rechtsgrundlage: "Art. 13 Abs. 1 lit. e, Art. 28 DSGVO"
+    status: ok
+    befund: "Netlify (§3), Cloudflare (§4), Supabase (§8 Art.28), Anthropic (§10 Art.28), Loops, Digistore24 benannt."
+
+  - id: dse-zahlungsdienstleister
+    titel: "DSE: Zahlungsdienstleister"
+    herkunft: arag-15
+    neu: true
+    pruefung: "Datensparsamkeit bei Payment-Providern; Provider benannt"
+    rechtsgrundlage: "Art. 6 Abs. 1 lit. b DSGVO"
+    status: ok
+    befund: "Digistore24 in DSE §9 dokumentiert."
+
+  - id: dse-statistik-analyse-tools
+    titel: "DSE: Statistik- & Analysetools"
+    herkunft: arag-16
+    neu: true
+    pruefung: "IP nur anonymisiert; Widerspruchsmöglichkeit; Tool benannt"
+    rechtsgrundlage: "§ 25 TDDDG; Art. 6 DSGVO"
+    status: ok
+    befund: "Plausible (cookielos, anonym) in §5."
+    monitor: "Bei GA4-Aktivierung: Consent + Opt-out ergänzen."
+
+  - id: dse-marketing-affiliate-tools
+    titel: "DSE: Marketing- & Affiliate-Tools"
+    herkunft: arag-17
+    neu: true
+    pruefung: "IP-Anonymisierung + Widerspruch bei Marketing/Affiliate (Google Ads, AWIN); Programme benannt"
+    rechtsgrundlage: "§ 25 TDDDG; Art. 6 DSGVO"
+    status: ok
+    befund: "Affiliate-Programme in DSE §12 + /affiliate-disclosure (Amazon aktiv; 360°BBQ/Grill-Experte/Banggood geplant)."
+    monitor: "Beim Aktivschalten der Affiliate-/Marketing-Cookies: Consent-Pflicht."
+
+  - id: google-fonts-selfhosted
+    titel: "Google Fonts — kein externes Nachladen"
+    herkunft: arag-18
+    neu: true
+    pruefung: "Quelltext auf nachladende Google-Fonts prüfen — müssen self-hosted sein"
+    rechtsgrundlage: "Art. 6 DSGVO; LG München 3 O 17493/20"
+    status: ok
+    befund: "Self-hosted via next/font. Keine externen Font-Requests."
+
+  # ── Bestehende Agent-Prüfpunkte (nicht im ARAG-Check, aber Agent-Bestand) ──
+  - id: robots-txt
+    titel: "robots.txt & Crawling-Direktiven"
+    herkunft: agent-bestand
+    neu: false
+    pruefung: "robots.txt erreichbar, sinnvolle Direktiven, Sitemap referenziert"
+    rechtsgrundlage: "—"
+    status: ok
+
+  - id: schema-org-korrektheit
+    titel: "Schema.org / strukturierte Daten"
+    herkunft: agent-bestand
+    neu: false
+    pruefung: "JSON-LD valide; Preis/Währung/Verfügbarkeit korrekt (auch für Meta-Pixel-Lesbarkeit)"
+    rechtsgrundlage: "—"
+    status: ok
+
+  - id: rechts-updates-monitoring
+    titel: "Rechts-Update-Monitoring (Agent 8)"
+    herkunft: agent-bestand
+    neu: false
+    pruefung: "Änderungen DSGVO, TDDDG, EU AI Act, DDG, Verbraucherrecht; Steuerrecht (Steuer-Matrix)"
+    rechtsgrundlage: "—"
+    status: monitor

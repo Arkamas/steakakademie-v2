@@ -1,0 +1,146 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Gründung-Sprint — Rechts-Check-Komponenten (Kunden-Audit)
+# ─────────────────────────────────────────────────────────────────────────────
+# Wiederverwendbare Prüf-Checkliste für die NEUE Website des Gründer-Kunden im
+# Gründung-Sprint (Produkt F). Spiegelt 1:1 die 18 Komponenten des ARAG-
+# Homepagechecks — so liefert der Sprint genau die Punkte ab, gegen die ein
+# offizielles Anwalts-Testat prüft.
+#
+# Unterschied zum Self-Audit (website-rechtscheck.yaml): Gründer-Sites haben
+# typischerweise MEHR aktive Komponenten (Shop/Zahlung, oft Cookie-Banner,
+# evtl. Google-Embeds) → diese Punkte sind hier KEINE "not-applicable"-Defaults,
+# sondern müssen je Kundensite einzeln bewertet werden.
+#
+# status je Kunde: open | ok | fix-needed | not-applicable
+# Letzte Aktualisierung: 2026-06-02
+
+version: 1
+zweck: "Rechts-Check-Modul des Gründung-Sprint (Produkt F)"
+hinweis: "Keine Rechtsberatung — strukturierte Vorprüfung. Bei Unsicherheit Anwalt (Kunde hat ggf. Rechtsschutz)."
+standComponents: "2026-06-02"
+
+# Reihenfolge = Abarbeitung im Sprint
+komponenten:
+  - id: domain-kennzeichenrecht
+    titel: "Namens- & Kennzeichenrechte der Domain/Marke"
+    pruefung: "DPMA-/TMview-Abgleich: kollidiert Domain/Name mit fremder Marke?"
+    rechtsgrundlage: "MarkenG §§ 5, 15; § 12 BGB"
+    sprint-aktion: "Vor Domain-Kauf prüfen; bei Treffer alternativen Namen wählen."
+    status: open
+
+  - id: haftung-externe-links
+    titel: "Haftung für externe Links"
+    pruefung: "Disclaimer + keine Links auf rechtswidrige Inhalte"
+    rechtsgrundlage: "§ 8 TMG/DDG"
+    sprint-aktion: "Standard-Haftungsausschluss in DSE/Impressum aufnehmen."
+    status: open
+
+  - id: urheberrecht-texte-bilder
+    titel: "Urheberrecht Texte & Bilder"
+    pruefung: "Alle Medien lizenziert/eigen; Stockfoto-Lizenzen dokumentiert; KI-Bilder ok"
+    rechtsgrundlage: "UrhG §§ 2, 19a, 72"
+    sprint-aktion: "Kunde: nur eigene/lizenzierte/CC0-Bilder. Keine Google-Bilder."
+    status: open
+
+  - id: impressum-ddg
+    titel: "Impressum § 5 DDG (2-Klick erreichbar)"
+    pruefung: "Vollständig (Name, Anschrift, Kontakt, ggf. USt-ID/Register); max. 2 Klicks"
+    rechtsgrundlage: "§ 5 DDG; BGH I ZR 228/03"
+    sprint-aktion: "Impressum-Generator + Footer-Link auf jeder Seite."
+    status: open
+
+  - id: dse-speicherdauer-loeschfristen
+    titel: "DSE: konkrete Speicherdauer / Löschfristen"
+    pruefung: "Je Verarbeitung Frist/Kriterium angeben (häufigster Testat-Mangel!)"
+    rechtsgrundlage: "Art. 13 Abs. 2 lit. a DSGVO"
+    sprint-aktion: "Pro Dienst konkrete Frist eintragen — Vorlage aus Steakakademie-DSE nutzen."
+    status: open
+
+  - id: widerrufs-rueckgaberecht
+    titel: "Widerrufs- & Rückgaberecht (+ Widerrufsbutton)"
+    pruefung: "§§ 312 ff BGB bei Verkauf an Verbraucher; Widerrufsbutton ab 19.06.2026"
+    rechtsgrundlage: "§§ 312 ff BGB; Art. 246a EGBGB"
+    sprint-aktion: "Nur falls Kunde an Verbraucher verkauft. Muster-Widerrufsbelehrung + Button."
+    status: open
+
+  - id: preisangaben-pangv
+    titel: "Preisangabenverordnung"
+    pruefung: "Gesamtpreis inkl. USt, Grundpreis, Versand"
+    rechtsgrundlage: "PAngV §§ 3, 4"
+    sprint-aktion: "Nur bei Shop/Preisen relevant."
+    status: open
+
+  - id: dse-ssl-tls
+    titel: "SSL/TLS aktiv + in DSE genannt"
+    pruefung: "HTTPS erzwungen; Erwähnung in DSE"
+    rechtsgrundlage: "Art. 32 DSGVO"
+    sprint-aktion: "Hosting mit Auto-TLS (Netlify/Vercel) → automatisch erfüllt."
+    status: open
+
+  - id: dse-datensparsamkeit
+    titel: "Datensparsamkeit"
+    pruefung: "Nur nötige Felder in Formularen; keine Daten ohne Zweck"
+    rechtsgrundlage: "Art. 5 Abs. 1 lit. c DSGVO"
+    status: open
+
+  - id: dse-cookies-consent
+    titel: "Cookies & Consent-Banner"
+    pruefung: "Banner mit GLEICHWERTIGEM Ablehnen-Button + Widerruf-Link, falls einwilligungspflichtige Cookies"
+    rechtsgrundlage: "§ 25 TDDDG; Art. 7 Abs. 3 DSGVO"
+    sprint-aktion: "EMPFEHLUNG: cookieless starten (Plausible) → kein Banner. Sonst Consent-Tool (Cookiebot/Usercentrics) mit gleichwertigem Ablehnen."
+    status: open
+
+  - id: dse-social-media-plugins
+    titel: "Social-Media-Plug-Ins"
+    pruefung: "Echte Plug-ins datenschutzkonform (2-Klick/Shariff) — oder nur Links"
+    rechtsgrundlage: "Art. 6, 26 DSGVO"
+    sprint-aktion: "EMPFEHLUNG: nur Profil-Links statt Plug-ins → kein Problem."
+    status: open
+
+  - id: dse-eingebettete-dienste
+    titel: "Eingebettete Dienste (YouTube, Maps, Fonts)"
+    pruefung: "Bei Embeds: Drittlandtransfer (DPF/SCC) + Widerspruch + Anbieter-DS verlinken; Consent vor Laden"
+    rechtsgrundlage: "Art. 44 ff DSGVO; § 25 TDDDG"
+    sprint-aktion: "EMPFEHLUNG: YouTube-nocookie + Klick-to-load; Maps statisch/verlinkt."
+    status: open
+
+  - id: dse-ip-logfiles-anonym
+    titel: "IP-Adressen / Logfiles anonymisiert"
+    pruefung: "Serverlogs nur anonymisiert/kurzfristig"
+    rechtsgrundlage: "Art. 5, 32 DSGVO"
+    status: open
+
+  - id: dse-auftragsverarbeitung
+    titel: "Auftragsverarbeitung benennen"
+    pruefung: "Alle AV (Hosting, CDN, Mail, DB, KI, Payment) in DSE genannt + AV-Verträge"
+    rechtsgrundlage: "Art. 13 Abs. 1 lit. e, Art. 28 DSGVO"
+    sprint-aktion: "Checkliste: jeden eingesetzten Dienst benennen (häufiger Testat-Mangel)."
+    status: open
+
+  - id: dse-zahlungsdienstleister
+    titel: "Zahlungsdienstleister"
+    pruefung: "Provider (PayPal, Stripe, Digistore24…) benannt + datensparsam"
+    rechtsgrundlage: "Art. 6 Abs. 1 lit. b DSGVO"
+    sprint-aktion: "Nur falls Zahlungen. Provider-Block in DSE."
+    status: open
+
+  - id: dse-statistik-analyse-tools
+    titel: "Statistik-/Analysetools"
+    pruefung: "IP anonym + Opt-out; bei GA4: Consent zwingend"
+    rechtsgrundlage: "§ 25 TDDDG; Art. 6 DSGVO"
+    sprint-aktion: "EMPFEHLUNG: Plausible (cookielos) statt GA4 → kein Consent nötig."
+    status: open
+
+  - id: dse-marketing-affiliate-tools
+    titel: "Marketing-/Affiliate-Tools"
+    pruefung: "Google Ads/AWIN etc.: Consent + Opt-out; Programme benennen"
+    rechtsgrundlage: "§ 25 TDDDG; Art. 6 DSGVO"
+    sprint-aktion: "Nur falls eingesetzt. Affiliate-Disclosure-Seite anlegen."
+    status: open
+
+  - id: google-fonts-selfhosted
+    titel: "Google Fonts self-hosted"
+    pruefung: "Keine extern nachladenden Google-Fonts"
+    rechtsgrundlage: "LG München 3 O 17493/20"
+    sprint-aktion: "next/font o. lokale Einbindung → kein externer Request."
+    status: open

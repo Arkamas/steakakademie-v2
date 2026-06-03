@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { ChevronRight, ExternalLink } from 'lucide-react';
+import { ChevronRight, ExternalLink, Copy, Check, Linkedin } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
@@ -21,8 +21,28 @@ export default function ProfilPage() {
   const [slug, setSlug] = useState('');
   const [isPublic, setIsPublic] = useState(false);
   const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const supabase = createClient();
+
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://steakakademie.de';
+  const profileUrl = `${origin}/griller/${slug}`;
+  const signatureHtml =
+    `<a href="${profileUrl}" style="font-family:sans-serif;font-size:13px;color:#C8882A;text-decoration:none">` +
+    `🔥 Grillmeister-Ausbildung @ Steakakademie</a>`;
+  const linkedinUrl =
+    'https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME' +
+    '&name=' + encodeURIComponent('Grillmeister-Ausbildung') +
+    '&organizationName=' + encodeURIComponent('Steakakademie') +
+    '&certUrl=' + encodeURIComponent(profileUrl);
+
+  function copySignature() {
+    try {
+      void navigator.clipboard.writeText(signatureHtml);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch { /* ignore */ }
+  }
 
   const load = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -118,6 +138,36 @@ export default function ProfilPage() {
                     Profil ansehen <ExternalLink size={13} />
                   </a>
                 )}
+              </div>
+            </div>
+          )}
+
+          {state === 'ready' && isPublic && slug && (
+            <div className="mt-6 space-y-5 border border-border-subtle bg-surface-elevated p-6">
+              <h2 className="font-serif text-lg font-bold text-text-primary">Zeigen & verlinken</h2>
+
+              {/* B2 — E-Mail-Signatur */}
+              <div>
+                <p className="text-xs font-sans font-bold uppercase tracking-wide text-text-muted mb-1.5">E-Mail-Signatur</p>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 px-3 py-2 bg-surface-base border border-border-subtle text-text-secondary text-xs font-mono overflow-x-auto whitespace-nowrap">
+                    🔥 Grillmeister-Ausbildung @ Steakakademie
+                  </code>
+                  <button onClick={copySignature}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 border border-brand-gold/40 text-brand-gold font-sans text-xs font-bold uppercase hover:bg-brand-gold/10 transition-colors">
+                    {copied ? <><Check size={13} /> Kopiert</> : <><Copy size={13} /> Kopieren</>}
+                  </button>
+                </div>
+                <p className="text-[11px] font-sans text-text-muted mt-1.5">Verlinkt auf deine öffentliche Vita.</p>
+              </div>
+
+              {/* B3 — LinkedIn */}
+              <div>
+                <p className="text-xs font-sans font-bold uppercase tracking-wide text-text-muted mb-1.5">LinkedIn</p>
+                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0A66C2] text-white font-sans font-bold text-sm hover:bg-[#0a5cad] transition-colors">
+                  <Linkedin size={16} /> Zertifikat zum Profil hinzufügen
+                </a>
               </div>
             </div>
           )}

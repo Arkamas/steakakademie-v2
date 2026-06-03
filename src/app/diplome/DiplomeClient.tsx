@@ -186,6 +186,12 @@ export default function DiplomeClient() {
               >
                 Urkunde per Post &mdash; 9,99 &euro; + Porto
               </Link>
+              <Link
+                href="/diplome/profil"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition-colors"
+              >
+                Mein Profil &amp; Vita &rarr;
+              </Link>
             </div>
             <Link
               href="/manifest"

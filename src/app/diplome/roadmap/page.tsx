@@ -506,6 +506,35 @@ function useProgress() {
     }
   }, []);
 
+  // Server-Fortschritt (Supabase) in den lokalen Stand mergen — cross-device.
+  const mergeServer = useCallback(
+    (rows: { modul: string; quiz_score: number | null; badge: string | null }[]) => {
+      setProgress((prev) => {
+        const modules = new Set(prev.bestandene_module);
+        const scores = { ...prev.quiz_scores };
+        const badges = new Set(prev.badges);
+        for (const r of rows) {
+          modules.add(r.modul as ModuleKey);
+          if (r.quiz_score != null) {
+            scores[r.modul as ModuleKey] = Math.max(scores[r.modul as ModuleKey] ?? 0, r.quiz_score);
+          }
+          if (r.badge) badges.add(r.badge);
+        }
+        const next: Progress = {
+          ...prev,
+          bestandene_module: Array.from(modules),
+          quiz_scores: scores,
+          badges: Array.from(badges),
+        };
+        if (typeof window !== 'undefined') {
+          try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {}
+        }
+        return next;
+      });
+    },
+    [],
+  );
+
   const completeModule = useCallback(
     (key: ModuleKey, score: number): string => {
       const badge = moduleMeta[key].badge;
@@ -568,7 +597,7 @@ function useProgress() {
     [progress.quiz_scores],
   );
 
-  return { progress, hydrated, completeModule, bumpStreak, resetStreak, resetAll, isUnlocked };
+  return { progress, hydrated, completeModule, bumpStreak, resetStreak, resetAll, isUnlocked, mergeServer };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -598,6 +627,25 @@ export default function DiplomeRoadmapPage() {
   const prog = useProgress();
   const [banner, setBanner] = useBanner();
   const [ceremony, setCeremony] = useState<CeremonyData | null>(null);
+
+  // Beim Laden: Server-Fortschritt holen (falls eingeloggt) und mergen.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user || cancelled) return;
+        const { data } = await supabase
+          .from('course_progress')
+          .select('modul, quiz_score, badge')
+          .eq('user_id', user.id);
+        if (data && !cancelled) prog.mergeServer(data);
+      } catch { /* localStorage bleibt Fallback */ }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function tryOpenModule(key: ModuleKey) {
     if (!prog.isUnlocked(key)) {

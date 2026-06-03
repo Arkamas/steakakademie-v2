@@ -1,8 +1,10 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+
+const NAME_KEY = 'sa_griller_name';
 
 export type CeremonyData = {
   tier: 'bronze' | 'silber' | 'gold' | 'platin' | 'master';
@@ -23,10 +25,11 @@ const MARCO_LINES: Record<number, string> = {
   5: 'Pitmaster. Mehr muss ich nicht sagen. Du kennst das Steak von der Weide bis zum Teller. Willkommen in der Elite. 🥩',
 };
 
-function shareBadge(data: CeremonyData) {
+function shareBadge(data: CeremonyData, name?: string) {
   if (typeof window === 'undefined') return;
   const params = new URLSearchParams({ tier: data.tier, badge: data.badge });
   if (data.stufe) params.set('stufe', String(data.stufe));
+  if (name && name.trim()) params.set('name', name.trim());
   const imgUrl = `${window.location.origin}/api/og/badge?${params.toString()}`;
   const text = `Ich habe mein ${data.tier.charAt(0).toUpperCase() + data.tier.slice(1)}-Zertifikat der Grillmeister-Ausbildung bestanden! 🔥`;
   const nav = window.navigator as Navigator & { share?: (d: ShareData) => Promise<void> };
@@ -45,6 +48,18 @@ export default function MedalCeremony({
   onClose: () => void;
 }) {
   const reduce = useReducedMotion();
+  const [name, setName] = useState('');
+
+  // Gespeicherten Namen laden (für persönliche Badge-Card)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try { setName(window.localStorage.getItem(NAME_KEY) ?? ''); } catch { /* ignore */ }
+  }, [data]);
+
+  function persistName(v: string) {
+    setName(v);
+    try { window.localStorage.setItem(NAME_KEY, v); } catch { /* ignore */ }
+  }
 
   // Konfetti-Stücke einmal pro Öffnung erzeugen
   const pieces = useMemo(() => {
@@ -150,9 +165,18 @@ export default function MedalCeremony({
               </div>
             )}
 
+            <input
+              value={name}
+              onChange={(e) => persistName(e.target.value)}
+              placeholder="Dein Name für die Urkunde (optional)"
+              maxLength={40}
+              className="w-full mb-4 px-4 py-2.5 rounded-lg font-sans text-sm text-text-light text-center outline-none"
+              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)' }}
+            />
+
             <div className="flex items-center justify-center gap-3">
               <button
-                onClick={() => shareBadge(data)}
+                onClick={() => shareBadge(data, name)}
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 font-sans font-bold text-sm tracking-[0.08em] uppercase rounded-full transition-transform hover:scale-[1.03]"
                 style={{ background: `linear-gradient(135deg, ${data.color}, ${data.color}cc)`, color: '#100A06' }}
               >

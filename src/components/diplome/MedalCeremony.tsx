@@ -9,9 +9,24 @@ export type CeremonyData = {
   badge: string;   // z.B. "Glut-Lehrling Zertifikat"
   name: string;    // Stufen-/Level-Name
   color: string;   // Akzentfarbe der Stufe
+  stufe?: number;  // 1–5 (für teilbare Badge-Card)
 };
 
 const CONFETTI_COLORS = ['#C8882A', '#E85018', '#F5D060', '#E8E0D0', '#9aa0a5'];
+
+function shareBadge(data: CeremonyData) {
+  if (typeof window === 'undefined') return;
+  const params = new URLSearchParams({ tier: data.tier, badge: data.badge });
+  if (data.stufe) params.set('stufe', String(data.stufe));
+  const imgUrl = `${window.location.origin}/api/og/badge?${params.toString()}`;
+  const text = `Ich habe mein ${data.tier.charAt(0).toUpperCase() + data.tier.slice(1)}-Zertifikat der Grillmeister-Ausbildung bestanden! 🔥`;
+  const nav = window.navigator as Navigator & { share?: (d: ShareData) => Promise<void> };
+  if (nav.share) {
+    nav.share({ title: 'Steakakademie · Grillmeister-Diplom', text, url: imgUrl }).catch(() => {});
+  } else {
+    window.open(imgUrl, '_blank', 'noopener');
+  }
+}
 
 export default function MedalCeremony({
   data,
@@ -111,13 +126,22 @@ export default function MedalCeremony({
               🏅 {data.badge} freigeschaltet
             </p>
 
-            <button
-              onClick={onClose}
-              className="inline-flex items-center justify-center px-6 py-3 font-sans font-bold text-sm tracking-[0.08em] uppercase rounded-full transition-transform hover:scale-[1.03]"
-              style={{ background: `linear-gradient(135deg, ${data.color}, ${data.color}cc)`, color: '#100A06' }}
-            >
-              Weiter
-            </button>
+            <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={() => shareBadge(data)}
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 font-sans font-bold text-sm tracking-[0.08em] uppercase rounded-full transition-transform hover:scale-[1.03]"
+                style={{ background: `linear-gradient(135deg, ${data.color}, ${data.color}cc)`, color: '#100A06' }}
+              >
+                Teilen
+              </button>
+              <button
+                onClick={onClose}
+                className="inline-flex items-center justify-center px-5 py-3 font-sans font-bold text-sm tracking-[0.08em] uppercase rounded-full border transition-colors hover:bg-white/5"
+                style={{ borderColor: `${data.color}55`, color: data.color }}
+              >
+                Weiter
+              </button>
+            </div>
           </motion.div>
         </motion.div>
       )}

@@ -601,7 +601,7 @@ export default function DiplomeRoadmapPage() {
     const meta = moduleMeta[key];
     const tier = (['bronze', 'silber', 'gold', 'platin', 'master'] as const)[meta.stage - 1];
     const stage = stages[meta.stage - 1];
-    setCeremony({ tier, badge, name: stage?.title ?? meta.title, color: meta.color });
+    setCeremony({ tier, badge, name: stage?.title ?? meta.title, color: meta.color, stufe: meta.stage });
   }
 
   function handleStreakHit() {

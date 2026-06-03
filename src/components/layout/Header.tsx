@@ -7,6 +7,7 @@ import { Search, Menu, X, ChevronDown, Flame } from 'lucide-react';
 // Flame kept for Diplome CTA button
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import AccountLink from './AccountLink';
 
 const NAV_CATEGORIES = [
   {
@@ -185,6 +186,7 @@ export default function Header() {
               >
                 Tests
               </Link>
+              <AccountLink />
               <Link
                 href="/diplome"
                 className="hidden sm:flex items-center gap-1.5 bg-brand-gold text-ink font-sans text-[11px] font-bold tracking-[0.12em] uppercase px-3 py-2 hover:bg-[#b07020] transition-colors"
@@ -312,6 +314,7 @@ export default function Header() {
               >
                 Produkttests &amp; Vergleiche
               </Link>
+              <AccountLink mobile />
               <Link
                 href="/diplome"
                 className="inline-flex items-center gap-2 bg-brand-gold text-ink font-sans text-sm font-bold tracking-wide uppercase px-5 py-3 hover:bg-[#b07020] transition-colors"

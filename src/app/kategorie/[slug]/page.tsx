@@ -6,6 +6,7 @@ import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allCuts, allMethodes, allVergleiches } from 'contentlayer/generated';
+import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
 
 interface Props {
   params: { slug: string };
@@ -106,9 +107,14 @@ export default function KategoriePage({ params }: Props) {
 
   const articles = getArticles(params.slug);
 
+  const collectionSchema = collectionPageSchema(cat.label, `/kategorie/${params.slug}`, cat.description);
+  const breadcrumb = breadcrumbSchema([{ name: cat.label, url: `/kategorie/${params.slug}` }]);
+
   return (
     <>
       <Header />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <main className="min-h-screen bg-surface-base">
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
 

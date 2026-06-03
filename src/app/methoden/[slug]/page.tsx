@@ -91,12 +91,12 @@ export default function MethodePage({ params }: Props) {
 
   const MDXContent = useMDXComponent(methode.body.code);
 
-  const schema = {
-    '@context': 'https://schema.org',
+  const howToSchema = {
     '@type': 'HowTo',
     name: methode.title,
     description: methode.excerpt,
     image: methode.image,
+    inLanguage: 'de-DE',
     datePublished: methode.publishedAt,
     dateModified: methode.updatedAt ?? methode.publishedAt,
     author: {
@@ -104,7 +104,24 @@ export default function MethodePage({ params }: Props) {
       name: methode.author,
       url: `https://steakakademie.de/autoren/${methode.authorSlug}`,
     },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Steakakademie',
+      url: 'https://steakakademie.de',
+      logo: { '@type': 'ImageObject', url: 'https://steakakademie.de/images/og-image.svg' },
+    },
   };
+
+  const breadcrumbSchema = {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Start', item: 'https://steakakademie.de' },
+      { '@type': 'ListItem', position: 2, name: 'Methoden', item: 'https://steakakademie.de/methoden' },
+      { '@type': 'ListItem', position: 3, name: methode.title, item: `https://steakakademie.de${methode.url}` },
+    ],
+  };
+
+  const schema = { '@context': 'https://schema.org', '@graph': [howToSchema, breadcrumbSchema] };
 
   return (
     <>

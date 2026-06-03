@@ -5,6 +5,7 @@ import { allDiplomLektions } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { breadcrumbSchema } from '@/lib/schema';
 import { ChevronRight, ChevronLeft, ArrowRight, BookOpen, Lightbulb } from 'lucide-react';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 
@@ -110,10 +111,17 @@ export default function DiplomLektionPage({ params }: Props) {
     },
   };
 
+  const breadcrumb = breadcrumbSchema([
+    { name: 'Diplom-System', url: '/diplome' },
+    { name: 'Roadmap', url: '/diplome/roadmap' },
+    { name: lektion.title, url: `/diplome/lernen/stufe-${lektion.stufe}/${lektion.lektionSlug}` },
+  ]);
+
   return (
     <>
       <Header />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
 
       <main className="bg-surface-base">
         {/* Header-Band */}

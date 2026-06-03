@@ -1,4 +1,5 @@
 import { defineDocumentType, makeSource } from 'contentlayer2/source-files';
+import remarkGfm from 'remark-gfm';
 import { format, parseISO } from 'date-fns';
 import { de } from 'date-fns/locale';
 
@@ -61,6 +62,9 @@ export const Cut = defineDocumentType(() => ({
     seoTitle: { type: 'string' },
     seoDescription: { type: 'string' },
     schemaType: { type: 'string', default: 'Article' },
+    // Optional: FAQ-Paare {question, answer} für FAQPage-Schema (GEO/Rich Results).
+    // Optional gehalten, damit bestehende Cuts ohne faq nicht brechen.
+    faq: { type: 'json' },
   },
   computedFields: {
     slug: {
@@ -368,10 +372,43 @@ export const DiplomLektion = defineDocumentType(() => ({
 
 // ── SOURCE ────────────────────────────────────────────────────────────────────
 
+// ── GRÜNDUNG-SPRINT MODULE (GF3 „Das ehrliche System" — Lehrinhalt) ───────────
+
+export const SprintModul = defineDocumentType(() => ({
+  name: 'SprintModul',
+  filePathPattern: 'gruendung-sprint/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title:          { type: 'string', required: true },
+    order:          { type: 'number', required: true },   // Reihenfolge in der Modulreihe
+    excerpt:        { type: 'string', required: true },
+    dauer:          { type: 'string', required: true },   // z. B. "6 Min"
+    publishedAt:    { type: 'date',   required: true },
+    seoTitle:       { type: 'string' },
+    seoDescription: { type: 'string' },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => doc._raw.flattenedPath.replace('gruendung-sprint/', ''),
+    },
+    url: {
+      type: 'string',
+      resolve: (doc) => `/gruendung-sprint/lernen/${doc._raw.flattenedPath.replace('gruendung-sprint/', '')}`,
+    },
+  },
+}));
+
 export default makeSource({
   contentDirPath: 'content',
-  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe, DiplomLektion],
+  // Datendateien (kein Document-Typ) von der Doc-Klassifizierung ausnehmen,
+  // sonst meldet Contentlayer sie als "problem" → Warn-Rauschen, das echte
+  // Build-Fehler verdeckt (siehe KAN-26: 33 stille Rezept-404s).
+  contentDirExclude: ['glossar/terms.json'],
+  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe, DiplomLektion, SprintModul],
   mdx: {
-    // rehype / remark plugins can be added here later
+    // GitHub Flavored Markdown — sonst rendern Markdown-Tabellen als roher
+    // Pipe-Text statt als <table> (KAN-28). Aktiviert auch Task-Lists/Autolinks.
+    remarkPlugins: [remarkGfm],
   },
 });

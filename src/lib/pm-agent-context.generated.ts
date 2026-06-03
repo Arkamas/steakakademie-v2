@@ -13,7 +13,7 @@ export interface ProjectStatus {
 }
 
 export const PROJECT_STATUS: ProjectStatus = {
-  "readinessScore": 49,
+  "readinessScore": 50,
   "completed": [
     "Email-Capture",
     "Sitemap & Robots",
@@ -66,15 +66,15 @@ export const PROJECT_STATUS: ProjectStatus = {
     "YouTube",
     "Affiliate Marketing",
     "Supabase Auth",
+    "Stufe 1 Bronze „Der Funke\"",
+    "Stufe 2 Silber „Die Flamme Bezähmen\"",
+    "Stufe 3 Gold „Hitzekontrolle\"",
+    "Stufe 4 Platin „Präzision & Geschmack\"",
+    "Stufe 5 Meister „Der vollendete Pitmaster\"",
     "Supabase",
     "Autoren-Profile `/autoren/marco`, `/autoren/jonas`, `/autoren/elena`",
     "Digistore24 Produkt 695797 Titel fix: \"11 Länder\" → \"23 Länder\"",
-    "Digistore24 Testbestellungen Produkt 695894 + 695900",
-    "Mein Protokoll Produkt B (Fragebogen → PDF-Plan)",
-    "Steuer-Matrix LIVE Jahres-Abo (Produkt D)",
-    "SEO-Monitor Agent (Agent 2) aufsetzen + in Routine eintragen",
-    "Messerkategorie `/ausruestung/messer` — Segmentfilter (Premium / Damast / Mittelklasse)",
-    "Meta-Pixel Datenschutz-Gate + Pixel-Status prüfen (Consent, keine PII) — vor Aktivierung"
+    "Digistore24 Testbestellungen Produkt 695894 + 695900"
   ],
   "open": [
     "Ribeye Pillar Page",
@@ -105,10 +105,10 @@ export const PROJECT_STATUS: ProjectStatus = {
     "Content-Strategie": 17,
     "Avatar-System": 57,
     "Technische Infrastruktur": 75,
-    "Kurse & Diplom-System": 43,
+    "Kurse & Diplom-System": 50,
     "Tech-Stack & Tools": 76,
     "KI-System & Automation": 38,
     "Agenten & Automation": 0
   },
-  "generatedAt": "2026-06-02T17:24:29.530Z"
+  "generatedAt": "2026-06-03T20:10:30.135Z"
 }

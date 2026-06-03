@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { getAuthorBySlug, getAllAuthors } from '@/lib/authors';
 import { allCuts, allArtikels } from 'contentlayer/generated';
+import { breadcrumbSchema } from '@/lib/schema';
 
 interface Props {
   params: { slug: string };
@@ -51,6 +52,11 @@ export default function AutorPage({ params }: Props) {
     knowsAbout: author.expertise,
   };
 
+  const breadcrumb = breadcrumbSchema([
+    { name: 'Autoren', url: '/autoren' },
+    { name: author.name, url: `/autoren/${author.slug}` },
+  ]);
+
   return (
     <>
       <Header />
@@ -58,6 +64,10 @@ export default function AutorPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
 
       <main>

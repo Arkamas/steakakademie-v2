@@ -68,9 +68,24 @@ export default function RecipePage({ params }: Props) {
     .sort((a, b) => (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0))
     .slice(0, 3);
 
+  // Schema.org JSON-LD — nur BreadcrumbList.
+  // Das Recipe-Schema liefert bereits die RecipeTemplate-Komponente; hier KEIN
+  // zweites Recipe erzeugen (Duplikat verwirrt Google). Breadcrumb fehlt dort → ergänzen.
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Start', item: 'https://steakakademie.de' },
+      { '@type': 'ListItem', position: 2, name: 'Rezepte', item: 'https://steakakademie.de/rezepte' },
+      { '@type': 'ListItem', position: 3, name: recipe.kategorie, item: `https://steakakademie.de/rezepte/${recipe.kategorie}` },
+      { '@type': 'ListItem', position: 4, name: recipe.title, item: `https://steakakademie.de${recipe.url}` },
+    ],
+  };
+
   return (
     <>
       <Header />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <main>
         <RecipeTemplate recipe={recipe} hardwareProducts={hardwareProducts} />
       </main>

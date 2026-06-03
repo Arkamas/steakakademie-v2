@@ -6,6 +6,7 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import { allPersoenlichkeits } from 'contentlayer/generated';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { breadcrumbSchema } from '@/lib/schema';
 import SeriesBadge from '@/components/persoenlichkeiten/SeriesBadge';
 import DiplomFunnel from '@/components/persoenlichkeiten/DiplomFunnel';
 import NewsletterCapture from '@/components/persoenlichkeiten/NewsletterCapture';
@@ -91,6 +92,11 @@ export default function PersoenlichkeitPage({ params }: Props) {
     keywords: person.tags?.join(', '),
   };
 
+  const breadcrumb = breadcrumbSchema([
+    { name: 'Persönlichkeiten', url: '/persoenlichkeiten' },
+    { name: person.title.split('—')[0].trim(), url: person.url },
+  ]);
+
   // Related: same category first, then others — curated for funnel depth
   const related = sorted
     .filter(p => p.slug !== person.slug)
@@ -144,6 +150,7 @@ export default function PersoenlichkeitPage({ params }: Props) {
     <>
       <Header />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
 
       <main className="min-h-screen bg-surface-base">
 

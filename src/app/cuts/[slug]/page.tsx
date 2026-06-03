@@ -130,13 +130,15 @@ export default function CutPage({ params }: Props) {
   const MDXContent = useMDXComponent(cut.body.code);
   const relatedProducts = getProductsByCategory('thermometer').slice(0, 3);
 
-  // Schema.org JSON-LD
-  const schema = {
+  // Schema.org JSON-LD — Article + BreadcrumbList (GEO/Burggraben 3)
+  const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: cut.title,
     description: cut.excerpt,
     image: cut.image,
+    inLanguage: 'de-DE',
+    articleSection: 'Cuts & Fleischkunde',
     datePublished: cut.publishedAt,
     dateModified: cut.updatedAt ?? cut.publishedAt,
     author: {
@@ -148,11 +150,42 @@ export default function CutPage({ params }: Props) {
       '@type': 'Organization',
       name: 'Steakakademie',
       url: 'https://steakakademie.de',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://steakakademie.de/images/og-image.svg',
+      },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `https://steakakademie.de${cut.url}`,
     },
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Start', item: 'https://steakakademie.de' },
+      { '@type': 'ListItem', position: 2, name: 'Cuts & Fleischkunde', item: 'https://steakakademie.de/kategorie/cuts' },
+      { '@type': 'ListItem', position: 3, name: cut.title.split(':')[0], item: `https://steakakademie.de${cut.url}` },
+    ],
+  };
+
+  const faqItems = (Array.isArray(cut.faq) ? cut.faq : []) as Array<{ question: string; answer: string }>;
+  const faqSchema = faqItems.length > 0
+    ? {
+        '@type': 'FAQPage',
+        mainEntity: faqItems.map((f) => ({
+          '@type': 'Question',
+          name: f.question,
+          acceptedAnswer: { '@type': 'Answer', text: f.answer },
+        })),
+      }
+    : null;
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])],
   };
 
   return (

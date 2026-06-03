@@ -45,7 +45,7 @@ export const SCOUT_SOURCES: ScoutSource[] = [
     type: 'forum',
     language: 'en',
     pipeline_hint: 'usa',
-    active: true,
+    active: false, // kein RSS-Feed → nicht scrapebar (Weg-A-Cleanup)
   },
   {
     id: 'src_smoked_meat_forums',
@@ -55,7 +55,7 @@ export const SCOUT_SOURCES: ScoutSource[] = [
     type: 'forum',
     language: 'en',
     pipeline_hint: 'general-bbq',
-    active: true,
+    active: false, // kein RSS-Feed → nicht scrapebar (Weg-A-Cleanup)
   },
   {
     id: 'src_weber_kettle_club',
@@ -65,7 +65,7 @@ export const SCOUT_SOURCES: ScoutSource[] = [
     type: 'forum',
     language: 'en',
     pipeline_hint: 'equipment',
-    active: true,
+    active: false, // kein RSS-Feed → nicht scrapebar (Weg-A-Cleanup)
   },
   {
     id: 'src_big_green_egg',
@@ -75,7 +75,7 @@ export const SCOUT_SOURCES: ScoutSource[] = [
     type: 'forum',
     language: 'en',
     pipeline_hint: 'equipment',
-    active: true,
+    active: false, // kein RSS-Feed → nicht scrapebar (Weg-A-Cleanup)
   },
 
   // ── Deutsche Szene & Events ───────────────────────────────────────────────

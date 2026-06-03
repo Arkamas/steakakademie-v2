@@ -1,0 +1,82 @@
+name: Content-Pipeline (Scout → Draft)
+
+# Autonomer Content-Scout: liest RSS-Quellen (inkl. „Die Frau am Grill" / Queen of
+# Fire), generiert via Claude redaktionelle Entwürfe und schreibt sie als
+# status='draft'/'review' nach Supabase `content_drafts`.
+# WICHTIG: Nichts geht live ohne menschliche Freigabe in /admin/review.
+# Output geht in die DB, NICHT ins Git → kein Commit/Push nötig.
+#
+# EINMALIGE EINRICHTUNG (Repo → Settings → Secrets and variables → Actions):
+#   ANTHROPIC_API_KEY          = sk-ant-…
+#   NEXT_PUBLIC_SUPABASE_URL   = https://<projekt>.supabase.co
+#   SUPABASE_SERVICE_ROLE_KEY  = <service-role-key>   (NIE der anon-Key!)
+
+on:
+  schedule:
+    - cron: '0 4 * * 0'      # Jeden Sonntag 04:00 UTC (nach Glossar/Rezept-Läufen)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Trockenlauf (nur scouten, nichts schreiben)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  scout-content:
+    name: Quellen scouten + Entwürfe generieren
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Secrets-Guard (sauber skippen, solange nicht eingerichtet)
+        id: guard
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          missing=""
+          [ -z "$ANTHROPIC_API_KEY" ] && missing="$missing ANTHROPIC_API_KEY"
+          [ -z "$SUPABASE_URL" ]      && missing="$missing NEXT_PUBLIC_SUPABASE_URL"
+          [ -z "$SERVICE_ROLE" ]      && missing="$missing SUPABASE_SERVICE_ROLE_KEY"
+          if [ -n "$missing" ]; then
+            echo "## ⏭️ Content-Pipeline übersprungen" >> $GITHUB_STEP_SUMMARY
+            echo "Fehlende Secrets:$missing — in Repo-Settings setzen, dann läuft der nächste Lauf." >> $GITHUB_STEP_SUMMARY
+            echo "ready=false" >> $GITHUB_OUTPUT
+          else
+            echo "ready=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Node.js einrichten
+        if: steps.guard.outputs.ready == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        if: steps.guard.outputs.ready == 'true'
+        run: npm ci --ignore-scripts
+
+      - name: Content-Scout ausführen
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            node scripts/cron-scout.mjs --dry-run
+          else
+            node scripts/cron-scout.mjs
+          fi
+
+      - name: Hinweis zur Freigabe
+        if: steps.guard.outputs.ready == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          echo "## 🍳 Content-Pipeline gelaufen" >> $GITHUB_STEP_SUMMARY
+          echo "Neue Entwürfe liegen als **draft/review** in Supabase \`content_drafts\`." >> $GITHUB_STEP_SUMMARY
+          echo "→ Freigeben in **/admin/review**. Nichts ist automatisch live." >> $GITHUB_STEP_SUMMARY

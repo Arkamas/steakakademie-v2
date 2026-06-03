@@ -5,7 +5,22 @@ import Link from 'next/link';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
 import { allDiplomLektions } from 'contentlayer/generated';
 import MedalCeremony, { type CeremonyData } from '@/components/diplome/MedalCeremony';
+import { createClient } from '@/lib/supabase/client';
 import Header from '@/components/layout/Header';
+
+// Fortschritt in Supabase persistieren (nur wenn eingeloggt). Graceful:
+// kein Login oder Tabelle fehlt → still scheitern, localStorage bleibt Fallback.
+async function syncDiplomProgress(modul: string, stufe: number, score: number, badge: string) {
+  try {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    await supabase.from('course_progress').upsert(
+      { user_id: user.id, modul, stufe, status: 'bestanden', quiz_score: score, badge, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id,modul' },
+    );
+  } catch { /* localStorage bleibt Fallback */ }
+}
 import Footer from '@/components/layout/Footer';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -602,6 +617,7 @@ export default function DiplomeRoadmapPage() {
     const tier = (['bronze', 'silber', 'gold', 'platin', 'master'] as const)[meta.stage - 1];
     const stage = stages[meta.stage - 1];
     setCeremony({ tier, badge, name: stage?.title ?? meta.title, color: meta.color, stufe: meta.stage });
+    void syncDiplomProgress(key, meta.stage, score, badge);
   }
 
   function handleStreakHit() {

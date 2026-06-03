@@ -14,6 +14,15 @@ export type CeremonyData = {
 
 const CONFETTI_COLORS = ['#C8882A', '#E85018', '#F5D060', '#E8E0D0', '#9aa0a5'];
 
+// Marco gratuliert persönlich — kuratiert je Stufe (kein API-Call → kein Kosten-/Fehlerrisiko).
+const MARCO_LINES: Record<number, string> = {
+  1: 'Stark angefeuert! Du beherrschst jetzt das Feuer — die Basis von allem. Weiter geht’s ans Fleisch.',
+  2: 'Sauber. Du erkennst deine Cuts und weißt, warum sie sich unterscheiden — das trennt Griller von Köchen.',
+  3: 'Präzision sitzt. Deine Kerntemperaturen sind ab jetzt eine Ansage, kein Ratespiel.',
+  4: 'Low & Slow gemeistert. Geduld und Rauch sind deine neuen Werkzeuge — Respekt.',
+  5: 'Pitmaster. Mehr muss ich nicht sagen. Du kennst das Steak von der Weide bis zum Teller. Willkommen in der Elite. 🥩',
+};
+
 function shareBadge(data: CeremonyData) {
   if (typeof window === 'undefined') return;
   const params = new URLSearchParams({ tier: data.tier, badge: data.badge });
@@ -122,9 +131,24 @@ export default function MedalCeremony({
             <h2 className="font-serif text-2xl font-bold text-text-light mb-1">
               {data.name}
             </h2>
-            <p className="font-sans text-sm text-text-light/60 mb-7">
+            <p className="font-sans text-sm text-text-light/60 mb-5">
               🏅 {data.badge} freigeschaltet
             </p>
+
+            {/* Marco gratuliert */}
+            {data.stufe && MARCO_LINES[data.stufe] && (
+              <div
+                className="text-left mb-7 px-4 py-3 rounded-lg"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                <p className="font-body text-[13px] leading-relaxed text-text-light/80 italic">
+                  „{MARCO_LINES[data.stufe]}"
+                </p>
+                <p className="font-sans text-[10px] uppercase tracking-[0.14em] mt-2" style={{ color: data.color }}>
+                  — Marco, dein BBQ-Guide
+                </p>
+              </div>
+            )}
 
             <div className="flex items-center justify-center gap-3">
               <button

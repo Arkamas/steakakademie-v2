@@ -10,7 +10,7 @@ import { ArrowRight, Mail, Flame } from 'lucide-react';
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const redirectTo   = searchParams.get('redirectTo') ?? '/profil';
+  const redirectTo   = searchParams.get('redirectTo') ?? '/diplome/profil';
   const urlError     = searchParams.get('error');
 
   const [email,   setEmail]   = useState('');
@@ -106,7 +106,7 @@ function LoginForm() {
                 className="mb-4 px-4 py-3 rounded-sm border text-sm font-sans"
                 style={{ borderColor: 'rgba(232,80,24,0.4)', background: 'rgba(232,80,24,0.08)', color: '#E85018' }}
               >
-                {message || 'Anmeldung fehlgeschlagen — bitte erneut versuchen.'}
+                {message || urlError || 'Anmeldung fehlgeschlagen — bitte erneut versuchen.'}
               </div>
             )}
 

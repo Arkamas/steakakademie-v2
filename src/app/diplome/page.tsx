@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import DiplomeClient from './DiplomeClient';
+import { getPlattformPuls } from '@/lib/plattform-puls';
 
 export const metadata: Metadata = {
   title: 'Grillmeister-Diplom — 10 Level BBQ-Ausbildung | Steakakademie',
@@ -15,5 +16,5 @@ export const metadata: Metadata = {
 };
 
 export default function DiplomePage() {
-  return <DiplomeClient />;
+  return <DiplomeClient puls={getPlattformPuls()} />;
 }

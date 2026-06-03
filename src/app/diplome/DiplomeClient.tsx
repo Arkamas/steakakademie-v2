@@ -8,6 +8,8 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import BadgeProgression from '@/components/diplome/BadgeProgression';
 import Medal, { tierForLevel } from '@/components/diplome/Medal';
+import PlattformPuls from '@/components/home/PlattformPuls';
+import type { PulsData } from '@/lib/plattform-puls';
 
 const LEVELS = [
   { id: 1,  name: 'Glut-Lehrling',      emoji: '🔥', description: 'Grundlagen des Grillens: Temperaturzonen, direktes vs. indirektes Grillen, Sicherheit.', locked: false },
@@ -22,7 +24,7 @@ const LEVELS = [
   { id: 10, name: 'Master of Steak',    emoji: '👑', description: 'Das Abschluss-Diplom. Du kennst das Steak von der Weide bis zum Teller.', locked: true },
 ];
 
-export default function DiplomeClient() {
+export default function DiplomeClient({ puls }: { puls?: PulsData }) {
   return (
     <>
       <Header />
@@ -110,6 +112,8 @@ export default function DiplomeClient() {
         </section>
 
         <BadgeProgression />
+
+        {puls && <PlattformPuls data={puls} />}
 
         {/* Level Grid */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">

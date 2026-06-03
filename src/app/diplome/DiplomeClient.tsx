@@ -94,17 +94,16 @@ export default function DiplomeClient() {
               <div className="h-px w-16 bg-brand-gold/20" />
             </div>
 
-            {/* Medaillen-Schaustück */}
-            <div className="mt-12 mx-auto" style={{ maxWidth: 620 }}>
+            {/* Medaillen-Schaustück — 5 Medaillon-Fassungen in Reihe */}
+            <div className="mt-12 mx-auto" style={{ maxWidth: 880 }}>
               <Image
-                src="/images/diplome/medals-hero.png"
+                src="/images/diplome/medals-hero-v2.png"
                 alt="Die Grillmeister-Medaillen — Bronze, Silber, Gold, Platin, Meister"
-                width={1024}
-                height={1024}
+                width={1600}
+                height={420}
                 priority
-                sizes="(max-width: 640px) 100vw, 620px"
+                sizes="(max-width: 640px) 100vw, 880px"
                 className="w-full h-auto"
-                style={{ filter: 'drop-shadow(0 10px 34px rgba(0,0,0,0.6))' }}
               />
             </div>
           </div>

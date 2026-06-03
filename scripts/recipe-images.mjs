@@ -29,6 +29,10 @@ const DRY   = process.argv.includes('--dry-run')
 const FORCE = process.argv.includes('--force')
 const LIMIT = process.argv.includes('--limit')
   ? parseInt(process.argv[process.argv.indexOf('--limit') + 1], 10) : Infinity
+// --only slug1,slug2 → nur diese Rezepte (gezielte Regenerierung)
+const ONLY = process.argv.includes('--only')
+  ? process.argv[process.argv.indexOf('--only') + 1].split(',').map(s => s.trim())
+  : null
 
 // FAL_KEY robust: env zuerst, sonst .env.local manuell (dotenv-Quirk umgehen)
 let FAL_KEY = process.env.FAL_KEY
@@ -44,13 +48,42 @@ function fm(raw, key) {
   return m ? m[1] : ''
 }
 
+// Anatomisch präzise Cut-Beschreibungen → FLUX rendert den RICHTIGEN Schnitt.
+// Schlüssel werden als Teilstring im lowercased meatType/slug gesucht.
+const CUT_ANATOMY = {
+  'porterhouse': 'a single thick porterhouse steak with a clearly visible T-shaped bone running down the center, a large striploin muscle on one side and a LARGE round tenderloin filet on the other side of the bone',
+  't-bone':      'a single thick T-bone steak with a clearly visible T-shaped bone, a striploin muscle on one side and a small round tenderloin filet on the other',
+  'tomahawk':    'a thick tomahawk steak: a ribeye with the large round central eye muscle and crescent fat cap, attached to a long frenched (cleaned) rib bone handle',
+  'ribeye':      'a single thick boneless ribeye steak showing the large round central eye muscle (longissimus) with the distinctive crescent-shaped spinalis fat cap on top and rich fine marbling',
+  'rib-eye':     'a single thick boneless ribeye steak showing the large round central eye muscle with the crescent-shaped spinalis fat cap and rich marbling',
+  'entrecôte':   'a single thick entrecôte (ribeye) steak with the round central eye muscle, fat cap and fine marbling',
+  'entrecote':   'a single thick entrecôte (ribeye) steak with the round central eye muscle, fat cap and fine marbling',
+  'flank':       'a flat, long flank steak with clearly visible long parallel muscle fibers',
+  'onglet':      'a single hanger steak (onglet), a thick rope-like muscle with coarse grain and a central sinew',
+  'brisket':     'a sliced smoked beef brisket showing a dark peppery bark, a pink smoke ring just under the surface, and visible fat cap',
+  'short rib':   'thick beef short ribs on the bone with a dark smoky bark',
+  'roastbeef':   'a thick striploin / roastbeef steak with a firm fat rim along one edge',
+  'wagyu':       'a single wagyu beef steak with extreme dense web-like marbling throughout the bright red meat',
+}
+
+function cutAnatomy(meat, slug) {
+  const hay = `${meat} ${slug}`.toLowerCase()
+  for (const [k, v] of Object.entries(CUT_ANATOMY)) if (hay.includes(k)) return v
+  return ''
+}
+
 // NATÜRLICHER Hausstil — kein Hochglanz-KI-Look, glaubwürdiges "echtes Ergebnis"
-function buildPrompt(raw) {
-  const alt   = fm(raw, 'imageAlt') || fm(raw, 'title')
-  const meat  = fm(raw, 'meatType')
+function buildPrompt(raw, slug = '') {
+  const alt    = fm(raw, 'imageAlt') || fm(raw, 'title')
+  const meat   = fm(raw, 'meatType')
   const method = fm(raw, 'cookingMethod')
-  const subject = [alt, meat && `(${meat})`, method].filter(Boolean).join(', ')
+  const anatomy = cutAnatomy(meat, slug)
+  // Anatomie führt (korrekter Cut!), sonst Fallback auf Alt/Titel.
+  const subject = anatomy
+    ? `${anatomy}${method ? `, ${method}` : ''}`
+    : [alt, meat && `(${meat})`, method].filter(Boolean).join(', ')
   return `professional food photography of ${subject}, `
+    + `anatomically accurate cut of meat, `
     + `naturally styled and slightly imperfect like a real home-grilled result, `
     + `dark charcoal background, warm dramatic side lighting, glistening juices, visible char and texture, `
     + `shallow depth of field, photorealistic, editorial quality, no text, no watermark, no people`
@@ -81,6 +114,7 @@ async function main() {
   for (const file of files) {
     if (done >= LIMIT) break
     const slug = file.replace(/\.mdx$/, '')
+    if (ONLY && !ONLY.includes(slug)) { skipped++; continue }
     const path = join(REZEPTE, file)
     const raw  = await readFile(path, 'utf8')
     const target = join(IMG_DIR, `${slug}.jpg`)
@@ -88,7 +122,7 @@ async function main() {
 
     if (!FORCE && existsSync(target)) { skipped++; continue }
 
-    const prompt = buildPrompt(raw)
+    const prompt = buildPrompt(raw, slug)
     if (DRY) { console.log(c.y(`◇ ${slug}`)); console.log(c.d(`  ${prompt}\n`)); done++; continue }
 
     try {

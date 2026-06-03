@@ -19,14 +19,14 @@ const KATEGORIEN: Record<string, {
     subtitle:    'Master-Cuts',
     description: 'Präzise Rezepte für Premium-Cuts — Ribeye, Brisket, Tomahawk und mehr. Jedes Rezept mehrfach am Grill getestet, mit exakten Gramm- und Temperaturangaben.',
     heroImage:   '/images/rezepte/dry-aged-ribeye.jpg',
-    heroAlt:     'Dick gegrilltes Premium-Steak mit Grillmarkierung und rosa Kern, Rauch über dunklem Holzbrett',
+    heroAlt:     'Marmoriertes Premium-Ribeye mit ausgeprägtem Fettauge auf dunklem Schiefer',
   },
   beilagen: {
     label:       'Beilagen & Salate',
     subtitle:    'Das BBQ-Büfett',
     description: 'Das Büfett macht das Grillen vollständig. Von der knusprigen Grillkartoffel bis zum rauchigen Coleslaw — Beilagen, die eigenständig brillieren.',
-    heroImage:   '/images/Beilagen_zu_Steak_1800x1000_6c5b974a-f29a-492b-95fb-424e0c4624d3.webp',
-    heroAlt:     'BBQ-Beilagen und Salate auf dem Grilltisch',
+    heroImage:   '/images/beilagen-salate-hero.jpg',
+    heroAlt:     'BBQ-Beilagen-Büfett: Mac and Cheese in der Gusspfanne, Grillmais, Röstkartoffeln, Coleslaw und frische Salate',
   },
   'saucen-rubs': {
     label:       'Saucen, Rubs & Injektionen',

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
 import { allDiplomLektions } from 'contentlayer/generated';
+import MedalCeremony, { type CeremonyData } from '@/components/diplome/MedalCeremony';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
@@ -581,6 +582,7 @@ export default function DiplomeRoadmapPage() {
   const [view, setView] = useState<ViewKey>('roadmap');
   const prog = useProgress();
   const [banner, setBanner] = useBanner();
+  const [ceremony, setCeremony] = useState<CeremonyData | null>(null);
 
   function tryOpenModule(key: ModuleKey) {
     if (!prog.isUnlocked(key)) {
@@ -596,7 +598,10 @@ export default function DiplomeRoadmapPage() {
 
   function handleQuizComplete(key: ModuleKey, score: number) {
     const badge = prog.completeModule(key, score);
-    setBanner({ text: `🏅 ${badge} freigeschaltet!`, color: moduleMeta[key].color });
+    const meta = moduleMeta[key];
+    const tier = (['bronze', 'silber', 'gold', 'platin', 'master'] as const)[meta.stage - 1];
+    const stage = stages[meta.stage - 1];
+    setCeremony({ tier, badge, name: stage?.title ?? meta.title, color: meta.color });
   }
 
   function handleStreakHit() {
@@ -625,6 +630,7 @@ export default function DiplomeRoadmapPage() {
       <main className="bg-surface-base min-h-screen relative">
 
         {banner && <Banner text={banner.text} color={banner.color} />}
+        <MedalCeremony data={ceremony} onClose={() => setCeremony(null)} />
 
         {/* Breadcrumb */}
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6">

@@ -4,7 +4,7 @@ import { useState, Suspense }  from 'react';
 import Link                    from 'next/link';
 import { useSearchParams }     from 'next/navigation';
 import { createClient }        from '@/lib/supabase/client';
-import { ArrowRight, Mail, Flame } from 'lucide-react';
+import { ArrowRight, Mail, Flame, Lock } from 'lucide-react';
 
 // ── Inner component — reads URL params (must be inside <Suspense>) ─────────────
 
@@ -13,9 +13,12 @@ function LoginForm() {
   const redirectTo   = searchParams.get('redirectTo') ?? '/diplome/profil';
   const urlError     = searchParams.get('error');
 
-  const [email,   setEmail]   = useState('');
-  const [status,  setStatus]  = useState<'idle' | 'loading' | 'sent' | 'error'>('idle');
-  const [message, setMessage] = useState('');
+  const [email,    setEmail]    = useState('');
+  const [password, setPassword] = useState('');
+  const [mode,     setMode]     = useState<'magic' | 'password'>('magic');
+  const [status,   setStatus]   = useState<'idle' | 'loading' | 'sent' | 'error'>('idle');
+  const [message,  setMessage]  = useState('');
+  const [sentMsg,  setSentMsg]  = useState('');
 
   async function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
@@ -35,6 +38,49 @@ function LoginForm() {
       setStatus('error');
       setMessage(error.message);
     } else {
+      setSentMsg('Klick auf den Link in der E-Mail — kein Passwort nötig.');
+      setStatus('sent');
+    }
+  }
+
+  async function handlePassword(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim() || !password) return;
+    setStatus('loading');
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    if (error) {
+      setStatus('error');
+      setMessage(
+        /invalid login credentials/i.test(error.message)
+          ? 'E-Mail oder Passwort falsch. Noch kein Passwort-Konto? Unten „Konto erstellen".'
+          : error.message,
+      );
+    } else {
+      window.location.href = redirectTo;
+    }
+  }
+
+  async function handleSignup() {
+    if (!email.trim() || !password) {
+      setStatus('error'); setMessage('E-Mail und Passwort (min. 8 Zeichen) eingeben.'); return;
+    }
+    if (password.length < 8) {
+      setStatus('error'); setMessage('Passwort muss mindestens 8 Zeichen haben.'); return;
+    }
+    setStatus('loading');
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signUp({
+      email: email.trim(),
+      password,
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${redirectTo}` },
+    });
+    if (error) {
+      setStatus('error'); setMessage(error.message);
+    } else if (data.session) {
+      window.location.href = redirectTo;                 // E-Mail-Bestätigung deaktiviert → direkt drin
+    } else {
+      setSentMsg('Konto erstellt. Bestätige deine E-Mail-Adresse über den zugeschickten Link.');
       setStatus('sent');
     }
   }
@@ -77,9 +123,9 @@ function LoginForm() {
               E-Mail unterwegs
             </h1>
             <p className="font-body text-sm text-text-secondary leading-relaxed">
-              Wir haben einen Anmelde-Link an{' '}
+              Wir haben eine E-Mail an{' '}
               <strong className="text-text-light">{email}</strong> geschickt.
-              Klick auf den Link — kein Passwort nötig.
+              {' '}{sentMsg}
             </p>
             <button
               onClick={() => setStatus('idle')}
@@ -97,8 +143,9 @@ function LoginForm() {
               Willkommen zurück
             </h1>
             <p className="font-body text-sm text-text-secondary mb-6">
-              Gib deine E-Mail-Adresse ein. Wir schicken dir einen
-              Magic Link — kein Passwort nötig.
+              {mode === 'magic'
+                ? 'Gib deine E-Mail-Adresse ein. Wir schicken dir einen Magic Link — kein Passwort nötig.'
+                : 'Melde dich mit E-Mail und Passwort an — oder erstelle ein Passwort-Konto.'}
             </p>
 
             {(urlError || status === 'error') && (
@@ -110,12 +157,9 @@ function LoginForm() {
               </div>
             )}
 
-            <form onSubmit={handleMagicLink} className="space-y-4">
+            <form onSubmit={mode === 'magic' ? handleMagicLink : handlePassword} className="space-y-4">
               <div>
-                <label
-                  htmlFor="email"
-                  className="font-sans text-xs font-bold uppercase tracking-wider text-text-muted block mb-2"
-                >
+                <label htmlFor="email" className="font-sans text-xs font-bold uppercase tracking-wider text-text-muted block mb-2">
                   E-Mail-Adresse
                 </label>
                 <input
@@ -127,30 +171,70 @@ function LoginForm() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   className="w-full px-4 py-3 rounded-sm font-sans text-sm text-text-light placeholder:text-text-muted outline-none transition-all"
-                  style={{
-                    background:   '#120C07',
-                    border:       '1px solid rgba(58,42,30,0.9)',
-                  }}
-                  onFocus={e  => e.target.style.borderColor = '#C8882A'}
-                  onBlur={e   => e.target.style.borderColor = 'rgba(58,42,30,0.9)'}
+                  style={{ background: '#120C07', border: '1px solid rgba(58,42,30,0.9)' }}
+                  onFocus={e => e.target.style.borderColor = '#C8882A'}
+                  onBlur={e  => e.target.style.borderColor = 'rgba(58,42,30,0.9)'}
                 />
               </div>
 
+              {mode === 'password' && (
+                <div>
+                  <label htmlFor="password" className="font-sans text-xs font-bold uppercase tracking-wider text-text-muted block mb-2">
+                    Passwort
+                  </label>
+                  <input
+                    id="password"
+                    type="password"
+                    required
+                    autoComplete="current-password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    className="w-full px-4 py-3 rounded-sm font-sans text-sm text-text-light placeholder:text-text-muted outline-none transition-all"
+                    style={{ background: '#120C07', border: '1px solid rgba(58,42,30,0.9)' }}
+                    onFocus={e => e.target.style.borderColor = '#C8882A'}
+                    onBlur={e  => e.target.style.borderColor = 'rgba(58,42,30,0.9)'}
+                  />
+                </div>
+              )}
+
               <button
                 type="submit"
-                disabled={status === 'loading' || !email.trim()}
+                disabled={status === 'loading' || !email.trim() || (mode === 'password' && !password)}
                 className="w-full flex items-center justify-center gap-2 py-3 px-4 font-sans font-bold text-sm text-white rounded-sm transition-opacity disabled:opacity-50"
                 style={{ background: '#E85018' }}
               >
-                {status === 'loading' ? 'Wird gesendet …' : 'Magic Link senden'}
-                {status !== 'loading' && <ArrowRight size={14} />}
+                {status === 'loading'
+                  ? (mode === 'magic' ? 'Wird gesendet …' : 'Bitte warten …')
+                  : (mode === 'magic' ? 'Magic Link senden' : 'Anmelden')}
+                {status !== 'loading' && (mode === 'magic' ? <ArrowRight size={14} /> : <Lock size={14} />)}
               </button>
             </form>
 
-            <p className="font-sans text-xs text-text-muted text-center mt-5">
-              Noch kein Konto? Einfach E-Mail eingeben —<br />
-              dein Zugang wird automatisch erstellt.
-            </p>
+            {mode === 'password' && (
+              <button
+                onClick={handleSignup}
+                disabled={status === 'loading'}
+                className="w-full mt-3 py-2.5 px-4 font-sans font-bold text-xs uppercase tracking-wider rounded-sm border transition-colors disabled:opacity-50"
+                style={{ borderColor: 'rgba(200,136,42,0.45)', color: '#C8882A' }}
+              >
+                Neues Konto mit Passwort erstellen
+              </button>
+            )}
+
+            {/* Modus-Umschalter */}
+            <button
+              onClick={() => { setMode(m => m === 'magic' ? 'password' : 'magic'); setStatus('idle'); setMessage(''); }}
+              className="w-full text-center font-sans text-xs text-brand-gold hover:text-text-light transition-colors mt-5"
+            >
+              {mode === 'magic' ? 'Lieber mit Passwort anmelden →' : 'Lieber Magic Link (ohne Passwort) →'}
+            </button>
+
+            {mode === 'magic' && (
+              <p className="font-sans text-xs text-text-muted text-center mt-4">
+                Noch kein Konto? Einfach E-Mail eingeben — dein Zugang wird automatisch erstellt.
+              </p>
+            )}
           </>
 
         )}

@@ -7,10 +7,10 @@ import { allSprintModuls } from 'contentlayer/generated';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  title: 'KI-Projektsteuerung — Modulreihe | Gründung-Sprint',
+  title: 'KI-Projektsteuerung — Modulreihe | Gründer-Schmiede',
   description:
     'Vier Module: dein Projekt mit KI in Jira + Confluence sauber aufsetzen und steuern — statt im Tool-Chaos zu ertrinken.',
-  alternates: { canonical: 'https://steakakademie.de/gruendung-sprint/lernen' },
+  alternates: { canonical: 'https://steakakademie.de/gruender-schmiede/lernen' },
 };
 
 export default function SprintLernenIndex() {
@@ -18,12 +18,12 @@ export default function SprintLernenIndex() {
 
   const collection = collectionPageSchema(
     'KI-Projektsteuerung — Modulreihe',
-    '/gruendung-sprint/lernen',
+    '/gruender-schmiede/lernen',
     'Vier Module: dein Projekt mit KI in Jira + Confluence sauber aufsetzen und steuern.',
   );
   const breadcrumb = breadcrumbSchema([
-    { name: 'Gründung-Sprint', url: '/gruendung-sprint' },
-    { name: 'KI-Projektsteuerung', url: '/gruendung-sprint/lernen' },
+    { name: 'Gründer-Schmiede', url: '/gruender-schmiede' },
+    { name: 'KI-Projektsteuerung', url: '/gruender-schmiede/lernen' },
   ]);
 
   return (
@@ -38,7 +38,7 @@ export default function SprintLernenIndex() {
           <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted mb-8" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-brand-fire transition-colors">Start</Link>
             <ChevronRight size={12} />
-            <Link href="/gruendung-sprint" className="hover:text-brand-fire transition-colors">Gründung-Sprint</Link>
+            <Link href="/gruender-schmiede" className="hover:text-brand-fire transition-colors">Gründer-Schmiede</Link>
             <ChevronRight size={12} />
             <span className="text-text-primary">KI-Projektsteuerung</span>
           </nav>
@@ -46,7 +46,7 @@ export default function SprintLernenIndex() {
           {/* Header */}
           <div className="mb-12 pb-10 border-b-2 border-text-primary">
             <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-3">
-              Modulreihe · Gründung-Sprint
+              Modulreihe · Gründer-Schmiede
             </p>
             <h1 className="font-serif text-4xl sm:text-5xl font-bold text-text-primary mb-4 leading-tight">
               KI-Projektsteuerung mit Atlassian

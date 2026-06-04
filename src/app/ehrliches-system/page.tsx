@@ -21,10 +21,10 @@ export const metadata: Metadata = {
 
 const PILLARS = [
   {
-    slug: 'gruendung-sprint',
+    slug: 'gruender-schmiede',
     number: 'I',
     icon: '🚀',
-    label: 'Gründung-Sprint',
+    label: 'Gründer-Schmiede',
     kicker: 'Von 0 auf legal in 72h',
     tagline: 'Von der Idee zur rechtssicheren Gewerbeanmeldung & ersten Website in 72 Stunden.',
     bullets: [
@@ -113,7 +113,7 @@ export default async function EhrlichesSystemPage() {
     const { data } = await supabase
       .from('courses')
       .select('slug, price, published')
-      .in('slug', ['gruendung-sprint', 'steuer-matrix', 'agentur-killer-sprint']);
+      .in('slug', ['gruender-schmiede', 'steuer-matrix', 'agentur-killer-sprint']);
     if (data) {
       courseData = Object.fromEntries(data.map((c) => [c.slug, c]));
     }

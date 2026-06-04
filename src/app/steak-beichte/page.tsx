@@ -422,7 +422,7 @@ export default function SteakBeichtePage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
                   { label: 'Steuer-Matrix', href: '/steuer-matrix' },
-                  { label: 'GrÃ¼ndung-Sprint', href: '/gruendung-sprint' },
+                  { label: 'GrÃ¼nder-Schmiede', href: '/gruender-schmiede' },
                   { label: 'Agentur-Killer-Sprint', href: '/agentur-killer-sprint' },
                   { label: 'Erste-Kunden-Sprint', href: '/erste-kunden-sprint' },
                 ].map(({ label, href }) => (

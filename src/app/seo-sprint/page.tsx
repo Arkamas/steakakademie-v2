@@ -429,7 +429,7 @@ export default async function SeoSprintPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
                   { label: 'Agentur-Killer-Sprint', href: '/agentur-killer-sprint', note: 'Voraussetzung empfohlen' },
-                  { label: 'Gründung-Sprint', href: '/gruendung-sprint', note: 'Von der Idee zur Anmeldung' },
+                  { label: 'Gründer-Schmiede', href: '/gruender-schmiede', note: 'Von der Idee zur Anmeldung' },
                   { label: 'Erste-Kunden-Sprint', href: '/erste-kunden-sprint', note: 'Erste Aufträge in 72h' },
                   { label: 'Steuer-Matrix', href: '/steuer-matrix', note: '23 Länder im Netto-Vergleich' },
                 ].map(({ label, href, note }) => (

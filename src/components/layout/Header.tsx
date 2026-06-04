@@ -90,7 +90,7 @@ const NAV_CATEGORIES = [
     name: 'Ehrliches System',
     href: '/ehrliches-system',
     sub: [
-      { label: 'Gründung-Sprint', href: '/ehrliches-system#saule-i' },
+      { label: 'Gründer-Schmiede', href: '/gruender-schmiede' },
       { label: 'Steuer-Matrix', href: '/steuer-matrix' },
       { label: 'Agentur-Killer-Sprint', href: '/ehrliches-system#saule-iii' },
       { label: 'Mein Zugang', href: '/mein-system' },

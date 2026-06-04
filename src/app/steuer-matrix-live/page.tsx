@@ -380,7 +380,7 @@ export default function SteuerMatrixLivePage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
                   { label: '← Steuer-Matrix (Basis)', href: '/steuer-matrix', note: 'Voraussetzung für dieses Abo' },
-                  { label: 'Gründung-Sprint', href: '/gruendung-sprint', note: 'Von der Idee zur Anmeldung in 72h' },
+                  { label: 'Gründer-Schmiede', href: '/gruender-schmiede', note: 'Von der Idee zur Anmeldung in 72h' },
                   { label: 'Erste-Kunden-Sprint', href: '/erste-kunden-sprint', note: 'Erste bezahlte Aufträge in 72h' },
                 ].map(({ label, href, note }) => (
                   <Link

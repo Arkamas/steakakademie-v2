@@ -10,15 +10,15 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Gründung-Sprint — In 72 Stunden selbstständig | Steakakademie',
+  title: 'Gründer-Schmiede — In 72 Stunden selbstständig | Steakakademie',
   description:
-    'Von der Idee zur rechtssicheren Gewerbeanmeldung und ersten Website in 72 Stunden. Exakt das, was wirklich notwendig ist — kein "Was du brauchen könntest".',
-  alternates: { canonical: 'https://steakakademie.de/gruendung-sprint' },
+    'Aus der Idee wird ein angemeldetes Unternehmen — in 72 Stunden geschmiedet. Gewerbeanmeldung, Steuer-Onboarding und erste Website. Exakt das, was wirklich notwendig ist — kein "Was du brauchen könntest".',
+  alternates: { canonical: 'https://steakakademie.de/gruender-schmiede' },
   openGraph: {
-    title: 'Gründung-Sprint — In 72 Stunden selbstständig',
+    title: 'Gründer-Schmiede — In 72 Stunden selbstständig',
     description:
-      'Schritt-für-Schritt-System: Gewerbe anmelden, Steuer-Onboarding, erste Website live. Ohne Agentur, ohne Beratungskosten.',
-    url: 'https://steakakademie.de/gruendung-sprint',
+      'Die Gründer-Schmiede gründet mit dir: Gewerbe anmelden, Steuer-Onboarding, erste Website live. Ohne Agentur, ohne Beratungskosten.',
+    url: 'https://steakakademie.de/gruender-schmiede',
     type: 'website',
   },
 };
@@ -71,7 +71,7 @@ const FAQ = [
   },
   {
     q: 'Was, wenn ich schon gegründet habe?',
-    a: 'Der Sprint hilft dir trotzdem: als Prüfung ob alles korrekt aufgesetzt ist, und als Grundlage für die Optimierung deiner digitalen Infrastruktur.',
+    a: 'Die Gründer-Schmiede hilft dir trotzdem: als Prüfung ob alles korrekt aufgesetzt ist, und als Grundlage für die Optimierung deiner digitalen Infrastruktur.',
   },
   {
     q: 'Gibt es Support bei Fragen?',
@@ -79,14 +79,14 @@ const FAQ = [
   },
 ];
 
-export default async function GruendungSprintPage() {
+export default async function GruenderSchmiedePage() {
   let price: number | null = null;
   try {
     const supabase = createClient();
     const { data } = await supabase
       .from('courses')
       .select('price')
-      .eq('slug', 'gruendung-sprint')
+      .eq('slug', 'gruender-schmiede')
       .single();
     if (data) price = data.price;
   } catch {
@@ -113,9 +113,9 @@ export default async function GruendungSprintPage() {
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: 'Gründung-Sprint',
+    name: 'Gründer-Schmiede',
     description:
-      'Von der Idee zur rechtssicheren Gewerbeanmeldung und ersten Website in 72 Stunden.',
+      'Aus der Idee wird ein angemeldetes Unternehmen — in 72 Stunden geschmiedet. Gewerbeanmeldung, Steuer-Onboarding und erste Website.',
     brand: { '@type': 'Brand', name: 'Steakakademie' },
     offers: {
       '@type': 'Offer',
@@ -131,7 +131,7 @@ export default async function GruendungSprintPage() {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://steakakademie.de' },
       { '@type': 'ListItem', position: 2, name: 'Das Ehrliche System', item: 'https://steakakademie.de/ehrliches-system' },
-      { '@type': 'ListItem', position: 3, name: 'Gründung-Sprint', item: 'https://steakakademie.de/gruendung-sprint' },
+      { '@type': 'ListItem', position: 3, name: 'Gründer-Schmiede', item: 'https://steakakademie.de/gruender-schmiede' },
     ],
   };
 
@@ -166,31 +166,32 @@ export default async function GruendungSprintPage() {
                 Das Ehrliche System
               </Link>
               <ChevronRight size={12} />
-              <span className="text-text-light/65">Gründung-Sprint</span>
+              <span className="text-text-light/65">Gründer-Schmiede</span>
             </nav>
 
             <div className="max-w-3xl">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Säule I — Gründung-Sprint
+                Säule I — Gründer-Schmiede
               </span>
               <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold text-text-light leading-tight mb-6">
-                In 72 Stunden selbstständig —<br className="hidden lg:block" />
-                rechtssicher gegründet, Website live.
+                Aus der Idee wird ein Unternehmen —<br className="hidden lg:block" />
+                in 72 Stunden geschmiedet.
               </h1>
               <p className="font-serif text-xl lg:text-2xl text-text-light/80 leading-relaxed mb-4">
                 Kein Raten. Kein Stundenlang-Recherchieren. Kein teurer Berater für Basics.
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
-                Du bekommst exakt die Schritte, die wirklich notwendig sind — nicht mehr, nicht weniger.
-                Gewerbeanmeldung, Steuer-Onboarding, erste Website live. Alles was du brauchst,
+                Andere verkaufen dir einen Kurs <em>über</em> das Gründen. Die Gründer-Schmiede
+                gründet <em>mit</em> dir: Gewerbeanmeldung, Finanzamt-Onboarding und erste Website —
+                Schritt für Schritt, bis alles steht und läuft. Alles was du brauchst,
                 nichts was dich aufhält.
               </p>
 
               <div className="flex flex-wrap gap-6">
                 {[
-                  { icon: <Clock size={14} />, text: '72 Stunden bis zur laufenden Website' },
-                  { icon: <Shield size={14} />, text: 'Rechtssicher: Impressum, Datenschutz, DSGVO' },
-                  { icon: <CheckCircle size={14} />, text: 'Kein Vorwissen, kein Agentur-Budget nötig' },
+                  { icon: <Clock size={14} />, text: '72 Stunden vom Entschluss zur laufenden Website' },
+                  { icon: <Shield size={14} />, text: 'Rechtssicher ab Tag 1: Gewerbe, Finanzamt, Impressum, DSGVO' },
+                  { icon: <CheckCircle size={14} />, text: 'Ohne Berater-Stundensatz, ohne Agentur, ohne Vorwissen' },
                 ].map(({ icon, text }) => (
                   <div key={text} className="flex items-center gap-2 text-xs font-sans text-text-light/55">
                     <span className="text-brand-gold">{icon}</span>
@@ -234,7 +235,7 @@ export default async function GruendungSprintPage() {
                   <p>
                     Dabei ist Gründen handwerklich. Nicht kompliziert — aber man muss die
                     richtige Reihenfolge kennen. Was zuerst, was danach, was kann warten.
-                    Das ist exakt das, was dieser Sprint liefert.
+                    Das ist exakt das, was die Gründer-Schmiede liefert.
                   </p>
                 </div>
               </div>
@@ -291,7 +292,7 @@ export default async function GruendungSprintPage() {
                   notwendig ist."
                 </p>
                 <footer className="mt-4 text-sm font-sans text-text-muted">
-                  — Kernprinzip des Gründung-Sprints
+                  — Kernprinzip der Gründer-Schmiede
                 </footer>
               </blockquote>
 
@@ -362,7 +363,7 @@ export default async function GruendungSprintPage() {
                       was es kostet, wenn man die Grundlagen nicht kennt.
                     </p>
                     <p>
-                      Der Gründung-Sprint ist das, was ich mir selbst gewünscht hätte — vor zwanzig
+                      Die Gründer-Schmiede ist das, was ich mir selbst gewünscht hätte — vor zwanzig
                       Jahren. Kein Kurs über Kurse. Ein System, das funktioniert.
                     </p>
                   </div>
@@ -386,7 +387,7 @@ export default async function GruendungSprintPage() {
                     Einmaliger Zugang
                   </span>
                   <h2 className="font-serif text-3xl font-bold text-text-primary">
-                    Gründung-Sprint
+                    Gründer-Schmiede
                   </h2>
                   {price && (
                     <p className="font-serif text-4xl font-bold text-brand-gold mt-2">
@@ -406,7 +407,7 @@ export default async function GruendungSprintPage() {
                     In Vorbereitung
                   </span>
                   <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Dieser Sprint wird derzeit fertiggestellt — bald buchbar.
+                    Die Gründer-Schmiede wird derzeit fertiggestellt — bald buchbar.
                   </p>
                 </div>
               </div>
@@ -456,7 +457,7 @@ export default async function GruendungSprintPage() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
-                  { label: 'Säule I — Gründung-Sprint', href: '/gruendung-sprint', active: true },
+                  { label: 'Säule I — Gründer-Schmiede', href: '/gruender-schmiede', active: true },
                   { label: 'Säule II — Steuer-Matrix', href: '/steuer-matrix', active: false },
                   { label: 'Säule III — Agentur-Killer-Sprint', href: '/agentur-killer-sprint', active: false },
                 ].map(({ label, href, active }) => (

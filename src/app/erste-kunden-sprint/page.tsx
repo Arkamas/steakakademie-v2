@@ -58,7 +58,7 @@ const DELIVERABLES = [
 
 const FAQ = [
   {
-    q: 'Muss ich vorher den Gründung-Sprint gemacht haben?',
+    q: 'Muss ich vorher den Gründer-Schmiede gemacht haben?',
     a: 'Nein. Der Erste-Kunden-Sprint funktioniert unabhängig — egal ob du gerade gegründet hast oder schon ein Jahr selbstständig bist und noch nicht weißt wie du an Kunden kommst.',
   },
   {
@@ -143,7 +143,7 @@ export default async function ErsteKundenSprintPage() {
 
             <div className="max-w-3xl">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Folgeprodukt zum Gründung-Sprint
+                Folgeprodukt zum Gründer-Schmiede
               </span>
               <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold text-text-light leading-tight mb-6">
                 Gegründet. Website live.<br className="hidden lg:block" />
@@ -432,7 +432,7 @@ export default async function ErsteKundenSprintPage() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
-                  { label: 'Säule I — Gründung-Sprint', href: '/gruendung-sprint', active: false },
+                  { label: 'Säule I — Gründer-Schmiede', href: '/gruender-schmiede', active: false },
                   { label: 'Säule II — Steuer-Matrix', href: '/steuer-matrix', active: false },
                   { label: 'Säule III — Agentur-Killer-Sprint', href: '/agentur-killer-sprint', active: false },
                   { label: 'Erste-Kunden-Sprint', href: '/erste-kunden-sprint', active: true },

@@ -20,7 +20,7 @@ export function generateMetadata({ params }: Props): Metadata {
   const m = allSprintModuls.find((x) => x.slug === params.slug);
   if (!m) return {};
   return {
-    title: m.seoTitle ?? `${m.title} | Gründung-Sprint`,
+    title: m.seoTitle ?? `${m.title} | Gründer-Schmiede`,
     description: m.seoDescription ?? m.excerpt,
     alternates: { canonical: `https://steakakademie.de${m.url}` },
   };
@@ -93,7 +93,7 @@ export default function SprintModulPage({ params }: Props) {
     name: modul.title,
     description: modul.excerpt,
     learningResourceType: 'Lesson',
-    educationalLevel: 'Gründung-Sprint',
+    educationalLevel: 'Gründer-Schmiede',
     datePublished: modul.publishedAt,
     inLanguage: 'de',
     isPartOf: {
@@ -103,8 +103,8 @@ export default function SprintModulPage({ params }: Props) {
     },
   };
   const breadcrumb = breadcrumbSchema([
-    { name: 'Gründung-Sprint', url: '/gruendung-sprint' },
-    { name: 'KI-Projektsteuerung', url: '/gruendung-sprint/lernen' },
+    { name: 'Gründer-Schmiede', url: '/gruender-schmiede' },
+    { name: 'KI-Projektsteuerung', url: '/gruender-schmiede/lernen' },
     { name: modul.title, url: modul.url },
   ]);
 
@@ -123,7 +123,7 @@ export default function SprintModulPage({ params }: Props) {
               <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted mb-6" aria-label="Breadcrumb">
                 <Link href="/" className="hover:text-brand-fire transition-colors">Start</Link>
                 <ChevronRight size={12} />
-                <Link href="/gruendung-sprint/lernen" className="hover:text-brand-fire transition-colors">
+                <Link href="/gruender-schmiede/lernen" className="hover:text-brand-fire transition-colors">
                   KI-Projektsteuerung
                 </Link>
                 <ChevronRight size={12} />

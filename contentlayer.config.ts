@@ -376,7 +376,7 @@ export const DiplomLektion = defineDocumentType(() => ({
 
 export const SprintModul = defineDocumentType(() => ({
   name: 'SprintModul',
-  filePathPattern: 'gruendung-sprint/**/*.mdx',
+  filePathPattern: 'gruender-schmiede/**/*.mdx',
   contentType: 'mdx',
   fields: {
     title:          { type: 'string', required: true },
@@ -390,11 +390,11 @@ export const SprintModul = defineDocumentType(() => ({
   computedFields: {
     slug: {
       type: 'string',
-      resolve: (doc) => doc._raw.flattenedPath.replace('gruendung-sprint/', ''),
+      resolve: (doc) => doc._raw.flattenedPath.replace('gruender-schmiede/', ''),
     },
     url: {
       type: 'string',
-      resolve: (doc) => `/gruendung-sprint/lernen/${doc._raw.flattenedPath.replace('gruendung-sprint/', '')}`,
+      resolve: (doc) => `/gruender-schmiede/lernen/${doc._raw.flattenedPath.replace('gruender-schmiede/', '')}`,
     },
   },
 }));

@@ -10,10 +10,10 @@ DELETE FROM courses WHERE slug IN ('steak-masterclass', 'grill-science', 'advanc
 INSERT INTO courses (title, description, price, slug)
 VALUES
   (
-    'Der Gründung-Sprint',
-    'Von der Idee zur rechtssicheren Gewerbeanmeldung und ersten Website in 72h. Kein Agentur-Modell, keine vagen Versprechen — konkrete Schritte, reale Kosten, reproduzierbare Ergebnisse.',
+    'Die Gründer-Schmiede',
+    'Aus der Idee wird ein angemeldetes Unternehmen — in 72h geschmiedet. Gewerbeanmeldung, Finanzamt-Onboarding und erste Website. Kein Agentur-Modell, keine vagen Versprechen — konkrete Schritte, reale Kosten, reproduzierbare Ergebnisse.',
     297.00,
-    'gruendung-sprint'
+    'gruender-schmiede'
   ),
   (
     'Die Steuer-Matrix',

@@ -51,7 +51,7 @@ export default function AgbPage() {
               </p>
               <p>
                 Die Zahlungsabwicklung für digitale Produkte (Steuer-Matrix, Agentur-Killer-Sprint,
-                Gründung-Sprint und weitere) erfolgt über <strong className="text-text-primary">Digistore24 GmbH</strong>,
+                Gründer-Schmiede und weitere) erfolgt über <strong className="text-text-primary">Digistore24 GmbH</strong>,
                 St.-Kilian-Str. 14, 97236 Randersacker. Digistore24 agiert im Rahmen des Kaufvorgangs
                 als Zahlungsdienstleister. Die Allgemeinen Geschäftsbedingungen von Digistore24
                 gelten ergänzend und sind unter{' '}

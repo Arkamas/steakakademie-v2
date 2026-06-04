@@ -13,7 +13,7 @@ export interface ProjectStatus {
 }
 
 export const PROJECT_STATUS: ProjectStatus = {
-  "readinessScore": 50,
+  "readinessScore": 52,
   "completed": [
     "Email-Capture",
     "Sitemap & Robots",
@@ -107,8 +107,8 @@ export const PROJECT_STATUS: ProjectStatus = {
     "Technische Infrastruktur": 75,
     "Kurse & Diplom-System": 50,
     "Tech-Stack & Tools": 76,
-    "KI-System & Automation": 38,
+    "KI-System & Automation": 58,
     "Agenten & Automation": 0
   },
-  "generatedAt": "2026-06-03T20:10:30.135Z"
+  "generatedAt": "2026-06-04T07:52:46.600Z"
 }

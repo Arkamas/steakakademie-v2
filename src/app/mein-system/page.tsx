@@ -19,14 +19,14 @@ export const metadata: Metadata = {
 
 const SAULEN = [
   {
-    slug:        'gruendung-sprint',
+    slug:        'gruender-schmiede',
     nummer:      'I',
-    titel:       'Gründung-Sprint',
+    titel:       'Gründer-Schmiede',
     untertitel:  'Idee → Gewerbeanmeldung → erste Website. In 72 Stunden.',
     beschreibung:
       'Schritt-für-Schritt-System: Rechtsform wählen, Gewerbe anmelden, Domain & Hosting einrichten, erste Website live. Kein Agentur-Budget nötig.',
     Icon:        Rocket,
-    href:        '/gruendung-sprint',
+    href:        '/gruender-schmiede',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
     checkoutUrl: 'https://www.digistore24.com/product/695894' as string | null,

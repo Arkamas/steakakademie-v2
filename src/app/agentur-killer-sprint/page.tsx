@@ -484,7 +484,7 @@ export default async function AgenturKillerSprintPage() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
-                  { label: 'Säule I — Gründung-Sprint', href: '/gruendung-sprint', active: false },
+                  { label: 'Säule I — Gründer-Schmiede', href: '/gruender-schmiede', active: false },
                   { label: 'Säule II — Steuer-Matrix', href: '/steuer-matrix', active: false },
                   { label: 'Säule III — Agentur-Killer-Sprint', href: '/agentur-killer-sprint', active: true },
                 ].map(({ label, href, active }) => (

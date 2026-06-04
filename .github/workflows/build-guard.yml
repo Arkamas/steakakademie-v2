@@ -1,0 +1,49 @@
+name: Build-Guard
+
+# Fängt stille Content-Defekte, die einen "grünen" Build überleben (KAN-29):
+#   • Contentlayer-Probleme / stumme Doc-Drops (vgl. KAN-26, CRLF-Rezepte)
+#   • Markdown-Tabellen ohne remark-gfm → Pipe-Text (vgl. KAN-28)
+# Läuft schnell (kein voller Next-Build). Bei Defekt: rot + automatisches KAN-Ticket.
+# Hinweis: blockiert NICHT den Vercel/Netlify-Deploy (der läuft parallel) — es ist
+# ein Frühwarn-Signal + Ticket. Harte Sperre bräuchte Branch-Protection (Admin).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  guard:
+    name: Stille Content-Defekte prüfen
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Build-Guard ausführen
+        run: node scripts/build-guard.mjs
+
+      - name: Bei Defekt → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Build-Guard: stille Content-Defekte erkannt'
+          ALERT_DESCRIPTION: 'Der Build-Guard hat stille Defekte gefunden (Contentlayer-Probleme oder Tabellen ohne remark-gfm). Run-Log mit Details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,content,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-buildguard-failed'
+        run: node scripts/ops-alert-to-jira.mjs

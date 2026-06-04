@@ -341,10 +341,10 @@ const quizzes: Record<ModuleKey, QuizQuestion[]> = {
       explain: '230-290 °C ist die Searing-Zone für die Maillard-Reaktion.',
     },
     {
-      q: 'Wofür nutzt man indirekte Hitze?',
-      options: ['Schnelles Anbraten', 'Große Stücke, Low & Slow', 'Maillard-Reaktion', 'Scharfes Angrillen'],
+      q: 'Wofür nutzt man indirekte Hitze (150–180 °C)?',
+      options: ['Schnelles Anbraten', 'Große Stücke schonend durchgaren', 'Maillard-Reaktion', 'Scharfes Angrillen'],
       correct: 1,
-      explain: 'Indirekt = langsam und schonend für Brisket, Pulled Pork etc.',
+      explain: 'Indirekt = schonend fertig garen (Geflügel, Gemüse, Braten). Echtes Low & Slow für Brisket läuft noch kühler: 100–130 °C.',
     },
     {
       q: 'Was verhindert ein gefährliches Aufflackern?',
@@ -396,7 +396,7 @@ const quizzes: Record<ModuleKey, QuizQuestion[]> = {
 const flashcards: Record<ModuleKey, Flashcard[]> = {
   bronze: [
     { front: 'Direkte Hitze',          back: '230-290 °C · Maillard, schnelles Anbraten' },
-    { front: 'Indirekte Hitze',        back: '150-180 °C · Low & Slow, schonend gleichmäßig' },
+    { front: 'Indirekte Hitze',        back: '150-180 °C · schonend durchgaren, große Stücke & Geflügel' },
     { front: 'Aschefilm',              back: 'Grauer Belag = Kohle ist bereit, gleichmäßige Glut' },
     { front: 'Maillard-Reaktion',      back: 'Bräunung & Aromen · startet ab ~140 °C' },
     { front: 'Reverse Sear',           back: 'Erst niedrig garen, dann kurz scharf für Kruste' },
@@ -454,15 +454,15 @@ const feuerzoneItems: FeuerzoneItem[] = [
   { id: 'steak',   label: 'Steak',    emoji: '🥩', correctZone: 'direkte',   explain: 'Direkte Hitze für die perfekte Kruste (Maillard-Reaktion).' },
   { id: 'wurst',   label: 'Wurst',    emoji: '🌭', correctZone: 'direkte',   explain: 'Schnelles Bräunen, direkt servieren.' },
   { id: 'haehn',   label: 'Hähnchen', emoji: '🍗', correctZone: 'indirekte', explain: 'Indirekt durchgaren — innen 75 °C, sicher und saftig.' },
-  { id: 'brisket', label: 'Brisket',  emoji: '🐂', correctZone: 'indirekte', explain: 'Indirekte Hitze = Low & Slow: große Stücke über viele Stunden schonend garen.' },
-  { id: 'gemuese', label: 'Gemüse',   emoji: '🥦', correctZone: 'ruhe',      explain: 'Ruhezone: sanfte Hitze, keine Verkohlung.' },
+  { id: 'brisket', label: 'Brisket',  emoji: '🐂', correctZone: 'ruhe',      explain: 'Low & Slow: 100–130 °C über viele Stunden — so wird die zähe Brust butterzart.' },
+  { id: 'gemuese', label: 'Gemüse',   emoji: '🥦', correctZone: 'indirekte', explain: 'Indirekte Hitze: gleichmäßig garen ohne Verkohlen.' },
   { id: 'fisch',   label: 'Fisch',    emoji: '🐟', correctZone: 'abdeck',    explain: 'Abdeckzone mit Deckel: schonend, gleichmäßig.' },
 ];
 
 const zoneMeta: Record<ZoneKey, { label: string; temp: string; color: string }> = {
   direkte:   { label: 'Direkte Hitze',   temp: '230-290 °C', color: '#E53935' },
   indirekte: { label: 'Indirekte Hitze', temp: '150-180 °C', color: '#FB8C00' },
-  ruhe:      { label: 'Ruhezone',        temp: '100-130 °C', color: '#FBC02D' },
+  ruhe:      { label: 'Low & Slow',      temp: '100-130 °C', color: '#FBC02D' },
   abdeck:    { label: 'Abdeckzone',      temp: '90-110 °C',  color: '#43A047' },
 };
 
@@ -1407,25 +1407,43 @@ function FeuerzoneSpiel({ color }: { color: string }) {
             <button
               key={item.id}
               onClick={() => {
-                if (placed) return;
+                if (placed) {
+                  // Platziertes Item wieder aufnehmen → neu setzen
+                  setPlacements(prev => { const n = { ...prev }; delete n[item.id]; return n; });
+                  setFeedback(null);
+                  setSelected(item.id);
+                  return;
+                }
                 setSelected(isSelected ? null : item.id);
               }}
-              disabled={!!placed}
+              title={placed ? 'Klicken, um neu zu platzieren' : 'Item auswählen'}
               className="rounded-lg px-3 py-2 flex items-center gap-2 text-[13px] font-sans transition-all"
               style={{
                 background: isSelected ? `${color}30` : (placed ? T.borderSubtle : T.panelAlt),
                 border:     isSelected ? `1px solid ${color}` : `1px solid ${T.borderMuted}`,
                 color:      placed ? T.textDim : T.text,
-                opacity:    placed ? 0.5 : 1,
-                cursor:     placed ? 'default' : 'pointer',
+                opacity:    placed ? 0.7 : 1,
+                cursor:     'pointer',
               }}
             >
               <span className="text-base">{item.emoji}</span>
               {item.label}
-              {placed && <span className="text-[10px]" style={{ color: T.textDim }}>· platziert</span>}
+              {placed && <span className="text-[10px]" style={{ color: T.textDim }}>· platziert ↺</span>}
             </button>
           );
         })}
+      </div>
+
+      {/* Hinweis + Reset (jederzeit verfügbar) */}
+      <div className="flex items-center justify-between gap-3 mb-3">
+        <span className="text-[11px] font-sans" style={{ color: T.textDim }}>
+          Falsch gelegt? Klick das Item erneut, um es zu verschieben.
+        </span>
+        {placedCount > 0 && !allPlaced && (
+          <button onClick={reset} className="text-[11px] font-sans font-bold uppercase tracking-wider underline" style={{ color: T.textDim }}>
+            Zurücksetzen
+          </button>
+        )}
       </div>
 
       {/* Feedback */}

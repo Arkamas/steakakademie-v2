@@ -7,8 +7,10 @@ import Footer from '@/components/layout/Footer';
 import ArticleCard from '@/components/article/ArticleCard';
 import ProductCard from '@/components/affiliate/ProductCard';
 import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
+import PlattformPuls from '@/components/home/PlattformPuls';
 import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
 import { getRecommendedProducts } from '@/lib/products';
+import { getPlattformPuls } from '@/lib/plattform-puls';
 import { getNewsItems } from '@/lib/bbq-news';
 import type { ArticleMeta } from '@/types';
 
@@ -131,6 +133,9 @@ export default async function HomePage() {
   const sideArticles   = PLACEHOLDER_ARTICLES.slice(1, 4);
   const latestArticles = PLACEHOLDER_ARTICLES.slice(2);
 
+  // Plattform-Puls: echte, automatisch wachsende Content-Zahlen + frisch dazugekommene Inhalte
+  const puls = getPlattformPuls();
+
   // BBQ-News-Teaser aus derselben Quelle wie /bbq-news (kein hardcoded Drift)
   const news        = await getNewsItems();
   const newsLead    = news[0];
@@ -183,6 +188,9 @@ export default async function HomePage() {
             ))}
           </div>
         </section>
+
+        {/* ── PLATTFORM-PULS — lebendige, wachsende Wissensbasis ───────────── */}
+        <PlattformPuls data={puls} />
 
         {/* ── MANIFESTO — Dunkle Ember-Karte ──────────────────────────────── */}
         <section className="py-8 sm:py-12">

@@ -138,7 +138,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Bild konnte nicht gespeichert werden.' }, { status: 500 });
   }
   const { data: pub } = admin.storage.from('recipe-images').getPublicUrl(path);
-  const imageUrl = pub.publicUrl;
+  // Cache-Sperre: gleicher Dateiname (upsert) → ohne Versions-Param würde der Browser
+  // das alte Bild zeigen. ?v=<ts> erzwingt frisches Laden bei jeder Neugenerierung.
+  const imageUrl = `${pub.publicUrl}?v=${Date.now()}`;
 
   // 6) image_url setzen
   const { error: updErr } = await admin

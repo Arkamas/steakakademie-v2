@@ -80,3 +80,17 @@ jobs:
           echo "## 🍳 Content-Pipeline gelaufen" >> $GITHUB_STEP_SUMMARY
           echo "Neue Entwürfe liegen als **draft/review** in Supabase \`content_drafts\`." >> $GITHUB_STEP_SUMMARY
           echo "→ Freigeben in **/admin/review**. Nichts ist automatisch live." >> $GITHUB_STEP_SUMMARY
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Content-Pipeline fehlgeschlagen'
+          ALERT_DESCRIPTION: 'Die Content-Pipeline (content-grow / cron-scout) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-content-failed'
+        run: node scripts/ops-alert-to-jira.mjs

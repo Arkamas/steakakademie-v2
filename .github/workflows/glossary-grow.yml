@@ -48,3 +48,17 @@ jobs:
           git push
           echo "## 📖 Glossar gewachsen" >> $GITHUB_STEP_SUMMARY
           echo "**${NEW}** neue/aktualisierte Begriffe committet + gepusht → löst Deploy aus." >> $GITHUB_STEP_SUMMARY
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Glossar-Agent fehlgeschlagen'
+          ALERT_DESCRIPTION: 'Der wöchentliche Glossar-Agent (glossary-grow) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-glossary-failed'
+        run: node scripts/ops-alert-to-jira.mjs

@@ -48,3 +48,17 @@ jobs:
             Titel: ${{ github.event.issue.title }}
 
             ${{ github.event.issue.body }}
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Auto-Fix-Agent fehlgeschlagen (Issue #${{ github.event.issue.number }})'
+          ALERT_DESCRIPTION: 'Der Auto-Fix-Workflow für Issue #${{ github.event.issue.number }} ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-autofix-failed'
+        run: node scripts/ops-alert-to-jira.mjs

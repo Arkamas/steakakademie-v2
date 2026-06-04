@@ -19,6 +19,13 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 90;
 
+// Steakakademie-Hausstil-LoRA „Warm & Rustikal" (fal.ai, trainiert 04.06.2026 auf
+// 21 kuratierten CC0-Bildern). Über Env überschreibbar, falls neu trainiert.
+const FOODSTYLE_LORA =
+  process.env.FAL_LORA_FOODSTYLE ??
+  'https://v3b.fal.media/files/b/0a9cfb28/4f5c21hz9uGU5ia2PWRnR_pytorch_lora_weights.safetensors';
+const FOODSTYLE_TRIGGER = 'sa_foodstyle';
+
 type Zutat = { menge: string; einheit: string; name: string };
 
 // Bild-Prompt-Doktrin (siehe CLAUDE.md): KEINE Wörter wie "photorealistic"/"4K"/"8k"
@@ -107,14 +114,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ image_url: recipe.image_url, cached: true });
   }
 
-  // 4) fal.ai FLUX.1 dev
+  // 4) fal.ai FLUX + Steakakademie-Hausstil-LoRA ("Warm & Rustikal", Trigger sa_foodstyle)
   let bytes: ArrayBuffer;
   try {
-    const prompt = buildPrompt(recipe as never);
-    const falRes = await fetch('https://fal.run/fal-ai/flux/dev', {
+    const prompt = `${FOODSTYLE_TRIGGER}, ${buildPrompt(recipe as never)}`;
+    const falRes = await fetch('https://fal.run/fal-ai/flux-lora', {
       method: 'POST',
       headers: { Authorization: `Key ${process.env.FAL_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, image_size: 'landscape_4_3', num_images: 1, enable_safety_checker: true }),
+      body: JSON.stringify({
+        prompt,
+        image_size: 'landscape_4_3',
+        num_images: 1,
+        enable_safety_checker: true,
+        loras: [{ path: FOODSTYLE_LORA, scale: 0.9 }],
+      }),
     });
     if (!falRes.ok) throw new Error(`fal ${falRes.status}: ${(await falRes.text()).slice(0, 160)}`);
     const j = await falRes.json();

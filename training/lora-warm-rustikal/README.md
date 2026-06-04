@@ -35,4 +35,13 @@ Atmosphäre, glatte appetitliche Schnittflächen, frische Garnitur).
 3. Verdrahtung in beide Generatoren: fal-Request um `loras:[{path:<url>,scale:~0.9}]`
    + Trigger-Wort im Prompt erweitern. Danach hat jedes Bild den Hausstil.
 
+## ✅ Trainiert 04.06.2026
+- Dataset: 21 kuratierte CC0-Bilder (Pexels, kommerziell frei)
+- Modell: `fal-ai/flux-lora-fast-training`, `is_style:true`, 1000 Steps, Trigger `sa_foodstyle`
+- **LoRA-Weights:** `https://v3b.fal.media/files/b/0a9cfb28/4f5c21hz9uGU5ia2PWRnR_pytorch_lora_weights.safetensors`
+- **Verdrahtet** in `src/app/api/rezept-bild/route.ts` + `scripts/recipe-images.mjs`
+  (Endpoint `fal-ai/flux-lora`, `loras:[{path,scale:0.9}]`, Trigger im Prompt).
+  Über Env `FAL_LORA_FOODSTYLE` überschreibbar.
+- Validierung: Testbild butterzart-rosa Schnittfläche, warmes Holz, Glut-Glühen — top.
+
 Stand 04.06.2026.

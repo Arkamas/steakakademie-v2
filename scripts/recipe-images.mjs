@@ -118,11 +118,21 @@ function buildPrompt(raw, slug = '') {
     + `50mm lens, f/5.6, balanced focus, appetizing, no text, no watermark, no people`
 }
 
+// Steakakademie-Hausstil-LoRA „Warm & Rustikal" (Trigger sa_foodstyle)
+const FOODSTYLE_LORA = process.env.FAL_LORA_FOODSTYLE
+  || 'https://v3b.fal.media/files/b/0a9cfb28/4f5c21hz9uGU5ia2PWRnR_pytorch_lora_weights.safetensors'
+
 async function generate(prompt) {
-  const res = await fetch('https://fal.run/fal-ai/flux/dev', {
+  const res = await fetch('https://fal.run/fal-ai/flux-lora', {
     method: 'POST',
     headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, image_size: 'landscape_4_3', num_images: 1, enable_safety_checker: true }),
+    body: JSON.stringify({
+      prompt: `sa_foodstyle, ${prompt}`,
+      image_size: 'landscape_4_3',
+      num_images: 1,
+      enable_safety_checker: true,
+      loras: [{ path: FOODSTYLE_LORA, scale: 0.9 }],
+    }),
   })
   if (!res.ok) throw new Error(`fal ${res.status}: ${(await res.text()).slice(0, 160)}`)
   const j = await res.json()

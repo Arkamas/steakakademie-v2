@@ -147,6 +147,40 @@ export default async function HomePage() {
 
       <main>
 
+        {/* ── VALUE-PROP-BAND — Need + Identität (Marketing-Feedback M. Kraemer, 04.06.2026) ── */}
+        <section className="bg-surface-dark border-b border-brand-gold/15">
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-14 text-center">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.22em] uppercase text-brand-fire mb-4">
+              <Flame size={12} /> Die methodisch tiefste BBQ-Plattform auf Deutsch
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-text-light leading-[1.1] mb-4 max-w-3xl mx-auto">
+              Wer das perfekte Steak will, wird hier zum{' '}
+              <span className="text-brand-gold">SteakAdemiker</span>.
+            </h1>
+            <p className="font-body text-base sm:text-lg text-text-light/65 leading-relaxed max-w-2xl mx-auto mb-7">
+              In 5 Rubriken vom Anfänger zum Pitmaster — Fleischkunde, Grilltechniken, Wissen,
+              Rezepte, Ausrüstung. Methodisch, geprüft, ohne Bullshit.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-2.5">
+              {[
+                { label: 'Cuts & Fleischkunde', href: '/cuts' },
+                { label: 'Grilltechniken',      href: '/methoden' },
+                { label: 'Wissen',              href: '/wissen' },
+                { label: 'Rezepte',             href: '/rezepte' },
+                { label: 'Ausrüstung',          href: '/kategorie/ausruestung' },
+              ].map(({ label, href }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/30 px-4 py-2 text-xs font-sans font-bold tracking-wide uppercase text-text-light/80 hover:text-ink hover:bg-brand-gold hover:border-brand-gold transition-colors"
+                >
+                  {label} <ChevronRight size={12} />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── HERO — Full-Bleed 70vh ────────────────────────────────────── */}
         <section className="hero-fullbleed" style={{ height: '70vh', minHeight: '520px' }}>
           <Image
@@ -162,9 +196,9 @@ export default async function HomePage() {
             <div className="max-w-editorial mx-auto w-full px-4 sm:px-6 lg:px-8 pb-14 lg:pb-20">
               <Link href={heroArticle.url} className="group block max-w-3xl">
                 <span className="category-label mb-4 block">{heroArticle.category}</span>
-                <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text-light leading-[1.08] mb-5 group-hover:text-brand-gold transition-colors duration-300">
+                <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text-light leading-[1.08] mb-5 group-hover:text-brand-gold transition-colors duration-300">
                   {heroArticle.title}
-                </h1>
+                </h2>
                 <p className="font-body text-lg text-text-light/65 leading-relaxed mb-7 max-w-2xl">
                   {heroArticle.excerpt}
                 </p>

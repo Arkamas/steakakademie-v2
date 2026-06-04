@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChefHat, Plus, Trash2, ChevronDown, Award } from 'lucide-react';
+import { X, ChefHat, Plus, Trash2, ChevronDown, Award, CheckCircle, Clock, AlertCircle, LogIn, ExternalLink } from 'lucide-react';
 import { z } from 'zod';
 
 // ─── Design-Token-Klassen ─────────────────────────────────────────────────────
@@ -101,6 +101,7 @@ export default function RecipeSubmitModal() {
   const [errors, setErrors]       = useState<FieldErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending]     = useState(false);
+  const [result, setResult]       = useState<{ status: string; slug?: string; message: string } | null>(null);
 
   // ── Feld-Helfer ──
 
@@ -166,10 +167,26 @@ export default function RecipeSubmitModal() {
       return;
     }
     setSending(true);
-    // TODO: POST to /api/rezept-einreichen when backend is ready
-    await new Promise(r => setTimeout(r, 900));
-    setSending(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch('/api/rezept-einreichen', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        setResult({ status: 'login', message: data.error ?? 'Bitte melde dich an, um ein Rezept einzureichen.' });
+      } else if (!res.ok) {
+        setResult({ status: 'error', message: data.error ?? 'Etwas ist schiefgelaufen. Bitte später erneut.' });
+      } else {
+        setResult({ status: data.status, slug: data.slug, message: data.message });
+      }
+    } catch {
+      setResult({ status: 'error', message: 'Netzwerkfehler — bitte später erneut versuchen.' });
+    } finally {
+      setSending(false);
+      setSubmitted(true);
+    }
   }
 
   function handleClose() {
@@ -178,6 +195,7 @@ export default function RecipeSubmitModal() {
       setForm(INITIAL);
       setErrors({});
       setSubmitted(false);
+      setResult(null);
     }, 350);
   }
 
@@ -272,30 +290,64 @@ export default function RecipeSubmitModal() {
                 {/* Scrollbarer Body */}
                 <div className="flex-1 overflow-y-auto overscroll-contain px-6 pb-4">
                   {submitted ? (
-                    /* ── Erfolgs-State ── */
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.96 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.1 }}
-                      className="flex flex-col items-center justify-center min-h-[340px] text-center py-12"
-                    >
-                      <div className="w-16 h-16 bg-brand-gold/10 border border-brand-gold/30 flex items-center justify-center mb-6">
-                        <Award size={28} className="text-brand-gold" />
-                      </div>
-                      <h3 className="font-serif text-2xl font-bold text-text-primary mb-3">
-                        Das Rezept ist eingegangen.
-                      </h3>
-                      <p className="text-sm font-body text-text-secondary max-w-xs leading-relaxed">
-                        Marco prüft jede Einreichung persönlich. Entspricht dein Rezept den
-                        Standards der Akademie, erscheint es hier — mit deinem Namen.
-                      </p>
-                      <button
-                        onClick={handleClose}
-                        className="mt-8 text-[11px] font-sans tracking-[0.12em] uppercase text-text-muted hover:text-text-primary transition-colors border-b border-text-muted/30 hover:border-text-primary/50 pb-px"
-                      >
-                        Fenster schließen
-                      </button>
-                    </motion.div>
+                    /* ── Ergebnis-State (KI-Urteil) ── */
+                    (() => {
+                      const s = result?.status ?? 'error';
+                      const cfgMap: Record<string, { Icon: typeof Award; color: string; title: string }> = {
+                        approved:     { Icon: CheckCircle, color: '#7CB342', title: 'Freigegeben — dein Rezept ist live!' },
+                        needs_review: { Icon: Clock,       color: '#C8882A', title: 'Fast geschafft — in Prüfung' },
+                        rejected:     { Icon: AlertCircle, color: '#E85018', title: 'Noch nicht ganz' },
+                        login:        { Icon: LogIn,       color: '#C8882A', title: 'Anmeldung nötig' },
+                        error:        { Icon: AlertCircle, color: '#E85018', title: 'Etwas ist schiefgelaufen' },
+                      };
+                      const cfg = cfgMap[s] ?? { Icon: Award, color: '#C8882A', title: 'Eingegangen' };
+                      const { Icon } = cfg;
+                      return (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.96 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.1 }}
+                          className="flex flex-col items-center justify-center min-h-[340px] text-center py-12"
+                        >
+                          <div className="w-16 h-16 flex items-center justify-center mb-6 border"
+                            style={{ background: `${cfg.color}1A`, borderColor: `${cfg.color}4D` }}>
+                            <Icon size={28} style={{ color: cfg.color }} />
+                          </div>
+                          <h3 className="font-serif text-2xl font-bold text-text-primary mb-3">{cfg.title}</h3>
+                          <p className="text-sm font-body text-text-secondary max-w-sm leading-relaxed">
+                            {result?.message ?? 'Deine Einreichung wurde verarbeitet.'}
+                          </p>
+
+                          {/* Aktionen je Ergebnis */}
+                          {s === 'approved' && result?.slug && (
+                            <a href={`/rezepte/community/${result.slug}`}
+                              className="mt-7 inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase">
+                              Rezept ansehen <ExternalLink size={13} />
+                            </a>
+                          )}
+                          {s === 'login' && (
+                            <a href="/auth/login?redirectTo=/rezepte"
+                              className="mt-7 inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase">
+                              Zum Login <LogIn size={13} />
+                            </a>
+                          )}
+                          {(s === 'rejected' || s === 'error') && (
+                            <button
+                              onClick={() => { setSubmitted(false); setResult(null); }}
+                              className="mt-7 inline-flex items-center gap-2 px-6 py-3 border border-brand-gold/40 text-brand-gold font-sans font-bold text-xs tracking-[0.12em] uppercase hover:bg-brand-gold/10 transition-colors">
+                              Rezept überarbeiten
+                            </button>
+                          )}
+
+                          <button
+                            onClick={handleClose}
+                            className="mt-6 text-[11px] font-sans tracking-[0.12em] uppercase text-text-muted hover:text-text-primary transition-colors border-b border-text-muted/30 hover:border-text-primary/50 pb-px"
+                          >
+                            Fenster schließen
+                          </button>
+                        </motion.div>
+                      );
+                    })()
                   ) : (
                     /* ── Formular ── */
                     <form id="rezept-form" onSubmit={handleSubmit} noValidate>

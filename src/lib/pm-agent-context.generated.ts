@@ -110,5 +110,5 @@ export const PROJECT_STATUS: ProjectStatus = {
     "KI-System & Automation": 58,
     "Agenten & Automation": 0
   },
-  "generatedAt": "2026-06-04T07:52:46.600Z"
+  "generatedAt": "2026-06-04T10:21:28.411Z"
 }

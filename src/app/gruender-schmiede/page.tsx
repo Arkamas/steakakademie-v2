@@ -203,6 +203,31 @@ export default async function GruenderSchmiedePage() {
           </div>
         </section>
 
+        {/* ── Setup-Showcase Teaser ─────────────────────────────────────────── */}
+        <section className="border-b border-brand-gold/15" style={{ background: 'linear-gradient(180deg, rgba(200,136,42,0.06) 0%, transparent 100%)' }}>
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="max-w-content mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+              <div>
+                <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-2">
+                  Eröffnung — volle Transparenz
+                </span>
+                <h2 className="font-serif text-2xl font-bold text-text-primary mb-2">
+                  Erst zeige ich dir mein komplettes System.
+                </h2>
+                <p className="font-body text-sm text-text-secondary leading-relaxed max-w-xl">
+                  Die KI-Agenten, Programme, Konnektoren und Werkzeuge, mit denen die Steakakademie
+                  als Ein-Personen-Betrieb läuft — offen gelegt. Du kaufst kein Theorie-Modell,
+                  du bekommst dieses laufende System.
+                </p>
+              </div>
+              <Link href="/gruender-schmiede/setup"
+                className="shrink-0 inline-flex items-center gap-2 px-6 py-3.5 border border-brand-gold/40 text-brand-gold font-sans font-bold text-xs tracking-[0.1em] uppercase hover:bg-brand-gold/10 transition-colors">
+                Mein Setup ansehen <ArrowRight size={15} />
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* ── Problem ───────────────────────────────────────────────────────── */}
         <section className="border-b border-border-subtle">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">

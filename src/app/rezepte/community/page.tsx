@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight, ChefHat, Clock, Users } from 'lucide-react';
+import { ChevronRight, ChefHat, Clock, Users, Award } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
@@ -23,13 +23,16 @@ type Card = {
   prep_time: string | null;
   image_url: string | null;
   author_name: string;
+  quality_score: number | null;
 };
+
+const PITMASTER_SEAL = 85;
 
 export default async function CommunityIndexPage() {
   const supabase = createClient();
   const { data } = await supabase
     .from('user_recipes')
-    .select('slug, title, description, portions, prep_time, image_url, author_name')
+    .select('slug, title, description, portions, prep_time, image_url, author_name, quality_score')
     .eq('status', 'approved')
     .order('published_at', { ascending: false })
     .limit(60);
@@ -85,6 +88,12 @@ export default async function CommunityIndexPage() {
                     <span className="absolute top-3 left-3 inline-flex items-center gap-1 text-[10px] font-sans font-bold tracking-[0.1em] uppercase px-2 py-1 bg-surface-dark/90 backdrop-blur-sm border border-border-subtle text-brand-gold">
                       <ChefHat size={10} /> {r.author_name}
                     </span>
+                    {(r.quality_score ?? 0) >= PITMASTER_SEAL && (
+                      <span className="absolute top-3 right-3 inline-flex items-center gap-1 text-[10px] font-sans font-bold tracking-[0.1em] uppercase px-2 py-1 backdrop-blur-sm border"
+                        style={{ background: 'rgba(200,136,42,0.9)', color: '#1a1206', borderColor: 'rgba(255,255,255,0.25)' }}>
+                        <Award size={10} /> Pitmaster
+                      </span>
+                    )}
                   </div>
                   <div className="p-5">
                     <h2 className="font-serif text-lg font-bold text-text-primary group-hover:text-brand-gold transition-colors mb-2 leading-snug">

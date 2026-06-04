@@ -2,12 +2,15 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight, Clock, Users, ChefHat } from 'lucide-react';
+import { ChevronRight, Clock, Users, ChefHat, Award } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import GenerateImageButton from '@/components/recipe/GenerateImageButton';
 import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
+
+const PITMASTER_SEAL = 85; // quality_score-Schwelle für das Gold-Siegel
 
 type Zutat = { menge: string; einheit: string; name: string };
 type Schritt = { beschreibung: string };
@@ -21,6 +24,7 @@ type CommunityRecipe = {
   steps: Schritt[];
   image_url: string | null;
   author_name: string;
+  quality_score: number | null;
   published_at: string | null;
 };
 
@@ -28,7 +32,7 @@ async function getRecipe(slug: string): Promise<CommunityRecipe | null> {
   const supabase = createClient();
   const { data } = await supabase
     .from('user_recipes')
-    .select('slug, title, description, portions, prep_time, ingredients, steps, image_url, author_name, published_at')
+    .select('slug, title, description, portions, prep_time, ingredients, steps, image_url, author_name, quality_score, published_at')
     .eq('slug', slug)
     .eq('status', 'approved')
     .maybeSingle();
@@ -107,16 +111,29 @@ export default async function CommunityRecipePage({ params }: { params: { slug: 
             <span>von <strong className="text-brand-gold">{r.author_name}</strong></span>
             {r.portions && <span className="flex items-center gap-1.5"><Users size={13} /> {r.portions} Portionen</span>}
             {r.prep_time && <span className="flex items-center gap-1.5"><Clock size={13} /> {r.prep_time}</span>}
+            {(r.quality_score ?? 0) >= PITMASTER_SEAL && (
+              <span className="inline-flex items-center gap-1.5 text-brand-gold font-bold">
+                <Award size={13} /> Pitmaster-geprüft
+              </span>
+            )}
           </div>
 
           {/* Bild (Phase 2) */}
-          {r.image_url && (
+          {r.image_url ? (
             <div className="relative w-full aspect-[16/9] mb-10 overflow-hidden rounded-sm border border-border-subtle">
               <Image src={r.image_url} alt={r.title} fill sizes="(max-width: 768px) 100vw, 720px" className="object-cover" unoptimized />
               <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.1em] uppercase px-2.5 py-1 bg-surface-dark/90 backdrop-blur-sm border border-border-subtle text-brand-gold">
                 <ChefHat size={11} /> {r.author_name}
               </span>
+              {(r.quality_score ?? 0) >= PITMASTER_SEAL && (
+                <span className="absolute top-3 right-3 inline-flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.1em] uppercase px-2.5 py-1 backdrop-blur-sm border"
+                  style={{ background: 'rgba(200,136,42,0.9)', color: '#1a1206', borderColor: 'rgba(255,255,255,0.25)' }}>
+                  <Award size={11} /> Pitmaster-geprüft
+                </span>
+              )}
             </div>
+          ) : (
+            <GenerateImageButton slug={r.slug} />
           )}
 
           <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-10">

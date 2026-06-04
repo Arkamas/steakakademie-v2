@@ -113,7 +113,7 @@ function buildPrompt(raw, slug = '') {
   return `appetizing professional food photograph of ${subject}, the whole dish in frame, `
     + (anatomy ? `anatomically accurate cut of meat, ` : ``)
     + `${clause}, `
-    + `natural food styling on a wooden board or dark slate, warm soft natural light, subtle steam, `
+    + `plated on a rustic warm wooden board, soft warm natural daylight, a subtle grill and glowing ember atmosphere softly blurred in the background, a little fresh herb garnish, clean and appetizing, subtle steam, `
     + `${pickPerspective(slug || alt)}, `
     + `50mm lens, f/5.6, balanced focus, appetizing, no text, no watermark, no people`
 }

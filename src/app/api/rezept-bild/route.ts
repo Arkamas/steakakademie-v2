@@ -57,7 +57,7 @@ function buildPrompt(r: { slug?: string; title: string; description: string; mod
     r.description,
     main && `with ${main}`,
     styleClause(hay),
-    'natural food styling on a wooden board or dark slate, warm soft natural light, subtle steam',
+    'plated on a rustic warm wooden board, soft warm natural daylight, a subtle grill and glowing ember atmosphere softly blurred in the background, a little fresh herb garnish, clean and appetizing, subtle steam',
     pickPerspective(r.slug || r.title),
     '50mm lens, f/5.6, balanced focus, appetizing, no text, no watermark, no people',
   ].filter(Boolean).join(', ');

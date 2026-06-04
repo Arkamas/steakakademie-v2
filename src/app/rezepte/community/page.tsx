@@ -81,6 +81,10 @@ export default async function CommunityIndexPage() {
                         <ChefHat size={32} className="text-brand-gold/30" />
                       </div>
                     )}
+                    {/* Autor-Badge — an derselben Stelle, an der bei Redaktions-Rezepten das Land steht */}
+                    <span className="absolute top-3 left-3 inline-flex items-center gap-1 text-[10px] font-sans font-bold tracking-[0.1em] uppercase px-2 py-1 bg-surface-dark/90 backdrop-blur-sm border border-border-subtle text-brand-gold">
+                      <ChefHat size={10} /> {r.author_name}
+                    </span>
                   </div>
                   <div className="p-5">
                     <h2 className="font-serif text-lg font-bold text-text-primary group-hover:text-brand-gold transition-colors mb-2 leading-snug">

@@ -113,6 +113,9 @@ export default async function CommunityRecipePage({ params }: { params: { slug: 
           {r.image_url && (
             <div className="relative w-full aspect-[16/9] mb-10 overflow-hidden rounded-sm border border-border-subtle">
               <Image src={r.image_url} alt={r.title} fill sizes="(max-width: 768px) 100vw, 720px" className="object-cover" unoptimized />
+              <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.1em] uppercase px-2.5 py-1 bg-surface-dark/90 backdrop-blur-sm border border-border-subtle text-brand-gold">
+                <ChefHat size={11} /> {r.author_name}
+              </span>
             </div>
           )}
 

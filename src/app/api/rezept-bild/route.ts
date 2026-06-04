@@ -21,16 +21,32 @@ export const maxDuration = 90;
 
 type Zutat = { menge: string; einheit: string; name: string };
 
+// Bild-Prompt-Doktrin (siehe CLAUDE.md): KEINE Wörter wie "photorealistic"/"4K"/"8k"
+// (erzeugen den künstlichen Plastik-Look). Stattdessen Textur- + Kamera-Sprache und
+// der "sliced"-Trick. Klassifizierung wählt die richtige Fleisch-Doktrin.
+const STEAK_RE  = /\b(ribeye|rib-?eye|entrecote|entrecôte|t-?bone|tomahawk|porterhouse|rumpsteak|sirloin|striploin|roastbeef|picanha|wagyu|flank|onglet|hanger|rindersteak|beef steak|steak)\b/i;
+const SMOKED_RE = /\b(brisket|pulled pork|spare ?ribs|baby ?back|ribs|rippchen|short ?rib|smoked|pastrami)\b/i;
+
+function styleClause(text: string): string {
+  if (SMOKED_RE.test(text))
+    return 'dark, heavily seasoned almost-black bark crust, a vivid pink smoke ring just beneath the surface, juices squeezing from the tender meat fibers, resting on peach butcher paper';
+  if (STEAK_RE.test(text))
+    return 'sliced open to reveal a juicy warm medium-rare pink center, dark charred caramelized crust, visible muscle fibers and rendering fat, coarse sea salt flakes glistening on the surface';
+  return 'glistening with natural juices (not oily), charred caramelized grill marks where grilled, coarse sea salt flakes, fresh and appetizing';
+}
+
 function buildPrompt(r: { title: string; description: string; moderation: { category_guess?: string } | null; ingredients: Zutat[] }): string {
   const subject = r.moderation?.category_guess?.trim() || r.title;
   const main = (r.ingredients ?? []).slice(0, 3).map((z) => z.name).filter(Boolean).join(', ');
+  const hay = `${r.title} ${main} ${r.moderation?.category_guess ?? ''}`;
   return [
-    `professional food photography of ${subject}`,
+    `macro food photograph of ${subject}`,
     r.description,
-    main && `featuring ${main}`,
-    'naturally styled and slightly imperfect like a real home-grilled BBQ result',
-    'dark charcoal background, warm dramatic side lighting, glistening juices, visible char and texture',
-    'shallow depth of field, photorealistic, editorial quality, no text, no watermark, no people',
+    main && `with ${main}`,
+    styleClause(hay),
+    'naturally styled and slightly imperfect like a real home-grilled result, appetizing',
+    'dark charcoal slate background, warm dramatic side lighting, subtle steam rising, shallow depth of field, 85mm lens, f/2.8',
+    'no text, no watermark, no people',
   ].filter(Boolean).join(', ');
 }
 

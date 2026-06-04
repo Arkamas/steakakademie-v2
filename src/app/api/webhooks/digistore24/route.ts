@@ -64,7 +64,9 @@ export async function POST(req: Request) {
   const rawBody = await req.text();
   const params  = Object.fromEntries(new URLSearchParams(rawBody));
 
-  const event     = params.event;
+  // Digistore24 sendet Events OHNE "on_"-Präfix ("payment", "refund", …);
+  // ältere/Test-Aufrufe nutzten "on_payment". Normalisieren → beide Formen funktionieren.
+  const event     = (params.event ?? '').replace(/^on_/, '');
   const orderId   = params.order_id;
   const productId = params.product_id;
   const email     = (params.email ?? params.buyer_email ?? '').toLowerCase().trim();
@@ -131,7 +133,7 @@ export async function POST(req: Request) {
 
   // 3) Event-Routing
   try {
-    if (event === 'on_payment' || event === 'on_rebill_resumed') {
+    if (event === 'payment' || event === 'rebill' || event === 'rebill_resumed') {
       const userId      = await ensureUser(supabase, email, courseSlug);
 
       const { data: bookingId, error: grantErr } = await supabase.rpc('grant_course_access', {
@@ -154,7 +156,7 @@ export async function POST(req: Request) {
       return new Response('OK', { status: 200 });
     }
 
-    if (event === 'on_refund' || event === 'on_chargeback') {
+    if (event === 'refund' || event === 'chargeback') {
       const userId = await findUserId(supabase, email);
       if (!userId) throw new Error(`refund for unknown user: ${email}`);
 
@@ -241,7 +243,7 @@ async function handleCreditProduct(
   }
 
   try {
-    if (event === 'on_payment' || event === 'on_rebill_resumed') {
+    if (event === 'payment' || event === 'rebill' || event === 'rebill_resumed') {
       const userId = await ensureUser(supabase, email, CREDIT_COURSE_SLUG);
 
       const { error: grantErr } = await supabase.rpc('grant_diagnose_credits', {
@@ -260,7 +262,7 @@ async function handleCreditProduct(
       return new Response('OK', { status: 200 });
     }
 
-    if (event === 'on_refund' || event === 'on_chargeback') {
+    if (event === 'refund' || event === 'chargeback') {
       const userId = await findUserId(supabase, email);
       if (!userId) throw new Error(`refund for unknown user: ${email}`);
 

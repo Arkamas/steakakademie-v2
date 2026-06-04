@@ -27,26 +27,39 @@ type Zutat = { menge: string; einheit: string; name: string };
 const STEAK_RE  = /\b(ribeye|rib-?eye|entrecote|entrecôte|t-?bone|tomahawk|porterhouse|rumpsteak|sirloin|striploin|roastbeef|picanha|wagyu|flank|onglet|hanger|rindersteak|beef steak|steak)\b/i;
 const SMOKED_RE = /\b(brisket|pulled pork|spare ?ribs|baby ?back|ribs|rippchen|short ?rib|smoked|pastrami)\b/i;
 
-function styleClause(text: string): string {
-  if (SMOKED_RE.test(text))
-    return 'dark, heavily seasoned almost-black bark crust, a vivid pink smoke ring just beneath the surface, juices squeezing from the tender meat fibers, resting on peach butcher paper';
-  if (STEAK_RE.test(text))
-    return 'sliced open to reveal a juicy warm medium-rare pink center, dark charred caramelized crust, visible muscle fibers and rendering fat, coarse sea salt flakes glistening on the surface';
-  return 'glistening with natural juices (not oily), charred caramelized grill marks where grilled, coarse sea salt flakes, fresh and appetizing';
+// Perspektiven-Rotation (deterministisch je Rezept) → Vielfalt statt Einheits-Close-up.
+const PERSPECTIVES = [
+  'shot from directly above, clean top-down flat lay on a wooden board',
+  'shot from a 45-degree angle on a wooden serving board',
+  'shot from a low three-quarter angle at plate level',
+  'slightly elevated three-quarter angle showing the whole plating on a dark slate',
+];
+function pickPerspective(seed: string): string {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return PERSPECTIVES[h % PERSPECTIVES.length];
 }
 
-function buildPrompt(r: { title: string; description: string; moderation: { category_guess?: string } | null; ingredients: Zutat[] }): string {
+function styleClause(text: string): string {
+  if (SMOKED_RE.test(text))
+    return 'cut into clean slices showing a dark, heavily seasoned bark crust and a vivid pink smoke ring, tender and juicy, resting on peach butcher paper';
+  if (STEAK_RE.test(text))
+    return 'cut into clean thick slices revealing a smooth, juicy, evenly rosy medium-rare interior, dark caramelized seared crust, a few coarse sea salt flakes';
+  return 'glistening with natural juices (not oily), lightly charred where grilled, fresh and appetizing';
+}
+
+function buildPrompt(r: { slug?: string; title: string; description: string; moderation: { category_guess?: string } | null; ingredients: Zutat[] }): string {
   const subject = r.moderation?.category_guess?.trim() || r.title;
   const main = (r.ingredients ?? []).slice(0, 3).map((z) => z.name).filter(Boolean).join(', ');
   const hay = `${r.title} ${main} ${r.moderation?.category_guess ?? ''}`;
   return [
-    `macro food photograph of ${subject}`,
+    `appetizing professional food photograph of ${subject}, the whole dish in frame`,
     r.description,
     main && `with ${main}`,
     styleClause(hay),
-    'naturally styled and slightly imperfect like a real home-grilled result, appetizing',
-    'dark charcoal slate background, warm dramatic side lighting, subtle steam rising, shallow depth of field, 85mm lens, f/2.8',
-    'no text, no watermark, no people',
+    'natural food styling on a wooden board or dark slate, warm soft natural light, subtle steam',
+    pickPerspective(r.slug || r.title),
+    '50mm lens, f/5.6, balanced focus, appetizing, no text, no watermark, no people',
   ].filter(Boolean).join(', ');
 }
 

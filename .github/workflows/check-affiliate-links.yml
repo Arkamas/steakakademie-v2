@@ -161,6 +161,22 @@ jobs:
               console.log(`Neues Issue erstellt: #${created.data.number}`);
             }
 
+      - name: Ops-Alert → Jira-Ticket (KAN)
+        if: steps.check.outputs.exit_code != '0'
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          ERRORS=$(jq -r '.errors // 0' link-report.json 2>/dev/null || echo "?")
+          export ALERT_SUMMARY="🔴 Affiliate-Links defekt — ${ERRORS} Fehler"
+          export ALERT_DESCRIPTION="$(jq -r '.results[]? | select(.ok==false) | "- \(.id) (\(.name)): \(.reason) — \(.url)"' link-report.json 2>/dev/null | head -n 30)"
+          export ALERT_LABELS="affiliate,ops,agent-senior-marketing-manager"
+          export ALERT_ISSUETYPE="Bug"
+          export ALERT_DEDUP_LABEL="ops-affiliate-link"
+          node scripts/ops-alert-to-jira.mjs
+
       - name: Issue schließen wenn alle Links OK
         if: |
           steps.check.outputs.exit_code == '0' &&

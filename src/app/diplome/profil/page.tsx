@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { ChevronRight, ExternalLink, Copy, Check, Linkedin } from 'lucide-react';
+import { ChevronRight, ExternalLink, Copy, Check, Linkedin, LogOut, Map, GraduationCap, Award } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
@@ -83,10 +83,20 @@ export default function ProfilPage() {
       <Header />
       <main className="bg-surface-base min-h-screen">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-          <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted mb-6">
-            <Link href="/diplome" className="hover:text-brand-gold transition-colors">Diplom-System</Link>
-            <ChevronRight size={12} /><span>Mein Profil</span>
-          </nav>
+          <div className="flex items-center justify-between gap-3 mb-6">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted">
+              <Link href="/diplome" className="hover:text-brand-gold transition-colors">Diplom-System</Link>
+              <ChevronRight size={12} /><span>Mein Profil</span>
+            </nav>
+            {(state === 'ready' || state === 'saving') && (
+              <form action="/auth/logout" method="post">
+                <button type="submit"
+                  className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold text-text-muted hover:text-brand-fire transition-colors">
+                  <LogOut size={13} /> Abmelden
+                </button>
+              </form>
+            )}
+          </div>
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">Deine Grillmeister-Vita</h1>
           <p className="font-body text-text-secondary mb-8">
             Mach deine bestandenen Stufen öffentlich teilbar — eine eigene Profil-Seite mit deinen Medaillen.
@@ -138,6 +148,36 @@ export default function ProfilPage() {
                     Profil ansehen <ExternalLink size={13} />
                   </a>
                 )}
+              </div>
+            </div>
+          )}
+
+          {state === 'ready' && (
+            <div className="mt-6 border border-border-subtle bg-surface-elevated p-6">
+              <h2 className="font-serif text-lg font-bold text-text-primary mb-1">Wie geht's weiter?</h2>
+              <p className="font-body text-sm text-text-secondary mb-5">
+                Dein Profil ist eingerichtet. Jetzt fängt die eigentliche Ausbildung an:
+              </p>
+              <div className="space-y-3">
+                {[
+                  { href: '/diplome/roadmap', Icon: Map, title: 'Lernpfad starten', desc: 'Deine Grillmeister-Ausbildung — Stufe 1 „Glut-Lehrling". Fortschritt wird gespeichert.', primary: true },
+                  { href: '/meine-kurse', Icon: GraduationCap, title: 'Meine Kurse', desc: 'Alle freigeschalteten Tools & Kurse auf einen Blick.' },
+                  { href: '/diplome', Icon: Award, title: 'Diplom-Übersicht', desc: 'Alle 5 Stufen — Bronze bis Meister — im Überblick.' },
+                ].map(({ href, Icon, title, desc, primary }) => (
+                  <Link key={href} href={href}
+                    className="group flex items-center gap-4 p-4 border transition-colors"
+                    style={{
+                      borderColor: primary ? 'rgba(200,136,42,0.45)' : 'rgba(200,136,42,0.14)',
+                      background: primary ? 'rgba(200,136,42,0.08)' : 'transparent',
+                    }}>
+                    <Icon size={20} className={primary ? 'text-brand-gold shrink-0' : 'text-text-muted shrink-0'} />
+                    <div className="flex-1 min-w-0">
+                      <p className={`font-sans text-sm font-bold ${primary ? 'text-brand-gold' : 'text-text-primary'}`}>{title}</p>
+                      <p className="font-body text-xs text-text-secondary leading-snug">{desc}</p>
+                    </div>
+                    <ChevronRight size={16} className="text-text-muted group-hover:text-brand-fire transition-colors shrink-0" />
+                  </Link>
+                ))}
               </div>
             </div>
           )}

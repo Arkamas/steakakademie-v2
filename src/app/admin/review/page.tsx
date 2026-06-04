@@ -58,6 +58,7 @@ export default function ReviewPage() {
       <div className="flex items-center justify-between mb-6">
         <div className="text-[#c8621a] text-xs tracking-widest">🥩 STEAKAKADEMIE · REVIEW
           <a href="/admin/pm-agent" className="ml-4 text-[#8a7e6a] hover:text-[#d4a53a]">▸ PM-AGENT</a>
+          <a href="/admin/rezepte" className="ml-4 text-[#8a7e6a] hover:text-[#d4a53a]">▸ REZEPTE</a>
         </div>
         <button onClick={load} className="text-[#8a7e6a] text-xs hover:text-[#d4a53a]">↻ neu laden</button>
       </div>

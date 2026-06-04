@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allRecipes } from 'contentlayer/generated';
 import { breadcrumbSchema } from '@/lib/schema';
+import RecipeSubmitModal from '@/components/recipe/RecipeSubmitModal';
 
 export const metadata: Metadata = {
   title: 'BBQ-Rezepte — Geprüfte Rezepte vom Grill | Steakakademie',
@@ -91,6 +92,34 @@ export default function RezepteIndexPage() {
               Kein Rezept ohne Feldtest — jede Angabe basiert auf mehrfach reproduzierten Versuchen.
               Mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach direkt am Grill.
             </p>
+          </div>
+        </section>
+
+        {/* Community-Band — Austausch + eigenes Rezept einreichen */}
+        <section className="border-b border-border-subtle bg-surface-dark">
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-center">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">
+                  <Users size={12} /> Aus der Community
+                </span>
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light mb-2">
+                  Rezepte von Mitgliedern — KI-geprüft, freigegeben
+                </h2>
+                <p className="font-body text-text-light/60 leading-relaxed max-w-xl mb-4">
+                  Echte Kreationen zum Nachgrillen, eingereicht von der Akademie-Community.
+                  Jede Einreichung wird von einer KI auf Sicherheit und Qualität geprüft —
+                  gute Rezepte gehen sofort live.
+                </p>
+                <Link
+                  href="/rezepte/community"
+                  className="inline-flex items-center gap-1.5 text-xs font-sans font-bold tracking-widest uppercase text-brand-gold hover:text-brand-fire transition-colors"
+                >
+                  Alle Community-Rezepte <ChevronRight size={14} />
+                </Link>
+              </div>
+              <RecipeSubmitModal />
+            </div>
           </div>
         </section>
 

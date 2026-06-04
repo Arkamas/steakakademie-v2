@@ -1,0 +1,34 @@
+name: Test — Ops-Hook → Jira
+
+# Manueller Test des Ops-Alert→Jira-Hooks (KAN-31).
+# Erzeugt EIN Test-Ticket im KAN-Board, um zu beweisen, dass die Kette
+# GitHub Actions → Jira API → KAN funktioniert. Danach Test-Ticket löschen.
+# Skippt sauber, solange JIRA_EMAIL / JIRA_API_TOKEN nicht gesetzt sind.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-jira-hook:
+    name: Test-Ticket in Jira erstellen
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Test-Ticket erzeugen
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🧪 Test: Ops-Hook → Jira funktioniert'
+          ALERT_DESCRIPTION: 'Test des automatischen Ops-Alert→Jira-Hooks (KAN-31). Wenn du dieses Ticket siehst, funktioniert die Kette GitHub Actions → Jira-API → KAN-Board. Dieses Ticket kann gelöscht werden.'
+          ALERT_LABELS: 'test,ops,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Task'
+        run: node scripts/ops-alert-to-jira.mjs

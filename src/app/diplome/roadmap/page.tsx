@@ -454,7 +454,7 @@ const feuerzoneItems: FeuerzoneItem[] = [
   { id: 'steak',   label: 'Steak',    emoji: '🥩', correctZone: 'direkte',   explain: 'Direkte Hitze für die perfekte Kruste (Maillard-Reaktion).' },
   { id: 'wurst',   label: 'Wurst',    emoji: '🌭', correctZone: 'direkte',   explain: 'Schnelles Bräunen, direkt servieren.' },
   { id: 'haehn',   label: 'Hähnchen', emoji: '🍗', correctZone: 'indirekte', explain: 'Indirekt durchgaren — innen 75 °C, sicher und saftig.' },
-  { id: 'brisket', label: 'Brisket',  emoji: '🐂', correctZone: 'indirekte', explain: 'Low & Slow: 110-120 °C über 12-16 Stunden.' },
+  { id: 'brisket', label: 'Brisket',  emoji: '🐂', correctZone: 'indirekte', explain: 'Indirekte Hitze = Low & Slow: große Stücke über viele Stunden schonend garen.' },
   { id: 'gemuese', label: 'Gemüse',   emoji: '🥦', correctZone: 'ruhe',      explain: 'Ruhezone: sanfte Hitze, keine Verkohlung.' },
   { id: 'fisch',   label: 'Fisch',    emoji: '🐟', correctZone: 'abdeck',    explain: 'Abdeckzone mit Deckel: schonend, gleichmäßig.' },
 ];
@@ -1297,10 +1297,43 @@ function FeuerzoneSpiel({ color }: { color: string }) {
               <stop offset="0%"   stopColor="#FF6B35" stopOpacity="0.4" />
               <stop offset="100%" stopColor="#FF6B35" stopOpacity="0" />
             </radialGradient>
+            <radialGradient id="sk-ember" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stopColor="#FF7A1A" stopOpacity="0.6" />
+              <stop offset="55%"  stopColor="#C2410C" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#C2410C" stopOpacity="0" />
+            </radialGradient>
+            <clipPath id="sk-bowl">
+              <ellipse cx="200" cy="140" rx="170" ry="112" />
+            </clipPath>
           </defs>
           {/* Grill body */}
           <ellipse cx="200" cy="140" rx="180" ry="120" fill="#0a0a0a" stroke={T.borderMuted} strokeWidth="2" />
-          <ellipse cx="200" cy="140" rx="170" ry="112" fill="url(#sk-glow)" opacity="0.4" />
+
+          {/* Glut-Bett + urtümliches Rost-Gitter (auf die Schale geclippt) */}
+          <g clipPath="url(#sk-bowl)">
+            <rect x="30" y="28" width="340" height="224" fill="#160f0a" />
+            {/* glühende Glut darunter */}
+            <ellipse cx="180" cy="152" rx="130" ry="86" fill="url(#sk-ember)" />
+            <ellipse cx="240" cy="118" rx="86"  ry="58" fill="url(#sk-ember)" opacity="0.7" />
+            {/* einzelne Glutpunkte */}
+            {[[140,176,2.6,'#FF8A33'],[168,196,2,'#FFB066'],[205,165,2.3,'#FF7A1A'],
+              [243,188,1.8,'#FFA050'],[120,150,1.8,'#E8531C'],[270,150,2.2,'#FF8A33'],
+              [190,205,1.6,'#FFB066'],[225,210,2,'#FF7A1A']].map(([cx,cy,r,c],i) => (
+              <circle key={i} cx={cx as number} cy={cy as number} r={r as number} fill={c as string} opacity="0.8" />
+            ))}
+            {/* geschmiedete Eisenstäbe (Rost) */}
+            {[58,86,114,142,170,198,226].map((y) => (
+              <g key={y}>
+                <line x1="32" y1={y} x2="368" y2={y} stroke="#241811" strokeWidth="4" strokeLinecap="round" />
+                <line x1="32" y1={y - 1.2} x2="368" y2={y - 1.2} stroke="#7a5c3a" strokeWidth="1" strokeLinecap="round" opacity="0.5" />
+              </g>
+            ))}
+            {/* zwei quer liegende Auflage-Streben */}
+            {[120, 280].map((x) => (
+              <line key={x} x1={x} y1="34" x2={x} y2="246" stroke="#1c130d" strokeWidth="5" strokeLinecap="round" opacity="0.6" />
+            ))}
+          </g>
+          <ellipse cx="200" cy="140" rx="170" ry="112" fill="url(#sk-glow)" opacity="0.35" />
 
           {/* 4 zones */}
           {(['direkte', 'indirekte', 'ruhe', 'abdeck'] as ZoneKey[]).map((zone, idx) => {

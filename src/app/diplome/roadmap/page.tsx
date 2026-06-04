@@ -1309,72 +1309,86 @@ function FeuerzoneSpiel({ color }: { color: string }) {
           {/* Grill body */}
           <ellipse cx="200" cy="140" rx="180" ry="120" fill="#0a0a0a" stroke={T.borderMuted} strokeWidth="2" />
 
-          {/* Glut-Bett + urtümliches Rost-Gitter (auf die Schale geclippt) */}
-          <g clipPath="url(#sk-bowl)">
+          {/* Glut-Bett unter dem Rost */}
+          <g clipPath="url(#sk-bowl)" style={{ pointerEvents: 'none' }}>
             <rect x="30" y="28" width="340" height="224" fill="#160f0a" />
-            {/* glühende Glut darunter */}
-            <ellipse cx="180" cy="152" rx="130" ry="86" fill="url(#sk-ember)" />
-            <ellipse cx="240" cy="118" rx="86"  ry="58" fill="url(#sk-ember)" opacity="0.7" />
-            {/* einzelne Glutpunkte */}
+            <ellipse cx="200" cy="140" rx="150" ry="100" fill="url(#sk-ember)" />
             {[[140,176,2.6,'#FF8A33'],[168,196,2,'#FFB066'],[205,165,2.3,'#FF7A1A'],
               [243,188,1.8,'#FFA050'],[120,150,1.8,'#E8531C'],[270,150,2.2,'#FF8A33'],
-              [190,205,1.6,'#FFB066'],[225,210,2,'#FF7A1A']].map(([cx,cy,r,c],i) => (
-              <circle key={i} cx={cx as number} cy={cy as number} r={r as number} fill={c as string} opacity="0.8" />
-            ))}
-            {/* geschmiedete Eisenstäbe (Rost) */}
-            {[58,86,114,142,170,198,226].map((y) => (
-              <g key={y}>
-                <line x1="32" y1={y} x2="368" y2={y} stroke="#241811" strokeWidth="4" strokeLinecap="round" />
-                <line x1="32" y1={y - 1.2} x2="368" y2={y - 1.2} stroke="#7a5c3a" strokeWidth="1" strokeLinecap="round" opacity="0.5" />
-              </g>
-            ))}
-            {/* zwei quer liegende Auflage-Streben */}
-            {[120, 280].map((x) => (
-              <line key={x} x1={x} y1="34" x2={x} y2="246" stroke="#1c130d" strokeWidth="5" strokeLinecap="round" opacity="0.6" />
+              [190,205,1.6,'#FFB066'],[225,118,2,'#FF7A1A']].map(([cx,cy,r,c],i) => (
+              <circle key={i} cx={cx as number} cy={cy as number} r={r as number} fill={c as string} opacity="0.7" />
             ))}
           </g>
-          <ellipse cx="200" cy="140" rx="170" ry="112" fill="url(#sk-glow)" opacity="0.35" />
 
-          {/* 4 zones */}
+          {/* 4 Zonen — füllen die Schale als Quadranten (klickbar) */}
           {(['direkte', 'indirekte', 'ruhe', 'abdeck'] as ZoneKey[]).map((zone, idx) => {
-            const positions = [
-              { x: 110, y: 100, w: 90, h: 90 },   // direkte (top-left)
-              { x: 200, y: 100, w: 90, h: 90 },   // indirekte (top-right)
-              { x: 110, y: 190, w: 90, h: 60 },   // ruhe (bottom-left)
-              { x: 200, y: 190, w: 90, h: 60 },   // abdeck (bottom-right)
-            ];
-            const p  = positions[idx];
+            const q = [
+              { x: 28,  y: 26,  w: 172, h: 114 },  // direkte   (oben-links)
+              { x: 200, y: 26,  w: 172, h: 114 },  // indirekte (oben-rechts)
+              { x: 28,  y: 140, w: 172, h: 114 },  // ruhe      (unten-links)
+              { x: 200, y: 140, w: 172, h: 114 },  // abdeck    (unten-rechts)
+            ][idx];
+            const baseOpacity = [0.34, 0.28, 0.22, 0.18][idx];
+            const zm = zoneMeta[zone];
+            return (
+              <g key={zone}
+                 clipPath="url(#sk-bowl)"
+                 onClick={() => selected && place(selected, zone)}
+                 style={{ cursor: selected ? 'pointer' : 'default' }}>
+                <rect x={q.x} y={q.y} width={q.w} height={q.h}
+                  fill={zm.color} fillOpacity={selected ? baseOpacity + 0.14 : baseOpacity} />
+              </g>
+            );
+          })}
+
+          {/* Trenn-Kreuz zwischen den Zonen */}
+          <g clipPath="url(#sk-bowl)" style={{ pointerEvents: 'none' }}>
+            <line x1="200" y1="28" x2="200" y2="252" stroke="#0d0906" strokeWidth="2.5" opacity="0.55" />
+            <line x1="30" y1="140" x2="370" y2="140" stroke="#0d0906" strokeWidth="2.5" opacity="0.55" />
+          </g>
+
+          {/* Rost-Gitter ÜBER den Zonen (geschmiedete Eisenstäbe) */}
+          <g clipPath="url(#sk-bowl)" style={{ pointerEvents: 'none' }}>
+            {[44,72,100,128,156,184,212,240].map((y) => (
+              <g key={y}>
+                <line x1="32" y1={y} x2="368" y2={y} stroke="#241811" strokeWidth="3.5" strokeLinecap="round" opacity="0.85" />
+                <line x1="32" y1={y - 1.1} x2="368" y2={y - 1.1} stroke="#8a6940" strokeWidth="0.9" strokeLinecap="round" opacity="0.45" />
+              </g>
+            ))}
+            {[120, 280].map((x) => (
+              <line key={x} x1={x} y1="32" x2={x} y2="248" stroke="#1c130d" strokeWidth="5" strokeLinecap="round" opacity="0.5" />
+            ))}
+          </g>
+
+          {/* zentraler Glut-Glow */}
+          <ellipse cx="200" cy="140" rx="170" ry="112" fill="url(#sk-glow)" opacity="0.3" style={{ pointerEvents: 'none' }} />
+
+          {/* Labels + Temperatur + platzierte Items (über dem Rost) */}
+          {(['direkte', 'indirekte', 'ruhe', 'abdeck'] as ZoneKey[]).map((zone, idx) => {
+            const L = [
+              { lx: 116, ly: 74,  ex: 92,  ey: 100 },  // direkte
+              { lx: 284, ly: 74,  ex: 256, ey: 100 },  // indirekte
+              { lx: 116, ly: 210, ex: 92,  ey: 158 },  // ruhe
+              { lx: 284, ly: 210, ex: 256, ey: 158 },  // abdeck
+            ][idx];
             const zm = zoneMeta[zone];
             const itemsInZone = feuerzoneItems.filter(i => placements[i.id] === zone);
-
             return (
-              <g
-                key={zone}
-                onClick={() => selected && place(selected, zone)}
-                style={{ cursor: selected ? 'pointer' : 'default' }}
-              >
-                <rect
-                  x={p.x} y={p.y} width={p.w} height={p.h}
-                  rx="6"
-                  fill={`${zm.color}22`}
-                  stroke={zm.color}
-                  strokeWidth={selected ? 2 : 1}
-                  strokeDasharray={selected ? '4 3' : '0'}
-                  opacity={selected ? 1 : 0.7}
-                />
-                <text x={p.x + p.w / 2} y={p.y + 18} textAnchor="middle" fontSize="9" fontWeight="700" fill={zm.color} fontFamily="sans-serif">
+              <g key={`${zone}-lbl`}
+                 onClick={() => selected && place(selected, zone)}
+                 style={{ cursor: selected ? 'pointer' : 'default' }}>
+                <text x={L.lx} y={L.ly} textAnchor="middle" fontSize="9.5" fontWeight="700"
+                  fill={zm.color} fontFamily="sans-serif"
+                  style={{ paintOrder: 'stroke', stroke: '#0d0906', strokeWidth: 2.5 }}>
                   {zm.label.toUpperCase()}
                 </text>
-                <text x={p.x + p.w / 2} y={p.y + 30} textAnchor="middle" fontSize="8" fill={T.textDim} fontFamily="sans-serif">
+                <text x={L.lx} y={L.ly + 12} textAnchor="middle" fontSize="8"
+                  fill="#d8c7a8" fontFamily="sans-serif"
+                  style={{ paintOrder: 'stroke', stroke: '#0d0906', strokeWidth: 2.5 }}>
                   {zm.temp}
                 </text>
                 {itemsInZone.map((it, i) => (
-                  <text
-                    key={it.id}
-                    x={p.x + 18 + (i % 3) * 24}
-                    y={p.y + 55 + Math.floor(i / 3) * 22}
-                    fontSize="18"
-                  >
+                  <text key={it.id} x={L.ex + (i % 3) * 24} y={L.ey + Math.floor(i / 3) * 22} fontSize="18">
                     {it.emoji}
                   </text>
                 ))}

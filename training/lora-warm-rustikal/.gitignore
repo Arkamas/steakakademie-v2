@@ -1,0 +1,6 @@
+# Trainingsbilder gehören NICHT ins Repo/Deploy — nur die README wird versioniert.
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.zip

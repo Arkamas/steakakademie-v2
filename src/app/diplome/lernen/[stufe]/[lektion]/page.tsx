@@ -9,6 +9,7 @@ import { breadcrumbSchema } from '@/lib/schema';
 import { ChevronRight, ChevronLeft, ArrowRight, BookOpen, Lightbulb } from 'lucide-react';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import KontextRail from '@/components/diplome/KontextRail';
+import AnimatedBar from '@/components/diplome/AnimatedBar';
 
 interface Props {
   params: { stufe: string; lektion: string };
@@ -206,6 +207,13 @@ export default function DiplomLektionPage({ params }: Props) {
                   <h2 className="font-sans font-bold text-sm text-text-primary flex items-center gap-2">
                     <BookOpen size={14} style={{ color: meta.color }} /> Stufe {lektion.stufe} · {meta.title}
                   </h2>
+                </div>
+                <div className="mb-4">
+                  <AnimatedBar
+                    percent={((idx + 1) / siblings.length) * 100}
+                    color={meta.color}
+                    label={`Lektion ${idx + 1} von ${siblings.length}`}
+                  />
                 </div>
                 <ol className="space-y-1">
                   {siblings.map((l) => {

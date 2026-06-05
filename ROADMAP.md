@@ -1,6 +1,6 @@
 # Steakakademie — Roadmap & Offene Punkte
 
-> Letzte Aktualisierung: 2026-05-28
+> Letzte Aktualisierung: 2026-06-05
 
 ---
 
@@ -43,6 +43,26 @@
 
 ---
 
+## 🎓 Diplom-Grillmeister — offene Folge-Arbeit
+
+> Curriculum-Abgleich gegen 5-Säulen-Framework erledigt (siehe
+> `docs/diplom-curriculum-abgleich.md`). Kompetenzen sind eingepflegt — es fehlen
+> noch die ausformulierten **MDX-Lektionstexte** (bisher nur Stufe 1, 7 Stück).
+
+- [ ] **Stufe 2** Lektionen: „Schweine-Zuschnitte: Boston Butt & St. Louis Ribs"
+- [ ] **Stufe 3** Lektionen: „Zeitmanagement: ein Menü synchron fertigstellen"
+- [ ] **Stufe 4** Lektionen: Gerätekunde Gas · Smart Grilling (Pellet digital) ·
+  Mopping & sauberer Rauch (Creosote) · Kühlketten-Logistik für Events
+- [ ] **Stufe 5** Lektionen: „Didaktik: jedes Niveau abholen" · „Krisenmanagement
+  am Grill vor Gästen"
+- [ ] **Stufe 1** Ergänzungen: Kombi-Zone & 50/50-Methode · Grill-Aufsätze
+  (Wok/Dutch Oven/Pizzastein/Plancha) · Holzkohle steuern (Glutkörbe/Minion-Ring/Lüftung)
+- [ ] **Steak-Beichte-Doktrin** befüllen (`src/lib/steak-beichte/DOKTRIN.md`):
+  Bereiche 4, 7–15 noch offen (Hitze/Zonen, Salzen-Timing, Rubs, Kruste, Wenden,
+  Carryover, Räuchern, Spezial-Cuts, Ausrüstungsfehler, Fleischqualität)
+
+---
+
 ## 🎯 Mittelfristig (KW 24–26)
 
 - [ ] **GA4 Measurement Protocol** — `GA4_MEASUREMENT_ID` + `GA4_API_SECRET` in Netlify
@@ -51,6 +71,30 @@
 - [ ] **Google Search Console** — Indexierungsstatus prüfen nach Sitemap-Fix
 - [ ] **Vergleichsseiten** erweitern — `/vergleich/fleischthermometer` live stellen
 - [ ] Smoker-Kategorie zur Registry hinzufügen
+
+---
+
+## ✅ Erledigt (KW 23 — Diplom-System, Auth & Security)
+
+**Diplom-Grillmeister**
+- [x] Prüfungs-Gimmicks: Medaillen-Verleihung + Konfetti bei bestandener Prüfung
+- [x] Teilbare Badge-Card + Teilen-Button; optionaler Name (persönliche Urkunde)
+- [x] „Marco gratuliert persönlich" — kuratierte Glückwünsche je Stufe
+- [x] Phase B: Fortschritt-Sync server-seitig (cross-device) + öffentliche Profil-Seite
+- [x] Profil-Verwaltung `/diplome/profil`
+- [x] B2 E-Mail-Signatur-Badge + B3 LinkedIn-Zertifikat + Profil-Link
+- [x] „Plattform-Puls" — lebendige Content-Zahlen + „Frisch dazugekommen"
+- [x] Curriculum-Abgleich gegen 5-Säulen-Framework (`docs/diplom-curriculum-abgleich.md`)
+
+**Auth & Konten**
+- [x] Passwort-Login zusätzlich zum Magic-Link
+- [x] Auth-bewusster „Anmelden / Mein Konto"-Link im Header
+- [x] Magic-Link-Fehler sauber durchreichen + Redirect-Default gefixt
+
+**Datenbank & Security**
+- [x] Phase-B Migration: `course_progress` + `profiles` (RLS)
+- [x] GRANTs für `profiles` + `course_progress` (RLS-Tabellen)
+- [x] Security-Advisor-Härtung (search_path + revoke)
 
 ---
 

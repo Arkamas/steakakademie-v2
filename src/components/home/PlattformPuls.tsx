@@ -7,7 +7,9 @@ import type { PulsData } from '@/lib/plattform-puls';
 
 // Zählt von 0 auf target, sobald sichtbar (IntersectionObserver).
 function useCountUp(target: number, run: boolean, durationMs = 1100) {
-  const [val, setVal] = useState(0);
+  // Start auf target → Server-HTML/Crawler sehen die ECHTE Zahl (nicht 0).
+  // Beim Sichtbarwerden (run) animiert die Client-Version von 0 hoch.
+  const [val, setVal] = useState(target);
   useEffect(() => {
     if (!run) return;
     let raf = 0;

@@ -106,6 +106,10 @@ export interface Author {
   expertise: string[];
   statsLabel?: string; // "15+ Jahre Grillpraxis"
   linkedIn?: string;
+  jobTitle?: string;        // E-E-A-T: echte Rolle (z.B. "Gründer & Profi-Koch")
+  credential?: string;      // E-E-A-T: Qualifikation → schema hasCredential
+  sameAs?: string[];        // verifizierende Profile (Person)
+  realPerson?: boolean;     // echte Person (vs. Avatar-Persona)
 }
 
 // ── ARTICLE CARD ─────────────────────────────────────────────────────────────

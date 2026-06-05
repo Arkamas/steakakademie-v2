@@ -2,6 +2,18 @@ import type { Author } from '@/types';
 
 export const AUTHORS: Author[] = [
   {
+    name: 'Uwe Yendell',
+    slug: 'uwe-yendell',
+    avatar: '/images/uwe-yendell.png',
+    bio: 'Uwe Yendell ist Gründer der Steakakademie. Als gelernter Profi-Koch und Gastronom hat er jahrzehntelang an der Front gekocht — inklusive einer eigenen Eventküche. Dazu kommt eine zertifizierte Marketing-Ausbildung auf Master-Niveau und 20 Jahre als Sport- und Gymnastiklehrer. Diese Dreifach-Kompetenz — Küchenhandwerk, Marketing-Methodik und Coaching — prägt jede Entscheidung der Steakakademie. Uwe schreibt nicht als Theoretiker, sondern als krisenerprobter Praktiker, der weiß, wie Küchen, Fleisch und Menschen wirklich funktionieren.',
+    shortBio: 'Gründer der Steakakademie · Profi-Koch · zertifizierter Marketing-Manager.',
+    expertise: ['BBQ & Grillen', 'Fleischkunde & Cuts', 'Gastronomie-Praxis', 'Kerntemperaturen', 'Existenzgründung'],
+    statsLabel: 'Profi-Koch · zert. Marketing-Manager · 20 Jahre Trainer',
+    jobTitle: 'Gründer & Profi-Koch',
+    credential: 'Zertifizierter Marketing-Manager (Master-Niveau)',
+    realPerson: true,
+  },
+  {
     name: 'Marco',
     slug: 'marco',
     avatar: '/images/authors/marco.jpg',

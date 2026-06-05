@@ -35,7 +35,7 @@ export default function AutorPage({ params }: Props) {
   const authorArtikel = allArtikels.filter((a) => a.authorSlug === author.slug);
   const totalArticles = authorCuts.length + authorArtikel.length;
 
-  // Schema.org Person
+  // Schema.org Person (E-E-A-T: reicher für reale Autoren)
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Person',
@@ -43,13 +43,17 @@ export default function AutorPage({ params }: Props) {
     url: `https://steakakademie.de/autoren/${author.slug}`,
     image: `https://steakakademie.de${author.avatar}`,
     description: author.bio,
-    jobTitle: 'Autor',
+    jobTitle: author.jobTitle ?? 'Autor',
     worksFor: {
       '@type': 'Organization',
       name: 'Steakakademie',
       url: 'https://steakakademie.de',
     },
     knowsAbout: author.expertise,
+    ...(author.credential
+      ? { hasCredential: { '@type': 'EducationalOccupationalCredential', name: author.credential } }
+      : {}),
+    ...(author.sameAs && author.sameAs.length ? { sameAs: author.sameAs } : {}),
   };
 
   const breadcrumb = breadcrumbSchema([

@@ -72,15 +72,63 @@ function cutAnatomy(meat, slug) {
   return ''
 }
 
+// Nicht-Rind-Proteine: explizite ENGLISCHE Motiv-Anker → FLUX rendert das RICHTIGE Tier.
+// (Deutscher Alt-Text im englischen Prompt erzeugte sonst generische Braten = Huhn statt Ente.)
+// Spezifische Schlüssel ZUERST — der erste Teilstring-Treffer gewinnt.
+const PROTEIN_SUBJECT = {
+  'lammkarree':        'a grilled rack of lamb with frenched rib bones, a dark charred herb crust and a rosy-pink juicy interior',
+  'lammkeule':         'a whole roasted leg of lamb, charred herb crust outside, sliced to show a rosy-pink juicy interior',
+  'lammkotelett':      'several grilled lamb chops with charred fat edges and rosy-pink centres',
+  'lamm':              'grilled lamb with a dark charred herb crust and a rosy-pink juicy interior',
+  'haehnchenschenkel': 'grilled chicken legs and thighs with golden-brown crispy skin, juicy',
+  'hähnchenschenkel':  'grilled chicken legs and thighs with golden-brown crispy skin, juicy',
+  'haehnchen':         'a whole roast chicken with golden-brown crispy skin',
+  'hähnchen':          'a whole roast chicken with golden-brown crispy skin',
+  'chicken':           'a whole roast chicken with golden-brown crispy skin',
+  'ente':              'a whole roasted duck with crispy lacquered mahogany-brown skin, a plump rounded body and dark rich meat — clearly a DUCK, not a chicken',
+  'duck':              'a whole roasted duck with crispy lacquered mahogany-brown skin, a plump rounded body and dark rich meat — clearly a DUCK, not a chicken',
+  'gans':              'a whole roasted goose with deep golden-brown crispy skin and dark poultry meat',
+  'pute':              'a roasted turkey portion with golden-brown crispy skin and juicy meat',
+  'lachs':             'a grilled salmon fillet with flaky coral-pink flesh and crisp browned skin',
+  'salmon':            'a grilled salmon fillet with flaky coral-pink flesh and crisp browned skin',
+  'forelle':           'a whole grilled trout with crisp charred skin and moist white flaky flesh',
+  'thunfisch':         'a seared tuna steak with a dark crust and a deep-red rare centre',
+  'garnele':           'grilled prawns with lightly charred shells, juicy',
+  'fisch':             'a whole grilled fish with lightly charred crisp skin and moist flaky white flesh',
+  'presa':             'a grilled Iberico pork presa with a dark seared crust, fine marbling and a juicy just-cooked interior',
+  'pluma':             'a grilled Iberico pork pluma with a seared crust and a juicy just-cooked interior',
+  'secreto':           'a grilled Iberico pork secreto, a thin marbled cut, charred and juicy',
+  'carrillera':        'braised Iberico pork cheeks with a dark glossy glaze, fork-tender',
+  'schweineschulter':  'pulled pork from a slow-smoked pork shoulder, dark bark and shredded juicy strands',
+}
+
+function proteinSubject(meat, slug) {
+  const hay = `${meat} ${slug}`.toLowerCase()
+  for (const [k, v] of Object.entries(PROTEIN_SUBJECT)) if (hay.includes(k)) return v
+  return ''
+}
+
 // Bild-Prompt-Doktrin (siehe CLAUDE.md): KEINE Wörter wie "photorealistic"/"4K"/"8k"
 // (erzeugen den künstlichen Plastik-Look). Stattdessen Textur- + Kamera-Sprache und
 // der "sliced"-Trick. Klassifizierung wählt die richtige Fleisch-Doktrin.
-const STEAK_RE  = /\b(ribeye|rib-?eye|entrecote|entrecôte|t-?bone|tomahawk|porterhouse|rumpsteak|sirloin|striploin|roastbeef|picanha|wagyu|flank|onglet|hanger|rindersteak|beef steak|steak)\b/i
-const SMOKED_RE = /\b(brisket|pulled pork|spare ?ribs|baby ?back|ribs|rippchen|short ?rib|smoked|pastrami)\b/i
+const STEAK_RE   = /\b(ribeye|rib-?eye|entrecote|entrecôte|t-?bone|tomahawk|porterhouse|rumpsteak|sirloin|striploin|roastbeef|picanha|wagyu|flank|onglet|hanger|rindersteak|beef steak|steak)\b/i
+const SMOKED_RE  = /\b(brisket|pulled pork|spare ?ribs|baby ?back|ribs|rippchen|short ?rib|smoked|pastrami)\b/i
+const POULTRY_RE = /\b(ente|duck|gans|goose|h(?:ä|ae)hnchen|chicken|pute|turkey|geflügel|poultry)\b/i
+const FISH_RE    = /\b(lachs|salmon|forelle|trout|thunfisch|tuna|fisch|fish|dorade|wolfsbarsch|garnele|shrimp|prawn)\b/i
+const LAMB_RE    = /\b(lamm|lamb)\b/i
+const PORK_RE    = /\b(presa|pluma|secreto|carrillera|iberico|schweineschulter|pork)\b/i
 
 function styleClause(text) {
   if (SMOKED_RE.test(text))
     return 'cut into clean slices showing a dark, heavily seasoned bark crust and a vivid pink smoke ring, tender and juicy, resting on peach butcher paper'
+  if (POULTRY_RE.test(text))
+    return 'with crispy golden-brown skin and juicy, fully-cooked tender meat (NO pink centre, NO red meat)'
+  if (FISH_RE.test(text))
+    return 'with moist, flaky, tender flesh and lightly crisp charred skin (NO red meat, NO beef-pink centre)'
+  if (LAMB_RE.test(text))
+    return 'sliced to reveal a rosy-pink juicy interior under a dark charred herb crust'
+  if (PORK_RE.test(text))
+    return 'with a dark seared crust and a juicy, just-cooked interior, glistening with natural juices'
   if (STEAK_RE.test(text))
     return 'cut into clean thick slices revealing a smooth, juicy, evenly rosy medium-rare interior, dark caramelized seared crust, a few coarse sea salt flakes'
   return 'glistening with natural juices (not oily), lightly charred where grilled, fresh and appetizing'
@@ -105,13 +153,16 @@ function buildPrompt(raw, slug = '') {
   const meat   = fm(raw, 'meatType')
   const method = fm(raw, 'cookingMethod')
   const anatomy = cutAnatomy(meat, slug)
-  // Anatomie führt (korrekter Cut!), sonst Fallback auf Alt/Titel.
-  const subject = anatomy
-    ? `${anatomy}${method ? `, ${method}` : ''}`
+  const protein = anatomy ? '' : proteinSubject(meat, slug)
+  const lead = anatomy || protein
+  // Explizites Motiv führt (korrekter Cut / korrektes Tier!), sonst Fallback auf Alt/Titel.
+  const subject = lead
+    ? `${lead}${method ? `, ${method}` : ''}`
     : [alt, meat && `(${meat})`, method].filter(Boolean).join(', ')
   const clause = styleClause(`${meat} ${slug} ${alt}`)
   return `appetizing professional food photograph of ${subject}, the whole dish in frame, `
     + (anatomy ? `anatomically accurate cut of meat, ` : ``)
+    + (protein ? `the dish must clearly and unmistakably show exactly this animal, ` : ``)
     + `${clause}, `
     + `plated on a rustic warm wooden board, soft warm natural daylight, a subtle grill and glowing ember atmosphere softly blurred in the background, a little fresh herb garnish, clean and appetizing, subtle steam, `
     + `${pickPerspective(slug || alt)}, `
@@ -122,7 +173,14 @@ function buildPrompt(raw, slug = '') {
 const FOODSTYLE_LORA = process.env.FAL_LORA_FOODSTYLE
   || 'https://v3b.fal.media/files/b/0a9cfb28/4f5c21hz9uGU5ia2PWRnR_pytorch_lora_weights.safetensors'
 
-async function generate(prompt) {
+// Die LoRA ist auf RIND trainiert → bei Geflügel/Fisch zieht sie das Motiv Richtung
+// Fleisch/Huhn. Dort Stil-Stärke senken (Stil bleibt, korrektes Tier gewinnt).
+function loraScale(raw, slug) {
+  const t = `${fm(raw, 'meatType')} ${slug} ${fm(raw, 'imageAlt') || fm(raw, 'title')}`
+  return (POULTRY_RE.test(t) || FISH_RE.test(t)) ? 0.55 : 0.9
+}
+
+async function generate(prompt, scale = 0.9) {
   const res = await fetch('https://fal.run/fal-ai/flux-lora', {
     method: 'POST',
     headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json' },
@@ -131,7 +189,7 @@ async function generate(prompt) {
       image_size: 'landscape_4_3',
       num_images: 1,
       enable_safety_checker: true,
-      loras: [{ path: FOODSTYLE_LORA, scale: 0.9 }],
+      loras: [{ path: FOODSTYLE_LORA, scale }],
     }),
   })
   if (!res.ok) throw new Error(`fal ${res.status}: ${(await res.text()).slice(0, 160)}`)
@@ -166,7 +224,7 @@ async function main() {
 
     try {
       process.stdout.write(c.d(`◇ ${slug} … `))
-      const buf = await generate(prompt)
+      const buf = await generate(prompt, loraScale(raw, slug))
       await writeFile(target, buf)
       // image:-Feld patchen (regex, KEIN Re-Serialize → contentlayer-safe)
       const patched = raw.match(/^image:\s*.*$/m)

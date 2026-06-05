@@ -3,6 +3,10 @@ import Link from 'next/link';
 import { ChevronRight, Lock, BarChart3, Globe, ShieldCheck } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import BuyButton from '@/components/checkout/BuyButton';
+import DigistoreCart from '@/components/checkout/DigistoreCart';
+import CartLink from '@/components/checkout/CartLink';
+import { getDs24Id } from '@/lib/digistore';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
@@ -233,20 +237,26 @@ export default async function SteuerMatrixPage() {
                     Einmaliger Kauf — danach unbegrenzter Zugang zum interaktiven Rechner
                     mit allen 23 Ländern und künftigen Updates.
                   </p>
-                  <a
-                    href="#kaufen"
+                  <BuyButton
+                    slug="steuer-matrix"
                     id="kaufen"
                     className="inline-flex items-center gap-2 bg-brand-gold text-surface-dark font-sans font-bold text-sm px-6 py-3 hover:bg-brand-gold/90 transition-colors"
                   >
                     {price
-                      ? `${new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 }).format(price)} — Jetzt kaufen`
-                      : 'Jetzt kaufen'
+                      ? `${new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 }).format(price)} — In den Warenkorb`
+                      : 'In den Warenkorb'
                     }
                     <ChevronRight size={16} />
-                  </a>
+                  </BuyButton>
                   <p className="mt-4 text-[11px] font-sans text-text-muted">
                     Zahlung via Digistore24 · SEPA, Klarna, PayPal · Sofortzugang
                   </p>
+                  {getDs24Id('steuer-matrix') && (
+                    <>
+                      <DigistoreCart />
+                      <div className="mt-3 flex justify-center"><CartLink /></div>
+                    </>
+                  )}
                 </div>
               </div>
             )}

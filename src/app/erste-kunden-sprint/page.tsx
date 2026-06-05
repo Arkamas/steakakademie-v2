@@ -7,6 +7,10 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import BuyButton from '@/components/checkout/BuyButton';
+import DigistoreCart from '@/components/checkout/DigistoreCart';
+import CartLink from '@/components/checkout/CartLink';
+import { getDs24Id } from '@/lib/digistore';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
@@ -373,17 +377,23 @@ export default async function ErsteKundenSprintPage() {
                 </div>
                 <div className="shrink-0">
                   {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
-                  <a
-                    href="#kaufen"
+                  <BuyButton
+                    slug="erste-kunden-sprint"
                     className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
                     style={{ background: '#C8882A', color: '#0D0A06' }}
                   >
                     {price ? `${eur(price)} — Jetzt kaufen` : 'Jetzt kaufen'}
                     <ArrowRight size={16} />
-                  </a>
+                  </BuyButton>
                   <p className="text-center text-[10px] font-sans text-text-muted mt-2">
                     Zahlungsabwicklung: Digistore24 · SEPA, PayPal, Kreditkarte
                   </p>
+                  {getDs24Id('erste-kunden-sprint') && (
+                    <>
+                      <DigistoreCart />
+                      <div className="mt-2 flex justify-center"><CartLink /></div>
+                    </>
+                  )}
                 </div>
               </div>
 

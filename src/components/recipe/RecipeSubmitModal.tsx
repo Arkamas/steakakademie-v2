@@ -54,6 +54,9 @@ const RezeptSchema = z.object({
   schritte: z.array(SchrittSchema).min(1, {
     message: 'Führe uns Schritt für Schritt — mindestens einer ist Pflicht.',
   }),
+  einwilligung: z.literal(true, {
+    errorMap: () => ({ message: 'Bitte bestätige die Rechte- und Datenschutz-Hinweise, um einzureichen.' }),
+  }),
 });
 
 type FieldErrors = Partial<Record<string, string>>;
@@ -67,6 +70,7 @@ const INITIAL: {
   zubereitungszeit: string;
   zutaten: { menge: string; einheit: Einheit; name: string }[];
   schritte: { beschreibung: string }[];
+  einwilligung: boolean;
 } = {
   titel:            '',
   beschreibung:     '',
@@ -74,6 +78,7 @@ const INITIAL: {
   zubereitungszeit: '',
   zutaten:  [{ menge: '', einheit: 'g', name: '' }],
   schritte: [{ beschreibung: '' }],
+  einwilligung: false,
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -570,6 +575,37 @@ export default function RecipeSubmitModal() {
                         <Plus size={13} />
                         Schritt hinzufügen
                       </button>
+
+                      {/* ── Bereich D — Rechte & Datenschutz (Pflicht) ── */}
+                      <SectionHeader label="Bereich D" sub="Rechte & Veröffentlichung" />
+
+                      <div id="field-einwilligung" className="bg-surface-elevated border border-border-subtle p-4">
+                        <label className="flex items-start gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={form.einwilligung}
+                            onChange={e => setField('einwilligung', e.target.checked)}
+                            className="mt-0.5 h-4 w-4 shrink-0 accent-brand-gold cursor-pointer"
+                          />
+                          <span className="text-xs font-body text-text-secondary leading-relaxed">
+                            Ich bestätige, dass dieses Rezept von mir stammt bzw. ich die nötigen
+                            Rechte daran habe und keine fremden Rechte verletze. Ich räume der
+                            Steakakademie das Recht ein, es (samt automatisch generiertem KI-Bild)
+                            kostenlos und dauerhaft auf der Plattform zu veröffentlichen, und willige
+                            ein, dass mein gewählter Anzeigename als Autor angezeigt wird. Es besteht
+                            kein Vergütungsanspruch; eine Entfernung kann ich jederzeit per E-Mail
+                            verlangen. Details:{' '}
+                            <a href="/agb#community" target="_blank" rel="noopener noreferrer" className="text-brand-gold hover:underline">AGB § 13</a>
+                            {' '}·{' '}
+                            <a href="/datenschutz#community" target="_blank" rel="noopener noreferrer" className="text-brand-gold hover:underline">Datenschutz</a>.
+                          </span>
+                        </label>
+                        {errors.einwilligung && <p className={`${errorCls} mt-2`}>{errors.einwilligung}</p>}
+                        <p className="mt-3 text-[10px] font-sans text-text-muted leading-relaxed">
+                          Hinweis: Jede Einreichung wird automatisiert durch ein KI-System geprüft.
+                          Bitte gib keine personenbezogenen Daten Dritter (Klarnamen, Adressen) in das Rezept ein.
+                        </p>
+                      </div>
 
                       {/* Unterer Abstand im Scroll-Bereich */}
                       <div className="h-4" />

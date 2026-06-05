@@ -261,6 +261,72 @@ export default function DatenschutzPage() {
               </p>
             </section>
 
+            <section id="community" className="scroll-mt-24">
+              <h2 className={h2Class}>10a. Community-Rezepte (nutzergenerierte Inhalte)</h2>
+              <p className="mb-3">
+                Eingeloggte Nutzer können eigene Rezepte einreichen. Bei einer Einreichung
+                verarbeiten wir folgende Daten:
+              </p>
+              <ul className="list-disc pl-5 space-y-2 mb-3">
+                <li>
+                  <strong className="text-text-primary">Rezeptinhalt</strong> (Titel, Beschreibung,
+                  Zutaten, Zubereitungsschritte) sowie die <strong className="text-text-primary">Konto-ID</strong>{' '}
+                  des Einreichers (intern, zur Zuordnung).
+                </li>
+                <li>
+                  <strong className="text-text-primary">Anzeigename:</strong> Nur ein von dir selbst
+                  im Profil gesetzter Anzeigename wird öffentlich als Autor angezeigt. Es wird kein
+                  aus deiner E-Mail-Adresse abgeleiteter Name veröffentlicht; ohne Anzeigenamen
+                  erfolgt die Anzeige unter einer neutralen Bezeichnung.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Automatisierte KI-Prüfung:</strong> Der
+                  Rezeptinhalt wird zur Qualitäts- und Sicherheitsprüfung an Anthropic PBC
+                  (548 Market Street, San Francisco, CA 94104, USA) übermittelt
+                  (Auftragsverarbeiter, Art.&nbsp;28 DSGVO). Es findet keine vollautomatisierte
+                  Entscheidung mit rechtlicher Wirkung i.&nbsp;S.&nbsp;v. Art.&nbsp;22 DSGVO statt;
+                  eine redaktionelle Prüfung ist möglich.
+                </li>
+                <li>
+                  <strong className="text-text-primary">KI-Bildgenerierung (fal.ai):</strong> Für
+                  freigegebene Rezepte kann ein KI-Symbolbild erzeugt werden. Dazu werden
+                  Rezeptangaben (Titel, Beschreibung, Zutaten) an die Features &amp; Labels, Inc.
+                  („fal.ai", San Francisco, USA) übermittelt (Auftragsverarbeiter, Art.&nbsp;28
+                  DSGVO). Es werden hierbei keine Nutzer-Stammdaten oder dein Name übertragen. Das
+                  erzeugte Bild wird im öffentlichen Speicher von Supabase (EU-Rechenzentrum
+                  Frankfurt) abgelegt und ist als KI-Symbolbild gekennzeichnet.
+                </li>
+              </ul>
+              <p className="mb-3">
+                <strong className="text-text-primary">Drittlandübermittlung:</strong> USA — auf
+                Grundlage der EU-Standardvertragsklauseln (SCC, Art.&nbsp;46 Abs.&nbsp;2 lit.&nbsp;c DSGVO).
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Rechtsgrundlage:</strong> Art.&nbsp;6 Abs.&nbsp;1
+                lit.&nbsp;a DSGVO (Einwilligung in die Veröffentlichung des Rezepts und des
+                Anzeigenamens, erteilt im Einreichungsformular) sowie Art.&nbsp;6 Abs.&nbsp;1
+                lit.&nbsp;f DSGVO (berechtigtes Interesse an Qualitäts-/Missbrauchsprüfung und
+                Bereitstellung der Community-Funktion).
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Veröffentlichte
+                Rezepte bleiben gespeichert, bis du ihre Löschung verlangst oder dein Konto gelöscht
+                wird. Abgelehnte Einreichungen werden zur Missbrauchsvermeidung befristet vorgehalten
+                und anschließend gelöscht.
+              </p>
+              <p>
+                Du kannst die Löschung eines veröffentlichten Rezepts und die zugehörige
+                Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen — per E-Mail an{' '}
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>.
+                Anbieter-Datenschutz:{' '}
+                <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>anthropic.com/privacy</a>
+                {' '}·{' '}
+                <a href="https://fal.ai/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className={linkClass}>fal.ai/legal/privacy-policy</a>
+                {' '}·{' '}
+                <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>supabase.com/privacy</a>
+              </p>
+            </section>
+
             <section>
               <h2 className={h2Class}>11. Cookies & lokale Speicherung</h2>
               <p className="mb-3">

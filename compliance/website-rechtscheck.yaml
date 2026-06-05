@@ -16,11 +16,11 @@
 #   rechtsgrundlage
 #   status     : ok | fix-needed | not-applicable | monitor
 #   befund     : aktueller Stand steakakademie.de (Stand 02.06.2026)
-# Letzte Aktualisierung: 2026-06-02
+# Letzte Aktualisierung: 2026-06-05
 
-version: 1
+version: 2
 geprueftesObjekt: "https://www.steakakademie.de/"
-standComponents: "2026-06-02"
+standComponents: "2026-06-05"
 
 komponenten:
   - id: domain-kennzeichenrecht
@@ -47,7 +47,7 @@ komponenten:
     pruefung: "Nutzungsrechte aller Texte/Bilder; KI-/Eigenbilder kennzeichnen; keine Fremdfotos ohne Lizenz"
     rechtsgrundlage: "UrhG §§ 2, 19a, 72"
     status: ok
-    befund: "Eigen-/KI-Bilder; Symbolbild-Badge vorhanden. Affiliate-Produktbilder via PA-API/Hersteller."
+    befund: "Eigen-/KI-Bilder; Symbolbild-Badge vorhanden. Affiliate-Produktbilder via PA-API/Hersteller. BEHOBEN 05.06.2026: KI-generierte Community-Rezeptbilder (fal.ai FLUX) tragen jetzt sichtbares 'KI-Symbolbild'-Badge (Liste + Detail) + Fußnoten-Hinweis (§5 UWG, EU-AI-Act Art. 50)."
 
   - id: impressum-ddg
     titel: "Impressum nach § 5 DDG (Erreichbarkeit 2-Klick)"
@@ -144,7 +144,7 @@ komponenten:
     pruefung: "Alle AV-Dienstleister benannt (Hosting, CDN, DB, KI, Mail)"
     rechtsgrundlage: "Art. 13 Abs. 1 lit. e, Art. 28 DSGVO"
     status: ok
-    befund: "Netlify (§3), Cloudflare (§4), Supabase (§8 Art.28), Anthropic (§10 Art.28), Loops, Digistore24 benannt."
+    befund: "Netlify (§3), Cloudflare (§4), Supabase (§8 Art.28), Anthropic (§10 Art.28), Loops, Digistore24 benannt. BEHOBEN 05.06.2026: fal.ai (Features & Labels, Inc., USA — Bild-KI) + Community-Rezept-Verarbeitung in DSE §10a ergänzt (Art.28, SCC)."
 
   - id: dse-zahlungsdienstleister
     titel: "DSE: Zahlungsdienstleister"
@@ -208,3 +208,13 @@ komponenten:
     pruefung: "Änderungen DSGVO, TDDDG, EU AI Act, DDG, Verbraucherrecht; Steuerrecht (Steuer-Matrix)"
     rechtsgrundlage: "—"
     status: monitor
+
+  # ── Neu 05.06.2026: Community-Rezepte (User-Generated Content) ──
+  - id: ugc-community-rezepte
+    titel: "Nutzergenerierte Inhalte (Community-Rezepte) — Rechte, Einwilligung, Haftung"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "Rechteeinräumung + Rechte-Zusicherung + Freistellung bei UGC; Einwilligung zur Anzeige des Autorennamens; keine PII-Veröffentlichung ohne Einwilligung; Host-Privileg §§7ff DDG; KI-Bild-/KI-Prüf-Hinweis; AGB-/DSE-Verweis am Einreichpunkt"
+    rechtsgrundlage: "UrhG § 31; DSGVO Art. 6 Abs. 1 lit. a/f, Art. 13; §§ 7 ff. DDG; § 5 UWG; EU-AI-Act Art. 50"
+    status: ok
+    befund: "BEHOBEN 05.06.2026: Pflicht-Einwilligungs-Checkbox im Einreich-Modal (Rechteeinräumung + Namens-Einwilligung, Links AGB/DSE), Backend erzwingt einwilligung=true (z.literal). Kein E-Mail-Lokalteil mehr als Autorname (Default neutral 'Pitmaster'). AGB §13 (UGC: Rechte, Moderation, Freistellung, Host-Privileg) + DSE §10a (Anthropic-Moderation, fal.ai-Bild, Supabase-Storage, Speicherdauer, Widerruf) ergänzt."

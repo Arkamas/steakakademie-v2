@@ -29,6 +29,9 @@ export const maxDuration = 60;
 const EINHEITEN = ['g', 'kg', 'ml', 'l', 'EL', 'TL', 'Stück', 'Bund', 'Prise', 'Msp.'] as const;
 
 const InputSchema = z.object({
+  // Rechte-/Datenschutz-Gate: ohne aktive Bestätigung keine Veröffentlichung.
+  // (Nutzungsrechte-Einräumung + Einwilligung zur Anzeige des Autorennamens, UrhG § 31, DSGVO Art. 6 Abs. 1 lit. a)
+  einwilligung: z.literal(true),
   titel: z.string().min(3).max(70),
   beschreibung: z.string().min(20).max(200),
   portionen: z.string().min(1).max(20),
@@ -125,8 +128,10 @@ export async function POST(req: Request) {
     status = 'rejected';
   }
 
-  // Autor-Name (für Hall of Fame): Profil-Anzeigename > E-Mail-Lokalteil
-  let authorName = user.email?.split('@')[0] ?? 'Pitmaster';
+  // Autor-Name (für Hall of Fame): NUR der selbst gesetzte Profil-Anzeigename wird
+  // öffentlich gezeigt. Kein Fallback auf den E-Mail-Lokalteil — der kann den Klarnamen
+  // enthalten und würde sonst ohne Einwilligung veröffentlicht (DSGVO Art. 5 Datenminimierung).
+  let authorName = 'Pitmaster';
   const { data: profile } = await admin
     .from('profiles')
     .select('display_name')

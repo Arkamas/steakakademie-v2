@@ -28,7 +28,7 @@ export default function AgbPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             Allgemeine Geschäftsbedingungen
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Mai 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -236,8 +236,62 @@ export default function AgbPage() {
               </p>
             </section>
 
+            <section id="community" className="scroll-mt-24">
+              <h2 className={h2Class}>§ 13 Community-Rezepte &amp; nutzergenerierte Inhalte</h2>
+              <p className="mb-3">
+                Eingeloggte Nutzer können eigene Rezepte einreichen, die nach automatisierter
+                Prüfung auf steakakademie.de veröffentlicht werden können. Für diese Inhalte gilt:
+              </p>
+              <ul className="list-disc pl-5 space-y-2 mb-3">
+                <li>
+                  <strong className="text-text-primary">Zusicherung der Rechte:</strong> Du sicherst
+                  zu, dass das eingereichte Rezept von dir stammt bzw. du über alle erforderlichen
+                  Rechte verfügst und keine Rechte Dritter (Urheber-, Marken-, Persönlichkeits- oder
+                  sonstige Rechte) verletzt. Es dürfen keine personenbezogenen Daten Dritter
+                  enthalten sein.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Nutzungsrechtseinräumung:</strong> Mit der
+                  Einreichung räumst du uns ein einfaches, räumlich und zeitlich unbeschränktes,
+                  unentgeltliches Nutzungsrecht ein, das Rezept sowie ein dazu automatisch
+                  generiertes KI-Bild auf der Plattform und in damit verbundenen Kanälen zu
+                  speichern, zu bearbeiten (z.&nbsp;B. redaktionelle Anpassung, Kürzung), öffentlich
+                  zugänglich zu machen und zu bewerben. Ein Vergütungsanspruch besteht nicht.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Autoren-Anzeige:</strong> Sofern du einen
+                  Anzeigenamen gesetzt hast, wird dieser als Autor angezeigt. Ohne Anzeigenamen
+                  erfolgt die Veröffentlichung unter einer neutralen Bezeichnung.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Moderation &amp; Entfernung:</strong> Wir
+                  prüfen Einreichungen automatisiert (KI) und behalten uns vor, Inhalte ohne
+                  Angabe von Gründen abzulehnen, zu bearbeiten oder zu entfernen. Du kannst die
+                  Löschung deines veröffentlichten Rezepts jederzeit per E-Mail an{' '}
+                  <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>{' '}
+                  verlangen.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Verantwortlichkeit:</strong> Für eingereichte
+                  Inhalte ist der jeweilige Nutzer verantwortlich. Wir machen uns nutzergenerierte
+                  Inhalte nicht zu eigen und haften nach den §§ 7&nbsp;ff. DDG erst ab Kenntnis einer
+                  konkreten Rechtsverletzung; bei Hinweisen entfernen wir betroffene Inhalte
+                  unverzüglich.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Freistellung:</strong> Verletzt ein von dir
+                  eingereichter Inhalt schuldhaft Rechte Dritter, stellst du uns von berechtigten
+                  Ansprüchen Dritter frei, die hieraus entstehen.
+                </li>
+              </ul>
+              <p>
+                Hinweise zur Datenverarbeitung bei Community-Rezepten findest du in der{' '}
+                <Link href="/datenschutz#community" className={linkClass}>Datenschutzerklärung</Link>.
+              </p>
+            </section>
+
             <section>
-              <h2 className={h2Class}>§ 12 Anwendbares Recht</h2>
+              <h2 className={h2Class}>§ 14 Anwendbares Recht</h2>
               <p>
                 Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand ist
                 Wuppertal, sofern du Kaufmann oder juristische Person des öffentlichen

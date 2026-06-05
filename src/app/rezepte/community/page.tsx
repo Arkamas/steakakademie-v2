@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight, ChefHat, Clock, Users, Award } from 'lucide-react';
+import { ChevronRight, ChefHat, Clock, Users, Award, Sparkles } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
@@ -78,7 +78,13 @@ export default async function CommunityIndexPage() {
                   className="group block border border-border-subtle bg-surface-elevated hover:border-brand-gold/40 transition-colors overflow-hidden">
                   <div className="relative aspect-[16/10] bg-surface-dark">
                     {r.image_url ? (
-                      <Image src={r.image_url} alt={r.title} fill sizes="(max-width: 768px) 100vw, 360px" className="object-cover" unoptimized />
+                      <>
+                        <Image src={r.image_url} alt={`${r.title} — KI-generiertes Symbolbild`} fill sizes="(max-width: 768px) 100vw, 360px" className="object-cover" unoptimized />
+                        {/* KI-Kennzeichnung (EU-AI-Act Art. 50 / § 5 UWG) */}
+                        <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 text-[9px] font-sans font-bold tracking-[0.1em] uppercase px-1.5 py-0.5 bg-black/65 backdrop-blur-sm border border-white/15 text-zinc-200">
+                          <Sparkles size={9} /> KI-Symbolbild
+                        </span>
+                      </>
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
                         <ChefHat size={32} className="text-brand-gold/30" />

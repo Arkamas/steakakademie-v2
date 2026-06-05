@@ -29,10 +29,6 @@
 
 ## 📋 Diese Woche (KW 22–23)
 
-### Content
-- [ ] **Ribeye Pillar Page** `/cuts/ribeye` — P0, 18.000 Suchanfragen/Monat
-- [ ] **Autoren-Profile** `/autoren/marco`, `/autoren/jonas`, `/autoren/elena`
-
 ### Produktbilder
 - [ ] Hersteller kontaktieren: **Beefer**, **DRY AGER**, **Kamado Joe**, **Weber**, **KitchenAid**
 - [ ] Anfrage-Vorlage schreiben (Lizenzfrei für redaktionellen Einsatz)
@@ -46,20 +42,17 @@
 ## 🎓 Diplom-Grillmeister — offene Folge-Arbeit
 
 > Curriculum-Abgleich gegen 5-Säulen-Framework erledigt (siehe
-> `docs/diplom-curriculum-abgleich.md`). Kompetenzen sind eingepflegt — es fehlen
-> noch die ausformulierten **MDX-Lektionstexte** (bisher nur Stufe 1, 7 Stück).
+> `docs/diplom-curriculum-abgleich.md`). **Alle 5 Stufen sind mit je 7
+> MDX-Lektionen ausgeschrieben (35 Lektionen total).** Offen sind nur noch:
 
-- [ ] **Stufe 2** Lektionen: „Schweine-Zuschnitte: Boston Butt & St. Louis Ribs"
-- [ ] **Stufe 3** Lektionen: „Zeitmanagement: ein Menü synchron fertigstellen"
-- [ ] **Stufe 4** Lektionen: Gerätekunde Gas · Smart Grilling (Pellet digital) ·
-  Mopping & sauberer Rauch (Creosote) · Kühlketten-Logistik für Events
-- [ ] **Stufe 5** Lektionen: „Didaktik: jedes Niveau abholen" · „Krisenmanagement
-  am Grill vor Gästen"
-- [ ] **Stufe 1** Ergänzungen: Kombi-Zone & 50/50-Methode · Grill-Aufsätze
-  (Wok/Dutch Oven/Pizzastein/Plancha) · Holzkohle steuern (Glutkörbe/Minion-Ring/Lüftung)
+- [ ] **Stufe-1-Ergänzungslektionen** (aus Curriculum-Abgleich, brauchen
+  gemeinsame Planung nach Regel 8b vor dem Schreiben): „Kombi-Zone &
+  50/50-Methode" · „Grill-Aufsätze: Wok/Dutch Oven/Pizzastein/Plancha" ·
+  „Holzkohle steuern: Glutkörbe/Minion-Ring/Lüftung"
 - [ ] **Steak-Beichte-Doktrin** befüllen (`src/lib/steak-beichte/DOKTRIN.md`):
   Bereiche 4, 7–15 noch offen (Hitze/Zonen, Salzen-Timing, Rubs, Kruste, Wenden,
-  Carryover, Räuchern, Spezial-Cuts, Ausrüstungsfehler, Fleischqualität)
+  Carryover, Räuchern, Spezial-Cuts, Ausrüstungsfehler, Fleischqualität).
+  ⚠️ Nur mit **eigenem geprüftem Fachwissen** (Workflow lt. DOKTRIN.md) — nicht autonom.
 
 ---
 
@@ -69,8 +62,8 @@
 - [ ] **Güde Solingen** — Kontakt wegen Affiliate/Partnerschaft (`info@guede.com`)
   - Kein öffentliches Affiliate-Programm bekannt → direkte Anfrage nötig
 - [ ] **Google Search Console** — Indexierungsstatus prüfen nach Sitemap-Fix
-- [ ] **Vergleichsseiten** erweitern — `/vergleich/fleischthermometer` live stellen
-- [ ] Smoker-Kategorie zur Registry hinzufügen
+- [ ] **Smoker-Kategorie** zur Registry hinzufügen — braucht echte Produktdaten
+  (ASIN/Preis/Affiliate-URL) → hängt an Affiliate-Anmeldungen, daher (noch) nicht autonom
 
 ---
 
@@ -95,6 +88,12 @@
 - [x] Phase-B Migration: `course_progress` + `profiles` (RLS)
 - [x] GRANTs für `profiles` + `course_progress` (RLS-Tabellen)
 - [x] Security-Advisor-Härtung (search_path + revoke)
+
+**Content (waren fälschlich noch als offen gelistet — sind fertig)**
+- [x] **Ribeye Pillar Page** `/cuts/ribeye` (P0) — vollständiger Guide live
+- [x] **Autoren-Profile** Marco/Jonas/Elena (`src/lib/authors.ts` + `/autoren/[slug]`)
+- [x] **Diplom-Lektionen** alle 5 Stufen × 7 = **35 MDX-Lektionen** ausgeschrieben
+- [x] **Vergleichsseite** `/vergleich/fleischthermometer` (+ `premium-fleischthermometer`)
 
 ---
 

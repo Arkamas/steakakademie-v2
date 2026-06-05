@@ -12,12 +12,12 @@
 # sondern müssen je Kundensite einzeln bewertet werden.
 #
 # status je Kunde: open | ok | fix-needed | not-applicable
-# Letzte Aktualisierung: 2026-06-02
+# Letzte Aktualisierung: 2026-06-05
 
-version: 1
+version: 2
 zweck: "Rechts-Check-Modul des Gründung-Sprint (Produkt F)"
 hinweis: "Keine Rechtsberatung — strukturierte Vorprüfung. Bei Unsicherheit Anwalt (Kunde hat ggf. Rechtsschutz)."
-standComponents: "2026-06-02"
+standComponents: "2026-06-05"
 
 # Reihenfolge = Abarbeitung im Sprint
 komponenten:
@@ -143,4 +143,14 @@ komponenten:
     pruefung: "Keine extern nachladenden Google-Fonts"
     rechtsgrundlage: "LG München 3 O 17493/20"
     sprint-aktion: "next/font o. lokale Einbindung → kein externer Request."
+    status: open
+
+  # ── Neu 05.06.2026: nur relevant, wenn die Kundensite nutzergenerierte
+  #    Inhalte (Bewertungen, Kommentare, Uploads, Community-Beiträge) ODER
+  #    KI-generierte Bilder/Texte zeigt. Sonst not-applicable. ──
+  - id: ugc-und-ki-inhalte
+    titel: "Nutzergenerierte Inhalte (UGC) & KI-generierte Medien"
+    pruefung: "Bei UGC: Rechteeinräumung + Rechte-Zusicherung + Freistellung in AGB; Einwilligung zur Anzeige von Namen/Profil (keine PII-Veröffentlichung ohne Einwilligung); Host-Privileg §§7ff DDG + Melde-/Löschweg. Bei KI-Medien: sichtbare Kennzeichnung KI-erzeugter Bilder/Texte; eingesetzte KI-Dienste als AV in DSE benennen (Art.28/SCC)."
+    rechtsgrundlage: "UrhG § 31; DSGVO Art. 6 Abs. 1 lit. a/f, Art. 13, Art. 28; §§ 7 ff. DDG; § 5 UWG; EU-AI-Act Art. 50"
+    sprint-aktion: "Falls UGC: Einwilligungs-Checkbox am Einreichpunkt (Rechteeinräumung + Namens-Einwilligung, Link AGB/DSE) + AGB-§ UGC + Backend erzwingt Einwilligung; kein E-Mail-Lokalteil als öffentlicher Name. Falls KI-Bilder/-Texte: sichtbares 'KI'-/'KI-Symbolbild'-Badge + KI-Dienst in DSE. Vorlage: Steakakademie AGB §13 / DSE §10a (Self-Audit, Commit fec7e95)."
     status: open

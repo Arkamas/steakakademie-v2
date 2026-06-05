@@ -8,14 +8,14 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Steak-Beichte â€” KI-Diagnose fÃ¼r dein Grill-Problem | Steakakademie',
+  title: 'Steak-Beichte — KI-Diagnose für dein Grill-Problem | Steakakademie',
   description:
-    'Beschreibe was schiefgelaufen ist â€” du bekommst die genaue Ursache und ein Korrektur-Protokoll fÃ¼r das nÃ¤chste Mal. Kein Forum, kein Raten, keine allgemeinen Tipps.',
+    'Beschreibe was schiefgelaufen ist — du bekommst die genaue Ursache und ein Korrektur-Protokoll für das nächste Mal. Kein Forum, kein Raten, keine allgemeinen Tipps.',
   alternates: { canonical: 'https://steakakademie.de/steak-beichte' },
   openGraph: {
-    title: 'Steak-Beichte â€” KI-Diagnose fÃ¼r dein Grill-Problem',
+    title: 'Steak-Beichte — KI-Diagnose für dein Grill-Problem',
     description:
-      'Zu trocken, Kruste falsch, innen roh? Beschreibe dein Ergebnis â€” KI-Analyse liefert Ursache + Korrektur-Protokoll. Pro Diagnose oder als 5er-Pack.',
+      'Zu trocken, Kruste falsch, innen roh? Beschreibe dein Ergebnis — KI-Analyse liefert Ursache + Korrektur-Protokoll. Pro Diagnose oder als 5er-Pack.',
     url: 'https://steakakademie.de/steak-beichte',
     type: 'website',
   },
@@ -26,62 +26,62 @@ const STEPS = [
     Icon: Camera,
     step: '01',
     title: 'Beschreibe dein Problem',
-    desc: 'Was hast du gegrillt, wie vorbereitet, was ist passiert? Foto optional, aber hilfreich. Je konkreter, desto prÃ¤ziser die Diagnose.',
+    desc: 'Was hast du gegrillt, wie vorbereitet, was ist passiert? Foto optional, aber hilfreich. Je konkreter, desto präziser die Diagnose.',
   },
   {
     Icon: Zap,
     step: '02',
     title: 'KI analysiert',
-    desc: 'Claude Vision kombiniert deine Beschreibung mit dem Bild und gleicht es gegen bekannte Fehlerursachen ab. Keine allgemeinen Tipps â€” prÃ¤zise Ursachenforschung.',
+    desc: 'Claude Vision kombiniert deine Beschreibung mit dem Bild und gleicht es gegen bekannte Fehlerursachen ab. Keine allgemeinen Tipps — präzise Ursachenforschung.',
   },
   {
     Icon: FileSearch,
     step: '03',
     title: 'Diagnose in deinem Postfach',
-    desc: 'Du bekommst: die Ursache, warum es passiert ist, und die 2â€“3 konkreten Ã„nderungen die das nÃ¤chste Mal den Unterschied machen.',
+    desc: 'Du bekommst: die Ursache, warum es passiert ist, und die 2–3 konkreten Änderungen die das nächste Mal den Unterschied machen.',
   },
 ];
 
 const REPORT_ITEMS = [
-  { label: 'Ursachen-Analyse', desc: 'Was genau schiefgelaufen ist â€” technisch prÃ¤zise, nicht beschÃ¶nigt' },
+  { label: 'Ursachen-Analyse', desc: 'Was genau schiefgelaufen ist — technisch präzise, nicht beschönigt' },
   { label: 'Fehler-Einordnung', desc: 'Ob es ein Temperatur-, Timing-, Technik- oder Vorbereitung-Problem ist' },
-  { label: 'Korrektur-Protokoll', desc: 'Die 2â€“3 konkreten Ã„nderungen fÃ¼r das nÃ¤chste Mal â€” in der richtigen Reihenfolge' },
-  { label: 'NÃ¤chste-Session-Plan', desc: 'Wie du das nÃ¤chste Mal vorgehst um denselben Fehler auszuschlieÃŸen' },
+  { label: 'Korrektur-Protokoll', desc: 'Die 2–3 konkreten Änderungen für das nächste Mal — in der richtigen Reihenfolge' },
+  { label: 'Nächste-Session-Plan', desc: 'Wie du das nächste Mal vorgehst um denselben Fehler auszuschließen' },
 ];
 
 const PROBLEMS = [
-  'AuÃŸen verbrannt, innen roh',
-  'Fleisch zu trocken / zÃ¤h',
+  'Außen verbrannt, innen roh',
+  'Fleisch zu trocken / zäh',
   'Kruste bildet sich nicht',
-  'UngleichmÃ¤ÃŸige Garung',
+  'Ungleichmäßige Garung',
   'Geschmack flach oder bitter',
   'Rub haftet nicht',
   'Plateauphase endlos lang',
-  'Pulled Pork zerfÃ¤llt nicht',
+  'Pulled Pork zerfällt nicht',
   'Brisket zu fest',
   'Fettrand schmilzt nicht',
 ];
 
 const FAQ = [
   {
-    q: 'Welche Grillprobleme kÃ¶nnen analysiert werden?',
-    a: 'Alles was beim Grillen, Smoken oder Barbecue schiefgehen kann â€” von Steak Ã¼ber Brisket, Pulled Pork, Ribs bis Burger. Auch Technikprobleme wie Temperatursteuerung, Rauchenentwicklung oder Brikettmanagement.',
+    q: 'Welche Grillprobleme können analysiert werden?',
+    a: 'Alles was beim Grillen, Smoken oder Barbecue schiefgehen kann — von Steak über Brisket, Pulled Pork, Ribs bis Burger. Auch Technikprobleme wie Temperatursteuerung, Rauchenentwicklung oder Brikettmanagement.',
   },
   {
     q: 'Brauche ich zwingend ein Foto?',
-    a: 'Nein. Ein gutes Foto erhÃ¶ht die Diagnose-PrÃ¤zision deutlich â€” aber auch reine Textbeschreibungen werden analysiert. Fotos von SchnittflÃ¤che, OberflÃ¤che und Grillsituation sind am hilfreichsten.',
+    a: 'Nein. Ein gutes Foto erhöht die Diagnose-Präzision deutlich — aber auch reine Textbeschreibungen werden analysiert. Fotos von Schnittfläche, Oberfläche und Grillsituation sind am hilfreichsten.',
   },
   {
     q: 'Wie detailliert muss meine Beschreibung sein?',
-    a: 'So detailliert wie mÃ¶glich: welcher Cut, Gewicht, Vorbereitung (Trockenreife, Marinade, Rub), Grilltemperatur, Methode (direkt/indirekt), Garzeiten, gemessene Kerntemperatur. Je mehr Daten, desto prÃ¤zisere Analyse.',
+    a: 'So detailliert wie möglich: welcher Cut, Gewicht, Vorbereitung (Trockenreife, Marinade, Rub), Grilltemperatur, Methode (direkt/indirekt), Garzeiten, gemessene Kerntemperatur. Je mehr Daten, desto präzisere Analyse.',
   },
   {
     q: 'Wie schnell bekomme ich die Diagnose?',
-    a: 'In der Regel innerhalb weniger Minuten nach Einreichung. Die KI-Analyse lÃ¤uft automatisch â€” du bekommst das Ergebnis per E-Mail sobald es fertig ist.',
+    a: 'In der Regel innerhalb weniger Minuten nach Einreichung. Die KI-Analyse läuft automatisch — du bekommst das Ergebnis per E-Mail sobald es fertig ist.',
   },
   {
     q: 'Was wenn ich mit der Diagnose nicht einverstanden bin?',
-    a: 'Schreib uns unter pitmaster@steakakademie.de. Bei faktisch falschen Diagnosen erstatten wir den Credit. Wir stehen hinter der QualitÃ¤t der Analyse.',
+    a: 'Schreib uns unter pitmaster@steakakademie.de. Bei faktisch falschen Diagnosen erstatten wir den Credit. Wir stehen hinter der Qualität der Analyse.',
   },
 ];
 
@@ -113,12 +113,12 @@ export default function SteakBeichtePage() {
                 Ich sag dir warum.
               </h1>
               <p className="font-serif text-xl lg:text-2xl text-text-light/80 leading-relaxed mb-4">
-                Keine allgemeinen Tipps. Keine Forum-Diskussion. PrÃ¤zise Ursache â€” in Minuten.
+                Keine allgemeinen Tipps. Keine Forum-Diskussion. Präzise Ursache — in Minuten.
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
-                Du beschreibst dein Grill-Ergebnis â€” mit oder ohne Foto. Die KI-Diagnose
+                Du beschreibst dein Grill-Ergebnis — mit oder ohne Foto. Die KI-Diagnose
                 liefert dir die genaue Ursache, eine Fehler-Einordnung und ein konkretes
-                Korrektur-Protokoll fÃ¼r das nÃ¤chste Mal. Kein Raten. Kein â€žkommt drauf an".
+                Korrektur-Protokoll für das nächste Mal. Kein Raten. Kein „kommt drauf an".
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -149,32 +149,32 @@ export default function SteakBeichtePage() {
                 Das Problem
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-8">
-                Ein â‚¬45-Tomahawk. Vergeigt.<br />
+                Ein €45-Tomahawk. Vergeigt.<br />
                 Und niemand kann dir sagen warum.
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 font-body text-text-secondary leading-relaxed">
                 <div className="space-y-4">
                   <p>
-                    Du postest es im Forum. â€žZu hohe Temperatur vielleicht?" â€žHast du
-                    rested?" â€žWar der Rost sauber?" Zehn Meinungen, null Diagnose.
-                    Du weiÃŸt danach immer noch nicht was wirklich passiert ist.
+                    Du postest es im Forum. „Zu hohe Temperatur vielleicht?" „Hast du
+                    rested?" „War der Rost sauber?" Zehn Meinungen, null Diagnose.
+                    Du weißt danach immer noch nicht was wirklich passiert ist.
                   </p>
                   <p>
                     YouTube-Videos zeigen dir wie es richtig gemacht wird. Aber nicht
-                    warum es bei dir falsch gegangen ist â€” mit deinem Grill, deinem Cut,
+                    warum es bei dir falsch gegangen ist — mit deinem Grill, deinem Cut,
                     deiner Situation.
                   </p>
                 </div>
                 <div className="space-y-4">
                   <p>
                     Grillfehler haben Ursachen. Meistens eine einzelne, entscheidende.
-                    AuÃŸen verbrannt innen roh ist ein Temperaturproblem. ZÃ¤hes Fleisch
+                    Außen verbrannt innen roh ist ein Temperaturproblem. Zähes Fleisch
                     ist ein Timing-Problem. Keine Kruste ist ein Feuchtigkeitsproblem.
                     Wer die Ursache kennt, macht den Fehler kein zweites Mal.
                   </p>
                   <p>
-                    Genau das liefert die Steak-Beichte: keine allgemeinen RatschlÃ¤ge,
-                    sondern die prÃ¤zise Ursache fÃ¼r dein spezifisches Problem â€” und
+                    Genau das liefert die Steak-Beichte: keine allgemeinen Ratschläge,
+                    sondern die präzise Ursache für dein spezifisches Problem — und
                     das Protokoll um es zu beheben.
                   </p>
                 </div>
@@ -236,7 +236,7 @@ export default function SteakBeichtePage() {
                 Dein Diagnose-Bericht
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-10">
-                Vier Bestandteile. Keine FÃ¼llung.
+                Vier Bestandteile. Keine Füllung.
               </h2>
 
               <div className="space-y-4">
@@ -275,10 +275,10 @@ export default function SteakBeichtePage() {
                 Credits kaufen
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-2">
-                WÃ¤hle dein Paket
+                Wähle dein Paket
               </h2>
               <p className="font-body text-text-secondary mb-10">
-                Jeder Credit = eine vollstÃ¤ndige Diagnose. Credits verfallen nicht.
+                Jeder Credit = eine vollständige Diagnose. Credits verfallen nicht.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl">
@@ -289,12 +289,12 @@ export default function SteakBeichtePage() {
                       <p className="font-sans text-xs font-bold tracking-[0.12em] uppercase text-text-muted mb-1">
                         Einzeldiagnose
                       </p>
-                      <p className="font-serif text-3xl font-bold text-text-primary">7 â‚¬</p>
-                      <p className="font-sans text-xs text-text-muted mt-1">1 Credit Â· einmalig</p>
+                      <p className="font-serif text-3xl font-bold text-text-primary">7 €</p>
+                      <p className="font-sans text-xs text-text-muted mt-1">1 Credit · einmalig</p>
                     </div>
                     <Flame size={20} className="text-brand-gold mt-1" />
                   </div>
-                  {/* Digistore24-Link â€” nach Produkt-Anlage eintragen */}
+                  {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
                   <a
                     href="https://www.checkout-ds24.com/product/696394"
                     className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm border transition-colors hover:border-brand-gold/50"
@@ -320,22 +320,22 @@ export default function SteakBeichtePage() {
                       <p className="font-sans text-xs font-bold tracking-[0.12em] uppercase text-text-muted mb-1">
                         5er-Pack
                       </p>
-                      <p className="font-serif text-3xl font-bold text-brand-gold">25 â‚¬</p>
-                      <p className="font-sans text-xs text-text-muted mt-1">5 Credits Â· 5 â‚¬ pro Diagnose</p>
+                      <p className="font-serif text-3xl font-bold text-brand-gold">25 €</p>
+                      <p className="font-sans text-xs text-text-muted mt-1">5 Credits · 5 € pro Diagnose</p>
                     </div>
                     <div className="text-right">
                       <span
                         className="text-xs font-sans font-bold px-2 py-0.5"
                         style={{ background: 'rgba(200,136,42,0.2)', color: '#C8882A' }}
                       >
-                        Spare 10 â‚¬
+                        Spare 10 €
                       </span>
                     </div>
                   </div>
                   <p className="font-body text-xs text-text-muted mb-4 mt-2">
-                    Credits verfallen nicht â€” nutz sie wann du willst.
+                    Credits verfallen nicht — nutz sie wann du willst.
                   </p>
-                  {/* Digistore24-Link â€” nach Produkt-Anlage eintragen */}
+                  {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
                   <a
                     href="https://www.checkout-ds24.com/product/696394"
                     className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
@@ -352,9 +352,9 @@ export default function SteakBeichtePage() {
               >
                 <p className="text-xs font-sans text-text-secondary leading-relaxed">
                   <strong className="text-text-primary">Hinweis:</strong>{' '}
-                  Credits sind sofort nach Kauf verfÃ¼gbar. Kein Abo, keine automatische VerlÃ¤ngerung.
-                  Zahlungsabwicklung Ã¼ber Digistore24 Â· SEPA, PayPal, Kreditkarte.
-                  Alle Preise sind Endpreise in Euro; als Kleinunternehmer gemÃ¤ÃŸ Â§ 19 UStG wird keine Umsatzsteuer ausgewiesen.
+                  Credits sind sofort nach Kauf verfügbar. Kein Abo, keine automatische Verlängerung.
+                  Zahlungsabwicklung über Digistore24 · SEPA, PayPal, Kreditkarte.
+                  Alle Preise sind Endpreise in Euro; als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.
                 </p>
               </div>
             </div>
@@ -368,18 +368,18 @@ export default function SteakBeichtePage() {
               {[
                 {
                   Icon: CheckCircle,
-                  title: 'PrÃ¤zise â€” nicht generisch',
-                  desc: 'Kein "kÃ¶nntest du vielleichtâ€¦". Die Diagnose benennt die Ursache direkt â€” basierend auf deinem spezifischen Fall.',
+                  title: 'Präzise — nicht generisch',
+                  desc: 'Kein "könntest du vielleicht…". Die Diagnose benennt die Ursache direkt — basierend auf deinem spezifischen Fall.',
                 },
                 {
                   Icon: AlertTriangle,
                   title: 'Keine Steuerberatung',
-                  desc: 'Die Steak-Beichte analysiert Grillfehler â€” keine Gesundheitsaussagen, keine Haftung fÃ¼r Lebensmittelsicherheit. Gesunden Menschenverstand beim Grillen vorausgesetzt.',
+                  desc: 'Die Steak-Beichte analysiert Grillfehler — keine Gesundheitsaussagen, keine Haftung für Lebensmittelsicherheit. Gesunden Menschenverstand beim Grillen vorausgesetzt.',
                 },
                 {
                   Icon: Zap,
                   title: 'Minuten statt Tage',
-                  desc: 'Keine Wartezeit auf Forum-Antworten. Die KI-Diagnose lÃ¤uft automatisch â€” du bekommst dein Ergebnis noch am selben Tag.',
+                  desc: 'Keine Wartezeit auf Forum-Antworten. Die KI-Diagnose läuft automatisch — du bekommst dein Ergebnis noch am selben Tag.',
                 },
               ].map(({ Icon, title, desc }) => (
                 <div key={title}>
@@ -397,7 +397,7 @@ export default function SteakBeichtePage() {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="max-w-content mx-auto">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                HÃ¤ufige Fragen
+                Häufige Fragen
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-10">FAQ</h2>
               <div className="divide-y divide-border-subtle">
@@ -422,7 +422,7 @@ export default function SteakBeichtePage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
                   { label: 'Steuer-Matrix', href: '/steuer-matrix' },
-                  { label: 'GrÃ¼nder-Schmiede', href: '/gruender-schmiede' },
+                  { label: 'Gründer-Schmiede', href: '/gruender-schmiede' },
                   { label: 'Agentur-Killer-Sprint', href: '/agentur-killer-sprint' },
                   { label: 'Erste-Kunden-Sprint', href: '/erste-kunden-sprint' },
                 ].map(({ label, href }) => (

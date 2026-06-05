@@ -10,17 +10,17 @@ import Footer from '@/components/layout/Footer';
 // â”€â”€ Metadata â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const metadata: Metadata = {
-  title: 'BBQ Grundkurs â€” Systematisch besser grillen | Steakakademie',
+  title: 'BBQ Grundkurs — Systematisch besser grillen | Steakakademie',
   description:
-    'Der erste vollstÃ¤ndige BBQ-Videokurs der Steakakademie. Feuer, Temperatur, 5 Cuts, echte Technik. Earlybird 79â‚¬ statt 127â‚¬ â€” PDFs sofort, Videos ab Juli 2026.',
+    'Der erste vollständige BBQ-Videokurs der Steakakademie. Feuer, Temperatur, 5 Cuts, echte Technik. Earlybird 79€ statt 127€ — PDFs sofort, Videos ab Juli 2026.',
   alternates: { canonical: 'https://steakakademie.de/bbq-grundkurs' },
   openGraph: {
-    title: 'BBQ Grundkurs â€” Wer jetzt lernt, dominiert den Rest der Saison',
+    title: 'BBQ Grundkurs — Wer jetzt lernt, dominiert den Rest der Saison',
     description:
       'Kein YouTube-Chaos. Kein Trial-and-Error. Ein strukturierter Lernweg der dich in einem Sommer weiter bringt als Jahre davor.',
     url: 'https://steakakademie.de/bbq-grundkurs',
     type: 'website',
-    images: [{ url: '/api/og', width: 1200, height: 630, alt: 'BBQ Grundkurs â€” Steakakademie' }],
+    images: [{ url: '/api/og', width: 1200, height: 630, alt: 'BBQ Grundkurs — Steakakademie' }],
   },
   twitter: { card: 'summary_large_image', creator: '@steakakademie' },
 };
@@ -33,65 +33,65 @@ const MODULES = [
     title: 'Feuer & Hitze',
     Icon: Flame,
     desc: 'Direkte vs. indirekte Hitze, Temperaturzonen einrichten, Kohlemengen berechnen, Gas- und Pelletgrills richtig einstellen. Was auf deinem Rost wirklich passiert.',
-    lessons: ['Zwei-Zonen-Feuer aufbauen', 'Temperaturkontrolle ohne Thermometer', 'HÃ¤ufigste AnfÃ¤ngerfehler'],
+    lessons: ['Zwei-Zonen-Feuer aufbauen', 'Temperaturkontrolle ohne Thermometer', 'Häufigste Anfängerfehler'],
   },
   {
     nr: '02',
     title: 'Kerntemperatur & Timing',
     Icon: Thermometer,
-    desc: 'Warum Kerntemperatur das einzige ist, dem du vertrauen kannst. Carryover Cooking verstehen, Ruhephasen richtig nutzen, Timing fÃ¼r mehrere Cuts gleichzeitig.',
-    lessons: ['Thermometer korrekt einsetzen', 'Carryover-Tabelle fÃ¼r alle Garstufen', 'Paralleles Grillen planen'],
+    desc: 'Warum Kerntemperatur das einzige ist, dem du vertrauen kannst. Carryover Cooking verstehen, Ruhephasen richtig nutzen, Timing für mehrere Cuts gleichzeitig.',
+    lessons: ['Thermometer korrekt einsetzen', 'Carryover-Tabelle für alle Garstufen', 'Paralleles Grillen planen'],
   },
   {
     nr: '03',
     title: 'Die 5 Grundcuts',
     Icon: Target,
-    desc: 'Ribeye, EntrecÃ´te, Rumpsteak, Flank Steak, HÃ¤hnchenbrust â€” die fÃ¼nf Cuts die jeder Grillmeister beherrscht. Worin sie sich unterscheiden, was sie verzeihen und was nicht.',
-    lessons: ['Cut-Anatomie & Fettmarmorierung', 'Marinieren vs. Dry Brine', 'Schnittrichtung & PrÃ¤sentation'],
+    desc: 'Ribeye, Entrecôte, Rumpsteak, Flank Steak, Hähnchenbrust — die fünf Cuts die jeder Grillmeister beherrscht. Worin sie sich unterscheiden, was sie verzeihen und was nicht.',
+    lessons: ['Cut-Anatomie & Fettmarmorierung', 'Marinieren vs. Dry Brine', 'Schnittrichtung & Präsentation'],
   },
   {
     nr: '04',
     title: 'Techniken meistern',
     Icon: BookOpen,
-    desc: 'Reverse Sear, direktes Searing, Plancha, Rotisserie-Grundlagen â€” wann welche Technik die richtige ist und wie du sie auf jedem Grill umsetzt.',
-    lessons: ['Reverse Sear Schritt fÃ¼r Schritt', 'Die perfekte Kruste â€” Maillard-Reaktion', 'Plancha & Gusseisenplatte'],
+    desc: 'Reverse Sear, direktes Searing, Plancha, Rotisserie-Grundlagen — wann welche Technik die richtige ist und wie du sie auf jedem Grill umsetzt.',
+    lessons: ['Reverse Sear Schritt für Schritt', 'Die perfekte Kruste — Maillard-Reaktion', 'Plancha & Gusseisenplatte'],
   },
   {
     nr: '05',
     title: 'Troubleshooting & Wiederholung',
     Icon: CheckCircle,
-    desc: 'Was tun wenn es schiefgelaufen ist. HÃ¤ufigste Fehlerbilder und ihre Ursachen â€” damit du aus jedem Grillergebnis lernst statt fluchst.',
-    lessons: ['Zu trocken â€” 5 Ursachen', 'Verbannt auÃŸen, roh innen', 'Planen fÃ¼r 4â€“10 Personen'],
+    desc: 'Was tun wenn es schiefgelaufen ist. Häufigste Fehlerbilder und ihre Ursachen — damit du aus jedem Grillergebnis lernst statt fluchst.',
+    lessons: ['Zu trocken — 5 Ursachen', 'Verbannt außen, roh innen', 'Planen für 4–10 Personen'],
   },
 ];
 
 const WHATS_INCLUDED = [
   { label: '5 Video-Module', detail: '~4 Stunden Lernzeit, abrufbar wann du willst', Icon: Play },
-  { label: 'Begleit-PDFs sofort', detail: 'Kerntemperatur-Tabellen, Cut-Guides, Checklisten â€” nach Kauf verfÃ¼gbar', Icon: BookOpen },
-  { label: '8-Wochen-Lernplan', detail: 'Strukturierter Zeitplan damit du weiÃŸt was wann drankommt', Icon: Clock },
-  { label: 'Lebenslanger Zugang', detail: 'Einmal gekauft, immer verfÃ¼gbar â€” inkl. Updates', Icon: CheckCircle },
+  { label: 'Begleit-PDFs sofort', detail: 'Kerntemperatur-Tabellen, Cut-Guides, Checklisten — nach Kauf verfügbar', Icon: BookOpen },
+  { label: '8-Wochen-Lernplan', detail: 'Strukturierter Zeitplan damit du weißt was wann drankommt', Icon: Clock },
+  { label: 'Lebenslanger Zugang', detail: 'Einmal gekauft, immer verfügbar — inkl. Updates', Icon: CheckCircle },
 ];
 
 const FAQ = [
   {
-    q: 'Wann sind die Videos verfÃ¼gbar?',
-    a: 'Die Begleit-PDFs sind sofort nach Kauf abrufbar. Die Video-Module werden ab Juli 2026 freigeschaltet â€” Earlybird-KÃ¤ufer bekommen automatisch Zugang zum Kursstart.',
+    q: 'Wann sind die Videos verfügbar?',
+    a: 'Die Begleit-PDFs sind sofort nach Kauf abrufbar. Die Video-Module werden ab Juli 2026 freigeschaltet — Earlybird-Käufer bekommen automatisch Zugang zum Kursstart.',
   },
   {
-    q: 'FÃ¼r wen ist dieser Kurs?',
-    a: 'FÃ¼r alle die strukturiert besser grillen wollen â€” Einsteiger die das Chaos beenden wollen, und Fortgeschrittene die endlich verstehen wollen warum ihr Ergebnis mal gut und mal schlecht ist.',
+    q: 'Für wen ist dieser Kurs?',
+    a: 'Für alle die strukturiert besser grillen wollen — Einsteiger die das Chaos beenden wollen, und Fortgeschrittene die endlich verstehen wollen warum ihr Ergebnis mal gut und mal schlecht ist.',
   },
   {
     q: 'Brauche ich einen bestimmten Grill?',
-    a: 'Nein. Die Techniken im Kurs funktionieren auf Kugelgrill, Gasgrill, Kamado und Pelletgrill. Wo es Unterschiede gibt, werden sie erklÃ¤rt.',
+    a: 'Nein. Die Techniken im Kurs funktionieren auf Kugelgrill, Gasgrill, Kamado und Pelletgrill. Wo es Unterschiede gibt, werden sie erklärt.',
   },
   {
     q: 'Gibt es ein Widerrufsrecht?',
-    a: 'Ja, 14 Tage ab Kauf â€” solange du die PDF-Inhalte noch nicht heruntergeladen hast. Sobald digitale Inhalte bereitgestellt wurden, erlischt das Widerrufsrecht gemÃ¤ÃŸ Â§356 Abs. 5 BGB.',
+    a: 'Ja, 14 Tage ab Kauf — solange du die PDF-Inhalte noch nicht heruntergeladen hast. Sobald digitale Inhalte bereitgestellt wurden, erlischt das Widerrufsrecht gemäß §356 Abs. 5 BGB.',
   },
   {
     q: 'Was ist, wenn ich schon einige Grundlagen kenne?',
-    a: 'Der Kurs baut auf solide Grundlagen. Modul 3 (5 Grundcuts) und Modul 4 (Techniken) sind auch fÃ¼r erfahrene Griller wertvoll â€” die meisten haben LÃ¼cken die ihnen nicht bewusst sind.',
+    a: 'Der Kurs baut auf solide Grundlagen. Modul 3 (5 Grundcuts) und Modul 4 (Techniken) sind auch für erfahrene Griller wertvoll — die meisten haben Lücken die ihnen nicht bewusst sind.',
   },
   {
     q: 'Kann ich den Kurs verschenken?',
@@ -130,7 +130,7 @@ export default function BbqGrundkursPage() {
                    style={{ borderColor: 'rgba(232,80,24,0.4)', background: 'rgba(232,80,24,0.07)' }}>
                 <Flame size={12} className="text-brand-fire" />
                 <span className="text-[11px] font-sans font-bold tracking-[0.14em] uppercase text-brand-fire">
-                  Earlybird â€” 48â‚¬ sparen Â· PDFs sofort verfÃ¼gbar
+                  Earlybird — 48€ sparen · PDFs sofort verfügbar
                 </span>
               </div>
 
@@ -140,11 +140,11 @@ export default function BbqGrundkursPage() {
 
               <p className="font-body text-lg text-text-secondary leading-relaxed mb-8 max-w-2xl">
                 Kein YouTube-Chaos. Kein Trial-and-Error. Ein strukturierter Lernweg der dich
-                in einem Sommer weiter bringt als Jahre davor. Feuer, Temperatur, 5 Cuts, echte Technik â€”
-                der erste vollstÃ¤ndige BBQ-Kurs der Steakakademie.
+                in einem Sommer weiter bringt als Jahre davor. Feuer, Temperatur, 5 Cuts, echte Technik —
+                der erste vollständige BBQ-Kurs der Steakakademie.
               </p>
 
-              {/* Kurs-Ãœberblick Chips */}
+              {/* Kurs-Überblick Chips */}
               <div className="flex flex-wrap gap-3 mb-10">
                 {[
                   '5 Video-Module',
@@ -165,7 +165,7 @@ export default function BbqGrundkursPage() {
 
               {/* Earlybird CTA */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                {/* Digistore24-Link â€” nach Produkt-Anlage eintragen */}
+                {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
                 <a
                   href=""
                   className="inline-flex items-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
@@ -267,11 +267,11 @@ export default function BbqGrundkursPage() {
                 In Vorbereitung
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-2">
-                Earlybird â€” solange der Sommer lÃ¤uft.
+                Earlybird — solange der Sommer läuft.
               </h2>
               <p className="font-body text-sm text-text-secondary mb-10 max-w-xl">
                 PDFs sofort nach Kauf. Videos folgen bei Kursstart im Juli 2026.
-                Wer den Earlybird verpasst, zahlt 48â‚¬ mehr â€” und hat weniger Sommer Ã¼brig, um das Gelernte anzuwenden.
+                Wer den Earlybird verpasst, zahlt 48€ mehr — und hat weniger Sommer übrig, um das Gelernte anzuwenden.
               </p>
 
               <div
@@ -291,7 +291,7 @@ export default function BbqGrundkursPage() {
                       </span>
                     </div>
                     <p className="font-sans text-xs text-text-muted mt-1">
-                      Einmalzahlung Â· Keine monatlichen Kosten Â· Lebenslanger Zugang
+                      Einmalzahlung · Keine monatlichen Kosten · Lebenslanger Zugang
                     </p>
                   </div>
                   <div className="sm:ml-auto shrink-0">
@@ -307,8 +307,8 @@ export default function BbqGrundkursPage() {
                 {/* Was sofort inklusive */}
                 <ul className="space-y-2 mb-8">
                   {[
-                    { text: 'Begleit-PDFs â€” sofort nach Kauf verfÃ¼gbar', now: true },
-                    { text: '5 Video-Module â€” ab Juli 2026', now: false },
+                    { text: 'Begleit-PDFs — sofort nach Kauf verfügbar', now: true },
+                    { text: '5 Video-Module — ab Juli 2026', now: false },
                     { text: '8-Wochen-Lernplan als PDF', now: true },
                     { text: 'Kerntemperatur-Tabellen & Cut-Guides', now: true },
                     { text: 'Updates & neue Module kostenlos', now: true },
@@ -332,7 +332,7 @@ export default function BbqGrundkursPage() {
 
                 {/* CTA */}
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                  {/* Digistore24-Link â€” nach Produkt-Anlage eintragen */}
+                  {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
                   <a
                     href=""
                     className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
@@ -369,7 +369,7 @@ export default function BbqGrundkursPage() {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div className="max-w-content mx-auto">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                HÃ¤ufige Fragen
+                Häufige Fragen
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-10">FAQ</h2>
               <div className="divide-y divide-border-subtle">
@@ -393,8 +393,8 @@ export default function BbqGrundkursPage() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
-                  { label: 'Steak-Beichte', href: '/steak-beichte', note: 'KI-Diagnose fÃ¼r Grillfehler' },
-                  { label: 'Mein Protokoll', href: '/mein-protokoll', note: 'PersÃ¶nlicher 8-Wochen-Plan' },
+                  { label: 'Steak-Beichte', href: '/steak-beichte', note: 'KI-Diagnose für Grillfehler' },
+                  { label: 'Mein Protokoll', href: '/mein-protokoll', note: 'Persönlicher 8-Wochen-Plan' },
                   { label: 'Kerntemperatur-Guide', href: '/temperatur-guide', note: 'Alle Cuts & Garstufen' },
                 ].map(({ label, href, note }) => (
                   <Link

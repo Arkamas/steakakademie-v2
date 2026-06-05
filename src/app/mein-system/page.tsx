@@ -7,6 +7,9 @@ import {
 } from 'lucide-react';
 import Header  from '@/components/layout/Header';
 import Footer  from '@/components/layout/Footer';
+import DigistoreCart from '@/components/checkout/DigistoreCart';
+import CartLink from '@/components/checkout/CartLink';
+import { ds24AddUrl } from '@/lib/digistore';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
@@ -29,7 +32,7 @@ const SAULEN = [
     href:        '/gruender-schmiede',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
-    checkoutUrl: 'https://www.digistore24.com/product/695894' as string | null,
+    checkoutUrl: ds24AddUrl(695894) as string | null,
   },
   {
     slug:        'steuer-matrix',
@@ -42,7 +45,7 @@ const SAULEN = [
     href:        '/steuer-matrix',
     toolHref:    '/steuer-matrix/rechner' as string | null,
     toolLabel:   'Rechner öffnen' as string | null,
-    checkoutUrl: 'https://www.digistore24.com/product/695797' as string | null,
+    checkoutUrl: ds24AddUrl(695797) as string | null,
   },
   {
     slug:        'agentur-killer-sprint',
@@ -55,7 +58,7 @@ const SAULEN = [
     href:        '/agentur-killer-sprint',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
-    checkoutUrl: 'https://www.digistore24.com/product/695900' as string | null,
+    checkoutUrl: ds24AddUrl(695900) as string | null,
   },
 ] as const;
 
@@ -291,15 +294,13 @@ export default async function MeinSystemPage() {
                       ) : (
                         <>
                           {saule.checkoutUrl ? (
-                            /* Direkt zum Digistore24-Checkout */
+                            /* In den Digistore24-Warenkorb legen (kein neuer Tab — Script fängt den Klick ab) */
                             <a
                               href={saule.checkoutUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className={`flex items-center justify-center gap-2 w-full py-2.5 font-sans font-bold text-sm hover:opacity-90 transition-opacity plausible-event-name=Digistore-Checkout plausible-event-produkt=${saule.slug}`}
+                              className={`flex items-center justify-center gap-2 w-full py-2.5 font-sans font-bold text-sm hover:opacity-90 transition-opacity plausible-event-name=Warenkorb-Add plausible-event-produkt=${saule.slug}`}
                               style={{ background: '#C8882A', color: '#0D0A06' }}
                             >
-                              {price ? `${eur(price)} — Freischalten` : 'Freischalten'}
+                              {price ? `${eur(price)} — In den Warenkorb` : 'In den Warenkorb'}
                               <ChevronRight size={13} />
                             </a>
                           ) : (
@@ -323,6 +324,12 @@ export default async function MeinSystemPage() {
                 </div>
               );
             })}
+          </div>
+
+          {/* Digistore24-Warenkorb aktivieren + Warenkorb-Link */}
+          <DigistoreCart />
+          <div className="mt-6 flex justify-center">
+            <CartLink className="text-xs" />
           </div>
 
           {/* ── Footer ────────────────────────────────────────────── */}

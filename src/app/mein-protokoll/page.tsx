@@ -6,6 +6,9 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import DigistoreCart from '@/components/checkout/DigistoreCart';
+import CartLink from '@/components/checkout/CartLink';
+import { ds24AddUrl } from '@/lib/digistore';
 
 export const metadata: Metadata = {
   title: 'Mein Protokoll â€” Dein persÃ¶nlicher 8-Wochen-Grillplan | Steakakademie',
@@ -134,7 +137,7 @@ export default function MeinProtokollPage() {
 
               <div className="flex flex-wrap items-center gap-4">
                 <a
-                  href="https://www.checkout-ds24.com/product/696396"
+                  href={ds24AddUrl(696396)}
                   className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                   style={{ background: '#C8882A', color: '#0D0A06' }}
                 >
@@ -351,7 +354,7 @@ export default function MeinProtokollPage() {
                 <div className="shrink-0 flex flex-col items-stretch sm:items-end gap-4">
                   {/* Digistore24-Link â€” nach Produkt-Anlage eintragen */}
                   <a
-                    href="https://www.checkout-ds24.com/product/696396"
+                    href={ds24AddUrl(696396)}
                     className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
                     style={{ background: '#C8882A', color: '#0D0A06' }}
                   >
@@ -361,6 +364,8 @@ export default function MeinProtokollPage() {
                   <p className="text-center text-[10px] font-sans text-text-muted">
                     Digistore24 Â· SEPA, PayPal, Kreditkarte
                   </p>
+                  <DigistoreCart />
+                  <CartLink className="justify-center" />
                 </div>
               </div>
 

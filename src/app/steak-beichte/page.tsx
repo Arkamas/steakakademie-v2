@@ -6,6 +6,9 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import DigistoreCart from '@/components/checkout/DigistoreCart';
+import CartLink from '@/components/checkout/CartLink';
+import { ds24AddUrl } from '@/lib/digistore';
 
 export const metadata: Metadata = {
   title: 'Steak-Beichte â€” KI-Diagnose fÃ¼r dein Grill-Problem | Steakakademie',
@@ -123,7 +126,7 @@ export default function SteakBeichtePage() {
 
               <div className="flex flex-wrap gap-3">
                 <a
-                  href="https://www.checkout-ds24.com/product/696394"
+                  href={ds24AddUrl(696394)}
                   className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                   style={{ background: '#C8882A', color: '#0D0A06' }}
                 >
@@ -296,7 +299,7 @@ export default function SteakBeichtePage() {
                   </div>
                   {/* Digistore24-Link â€” nach Produkt-Anlage eintragen */}
                   <a
-                    href="https://www.checkout-ds24.com/product/696394"
+                    href={ds24AddUrl(696394)}
                     className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm border transition-colors hover:border-brand-gold/50"
                     style={{ borderColor: 'rgba(200,136,42,0.25)', color: '#C8882A' }}
                   >
@@ -337,13 +340,19 @@ export default function SteakBeichtePage() {
                   </p>
                   {/* Digistore24-Link â€” nach Produkt-Anlage eintragen */}
                   <a
-                    href="https://www.checkout-ds24.com/product/696394"
+                    href={ds24AddUrl(696394)}
                     className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                     style={{ background: '#C8882A', color: '#0D0A06' }}
                   >
                     5er-Pack kaufen <ArrowRight size={14} />
                   </a>
                 </div>
+              </div>
+
+              {/* Digistore24-Warenkorb aktivieren + Warenkorb-Link */}
+              <DigistoreCart />
+              <div className="mt-5">
+                <CartLink />
               </div>
 
               <div

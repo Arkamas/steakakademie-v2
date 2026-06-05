@@ -198,6 +198,18 @@ export default function DatenschutzPage() {
                 vollständige Zahlungsdaten.
               </p>
               <p className="mb-3">
+                <strong className="text-text-primary">Warenkorb-Funktion:</strong> Auf einzelnen
+                Verkaufsseiten binden wir den Digistore24-Warenkorb ein (Script von
+                <code> digistore24-scripts.com</code>), damit mehrere Produkte gesammelt und in
+                einem Vorgang bezahlt werden können. Das Script wird ausschließlich auf diesen
+                Verkaufsseiten geladen (nicht auf reinen Inhaltsseiten); dabei können technische
+                Verbindungsdaten (u.&nbsp;a. IP-Adresse) an Digistore24 übermittelt werden. Es
+                werden keine einwilligungspflichtigen Marketing-/Tracking-Cookies gesetzt.
+                Rechtsgrundlage: Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b DSGVO (Anbahnung/Abwicklung
+                des Kaufvertrags) bzw. lit.&nbsp;f (berechtigtes Interesse an einem komfortablen
+                Bestellprozess).
+              </p>
+              <p className="mb-3">
                 <strong className="text-text-primary">Speicherdauer:</strong> Rechnungs- und
                 Buchungsdaten unterliegen den gesetzlichen Aufbewahrungsfristen
                 (§ 147 AO, § 257 HGB — 10 bzw. 6 Jahre) und werden erst nach deren Ablauf gelöscht.

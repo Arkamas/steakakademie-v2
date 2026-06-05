@@ -81,7 +81,7 @@ export default function PlattformPuls({ data }: { data: PulsData }) {
                 <Link
                   key={item.url}
                   href={item.url}
-                  className="group inline-flex items-center gap-2 rounded-full pl-2 pr-3 py-1.5 transition-colors"
+                  className="group inline-flex items-center gap-2 rounded-full pl-2 pr-3 py-1.5 transition-all duration-200 hover:-translate-y-0.5"
                   style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
                 >
                   <span

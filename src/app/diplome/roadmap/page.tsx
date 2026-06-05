@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
 import { allDiplomLektions } from 'contentlayer/generated';
 import MedalCeremony, { type CeremonyData } from '@/components/diplome/MedalCeremony';
+import KontextRail from '@/components/diplome/KontextRail';
 import { createClient } from '@/lib/supabase/client';
 import Header from '@/components/layout/Header';
 
@@ -850,7 +851,9 @@ function RoadmapView({
       </div>
 
       {/* Main */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="lg:grid lg:grid-cols-[1fr_300px] lg:gap-10">
+          <div className="max-w-3xl w-full mx-auto lg:mx-0">
 
         {/* Stage Hero */}
         <div
@@ -1044,6 +1047,14 @@ function RoadmapView({
           <div className="mt-2.5 text-[11px] font-sans" style={{ color: T.textFaint }}>
             steakakademie.de/diplome · Kostenlos starten
           </div>
+        </div>
+          </div>
+
+          <aside className="hidden lg:block">
+            <div className="sticky top-24">
+              <KontextRail text={`${s.kompetenzen.join(' ')} ${s.title}`} color={s.color} />
+            </div>
+          </aside>
         </div>
       </div>
     </>

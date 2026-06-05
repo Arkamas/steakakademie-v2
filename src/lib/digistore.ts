@@ -37,13 +37,12 @@ export function ds24AddUrl(productId: string | number): string {
  * Produkt-ID findest du in Digistore24 unter „Meine Produkte → Produktliste".
  */
 export const DS24_PRODUCTS: Record<string, number | null> = {
-  // ── live verdrahtet ──
+  // ── live verdrahtet (kaufbar) ──
+  'gruender-schmiede':     695894, // Säule I — live
   'steuer-matrix':         695797, // Säule II — live
+  'agentur-killer-sprint': 695900, // Säule III — live
   'mein-protokoll':        696396, // live
   'steak-beichte':         696394, // live (1 Diagnose; 5er-Pack nutzt aktuell dieselbe ID — prüfen)
-  // ── ID bekannt, Seite zeigt aber aktuell „In Vorbereitung" (Launch-Entscheidung offen) ──
-  'gruender-schmiede':     695894, // Säule I
-  'agentur-killer-sprint': 695900, // Säule III
   // ── Produkt-ID noch eintragen → Button wird dann automatisch live ──
   'bbq-grundkurs':         null,
   'fleischpass-premium':   null,

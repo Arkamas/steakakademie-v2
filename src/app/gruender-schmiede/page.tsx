@@ -7,6 +7,10 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import BuyButton from '@/components/checkout/BuyButton';
+import DigistoreCart from '@/components/checkout/DigistoreCart';
+import CartLink from '@/components/checkout/CartLink';
+import { getDs24Id } from '@/lib/digistore';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
@@ -424,16 +428,23 @@ export default async function GruenderSchmiedePage() {
                   </p>
                 </div>
                 <div className="shrink-0">
-                  <span
-                    className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base cursor-not-allowed select-none"
-                    style={{ background: 'rgba(200,136,42,0.12)', color: '#9a8a72', border: '1px solid rgba(200,136,42,0.25)' }}
-                    aria-disabled="true"
+                  <BuyButton
+                    slug="gruender-schmiede"
+                    className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
+                    style={{ background: '#C8882A', color: '#0D0A06' }}
                   >
-                    In Vorbereitung
-                  </span>
+                    {price ? `${eur(price)} — In den Warenkorb` : 'In den Warenkorb'}
+                    <ArrowRight size={16} />
+                  </BuyButton>
                   <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Die Gründer-Schmiede wird derzeit fertiggestellt — bald buchbar.
+                    Einmalig · Sofortzugang · Abgewickelt über Digistore24
                   </p>
+                  {getDs24Id('gruender-schmiede') && (
+                    <>
+                      <DigistoreCart />
+                      <div className="mt-2 flex justify-center"><CartLink /></div>
+                    </>
+                  )}
                 </div>
               </div>
 

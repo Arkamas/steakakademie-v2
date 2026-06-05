@@ -73,7 +73,7 @@ markmap:
 ---
 # 🤖 Agentensystem
 
-## ✅ Agent 1 — AGB-Compliance-Scanner
+## ✅ Agent 1 „Argus" — AGB-Compliance-Scanner
 ### 📋 Tätigkeit: Prüfe steakakademie.de auf DSGVO/TTDSG-Verstöße. Prüfe: robots.txt, cookie consent, Impressum, Datenschutz, Schema.org Korrektheit. Erstelle Report.
 ### ⏰ Trigger: Täglich 06:00 UTC
 ### 🗓️ Schedule: 0 6 * * * (täglich)
@@ -81,7 +81,7 @@ markmap:
 ### 📊 Status: ✅ Aktiv (CronCreate)
 ### 📦 Repo: https://github.com/vecmahr/steakakademie-v2
 
-## ○ Agent 2 — SEO-Monitor
+## ○ Agent 2 „Falke" — SEO-Monitor
 ### 📋 Tätigkeit: Hole wöchentliche Google Search Console Daten für steakakademie.de. Top-10 Rankings, CTR-Entwicklung, neue indexierte Seiten, Fehler-Report. Vergleich mit Vorwoche.
 ### ⏰ Trigger: Wöchentlich Mo 07:00 UTC
 ### 🗓️ Schedule: 0 7 * * 1 (Montag 07:00 UTC)
@@ -89,7 +89,7 @@ markmap:
 ### 📊 Status: open
 ### 📦 GSC API-Zugang (MCP oder Service Account JSON in Netlify)
 
-## ○ Agent 3 — Content-Pipeline
+## ○ Agent 3 „Octopus" — Content-Pipeline
 ### 📋 Tätigkeit: Starte Rezept-Scraper für TOP-10 BBQ-Rezepte diese Woche. Übersetze DE. Passe an Steakakademie-Stil an. Erstelle Notion-Entwurf zur Freigabe.
 ### ⏰ Trigger: On-demand / wöchentlich
 ### 🗓️ Schedule: On-demand oder 0 10 * * 3 (Mi 10:00 UTC)
@@ -97,7 +97,7 @@ markmap:
 ### 📊 Status: open
 ### 📦 DeepL API Key, Notion MCP, scripts/recipe-scraper/
 
-## ○ Agent 4 — Newsletter-Automation
+## ○ Agent 4 „Hermes" — Newsletter-Automation
 ### 📋 Tätigkeit: Prüfe Loops.so auf neue Subscriber (letzten 24h). Fehlgeschlagene DOI-Tokens (Bounce-Rate &gt; 15%?). Ausstehende Sequenz-Versendungen. Status-Report.
 ### ⏰ Trigger: Täglich 08:00 UTC
 ### 🗓️ Schedule: 0 8 * * * (täglich)
@@ -105,7 +105,7 @@ markmap:
 ### 📊 Status: open
 ### 📦 LOOPS_API_KEY (in Netlify gesetzt)
 
-## ✅ Agent 5 — Affiliate-Link-Checker
+## ✅ Agent 5 „Spürhund" — Affiliate-Link-Checker
 ### 📋 Tätigkeit: Prüfe alle Amazon-Affiliate-Links in steakakademie-v2/. Teste jeden Link auf HTTP-Status. Markiere 404 oder redirected Links. Erstelle Fix-Liste für manuellen Review.
 ### ⏰ Trigger: Wöchentlich Mo 08:00 UTC
 ### 🗓️ Schedule: 0 3 * * 0 (Sonntag 03:00 UTC)
@@ -113,7 +113,7 @@ markmap:
 ### 📊 Status: ✅ done (GitHub Actions)
 ### 📦 Amazon PA-API ASIN-Liste (noch aufzubauen)
 
-## ○ Agent 6 — Social-Media-Content-Generator
+## ○ Agent 6 „Ruflo" — Social-Media-Content-Generator
 ### 📋 Tätigkeit: Generiere 3 Instagram-Posts und 2 TikTok-Ideen aus dem neuesten Content von steakakademie.de. Format: Bild-Prompt für fal.ai + Caption + Hashtags. Schreibe in Notion-DB.
 ### ⏰ Trigger: Wöchentlich Fr 10:00 UTC
 ### 🗓️ Schedule: 0 10 * * 5 (Freitag 10:00 UTC)
@@ -121,7 +121,7 @@ markmap:
 ### 📊 Status: open
 ### 📦 Notion MCP, fal.ai API
 
-## ○ Agent 7 — Konkurrenz-Monitor
+## ○ Agent 7 „Späher" — Konkurrenz-Monitor
 ### 📋 Tätigkeit: Analysiere Top-5 DE-BBQ-Konkurrenten (Grillsportverein, BBQ-Pit Boys DE, etc.) auf neue Inhalte, Keyword-Gewinne, neue Produkte. Vergleiche mit steakakademie.de Ranking.
 ### ⏰ Trigger: Monatlich 1. Mo 07:00 UTC
 ### 🗓️ Schedule: 0 7 1 * * (monatlich, 1. des Monats)
@@ -129,7 +129,7 @@ markmap:
 ### 📊 Status: open
 ### 📦 Searchfit SEO, Nimble/Brightdata
 
-## ○ Agent 8 — Rechts-Update-Scanner
+## ○ Agent 8 „Kodex" — Rechts-Update-Scanner
 ### 📋 Tätigkeit: Prüfe auf Änderungen bei: DSGVO, TTDSG, EU AI Act, TDG (Telemediengesetz), Verbraucherrecht DE. Prüfe Steuerrecht-Änderungen relevant für Steuer-Matrix-Produkt. Erstelle Change-Report.
 ### ⏰ Trigger: Monatlich 1. Mo 06:00 UTC
 ### 🗓️ Schedule: 0 6 1 * * (monatlich)
@@ -137,7 +137,7 @@ markmap:
 ### 📊 Status: open
 ### 📦 WebFetch (bmj.de, eur-lex.europa.eu, datenschutz.org)
 
-## ○ Agent 9 — Digistore24-Performance-Report
+## ○ Agent 9 „Kasswart" — Digistore24-Performance-Report
 ### 📋 Tätigkeit: Hole wöchentliche Verkaufsdaten von Digistore24 für alle aktiven Produkte. Berechne Conversion-Rate, AOV, Refund-Rate. Vergleiche mit Vorwoche. Erstelle Management-Summary.
 ### ⏰ Trigger: Wöchentlich Mo 08:00 UTC
 ### 🗓️ Schedule: 0 8 * * 1 (Montag)
@@ -145,7 +145,7 @@ markmap:
 ### 📊 Status: open
 ### 📦 Digistore24 API (API-Key in Netlify einzutragen)
 
-## ○ Agent 10 — GSC-Indexierungs-Report
+## ○ Agent 10 „Kartograph" — GSC-Indexierungs-Report
 ### 📋 Tätigkeit: Prüfe welche Seiten von steakakademie.de neu indexiert wurden (letzte 7 Tage). Welche Seiten haben Coverage-Fehler? Welche Keywords haben Impressionen gewonnen? Report erstellen.
 ### ⏰ Trigger: Wöchentlich Di 07:00 UTC
 ### 🗓️ Schedule: 0 7 * * 2 (Dienstag)

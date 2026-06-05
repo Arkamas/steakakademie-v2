@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import { breadcrumbSchema } from '@/lib/schema';
 import { ChevronRight, ChevronLeft, ArrowRight, BookOpen, Lightbulb } from 'lucide-react';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
+import KontextRail from '@/components/diplome/KontextRail';
 
 interface Props {
   params: { stufe: string; lektion: string };
@@ -231,6 +232,8 @@ export default function DiplomLektionPage({ params }: Props) {
                   Zur Prüfung <ArrowRight size={13} />
                 </Link>
               </div>
+
+              <KontextRail text={`${lektion.title} ${lektion.lektionSlug}`} color={meta.color} />
             </aside>
           </div>
         </div>

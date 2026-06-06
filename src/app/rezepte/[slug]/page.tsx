@@ -21,6 +21,13 @@ const KATEGORIEN: Record<string, {
     heroImage:   '/images/rezepte/dry-aged-ribeye.jpg',
     heroAlt:     'Marmoriertes Premium-Ribeye mit ausgeprägtem Fettauge auf dunklem Schiefer',
   },
+  fisch: {
+    label:       'Fisch & Meeresfrüchte',
+    subtitle:    'Vom Rost ins Meer',
+    description: 'Lachs auf der Zedernholzplanke, blutrotes Thunfisch-Steak, die ganze Dorade über der Glut — Fisch und Meeresfrüchte vom Grill, präzise gegart mit exakten Kerntemperaturen. Der feine Unterschied zwischen saftig und übergart.',
+    heroImage:   '/images/rezepte/cedar-plank-lachs.jpg',
+    heroAlt:     'Cedar-Plank-Lachs auf rauchender Zedernholzplanke mit Dill und Zitrone',
+  },
   beilagen: {
     label:       'Beilagen & Salate',
     subtitle:    'Das BBQ-Büfett',

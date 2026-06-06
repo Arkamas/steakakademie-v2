@@ -289,7 +289,7 @@ export const Recipe = defineDocumentType(() => ({
     totalTime:      { type: 'string',  required: true },
     servings:       { type: 'number',  required: true },
     calories:       { type: 'number' },
-    kategorie:      { type: 'enum',    options: ['fleisch', 'beilagen', 'saucen-rubs', 'desserts', 'wine-spirits'], required: true },
+    kategorie:      { type: 'enum',    options: ['fleisch', 'fisch', 'beilagen', 'saucen-rubs', 'desserts', 'wine-spirits'], required: true },
     meatType:       { type: 'string',  required: true },
     cookingMethod:  { type: 'string',  required: true },
     land:           { type: 'string' },   // Herkunft/Land (strukturiert, für Schema.org + Filter)

@@ -45,6 +45,7 @@ const NAV_CATEGORIES = [
     href: '/rezepte',
     sub: [
       { label: 'Fleisch-Rezepte', href: '/rezepte/fleisch' },
+      { label: 'Fisch & Meeresfrüchte', href: '/rezepte/fisch' },
       { label: 'Beilagen & Salate', href: '/rezepte/beilagen' },
       { label: 'Saucen, Rubs & Injektionen', href: '/rezepte/saucen-rubs' },
       { label: 'Fire-Desserts', href: '/rezepte/desserts' },

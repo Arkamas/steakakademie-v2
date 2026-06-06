@@ -68,3 +68,4 @@ playwright-report/
 /.playwright/
 
 .env*
+social-drafts/

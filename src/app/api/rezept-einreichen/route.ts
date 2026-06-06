@@ -92,7 +92,7 @@ export async function POST(req: Request) {
   let verdict;
   try {
     const result = await generateObject({
-      model: anthropic(process.env.MODERATION_MODEL ?? 'claude-3-5-haiku-latest'),
+      model: anthropic(process.env.MODERATION_MODEL ?? 'claude-haiku-4-5-20251001'),
       schema: RezeptVerdictSchema,
       system: MODERATION_SYSTEM,
       prompt: buildModerationPrompt({

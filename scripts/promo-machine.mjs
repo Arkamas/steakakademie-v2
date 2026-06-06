@@ -23,9 +23,14 @@ import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync, copyFi
 import { join, resolve, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
+import yaml from 'js-yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const V2_ROOT = resolve(__dirname, '..');
+
+// Autoritative Kerntemperatur-Referenz (Single Source of Truth)
+const REF = yaml.load(readFileSync(join(V2_ROOT, 'data', 'kerntemperatur-referenz.yaml'), 'utf8'));
+const BADGES = REF.badges;
 const VIDEO_ROOT = resolve(V2_ROOT, '..', 'steakakademie-video');
 const CONTENT_DIR = join(V2_ROOT, 'content', 'rezepte');
 const HERO_SRC_DIR = join(V2_ROOT, 'public', 'images', 'rezepte');
@@ -91,12 +96,62 @@ function shortTitle(title = '') {
   return t;
 }
 
-// Kern-Fakt: NUR eine °C-Angabe übernehmen, die im Kerntemperatur-Kontext steht
-// UND physiologisch plausibel ist (38–99 °C). Niemals Grill-/Ofenhitze (110–900 °C)
-// als „Kern" ausgeben — Genauigkeit ist der Burggraben (CLAUDE.md 8c).
-function deriveFact(fm, body) {
-  const hay = `${fm.description || ''}\n${body}`;
+// Klassifiziert ein Rezept in eine autoritative Badge-Familie (data/kerntemperatur-
+// referenz.yaml). Gibt einen Badge-Key zurück oder null (→ Regex-/Text-Fallback).
+function classifyBadge(fm, slug) {
+  const hay = `${fm.meatType || ''} ${fm.title || ''} ${slug} ${fm.cookingMethod || ''}`.toLowerCase();
+  const has = (...ws) => ws.some((w) => hay.includes(w));
+  const lowslow = has('low', 'slow', 'smoker', '3-2-1', 'geschmort', 'pulled', 'burnt end', 'räuch', 'raeuch');
+
+  // Hack/Burger zuerst (Sicherheit: durchgegart) — fängt auch Wagyu-Burger
+  if (has('burger', 'smash', 'patty', 'hackfleisch', 'tatar')) return 'burger';
+
+  // Fisch
+  if (has('lachs', 'salmon')) return 'salmon';
+  if (has('thunfisch', 'tuna')) return 'tuna';
+  if (has('makrele', 'sardin')) return 'oily_whole';
+  if (has('dorade', 'kabeljau', 'rotbarbe', 'mahi', 'schwertfisch', 'wolfsbarsch', 'seebarsch', 'seafood')) return 'whitefish';
+
+  // Geflügel (immer durch ≥72 °C; Pulled Chicken spezifisch via Regex)
+  if (has('hähnchen', 'haehnchen', 'chicken', 'pute', 'turkey', 'spatchcock', 'poularde')) return has('pulled') ? null : 'poultry';
+  if (has('ente', 'duck')) return has('brust') ? 'duck_breast' : 'duck_whole';
+  if (has('gans', 'goose')) return 'duck_whole';
+
+  // Schwein
+  if (has('carrillera')) return 'pork_lowslow';
+  if (has('krustenbraten')) return 'pork_kruste';
+  if (has('pulled pork', 'boston butt', 'spareribs', 'sparerib', 'schälrippchen')) return 'pork_lowslow';
+  if (has('iberico', 'pluma', 'presa', 'secreto', 'schweinefilet', 'schweinelende', 'schweinekotelett', 'schweinenacken')) return lowslow ? 'pork_lowslow' : 'pork_juicy';
+
+  // Lamm (Keule rosa 60–63 → spezifisch via Regex)
+  if (has('lammkarree', 'lammkotelett', 'lammrücken', 'lammruecken', 'lammlachs')) return 'lamb_mr';
+
+  // Rind Low & Slow — immer kollagenreiche Schmor-/Smoke-Cuts …
+  if (has('brisket', 'burnt end', 'pulled beef', 'ochsenback', 'ochsenbäck', 'rinderbrust')) return 'beef_lowslow';
+  // … Short/Back Ribs NUR bei echtem Low&Slow-Kontext (NICHT heiß gegrilltes Asado de Tira)
+  if (lowslow && has('short rib', 'short-rib', 'back rib', 'back-rib', 'rind', 'beef', 'ochsen', 'tafelspitz')) return 'beef_lowslow';
+
+  // Wagyu (außer dünn am Tischgrill/Yakiniku)
+  if (has('wagyu') && !has('yakiniku', 'tischgrill')) return 'wagyu';
+
+  // Rind Steak (Premium → Medium Rare)
+  if (has('ribeye', 'rib-eye', 'entrecote', 'entrecôte', 'roastbeef', 'filet', 'chateaubriand', 'tomahawk',
+    't-bone', 'tbone', 'porterhouse', 'picanha', 'tri-tip', 'tri tip', 'flank', 'bavette', 'skirt',
+    'onglet', 'hanger', 'flap', 'tagliata', 'dry-aged', 'dry aged', 'striploin', 'sirloin', 'rumpsteak',
+    'flat iron', 'denver', 'club steak', 'fiorentina')) return 'beef_mr';
+
+  return null;
+}
+
+// Kern-Fakt: 1) autoritativer Badge-Wert aus der Referenz (Serviertemperatur),
+// 2) sonst recipe-eigener °C-Wert NUR im Kerntemperatur-Kontext + plausibel (38–99),
+// 3) sonst meatType · Methode. Nie Grill-/Ofenhitze als „Kern" (CLAUDE.md 8c).
+function deriveFact(fm, body, slug) {
   const method = fm.cookingMethod || '';
+  const key = classifyBadge(fm, slug);
+  if (key && BADGES[key]) return method ? `Kern ${BADGES[key].c} °C · ${method}` : `Kern ${BADGES[key].c} °C`;
+
+  const hay = `${fm.description || ''}\n${body}`;
   const patterns = [
     /Kerntemperatur[^.\n]{0,40}?(\d{2,3})\s*°\s*C/i,
     /(\d{2,3})\s*°\s*C\s*Kerntemperatur/i,
@@ -110,7 +165,6 @@ function deriveFact(fm, body) {
       if (n >= 38 && n <= 99) return method ? `Kern ${n} °C · ${method}` : `Kern ${n} °C`;
     }
   }
-  // Fallback: keine Temp-Behauptung
   const parts = [fm.meatType, method].filter(Boolean);
   return parts.join(' · ') || 'Pitmaster-Rezept';
 }
@@ -156,7 +210,7 @@ function collectRecipes() {
       title: shortTitle(fm.title),
       kicker: KICKER[fm.kategorie] || 'Steakakademie',
       kategorie: fm.kategorie,
-      fact: deriveFact(fm, body),
+      fact: deriveFact(fm, body, slug),
       cookingMethod: fm.cookingMethod || '',
       fullTitle: fm.title || slug,
     });

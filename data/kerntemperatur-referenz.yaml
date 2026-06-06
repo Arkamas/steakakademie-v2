@@ -1,0 +1,42 @@
+# ════════════════════════════════════════════════════════════════════════════
+# Kanonische Kerntemperatur-Referenz — Single Source of Truth
+# Quelle: Steakakademie_Kerntemperatur-Referenz.md (Uwe Yendell)
+#
+# Alle Werte = KERNTEMPERATUR im dicksten Punkt, gemessen VOR dem Ruhen.
+# Genauigkeit ist der Burggraben (CLAUDE.md 8c) — diese Werte sind autoritativ
+# und überschreiben aus Rezept-Text gescrapte Einzelwerte.
+#
+# Nutzung: Promo-Maschine (Fakt-Badge), Rezept-Briefs, Temperatur-Guide.
+# ════════════════════════════════════════════════════════════════════════════
+
+meta:
+  carryover: "Nachziehen +2–5 °C — ca. 3 °C vor Ziel vom Grill nehmen"
+  ruhen: "Steaks 3–5 Min., große Braten 10–20 Min."
+  messen: "Einstich in den dicksten Punkt, NICHT am Knochen"
+
+# Badge-Werte für Promos/Content. `c` = empfohlene Serviertemperatur (ein Wert
+# für die Anzeige), `range` = Korridor, `label` = Garstufe/Hinweis.
+badges:
+  beef_mr:      { c: 54, range: [54, 58], label: "Medium Rare" }      # Premium-Steaks (Steakakademie-Empfehlung)
+  beef_lowslow: { c: 93, range: [90, 96], label: "Low & Slow" }       # Brisket/Short Ribs — Kollagen → Gelatine
+  wagyu:        { c: 52, range: [50, 54], label: "Medium Rare" }      # Fett schmilzt früh
+  lamb_mr:      { c: 56, range: [54, 57], label: "Medium Rare" }
+  lamb_done:    { c: 70, range: [70, 75], label: "durch" }            # Keule durch
+  pork_juicy:   { c: 63, range: [60, 65], label: "saftig" }           # Sicherheits-Minimum 63 °C
+  pork_lowslow: { c: 92, range: [88, 95], label: "zupfbar" }          # Pulled Pork / Spareribs
+  pork_kruste:  { c: 72, range: [70, 75], label: "durch" }            # Krustenbraten
+  poultry:      { c: 74, range: [72, 80], label: "durchgegart" }      # Hähnchen/Pute — IMMER durch (≥72 °C)
+  duck_breast:  { c: 58, range: [56, 62], label: "rosa" }             # Sonderfall: Entenbrust darf rosa
+  duck_whole:   { c: 75, range: [70, 80], label: "knusprig durch" }   # ganze Ente/Gans
+  salmon:       { c: 52, range: [48, 52], label: "glasig" }
+  tuna:         { c: 46, range: [40, 46], label: "seared" }
+  whitefish:    { c: 58, range: [55, 62], label: "durch" }            # Dorade/Kabeljau/Rotbarbe/Mahi/Schwertfisch
+  oily_whole:   { c: 63, range: [60, 65], label: "durch" }            # ganze Makrele/Sardine
+  burger:       { c: 70, range: [70, 72], label: "durchgegart" }      # Hack: durch Wolfen Keime innen → ≥70 °C
+
+# Sicherheits-Mindestwerte (nie unterschreiten — Risikogruppen)
+sicherheit:
+  schwein: 63          # Lebensmittelhygiene
+  gefluegel: 72        # Salmonellen
+  hackfleisch: 70      # gewolft
+  wildschwein: 70      # Trichinen — immer durch

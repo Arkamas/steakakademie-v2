@@ -1,0 +1,221 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Cut-Wissensbasis (Steakakademie / Pitmaster-Doktrin)
+#
+# EINE kanonische Quelle für: Bild-Briefing (visual:), Fleischkunde-Lektionen,
+# Glossar und Cut-Atlas. Gespeist aus mehreren Quellen + eigener Doktrin,
+# in EIGENER Formulierung — NIE 1:1 aus einer Fremdquelle übernommen (Burggraben 1).
+#
+# Felder je Cut:
+#   de       deutsche Bezeichnung(en)
+#   aka      Synonyme / Handelsnamen
+#   match    Substrings (lowercase) → Zuordnung von meatType/slug/Titel
+#   origin   Lage am Tier (Teilstück)
+#   visual   AUSSEHEN (für die Bildgenerierung — Knochen? Fettauge? Form?)
+#   doneness empfohlener Gargrad / Garweise
+#   facts    Kurzfakten (Gewicht, Verwendung) für Content
+#   note     Korrekturen / strittige Punkte (Doktrin: Genauigkeit)
+# ─────────────────────────────────────────────────────────────────────────────
+
+ribeye:
+  de: Ribeye / Hohe Rippe / Entrecôte
+  aka: [Rib-Eye, Entrecôte, Rib Steak, Delmonico (umstritten)]
+  match: [ribeye, rib-eye, "rib eye", entrecote, entrecôte, "rib steak", "hohe rippe"]
+  origin: Hochrippe (Rib primal), Längsmuskel (longissimus dorsi)
+  visual: >
+    Dickes, weitgehend rundes Steak mit großem zentralem Augenmuskel; obenauf
+    die sichelförmige Fettkappe (Spinalis/„Deckel"), durchzogen von feiner
+    Marmorierung. Meist knochenlos; mit Knochen = Rib Steak / Tomahawk.
+  doneness: medium-rare (~54 °C); rosa nur an der Schnittfläche, außen kräftige Kruste.
+  facts: Sehr marmoriert, saftig, aromatisch — einer der beliebtesten Steakcuts.
+  note: >
+    „Delmonico" wird oft mit Ribeye gleichgesetzt, ist historisch aber uneindeutig
+    (je nach Quelle/Restaurant anderer Cut) — nicht als Fakt behaupten.
+
+striploin:
+  de: Roastbeef / Rumpsteak / Striploin
+  aka: [New York Strip, Sirloin (US), Kansas City Strip, Contre-Filet]
+  match: [striploin, roastbeef, "new york", sirloin, rumpsteak, "contre-filet", strip]
+  origin: Roastbeef-Strang (short loin), oberhalb des Filets
+  visual: >
+    Längliches, feinfaseriges Steak mit fester Fettkante entlang einer Seite;
+    gleichmäßiger, eher magerer Muskel ohne Augenmuskel-Kappe.
+  doneness: medium-rare bis medium; rosa nur an der Schnittfläche.
+  facts: Fester Biss, ausgewogen mager — Klassiker für die Pfanne/den Grill.
+
+tenderloin:
+  de: Filet / Rinderfilet
+  aka: [Filet Mignon, Chateaubriand, Tournedos, Tenderloin]
+  match: [filet, "filet mignon", chateaubriand, tournedos, tenderloin, rinderfilet, mignon]
+  origin: Filetstrang (psoas major), unter der Lende — der zarteste Muskel
+  visual: >
+    Rundliches bis ovales, sehr mageres Steak ohne Fettkappe und ohne Knochen,
+    feinste glatte Faser, hoch geschnitten (dick). Keine Marmorierung.
+  doneness: medium-rare (~54 °C); extrem zart, wenig Eigenfett.
+  facts: >
+    Filet Mignon = kleine Steaks vom schmalen Ende; Chateaubriand = dickes
+    Mittelstück (für zwei); Tournedos = kleine, oft umwickelte Filetscheiben.
+
+tomahawk:
+  de: Tomahawk / Ribeye am langen Knochen
+  aka: [Cowboy Steak (kürzerer Knochen)]
+  match: [tomahawk]
+  origin: Hochrippe mit komplett freigelegtem (frenched) Rippenknochen
+  visual: >
+    Sehr großes Ribeye mit rundem Augenmuskel und Fettkappe, an einem LANGEN,
+    blank freigelegten Rippenknochen (Griff). Knochen hell, sauber.
+  doneness: gern reverse sear; rosa nur an der Schnittfläche, Außenkruste kräftig.
+  note: Der lange Knochen ist das Erkennungsmerkmal — beim Bild zwingend zeigen.
+
+porterhouse:
+  de: Porterhouse
+  aka: [Bistecca alla Fiorentina (groß geschnitten)]
+  match: [porterhouse, fiorentina]
+  origin: Hinteres Lendenstück (short loin), am T-Knochen
+  visual: >
+    Dickes Steak mit deutlich sichtbarem T-FÖRMIGEM KNOCHEN in der Mitte;
+    auf der einen Seite das Roastbeef (Striploin), auf der anderen ein GROSSES
+    rundes Filetstück. Der große Filetanteil unterscheidet es vom T-Bone.
+  doneness: medium-rare; rosa nur an der Schnittfläche, außen gebräunte Kruste.
+  note: Porterhouse = großer Filetanteil; T-Bone = kleiner. Knochen muss im Bild sein.
+
+t-bone:
+  de: T-Bone
+  aka: []
+  match: ["t-bone", "t bone", tbone]
+  origin: Lendenstück (short loin), am T-Knochen — weiter vorn als Porterhouse
+  visual: >
+    Steak mit T-förmigem Knochen; Roastbeef auf der einen, ein KLEINERES
+    rundes Filetstück auf der anderen Seite.
+  doneness: medium-rare; rosa nur an der Schnittfläche.
+
+flank:
+  de: Flank Steak / Bavette de Flanchet
+  aka: [Flanksteak, Rinderlappen]
+  match: [flank, flanksteak, rinderlappen]
+  origin: Bauchlappen (flank), unterhalb der Lende
+  visual: >
+    Flaches, langes, mageres Stück mit deutlich sichtbarer, langer paralleler
+    Faserstruktur; kein Knochen, kaum Fett. Oft quer zur Faser aufgeschnitten.
+  doneness: medium-rare, NICHT durchgaren; marinieren; quer zur Faser schneiden.
+
+flap:
+  de: Flap Steak / Bavette
+  aka: [Sirloin Flap, Bavette d'Aloyau, Skirt-ähnlich]
+  match: [flap, bavette, "skirt", "skirt steak"]
+  origin: Unteres Roastbeef/Bauch (bottom sirloin), nahe der Flanke
+  visual: >
+    Lockeres, langfaseriges, relativ dünnes Stück mit grober, offener Faser
+    und kräftiger Marmorierung; nimmt Marinade gut auf. Kein Knochen.
+  doneness: heiß und kurz, medium-rare; quer zur Faser schneiden.
+  note: Skirt (Saumfleisch/Zwerchfell) und Flap sind verwandt, aber nicht identisch.
+
+onglet:
+  de: Onglet / Nierenzapfen
+  aka: [Hanger Steak, Kronfleisch]
+  match: [onglet, hanger, nierenzapfen, kronfleisch]
+  origin: Zwerchfellpfeiler, „hängt" innen an der Lende
+  visual: >
+    Dickes, strangförmiges Stück mit grober Faser und einer derben Mittelsehne,
+    die den Strang teilt; tiefrotes, intensives Muskelfleisch.
+  doneness: medium-rare; Mittelsehne entfernen; quer zur Faser schneiden.
+
+picanha:
+  de: Picanha / Tafelspitz-Deckel (Bürgermeisterstück-nah)
+  aka: [Rump Cap, Coulotte, Sirloin Cap]
+  match: [picanha, "rump cap", coulotte]
+  origin: Hüftdeckel (oberes Roastbeef/Hüfte), mit Fettdeckel
+  visual: >
+    Dreieckiges Stück mit einer dicken, halbrunden, durchgehenden FETTKAPPE
+    auf einer Seite; gleichmäßiger Muskel darunter. Brasilianisch oft am Spieß,
+    in dicken Scheiben.
+  doneness: Fettkappe auslassen/knusprig, Fleisch medium-rare.
+
+tri-tip:
+  de: Tri-Tip / Bürgermeisterstück (nah)
+  aka: [Santa Maria Steak, Triangle Roast]
+  match: ["tri-tip", "tri tip", "santa maria", triangle]
+  origin: Unteres Roastbeef/Hüfte (bottom sirloin)
+  visual: >
+    Kompaktes DREIECKIGES Stück, mager bis leicht marmoriert, feine bis mittlere
+    Faser; meist als Braten gegrillt und schräg in Scheiben geschnitten.
+  doneness: medium-rare; quer/schräg zur Faser schneiden.
+
+brisket:
+  de: Brisket / Rinderbrust
+  aka: [Packer Brisket (Point + Flat)]
+  match: [brisket, rinderbrust]
+  origin: Brust (pectoral), stark bindegewebig
+  visual: >
+    Großes, langsam geräuchertes Stück mit dunkler, pfeffrig-würziger Rinde
+    (Bark) und einem rosa Rauchring direkt unter der Oberfläche; sichtbare
+    Fettschicht. Aufgeschnitten in fingerdicken Scheiben, glänzend saftig.
+  doneness: Low & Slow viele Stunden bis butterzart (Kollagen schmilzt).
+  facts: Whole Packer ~5–7 kg; kommerziell auch deutlich schwerer.
+
+short-rib:
+  de: Short Ribs / Beef Ribs / Kurzrippe
+  aka: [Beef Back Ribs, Asado de Tira (Querschnitt), Flanken]
+  match: ["short rib", "short ribs", "beef rib", "back rib", kurzrippe, tira, flanken]
+  origin: Rippenbereich (Brust/Rippe), kräftig durchwachsen
+  visual: >
+    Dicke Rippenstücke am Knochen mit dunkler, rauchiger Bark; fleischig,
+    glänzend. Als „Tira" im Querschnitt gesägt (mehrere kleine Knochenscheiben).
+  doneness: Low & Slow bis zartschmelzend.
+
+chuck:
+  de: Chuck / Rinderschulter / Bug
+  aka: [Chuck Roast, Chuck Steak, Flat Iron (zarte Ausnahme)]
+  match: [chuck, schulter, bug]
+  origin: Schulter (chuck primal)
+  visual: >
+    Gut marmoriertes, grob strukturiertes Stück mit Sehnen-/Bindegewebslinien;
+    Schmoroptik (dunkel, glänzend) bzw. zerzupft als Pulled.
+  doneness: schmoren / Low & Slow — bindegewebsreich.
+  note: >
+    KORREKTUR gängiger Angaben: Chuck ist eher ZÄH und bindegewebsreich, nicht der
+    „zarteste Teil der Schulter". Zarte Ausnahme ist das Flat Iron (Schulterfilet).
+
+cubed-steak:
+  de: Cubed Steak / Hüftsteak (zart geklopft)
+  aka: [Cube Steak, Minute Steak]
+  match: ["cubed steak", "cube steak", "minute steak"]
+  origin: meist aus Hüfte/Schulter (Round/Chuck)
+  visual: >
+    Dünnes, kleines, mageres Steak mit charakteristischem WÜRFEL-/RAUTENMUSTER
+    von der mechanischen Zartmachung (Klopfwerk) auf der Oberfläche.
+  doneness: sehr kurz braten.
+
+club-steak:
+  de: Club Steak / Rib Club Steak
+  aka: [Delmonico (eine Lesart)]
+  match: ["club steak", "rib club"]
+  origin: vorderes Lendenstück, rib-seitiges Ende
+  visual: >
+    Kompaktes Steak vom Mittelrücken, von einer Fettschicht umgeben; kann
+    Rippen-/Rückgratknochen enthalten, ohne (oder mit nur winzigem) Filetanteil.
+  note: Definitionen schwanken je Quelle/Region — vorsichtig formulieren.
+
+# ── Iberico/Schwein (keine Rind-Cuts, aber im Rezeptbestand) ──────────────────
+iberico-presa:
+  de: Presa (Iberico)
+  aka: []
+  match: [presa]
+  origin: Schweineschulter/Nacken-Übergang (Iberico)
+  visual: Dickes, rundliches, fein marmoriertes Schweinestück; tiefrosa, saftig.
+  doneness: medium, durchgegart aber saftig (leicht rosa ok).
+
+iberico-pluma:
+  de: Pluma (Iberico)
+  aka: []
+  match: [pluma]
+  origin: hinteres Ende des Rückenmuskels (Iberico)
+  visual: Flaches, federförmiges, marmoriertes Stück; rosa, zart.
+  doneness: medium, saftig.
+
+iberico-secreto:
+  de: Secreto (Iberico)
+  aka: []
+  match: [secreto]
+  origin: „verstecktes" Stück zwischen Schulter und Speck (Iberico)
+  visual: Dünnes, stark marmoriertes, fächriges Stück; netzartige Fettzeichnung.
+  doneness: heiß und kurz, saftig.

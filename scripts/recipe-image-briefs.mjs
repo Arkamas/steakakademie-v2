@@ -20,6 +20,7 @@ import { readdir, readFile, writeFile } from 'fs/promises'
 import { existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import yaml from 'js-yaml'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT    = join(__dirname, '..')
@@ -40,6 +41,22 @@ if (!KEY && existsSync(join(ROOT, '.env.local'))) {
 const c = { g: s => `\x1b[32m${s}\x1b[0m`, y: s => `\x1b[33m${s}\x1b[0m`, r: s => `\x1b[31m${s}\x1b[0m`, d: s => `\x1b[2m${s}\x1b[0m` }
 const fm = (raw, key) => { const m = raw.match(new RegExp(`^${key}:\\s*"?(.*?)"?\\s*$`, 'm')); return m ? m[1] : '' }
 
+// Cut-Wissensbasis laden → visual: erdet das Briefing anatomisch (korrekter Cut).
+let CUTS = {}
+const CUTS_PATH = join(ROOT, 'data', 'cuts-knowledge.yaml')
+if (existsSync(CUTS_PATH)) {
+  try { CUTS = yaml.load(await readFile(CUTS_PATH, 'utf8')) || {} }
+  catch (e) { console.log(c.r(`⚠ cuts-knowledge.yaml: ${e.message}`)) }
+}
+function cutLookup(hay) {
+  const h = ` ${hay.toLowerCase()} `
+  for (const [k, v] of Object.entries(CUTS)) {
+    const needles = (v.match || [k]).map(s => String(s).toLowerCase())
+    if (needles.some(n => n && h.includes(n))) return v
+  }
+  return null
+}
+
 const SYSTEM = `You write ONE concise English visual description of a FINISHED dish for an AI image generator (FLUX.1). The generator must render exactly the right food — not a look-alike. Output ONLY the description, no preamble, no quotes.
 
 Rules:
@@ -54,8 +71,9 @@ Rules:
 - End with a short "not:" clause naming the most likely WRONG render (e.g. coleslaw → "not pasta, no noodles"; duck → "not a chicken").
 - Do NOT mention camera, lens, lighting, board, style, "photorealistic", "4k" — those are added separately.`
 
-async function brief(title, desc, meat, kat) {
-  const user = `Dish title: ${title}\nCategory: ${kat || '—'}\nMain ingredient: ${meat || '—'}\nRecipe description: ${desc || '—'}`
+async function brief(title, desc, meat, kat, cut) {
+  let user = `Dish title: ${title}\nCategory: ${kat || '—'}\nMain ingredient: ${meat || '—'}\nRecipe description: ${desc || '—'}`
+  if (cut?.visual) user += `\n\nVerified cut appearance (authoritative — the rendered cut MUST match this anatomy): ${String(cut.visual).replace(/\s+/g, ' ').trim()}${cut.doneness ? ` Doneness: ${String(cut.doneness).replace(/\s+/g, ' ').trim()}` : ''}`
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
@@ -94,9 +112,10 @@ async function main() {
     const raw  = await readFile(path, 'utf8')
     if (!FORCE && fm(raw, 'imagePrompt')) { skipped++; continue }
     const title = fm(raw, 'title'), desc = fm(raw, 'description'), meat = fm(raw, 'meatType'), kat = fm(raw, 'kategorie')
+    const cut = cutLookup(`${meat} ${slug} ${title}`)
     try {
-      process.stdout.write(c.d(`◇ ${slug} … `))
-      const b = await brief(title, desc, meat, kat)
+      process.stdout.write(c.d(`◇ ${slug}${cut ? ' [cut]' : ''} … `))
+      const b = await brief(title, desc, meat, kat, cut)
       if (DRY) { console.log(c.y('\n  ' + b + '\n')); done++; continue }
       await writeFile(path, patch(raw, b), 'utf8')
       console.log(c.g('✓'))

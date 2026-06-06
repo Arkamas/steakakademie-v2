@@ -66,7 +66,7 @@ const mdxComponents = {
     </div>
   ),
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
-    <thead className="bg-text-primary text-white" {...props}>{children}</thead>
+    <thead className="bg-text-muted text-white" {...props}>{children}</thead>
   ),
   th: ({ children, ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) => (
     <th className="px-4 py-3 text-left text-[11px] font-bold tracking-[0.1em] uppercase" {...props}>{children}</th>

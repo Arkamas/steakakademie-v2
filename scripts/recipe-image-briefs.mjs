@@ -69,6 +69,7 @@ Rules:
   - Pork: "fully cooked, juicy, at most slightly rosy".
   - Sides/sauces/sweets: describe the REAL components precisely (e.g. coleslaw = finely shredded raw white cabbage and carrot in a creamy pale dressing).
   - Grilled vegetables/produce: caramelized charred edges, blistered skin, a glossy sheen of oil, vibrant fresh colours and clear grill marks — never raw and cold, never just burnt black.
+- Plating/garnish (tasteful, optional): you MAY add a fine drizzle of a glossy sauce, a neat dollop or quenelle of a dip, a small ramekin of sauce alongside, scattered microgreens, fresh herbs or crumbled cheese. Do NOT name the plate type, camera, lens, lighting or style — those are fixed separately.
 - End with a short "not:" clause naming the most likely WRONG render (e.g. coleslaw → "not pasta, no noodles"; duck → "not a chicken").
 - Do NOT mention camera, lens, lighting, board, style, "photorealistic", "4k" — those are added separately.`
 

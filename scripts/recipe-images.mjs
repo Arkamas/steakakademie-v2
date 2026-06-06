@@ -122,6 +122,7 @@ const POULTRY_RE = /\b(ente|duck|gans|goose|h(?:ä|ae)hnchen|chicken|pute|turkey
 const FISH_RE    = /\b(lachs|salmon|forelle|trout|thunfisch|tuna|fisch|fish|dorade|wolfsbarsch|garnele|shrimp|prawn)\b/i
 const LAMB_RE    = /\b(lamm|lamb)\b/i
 const PORK_RE    = /\b(presa|pluma|secreto|carrillera|iberico|schweineschulter|pork)\b/i
+const VEG_RE     = /\b(mais|corn|spargel|asparagus|zucchini|paprika|pepper|portobello|pilz|mushroom|gem(?:ü|ue)se|vegetable|halloumi|grillkäse|avocado|s(?:ü|ue)ßkartoffel|sweet potato|spie(?:ß|ss)|skewer)\b/i
 
 function styleClause(text) {
   if (SMOKED_RE.test(text))
@@ -136,6 +137,8 @@ function styleClause(text) {
     return 'with a dark seared crust and a juicy, just-cooked interior, glistening with natural juices'
   if (STEAK_RE.test(text))
     return 'cut into clean thick slices, the rosy medium-rare colour visible ONLY on the exposed cut faces, the outer surface an even dark-brown seared crust, fully cooked browned exterior, no raw red patches on the outside and no bloody juices, a few coarse sea salt flakes'
+  if (VEG_RE.test(text))
+    return 'with caramelized charred edges, lightly blistered skin, a glossy sheen of oil and clear dark grill marks, vibrant fresh colours (not raw and cold, not burnt black)'
   return 'glistening with natural juices (not oily), lightly charred where grilled, fresh and appetizing'
 }
 

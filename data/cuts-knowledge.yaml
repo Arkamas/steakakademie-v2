@@ -309,3 +309,79 @@ mahi-mahi:
     Festes, dickes Filet/Steak, helles cremig-rosa bis weißes, großblättriges
     Fleisch; klare Grillstreifen.
   doneness: medium, saftig halten.
+
+# ── Grill-Gemüse & Beilagen (für künftige Veggie-Rezepte) ────────────────────
+# FLUX-Schlüssel: karamellisierte Ränder, blistered Haut, Öl-Glanz, kräftige
+# Farben + klare Grillstreifen — sonst wirkt Gemüse „roh & kalt" oder verbrannt.
+maiskolben:
+  de: Maiskolben
+  aka: [Corn on the Cob]
+  match: [mais, maiskolben, corn]
+  origin: ganzer Maiskolben
+  visual: >
+    Ganzer Kolben, leuchtend gelbe Körner mit dunklen Grillstreifen und
+    karamellisierten Rändern; ein Stück Kräuterbutter schmilzt glänzend zwischen
+    die Körner. Zarter weißer Rauch.
+  doneness: gegrillt bis goldgelb mit dunklen Röstpunkten.
+
+gemuese-spiess:
+  de: Bunte Gemüse-Spieße
+  aka: [Veggie Skewers]
+  match: [spieß, spiess, skewer, gemüsespieß]
+  origin: gemischtes Gemüse am Spieß
+  visual: >
+    Stücke von rot-gelber Paprika, grüner Zucchini und roter Zwiebel aufgereiht;
+    tiefe parallele Grillstreifen, leicht geschwärzte/blasige Kanten, Olivenöl-
+    Glanz und grobes Salz. Kräftige, frische Farben.
+  doneness: außen angegrillt/blistered, innen bissfest.
+
+spargel:
+  de: Grüner Spargel
+  aka: [Green Asparagus]
+  match: [spargel, asparagus]
+  origin: grüne Spargelstangen
+  visual: >
+    Bündel kräftig grüner Stangen quer über dem Rost; präzise dunkle Grillstreifen,
+    die zarten Spitzen leicht knusprig/geschwärzt; feiner Ölfilm lässt sie glänzen.
+  doneness: bissfest, Spitzen knusprig.
+
+portobello:
+  de: Portobello-Pilze
+  aka: [Portobello Mushrooms]
+  match: [portobello, champignon, pilz, mushroom]
+  origin: große Pilzköpfe
+  visual: >
+    Große dunkle Pilzköpfe mit tiefem Gitter-Grillmuster; einer umgedreht, die
+    Lamellen mit schmelzender, blubbernder Knoblauch-Kräuterbutter gefüllt.
+    Aromatischer Rauch; saftig, nicht trocken.
+  doneness: gegrillt bis saftig (austretende Säfte sichtbar).
+
+paprika:
+  de: Paprika (gegrillt)
+  aka: [Bell Pepper]
+  match: [paprika, "bell pepper", spitzpaprika]
+  origin: Paprikaschoten
+  visual: >
+    Schoten mit glänzender, stellenweise blasig-geschwärzter Haut, eingefallene
+    karamellisierte Kanten, kräftiges Rot/Gelb, Öl-Glanz.
+  doneness: bis die Haut Blasen wirft und sich löst.
+
+suesskartoffel:
+  de: Süßkartoffel (gegrillt)
+  aka: [Sweet Potato]
+  match: [süßkartoffel, suesskartoffel, "sweet potato", batate]
+  origin: Süßkartoffel in Spalten/Scheiben
+  visual: >
+    Orange Spalten/Scheiben mit dunklen Grillstreifen und karamellisierten
+    Rändern, glänzend von Öl; innen weich.
+  doneness: weich gegart, außen geröstet.
+
+halloumi:
+  de: Halloumi (gegrillt)
+  aka: [Grillkäse]
+  match: [halloumi, grillkäse]
+  origin: fester Grillkäse
+  visual: >
+    Dicke Käsescheiben, goldbraun mit klaren dunklen Grillstreifen, leicht
+    gebräunte knusprige Oberfläche, innen weich/elastisch.
+  doneness: außen goldbraun, innen weich (schmilzt nicht).

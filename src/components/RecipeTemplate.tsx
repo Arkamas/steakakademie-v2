@@ -131,7 +131,7 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
       {/* ── Hero ── */}
       <div className="hero-fullbleed" style={{ height: '65vh', minHeight: '480px' }}>
         <Image
-          src={recipe.image}
+          src={recipe.heroImage || recipe.image}
           alt={recipe.imageAlt}
           fill
           priority

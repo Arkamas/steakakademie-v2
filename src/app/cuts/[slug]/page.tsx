@@ -86,7 +86,7 @@ const mdxComponents = {
     </div>
   ),
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
-    <thead className="bg-text-primary text-white" {...props}>
+    <thead className="bg-text-muted text-white" {...props}>
       {children}
     </thead>
   ),

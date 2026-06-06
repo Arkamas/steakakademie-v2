@@ -310,6 +310,17 @@ mahi-mahi:
     Fleisch; klare Grillstreifen.
   doneness: medium, saftig halten.
 
+rotbarbe:
+  de: Rotbarbe (Rouget)
+  aka: [Red Mullet, Rouget]
+  match: [rotbarbe, rouget, "red mullet"]
+  origin: kleiner Mittelmeerfisch, im Ganzen gegrillt
+  visual: >
+    Kleiner ganzer Fisch mit charakteristisch rötlich-rosa bis korallenroter Haut
+    und zwei langen Barteln am Unterkiefer; im Ganzen gegrillt, Haut knusprig mit
+    leichten Grillstreifen. Meist mehrere nebeneinander.
+  doneness: heiß über Glut; Haut knusprig, zartes weißes Fleisch.
+
 # ── Grill-Gemüse & Beilagen (für künftige Veggie-Rezepte) ────────────────────
 # FLUX-Schlüssel: karamellisierte Ränder, blistered Haut, Öl-Glanz, kräftige
 # Farben + klare Grillstreifen — sonst wirkt Gemüse „roh & kalt" oder verbrannt.

@@ -232,6 +232,11 @@ async function main() {
     if (ONLY && !ONLY.includes(slug)) { skipped++; continue }
     const path = join(REZEPTE, file)
     const raw  = await readFile(path, 'utf8')
+    // Drama-Look (Flammen/Grill) nur für Grillgut — Beilagen/Saucen/Rubs/Desserts überspringen.
+    if (DRAMATIC) {
+      const kat = (fm(raw, 'kategorie') || '').toLowerCase()
+      if (['beilagen', 'saucen-rubs', 'desserts', 'wine-spirits'].includes(kat)) { skipped++; continue }
+    }
     const suffix = DRAMATIC ? '-hero' : ''
     const target = join(IMG_DIR, `${slug}${suffix}.jpg`)
     const webPath = `/images/rezepte/${slug}${suffix}.jpg`

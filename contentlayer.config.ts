@@ -282,6 +282,8 @@ export const Recipe = defineDocumentType(() => ({
     authorSlug:     { type: 'string',  required: true },
     image:          { type: 'string',  required: true },
     imageAlt:       { type: 'string',  required: true },
+    heroImage:      { type: 'string' },   // optional: dramatischer Hero-Look (Eyecatcher); Galerie/Karten nutzen image
+    imagePrompt:    { type: 'string' },   // optional: KI-Selbst-Briefing fürs Bild (scripts/recipe-image-briefs.mjs)
     prepTime:       { type: 'string',  required: true },
     cookTime:       { type: 'string',  required: true },
     totalTime:      { type: 'string',  required: true },

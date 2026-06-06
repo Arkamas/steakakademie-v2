@@ -6,8 +6,10 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
+import { generateRecipeImage } from '@/lib/rezept/generate-image';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 90;
 
 function authed(): boolean {
   return cookies().get('admin_auth')?.value === process.env.ADMIN_PASSWORD;
@@ -48,7 +50,20 @@ export async function PATCH(req: Request) {
   const patch: Record<string, unknown> = { status, updated_at: new Date().toISOString() };
   if (status === 'approved') patch.published_at = new Date().toISOString();
 
-  const { error } = await supabase.from('user_recipes').update(patch).eq('id', id);
+  const { data: updated, error } = await supabase
+    .from('user_recipes').update(patch).eq('id', id).select('slug').single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+
+  // Auto-Bild bei Freigabe (best-effort — die Freigabe gilt auch ohne Bild)
+  let image_url: string | null = null;
+  if (status === 'approved' && updated?.slug) {
+    try {
+      const r = await generateRecipeImage(updated.slug);
+      image_url = r.image_url ?? null;
+      if (r.error) console.error('[admin] auto-image:', r.error);
+    } catch (e) {
+      console.error('[admin] auto-image failed', e);
+    }
+  }
+  return NextResponse.json({ ok: true, image_url });
 }

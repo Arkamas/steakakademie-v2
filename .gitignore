@@ -70,3 +70,6 @@ playwright-report/
 .env*
 social-drafts/
 pw-shots/
+
+# Promo-Maschine (generierte Post-Kits)
+promo-output/

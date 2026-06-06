@@ -48,8 +48,10 @@ tenderloin:
   match: [filet, "filet mignon", chateaubriand, tournedos, tenderloin, rinderfilet, mignon]
   origin: Filetstrang (psoas major), unter der Lende — der zarteste Muskel
   visual: >
-    Rundliches bis ovales, sehr mageres Steak ohne Fettkappe und ohne Knochen,
-    feinste glatte Faser, hoch geschnitten (dick). Keine Marmorierung.
+    Sehr mageres, glattes, knochenloses Filet ohne Fettkappe, tief rubinrot,
+    feinste Faser, keine Marmorierung. Als Filet Mignon rundlich-oval und hoch
+    geschnitten; als CHATEAUBRIAND ein dickes, zylindrisch-fassförmiges
+    Mittelstück, mit weißem Küchengarn in regelmäßigen Abständen umbunden.
   doneness: medium-rare (~54 °C); extrem zart, wenig Eigenfett.
   facts: >
     Filet Mignon = kleine Steaks vom schmalen Ende; Chateaubriand = dickes
@@ -219,3 +221,91 @@ iberico-secreto:
   origin: „verstecktes" Stück zwischen Schulter und Speck (Iberico)
   visual: Dünnes, stark marmoriertes, fächriges Stück; netzartige Fettzeichnung.
   doneness: heiß und kurz, saftig.
+
+# ── Geflügel-Detail — Härtefall Ente vs. Huhn ────────────────────────────────
+entenbrust:
+  de: Entenbrust (Magret)
+  aka: [Magret de Canard, Duck Breast]
+  match: [entenbrust, magret, "duck breast"]
+  origin: Brustfilet der Ente
+  visual: >
+    Einzelnes Brustfilet: unten dunkelrote, fast rindfleischfarbene Fleischseite,
+    oben eine DICKE weiße Fettkappe, rautenförmig eingeschnitten (cross-hatch).
+    Starker Kontrast Weiß/Dunkelrot — eindeutig Ente, kein Huhn.
+  doneness: Fettseite langsam auslassen/knusprig, Fleisch rosa (medium-rare).
+
+# ── Fisch & Meeresfrüchte (für künftige Grill-Fisch-Rezepte) ─────────────────
+# FLUX-Schlüssel: FASERUNG / Fettzeichnung diktieren, sonst „amorphe Masse".
+lachs:
+  de: Lachs(-filet)
+  aka: [Salmon, Cedar-Plank-Lachs]
+  match: [lachs, salmon]
+  origin: Filet vom Lachs (fettreich)
+  visual: >
+    Dickes Filet, leuchtend orange-rosa Fleisch mit deutlichen PARALLELEN weißen
+    Fettlinien; unten ein schmaler Streifen silbriger Haut, glänzt vom eigenen Öl.
+    Optional auf rauchendem, an den Kanten verkohltem Zedernholzbrett.
+  doneness: außen leicht angegrillt, innen saftig-glasig und blättrig.
+
+thunfisch:
+  de: Thunfisch-Steak (Ahi)
+  aka: [Ahi Tuna, Tuna Steak]
+  match: [thunfisch, ahi, tuna]
+  origin: dichtes Muskelfleisch, fettarm
+  visual: >
+    Dickes, dichtes, fast quadratisches Steak; tief rubinrot und VÖLLIG fettfrei
+    (keine weißen Linien), glatt und edelstein-artig. Gegrillt: scharfe Gitter-
+    Grillstreifen außen, innen tiefroter roher Kern (medium-rare), Ölglanz.
+  doneness: heiß & kurz; Kern roh/medium-rare (wie ein Rinderfilet).
+
+schwertfisch:
+  de: Schwertfisch-Steak
+  aka: [Swordfish]
+  match: [schwertfisch, swordfish]
+  origin: großer Speisefisch, sehr fest/„steakig"
+  visual: >
+    Dickes, festes Steak, blass beige-rosa Fleisch mit feinem, dichtem
+    Muskelmuster; klar steakartig, deutliche Grillstreifen. Mager.
+  doneness: medium — nicht übergaren (trocknet leicht aus).
+
+ganzer-fisch:
+  de: Ganzer Fisch (Dorade / Wolfsbarsch / Branzino)
+  aka: [Sea Bream, Sea Bass, Dorade, Loup de Mer]
+  match: ["ganzer fisch", dorade, wolfsbarsch, branzino, "sea bass", "sea bream", loup]
+  origin: ganzer Fisch mit Kopf
+  visual: >
+    Ganzer Fisch mit Kopf und leicht angekohlten Flossen; silbrig-goldene Haut,
+    blasig-knusprig, mit dunklen parallelen Grillstreifen. Im offenen Bauchraum
+    Zitronenscheiben und Kräuter (Rosmarin/Thymian). Rauch steigt vom Rost.
+  doneness: direkt über Glut; Haut knusprig, Fleisch weiß und saftig.
+
+makrele:
+  de: Makrele
+  aka: [Mackerel]
+  match: [makrele, mackerel]
+  origin: fettreicher, kräftiger Fisch
+  visual: >
+    Ganz oder als Filet; bläulich-silbrige Haut mit dunklen Tigerstreifen-Mustern,
+    öliger Glanz, leichte Grillstreifen.
+  doneness: gut grillbar — hoher Fettgehalt hält saftig.
+
+sardinen:
+  de: Sardinen
+  aka: [Sardines]
+  match: [sardine, sardinen, sardines]
+  origin: kleine Schwarmfische, im Ganzen gegrillt
+  visual: >
+    Mehrere kleine silbrige Fische nebeneinander auf dem Rost; Haut zu knusprigem
+    Gold-Schwarz verkohlt mit feinen Grillstreifen; kleine Flammen/Glut darunter,
+    aromatischer Rauch.
+  doneness: heiß über Glut; Haut sehr knusprig.
+
+mahi-mahi:
+  de: Mahi-Mahi / Goldmakrele
+  aka: [Dolphinfish]
+  match: ["mahi-mahi", "mahi mahi", mahimahi, goldmakrele]
+  origin: fester, magerer Speisefisch
+  visual: >
+    Festes, dickes Filet/Steak, helles cremig-rosa bis weißes, großblättriges
+    Fleisch; klare Grillstreifen.
+  doneness: medium, saftig halten.

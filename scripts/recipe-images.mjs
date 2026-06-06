@@ -33,6 +33,11 @@ const LIMIT = process.argv.includes('--limit')
 const ONLY = process.argv.includes('--only')
   ? process.argv[process.argv.indexOf('--only') + 1].split(',').map(s => s.trim())
   : null
+// --look warm|dramatic → dramatic = Hero-Eyecatcher (dunkel/Flammen), Output <slug>-hero.jpg + heroImage:
+const LOOK = process.argv.includes('--look')
+  ? (process.argv[process.argv.indexOf('--look') + 1] || 'warm').trim()
+  : 'warm'
+const DRAMATIC = LOOK === 'dramatic'
 
 // FAL_KEY robust: env zuerst, sonst .env.local manuell (dotenv-Quirk umgehen)
 let FAL_KEY = process.env.FAL_KEY
@@ -147,8 +152,8 @@ function pickPerspective(seed) {
   return PERSPECTIVES[h % PERSPECTIVES.length]
 }
 
-// NATÜRLICHER Hausstil — kein Hochglanz-KI-Look, mittlere Distanz, appetitlich
-function buildPrompt(raw, slug = '') {
+// Zwei Looks: warm (Hausstil, Galerie/Karten) vs. dramatic (Hero-Eyecatcher, dunkel/Flammen).
+function buildPrompt(raw, slug = '', look = 'warm') {
   const alt    = fm(raw, 'imageAlt') || fm(raw, 'title')
   const meat   = fm(raw, 'meatType')
   const method = fm(raw, 'cookingMethod')
@@ -160,12 +165,22 @@ function buildPrompt(raw, slug = '') {
   const subject = lead
     ? `${lead}${(method && !brief) ? `, ${method}` : ''}`
     : [alt, meat && `(${meat})`, method].filter(Boolean).join(', ')
-  const clause = brief ? '' : styleClause(`${meat} ${slug} ${alt}`)
-  return `appetizing professional food photograph of ${subject}, the whole dish in frame, `
+  const dramatic = look === 'dramatic'
+  // Im Drama-Look führt das Motiv (Brief/Anatomie); die Sliced-Doktrin (Teller) entfällt.
+  const clause = (brief || dramatic) ? '' : styleClause(`${meat} ${slug} ${alt}`)
+
+  const head = `appetizing professional food photograph of ${subject}, `
     + (anatomy ? `anatomically accurate cut of meat, ` : ``)
     + (protein ? `the dish must clearly and unmistakably show exactly this animal, ` : ``)
     + (clause ? `${clause}, ` : ``)
-    + `plated on a rustic warm wooden board, soft warm natural daylight, a subtle grill and glowing ember atmosphere softly blurred in the background, a little fresh herb garnish, clean and appetizing, subtle steam, `
+
+  if (dramatic) {
+    // Eyecatcher: präzise physikalische Sprache (Flux-stark), Form bleibt diktiert.
+    return head
+      + `shown whole and sizzling on a hot cast-iron grill grate, intense orange flames licking the edges from below, thick volumetric white smoke billowing around it, glowing embers visible through the grate, deep dark cross-hatch grill marks seared into the surface, warm golden-hour rim light, dark moody atmospheric background, cinematic lighting, glistening meat texture, sharp focus with a shallow depth of field, close three-quarter perspective, no text, no watermark, no people`
+  }
+  return head
+    + `the whole dish in frame, plated on a rustic warm wooden board, soft warm natural daylight, a subtle grill and glowing ember atmosphere softly blurred in the background, a little fresh herb garnish, clean and appetizing, subtle steam, `
     + `${pickPerspective(slug || alt)}, `
     + `50mm lens, f/5.6, balanced focus, appetizing, no text, no watermark, no people`
 }
@@ -183,13 +198,13 @@ function loraScale(raw, slug) {
   return 0.6 // Beilagen/Saucen/Desserts: Stil ja, Fleisch-Bias nein
 }
 
-async function generate(prompt, scale = 0.9) {
+async function generate(prompt, scale = 0.9, size = 'landscape_4_3') {
   const res = await fetch('https://fal.run/fal-ai/flux-lora', {
     method: 'POST',
     headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       prompt: `sa_foodstyle, ${prompt}`,
-      image_size: 'landscape_4_3',
+      image_size: size,
       num_images: 1,
       enable_safety_checker: true,
       loras: [{ path: FOODSTYLE_LORA, scale }],
@@ -217,22 +232,25 @@ async function main() {
     if (ONLY && !ONLY.includes(slug)) { skipped++; continue }
     const path = join(REZEPTE, file)
     const raw  = await readFile(path, 'utf8')
-    const target = join(IMG_DIR, `${slug}.jpg`)
-    const webPath = `/images/rezepte/${slug}.jpg`
+    const suffix = DRAMATIC ? '-hero' : ''
+    const target = join(IMG_DIR, `${slug}${suffix}.jpg`)
+    const webPath = `/images/rezepte/${slug}${suffix}.jpg`
 
     if (!FORCE && existsSync(target)) { skipped++; continue }
 
-    const prompt = buildPrompt(raw, slug)
-    if (DRY) { console.log(c.y(`◇ ${slug}`)); console.log(c.d(`  ${prompt}\n`)); done++; continue }
+    const prompt = buildPrompt(raw, slug, LOOK)
+    if (DRY) { console.log(c.y(`◇ ${slug}${suffix}`)); console.log(c.d(`  ${prompt}\n`)); done++; continue }
 
     try {
-      process.stdout.write(c.d(`◇ ${slug} … `))
-      const buf = await generate(prompt, loraScale(raw, slug))
+      process.stdout.write(c.d(`◇ ${slug}${suffix} … `))
+      const buf = await generate(prompt, DRAMATIC ? 0.4 : loraScale(raw, slug), DRAMATIC ? 'landscape_16_9' : 'landscape_4_3')
       await writeFile(target, buf)
-      // image:-Feld patchen (regex, KEIN Re-Serialize → contentlayer-safe)
-      const patched = raw.match(/^image:\s*.*$/m)
-        ? raw.replace(/^image:\s*.*$/m, `image: "${webPath}"`)
-        : raw.replace(/^---\n/, `---\nimage: "${webPath}"\n`)
+      // Frontmatter patchen (regex, KEIN Re-Serialize): warm → image:, dramatic → heroImage:
+      const field = DRAMATIC ? 'heroImage' : 'image'
+      const fieldRe = new RegExp(`^${field}:\\s*.*$`, 'm')
+      const patched = raw.match(fieldRe)
+        ? raw.replace(fieldRe, `${field}: "${webPath}"`)
+        : raw.replace(/^---\n/, `---\n${field}: "${webPath}"\n`)
       if (patched !== raw) await writeFile(path, patched, 'utf8')
       console.log(c.g(`✓ ${(buf.length / 1024).toFixed(0)} KB`))
       done++

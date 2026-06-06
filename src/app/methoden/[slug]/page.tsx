@@ -10,6 +10,10 @@ import { cn } from '@/lib/utils';
 import { Clock, Calendar, ChevronRight, RotateCcw, Flame } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
+import { getMethodZones } from '@/lib/affiliate-zones';
+import HeroRecommendation from '@/components/affiliate/HeroRecommendation';
+import EquipmentFooter from '@/components/affiliate/EquipmentFooter';
+import InlineAffiliate from '@/components/affiliate/InlineAffiliate';
 
 interface Props {
   params: { slug: string };
@@ -83,6 +87,7 @@ const mdxComponents = {
   hr: () => <hr className="border-border-subtle my-10" />,
   BBQPairing,
   Schnelluebersicht, Achtung, ProTipp, TempBox,
+  InlineAffiliate,
 };
 
 export default function MethodePage({ params }: Props) {
@@ -90,6 +95,7 @@ export default function MethodePage({ params }: Props) {
   if (!methode) notFound();
 
   const MDXContent = useMDXComponent(methode.body.code);
+  const zones = getMethodZones(methode.slug);
 
   const howToSchema = {
     '@type': 'HowTo',
@@ -199,6 +205,10 @@ export default function MethodePage({ params }: Props) {
                 <MDXContent components={mdxComponents} />
               </div>
 
+              {zones.footer && (
+                <EquipmentFooter title={zones.footer.title} productIds={zones.footer.productIds} />
+              )}
+
               <div className="mt-10 p-5 bg-surface-base border border-border-subtle flex gap-4">
                 <div className="w-14 h-14 bg-border-subtle rounded-full shrink-0" />
                 <div>
@@ -213,7 +223,11 @@ export default function MethodePage({ params }: Props) {
             </article>
 
             <aside className="space-y-6">
-              <div className="bg-surface-elevated border border-border-subtle p-5 sticky top-24">
+              {zones.hero && (
+                <HeroRecommendation productId={zones.hero.productId} pitch={zones.hero.pitch} />
+              )}
+
+              <div className="bg-surface-elevated border border-border-subtle p-5">
                 <div className="border-t-2 border-brand-fire -mt-5 mb-4 pt-4">
                   <h3 className="font-sans font-bold text-sm text-text-primary flex items-center gap-2">
                     <Flame size={14} className="text-brand-fire" /> Methoden-Info

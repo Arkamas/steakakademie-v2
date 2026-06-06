@@ -130,7 +130,7 @@ function styleClause(text) {
   if (PORK_RE.test(text))
     return 'with a dark seared crust and a juicy, just-cooked interior, glistening with natural juices'
   if (STEAK_RE.test(text))
-    return 'cut into clean thick slices revealing a smooth, juicy, evenly rosy medium-rare interior, dark caramelized seared crust, a few coarse sea salt flakes'
+    return 'cut into clean thick slices, the rosy medium-rare colour visible ONLY on the exposed cut faces, the outer surface an even dark-brown seared crust, fully cooked browned exterior, no raw red patches on the outside and no bloody juices, a few coarse sea salt flakes'
   return 'glistening with natural juices (not oily), lightly charred where grilled, fresh and appetizing'
 }
 
@@ -152,18 +152,19 @@ function buildPrompt(raw, slug = '') {
   const alt    = fm(raw, 'imageAlt') || fm(raw, 'title')
   const meat   = fm(raw, 'meatType')
   const method = fm(raw, 'cookingMethod')
-  const anatomy = cutAnatomy(meat, slug)
-  const protein = anatomy ? '' : proteinSubject(meat, slug)
-  const lead = anatomy || protein
-  // Explizites Motiv führt (korrekter Cut / korrektes Tier!), sonst Fallback auf Alt/Titel.
+  const brief  = fm(raw, 'imagePrompt')          // Selbst-Briefing (Priorität #1, von Claude verfasst)
+  const anatomy = brief ? '' : cutAnatomy(meat, slug)
+  const protein = (brief || anatomy) ? '' : proteinSubject(meat, slug)
+  const lead = brief || anatomy || protein
+  // Selbst-Briefing > Cut-Anatomie > Protein-Anker > Alt/Titel.
   const subject = lead
-    ? `${lead}${method ? `, ${method}` : ''}`
+    ? `${lead}${(method && !brief) ? `, ${method}` : ''}`
     : [alt, meat && `(${meat})`, method].filter(Boolean).join(', ')
-  const clause = styleClause(`${meat} ${slug} ${alt}`)
+  const clause = brief ? '' : styleClause(`${meat} ${slug} ${alt}`)
   return `appetizing professional food photograph of ${subject}, the whole dish in frame, `
     + (anatomy ? `anatomically accurate cut of meat, ` : ``)
     + (protein ? `the dish must clearly and unmistakably show exactly this animal, ` : ``)
-    + `${clause}, `
+    + (clause ? `${clause}, ` : ``)
     + `plated on a rustic warm wooden board, soft warm natural daylight, a subtle grill and glowing ember atmosphere softly blurred in the background, a little fresh herb garnish, clean and appetizing, subtle steam, `
     + `${pickPerspective(slug || alt)}, `
     + `50mm lens, f/5.6, balanced focus, appetizing, no text, no watermark, no people`
@@ -176,8 +177,10 @@ const FOODSTYLE_LORA = process.env.FAL_LORA_FOODSTYLE
 // Die LoRA ist auf RIND trainiert → bei Geflügel/Fisch zieht sie das Motiv Richtung
 // Fleisch/Huhn. Dort Stil-Stärke senken (Stil bleibt, korrektes Tier gewinnt).
 function loraScale(raw, slug) {
-  const t = `${fm(raw, 'meatType')} ${slug} ${fm(raw, 'imageAlt') || fm(raw, 'title')}`
-  return (POULTRY_RE.test(t) || FISH_RE.test(t)) ? 0.55 : 0.9
+  const t = `${fm(raw, 'meatType')} ${slug} ${fm(raw, 'imageAlt') || fm(raw, 'title')} ${fm(raw, 'kategorie')}`
+  if (STEAK_RE.test(t) || SMOKED_RE.test(t) || PORK_RE.test(t) || LAMB_RE.test(t)) return 0.9
+  if (POULTRY_RE.test(t) || FISH_RE.test(t)) return 0.55
+  return 0.6 // Beilagen/Saucen/Desserts: Stil ja, Fleisch-Bias nein
 }
 
 async function generate(prompt, scale = 0.9) {

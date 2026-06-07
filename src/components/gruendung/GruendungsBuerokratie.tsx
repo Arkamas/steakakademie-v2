@@ -11,6 +11,7 @@ import {
   ANTI_SCAM_SCHUTZ,
   BEHOERDEN_BRIEF_WARNUNG,
   RUECKLAGEN_REGEL,
+  NACHZAHLUNGS_FALLE,
   BUEROKRATIE_STAND,
   BUEROKRATIE_DISCLAIMER,
   type Pflichtgrad,
@@ -207,6 +208,10 @@ export default function GruendungsBuerokratie() {
             </span>
           </div>
           <p className="font-body text-[0.95rem] leading-relaxed text-text-secondary">{RUECKLAGEN_REGEL}</p>
+          <p className="mt-3 border-t border-border-subtle pt-3 font-body text-[0.95rem] leading-relaxed text-text-secondary">
+            <strong className="text-text-primary">Die Nachzahlungsfalle: </strong>
+            {NACHZAHLUNGS_FALLE}
+          </p>
         </aside>
 
         {/* Behörden-Brief-Falle */}

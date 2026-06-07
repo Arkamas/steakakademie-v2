@@ -338,11 +338,23 @@ export const BEHOERDEN_BRIEF_WARNUNG =
   'nicht zahlen, kurz per KI prüfen oder bei der IHK anrufen.';
 
 // Rücklagen-Disziplin — der härteste, wichtigste Finanz-Reflex.
+// DAUERregel (keine „erste 4 Jahre"-Sache) + Nachzahlungsfalle (Doppelschlag).
 export const RUECKLAGEN_REGEL =
-  'Lege ab Tag 1 jeden Monat 20–30 % deines Gewinns für die Einkommensteuer beiseite — auf ein ' +
-  'separates Konto, an das du nicht rangehst. Ziehe das die ersten Jahre eisern durch. Der ' +
-  'häufigste Pleitegrund junger Unternehmen ist nicht zu wenig Umsatz, sondern kein Geld für die ' +
-  'Steuernachzahlung. Zusätzlich: 3–6 Monatsausgaben als Notreserve aufbauen.';
+  'Lege ab Tag 1 jeden Monat rund 30 % deines Gewinns für die Steuer beiseite — auf ein separates ' +
+  'Konto, an das du nicht rangehst. Das ist keine Übergangsregel für die Anfangsjahre, sondern eine ' +
+  'Dauerdisziplin: Der häufigste Pleitegrund junger Unternehmen ist nicht zu wenig Umsatz, sondern ' +
+  'kein Geld für die Steuernachzahlung. Bei Regelbesteuerung die vereinnahmte Umsatzsteuer strikt ' +
+  'getrennt halten — sie war nie dein Geld. Zusätzlich 3–6 Monatsausgaben als Notreserve.';
+
+// Die zeitversetzte Doppelbelastung, die viele im 2.–4. Jahr umhaut.
+export const NACHZAHLUNGS_FALLE =
+  'Die Falle kommt zeitversetzt. Anfangs zahlst du oft noch keine Vorauszahlungen — der erste ' +
+  'Einkommensteuer-Bescheid trifft dich erst 1–2 Jahre nach dem Start. Und dann doppelt: eine ' +
+  'Nachzahlung fürs zurückliegende Jahr UND gleichzeitig neu festgesetzte Quartals-Vorauszahlungen ' +
+  '(oft rückwirkend für bereits vergangene Quartale). Wächst dein Gewinn, wiederholt sich das ' +
+  'jährlich — jede Erklärung bringt Nachzahlung plus höhere Vorauszahlungen. Ab dem 3.–4. Jahr ' +
+  'kann zusätzlich eine erste Betriebsprüfung anstehen (Nachforderungen plus Zinsen). Deshalb: ' +
+  'Rücklage nie auflösen, nur weil ein Jahr „gut lief".';
 
 export const BUEROKRATIE_STAND = 'Stand 06/2026';
 

@@ -1,0 +1,52 @@
+name: Vercel Deploy Alert → Jira
+
+# Vercel meldet jeden Deploy-Status an GitHub (Event: deployment_status).
+# Bei failure/error öffnen wir automatisch ein KAN-Ticket — mit Dedup, damit
+# wiederholte Fehlschläge nicht spammen (nur EIN offenes Ticket je Label).
+#
+# Hobby-Plan-kompatibel: KEIN Vercel-Pro-Webhook nötig — nutzt die GitHub-
+# Deployment-Status-Events der Vercel-Integration. Reuse: scripts/ops-alert-to-jira.mjs.
+# Benötigte GitHub-Secrets (bereits für den Ops-Hook gesetzt): JIRA_EMAIL, JIRA_API_TOKEN.
+
+on:
+  deployment_status: {}
+
+permissions:
+  contents: read
+
+jobs:
+  alert:
+    # Nur bei fehlgeschlagenem Deployment
+    if: ${{ github.event.deployment_status.state == 'failure' || github.event.deployment_status.state == 'error' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Vercel-Deploy-Fehler → Jira (KAN)
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_ISSUETYPE: Bug
+          ALERT_LABELS: vercel,deployment
+          ALERT_DEDUP_LABEL: vercel-deploy-fail
+          ALERT_SUMMARY: "Vercel-Deploy fehlgeschlagen: ${{ github.event.deployment_status.environment }}"
+          ALERT_DESCRIPTION: |
+            Ein Vercel-Deployment ist fehlgeschlagen (automatischer Alert via GitHub deployment_status).
+
+            Environment: ${{ github.event.deployment_status.environment }}
+            State: ${{ github.event.deployment_status.state }}
+            Commit: ${{ github.event.deployment.sha }}
+            Ref: ${{ github.event.deployment.ref }}
+            Deployment-URL: ${{ github.event.deployment_status.target_url }}
+            Beschreibung: ${{ github.event.deployment_status.description }}
+            Repo: ${{ github.repository }}
+
+            Zu tun: Build-Logs in Vercel pruefen (Deployments -> fehlgeschlagenes Deployment -> Logs).
+            Nach dem Fix Ticket auf "Fertig" setzen (Dedup haengt am Label vercel-deploy-fail —
+            solange das Ticket offen ist, werden keine neuen Duplikate erzeugt).
+        run: node scripts/ops-alert-to-jira.mjs

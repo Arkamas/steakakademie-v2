@@ -189,6 +189,55 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
+              <h2 className={h2Class}>8a. Community-Rezepte (nutzergenerierte Inhalte)</h2>
+              <p className="mb-3">
+                Angemeldete Nutzer können eigene Rezepte einreichen, die nach Prüfung im
+                Community-Bereich veröffentlicht werden. Dabei verarbeiten wir die von dir
+                eingegebenen Inhalte (Rezepttitel, Zutaten, Zubereitungsschritte, von dir
+                gewählter Anzeigename) sowie den Bearbeitungsstatus. Die Speicherung erfolgt
+                bei Supabase (Abschnitt 8).
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Kein Foto-Upload:</strong> Das Hochladen
+                von Bildern — insbesondere von Personenfotos — ist nicht vorgesehen. Rezeptbilder
+                werden von uns KI-generiert (siehe Abschnitt 10b).
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Eingereichte Inhalte
+                werden gespeichert, bis du sie bzw. dein Konto löschst oder die Veröffentlichung
+                widerrufst. Es gelten ergänzend unsere{' '}
+                <Link href="/nutzungsbedingungen" className={linkClass}>Nutzungsbedingungen</Link>.
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Nutzungsverhältnis) sowie lit. f
+                (berechtigtes Interesse am Betrieb der Community).
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>8b. Authentifizierungs- &amp; Transaktions-E-Mails (Resend)</h2>
+              <p className="mb-3">
+                Für den Versand von Anmelde-/Login-Links (Magic Link) und transaktionalen
+                E-Mails nutzen wir <strong className="text-text-primary">Resend, Inc.</strong>,
+                2261 Market Street #5039, San Francisco, CA 94114, USA. Resend verarbeitet hierfür
+                deine E-Mail-Adresse und den Nachrichteninhalt ausschließlich zum Zweck der Zustellung.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Drittlandübermittlung:</strong> USA —
+                abgesichert über EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).
+                <strong className="text-text-primary"> Speicherdauer:</strong> nur zur Zustellung;
+                Zustell-Logs werden kurzfristig vorgehalten.
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung/Kontozugang).
+                Details:{' '}
+                <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  resend.com/legal/privacy-policy
+                </a>
+              </p>
+            </section>
+
+            <section>
               <h2 className={h2Class}>9. Zahlungsabwicklung (Digistore24)</h2>
               <p className="mb-3">
                 Zahlungen für digitale Produkte werden über Digistore24 GmbH abgewickelt.
@@ -258,6 +307,42 @@ export default function DatenschutzPage() {
                 <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
                   anthropic.com/privacy
                 </a>
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>10a. KI-Moderation von Community-Einreichungen (Anthropic)</h2>
+              <p className="mb-3">
+                Von Nutzern eingereichte Rezepte werden vor einer möglichen Veröffentlichung
+                automatisiert mit einem KI-Sprachmodell von <strong className="text-text-primary">Anthropic
+                PBC</strong> (Auftragsverarbeiter, Art. 28 DSGVO; USA, EU-Standardvertragsklauseln)
+                auf Qualität und Zulässigkeit geprüft. Verarbeitet wird ausschließlich der von dir
+                eingereichte Rezeptinhalt.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Keine ausschließlich automatisierte
+                Entscheidung:</strong> Die KI-Prüfung ist eine Vorprüfung; die endgültige
+                Freigabe oder Ablehnung erfolgt unter menschlicher Kontrolle (kein automatisierter
+                Einzelfallbeschluss mit Rechtswirkung i.&nbsp;S.&nbsp;v. Art. 22 DSGVO).
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am Schutz der
+                Plattform vor rechtswidrigen oder unsachgemäßen Inhalten).
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>10b. KI-Bildgenerierung für Rezepte (fal.ai)</h2>
+              <p className="mb-3">
+                Rezeptbilder werden serverseitig mit dem KI-Bilddienst{' '}
+                <strong className="text-text-primary">fal.ai (Features &amp; Labels, Inc.)</strong>, USA,
+                erzeugt. Verarbeitet wird ausschließlich der Rezept-/Prompttext zur Erstellung eines
+                Bildes — <strong className="text-text-primary">es werden keine personenbezogenen Daten
+                und keine Personenfotos verarbeitet</strong>.
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Bebilderung
+                der Inhalte). Drittlandübermittlung USA — EU-Standardvertragsklauseln (Art. 46 DSGVO).
               </p>
             </section>
 

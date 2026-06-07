@@ -105,6 +105,45 @@ export default function AgbPage() {
             </section>
 
             <section>
+              <h2 className={h2Class}>§ 5a Geschenkgutscheine</h2>
+              <p className="mb-3">
+                Wir bieten <strong className="text-text-primary">Geschenkgutscheine für jeweils ein
+                bestimmtes digitales Produkt</strong> an (z.&nbsp;B. einen Kurs). Der Gutschein berechtigt
+                den Inhaber zur einmaligen Freischaltung des auf dem Gutschein genannten Produkts.
+              </p>
+              <ul className="list-disc pl-5 space-y-1 mb-3">
+                <li>
+                  <strong className="text-text-primary">Gültigkeit:</strong> 3 Jahre ab Ausstellung
+                  (gesetzliche Verjährungsfrist, § 195 BGB, beginnend zum Schluss des Ausstellungsjahres).
+                </li>
+                <li>
+                  <strong className="text-text-primary">Übertragbarkeit:</strong> Der Gutschein ist
+                  übertragbar und kann von der Person eingelöst werden, die im Besitz des Gutschein-Codes ist.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Einlösung:</strong> Code unter{' '}
+                  <Link href="/gutschein/einloesen" className={linkClass}>steakakademie.de/gutschein/einloesen</Link>{' '}
+                  eingeben. Für die Einlösung ist ein (kostenloses) Nutzerkonto erforderlich; nach Einlösung
+                  wird das jeweilige Produkt freigeschaltet.
+                </li>
+                <li>
+                  <strong className="text-text-primary">Kein Restguthaben / keine Barauszahlung:</strong>{' '}
+                  Der Gutschein wird vollständig auf das genannte Produkt eingelöst. Eine Barauszahlung
+                  oder Verrechnung eines Restwerts ist ausgeschlossen.
+                </li>
+              </ul>
+              <p className="mb-3">
+                <strong className="text-text-primary">Widerruf:</strong> Bis zur Einlösung besteht das
+                14-tägige Widerrufsrecht (siehe § 6a). Mit der Einlösung — also der Freischaltung des
+                digitalen Inhalts — erlischt das Widerrufsrecht gemäß § 356 Abs. 5 BGB.
+              </p>
+              <p>
+                Die Zahlungsabwicklung erfolgt über Digistore24 (§ 2). Als Kleinunternehmer gemäß § 19 UStG
+                wird keine Umsatzsteuer gesondert ausgewiesen (§ 3).
+              </p>
+            </section>
+
+            <section>
               <h2 className={h2Class}>§ 6 Widerrufsrecht (physische Produkte)</h2>
               <p className="mb-3">
                 Du hast das Recht, diesen Vertrag innerhalb von 14 Tagen ohne Angabe von

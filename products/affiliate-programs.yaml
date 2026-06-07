@@ -60,3 +60,17 @@
   channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
   note: "Optionales Zusatzprogramm. Keine Mindestauszahlung, monatlich. Retoure zieht Provision ab."
   disclosureNote: "Kaufst du über einen Banggood-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."
+
+- id: burnhard
+  name: "BURNHARD"
+  network: "retailAds"
+  providers: [burnhard]
+  commission: "6 % Basis, +2 % erste 2 Monate, Tiers bis 8 % (Silver/Gold/Platinum)"
+  cookie: "im Netzwerk prüfen (nicht öffentlich ausgewiesen)"
+  avgCartEur: null
+  status: planned
+  applyUrl: "https://www.burnhard.com/de/affiliate-programm"
+  focus: "Eigene BBQ-Marke — Gasgrills Mittelklasse (~300–1.500 €), Kohlegrills, Zubehör"
+  channels: { blog: true, socialOrganic: true, paidAds: regeln-pruefen }
+  note: "Content-Publisher akzeptiert (06.06.2026 geprüft). Ergänzt Premium (SANTOS/Grillfürst) nach unten. Potenzieller Sponsor für 'Rezept des Monats'-Challenge. Kontakt: affiliates@burnhard.com."
+  disclosureNote: "Kaufst du über einen BURNHARD-Link, erhalte ich eine Provision — ohne Mehrkosten für dich."

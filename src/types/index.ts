@@ -19,6 +19,7 @@ export type AffiliateProvider =
   | 'dreisechzig-bbq'
   | 'grill-experte'
   | 'banggood'
+  | 'burnhard'
   | 'other';
 
 // ── AFFILIATE-PROGRAMME ──────────────────────────────────────────────────────

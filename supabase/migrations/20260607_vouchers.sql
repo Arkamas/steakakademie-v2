@@ -2,33 +2,52 @@
 -- Geschenkgutscheine (produktspezifisch / Einzweckgutschein)
 -- Migration: 20260607_vouchers
 --
--- Modell: Käufer kauft einen "Geschenkgutschein <Kurs>" (eigene Digistore-
+-- Modell: Käufer kauft einen "Geschenkgutschein <Produkt>" (eigene Digistore-
 -- product_id mit is_voucher=true). Der Webhook erzeugt einen Code, schaltet
--- aber NICHTS frei. Der Beschenkte löst den Code ein → grant_course_access.
+-- aber NICHTS frei. Der Beschenkte löst den Code ein →
+--   kind='course' → grant_course_access   (BBQ-Grundkurs, Mein Protokoll, …)
+--   kind='credit' → grant_diagnose_credits (Steak-Beichte, N Credits)
 --
 -- Einzweckgutschein (§3 Abs.14 UStG): Produkt + USt bei Ausstellung fix →
 -- USt fällt beim Verkauf an → Digistore24 bucht sauber. 3 Jahre gültig (§195 BGB).
+--
+-- Idempotent (re-runnable): ADD COLUMN IF NOT EXISTS / CREATE OR REPLACE /
+-- DROP FUNCTION IF EXISTS vor Signatur-Änderung.
 -- ============================================================
 
--- ── 1. Flag: welche Digistore-Produkte sind Gutscheine ───────
+-- ── 1. Flags auf digistore_products ──────────────────────────
 ALTER TABLE digistore_products
   ADD COLUMN IF NOT EXISTS is_voucher boolean NOT NULL DEFAULT false;
+ALTER TABLE digistore_products
+  ADD COLUMN IF NOT EXISTS voucher_credit_amount int;  -- gesetzt = Credit-Gutschein (N Credits)
 
 -- ── 2. vouchers ──────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS vouchers (
   id              uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code            text UNIQUE NOT NULL,
-  course_id       uuid NOT NULL REFERENCES courses(id) ON DELETE RESTRICT,
-  ds_order_id     text,                     -- Audit-Link zum Kauf (Idempotenz)
-  purchaser_email text,                     -- wer ihn gekauft hat
-  gift_message    text,                     -- optionale persönliche Nachricht
+  course_id       uuid NOT NULL REFERENCES courses(id) ON DELETE RESTRICT,  -- Produkt-Identität (auch für Credit: steak-beichte-Course)
+  kind            text NOT NULL DEFAULT 'course',          -- 'course' | 'credit'
+  credit_amount   int,                                     -- nur bei kind='credit'
+  ds_order_id     text,                                    -- Audit-Link zum Kauf (Idempotenz)
+  purchaser_email text,
+  gift_message    text,
   status          text NOT NULL DEFAULT 'issued'
                     CHECK (status IN ('issued','redeemed','revoked')),
-  redeemed_by     uuid,                     -- auth.users.id des Beschenkten
+  redeemed_by     uuid,
   redeemed_at     timestamptz,
   issued_at       timestamptz NOT NULL DEFAULT now(),
   valid_until     timestamptz NOT NULL DEFAULT (now() + interval '3 years')
 );
+
+-- Spalten für den Fall einer bereits existierenden Tabelle nachziehen
+ALTER TABLE vouchers ADD COLUMN IF NOT EXISTS kind          text NOT NULL DEFAULT 'course';
+ALTER TABLE vouchers ADD COLUMN IF NOT EXISTS credit_amount int;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'vouchers_kind_check') THEN
+    ALTER TABLE vouchers ADD CONSTRAINT vouchers_kind_check CHECK (kind IN ('course','credit'));
+  END IF;
+END $$;
 
 CREATE INDEX IF NOT EXISTS idx_vouchers_status      ON vouchers(status);
 CREATE INDEX IF NOT EXISTS idx_vouchers_purchaser   ON vouchers(purchaser_email);
@@ -57,11 +76,14 @@ END;
 $$;
 
 -- ── 4. create_voucher — idempotent pro ds_order_id, eindeutiger Code ──
+DROP FUNCTION IF EXISTS create_voucher(uuid, text, text, text);
 CREATE OR REPLACE FUNCTION create_voucher(
   p_course_id       uuid,
   p_ds_order_id     text,
   p_purchaser_email text,
-  p_gift_message    text DEFAULT NULL
+  p_gift_message    text DEFAULT NULL,
+  p_kind            text DEFAULT 'course',
+  p_credit_amount   int  DEFAULT NULL
 )
 RETURNS text
 LANGUAGE plpgsql
@@ -72,7 +94,6 @@ DECLARE
   v_code text;
   v_try  int := 0;
 BEGIN
-  -- Idempotenz: existiert für diese Order schon ein Gutschein → den Code liefern
   IF p_ds_order_id IS NOT NULL THEN
     SELECT code INTO v_code FROM vouchers WHERE ds_order_id = p_ds_order_id LIMIT 1;
     IF FOUND THEN RETURN v_code; END IF;
@@ -82,8 +103,8 @@ BEGIN
     v_try  := v_try + 1;
     v_code := gen_voucher_code();
     BEGIN
-      INSERT INTO vouchers (code, course_id, ds_order_id, purchaser_email, gift_message)
-      VALUES (v_code, p_course_id, p_ds_order_id, p_purchaser_email, p_gift_message);
+      INSERT INTO vouchers (code, course_id, kind, credit_amount, ds_order_id, purchaser_email, gift_message)
+      VALUES (v_code, p_course_id, COALESCE(p_kind, 'course'), p_credit_amount, p_ds_order_id, p_purchaser_email, p_gift_message);
       RETURN v_code;
     EXCEPTION WHEN unique_violation THEN
       IF v_try > 10 THEN RAISE EXCEPTION 'voucher code generation failed after 10 tries'; END IF;
@@ -92,7 +113,7 @@ BEGIN
 END;
 $$;
 
--- ── 5. redeem_voucher — race-sicher (FOR UPDATE), ruft grant_course_access ──
+-- ── 5. redeem_voucher — race-sicher (FOR UPDATE); course ODER credit ──
 CREATE OR REPLACE FUNCTION redeem_voucher(
   p_code    text,
   p_user_id uuid
@@ -116,7 +137,11 @@ BEGIN
   IF v.status = 'revoked'    THEN RETURN jsonb_build_object('status','revoked'); END IF;
   IF v.valid_until < now()   THEN RETURN jsonb_build_object('status','expired'); END IF;
 
-  PERFORM grant_course_access(p_user_id, v.course_id);
+  IF v.kind = 'credit' THEN
+    PERFORM grant_diagnose_credits(p_user_id, COALESCE(v.credit_amount, 1));
+  ELSE
+    PERFORM grant_course_access(p_user_id, v.course_id);
+  END IF;
 
   UPDATE vouchers
     SET status = 'redeemed', redeemed_by = p_user_id, redeemed_at = now()
@@ -127,7 +152,7 @@ BEGIN
 END;
 $$;
 
--- ── 6. revoke_voucher — Refund/Chargeback (entzieht auch eingelösten Zugang) ──
+-- ── 6. revoke_voucher — Refund/Chargeback (entzieht auch eingelösten Wert) ──
 CREATE OR REPLACE FUNCTION revoke_voucher(p_ds_order_id text)
 RETURNS text
 LANGUAGE plpgsql
@@ -141,7 +166,11 @@ BEGIN
   IF NOT FOUND THEN RETURN 'not_found'; END IF;
 
   IF v.status = 'redeemed' AND v.redeemed_by IS NOT NULL THEN
-    PERFORM revoke_course_access(v.redeemed_by, v.course_id);
+    IF v.kind = 'credit' THEN
+      PERFORM revoke_diagnose_credits(v.redeemed_by, COALESCE(v.credit_amount, 1));
+    ELSE
+      PERFORM revoke_course_access(v.redeemed_by, v.course_id);
+    END IF;
   END IF;
 
   UPDATE vouchers SET status = 'revoked' WHERE id = v.id;
@@ -156,16 +185,18 @@ DROP POLICY IF EXISTS "service_role_all_vouchers" ON vouchers;
 CREATE POLICY "service_role_all_vouchers"
   ON vouchers FOR ALL TO service_role USING (true) WITH CHECK (true);
 
--- RPC-Ausführung: nur Service-Role (Webhook + server-seitige Routen).
-REVOKE ALL ON FUNCTION create_voucher(uuid, text, text, text) FROM public, anon, authenticated;
-REVOKE ALL ON FUNCTION redeem_voucher(text, uuid)            FROM public, anon, authenticated;
-REVOKE ALL ON FUNCTION revoke_voucher(text)                  FROM public, anon, authenticated;
-GRANT EXECUTE ON FUNCTION create_voucher(uuid, text, text, text) TO service_role;
-GRANT EXECUTE ON FUNCTION redeem_voucher(text, uuid)            TO service_role;
-GRANT EXECUTE ON FUNCTION revoke_voucher(text)                  TO service_role;
+REVOKE ALL ON FUNCTION create_voucher(uuid, text, text, text, text, int) FROM public, anon, authenticated;
+REVOKE ALL ON FUNCTION redeem_voucher(text, uuid)                        FROM public, anon, authenticated;
+REVOKE ALL ON FUNCTION revoke_voucher(text)                              FROM public, anon, authenticated;
+GRANT EXECUTE ON FUNCTION create_voucher(uuid, text, text, text, text, int) TO service_role;
+GRANT EXECUTE ON FUNCTION redeem_voucher(text, uuid)                        TO service_role;
+GRANT EXECUTE ON FUNCTION revoke_voucher(text)                              TO service_role;
 
 -- ── 8. Hinweis (kein Seed): Gutschein-Produkte legt Uwe in Digistore24 an,
---    dann hier mappen, z.B.:
+--    dann hier mappen:
+--    -- Kurs-Gutschein (BBQ-Grundkurs):
 --    INSERT INTO digistore_products (ds_product_id, course_id, is_voucher)
 --    VALUES ('<DS_VOUCHER_ID>', '11111111-0003-0000-0000-000000000000', true);
---    (Course-id = bestehender Kurs, hier BBQ-Grundkurs.)
+--    -- Credit-Gutschein (Steak-Beichte, 1 Credit):
+--    INSERT INTO digistore_products (ds_product_id, course_id, is_voucher, voucher_credit_amount)
+--    VALUES ('<DS_VOUCHER_ID>', '11111111-0001-0000-0000-000000000000', true, 1);

@@ -92,20 +92,21 @@ export async function POST(req: Request) {
   // 1) Produkt → Course Mapping aus DB
   const { data: mapping } = await supabase
     .from('digistore_products')
-    .select('course_id, is_voucher, courses(slug, title)')
+    .select('course_id, is_voucher, voucher_credit_amount, courses(slug, title)')
     .eq('ds_product_id', productId)
     .maybeSingle();
 
-  const courseId    = mapping?.course_id ?? null;
-  const courseSlug  = (mapping?.courses as any)?.slug  ?? null;
-  const courseTitle = (mapping?.courses as any)?.title ?? null;
-  const isVoucher   = mapping?.is_voucher ?? false;
+  const courseId      = mapping?.course_id ?? null;
+  const courseSlug    = (mapping?.courses as any)?.slug  ?? null;
+  const courseTitle   = (mapping?.courses as any)?.title ?? null;
+  const isVoucher     = mapping?.is_voucher ?? false;
+  const voucherCredit = mapping?.voucher_credit_amount ?? null;  // gesetzt = Credit-Gutschein
 
   // 0b) Geschenkgutschein — Kauf erzeugt NUR einen Code (keine Freischaltung
   //     beim Käufer). Der Beschenkte löst den Code unter /gutschein/einloesen ein.
   if (isVoucher && courseId) {
     return handleVoucherProduct(supabase, {
-      event, orderId, productId, email, params, rawBody, courseId, courseTitle,
+      event, orderId, productId, email, params, rawBody, courseId, courseTitle, creditAmount: voucherCredit,
     });
   }
 
@@ -315,10 +316,10 @@ async function handleVoucherProduct(
   args: {
     event: string; orderId: string; productId: string; email: string;
     params: Record<string, string>; rawBody: string;
-    courseId: string; courseTitle: string | null;
+    courseId: string; courseTitle: string | null; creditAmount: number | null;
   },
 ): Promise<Response> {
-  const { event, orderId, productId, email, params, rawBody, courseId, courseTitle } = args;
+  const { event, orderId, productId, email, params, rawBody, courseId, courseTitle, creditAmount } = args;
 
   const { data: orderRow, error: orderErr } = await supabase
     .from('digistore_orders')
@@ -352,6 +353,8 @@ async function handleVoucherProduct(
         p_ds_order_id:     orderId,
         p_purchaser_email: email,
         p_gift_message:    giftMessage,
+        p_kind:            creditAmount ? 'credit' : 'course',
+        p_credit_amount:   creditAmount ?? null,
       });
       if (cErr) throw new Error(`create_voucher failed: ${cErr.message}`);
 

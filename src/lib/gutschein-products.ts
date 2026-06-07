@@ -7,8 +7,11 @@
 // (2) NEXT_PUBLIC_DS_VOUCHER_* env setzen, (3) in digistore_products mappen
 // (ds_product_id → course_id, is_voucher=true).
 //
-// NICHT enthalten (Nachzügler): steak-beichte (Credit-Modell, braucht
-// Credit-Einlöse-Variante) · Diplom (noch nicht monetarisiert).
+// Steak-Beichte = Credit-Gutschein (kind='credit'): das Digistore-Produkt mappt
+// auf den steak-beichte-Course mit voucher_credit_amount=N → redeem_voucher ruft
+// grant_diagnose_credits statt grant_course_access.
+//
+// NICHT enthalten (Nachzügler): Diplom (noch nicht monetarisiert).
 
 export interface GiftableProduct {
   courseSlug: string;
@@ -32,5 +35,12 @@ export const GIFTABLE_PRODUCTS: GiftableProduct[] = [
     priceLabel: '19 €',
     blurb: 'Ein persönlicher 8-Wochen-Grillplan — Cuts, Techniken und Progression, abgestimmt auf Setup und Ziel.',
     checkoutUrl: process.env.NEXT_PUBLIC_DS_VOUCHER_MEIN_PROTOKOLL,
+  },
+  {
+    courseSlug: 'steak-beichte',
+    title: 'Steak-Beichte',
+    priceLabel: '7 €',
+    blurb: 'Die KI-Diagnose fürs misslungene Steak: Ergebnis beschreiben oder fotografieren, Analyse + Korrektur-Protokoll erhalten.',
+    checkoutUrl: process.env.NEXT_PUBLIC_DS_VOUCHER_STEAK_BEICHTE,
   },
 ];

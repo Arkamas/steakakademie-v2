@@ -28,7 +28,7 @@ export default function AgbPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             Allgemeine Geschäftsbedingungen
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Mai 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 

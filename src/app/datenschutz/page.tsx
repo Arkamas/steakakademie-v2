@@ -55,12 +55,13 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>3. Hosting (Netlify)</h2>
+              <h2 className={h2Class}>3. Hosting (Vercel)</h2>
               <p className="mb-3">
-                Diese Website wird bei Netlify Inc., 44 Montgomery Street, Suite 300, San Francisco,
-                CA 94104, USA gehostet. Beim Aufruf der Website werden automatisch Serverlog-Daten
-                gespeichert (IP-Adresse, Browsertyp, Betriebssystem, Referrer-URL, Uhrzeit des
-                Zugriffs). Diese Daten werden nicht mit anderen Datenquellen zusammengeführt.
+                Diese Website wird bei Vercel Inc., 440 N Barranca Avenue #4133, Covina,
+                CA 91723, USA gehostet. Beim Aufruf der Website werden automatisch technisch
+                notwendige Serverlog-Daten verarbeitet (IP-Adresse, Browsertyp, Betriebssystem,
+                Referrer-URL, Uhrzeit des Zugriffs). Diese Daten werden nicht mit anderen
+                Datenquellen zusammengeführt.
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Speicherdauer:</strong> Server-Logs werden
@@ -69,9 +70,10 @@ export default function DatenschutzPage() {
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am
-                störungsfreien Betrieb). Details:{' '}
-                <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer" className={linkClass}>
-                  netlify.com/privacy
+                störungsfreien Betrieb). Drittlandübermittlung USA: EU-US Data Privacy Framework
+                + EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO). Details:{' '}
+                <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  vercel.com/legal/privacy-policy
                 </a>
               </p>
             </section>
@@ -387,9 +389,11 @@ export default function DatenschutzPage() {
                 über das ein späterer Kauf der Vermittlung zugeordnet wird (Affiliate-Tracking).
               </p>
               <p>
-                Affiliate-Tracking-Cookies werden <strong>erst nach deiner Einwilligung</strong>{' '}
-                im Cookie-Banner gesetzt (§ 25 TDDDG). Eine vollständige Übersicht aller
-                Partnerprogramme findest du in unserer{' '}
+                <strong className="text-text-primary">Derzeit werden keine Affiliate-Tracking-Cookies
+                gesetzt.</strong> Sobald ein Affiliate- oder Marketing-Tracking aktiviert wird, das
+                einwilligungspflichtige Cookies erfordert (§ 25 TDDDG), richten wir vorab einen
+                Einwilligungs-Mechanismus mit gleichwertiger Ablehnen-Option ein. Eine vollständige
+                Übersicht aller Partnerprogramme findest du in unserer{' '}
                 <Link href="/affiliate-disclosure" className={linkClass}>Affiliate-Disclosure</Link>.
               </p>
             </section>
@@ -423,32 +427,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>12b. Hosting — Netlify</h2>
-              <p className="mb-3">
-                Diese Website wird gehostet bei <strong>Netlify, Inc.</strong>,
-                512 2nd Street, Fl 2, San Francisco, CA 94107, USA. Bei jedem
-                Seitenaufruf werden technisch notwendige Daten verarbeitet
-                (IP-Adresse, Browser-Typ, Datum/Uhrzeit, aufgerufene URL, Referrer).
-                Diese Daten werden zur Bereitstellung der Website und zur Abwehr von
-                Angriffen benötigt.
-              </p>
-              <p className="mb-3">
-                <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
-                (berechtigtes Interesse am sicheren, performanten Betrieb der Website).
-              </p>
-              <p>
-                <strong>Drittlandübermittlung:</strong> Netlify ist nach dem
-                EU-US Data Privacy Framework zertifiziert; zusätzlich werden
-                EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO) verwendet.
-                Datenschutzerklärung:{' '}
-                <a href="https://www.netlify.com/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
-                  netlify.com/privacy
-                </a>.
-              </p>
-            </section>
-
-            <section>
-              <h2 className={h2Class}>12c. Technische Infrastruktur — Vercel</h2>
+              <h2 className={h2Class}>12b. Technische Infrastruktur — Vercel</h2>
               <p className="mb-3">
                 Das verwendete Web-Framework Next.js wird von{' '}
                 <strong>Vercel Inc.</strong>, 440 N Barranca Avenue #4133, Covina,

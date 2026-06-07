@@ -144,7 +144,7 @@ komponenten:
     pruefung: "Alle AV-Dienstleister benannt (Hosting, CDN, DB, KI, Mail)"
     rechtsgrundlage: "Art. 13 Abs. 1 lit. e, Art. 28 DSGVO"
     status: ok
-    befund: "Netlify (§3), Cloudflare (§4), Supabase (§8 Art.28), Anthropic (§10 Art.28), Loops, Digistore24 benannt."
+    befund: "07.06. korrigiert: Vercel (§3 Host, war fälschlich Netlify), Cloudflare (§4), Loops (§6), Supabase (§8), Resend (§8b), Digistore24 (§9), Anthropic (§10/§10a), fal.ai (§10b) benannt."
 
   - id: dse-zahlungsdienstleister
     titel: "DSE: Zahlungsdienstleister"

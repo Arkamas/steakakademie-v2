@@ -1,0 +1,98 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Steakakademie Privé — Event-/B2B-Rechts- & Haftungs-Checkliste
+# ─────────────────────────────────────────────────────────────────────────────
+# Pflicht-Vorprüfung BEVOR /prive live geht (Rechts-Gate, CLAUDE.md Regel 12).
+# Modell: Steakakademie = EIGENVERKÄUFER des Event-Gutscheins; Partner-Caterer/
+# Location liefern als ERFÜLLUNGSGEHILFE. Fulfillment = beides (Uwe selbst +
+# Partner-Netzwerk).
+#
+# status: open | ok | fix-needed | not-applicable
+# Letzte Aktualisierung: 2026-06-07
+version: 1
+zweck: "Rechts-/Haftungs-Gate für Privé-Event-Gifting (B2B)"
+hinweis: "KEINE Rechtsberatung — strukturierte Vorprüfung. Event-AGB + Partnervertrag VOR Go-Live anwaltlich prüfen lassen (Rechtsschutz mit Veranstaltungs-/Vertragsrecht)."
+
+komponenten:
+  - id: gewerbe-abdeckung
+    titel: "Gewerbe deckt Veranstaltungs-/Cateringvermittlung"
+    pruefung: "Angemeldetes Gewerbe (digitale Bildung/Marketing) deckt Verkauf & Organisation von Grill-Events? Sonst Gewerbe erweitern."
+    rechtsgrundlage: "GewO § 14"
+    aktion: "Mit Steuerberater/Gewerbeamt klären; ggf. Tätigkeit 'Vermittlung/Veranstaltung kulinarischer Erlebnisse' ergänzen."
+    status: open
+
+  - id: event-agb
+    titel: "Separate Event-AGB (zusätzlich zu digitalen AGB)"
+    pruefung: "Eigene AGB für Erlebnis-/Eventleistungen: Leistungsumfang, Terminbindung, Stornofristen, höhere Gewalt, Haftungsbegrenzung, Erfüllung durch Partner."
+    rechtsgrundlage: "BGB §§ 305 ff., 631 (Werk-/Dienstvertrag)"
+    aktion: "Event-AGB-Entwurf (siehe docs/prive-konzept.md) anwaltlich finalisieren, vor Verkauf verlinken."
+    status: open
+
+  - id: partner-vertrag-erfuellungsgehilfe
+    titel: "Partner-/Caterer-Vertrag (Erfüllungsgehilfe)"
+    pruefung: "Schriftlicher Rahmenvertrag pro Partner: Netto-Festpreis je Paket, eigene Betriebshaftpflicht + Nachweis, HACCP/Lebensmittelhygiene, Kapazität, Vorlaufzeit, Storno-/Ausfallregel, Versicherungsnachweis."
+    rechtsgrundlage: "BGB § 278 (Haftung für Erfüllungsgehilfen)"
+    aktion: "Standard-Partnervertrag aufsetzen; Event-Haftung + Lebensmittelsicherheit vertraglich beim Caterer."
+    status: open
+
+  - id: betriebshaftpflicht
+    titel: "Veranstalter-/Betriebshaftpflicht"
+    pruefung: "Personen-/Sachschäden bei Live-Events abgesichert — eigene Veranstalterhaftpflicht ODER lückenlos über Partner-Haftpflicht?"
+    rechtsgrundlage: "BGB §§ 823 ff."
+    aktion: "Haftpflicht-Deckung klären; bei Eigen-Events eigene Veranstalterhaftpflicht abschließen."
+    status: open
+
+  - id: lebensmittelhygiene-haccp
+    titel: "Lebensmittelsicherheit (HACCP, Allergene)"
+    pruefung: "Wer trägt Lebensmittelhygiene? Allergen-/Zutateninfo gegenüber Teilnehmern?"
+    rechtsgrundlage: "LMIV (VO EU 1169/2011), LFGB, EU 852/2004"
+    aktion: "HACCP + Allergenpflicht vertraglich beim Caterer; bei Eigen-Events selbst nachweisen."
+    status: open
+
+  - id: gutschein-einzweck-ust
+    titel: "Event-Gutschein = Einzweckgutschein + Gültigkeit"
+    pruefung: "Festes Paket (Leistung + USt fix) → Einzweckgutschein, USt beim Verkauf. 3 Jahre Gültigkeit (§ 195 BGB)."
+    rechtsgrundlage: "UStG § 3 Abs. 14; BGB § 195"
+    aktion: "Pakete als feste Einzweck-Gutscheine modellieren (passt zur bestehenden Voucher-Engine, kind='event')."
+    status: open
+
+  - id: widerruf-event
+    titel: "Widerrufsrecht bei Erlebnisterminen"
+    pruefung: "Freizeit-/Eventleistung zu festem Termin kann vom Widerruf ausgenommen sein; reiner Gutschein OHNE Termin = Widerruf bis Einlösung."
+    rechtsgrundlage: "BGB § 312g Abs. 2 Nr. 9; § 356"
+    aktion: "Widerrufsregel je nach Termin-/Gutscheinfall in AGB sauber trennen — anwaltlich prüfen."
+    status: open
+
+  - id: storno-ausfall
+    titel: "Storno- & Ausfallregelung (beide Seiten)"
+    pruefung: "Kunden-Storno (Fristen/Gebühren) + Partner-Ausfall (Ersatz-Caterer oder Rückzahlung)."
+    rechtsgrundlage: "BGB §§ 314, 323"
+    aktion: "Staffel-Storno + Ausfall-/Ersatzklausel in Event-AGB + Partnervertrag."
+    status: open
+
+  - id: preisangaben
+    titel: "Preisauszeichnung B2B (netto) vs. B2C (brutto)"
+    pruefung: "B2C inkl. USt (PAngV); B2B netto möglich, aber klar kennzeichnen. Keine Preise im Frontend hardcoden (eure Regel)."
+    rechtsgrundlage: "PAngV"
+    aktion: "Auf /prive klar 'inkl. USt' (B2C) bzw. 'zzgl. USt' (B2B) ausweisen."
+    status: open
+
+  - id: datenschutz-teilnehmer
+    titel: "Teilnehmer-/Anfragedaten (DSGVO)"
+    pruefung: "Anfrageformular-/Eventdaten (Name, Allergien, Teilnehmerliste) datenschutzkonform; Auftragsverarbeitung mit Partner?"
+    rechtsgrundlage: "DSGVO Art. 6, 28"
+    aktion: "DSE um Event-/Anfragezwecke ergänzen; ggf. AV-Vertrag mit Partner."
+    status: open
+
+  - id: jugendschutz-alkohol
+    titel: "Jugendschutz / Alkohol (falls Getränke)"
+    pruefung: "Wird bei Events Alkohol ausgeschenkt? Dann Jugendschutz + ggf. Schankrecht."
+    rechtsgrundlage: "JuSchG § 9; GastG"
+    aktion: "Falls relevant: Alkohol über lizenzierten Partner; Jugendschutz beachten."
+    status: open
+
+  - id: rechtsschutz-versicherung
+    titel: "Rechtsschutz inkl. Veranstaltungs-/Vertragsrecht"
+    pruefung: "Rechtsschutz-Police deckt Veranstaltungs-/Vertrags-/Wettbewerbsrecht?"
+    rechtsgrundlage: "—"
+    aktion: "Police prüfen/erweitern (CLAUDE.md Regel 13)."
+    status: open

@@ -37,7 +37,7 @@ export default function KiDisclaimerPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             KI-Systeme &amp; KI-Disclaimer
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Mai 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
 
           <div className="max-w-content space-y-10 font-body text-text-secondary leading-relaxed">
 

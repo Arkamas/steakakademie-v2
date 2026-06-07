@@ -380,7 +380,7 @@ export default async function AgenturKillerSprintPage() {
                   </p>
                   <div className="space-y-3 font-body text-sm text-text-secondary leading-relaxed max-w-xl">
                     <p>
-                      Steakakademie.de läuft auf Next.js, Netlify und Cloudflare — ohne
+                      Steakakademie.de läuft auf Next.js, Vercel und Cloudflare — ohne
                       Agentur, ohne Wartungsvertrag, ohne monatliche Kosten. Dieser Stack
                       betreibt die Seite, die du gerade liest.
                     </p>

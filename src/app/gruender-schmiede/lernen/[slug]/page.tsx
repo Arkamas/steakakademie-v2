@@ -7,6 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allSprintModuls } from 'contentlayer/generated';
 import { breadcrumbSchema } from '@/lib/schema';
+import BuerokratieHinweis from '@/components/gruendung/BuerokratieHinweis';
 
 interface Props {
   params: { slug: string };
@@ -211,6 +212,11 @@ export default function SprintModulPage({ params }: Props) {
                     </li>
                   ))}
                 </ol>
+              </div>
+
+              {/* Bürokratie-Hinweis — holt Gründungs-Neulinge ab */}
+              <div className="mt-4">
+                <BuerokratieHinweis variant="inline" />
               </div>
             </aside>
           </div>

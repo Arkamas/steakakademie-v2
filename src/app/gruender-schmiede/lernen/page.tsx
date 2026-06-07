@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allSprintModuls } from 'contentlayer/generated';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
+import BuerokratieHinweis from '@/components/gruendung/BuerokratieHinweis';
 
 export const metadata: Metadata = {
   title: 'KI-Projektsteuerung — Modulreihe | Gründer-Schmiede',
@@ -84,6 +85,11 @@ export default function SprintLernenIndex() {
               </li>
             ))}
           </ol>
+
+          {/* Bürokratie-Hinweis — Gründungs-Neulinge abholen */}
+          <div className="mt-10">
+            <BuerokratieHinweis />
+          </div>
         </div>
       </main>
 

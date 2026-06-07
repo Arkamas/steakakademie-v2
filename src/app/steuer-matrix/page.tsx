@@ -245,7 +245,7 @@ export default async function SteuerMatrixPage() {
                     <ChevronRight size={16} />
                   </a>
                   <p className="mt-4 text-[11px] font-sans text-text-muted">
-                    Zahlung via Digistore24 · SEPA, Klarna, PayPal · Sofortzugang
+                    Sofortzugang nach Kauf.
                   </p>
                 </div>
               </div>

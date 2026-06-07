@@ -382,7 +382,7 @@ export default async function ErsteKundenSprintPage() {
                     <ArrowRight size={16} />
                   </a>
                   <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Zahlungsabwicklung: Digistore24 · SEPA, PayPal, Kreditkarte
+                    Sofort verfügbar nach Kauf.
                   </p>
                 </div>
               </div>

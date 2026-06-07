@@ -373,7 +373,7 @@ export default function FleischpassPage() {
                     Premium — 39 € / Jahr <ArrowRight size={14} />
                   </a>
                   <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Digistore24 · SEPA, PayPal, Kreditkarte
+                    Sofort freigeschaltet nach Kauf.
                   </p>
                 </div>
               </div>

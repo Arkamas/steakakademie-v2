@@ -379,7 +379,7 @@ export default async function SeoSprintPage() {
                     <ArrowRight size={16} />
                   </a>
                   <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Zahlungsabwicklung: Digistore24 · SEPA, PayPal, Kreditkarte
+                    Sofort startklar nach Kauf.
                   </p>
                 </div>
               </div>

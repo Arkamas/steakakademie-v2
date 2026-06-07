@@ -359,7 +359,7 @@ export default function MeinProtokollPage() {
                     <ArrowRight size={16} />
                   </a>
                   <p className="text-center text-[10px] font-sans text-text-muted">
-                    Digistore24 · SEPA, PayPal, Kreditkarte
+                    Plan sofort nach Kauf verfügbar.
                   </p>
                 </div>
               </div>

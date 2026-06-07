@@ -352,9 +352,7 @@ export default function SteakBeichtePage() {
               >
                 <p className="text-xs font-sans text-text-secondary leading-relaxed">
                   <strong className="text-text-primary">Hinweis:</strong>{' '}
-                  Credits sind sofort nach Kauf verfügbar. Kein Abo, keine automatische Verlängerung.
-                  Zahlungsabwicklung über Digistore24 · SEPA, PayPal, Kreditkarte.
-                  Alle Preise sind Endpreise in Euro; als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.
+                  Credits sind sofort nach Kauf verfügbar. Alle Preise sind Endpreise in Euro.
                 </p>
               </div>
             </div>

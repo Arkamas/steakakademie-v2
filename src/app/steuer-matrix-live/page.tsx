@@ -323,11 +323,7 @@ export default function SteuerMatrixLivePage() {
                 <div className="flex gap-3">
                   <ShieldCheck size={16} className="text-brand-gold shrink-0 mt-0.5" />
                   <p className="text-xs font-sans text-text-secondary leading-relaxed">
-                    <strong className="text-text-primary">Abo-Bedingungen:</strong>{' '}
-                    Jahresabrechnung. Kündigung jederzeit über dein Digistore24-Kundenkonto —
-                    ohne Frist, ohne Formular. Zugang bis Ende des bezahlten Zeitraums.
-                    Keine automatische Verlängerung ohne Zustimmung. Alle Preise sind Endpreise
-                    in Euro; als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.
+                    Alle Preise sind Endpreise in Euro.
                   </p>
                 </div>
               </div>

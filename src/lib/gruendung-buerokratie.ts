@@ -304,6 +304,46 @@ export const RECHTSFORMEN: Rechtsform[] = [
   },
 ];
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Anti-Scam — unseriöse Online-Modelle erkennen (aus „Digitaler Ratgeber
+// Selbständigkeit", destilliert). Zahlt auf GF3 „Das ehrliche System" ein.
+// ─────────────────────────────────────────────────────────────────────────────
+export const ANTI_SCAM_WARNSIGNALE: string[] = [
+  'Schneller Reichtum mit wenig Aufwand — „passives Einkommen in Wochen".',
+  'Künstliche Verknappung & Zeitdruck — „nur noch 3 Plätze", „heute endet das Angebot".',
+  'Gefälschte Erfolgsgeschichten, Screenshots und Testimonials als „Beweis".',
+  'Vortäuschen von Autorität — Lambo, Luxus, selbsternannter „Experte".',
+  'Beeindruckende, aber unbelegte Zahlen und Statistiken.',
+  'Vorabzahlung verlangt (außerhalb vertrauenswürdiger Treuhand).',
+  'Kostenloser Einstieg → später versteckte Kosten oder Abo-Falle.',
+  'Komplexes auf „3 einfache Schritte" reduziert — Realität ist nie so simpel.',
+];
+
+export const ANTI_SCAM_SCHUTZ: string[] = [
+  'Klingt es zu gut, um wahr zu sein, ist es das fast immer.',
+  'Anbieter + unabhängige Erfahrungen Dritter recherchieren.',
+  'Kein Geld im Voraus — außer über vertrauenswürdige Treuhand.',
+  'Keine sensiblen Daten leichtfertig preisgeben.',
+  'Bewertungen und Testimonials kritisch hinterfragen.',
+  'Keine Schnellentscheidung unter emotionalem Druck.',
+  'Im Zweifel: Verbraucherschutz, Anwalt oder IHK fragen.',
+];
+
+// Behörden-Brief-Falle — Fake-Rechnungen direkt nach der Gewerbeanmeldung.
+export const BEHOERDEN_BRIEF_WARNUNG =
+  'Direkt nach der Gewerbeanmeldung erhalten viele Gründer amtlich aussehende Briefe mit ' +
+  'Zahlungsaufforderungen („Gewerbeauskunft", „Unternehmensregister", „Branchenverzeichnis"). ' +
+  'Das sind fast immer KEINE echten Behördengebühren, sondern kostenpflichtige Einträge oder ' +
+  'Abo-Fallen. Echte Bescheide kommen nur von Finanzamt, Gemeinde und IHK/HWK. Im Zweifel: ' +
+  'nicht zahlen, kurz per KI prüfen oder bei der IHK anrufen.';
+
+// Rücklagen-Disziplin — der härteste, wichtigste Finanz-Reflex.
+export const RUECKLAGEN_REGEL =
+  'Lege ab Tag 1 jeden Monat 20–30 % deines Gewinns für die Einkommensteuer beiseite — auf ein ' +
+  'separates Konto, an das du nicht rangehst. Ziehe das die ersten Jahre eisern durch. Der ' +
+  'häufigste Pleitegrund junger Unternehmen ist nicht zu wenig Umsatz, sondern kein Geld für die ' +
+  'Steuernachzahlung. Zusätzlich: 3–6 Monatsausgaben als Notreserve aufbauen.';
+
 export const BUEROKRATIE_STAND = 'Stand 06/2026';
 
 export const BUEROKRATIE_DISCLAIMER =

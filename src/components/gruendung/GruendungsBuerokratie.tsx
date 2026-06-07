@@ -1,9 +1,16 @@
-import { AlertTriangle, ShieldCheck, FileText, Coins, ListChecks, Scale } from 'lucide-react';
+import {
+  AlertTriangle, ShieldCheck, FileText, Coins, ListChecks, Scale,
+  PiggyBank, MailWarning, ShieldAlert, Check, X,
+} from 'lucide-react';
 import {
   STATUS_SCHRITTE,
   ANTRAEGE,
   KOSTEN_6_MONATE,
   RECHTSFORMEN,
+  ANTI_SCAM_WARNSIGNALE,
+  ANTI_SCAM_SCHUTZ,
+  BEHOERDEN_BRIEF_WARNUNG,
+  RUECKLAGEN_REGEL,
   BUEROKRATIE_STAND,
   BUEROKRATIE_DISCLAIMER,
   type Pflichtgrad,
@@ -187,6 +194,34 @@ export default function GruendungsBuerokratie() {
           der Kapitalbedarf entsteht v. a. durch KV + deine Lebenshaltung, solange noch kein
           Umsatz fließt. Plane einen finanziellen Puffer ein. {BUEROKRATIE_STAND}.
         </p>
+
+        {/* Rücklagen-Disziplin */}
+        <aside
+          className="mt-6 rounded-r-sm border-l-[3px] py-4 pl-5 pr-5"
+          style={{ borderLeftColor: GOLD, background: `${GOLD}0F` }}
+        >
+          <div className="mb-2 flex items-center gap-2">
+            <PiggyBank size={15} style={{ color: GOLD }} className="shrink-0" />
+            <span className="font-sans text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: GOLD }}>
+              Die wichtigste Geld-Regel
+            </span>
+          </div>
+          <p className="font-body text-[0.95rem] leading-relaxed text-text-secondary">{RUECKLAGEN_REGEL}</p>
+        </aside>
+
+        {/* Behörden-Brief-Falle */}
+        <aside
+          className="mt-4 rounded-r-sm border-l-[3px] py-4 pl-5 pr-5"
+          style={{ borderLeftColor: FIRE, background: `${FIRE}0F` }}
+        >
+          <div className="mb-2 flex items-center gap-2">
+            <MailWarning size={15} style={{ color: FIRE }} className="shrink-0" />
+            <span className="font-sans text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: FIRE }}>
+              Vorsicht: Fake-Rechnungen nach der Anmeldung
+            </span>
+          </div>
+          <p className="font-body text-[0.95rem] leading-relaxed text-text-secondary">{BEHOERDEN_BRIEF_WARNUNG}</p>
+        </aside>
       </section>
 
       {/* Rechtsform-Vergleich */}
@@ -224,6 +259,44 @@ export default function GruendungsBuerokratie() {
               ))}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      {/* Anti-Scam — Das ehrliche System */}
+      <section>
+        <SectionTitle
+          icon={<ShieldAlert size={20} />}
+          kicker="Das ehrliche System"
+          title="Erkenne unseriöse Modelle"
+        />
+        <p className="mb-5 font-body text-[0.95rem] leading-relaxed text-text-secondary">
+          Wer in die Selbständigkeit startet, läuft online ständig „schnell reich werden"-Maschen
+          über den Weg. Hier baust du etwas Echtes auf — also lern, den Unterschied auf einen Blick
+          zu sehen.
+        </p>
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div className="rounded-sm border border-border-subtle bg-surface-elevated p-5">
+            <h3 className="mb-3 font-sans text-[0.95rem] font-bold text-text-primary">Warnsignale</h3>
+            <ul className="space-y-2">
+              {ANTI_SCAM_WARNSIGNALE.map((w) => (
+                <li key={w} className="flex gap-2 font-body text-[0.9rem] leading-relaxed text-text-secondary">
+                  <X size={15} style={{ color: FIRE }} className="mt-0.5 shrink-0" />
+                  <span>{w}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-sm border border-border-subtle bg-surface-elevated p-5">
+            <h3 className="mb-3 font-sans text-[0.95rem] font-bold text-text-primary">So schützt du dich</h3>
+            <ul className="space-y-2">
+              {ANTI_SCAM_SCHUTZ.map((s) => (
+                <li key={s} className="flex gap-2 font-body text-[0.9rem] leading-relaxed text-text-secondary">
+                  <Check size={15} style={{ color: GOLD }} className="mt-0.5 shrink-0" />
+                  <span>{s}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 

@@ -42,7 +42,7 @@ const DELIVERABLES = [
   {
     Icon: Globe,
     title: 'Domain + Hosting einrichten',
-    desc: 'Cloudflare für DNS, Netlify für Hosting — kostenlos, DSGVO-konform, professionell. Einmal richtig gemacht.',
+    desc: 'Cloudflare für DNS, Vercel für Hosting — kostenlos, DSGVO-konform, professionell. Einmal richtig gemacht.',
   },
   {
     Icon: Rocket,
@@ -325,7 +325,7 @@ export default async function GruenderSchmiedePage() {
                 {[
                   {
                     title: 'Praxiserprobt',
-                    desc: 'Dieser Stack — Cloudflare, Netlify, Next.js — betreibt steakakademie.de. Kein Theoriemodell, sondern das, was im echten Betrieb funktioniert.',
+                    desc: 'Dieser Stack — Cloudflare, Vercel, Next.js — betreibt steakakademie.de. Kein Theoriemodell, sondern das, was im echten Betrieb funktioniert.',
                   },
                   {
                     title: 'Vollständig',

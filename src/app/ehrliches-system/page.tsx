@@ -57,10 +57,10 @@ const PILLARS = [
     icon: '⚡',
     label: 'Agentur-Killer-Sprint',
     kicker: 'Full-Ownership in 72h',
-    tagline: 'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Netlify.',
+    tagline: 'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel.',
     bullets: [
       'Migration: Agentur-Website → GitHub-Ownership in 72h',
-      'Next.js + Netlify: vollständige Code-Kontrolle',
+      'Next.js + Vercel: vollständige Code-Kontrolle',
       'Claude Code als dein dauerhaftes Werkzeug',
       'Einmal aufgesetzt — für immer unabhängig',
     ],

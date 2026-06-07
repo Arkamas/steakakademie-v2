@@ -8,7 +8,7 @@ import { createDOIToken } from '@/lib/doi';
  *  1. POST /api/newsletter   → generiert signierten Token, schickt Bestätigungs-E-Mail
  *  2. GET  /api/newsletter/confirm?token=... → verifiziert Token, legt Kontakt in Loops an
  *
- * Benötigte Umgebungsvariablen (Netlify):
+ * Benötigte Umgebungsvariablen (Vercel):
  *  LOOPS_API_KEY              — Loops.so API Key
  *  LOOPS_DOI_TEMPLATE_ID      — ID der transaktionalen Bestätigungs-E-Mail in Loops
  *  NEWSLETTER_DOI_SECRET      — HMAC-Geheimnis (min. 32 zufällige Zeichen)
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
     } else {
       console.warn(
         '[Newsletter] LOOPS_DOI_TEMPLATE_ID fehlt — Bestätigungs-E-Mail wird NICHT gesendet. ' +
-        'Transaktionale E-Mail-Vorlage in Loops anlegen und ID in Netlify eintragen.',
+        'Transaktionale E-Mail-Vorlage in Loops anlegen und ID in Vercel eintragen.',
       );
     }
 

@@ -12,7 +12,7 @@ import Footer from '@/components/layout/Footer';
 export const metadata: Metadata = {
   title: 'BBQ Grundkurs — Systematisch besser grillen | Steakakademie',
   description:
-    'Der erste vollständige BBQ-Videokurs der Steakakademie. Feuer, Temperatur, 5 Cuts, echte Technik. Earlybird 79€ statt 127€ — PDFs sofort, Videos ab Juli 2026.',
+    'Der erste vollständige BBQ-Videokurs der Steakakademie. Feuer, Temperatur, 5 Cuts, echte Technik. Aktuell in Vorbereitung — Kursstart geplant 2026.',
   alternates: { canonical: 'https://steakakademie.de/bbq-grundkurs' },
   openGraph: {
     title: 'BBQ Grundkurs — Wer jetzt lernt, dominiert den Rest der Saison',
@@ -67,15 +67,15 @@ const MODULES = [
 
 const WHATS_INCLUDED = [
   { label: '5 Video-Module', detail: '~4 Stunden Lernzeit, abrufbar wann du willst', Icon: Play },
-  { label: 'Begleit-PDFs sofort', detail: 'Kerntemperatur-Tabellen, Cut-Guides, Checklisten — nach Kauf verfügbar', Icon: BookOpen },
+  { label: 'Begleit-PDFs', detail: 'Kerntemperatur-Tabellen, Cut-Guides, Checklisten — zum Kursstart', Icon: BookOpen },
   { label: '8-Wochen-Lernplan', detail: 'Strukturierter Zeitplan damit du weißt was wann drankommt', Icon: Clock },
   { label: 'Lebenslanger Zugang', detail: 'Einmal gekauft, immer verfügbar — inkl. Updates', Icon: CheckCircle },
 ];
 
 const FAQ = [
   {
-    q: 'Wann sind die Videos verfügbar?',
-    a: 'Die Begleit-PDFs sind sofort nach Kauf abrufbar. Die Video-Module werden ab Juli 2026 freigeschaltet — Earlybird-Käufer bekommen automatisch Zugang zum Kursstart.',
+    q: 'Wann ist der Kurs verfügbar?',
+    a: 'Der Kurs ist aktuell in Vorbereitung. Sobald er buchbar ist, informieren wir über den Newsletter. Geplanter Kursstart mit Video-Modulen und Begleit-PDFs: 2026.',
   },
   {
     q: 'Für wen ist dieser Kurs?',
@@ -130,7 +130,7 @@ export default function BbqGrundkursPage() {
                    style={{ borderColor: 'rgba(232,80,24,0.4)', background: 'rgba(232,80,24,0.07)' }}>
                 <Flame size={12} className="text-brand-fire" />
                 <span className="text-[11px] font-sans font-bold tracking-[0.14em] uppercase text-brand-fire">
-                  Earlybird — 48€ sparen · PDFs sofort verfügbar
+                  In Vorbereitung · Kursstart geplant 2026
                 </span>
               </div>
 
@@ -149,8 +149,8 @@ export default function BbqGrundkursPage() {
                 {[
                   '5 Video-Module',
                   '~4 Stunden Lernzeit',
-                  'PDFs sofort nach Kauf',
-                  'Kursstart Juli 2026',
+                  'Begleit-PDFs',
+                  'Kursstart geplant 2026',
                   'Lebenslanger Zugang',
                 ].map((chip) => (
                   <span
@@ -236,7 +236,7 @@ export default function BbqGrundkursPage() {
                 Im Lieferumfang
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-10">
-                Was du nach dem Kauf bekommst
+                Was der Kurs enthält
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {WHATS_INCLUDED.map(({ label, detail, Icon }) => (
@@ -267,11 +267,11 @@ export default function BbqGrundkursPage() {
                 In Vorbereitung
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-2">
-                Earlybird — solange der Sommer läuft.
+                Dieser Kurs ist in Vorbereitung.
               </h2>
               <p className="font-body text-sm text-text-secondary mb-10 max-w-xl">
-                PDFs sofort nach Kauf. Videos folgen bei Kursstart im Juli 2026.
-                Wer den Earlybird verpasst, zahlt 48€ mehr — und hat weniger Sommer übrig, um das Gelernte anzuwenden.
+                Der Kurs wird gerade erstellt. Geplanter Kursstart mit Video-Modulen und Begleit-PDFs:
+                2026. Sobald er buchbar ist, erfährst du es zuerst über den Newsletter.
               </p>
 
               <div
@@ -307,11 +307,11 @@ export default function BbqGrundkursPage() {
                 {/* Was sofort inklusive */}
                 <ul className="space-y-2 mb-8">
                   {[
-                    { text: 'Begleit-PDFs — sofort nach Kauf verfügbar', now: true },
-                    { text: '5 Video-Module — ab Juli 2026', now: false },
-                    { text: '8-Wochen-Lernplan als PDF', now: true },
-                    { text: 'Kerntemperatur-Tabellen & Cut-Guides', now: true },
-                    { text: 'Updates & neue Module kostenlos', now: true },
+                    { text: 'Begleit-PDFs (Tabellen, Cut-Guides, Checklisten)', now: false },
+                    { text: '5 Video-Module', now: false },
+                    { text: '8-Wochen-Lernplan als PDF', now: false },
+                    { text: 'Kerntemperatur-Tabellen & Cut-Guides', now: false },
+                    { text: 'Updates & neue Module kostenlos', now: false },
                   ].map(({ text, now }) => (
                     <li key={text} className="flex items-start gap-2.5 text-sm font-sans">
                       <CheckCircle size={14} className="text-brand-gold shrink-0 mt-0.5" />

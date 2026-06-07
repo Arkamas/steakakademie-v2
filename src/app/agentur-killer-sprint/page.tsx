@@ -12,12 +12,12 @@ import { createClient } from '@/lib/supabase/server';
 export const metadata: Metadata = {
   title: 'Agentur-Killer-Sprint — Full-Ownership deiner Website in 72h | Steakakademie',
   description:
-    'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Netlify + GitHub in 72 Stunden. Einmal aufgesetzt — für immer unabhängig.',
+    'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel + GitHub in 72 Stunden. Einmal aufgesetzt — für immer unabhängig.',
   alternates: { canonical: 'https://steakakademie.de/agentur-killer-sprint' },
   openGraph: {
     title: 'Agentur-Killer-Sprint — Full-Ownership in 72 Stunden',
     description:
-      'Raus aus der Agentur-Abhängigkeit. Vollständige Migration zu eigenem GitHub-Repo, Next.js und Netlify. Kein Wartungsvertrag mehr, keine monatlichen Gebühren.',
+      'Raus aus der Agentur-Abhängigkeit. Vollständige Migration zu eigenem GitHub-Repo, Next.js und Vercel. Kein Wartungsvertrag mehr, keine monatlichen Gebühren.',
     url: 'https://steakakademie.de/agentur-killer-sprint',
     type: 'website',
   },
@@ -36,8 +36,8 @@ const DELIVERABLES = [
   },
   {
     Icon: Globe,
-    title: 'Netlify-Deployment + DNS',
-    desc: 'Hosting auf Netlify (EU-Rechenzentrum, DSGVO-konform), Cloudflare für DNS und CDN. Kostenlos bis zu ehrlichen Traffic-Volumen.',
+    title: 'Vercel-Deployment + DNS',
+    desc: 'Hosting auf Vercel (EU-Rechenzentrum, DSGVO-konform), Cloudflare für DNS und CDN. Kostenlos bis zu ehrlichen Traffic-Volumen.',
   },
   {
     Icon: Zap,
@@ -127,7 +127,7 @@ export default async function AgenturKillerSprintPage() {
     '@type': 'Product',
     name: 'Agentur-Killer-Sprint',
     description:
-      'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Netlify in 72 Stunden.',
+      'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel in 72 Stunden.',
     brand: { '@type': 'Brand', name: 'Steakakademie' },
     offers: {
       '@type': 'Offer',
@@ -194,7 +194,7 @@ export default async function AgenturKillerSprintPage() {
                 die dir deinen eigenen Code verweigert.
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
-                Full-Ownership-Migration zu GitHub, Next.js und Netlify. Einmal aufgesetzt —
+                Full-Ownership-Migration zu GitHub, Next.js und Vercel. Einmal aufgesetzt —
                 für immer unabhängig. Claude Code als dein dauerhaftes Werkzeug für alle
                 zukünftigen Änderungen.
               </p>
@@ -245,7 +245,7 @@ export default async function AgenturKillerSprintPage() {
                     liegt auf deren Servern. Das Repository gehört ihnen. Du fängst von vorne an.
                   </p>
                   <p>
-                    Das muss nicht so sein. Moderne Infrastruktur — GitHub, Next.js, Netlify —
+                    Das muss nicht so sein. Moderne Infrastruktur — GitHub, Next.js, Vercel —
                     kostet null Euro im Monat und gibt dir die vollständige Kontrolle.
                     Der Sprint zeigt dir wie.
                   </p>

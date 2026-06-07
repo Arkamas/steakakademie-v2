@@ -50,7 +50,7 @@ const SAULEN = [
     titel:       'Agentur-Killer-Sprint',
     untertitel:  'Deine Website raus aus der Agentur-Abhängigkeit.',
     beschreibung:
-      'Migration in eigene Infrastruktur: Next.js, Netlify, GitHub. Full-Ownership-Modell. KI-gesteuert. 0 % Plattform-Abzug.',
+      'Migration in eigene Infrastruktur: Next.js, Vercel, GitHub. Full-Ownership-Modell. KI-gesteuert. 0 % Plattform-Abzug.',
     Icon:        Zap,
     href:        '/agentur-killer-sprint',
     toolHref:    null as string | null,

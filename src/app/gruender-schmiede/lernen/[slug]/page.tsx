@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import { allSprintModuls } from 'contentlayer/generated';
 import { breadcrumbSchema } from '@/lib/schema';
 import BuerokratieHinweis from '@/components/gruendung/BuerokratieHinweis';
+import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 
 interface Props {
   params: { slug: string };
@@ -75,6 +76,10 @@ const mdxComponents = {
     </a>
   ),
   hr: () => <hr className="border-border-subtle my-10" />,
+  Schnelluebersicht,
+  Achtung,
+  ProTipp,
+  TempBox,
 };
 
 export default function SprintModulPage({ params }: Props) {
@@ -152,10 +157,10 @@ export default function SprintModulPage({ params }: Props) {
               {/* End-CTA — nur im letzten Modul, sanft Richtung GF3 (kein Live-Checkout) */}
               {isLast && (
                 <div className="mt-12 p-6 bg-surface-elevated border border-brand-gold/30">
-                  <p className="font-serif text-xl font-bold text-text-primary mb-2">Geschafft — alle vier Module durch.</p>
+                  <p className="font-serif text-xl font-bold text-text-primary mb-2">Geschafft — alle {sorted.length} Module durch.</p>
                   <p className="font-body text-sm text-text-secondary mb-4">
-                    Dieses Backbone ist das Fundament von „Das ehrliche System": zeigen, wie du arbeitest, nicht nur
-                    was du verkaufst.
+                    Chef-Prinzip, ein mitwachsendes Backbone und der tägliche Arbeits-Loop — das ist das Fundament
+                    von „Das ehrliche System": zeigen, wie du arbeitest, nicht nur was du verkaufst.
                   </p>
                   <Link
                     href="/ehrliches-system"

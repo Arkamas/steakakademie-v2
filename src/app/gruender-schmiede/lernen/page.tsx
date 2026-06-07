@@ -8,9 +8,9 @@ import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
 import BuerokratieHinweis from '@/components/gruendung/BuerokratieHinweis';
 
 export const metadata: Metadata = {
-  title: 'KI-Projektsteuerung — Modulreihe | Gründer-Schmiede',
+  title: 'Die Methode: KI-gesteuert ein Business bauen | Gründer-Schmiede',
   description:
-    'Vier Module: dein Projekt mit KI in Jira + Confluence sauber aufsetzen und steuern — statt im Tool-Chaos zu ertrinken.',
+    'Sechs Module: vom Chef-Prinzip über KI-Projektsteuerung mit Jira + Confluence bis zum täglichen Arbeits-Loop — wie du KI-gesteuert ein digitales Business aufbaust.',
   alternates: { canonical: 'https://steakakademie.de/gruender-schmiede/lernen' },
 };
 
@@ -18,13 +18,13 @@ export default function SprintLernenIndex() {
   const module = allSprintModuls.slice().sort((a, b) => a.order - b.order);
 
   const collection = collectionPageSchema(
-    'KI-Projektsteuerung — Modulreihe',
+    'Die Methode: KI-gesteuert ein Business bauen',
     '/gruender-schmiede/lernen',
-    'Vier Module: dein Projekt mit KI in Jira + Confluence sauber aufsetzen und steuern.',
+    'Sechs Module — vom Chef-Prinzip bis zum täglichen Arbeits-Loop.',
   );
   const breadcrumb = breadcrumbSchema([
     { name: 'Gründer-Schmiede', url: '/gruender-schmiede' },
-    { name: 'KI-Projektsteuerung', url: '/gruender-schmiede/lernen' },
+    { name: 'Die Methode', url: '/gruender-schmiede/lernen' },
   ]);
 
   return (
@@ -41,7 +41,7 @@ export default function SprintLernenIndex() {
             <ChevronRight size={12} />
             <Link href="/gruender-schmiede" className="hover:text-brand-fire transition-colors">Gründer-Schmiede</Link>
             <ChevronRight size={12} />
-            <span className="text-text-primary">KI-Projektsteuerung</span>
+            <span className="text-text-primary">Die Methode</span>
           </nav>
 
           {/* Header */}
@@ -50,11 +50,12 @@ export default function SprintLernenIndex() {
               Modulreihe · Gründer-Schmiede
             </p>
             <h1 className="font-serif text-4xl sm:text-5xl font-bold text-text-primary mb-4 leading-tight">
-              KI-Projektsteuerung mit Atlassian
+              KI-gesteuert ein Business bauen
             </h1>
             <p className="font-body text-lg text-text-secondary max-w-content leading-relaxed">
-              Vier Module. In rund 30 Minuten baust du mit KI ein Projekt-Backbone, das mitwächst statt zu
-              zerfasern — Jira fürs Tun, Confluence fürs Wissen, eine einzige Wahrheitsquelle.
+              Sechs Module — meine echte Methode. Vom Chef-Prinzip über das KI-gesteuerte Projekt-Backbone
+              (Jira fürs Tun, Confluence fürs Wissen, eine einzige Wahrheitsquelle) bis zum täglichen
+              Arbeits-Loop, der aus begrenzter Zeit echten Fortschritt macht.
             </p>
           </div>
 

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import WerkzeugHinweis from '@/components/gruendung/WerkzeugHinweis';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
@@ -435,6 +436,11 @@ export default async function GruenderSchmiedePage() {
                     Die Gründer-Schmiede wird derzeit fertiggestellt — bald buchbar.
                   </p>
                 </div>
+              </div>
+
+              {/* Werkzeug-Kosten ehrlich offenlegen (Claude Code) — vor dem Kauf */}
+              <div className="mb-6">
+                <WerkzeugHinweis />
               </div>
 
               <div

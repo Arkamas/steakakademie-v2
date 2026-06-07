@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import { allSprintModuls } from 'contentlayer/generated';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
 import BuerokratieHinweis from '@/components/gruendung/BuerokratieHinweis';
+import WerkzeugHinweis from '@/components/gruendung/WerkzeugHinweis';
 
 export const metadata: Metadata = {
   title: 'Die Methode: KI-gesteuert ein Business bauen | Gründer-Schmiede',
@@ -57,6 +58,11 @@ export default function SprintLernenIndex() {
               (Jira fürs Tun, Confluence fürs Wissen, eine einzige Wahrheitsquelle) bis zum täglichen
               Arbeits-Loop, der aus begrenzter Zeit echten Fortschritt macht.
             </p>
+          </div>
+
+          {/* Werkzeug-Kosten ehrlich offenlegen */}
+          <div className="mb-8">
+            <WerkzeugHinweis />
           </div>
 
           {/* Module cards */}

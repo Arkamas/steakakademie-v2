@@ -16,11 +16,11 @@
 #   rechtsgrundlage
 #   status     : ok | fix-needed | not-applicable | monitor
 #   befund     : aktueller Stand steakakademie.de (Stand 02.06.2026)
-# Letzte Aktualisierung: 2026-06-02
+# Letzte Aktualisierung: 2026-06-07 (Tiefen-Check nach Community/Gutschein/Affiliate)
 
-version: 1
+version: 2
 geprueftesObjekt: "https://www.steakakademie.de/"
-standComponents: "2026-06-02"
+standComponents: "2026-06-07"
 
 komponenten:
   - id: domain-kennzeichenrecht
@@ -208,3 +208,80 @@ komponenten:
     pruefung: "Änderungen DSGVO, TDDDG, EU AI Act, DDG, Verbraucherrecht; Steuerrecht (Steuer-Matrix)"
     rechtsgrundlage: "—"
     status: monitor
+
+  # ── NEU 03–07.06.2026: Community/UGC, Gutscheine, neue Verarbeiter ──────────
+  # Tiefen-Check 07.06.2026. Diese Flächen kamen nach dem ARAG-Check (02.06.) dazu.
+  # GATE: Community NICHT bewerben/indexieren + Gutscheine NICHT scharfschalten,
+  # bevor diese Punkte erledigt UND anwaltlich geprüft sind (Regel 12/13).
+
+  - id: community-ugc-nutzungsbedingungen
+    titel: "Community: Nutzungsbedingungen für eingereichte Rezepte (UGC)"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "Eigene Nutzungsbedingungen: Inhaltslizenz an Steakakademie, Eigentums-/Rechtegarantie des Nutzers, verbotene Inhalte, Moderationsvorbehalt, Mindestalter"
+    rechtsgrundlage: "UrhG § 31; BGB §§ 305 ff."
+    status: fix-needed
+    befund: "Keine /nutzungsbedingungen-Seite vorhanden. User reichen Text-Rezepte ein (KEIN Bild-Upload)."
+
+  - id: community-ugc-dsa
+    titel: "Community: DSA-Pflichten als Hosting-Dienst"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "Melde-/Abhilfeverfahren (Notice & Action), AGB-Transparenz zu Moderation, Kontaktstelle"
+    rechtsgrundlage: "VO (EU) 2022/2065 (DSA) Art. 14, 16"
+    status: fix-needed
+    befund: "UGC = Hosting-Dienst. Notice-&-Action + Kontaktstelle noch nicht ausgewiesen."
+
+  - id: community-ugc-bildrecht
+    titel: "Community: Bild-/Persönlichkeitsrecht"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "Kein Upload von Personenfotos/Selfies; Bilder KI-generiert; food-not-people"
+    rechtsgrundlage: "KUG § 22; DSGVO Art. 9"
+    status: ok
+    befund: "Verifiziert 07.06.: KEIN User-Bild-Upload im Einreichungs-Flow. Bilder via fal.ai. Risiko niedrig."
+
+  - id: ki-moderation-transparenz
+    titel: "KI-Moderation nutzergenerierter Inhalte (Transparenz)"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "Hinweis auf automatisierte (KI-)Prüfung der Einreichungen; Anthropic-Zweck 'Moderation UGC' in DSE"
+    rechtsgrundlage: "DSGVO Art. 13, 22; EU AI Act"
+    status: fix-needed
+    befund: "Moderation läuft (claude-haiku). In DSE ist Anthropic als AV benannt, Zweck 'UGC-Moderation' ergänzen."
+
+  - id: gutschein-agb-widerruf
+    titel: "Geschenkgutscheine: AGB-Klauseln + Widerruf"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "AGB-Abschnitt Gutscheine: Einzweckgutschein, 3 Jahre Gültigkeit, Übertragbarkeit, Einlösung, Widerrufs-Nuance (digital/Termin)"
+    rechtsgrundlage: "UStG § 3 Abs. 14; BGB § 195, § 312g"
+    status: fix-needed
+    befund: "AGB enthält keine Gutschein-Klauseln. Engine gebaut, aber noch nicht live → vor Scharfschaltung ergänzen."
+
+  - id: dse-resend
+    titel: "DSE: Resend (Auth-/Transaktionsmail) als Verarbeiter"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "Resend in AV-Liste der DSE benannt (verarbeitet E-Mail-Adressen für Magic-Link/Login)"
+    rechtsgrundlage: "Art. 13 Abs. 1 lit. e, Art. 28 DSGVO"
+    status: fix-needed
+    befund: "Resend seit 04.06. produktiv (Supabase-Auth-SMTP), in DSE noch nicht benannt."
+
+  - id: dse-fal-ai
+    titel: "DSE: fal.ai (Bildgenerierung) benennen"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "fal.ai als Bild-Generierungsdienst transparent benennen (kein Personenbezug bei Food-Bildern)"
+    rechtsgrundlage: "Art. 13 DSGVO (Transparenz)"
+    status: fix-needed
+    befund: "fal.ai erzeugt Rezeptbilder serverseitig. Kein Personenbezug, aber Transparenz/Vollständigkeit der DSE."
+
+  - id: dse-community-ugc-verarbeitung
+    titel: "DSE: Verarbeitung von Konten + nutzergenerierten Inhalten"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "Zweck/Rechtsgrundlage (Art. 6 Abs. 1 b/f) + Speicherdauer für Community-Konten und eingereichte Rezepte"
+    rechtsgrundlage: "Art. 6, 13 DSGVO"
+    status: fix-needed
+    befund: "Supabase als AV benannt; UGC-/Konto-spezifische Verarbeitung in DSE noch nicht beschrieben."

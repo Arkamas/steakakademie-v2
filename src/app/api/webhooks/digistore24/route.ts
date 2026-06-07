@@ -92,13 +92,22 @@ export async function POST(req: Request) {
   // 1) Produkt → Course Mapping aus DB
   const { data: mapping } = await supabase
     .from('digistore_products')
-    .select('course_id, courses(slug, title)')
+    .select('course_id, is_voucher, courses(slug, title)')
     .eq('ds_product_id', productId)
     .maybeSingle();
 
   const courseId    = mapping?.course_id ?? null;
   const courseSlug  = (mapping?.courses as any)?.slug  ?? null;
   const courseTitle = (mapping?.courses as any)?.title ?? null;
+  const isVoucher   = mapping?.is_voucher ?? false;
+
+  // 0b) Geschenkgutschein — Kauf erzeugt NUR einen Code (keine Freischaltung
+  //     beim Käufer). Der Beschenkte löst den Code unter /gutschein/einloesen ein.
+  if (isVoucher && courseId) {
+    return handleVoucherProduct(supabase, {
+      event, orderId, productId, email, params, rawBody, courseId, courseTitle,
+    });
+  }
 
   // 2) Order immer protokollieren — auch unbekannte Produkte (Forensik).
   //    UNIQUE(ds_order_id, ds_event) garantiert Idempotenz: zweiter Aufruf → 23505.
@@ -296,6 +305,126 @@ async function handleCreditProduct(
       .update({ processing_status: 'failed', error_message: err?.message ?? 'unknown error' })
       .eq('id', orderRow.id);
     return new Response('Processing failed', { status: 500 });
+  }
+}
+
+// ─── Gutschein-Handler (Geschenkgutscheine) ─────────────────────────────────
+
+async function handleVoucherProduct(
+  supabase: SupabaseClient,
+  args: {
+    event: string; orderId: string; productId: string; email: string;
+    params: Record<string, string>; rawBody: string;
+    courseId: string; courseTitle: string | null;
+  },
+): Promise<Response> {
+  const { event, orderId, productId, email, params, rawBody, courseId, courseTitle } = args;
+
+  const { data: orderRow, error: orderErr } = await supabase
+    .from('digistore_orders')
+    .insert({
+      ds_order_id:       orderId,
+      ds_product_id:     productId,
+      ds_email:          email,
+      ds_event:          event,
+      course_id:         courseId,
+      raw_payload:       params,
+      raw_body:          rawBody,
+      processing_status: 'pending',
+      error_message:     'gift voucher',
+    })
+    .select('id')
+    .single();
+
+  if (orderErr) {
+    if (orderErr.code === '23505') return new Response('OK (duplicate)', { status: 200 });
+    console.error('[ds-webhook] voucher order insert failed', orderErr);
+    return new Response('Internal error', { status: 500 });
+  }
+
+  try {
+    if (event === 'payment' || event === 'rebill' || event === 'rebill_resumed') {
+      // optionale persönliche Nachricht (falls als Custom-Feld übergeben)
+      const giftMessage = (params.custom ?? params.gift_message ?? '').slice(0, 500) || null;
+
+      const { data: code, error: cErr } = await supabase.rpc('create_voucher', {
+        p_course_id:       courseId,
+        p_ds_order_id:     orderId,
+        p_purchaser_email: email,
+        p_gift_message:    giftMessage,
+      });
+      if (cErr) throw new Error(`create_voucher failed: ${cErr.message}`);
+
+      // Käufer bekommt den Gutschein (NICHT den Magic-Link — er soll ihn verschenken)
+      await sendVoucherEmail(email, code as string, courseTitle);
+
+      await supabase
+        .from('digistore_orders')
+        .update({
+          processing_status: 'processed',
+          processed_at:      new Date().toISOString(),
+          error_message:     `voucher ${code}`,
+        })
+        .eq('id', orderRow.id);
+
+      return new Response('OK', { status: 200 });
+    }
+
+    if (event === 'refund' || event === 'chargeback') {
+      const { error: rErr } = await supabase.rpc('revoke_voucher', { p_ds_order_id: orderId });
+      if (rErr) throw new Error(`revoke_voucher failed: ${rErr.message}`);
+
+      await supabase
+        .from('digistore_orders')
+        .update({ processing_status: 'processed', processed_at: new Date().toISOString() })
+        .eq('id', orderRow.id);
+
+      return new Response('OK', { status: 200 });
+    }
+
+    await supabase
+      .from('digistore_orders')
+      .update({
+        processing_status: 'processed',
+        processed_at:      new Date().toISOString(),
+        error_message:     `event recorded, no action: ${event}`,
+      })
+      .eq('id', orderRow.id);
+    return new Response('OK (event recorded)', { status: 200 });
+  } catch (err: any) {
+    console.error('[ds-webhook] voucher processing failed', err);
+    await supabase
+      .from('digistore_orders')
+      .update({ processing_status: 'failed', error_message: err?.message ?? 'unknown error' })
+      .eq('id', orderRow.id);
+    return new Response('Processing failed', { status: 500 });
+  }
+}
+
+async function sendVoucherEmail(email: string, code: string, courseTitle: string | null) {
+  const apiKey     = process.env.LOOPS_API_KEY;
+  const templateId = process.env.LOOPS_VOUCHER_TEMPLATE_ID;
+  if (!apiKey || !templateId) {
+    throw new Error('LOOPS_API_KEY or LOOPS_VOUCHER_TEMPLATE_ID not set');
+  }
+  const voucherUrl = `https://steakakademie.de/gutschein/${encodeURIComponent(code)}`;
+
+  const resp = await fetch('https://app.loops.so/api/v1/transactional', {
+    method:  'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      transactionalId: templateId,
+      email,
+      dataVariables: {
+        voucher_code:  code,
+        voucher_url:   voucherUrl,
+        course_title:  courseTitle ?? 'deinem Geschenk',
+      },
+    }),
+  });
+  if (!resp.ok) {
+    const errBody = await resp.text();
+    throw new Error(`loops voucher email failed (${resp.status}): ${errBody}`);
   }
 }
 

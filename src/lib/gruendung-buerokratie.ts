@@ -348,13 +348,16 @@ export const RUECKLAGEN_REGEL =
 
 // Die zeitversetzte Doppelbelastung, die viele im 2.–4. Jahr umhaut.
 export const NACHZAHLUNGS_FALLE =
-  'Die Falle kommt zeitversetzt. Anfangs zahlst du oft noch keine Vorauszahlungen — der erste ' +
-  'Einkommensteuer-Bescheid trifft dich erst 1–2 Jahre nach dem Start. Und dann doppelt: eine ' +
-  'Nachzahlung fürs zurückliegende Jahr UND gleichzeitig neu festgesetzte Quartals-Vorauszahlungen ' +
-  '(oft rückwirkend für bereits vergangene Quartale). Wächst dein Gewinn, wiederholt sich das ' +
-  'jährlich — jede Erklärung bringt Nachzahlung plus höhere Vorauszahlungen. Ab dem 3.–4. Jahr ' +
-  'kann zusätzlich eine erste Betriebsprüfung anstehen (Nachforderungen plus Zinsen). Deshalb: ' +
-  'Rücklage nie auflösen, nur weil ein Jahr „gut lief".';
+  'Die Falle kommt meist zeitversetzt. Anfangs zahlst du oft noch keine Vorauszahlungen — der ' +
+  'erste Einkommensteuer-Bescheid trifft dich dann erst 1–2 Jahre nach dem Start, und zwar ' +
+  'doppelt: eine Nachzahlung fürs zurückliegende Jahr UND gleichzeitig neu festgesetzte ' +
+  'Quartals-Vorauszahlungen (oft rückwirkend für bereits vergangene Quartale). Achtung: Bei ' +
+  'entsprechend hohem Umsatz/Gewinn kann das Finanzamt die Quartals-Abschläge auch früher ' +
+  'verlangen — schon im ersten Jahr, auf Basis deiner Schätzung im Fragebogen zur steuerlichen ' +
+  'Erfassung. Wächst dein Gewinn, wiederholt sich das jährlich: jede Erklärung bringt Nachzahlung ' +
+  'plus höhere Vorauszahlungen. Ab dem 3.–4. Jahr kann zusätzlich eine erste Betriebsprüfung ' +
+  'anstehen (Nachforderungen plus Zinsen). Deshalb: Rücklage nie auflösen, nur weil ein Jahr ' +
+  '„gut lief".';
 
 export const BUEROKRATIE_STAND = 'Stand 06/2026';
 

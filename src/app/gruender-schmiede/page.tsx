@@ -11,14 +11,14 @@ import WerkzeugHinweis from '@/components/gruendung/WerkzeugHinweis';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Gründer-Schmiede — In 72 Stunden selbstständig | Steakakademie',
+  title: 'Gründer-Schmiede — KI-gesteuert dein Business bauen | Steakakademie',
   description:
-    'Aus der Idee wird ein angemeldetes Unternehmen — in 72 Stunden geschmiedet. Gewerbeanmeldung, Steuer-Onboarding und erste Website. Exakt das, was wirklich notwendig ist — kein "Was du brauchen könntest".',
+    'Meine echte Methode: wie du mit KI ein digitales Business aufbaust, ohne dich im Chaos zu verlieren. Sechs Module, das Gründer-Nachschlagewerk „Das Komplettikon" und ein Arbeitszeit-Planer — von Tag 1 dokumentiert.',
   alternates: { canonical: 'https://steakakademie.de/gruender-schmiede' },
   openGraph: {
-    title: 'Gründer-Schmiede — In 72 Stunden selbstständig',
+    title: 'Gründer-Schmiede — KI-gesteuert dein Business bauen',
     description:
-      'Die Gründer-Schmiede gründet mit dir: Gewerbe anmelden, Steuer-Onboarding, erste Website live. Ohne Agentur, ohne Beratungskosten.',
+      'Nicht noch ein Kurs übers Gründen — die Methode, mit der ich steakakademie.de wirklich gebaut habe. Mit KI als Mitgründer, ehrlich dokumentiert.',
     url: 'https://steakakademie.de/gruender-schmiede',
     type: 'website',
   },
@@ -26,53 +26,57 @@ export const metadata: Metadata = {
 
 const DELIVERABLES = [
   {
-    Icon: FileText,
-    title: 'Rechtsform-Entscheidung',
-    desc: 'Einzelunternehmen, UG oder GmbH — wann was Sinn macht. Konkrete Entscheidungsmatrix ohne Steuerberater-Allgemeinplätze.',
+    Icon: Shield,
+    title: 'Das Chef-Prinzip',
+    desc: 'Das mentale Betriebssystem: eine Wahrheitsquelle, KI als Chef statt Praktikant, EIN Produkt bis es Geld bringt. Damit du dich nicht im Chaos verlierst.',
   },
   {
     Icon: List,
-    title: 'Gewerbeanmeldung Schritt für Schritt',
-    desc: 'Wo, wie, was es kostet. Welches Formular, welche Felder, welche Angaben — ohne Überraschungen beim Amt.',
-  },
-  {
-    Icon: Calculator,
-    title: 'Finanzamt-Fragebogen erklärt',
-    desc: 'Jede Frage des Fragebogens zur steuerlichen Erfassung verständlich gemacht. Kleinunternehmerregelung: ja oder nein — und warum.',
+    title: 'Schluss mit Tool-Chaos',
+    desc: 'Das mentale Modell, mit dem dein Projekt mitwächst statt zu zerfasern — der häufigste Grund, warum junge Projekte sterben.',
   },
   {
     Icon: Globe,
-    title: 'Domain + Hosting einrichten',
-    desc: 'Cloudflare für DNS, Vercel für Hosting — kostenlos, DSGVO-konform, professionell. Einmal richtig gemacht.',
+    title: 'KI an deine Tools koppeln',
+    desc: 'Die KI mit Jira & Confluence verbinden und erst den Ist-Stand lesen lassen — kein blindes Drauflosschreiben.',
+  },
+  {
+    Icon: Calculator,
+    title: 'Struktur bauen',
+    desc: 'Epics sind deine Geschäftsbereiche, Tickets die aktive Arbeit. Ein Backbone, das ehrlich bleibt und mitwächst.',
+  },
+  {
+    Icon: FileText,
+    title: 'Wissensbasis & Disziplin',
+    desc: 'Deine Wissensbasis aus echten Fakten — und die drei Todsünden, die jedes System nach drei Wochen wieder zerlegen.',
   },
   {
     Icon: Rocket,
-    title: 'Erste Website live',
-    desc: 'Technisch korrekt, rechtssicher (Impressum, Datenschutz), ohne Agentur-Budget. Der Stack, mit dem steakakademie.de betrieben wird.',
-  },
-  {
-    Icon: CheckCircle,
-    title: 'Checkliste erste 30 Tage',
-    desc: 'Was nach der Gründung sofort zu erledigen ist — priorisiert, ohne Lücken, ohne "das hätte ich früher wissen müssen".',
+    title: 'Der Arbeits-Loop',
+    desc: 'Briefing → bauen lassen → verifizieren → festhalten. Wie du mit begrenzter Zeit täglich etwas wirklich fertig machst.',
   },
 ];
 
 const FAQ = [
   {
-    q: 'Brauche ich Vorkenntnisse in Technik oder Buchhaltung?',
-    a: 'Nein. Das System setzt voraus, dass du einen Computer bedienen kannst — sonst nichts. Alle Schritte sind so erklärt, dass sie ohne Vorwissen ausführbar sind.',
+    q: 'Brauche ich Vorkenntnisse in Technik oder Programmierung?',
+    a: 'Nein. Du musst einen Computer bedienen können — sonst nichts. Die Methode arbeitet mit KI (Claude Code) als Werkzeug: Du steuerst und entscheidest, die KI macht die eigentliche Arbeit.',
   },
   {
-    q: 'Was genau bedeutet "72 Stunden"?',
-    a: 'Die Kernschritte — Gewerbeanmeldung, Steuer-Anmeldung, Domain kaufen, erste Seite live — sind in drei fokussierten Arbeitstagen abgeschlossen. Kein Vollzeit-Einsatz nötig.',
+    q: 'Wie viel Zeit muss ich investieren?',
+    a: 'So viel, wie du hast. Die Methode ist auf kleine Arbeits-Loops ausgelegt — auch 45 Minuten am Tag bringen dich voran. Der eingebaute Arbeitszeit-Planer macht aus deiner verfügbaren Zeit einen realistischen Plan.',
+  },
+  {
+    q: 'Entstehen mir zusätzliche Kosten?',
+    a: 'Ja, und das sagen wir offen: Die Methode baut mit Claude Code — dafür brauchst du ein eigenes Claude-Abo (Empfehlung: Max-Tarif). Diese Werkzeug-Kosten trägst du selbst, sie sind nicht im Preis enthalten. Du gehst kein langfristiges Abo ein — Claude ist monatlich kündbar.',
+  },
+  {
+    q: 'Und die Bürokratie — Gewerbe, Finanzamt, Rechtsform?',
+    a: 'Deckt „Das Komplettikon" ab, dein Gründer-Nachschlagewerk: was du angehen musst, was du beantragst und welche Kosten in den ersten 6 Monaten kommen — plus Rechtsform-Vergleich. Das ist eine Orientierung, keine Steuer- oder Rechtsberatung.',
   },
   {
     q: 'Ist das auch für nebenberufliche Selbstständigkeit geeignet?',
-    a: 'Ja. Das System funktioniert für Haupt- und Nebenerwerb. Die relevanten Unterschiede (Kleinunternehmer, Gewerbefreigrenze) sind explizit behandelt.',
-  },
-  {
-    q: 'Was, wenn ich schon gegründet habe?',
-    a: 'Die Gründer-Schmiede hilft dir trotzdem: als Prüfung ob alles korrekt aufgesetzt ist, und als Grundlage für die Optimierung deiner digitalen Infrastruktur.',
+    a: 'Ja. Methode und Komplettikon decken Haupt- und Nebenerwerb ab — die relevanten Unterschiede (Kleinunternehmer, Versicherung) sind erklärt.',
   },
   {
     q: 'Gibt es Support bei Fragen?',
@@ -116,7 +120,7 @@ export default async function GruenderSchmiedePage() {
     '@type': 'Product',
     name: 'Gründer-Schmiede',
     description:
-      'Aus der Idee wird ein angemeldetes Unternehmen — in 72 Stunden geschmiedet. Gewerbeanmeldung, Steuer-Onboarding und erste Website.',
+      'Die echte Methode, KI-gesteuert ein digitales Business aufzubauen — sechs Module vom Chef-Prinzip bis zum täglichen Arbeits-Loop, plus das Gründer-Nachschlagewerk „Das Komplettikon" und ein Arbeitszeit-Planer. Von Tag 1 dokumentiert.',
     brand: { '@type': 'Brand', name: 'Steakakademie' },
     offers: {
       '@type': 'Offer',
@@ -175,24 +179,24 @@ export default async function GruenderSchmiedePage() {
                 Säule I — Gründer-Schmiede
               </span>
               <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold text-text-light leading-tight mb-6">
-                Aus der Idee wird ein Unternehmen —<br className="hidden lg:block" />
-                in 72 Stunden geschmiedet.
+                KI-gesteuert dein Business bauen —<br className="hidden lg:block" />
+                ohne dich im Chaos zu verlieren.
               </h1>
               <p className="font-serif text-xl lg:text-2xl text-text-light/80 leading-relaxed mb-4">
-                Kein Raten. Kein Stundenlang-Recherchieren. Kein teurer Berater für Basics.
+                Nicht noch ein Kurs übers Gründen. Die Methode, mit der ich es wirklich gemacht habe.
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
-                Andere verkaufen dir einen Kurs <em>über</em> das Gründen. Die Gründer-Schmiede
-                gründet <em>mit</em> dir: Gewerbeanmeldung, Finanzamt-Onboarding und erste Website —
-                Schritt für Schritt, bis alles steht und läuft. Alles was du brauchst,
-                nichts was dich aufhält.
+                Andere verkaufen dir Theorie. Ich zeige dir meine echte Herangehensweise —
+                von Tag 1 dokumentiert: wie du mit KI als fokussiertem Mitgründer ein digitales
+                Business aufbaust, Schritt für Schritt, ohne dich zu verzetteln. Plus alles, was du
+                fürs Gründen brauchst, an einer Stelle.
               </p>
 
               <div className="flex flex-wrap gap-6">
                 {[
-                  { icon: <Clock size={14} />, text: '72 Stunden vom Entschluss zur laufenden Website' },
-                  { icon: <Shield size={14} />, text: 'Rechtssicher ab Tag 1: Gewerbe, Finanzamt, Impressum, DSGVO' },
-                  { icon: <CheckCircle size={14} />, text: 'Ohne Berater-Stundensatz, ohne Agentur, ohne Vorwissen' },
+                  { icon: <Clock size={14} />, text: 'Sechs Module — vom Chef-Prinzip bis zum täglichen Arbeits-Loop' },
+                  { icon: <Shield size={14} />, text: 'Das Komplettikon: Gründungs-Bürokratie & Kosten ehrlich erklärt' },
+                  { icon: <CheckCircle size={14} />, text: 'Arbeitszeit-Planer: aus deiner Zeit ein realistischer Plan' },
                 ].map(({ icon, text }) => (
                   <div key={text} className="flex items-center gap-2 text-xs font-sans text-text-light/55">
                     <span className="text-brand-gold">{icon}</span>
@@ -237,31 +241,32 @@ export default async function GruenderSchmiedePage() {
                 Das Problem
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-primary mb-8">
-                Gründen ist keine Raketenwissenschaft.<br />
-                Aber die meisten machen es trotzdem falsch.
+                Die Idee ist nicht das Problem.<br />
+                Das Chaos ist es.
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 font-body text-text-secondary leading-relaxed">
                 <div className="space-y-4">
                   <p>
-                    Du hast die Idee. Du weißt was du anbieten willst. Aber dann: Welche Rechtsform?
-                    Gewerbe oder Freiberufler? Finanzamt-Fragebogen — was zur Hölle soll ich da
-                    eintragen? Und was kostet ein Steuerberater allein für die Erstberatung?
+                    Du willst etwas aufbauen — vielleicht hast du schon angefangen: die Idee in
+                    Notion, die Zahlen in Excel, vierzig offene Tabs. Nach zwei Wochen weißt du nicht
+                    mehr, was Stand ist, und entscheidest aus dem Bauch.
                   </p>
                   <p>
-                    Online-Ratgeber helfen nicht wirklich. Sie sind vollgestopft mit
-                    "könnte relevant sein" und "es kommt darauf an". Du liest eine Stunde und
-                    weißt danach genauso viel wie vorher — nur frustrierter.
+                    KI macht das schlimmer, wenn du sie falsch einsetzt — sie öffnet dir auf
+                    Knopfdruck zehn neue Baustellen. Das killt mehr junge Projekte als jeder
+                    Wettbewerber: nicht die schlechte Idee, sondern der verlorene Überblick.
                   </p>
                 </div>
                 <div className="space-y-4">
                   <p>
-                    Die Alternative: Ein Berater. Stundensatz 180–350 Euro. Für Dinge, die
-                    eigentlich logisch aufgebaut sind — wenn man sie einmal erklärt bekommt.
+                    Dazu die Hürde davor: Gewerbe oder Freiberuf? Welche Rechtsform? Finanzamt-
+                    Fragebogen — was soll ich da eintragen? Viele verlieren hier den Überblick,
+                    bevor sie überhaupt gebaut haben.
                   </p>
                   <p>
-                    Dabei ist Gründen handwerklich. Nicht kompliziert — aber man muss die
-                    richtige Reihenfolge kennen. Was zuerst, was danach, was kann warten.
-                    Das ist exakt das, was die Gründer-Schmiede liefert.
+                    Die Gründer-Schmiede löst beides: eine Methode, die KI zu deinem fokussierten
+                    Mitgründer macht — und „Das Komplettikon", das die Bürokratie ehrlich erklärt.
+                    Genau so habe ich steakakademie.de gebaut.
                   </p>
                 </div>
               </div>
@@ -280,8 +285,8 @@ export default async function GruenderSchmiedePage() {
                 Sechs Module. Null Füllmaterial.
               </h2>
               <p className="font-body text-text-light/60 max-w-xl">
-                Jedes Modul hat eine Aufgabe. Am Ende ist die Aufgabe erledigt — nicht
-                "du weißt jetzt mehr darüber".
+                Das ist meine echte Methode — KI-gesteuert ein Business bauen, von Tag 1
+                dokumentiert. Jedes Modul bringt dich weiter, nicht nur „du weißt jetzt mehr".
               </p>
             </div>
 
@@ -305,6 +310,36 @@ export default async function GruenderSchmiedePage() {
                 </div>
               ))}
             </div>
+
+            {/* Dazu: Komplettikon + Arbeitszeit-Planer */}
+            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <Link
+                href="/gruender-schmiede/gruendung-basics"
+                className="group bg-surface-base border border-border-subtle p-6 transition-colors hover:border-brand-gold/50"
+              >
+                <div className="mb-2 flex items-center justify-between">
+                  <h3 className="font-serif text-base font-bold text-text-light">Das Komplettikon</h3>
+                  <ArrowRight size={16} className="text-brand-gold transition-transform group-hover:translate-x-1" />
+                </div>
+                <p className="font-body text-sm text-text-light/55 leading-relaxed">
+                  Dein komplettes Gründer-Nachschlagewerk: was du angehen musst, was du beantragst und
+                  welche Kosten die ersten 6 Monate kommen — plus Rechtsform-Vergleich und Anti-Scam.
+                </p>
+              </Link>
+              <Link
+                href="/gruender-schmiede/planer"
+                className="group bg-surface-base border border-border-subtle p-6 transition-colors hover:border-brand-gold/50"
+              >
+                <div className="mb-2 flex items-center justify-between">
+                  <h3 className="font-serif text-base font-bold text-text-light">Arbeitszeit-Planer</h3>
+                  <ArrowRight size={16} className="text-brand-gold transition-transform group-hover:translate-x-1" />
+                </div>
+                <p className="font-body text-sm text-text-light/55 leading-relaxed">
+                  Sag, wie viel Zeit du pro Tag hast — der Planer verteilt alle Aufgaben auf einen
+                  realistischen Timetable und rechnet automatisch neu, während dein Projekt wächst.
+                </p>
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -314,8 +349,8 @@ export default async function GruenderSchmiedePage() {
             <div className="max-w-content mx-auto">
               <blockquote className="border-l-4 border-brand-gold pl-6 py-2 mb-12">
                 <p className="font-serif text-xl lg:text-2xl text-text-primary italic leading-relaxed">
-                  „Nicht 'Was du brauchen könntest' — sondern exakt das, was wirklich
-                  notwendig ist."
+                  „Kein Kurs über Kurse. Die echte Methode, mit der dieses Projekt entstanden ist —
+                  von Tag 1 dokumentiert."
                 </p>
                 <footer className="mt-4 text-sm font-sans text-text-muted">
                   — Kernprinzip der Gründer-Schmiede
@@ -326,15 +361,15 @@ export default async function GruenderSchmiedePage() {
                 {[
                   {
                     title: 'Praxiserprobt',
-                    desc: 'Dieser Stack — Cloudflare, Vercel, Next.js — betreibt steakakademie.de. Kein Theoriemodell, sondern das, was im echten Betrieb funktioniert.',
+                    desc: 'Genau diese Methode hat steakakademie.de aufgebaut — solo, ohne Programmierer, ohne Agentur. Kein Theoriemodell, sondern der gelebte Weg.',
                   },
                   {
-                    title: 'Vollständig',
-                    desc: 'Von der Entscheidung für die Rechtsform bis zur ersten Seite im Netz. Keine Lücken, keine "das musst du selbst herausfinden".',
+                    title: 'Ehrlich',
+                    desc: 'Von Tag 1 dokumentiert, inklusive der Sackgassen. „Das ehrliche System": zeigen, wie man wirklich arbeitet — nicht nur, was man verkauft.',
                   },
                   {
-                    title: 'Einmalig',
-                    desc: 'Kein Abo, kein Coaching-Paket, kein Folgeprodukt als Pflicht. Du kaufst einmal — das System gehört dir.',
+                    title: 'Transparent',
+                    desc: 'Kein Hype, kein Pflicht-Coaching. Was an Werkzeug-Kosten anfällt (Claude), sagen wir offen — und Claude ist monatlich kündbar.',
                   },
                 ].map(({ title, desc }) => (
                   <div key={title}>

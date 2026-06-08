@@ -22,7 +22,9 @@
 
 - id: dreisechzig-bbq
   name: "360° BBQ"
-  network: "AWIN / TradeTracker (Netzwerk vor Bewerbung prüfen)"
+  # TradeTracker-Konto am 08.06.2026 nur AKTIVIERT (E-Mail bestätigt) — TT-Freischaltung steht noch aus.
+  # Erst nach Freischaltung: Kampagne 360° BBQ bewerben → bei Annahme Deeplink holen → status: active + Links.
+  network: "AWIN / TradeTracker (TT-Konto aktiviert 08.06.2026, Freischaltung ausstehend)"
   providers: [dreisechzig-bbq]
   commission: "bis 8 %"
   cookie: "30 Tage"

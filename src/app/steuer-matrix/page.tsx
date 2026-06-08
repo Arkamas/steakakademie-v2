@@ -230,8 +230,8 @@ export default async function SteuerMatrixPage() {
                     Zugang freischalten
                   </h3>
                   <p className="font-body text-sm text-text-secondary mb-6">
-                    Einmaliger Kauf — danach unbegrenzter Zugang zum interaktiven Rechner
-                    mit allen 23 Ländern und künftigen Updates.
+                    Einmaliger Kauf — danach 24/7 Zugang zum interaktiven Rechner
+                    mit allen 23 Ländern.
                   </p>
                   <a
                     href="#kaufen"

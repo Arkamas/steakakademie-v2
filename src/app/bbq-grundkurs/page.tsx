@@ -69,7 +69,7 @@ const WHATS_INCLUDED = [
   { label: '5 Video-Module', detail: '~4 Stunden Lernzeit, abrufbar wann du willst', Icon: Play },
   { label: 'Begleit-PDFs', detail: 'Kerntemperatur-Tabellen, Cut-Guides, Checklisten — zum Kursstart', Icon: BookOpen },
   { label: '8-Wochen-Lernplan', detail: 'Strukturierter Zeitplan damit du weißt was wann drankommt', Icon: Clock },
-  { label: 'Lebenslanger Zugang', detail: 'Einmal gekauft, immer verfügbar — inkl. Updates', Icon: CheckCircle },
+  { label: '24/7 Zugang', detail: 'Einmal gekauft — jederzeit abrufbar', Icon: CheckCircle },
 ];
 
 const FAQ = [
@@ -151,7 +151,7 @@ export default function BbqGrundkursPage() {
                   '~4 Stunden Lernzeit',
                   'Begleit-PDFs',
                   'Kursstart geplant 2026',
-                  'Lebenslanger Zugang',
+                  '24/7 Zugang',
                 ].map((chip) => (
                   <span
                     key={chip}
@@ -291,7 +291,7 @@ export default function BbqGrundkursPage() {
                       </span>
                     </div>
                     <p className="font-sans text-xs text-text-muted mt-1">
-                      Einmalzahlung · Keine monatlichen Kosten · Lebenslanger Zugang
+                      Einmalzahlung · Keine monatlichen Kosten · 24/7 Zugang
                     </p>
                   </div>
                   <div className="sm:ml-auto shrink-0">

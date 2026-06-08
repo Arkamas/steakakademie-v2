@@ -42,7 +42,7 @@ export default function DankeBbqGrundkursPage() {
             <span className="mt-0.5 flex-shrink-0 w-6 h-6 rounded-full bg-[#F5A623] text-black text-xs font-bold flex items-center justify-center">2</span>
             <div>
               <p className="text-white text-sm font-medium">Kursbereich freischalten</p>
-              <p className="text-white/60 text-sm">Mit deinem Code meldest du dich einmalig an — danach hast du dauerhaften Zugriff auf alle Module.</p>
+              <p className="text-white/60 text-sm">Mit deinem Code meldest du dich einmalig an — danach hast du jederzeit Zugriff auf alle Module.</p>
             </div>
           </div>
 

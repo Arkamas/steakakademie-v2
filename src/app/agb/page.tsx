@@ -50,8 +50,8 @@ export default function AgbPage() {
                 unserer Bestätigung per E-Mail zustande.
               </p>
               <p>
-                Die Zahlungsabwicklung für digitale Produkte (Steuer-Matrix, Agentur-Killer-Sprint,
-                Gründer-Schmiede und weitere) erfolgt über <strong className="text-text-primary">Digistore24 GmbH</strong>,
+                Die Zahlungsabwicklung für digitale Produkte (Steak-Beichte, Mein Protokoll,
+                BBQ Grundkurs und weitere) erfolgt über <strong className="text-text-primary">Digistore24 GmbH</strong>,
                 St.-Kilian-Str. 14, 97236 Randersacker. Digistore24 agiert im Rahmen des Kaufvorgangs
                 als Zahlungsdienstleister. Die Allgemeinen Geschäftsbedingungen von Digistore24
                 gelten ergänzend und sind unter{' '}

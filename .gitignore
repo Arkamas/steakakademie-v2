@@ -11,6 +11,10 @@ build/
 # Contentlayer
 .contentlayer/
 
+# Generierte Social-Banner (lokal, Regel 14)
+public/social/
+scripts/banner-gen.mjs
+
 # Production
 dist/
 

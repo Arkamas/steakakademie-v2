@@ -31,9 +31,13 @@ neu:    true  = durch ARAG-Auswertung neu in den Agenten aufgenommen
 - Nach jedem Fix: `status`/`befund` der Komponente aktualisieren (mit Commit-Ref).
 - Beide Kataloge synchron halten (Self-Audit vs. Kunden-Audit decken dieselben 18 Punkte ab).
 
-## Aktueller Self-Audit-Stand steakakademie.de (02.06.2026)
+## Aktueller Self-Audit-Stand steakakademie.de (05.06.2026)
 
 - **Behoben:** #5/#9 Speicherdauer/Löschfristen (Commit `a8a97f2`)
+- **Behoben 05.06.2026 (UGC-Audit, Commit `fec7e95`):** neue Komponente
+  `ugc-community-rezepte` — KI-Bild-Kennzeichnung (§5 UWG / EU-AI-Act Art. 50),
+  UGC-Rechteeinräumung + Namens-Einwilligung (UrhG §31, DSGVO), fal.ai als AV in
+  DSE §10a, AGB §13. Spiegelkomponente `ugc-und-ki-inhalte` im Kunden-Audit.
 - **ok:** 1–4, 6–9, 13–18
 - **not-applicable (cookieless):** #10 Cookies, #11 Social-Plugins, #12 Embeds
   → werden PFLICHT (`monitor`), sobald Meta-Pixel/GA4 oder ein Embed scharf gehen

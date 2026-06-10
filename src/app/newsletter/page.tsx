@@ -52,6 +52,15 @@ export default function NewsletterPage() {
           <div className="max-w-content mx-auto">
             <NewsletterCapture context="BBQ" />
 
+            {/* Sofort-Wert: der Spickzettel */}
+            <p className="mt-4 text-center font-body text-sm text-text-secondary">
+              Als Willkommensgeschenk bekommst du den{' '}
+              <a href="/kerntemperatur-spickzettel" className="font-semibold text-brand-fire hover:underline">
+                Kerntemperatur-Spickzettel
+              </a>{' '}
+              — alle Garstufen auf einer Seite, druckfertig für die Grillstation.
+            </p>
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
               {VORTEILE.map(({ Icon, title, desc }) => (
                 <div key={title} className="text-center sm:text-left">

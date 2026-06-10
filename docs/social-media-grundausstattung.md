@@ -144,3 +144,23 @@ Wissens-Brief auf steakakademie.de.
 4. Facebook: Impressum-URL eintragen (Pflicht).
 5. Banner (sobald Bilder da sind).
 6. Google Business: nur bei lokalem Bezug.
+
+---
+
+## 8. ⚠️ EU-Einschränkung: Meta-Messaging-Features & -Metriken
+
+> Quelle: [Meta Business Help 574941489951914](https://www.facebook.com/business/help/574941489951914) (extrahiert 10.06.2026). **Betrifft uns direkt** (Unternehmenssitz Deutschland = Europa).
+
+Wegen der **Datenschutzregeln in Europa und Japan** stellt Meta bestimmte **messaging-bezogene** Funktionen **nicht** bereit — für Ads, die von/nach Europa ausgeliefert oder dort getargetet werden. Betroffen sind **auch organisches Messaging** und **Messaging-API-Features**.
+
+**Warum es uns trifft:** u. a. wenn der Telefon-Ländercode der Seite in der EU liegt, der Seitenersteller in der EU ist oder der vorhergesagte Seitenstandort in der EU liegt — alles bei uns der Fall.
+
+**Nicht/eingeschränkt verfügbar (Auswahl):**
+- **Messaging-Kampagnen** (Messenger/Instagram/WhatsApp als Conversion-Ort): Audiences, Targeting, Optimierung, Reporting.
+- **Metriken:** „Messaging conversations started", „Cost per messaging conversation started", Link-Klicks, Leads, „On-Facebook leads/purchase", „Appointments scheduled", Instagram-Promotion-Messaging-Metriken.
+- Historische Daten bleiben sichtbar; **neue werden teils nicht mehr geloggt**.
+
+**Konsequenz für unsere Strategie:**
+- **Nicht** auf Meta-Messaging-Metriken (z. B. „Conversations started") als KPI verlassen — in der EU lückenhaft.
+- Keine **Messaging-Ad-Ziele** / Messaging-API-Automationen für den EU-Markt einplanen.
+- Stattdessen auf **Link-/Traffic-/Conversion-Ziele zur eigenen Website** (`steakakademie.de/newsletter`) setzen — dort messen wir selbst (Plausible, eigene Conversions) und sind nicht von Metas EU-Lücken abhängig. Passt ohnehin zur Newsletter-First-Strategie.

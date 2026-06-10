@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight, Clock, Users, ChefHat, Award } from 'lucide-react';
+import { ChevronRight, Clock, Users, ChefHat, Award, Sparkles } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import GenerateImageButton from '@/components/recipe/GenerateImageButton';
@@ -121,9 +121,13 @@ export default async function CommunityRecipePage({ params }: { params: { slug: 
           {/* Bild (Phase 2) */}
           {r.image_url ? (
             <div className="relative w-full aspect-[16/9] mb-10 overflow-hidden rounded-sm border border-border-subtle">
-              <Image src={r.image_url} alt={r.title} fill sizes="(max-width: 768px) 100vw, 720px" className="object-cover" unoptimized />
+              <Image src={r.image_url} alt={`${r.title} — KI-generiertes Symbolbild`} fill sizes="(max-width: 768px) 100vw, 720px" className="object-cover" unoptimized />
               <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.1em] uppercase px-2.5 py-1 bg-surface-dark/90 backdrop-blur-sm border border-border-subtle text-brand-gold">
                 <ChefHat size={11} /> {r.author_name}
+              </span>
+              {/* KI-Kennzeichnung (EU-AI-Act Art. 50 / § 5 UWG): das Bild ist KI-generiert, nicht das echte Gericht */}
+              <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.1em] uppercase px-2 py-1 bg-black/65 backdrop-blur-sm border border-white/15 text-zinc-200">
+                <Sparkles size={10} /> KI-Symbolbild
               </span>
               {(r.quality_score ?? 0) >= PITMASTER_SEAL && (
                 <span className="absolute top-3 right-3 inline-flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.1em] uppercase px-2.5 py-1 backdrop-blur-sm border"
@@ -171,6 +175,7 @@ export default async function CommunityRecipePage({ params }: { params: { slug: 
           <div className="mt-12 pt-6 border-t border-border-subtle">
             <p className="text-xs font-sans text-text-muted">
               Von einem Mitglied der Steakakademie eingereicht und KI-geprüft.{' '}
+              {r.image_url && <>Das Beitragsbild ist ein KI-generiertes Symbolbild und kann vom tatsächlichen Gericht abweichen.{' '}</>}
               <Link href="/rezepte/community" className="text-brand-gold hover:underline">Mehr Community-Rezepte →</Link>
             </p>
           </div>

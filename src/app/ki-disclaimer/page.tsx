@@ -76,6 +76,18 @@ export default function KiDisclaimerPage() {
                         Grillberatung: Cuts, Temperaturen, Techniken, Kaufempfehlungen
                       </td>
                     </tr>
+                    <tr className="border-b border-white/5">
+                      <td className="px-4 py-3">
+                        <span className="font-semibold text-text-primary">
+                          Rezept-Prüfung &amp; Bild
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">Claude (Anthropic PBC) · FLUX (fal.ai)</td>
+                      <td className="px-4 py-3">
+                        Automatisierte Prüfung eingereichter Community-Rezepte und Erzeugung von
+                        KI-Symbolbildern
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -102,11 +114,23 @@ export default function KiDisclaimerPage() {
                   <span className="shrink-0 text-green-400 font-bold">✅</span>
                   <div>
                     <span className="font-semibold text-text-primary">
-                      Art. 52 Abs. 1 EU AI Act — Transparenzpflicht:
+                      Art. 50 Abs. 1 EU AI Act — Transparenzpflicht (Interaktion):
                     </span>{' '}
                     Nutzer werden deutlich darauf hingewiesen, dass sie mit einem
                     KI-System interagieren. Marco kennzeichnet sich im Chat-Widget
                     und in seiner Begrüßung explizit als KI-Assistent.
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="shrink-0 text-green-400 font-bold">✅</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Art. 50 Abs. 2 &amp; 4 EU AI Act — Kennzeichnung KI-erzeugter Inhalte:
+                    </span>{' '}
+                    Bilder zu Community-Rezepten werden durch KI erzeugt. Sie sind auf der
+                    Website sichtbar als „KI-Symbolbild" gekennzeichnet und können vom
+                    tatsächlichen Gericht abweichen. Die Transparenzpflichten nach Art. 50
+                    gelten ab dem 2. August 2026; wir setzen die Kennzeichnung bereits jetzt um.
                   </div>
                 </li>
                 <li className="flex gap-3">

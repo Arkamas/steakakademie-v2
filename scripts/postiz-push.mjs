@@ -153,7 +153,8 @@ async function createPost(slug, kit, channels, media, isoDate) {
     posts: channels.map((ch) => ({
       integration: { id: ch.id },
       value: [{ content: captionFor(ch.platform, kit), image: media ? [media] : [] }],
-      settings: { __type: ch.platform },
+      // post_type seit Postiz-API-Update Pflicht ("post" | "story"). Reels = "post".
+      settings: { __type: ch.platform, post_type: 'post' },
     })),
   };
   return api('/posts', {

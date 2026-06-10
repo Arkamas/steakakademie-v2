@@ -41,6 +41,10 @@ export default function WerkzeugHinweis({
           <span style={{ color: FIRE }}>•</span>
           <span>Du musst dafür <strong className="text-text-primary">kein langfristiges Abo</strong> abschließen: Claude ist <strong className="text-text-primary">monatlich kündbar</strong>. Abonniere es für die Wochen, in denen du aktiv baust — und kündige danach wieder.</span>
         </li>
+        <li className="flex gap-2">
+          <span style={{ color: FIRE }}>•</span>
+          <span><strong className="text-text-primary">Zur Einordnung:</strong> Eine professionell gebaute Website — selbst halb so groß wie die Steakakademie — kostet bei einer Agentur schnell <strong className="text-text-primary">mehrere tausend Euro</strong>, dazu laufende Kosten bei jeder Änderung. Mit dieser Methode baust und verwaltest du alles selbst: keine Agentur, keine Wartezeiten — nur das Werkzeug, solange du es nutzt.</span>
+        </li>
       </ul>
     </aside>
   );

@@ -68,7 +68,7 @@ const FAQ = [
   },
   {
     q: 'Entstehen mir zusätzliche Kosten?',
-    a: 'Ja, und das sagen wir offen: Die Methode baut mit Claude Code — dafür brauchst du ein eigenes Claude-Abo (Empfehlung: Max-Tarif). Diese Werkzeug-Kosten trägst du selbst, sie sind nicht im Preis enthalten. Du gehst kein langfristiges Abo ein — Claude ist monatlich kündbar.',
+    a: 'Ja, und das sagen wir offen: Die Methode arbeitet mit Claude Code — dafür brauchst du ein eigenes Claude-Abo, Empfehlung Max-Tarif (rund 100 € im Monat, monatlich kündbar — aktuelle Preise bei Anthropic). Bevor du schluckst, rechne dagegen: Eine professionelle Website vom Dienstleister kostet im Aufbau schnell mehrere tausend Euro — und danach zahlst du für jede Änderung. Hier gehört dir das System komplett: Du baust geführt, verwaltest selbst und kündigst das Werkzeug, sobald du es nicht mehr brauchst. Die Steakakademie selbst ist genau so entstanden — ohne Agentur-Rechnung.',
   },
   {
     q: 'Und die Bürokratie — Gewerbe, Finanzamt, Rechtsform?',
@@ -183,7 +183,8 @@ export default async function GruenderSchmiedePage() {
                 ohne dich im Chaos zu verlieren.
               </h1>
               <p className="font-serif text-xl lg:text-2xl text-text-light/80 leading-relaxed mb-4">
-                Nicht noch ein Kurs übers Gründen. Die Methode, mit der ich es wirklich gemacht habe.
+                Nicht noch ein Kurs übers Gründen. Die Methode, mit der diese Website entstand —
+                solo, ohne Programmierer, von Tag 1 dokumentiert.
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
                 Andere verkaufen dir Theorie. Ich zeige dir meine echte Herangehensweise —
@@ -203,6 +204,19 @@ export default async function GruenderSchmiedePage() {
                     {text}
                   </div>
                 ))}
+              </div>
+
+              <div className="mt-10">
+                <a
+                  href="#kaufen"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-brand-gold text-ink font-sans font-bold text-sm tracking-[0.08em] uppercase hover:bg-[#b07020] transition-colors"
+                >
+                  {price ? `Jetzt für ${eur(price)} starten` : 'Jetzt starten'}
+                  <ArrowRight size={16} />
+                </a>
+                <p className="mt-3 text-[11px] font-sans text-text-light/40">
+                  Einmalzahlung inkl. MwSt. · Sofortzugang · Sichere Abwicklung über Digistore24
+                </p>
               </div>
             </div>
           </div>
@@ -456,19 +470,20 @@ export default async function GruenderSchmiedePage() {
                     </p>
                   )}
                   <p className="text-sm font-sans text-text-muted mt-1">
-                    Einmalig · Sofortzugang · Abgewickelt über Digistore24
+                    Einmalig · inkl. MwSt. · Sofortzugang · Abgewickelt über Digistore24
                   </p>
                 </div>
                 <div className="shrink-0">
-                  <span
-                    className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base cursor-not-allowed select-none"
-                    style={{ background: 'rgba(200,136,42,0.12)', color: '#9a8a72', border: '1px solid rgba(200,136,42,0.25)' }}
-                    aria-disabled="true"
+                  <a
+                    href="https://www.checkout-ds24.com/product/695894"
+                    rel="nofollow noopener"
+                    className="flex items-center justify-center gap-2 px-8 py-4 bg-brand-gold text-ink font-sans font-bold text-base hover:bg-[#b07020] transition-colors"
                   >
-                    In Vorbereitung
-                  </span>
+                    Jetzt kaufen
+                    <ArrowRight size={18} />
+                  </a>
                   <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Die Gründer-Schmiede wird derzeit fertiggestellt — bald buchbar.
+                    Sichere Abwicklung über Digistore24 · Sofortzugang nach Zahlung
                   </p>
                 </div>
               </div>

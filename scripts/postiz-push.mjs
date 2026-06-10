@@ -144,6 +144,26 @@ async function uploadVideo(slug) {
 }
 
 // ── Post (Entwurf/Plan) anlegen ──────────────────────────────────────────────
+// Plattform-spezifische Pflicht-Settings (Postiz-API).
+function settingsFor(platform) {
+  const p = String(platform).toLowerCase();
+  if (p.includes('tiktok')) {
+    return {
+      __type: platform,
+      privacy_level: 'PUBLIC_TO_EVERYONE',
+      duet: false,
+      stitch: false,
+      comment: true,
+      autoAddMusic: 'no',
+      brand_content_toggle: false,
+      brand_organic_toggle: false,
+      content_posting_method: 'DIRECT_POST',
+    };
+  }
+  // Instagram/Facebook (Reels) → post_type. YouTube ggf. später ergänzen.
+  return { __type: platform, post_type: 'post' };
+}
+
 async function createPost(slug, kit, channels, media, isoDate) {
   const body = {
     type: MODE, // 'draft' | 'schedule'
@@ -153,8 +173,7 @@ async function createPost(slug, kit, channels, media, isoDate) {
     posts: channels.map((ch) => ({
       integration: { id: ch.id },
       value: [{ content: captionFor(ch.platform, kit), image: media ? [media] : [] }],
-      // post_type seit Postiz-API-Update Pflicht ("post" | "story"). Reels = "post".
-      settings: { __type: ch.platform, post_type: 'post' },
+      settings: settingsFor(ch.platform),
     })),
   };
   return api('/posts', {

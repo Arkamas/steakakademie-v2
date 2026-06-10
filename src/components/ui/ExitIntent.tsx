@@ -1,11 +1,33 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X, Flame, Check } from 'lucide-react';
 import { trackEvent } from '@/components/analytics/PlausibleScript';
 
 type State = 'idle' | 'loading' | 'success';
+
+/**
+ * Symmetrische Akzent-Leiste (oben & unten) mit dezentem Glimmer-Sweep.
+ * Rahmt das Modal bewusst statt der einzelnen Linie oben; Motion respektiert
+ * prefers-reduced-motion (dann nur statischer Gradient, kein Sweep).
+ */
+function AccentBar() {
+  const reduce = useReducedMotion();
+  return (
+    <div className="relative h-0.5 overflow-hidden bg-gradient-to-r from-brand-fire via-brand-gold to-brand-fire">
+      {!reduce && (
+        <motion.div
+          aria-hidden
+          className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent"
+          initial={{ x: '-130%' }}
+          animate={{ x: '330%' }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1.4 }}
+        />
+      )}
+    </div>
+  );
+}
 
 // Routes where the overlay should NOT appear
 const EXCLUDED_PATHS = ['/diplome', '/diplome/simulation', '/kontakt', '/impressum', '/datenschutz', '/agb'];
@@ -103,8 +125,8 @@ export default function ExitIntent() {
           >
             <div className="bg-surface-dark border border-brand-gold/25 shadow-[0_24px_64px_rgba(0,0,0,0.7)] overflow-hidden">
 
-              {/* Top accent line */}
-              <div className="h-0.5 bg-gradient-to-r from-brand-fire via-brand-gold to-brand-fire" />
+              {/* Accent line — oben */}
+              <AccentBar />
 
               {/* Close button */}
               <button
@@ -199,6 +221,9 @@ export default function ExitIntent() {
                   </>
                 )}
               </div>
+
+              {/* Accent line — unten (Symmetrie) */}
+              <AccentBar />
             </div>
           </motion.div>
         </>

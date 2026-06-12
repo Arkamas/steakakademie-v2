@@ -124,12 +124,28 @@ function captionFor(platform, kit) {
 function loadLedger() { try { return JSON.parse(readFileSync(LEDGER, 'utf8')); } catch { return {}; } }
 function saveLedger(l) { writeFileSync(LEDGER, JSON.stringify(l, null, 2)); }
 
+// Veröffentlichungs-Reihenfolge: Zugpferde zuerst, Fisch ans Ende.
+const PRIORITY = [
+  'dry-aged-ribeye', 'brisket-low-slow', 'burnt-ends', 'tomahawk-reverse-sear',
+  'ribeye-sous-vide', 'porterhouse-grill', 't-bone-fiorentina', 'picanha-churrasco',
+  'wagyu-steak-braten', 'smash-burger', 'spareribs-3-2-1', 'pulled-pork-boston-butt',
+  'roastbeef-reverse-sear', 'entrecote-grillen', 'flank-steak-grillen',
+];
+const IS_FISCH = (s) => /lachs|dorade|makrele|mahi|rotbarbe|sardinen|schwertfisch|thunfisch/.test(s);
+
 // ── Slugs sammeln (Kit + Video müssen existieren) ────────────────────────────
 function collectSlugs() {
   if (!existsSync(KIT_DIR)) return [];
   let slugs = readdirSync(KIT_DIR).filter((f) => f.endsWith('.md')).map((f) => basename(f, '.md'));
   if (ONLY_SLUG) slugs = slugs.filter((s) => s === ONLY_SLUG);
   slugs = slugs.filter((s) => existsSync(join(VIDEO_OUT, `${s}.mp4`)));
+  slugs.sort((a, b) => {
+    const pa = PRIORITY.indexOf(a), pb = PRIORITY.indexOf(b);
+    if (pa !== -1 || pb !== -1) return (pa === -1 ? 999 : pa) - (pb === -1 ? 999 : pb);
+    const fa = IS_FISCH(a), fb = IS_FISCH(b);
+    if (fa !== fb) return fa ? 1 : -1; // Fisch nach hinten
+    return a.localeCompare(b);
+  });
   return slugs.slice(0, LIMIT);
 }
 

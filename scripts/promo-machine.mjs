@@ -74,6 +74,65 @@ function methodTag(method = '') {
   return '#kerntemperatur';
 }
 
+// Saison-Tag (timely; im Sommer Grillsaison)
+const TAG_SEASON = '#grillsaison';
+
+// Cut-/Rezept-spezifische Hashtags — der eigentliche Reichweiten-Hebel.
+// Substring-Match auf Slug/Titel; max. 2 pro Rezept.
+function cutTags(r) {
+  const s = `${r.slug} ${r.title || ''} ${r.fullTitle || ''}`.toLowerCase();
+  const out = [];
+  const add = (...ts) => ts.forEach((t) => { if (!out.includes(t)) out.push(t); });
+  if (s.includes('tomahawk')) add('#tomahawk');
+  if (s.includes('dry-aged') || s.includes('dry aged') || s.includes('dryaged')) add('#dryagedbeef');
+  if (s.includes('ribeye') || s.includes('entrecote') || s.includes('entrecôte')) add('#ribeye');
+  if (s.includes('brisket')) add('#brisket');
+  if (s.includes('burnt')) add('#burntends');
+  if (s.includes('spareribs') || s.includes('spare-ribs')) add('#spareribs');
+  if (s.includes('short-ribs') || s.includes('short ribs') || s.includes('back-ribs') || s.includes('back ribs')) add('#beefribs');
+  if (s.includes('flank')) add('#flanksteak');
+  if (s.includes('bavette') || s.includes('skirt')) add('#bavette');
+  if (s.includes('chateaubriand')) add('#filetsteak');
+  if (s.includes('picanha')) add('#picanha');
+  if (s.includes('churrasco')) add('#churrasco');
+  if (s.includes('tri-tip') || s.includes('santa-maria')) add('#tritip');
+  if (s.includes('asado')) add('#asado');
+  if (s.includes('iberico')) add('#iberico');
+  if (s.includes('pluma')) add('#pluma');
+  if (s.includes('presa')) add('#presa');
+  if (s.includes('secreto')) add('#secreto');
+  if (s.includes('carrillera')) add('#schweinebacke');
+  if (s.includes('porterhouse')) add('#porterhouse');
+  if (s.includes('t-bone') || s.includes('tbone')) add('#tbone');
+  if (s.includes('fiorentina')) add('#fiorentina');
+  if (s.includes('onglet') || s.includes('hanger')) add('#hangersteak');
+  if (s.includes('tagliata')) add('#tagliata');
+  if (s.includes('roastbeef')) add('#roastbeef');
+  if (s.includes('wagyu')) add('#wagyu');
+  if (s.includes('yakiniku')) add('#yakiniku');
+  if (s.includes('bulgogi') || s.includes('korean')) add('#koreanbbq');
+  if (s.includes('smash')) add('#smashburger');
+  else if (s.includes('burger')) add('#burger');
+  if (s.includes('pulled-pork') || s.includes('pulled pork') || s.includes('boston-butt')) add('#pulledpork');
+  if (s.includes('pulled-chicken') || s.includes('pulled chicken')) add('#pulledchicken');
+  if (s.includes('beer-can') || s.includes('beer can')) add('#beercanchicken');
+  if (s.includes('spatchcock')) add('#spatchcock');
+  if ((s.includes('chicken') || s.includes('haehnchen') || s.includes('hähnchen') || s.includes('huhn')) && !out.some((t) => t.includes('chicken'))) add('#bbqchicken');
+  if (s.includes('krustenbraten')) add('#krustenbraten');
+  if (s.includes('lamm') || s.includes('lamb')) add('#lamm');
+  if (s.includes('ochsenback') || s.includes('baeckchen') || s.includes('bäckchen')) add('#schmorbraten');
+  if (s.includes('ente')) add('#ente');
+  if (s.includes('lachs') || s.includes('salmon')) add('#lachs');
+  if (s.includes('dorade')) add('#dorade');
+  if (s.includes('makrele')) add('#makrele');
+  if (s.includes('mahi')) add('#mahimahi');
+  if (s.includes('rotbarbe')) add('#rotbarbe');
+  if (s.includes('sardinen') || s.includes('sardine')) add('#sardinen');
+  if (s.includes('schwertfisch')) add('#schwertfisch');
+  if (s.includes('thunfisch') || s.includes('tuna')) add('#thunfisch');
+  return out.slice(0, 2);
+}
+
 // ── Mini-Frontmatter-Parser (nur einzeilige Keys, die wir brauchen) ───────────
 function parseFrontmatter(raw) {
   const m = raw.match(/^---\s*\n([\s\S]*?)\n---/);
@@ -221,7 +280,7 @@ function collectRecipes() {
 // ── Post-Kit schreiben ─────────────────────────────────────────────────────
 function writeKit(r) {
   const isFisch = r.kategorie === 'fisch';
-  const tags = [...new Set([...TAGS_BRAND, methodTag(r.cookingMethod), ...(isFisch ? TAGS_FISCH : TAGS_REACH)])].slice(0, 11);
+  const tags = [...new Set([...TAGS_BRAND, ...cutTags(r), methodTag(r.cookingMethod), TAG_SEASON, ...(isFisch ? TAGS_FISCH : TAGS_REACH)])].slice(0, 12);
   const hook = hookFor(r.slug, r.title);
   const caption =
 `${hook}
@@ -232,7 +291,8 @@ Folge für mehr Grillwissen vom Pitmaster. 🥩
 
 ${tags.join(' ')}`;
 
-  const tiktok = `${hook.replace(' 🔥', '')} 🔥 Folge für mehr Grillwissen. ${TAGS_BRAND.join(' ')} #grilltok #steak`;
+  const ttTags = [...new Set([...TAGS_BRAND, ...cutTags(r), methodTag(r.cookingMethod), TAG_SEASON, '#grilltok'])].slice(0, 5);
+  const tiktok = `${hook.replace(' 🔥', '')} 🔥 Folge für mehr Grillwissen. ${ttTags.join(' ')}`;
 
   const md =
 `# Promo-Kit — ${r.fullTitle}

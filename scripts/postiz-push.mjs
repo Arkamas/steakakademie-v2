@@ -145,7 +145,7 @@ async function uploadVideo(slug) {
 
 // ── Post (Entwurf/Plan) anlegen ──────────────────────────────────────────────
 // Plattform-spezifische Pflicht-Settings (Postiz-API).
-function settingsFor(platform) {
+function settingsFor(platform, title) {
   const p = String(platform).toLowerCase();
   if (p.includes('tiktok')) {
     return {
@@ -160,11 +160,21 @@ function settingsFor(platform) {
       content_posting_method: 'DIRECT_POST',
     };
   }
-  // Instagram/Facebook (Reels) → post_type. YouTube ggf. später ergänzen.
+  if (p.includes('youtube')) {
+    // YouTube: Titel Pflicht; `type` = Sichtbarkeit (public/private/unlisted).
+    // 9:16 + ≤60s ⇒ YouTube erkennt automatisch als Short.
+    return {
+      __type: platform,
+      title: (title || 'Steakakademie · BBQ-Wissen').slice(0, 95),
+      type: 'public',
+    };
+  }
+  // Instagram/Facebook (Reels) → post_type.
   return { __type: platform, post_type: 'post' };
 }
 
 async function createPost(slug, kit, channels, media, isoDate) {
+  const ytTitle = (kit.caption.split('\n')[0] || 'Steakakademie').replace(/[#*_`]/g, '').trim().slice(0, 95);
   const body = {
     type: MODE, // 'draft' | 'schedule'
     date: isoDate,
@@ -173,7 +183,7 @@ async function createPost(slug, kit, channels, media, isoDate) {
     posts: channels.map((ch) => ({
       integration: { id: ch.id },
       value: [{ content: captionFor(ch.platform, kit), image: media ? [media] : [] }],
-      settings: settingsFor(ch.platform),
+      settings: settingsFor(ch.platform, ytTitle),
     })),
   };
   return api('/posts', {
@@ -219,15 +229,17 @@ async function createPost(slug, kit, channels, media, isoDate) {
     const kit = parseKit(slug);
     if (!kit || !kit.caption) { console.log(`⚠  ${slug} — kein Kit-Text, übersprungen`); continue; }
 
-    // Zeitpunkt: draft → +10min Platzhalter; schedule → AT + i*EVERY
+    // Zeitpunkt: wenn --at gesetzt → gestaffelt AT + i*EVERY (gilt auch für
+    // zukunfts-datierte ENTWÜRFE, damit sie im Kalender sichtbar sind);
+    // sonst Platzhalter +10min.
     let iso;
-    if (MODE === 'schedule' && !Number.isNaN(base)) iso = new Date(base + i * EVERY_MIN * 60000).toISOString();
+    if (!Number.isNaN(base)) iso = new Date(base + i * EVERY_MIN * 60000).toISOString();
     else iso = new Date(Date.now() + 10 * 60000).toISOString();
 
     if (DRY) {
-      console.log(`▶ ${slug}`);
+      console.log(`▶ ${slug}  [${MODE}]`);
       console.log(`   Caption: ${kit.caption.split('\n')[0].slice(0, 70)}…`);
-      console.log(`   Video:   ${slug}.mp4  ·  Zeit: ${MODE === 'schedule' ? iso : '(Entwurf)'}`);
+      console.log(`   Video:   ${slug}.mp4  ·  Zeit: ${iso}`);
       continue;
     }
 

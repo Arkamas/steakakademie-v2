@@ -61,7 +61,7 @@ const KICKER = {
 
 // ── Hashtag-Sets (aus Channel-Setup_Komplettpaket.md, „Marco"-Stimme) ─────────
 const TAGS_REACH = ['#grillen', '#steak', '#bbqdeutschland', '#grillenlernen', '#grilltipps', '#fleisch', '#grillmeister'];
-const TAGS_BRAND = ['#steakakademie', '#marco'];
+const TAGS_BRAND = ['#steakakademie'];
 const TAGS_FISCH = ['#grillen', '#fisch', '#fischgrillen', '#bbqdeutschland', '#grillenlernen', '#seafood', '#grilltipps'];
 // Methoden-Tag nach cookingMethod
 function methodTag(method = '') {

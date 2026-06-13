@@ -9,7 +9,7 @@
 |---|-------|----------|---------|--------|
 | 1 | **AGB/Rechts-Compliance-Scanner** | CronCreate (Remote) gegen `compliance/website-rechtscheck.yaml` (21 Komponenten) | täglich 06:00 UTC | ✅ aktiv |
 | 5 | **Affiliate-Link-Checker** | GitHub Actions `check-affiliate-links.yml` → `npm run check-links:json`, öffnet/schließt GitHub Issue | Mo 08:00 UTC | ✅ aktiv |
-| 6 | **Social Media Senior Director** | `scripts/social-posts.mjs` (Claude Haiku) → Post-Entwürfe nach `social-drafts/`; trägt Werbekennzeichnungs-Pflicht (LG Köln 12.05.2026) | manuell (`--only`/`--limit`) | ✅ aktiv (human-gated, **kein** Auto-Posten) |
+| 6 | **Social Media Senior Director** | GitHub Actions `social-grow.yml` → `scripts/social-posts.mjs` (Claude Haiku), Post-Entwürfe als Artifact `social-drafts`; trägt Werbekennzeichnungs-Pflicht (LG Köln 12.05.2026) | So 04:00 UTC | ✅ aktiv (human-gated, **kein** Auto-Posten) |
 | 11 | **Glossar-Agent** | GitHub Actions `glossary-grow.yml` → `scripts/glossary-agent.mjs` (Claude Haiku), committet `content/glossar` | So 03:00 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
 | 12 | **Rezept-Agent** | GitHub Actions `recipe-grow.yml` → `scripts/recipe-agent.mjs` (Claude Sonnet) + `recipe-images.mjs` (FLUX.1/FAL) | So 03:30 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
 | — | **Auto-Fix-Agent** | GitHub Actions `auto-fix.yml` → `claude-code-action@beta`, öffnet PR bei Issue-Label `auto-fix` | event-driven | ⚠️ vorhanden, aber **verwaist** — hängt am nicht existenten „Mingma Post-Agent" |

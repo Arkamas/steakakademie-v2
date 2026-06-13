@@ -60,8 +60,11 @@ async function main() {
     const jql = encodeURIComponent(
       `project = ${JIRA_PROJECT_KEY} AND labels = "${ALERT_DEDUP_LABEL}" AND statusCategory != Done`,
     );
-    const found = await jira(`/rest/api/3/search?jql=${jql}&maxResults=1&fields=key`);
-    if (found.total > 0) {
+    // Neuer Endpunkt /rest/api/3/search/jql (der alte /rest/api/3/search wurde
+    // von Atlassian entfernt → HTTP 410). Token-Pagination, KEIN total-Feld mehr
+    // → Existenz über issues-Länge prüfen (maxResults=1 reicht für Dedup).
+    const found = await jira(`/rest/api/3/search/jql?jql=${jql}&maxResults=1&fields=key`);
+    if (Array.isArray(found.issues) && found.issues.length > 0) {
       console.log(`ℹ️  Offenes Ticket existiert bereits (${found.issues[0].key}) — kein Duplikat erstellt.`);
       return;
     }

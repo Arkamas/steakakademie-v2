@@ -29,6 +29,7 @@
     "fetch-images:force": "node scripts/fetch-pa-api-images.mjs --force",
     "check-links": "node scripts/check-affiliate-links.mjs",
     "check-links:json": "node scripts/check-affiliate-links.mjs --json",
+    "legal-guard": "node scripts/legal-guard.mjs",
     "cron:scout": "node scripts/cron-scout.mjs",
     "cron:scout:dry": "node scripts/cron-scout.mjs --dry-run",
     "cron:scout:only": "node scripts/cron-scout.mjs --scout-only",

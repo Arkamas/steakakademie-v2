@@ -18,6 +18,21 @@ als Komponente verankert, nicht ad hoc geprüft.
 | `website-rechtscheck.yaml` | **Agent 1** (AGB-Compliance-Scanner) + **Agent 8** (Rechts-Update-Scanner) | Self-Audit von steakakademie.de gegen alle 18 + Bestandskomponenten |
 | `gruendung-sprint-rechtscheck.yaml` | **Gründung-Sprint** (Produkt F) Rechts-Check-Modul | Kunden-Audit der NEUEN Gründer-Website — gleiche 18 Komponenten |
 
+## Automatischer Regressions-Guard (CI)
+
+Die maschinell prüfbaren Katalog-Punkte sind zusätzlich als CI-Gate verankert:
+`scripts/legal-guard.mjs` (Workflow `.github/workflows/legal-guard.yml`, npm:
+`npm run legal-guard`). Der Guard wird bei jedem Push/PR rot, wenn jemand einen
+typischen Abmahn-Grund wieder einbaut:
+
+- toter EU-OS-Plattform-Link (`consumers/odr`)
+- extern nachladende Google Fonts (`fonts.googleapis.com`/`gstatic.com`)
+- einwilligungspflichtige Tracker (GA4/GTM, Meta-Pixel, Hotjar, Clarity)
+- Affiliate-Links ohne `rel="sponsored"` oder ohne sichtbares „Anzeige"-Label
+
+So bleibt das Audit-Ergebnis dauerhaft gesichert. Neue maschinell prüfbare
+Regeln → im Guard ergänzen UND als Katalog-Komponente verankern.
+
 ## So konsumiert der Agent den Katalog
 
 Der Compliance-Scanner liest die YAML, iteriert über `komponenten[]` und prüft

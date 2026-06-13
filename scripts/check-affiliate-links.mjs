@@ -21,6 +21,16 @@ const FAST    = process.argv.includes('--fast');
 const AS_JSON = process.argv.includes('--json');
 const TIMEOUT_MS = 8000;
 
+// Browser-ähnlicher User-Agent: viele Shops (v.a. Amazon) blocken Bot-UAs.
+const BROWSER_UA =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+  '(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+
+// Anti-Bot-/Transient-Codes: KEIN toter Link, sondern der Shop blockt den
+// CI-Runner (Datacenter-IP). Diese gelten als "blockiert/unbekannt" und lassen
+// den Build NICHT rot werden — echte tote Links (404/410/Timeout) tun das weiter.
+const BLOCKED_STATUS = new Set([403, 429, 503]);
+
 // ── Minimal YAML Parser ─────────────────────────────────────────────────────
 function loadRegistry() {
   const raw = readFileSync(join(ROOT, 'products', 'registry.yaml'), 'utf-8');
@@ -54,6 +64,17 @@ async function checkUrl(url) {
     return { ok: false, status: 0, reason: 'PLACEHOLDER in URL' };
   }
 
+  const classify = (status, method) => {
+    if (status >= 200 && status < 400) {
+      return { ok: true, status, reason: method === 'GET' ? 'OK (GET)' : 'OK' };
+    }
+    if (BLOCKED_STATUS.has(status)) {
+      // Anti-Bot-Block: nicht als toter Link werten.
+      return { ok: false, blocked: true, status, reason: `Blockiert (HTTP ${status})` };
+    }
+    return { ok: false, status, reason: `HTTP ${status}` };
+  };
+
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -62,24 +83,23 @@ async function checkUrl(url) {
       method: 'HEAD',
       signal: controller.signal,
       redirect: 'follow',
-      headers: {
-        'User-Agent': 'Steakakademie-LinkChecker/1.0 (+https://steakakademie.de)',
-      },
+      headers: { 'User-Agent': BROWSER_UA },
     });
-    clearTimeout(timer);
 
-    if (res.status === 405) {
-      // HEAD nicht erlaubt → GET versuchen
+    // HEAD oft nicht erlaubt/geblockt (405/403/501) → GET versuchen, bevor wir urteilen.
+    if (res.status === 405 || res.status === 403 || res.status === 501) {
       const res2 = await fetch(url, {
         method: 'GET',
         signal: controller.signal,
         redirect: 'follow',
-        headers: { 'User-Agent': 'Steakakademie-LinkChecker/1.0' },
+        headers: { 'User-Agent': BROWSER_UA, Accept: 'text/html,application/xhtml+xml' },
       });
-      return { ok: res2.ok, status: res2.status, reason: res2.ok ? 'OK (GET)' : `HTTP ${res2.status}` };
+      clearTimeout(timer);
+      return classify(res2.status, 'GET');
     }
 
-    return { ok: res.ok, status: res.status, reason: res.ok ? 'OK' : `HTTP ${res.status}` };
+    clearTimeout(timer);
+    return classify(res.status, 'HEAD');
   } catch (err) {
     if (err.name === 'AbortError') {
       return { ok: false, status: 0, reason: `Timeout nach ${TIMEOUT_MS}ms` };
@@ -102,9 +122,8 @@ async function main() {
     results.push({ id: p.id, name: p.name, url: p.url, ...result });
 
     if (!AS_JSON) {
-      const icon = result.ok ? '✅' : '❌';
-      const label = result.ok ? result.reason : `${result.reason}`;
-      console.log(`${icon} [${p.id}] ${label}`);
+      const icon = result.ok ? '✅' : result.blocked ? '⚠️' : '❌';
+      console.log(`${icon} [${p.id}] ${result.reason}`);
       if (!result.ok) {
         console.log(`   URL: ${p.url}`);
       }
@@ -116,18 +135,30 @@ async function main() {
     }
   }
 
-  const errors = results.filter(r => !r.ok);
-  const ok     = results.filter(r => r.ok);
+  const errors  = results.filter(r => !r.ok && !r.blocked);
+  const blocked = results.filter(r => r.blocked);
+  const ok      = results.filter(r => r.ok);
 
   if (AS_JSON) {
-    console.log(JSON.stringify({ total: results.length, ok: ok.length, errors: errors.length, results }, null, 2));
+    console.log(JSON.stringify(
+      { total: results.length, ok: ok.length, errors: errors.length, blocked: blocked.length, results },
+      null, 2,
+    ));
     process.exit(errors.length > 0 ? 1 : 0);
   }
 
   console.log(`\n────────────────────────────────`);
-  console.log(`✅ OK:      ${ok.length}`);
-  console.log(`❌ Fehler:  ${errors.length}`);
-  console.log(`📊 Gesamt:  ${results.length}`);
+  console.log(`✅ OK:         ${ok.length}`);
+  console.log(`⚠️  Blockiert:  ${blocked.length}`);
+  console.log(`❌ Fehler:     ${errors.length}`);
+  console.log(`📊 Gesamt:     ${results.length}`);
+
+  if (blocked.length > 0) {
+    console.log(`\nℹ️  Blockierte Links (Anti-Bot, kein toter Link — nicht als Fehler gewertet):\n`);
+    for (const b of blocked) {
+      console.log(`  • ${b.id} (${b.name}) — ${b.reason}`);
+    }
+  }
 
   if (errors.length > 0) {
     console.log(`\n⚠️  Fehlerhafte Links:\n`);
@@ -138,7 +169,7 @@ async function main() {
     }
     process.exit(1);
   } else {
-    console.log(`\n🎉 Alle Links erreichbar.\n`);
+    console.log(`\n🎉 Keine toten Links.\n`);
     process.exit(0);
   }
 }

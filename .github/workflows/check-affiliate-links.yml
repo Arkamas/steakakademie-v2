@@ -70,18 +70,27 @@ jobs:
             TOTAL=$(jq '.total // 0' link-report.json)
             OK=$(jq '.ok // 0' link-report.json)
             ERRORS=$(jq '.errors // 0' link-report.json)
+            BLOCKED=$(jq '.blocked // 0' link-report.json)
 
             echo "| Status | Anzahl |" >> $GITHUB_STEP_SUMMARY
             echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
             echo "| ✅ OK | $OK |" >> $GITHUB_STEP_SUMMARY
+            echo "| ⚠️ Blockiert (Anti-Bot) | $BLOCKED |" >> $GITHUB_STEP_SUMMARY
             echo "| ❌ Fehler | $ERRORS |" >> $GITHUB_STEP_SUMMARY
             echo "| 📊 Gesamt | $TOTAL |" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
 
             if [ "$ERRORS" -gt 0 ]; then
-              echo "### Fehlerhafte Links" >> $GITHUB_STEP_SUMMARY
+              echo "### ❌ Fehlerhafte Links (echte Defekte)" >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY
-              jq -r '.results[] | select(.ok == false) | "- **\(.id)** (`\(.name)`)\n  Grund: \(.reason)\n  URL: `\(.url)`\n"' \
+              jq -r '.results[] | select(.ok == false and (.blocked // false) == false) | "- **\(.id)** (`\(.name)`)\n  Grund: \(.reason)\n  URL: `\(.url)`\n"' \
+                link-report.json >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
+            fi
+
+            if [ "$BLOCKED" -gt 0 ]; then
+              echo "### ⚠️ Blockierte Links (Shop blockt CI-Runner — kein toter Link)" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              jq -r '.results[] | select(.blocked // false) | "- **\(.id)** (`\(.name)`) — \(.reason)"' \
                 link-report.json >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
             fi
           else

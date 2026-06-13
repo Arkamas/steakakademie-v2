@@ -8,6 +8,10 @@
 # Quellen der Komponenten:
 #   - ARAG Homepagecheck (RA Dr. Fröhlich, 02.06.2026) — Punkte 1–18
 #   - Bisherige Agent-1/Agent-8-Prüfpunkte (robots.txt, Schema.org, Rechts-Updates)
+#   - Abmahn-Check der Gesamtsite (13.06.2026) — Werbekennzeichnung (§5a UWG),
+#     Newsletter-Double-Opt-In (§7 UWG), Health-Claims (HCVO/LFGB/§5 UWG),
+#     Tracking-Code-Scan (§25 TDDDG). Dieser Katalog ist damit die EINE
+#     vereinheitlichte SSoT für ARAG-Testat-Punkte UND Abmahn-Prävention.
 #
 # Feld-Legende:
 #   herkunft   : woher die Komponente stammt (arag-#N | agent-bestand)
@@ -20,7 +24,7 @@
 # Tiefen-Check 07.06. gegen den aktuellen Code verifiziert → alle umgesetzt,
 # Implementierung in Commit 968e835 (UGC/DSA/Gutschein/DSE) + a476b51 (AGB→main))
 
-version: 4
+version: 5
 geprueftesObjekt: "https://www.steakakademie.de/"
 standComponents: "2026-06-13"
 
@@ -196,6 +200,35 @@ komponenten:
     rechtsgrundlage: "§ 5a Abs. 4 UWG; Amazon-PartnerNet-Bedingungen"
     status: ok
     befund: "BEHOBEN 2026-06-13 (Abmahn-Check): alle 6 Affiliate-Komponenten tragen sichtbares 'Anzeige'-Label — ComparisonTable + BuyingGuideBlock nachgezogen (vorher nur Fußnote = Risiko). Alle Affiliate-Links auf rel='sponsored nofollow noopener' umgestellt (Checkout-/Digistore24-Links bewusst NICHT, da kein Affiliate). Preis-Disclaimer um Unverbindlichkeit/Aktualität ergänzt (PAngV/§5 UWG). Amazon-Hinweis in EquipmentFooter + /affiliate-disclosure."
+
+  - id: newsletter-double-opt-in
+    titel: "Newsletter: Double-Opt-In & Einwilligung"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "DOI technisch erzwungen (kein Eintrag/Versand vor Bestätigungsklick); Einwilligungshinweis + DSE-Link am Anmeldepunkt; kein Kopplungszwang; Nachweisbarkeit der Einwilligung"
+    rechtsgrundlage: "§ 7 Abs. 2 UWG; Art. 6 Abs. 1 lit. a, Art. 7 DSGVO"
+    status: ok
+    befund: "Verifiziert 2026-06-13 (Abmahn-Check): api/newsletter erzeugt Token + Bestätigungsmail VOR Anlage; Kontakt erst nach /confirm mit 'subscribed:true'. DOI-Hinweis + DSE-Link auf /newsletter. Loops als AV in DSE §6. Kein Kopplungszwang (Kurse/Gutschein newsletter-unabhängig)."
+
+  - id: health-claims-irrefuehrung
+    titel: "Health-Claims & irreführende (Lebensmittel-)Werbung"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "Keine unzulässigen gesundheits-/krankheitsbezogenen Aussagen oder Heilversprechen in Content/Marketing; Lebensmittelsicherheits-Hinweise rein technisch, nicht medizinisch"
+    rechtsgrundlage: "HCVO (EG) 1924/2006; § 11 LFGB; § 5 UWG; § 3 HWG"
+    status: ok
+    befund: "Audit 2026-06-13: keine Heilversprechen/Health-Claims gefunden; Inhalte kulinarisch/grilltechnisch. Disclaimer 'keine Gesundheitsberatung' vorhanden (Marco-Widget, AGB, steak-beichte)."
+    monitor: "Redaktionell bei jedem neuen Marketing-/Content-Text gegenprüfen ('gesund', 'entzündungshemmend', 'Immunsystem' etc. vermeiden)."
+
+  - id: tracking-skripte-ohne-consent
+    titel: "Tracking-/Drittskripte ohne Einwilligung (Code-Scan)"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "Quelltext-Scan: keine einwilligungspflichtigen Tracker (GA4/gtag, Meta-Pixel/fbq, Hotjar, Clarity) ohne Consent; keine extern nachladenden Google Fonts; keine consent-pflichtigen Embeds ohne Klick-to-load. Ergänzt die DSE-Doku-Punkte #10/#16 um die technische Ist-Prüfung."
+    rechtsgrundlage: "§ 25 TDDDG; Art. 6 DSGVO"
+    status: ok
+    befund: "Scan 2026-06-13: ausschließlich Plausible (cookielos, § 25 Abs. 2 TDDDG), kein GA4/Meta-Pixel/Hotjar; Fonts self-hosted via next/font; keine iframe-Embeds. Kein Consent-Banner nötig."
+    monitor: "WIRD scharf, sobald GA4/Meta-Pixel/Embed eingebaut → Consent-Banner (Ablehnen gleichwertig) + Klick-to-load."
 
   # ── Bestehende Agent-Prüfpunkte (nicht im ARAG-Check, aber Agent-Bestand) ──
   - id: robots-txt

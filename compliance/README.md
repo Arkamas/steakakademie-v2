@@ -1,9 +1,15 @@
 # Compliance — Rechts-Check-Kataloge
 
 Maschinenlesbare Check-Komponenten-Kataloge, die unsere Rechts-Agenten als
-**Single Source of Truth** für ihre Prüfungen nutzen. Quelle der Komponenten:
+**Single Source of Truth** für ihre Prüfungen nutzen. Quellen der Komponenten:
 ARAG Homepagecheck (RA Dr. Fröhlich, 02.06.2026, Punkte 1–18) + bisherige
-Agent-Prüfpunkte.
+Agent-Prüfpunkte + **Abmahn-Check der Gesamtsite (13.06.2026)**.
+
+Der bisher genutzte ARAG-/Agent-Check und der breitere Abmahn-Check sind
+**zusammengeführt**: der Katalog ist die EINE vereinheitlichte Prüfgrundlage für
+das ARAG-Testat UND die Abmahn-Prävention. Künftige Checks (Agent oder manuell)
+arbeiten ausschließlich gegen diesen Katalog — neue Prüf-Dimensionen werden hier
+als Komponente verankert, nicht ad hoc geprüft.
 
 ## Dateien
 
@@ -27,9 +33,14 @@ neu:    true  = durch ARAG-Auswertung neu in den Agenten aufgenommen
 
 ## Pflege
 
-- Neue Rechtslage / neues Tool → Komponente ergänzen + `version` erhöhen.
+- Neue Rechtslage / neues Tool / neuer Abmahn-Grund → Komponente ergänzen +
+  `version` erhöhen (kein ad-hoc-Check außerhalb des Katalogs).
 - Nach jedem Fix: `status`/`befund` der Komponente aktualisieren (mit Commit-Ref).
-- Beide Kataloge synchron halten (Self-Audit vs. Kunden-Audit decken dieselben 18 Punkte ab).
+- Beide Kataloge synchron halten: Self-Audit (`website-rechtscheck.yaml`) und
+  Kunden-Audit (`gruendung-sprint-rechtscheck.yaml`) decken dieselben ARAG-18
+  **plus** die Abmahn-Check-Dimensionen ab (Werbekennzeichnung, Newsletter-DOI,
+  Health-Claims, Tracking-Code-Scan, UGC/KI). Wird eine Komponente in einem
+  Katalog ergänzt, im anderen spiegeln.
 
 ## Aktueller Self-Audit-Stand steakakademie.de (13.06.2026)
 

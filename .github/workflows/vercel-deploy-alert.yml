@@ -32,7 +32,7 @@ jobs:
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           ALERT_ISSUETYPE: Bug
-          ALERT_LABELS: vercel,deployment
+          ALERT_LABELS: vercel,deployment,ops,agent-tech-automation-engineer
           ALERT_DEDUP_LABEL: vercel-deploy-fail
           ALERT_SUMMARY: "Vercel-Deploy fehlgeschlagen: ${{ github.event.deployment_status.environment }}"
           ALERT_DESCRIPTION: |

@@ -50,10 +50,13 @@ für Affiliate/Glossar/Rezept stimmen). Korrekturen:
   `postiz-push.mjs` existieren bereits auf `main` (Runner fehlt noch auf main).
   Der offene **PR #3** schaltet ihn aktiv + ergänzt `social-grow.yml` und pflegt
   Agent-6-Zeile + Status-Zähler — diese Zeilen bleiben hier bewusst unangetastet.
-- **Label-Taxonomie**: ops-alert nutzt `agent-tech-automation-engineer` (meiste),
-  `agent-senior-marketing-manager` (Affiliate), `agent-social-media` (PR #3) —
-  diese gehen über die unten gelisteten 4 Rovo-Rollen hinaus; `vercel-deploy-alert`
-  trägt gar kein `agent-*`-Label. Vor Vereinheitlichung Jira-Filter/Dedup prüfen.
+- **Label-Taxonomie vereinheitlicht (2026-06-13):** Alle Ops-Alerts laufen jetzt
+  unter dem Tech-&-Automation-Label `agent-tech-automation-engineer` (Affiliate von
+  `agent-senior-marketing-manager` umgestellt; `vercel-deploy-alert` ergänzt um
+  `ops` + Agent-Label). Die fachliche Domäne bleibt als Topic-Label
+  (`affiliate`/`vercel`/…). `ALERT_DEDUP_LABEL` pro Workflow unverändert.
+  `social-grow.yml` (PR #3) beim Merge auf `agent-tech-automation-engineer`
+  + Topic `social` angleichen.
 
 ## Konsolidierungs-Empfehlung (aus Audit 2995)
 

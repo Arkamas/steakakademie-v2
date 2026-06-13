@@ -181,7 +181,7 @@ jobs:
           ERRORS=$(jq -r '.errors // 0' link-report.json 2>/dev/null || echo "?")
           export ALERT_SUMMARY="🔴 Affiliate-Links defekt — ${ERRORS} Fehler"
           export ALERT_DESCRIPTION="$(jq -r '.results[]? | select(.ok==false) | "- \(.id) (\(.name)): \(.reason) — \(.url)"' link-report.json 2>/dev/null | head -n 30)"
-          export ALERT_LABELS="affiliate,ops,agent-senior-marketing-manager"
+          export ALERT_LABELS="affiliate,ops,agent-tech-automation-engineer"
           export ALERT_ISSUETYPE="Bug"
           export ALERT_DEDUP_LABEL="ops-affiliate-link"
           node scripts/ops-alert-to-jira.mjs

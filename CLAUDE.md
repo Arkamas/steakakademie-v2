@@ -63,10 +63,13 @@ verwaist, kein Label-Erzeuger), `regenerate-recipe-images.yml` (manuell),
 ### ops-alert-Label ↔ Rovo-Rollen
 
 Vier Orchestrator-Rollen: **Content & Culinary**, **SEO & Growth**,
-**Tech & Automation**, **Brand & UX**. Reale `agent-*`-Labels in den Workflows
-gehen darüber hinaus (`agent-tech-automation-engineer`,
-`agent-senior-marketing-manager`, `agent-social-media`) — vor einer
-Vereinheitlichung Jira-Filter/Dedup prüfen.
+**Tech & Automation**, **Brand & UX**. **Vereinheitlichte Konvention (2026-06-13):**
+Alle Ops-Alerts triagiert **Tech & Automation** → einheitliches Agent-Label
+`agent-tech-automation-engineer` in jedem Workflow (inkl. `vercel-deploy-alert`).
+Die fachliche Domäne steht als Topic-Zweit-Label (`affiliate`, `content`,
+`vercel`, künftig `social`), **nicht** als eigenes `agent-*`-Label.
+`ALERT_DEDUP_LABEL` bleibt pro Workflow eindeutig. Neue Workflows (z. B.
+`social-grow.yml`, PR #3) folgen derselben Konvention.
 
 ### Pflege-Regel
 

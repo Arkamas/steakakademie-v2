@@ -91,7 +91,7 @@ export default function HeroRecommendation({ productId, pitch }: { productId: st
       <Link
         href={`/go/${product.id}`}
         className={`btn-affiliate w-full justify-center text-sm mb-2 plausible-event-name=Affiliate-Klick plausible-event-zone=hero plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-        rel="nofollow noopener"
+        rel="sponsored nofollow noopener"
         target="_blank"
       >
         <ExternalLink size={14} />

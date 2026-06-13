@@ -51,11 +51,16 @@ export default function BuyingGuideBlock({
         </div>
 
         <div className="flex-1 min-w-0">
-          {/* "Selbst getestet" trust badge */}
-          <div className="flex items-center gap-1.5 mb-2">
-            <ShieldCheck size={13} className="text-brand-gold shrink-0" />
-            <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-brand-fire">
-              Selbst getestet
+          {/* "Selbst getestet" trust badge + Werbekennzeichnung (§ 5a UWG) */}
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck size={13} className="text-brand-gold shrink-0" />
+              <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-brand-fire">
+                Selbst getestet
+              </span>
+            </div>
+            <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted shrink-0">
+              Anzeige
             </span>
           </div>
 
@@ -77,7 +82,7 @@ export default function BuyingGuideBlock({
             <Link
               href={affiliateHref}
               className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-sm font-bold tracking-wide px-5 py-2.5 hover:bg-[#d4891a] transition-colors self-start sm:self-auto plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-              rel="nofollow noopener"
+              rel="sponsored nofollow noopener"
               target="_blank"
             >
               <ExternalLink size={14} />
@@ -88,7 +93,8 @@ export default function BuyingGuideBlock({
       </div>
 
       <p className="text-[10px] font-sans text-text-muted mt-4 italic border-t border-border-subtle pt-3">
-        * Affiliate-Link — Preis unverändert für dich
+        * Affiliate-Link — Preis unverändert für dich. Angezeigter Preis unverbindlich
+        und ggf. abweichend; maßgeblich ist der Preis im Shop.
       </p>
     </div>
   );

@@ -46,7 +46,15 @@ neu:    true  = durch ARAG-Auswertung neu in den Agenten aufgenommen
   `ki-moderation-transparenz` (DSE §10a), `gutschein-agb-widerruf` (AGB §5a),
   `dse-resend` (DSE §8b), `dse-fal-ai` (DSE §10b),
   `dse-community-ugc-verarbeitung` (DSE §8a).
-- **ok:** 1–18 + alle UGC-/Gutschein-/Verarbeiter-Komponenten
+- **Abmahn-Check 13.06.2026 (gesamte Website):** Pflichtangaben (Impressum, DSE,
+  AGB, Widerruf), Newsletter-Double-Opt-In und Tracking (Plausible cookielos,
+  Fonts self-hosted, keine Embeds) geprüft → konform. Behoben: veralteter
+  EU-OS-Plattform-Link im Impressum entfernt (Plattform zum 20.07.2025
+  eingestellt); fehlende sichtbare „Anzeige"-Kennzeichnung in `ComparisonTable`
+  + `BuyingGuideBlock` ergänzt; alle Affiliate-Links auf `rel="sponsored"`;
+  Preis-Disclaimer (Unverbindlichkeit/Aktualität) ergänzt. Neue Katalog-Komponente
+  `werbekennzeichnung-affiliate-uwg`.
+- **ok:** 1–18 + alle UGC-/Gutschein-/Verarbeiter-Komponenten + Werbekennzeichnung
 - **not-applicable (cookieless):** #10 Cookies, #11 Social-Plugins, #12 Embeds
   → werden PFLICHT (`monitor`), sobald Meta-Pixel/GA4 oder ein Embed scharf gehen
 - **GATE bleibt (Regel 12/13):** Community-Bewerbung/Indexierung und

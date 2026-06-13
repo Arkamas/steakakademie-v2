@@ -33,6 +33,11 @@ function StarRating({ rating }: { rating: number }) {
 export default function ComparisonTable({ products, className }: ComparisonTableProps) {
   return (
     <div className={cn('w-full', className)}>
+      <div className="flex justify-end mb-1">
+        <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">
+          Anzeige
+        </span>
+      </div>
       <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
         <table className="w-full min-w-[620px] border-collapse">
           <thead>
@@ -129,7 +134,7 @@ export default function ComparisonTable({ products, className }: ComparisonTable
                     <Link
                       href={affiliateHref}
                       className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-[11px] font-bold tracking-wide px-4 py-2 hover:bg-[#d4891a] transition-colors whitespace-nowrap plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-                      rel="nofollow noopener"
+                      rel="sponsored nofollow noopener"
                       target="_blank"
                     >
                       Zum Shop →
@@ -142,7 +147,8 @@ export default function ComparisonTable({ products, className }: ComparisonTable
         </table>
       </div>
       <p className="text-[10px] font-sans text-text-muted mt-2 italic">
-        * Affiliate-Links — Preis unverändert für dich
+        * Affiliate-Links — Preis unverändert für dich. Angezeigte Preise sind
+        unverbindlich und können abweichen; maßgeblich ist der Preis im Shop.
       </p>
     </div>
   );

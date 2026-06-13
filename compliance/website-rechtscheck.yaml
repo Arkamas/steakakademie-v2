@@ -20,7 +20,7 @@
 # Tiefen-Check 07.06. gegen den aktuellen Code verifiziert → alle umgesetzt,
 # Implementierung in Commit 968e835 (UGC/DSA/Gutschein/DSE) + a476b51 (AGB→main))
 
-version: 3
+version: 4
 geprueftesObjekt: "https://www.steakakademie.de/"
 standComponents: "2026-06-13"
 
@@ -58,6 +58,7 @@ komponenten:
     pruefung: "Vollständigkeit § 5 DDG; Erreichbarkeit in max. 2 Klicks (BGH I ZR 228/03)"
     rechtsgrundlage: "§ 5 DDG (ehem. TMG)"
     status: ok
+    befund: "Vollständig (Name, ladungsfähige Anschrift, Telefon + E-Mail, § 19 UStG, § 18 Abs. 2 MStV, § 36 VSBG). 2026-06-13: veralteten Link auf die zum 20.07.2025 eingestellte EU-OS-Plattform entfernt (toter ec.europa.eu/consumers/odr-Link war selbst Abmahnrisiko)."
 
   - id: dse-speicherdauer-loeschfristen
     titel: "DSE: konkrete Speicherdauer / Löschfristen"
@@ -185,6 +186,16 @@ komponenten:
     rechtsgrundlage: "Art. 6 DSGVO; LG München 3 O 17493/20"
     status: ok
     befund: "Self-hosted via next/font. Keine externen Font-Requests."
+
+  # ── Werbekennzeichnung Affiliate (Abmahn-Check 13.06.2026) ─────────────────
+  - id: werbekennzeichnung-affiliate-uwg
+    titel: "Werbekennzeichnung von Affiliate-Empfehlungen"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: "Jede Affiliate-Empfehlung trägt unmittelbar erkennbar das deutsche Label 'Anzeige' (nicht nur Fußnote); Affiliate-Links mit rel='sponsored'; Amazon-Pflichthinweis + zentrale /affiliate-disclosure verlinkt"
+    rechtsgrundlage: "§ 5a Abs. 4 UWG; Amazon-PartnerNet-Bedingungen"
+    status: ok
+    befund: "BEHOBEN 2026-06-13 (Abmahn-Check): alle 6 Affiliate-Komponenten tragen sichtbares 'Anzeige'-Label — ComparisonTable + BuyingGuideBlock nachgezogen (vorher nur Fußnote = Risiko). Alle Affiliate-Links auf rel='sponsored nofollow noopener' umgestellt (Checkout-/Digistore24-Links bewusst NICHT, da kein Affiliate). Preis-Disclaimer um Unverbindlichkeit/Aktualität ergänzt (PAngV/§5 UWG). Amazon-Hinweis in EquipmentFooter + /affiliate-disclosure."
 
   # ── Bestehende Agent-Prüfpunkte (nicht im ARAG-Check, aber Agent-Bestand) ──
   - id: robots-txt

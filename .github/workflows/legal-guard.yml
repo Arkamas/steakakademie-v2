@@ -8,12 +8,21 @@ name: Legal-Guard
 # Regeln + Begründung je Punkt: compliance/website-rechtscheck.yaml
 # Läuft schnell, ohne npm install (reines Node-Skript). Bei Verstoß: rot.
 # Blockiert NICHT den Deploy (läuft parallel) — Frühwarn-Signal.
+#
+# Trigger: JEDER Push (alle Branches) + jeder PR. Die Seite wird täglich
+# bearbeitet → so greift der Guard sofort bei jeder Änderung, auch auf
+# Feature-Branches ohne PR. Ein zeitgesteuerter Cron wäre redundant, weil der
+# Check rein statisch ist (gleicher Code = gleiches Ergebnis).
 
 on:
   push:
-    branches: [main]
   pull_request:
   workflow_dispatch:
+
+# Doppelläufe (Push + PR auf demselben Branch) sauber zusammenfassen.
+concurrency:
+  group: legal-guard-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   guard:

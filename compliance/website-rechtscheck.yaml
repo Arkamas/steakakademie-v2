@@ -16,11 +16,13 @@
 #   rechtsgrundlage
 #   status     : ok | fix-needed | not-applicable | monitor
 #   befund     : aktueller Stand steakakademie.de (Stand 02.06.2026)
-# Letzte Aktualisierung: 2026-06-07 (Tiefen-Check nach Community/Gutschein/Affiliate)
+# Letzte Aktualisierung: 2026-06-13 (Self-Audit: 7 fix-needed-Punkte aus dem
+# Tiefen-Check 07.06. gegen den aktuellen Code verifiziert → alle umgesetzt,
+# Implementierung in Commit 968e835 (UGC/DSA/Gutschein/DSE) + a476b51 (AGB→main))
 
-version: 2
+version: 3
 geprueftesObjekt: "https://www.steakakademie.de/"
-standComponents: "2026-06-07"
+standComponents: "2026-06-13"
 
 komponenten:
   - id: domain-kennzeichenrecht
@@ -220,8 +222,8 @@ komponenten:
     neu: true
     pruefung: "Eigene Nutzungsbedingungen: Inhaltslizenz an Steakakademie, Eigentums-/Rechtegarantie des Nutzers, verbotene Inhalte, Moderationsvorbehalt, Mindestalter"
     rechtsgrundlage: "UrhG § 31; BGB §§ 305 ff."
-    status: fix-needed
-    befund: "Keine /nutzungsbedingungen-Seite vorhanden. User reichen Text-Rezepte ein (KEIN Bild-Upload)."
+    status: ok
+    befund: "BEHOBEN 2026-06-13 (Commit 968e835): /nutzungsbedingungen vorhanden mit allen 5 Elementen — Inhaltslizenz (§ einfaches, unentgeltliches Nutzungsrecht), Rechtegarantie des Nutzers, verbotene Inhalte (§4-Liste), Moderationsvorbehalt (kein Veröffentlichungsanspruch), Mindestalter 16. Verifiziert gegen src/app/nutzungsbedingungen/page.tsx."
 
   - id: community-ugc-dsa
     titel: "Community: DSA-Pflichten als Hosting-Dienst"
@@ -229,8 +231,8 @@ komponenten:
     neu: true
     pruefung: "Melde-/Abhilfeverfahren (Notice & Action), AGB-Transparenz zu Moderation, Kontaktstelle"
     rechtsgrundlage: "VO (EU) 2022/2065 (DSA) Art. 14, 16"
-    status: fix-needed
-    befund: "UGC = Hosting-Dienst. Notice-&-Action + Kontaktstelle noch nicht ausgewiesen."
+    status: ok
+    befund: "BEHOBEN 2026-06-13 (Commit 968e835): Notice-&-Action nach Art. 16 DSA in /nutzungsbedingungen ausgewiesen (Meldung + Prüf-/Abhilfeverfahren) inkl. Melde-E-Mail; zentrale DSA-Kontaktstelle (Art. 11/12) im Impressum benannt."
 
   - id: community-ugc-bildrecht
     titel: "Community: Bild-/Persönlichkeitsrecht"
@@ -247,8 +249,8 @@ komponenten:
     neu: true
     pruefung: "Hinweis auf automatisierte (KI-)Prüfung der Einreichungen; Anthropic-Zweck 'Moderation UGC' in DSE"
     rechtsgrundlage: "DSGVO Art. 13, 22; EU AI Act"
-    status: fix-needed
-    befund: "Moderation läuft (claude-haiku). In DSE ist Anthropic als AV benannt, Zweck 'UGC-Moderation' ergänzen."
+    status: ok
+    befund: "BEHOBEN 2026-06-13 (Commit 968e835): DSE §10a 'KI-Moderation von Community-Einreichungen (Anthropic)' beschreibt die automatisierte Prüfung eingereichter Rezepte mit Anthropic-Sprachmodell als AV (Art. 28 DSGVO, USA/SCC)."
 
   - id: gutschein-agb-widerruf
     titel: "Geschenkgutscheine: AGB-Klauseln + Widerruf"
@@ -256,8 +258,8 @@ komponenten:
     neu: true
     pruefung: "AGB-Abschnitt Gutscheine: Einzweckgutschein, 3 Jahre Gültigkeit, Übertragbarkeit, Einlösung, Widerrufs-Nuance (digital/Termin)"
     rechtsgrundlage: "UStG § 3 Abs. 14; BGB § 195, § 312g"
-    status: fix-needed
-    befund: "AGB enthält keine Gutschein-Klauseln. Engine gebaut, aber noch nicht live → vor Scharfschaltung ergänzen."
+    status: ok
+    befund: "BEHOBEN 2026-06-13 (Commit 968e835, AGB→main a476b51): AGB §5a 'Geschenkgutscheine' deckt alle 5 Elemente ab — Einzweckgutschein (ein bestimmtes digitales Produkt), 3 Jahre Gültigkeit (§ 195 BGB), Übertragbarkeit, Einlösung (Code + Konto), Widerruf 14 Tage bzw. Erlöschen mit Freischaltung (§ 356 Abs. 5 BGB). GATE-Hinweis: Scharfschaltung Verkauf weiterhin erst nach anwaltlicher Endprüfung (Regel 12/13)."
 
   - id: dse-resend
     titel: "DSE: Resend (Auth-/Transaktionsmail) als Verarbeiter"
@@ -265,8 +267,8 @@ komponenten:
     neu: true
     pruefung: "Resend in AV-Liste der DSE benannt (verarbeitet E-Mail-Adressen für Magic-Link/Login)"
     rechtsgrundlage: "Art. 13 Abs. 1 lit. e, Art. 28 DSGVO"
-    status: fix-needed
-    befund: "Resend seit 04.06. produktiv (Supabase-Auth-SMTP), in DSE noch nicht benannt."
+    status: ok
+    befund: "BEHOBEN 2026-06-13 (Commit 968e835): DSE §8b 'Authentifizierungs- & Transaktions-E-Mails (Resend)' benennt Resend, Inc. (USA) als AV für Magic-Link/Login + transaktionale Mails, Zweck + Art. 6 Abs. 1 lit. b dokumentiert."
 
   - id: dse-fal-ai
     titel: "DSE: fal.ai (Bildgenerierung) benennen"
@@ -274,8 +276,8 @@ komponenten:
     neu: true
     pruefung: "fal.ai als Bild-Generierungsdienst transparent benennen (kein Personenbezug bei Food-Bildern)"
     rechtsgrundlage: "Art. 13 DSGVO (Transparenz)"
-    status: fix-needed
-    befund: "fal.ai erzeugt Rezeptbilder serverseitig. Kein Personenbezug, aber Transparenz/Vollständigkeit der DSE."
+    status: ok
+    befund: "BEHOBEN 2026-06-13 (Commit 968e835): DSE §10b 'KI-Bildgenerierung für Rezepte (fal.ai)' benennt fal.ai (Features & Labels, Inc., USA); nur Prompt-/Rezepttext, kein Personenbezug; Art. 6 Abs. 1 lit. f + SCC dokumentiert."
 
   - id: dse-community-ugc-verarbeitung
     titel: "DSE: Verarbeitung von Konten + nutzergenerierten Inhalten"
@@ -283,5 +285,5 @@ komponenten:
     neu: true
     pruefung: "Zweck/Rechtsgrundlage (Art. 6 Abs. 1 b/f) + Speicherdauer für Community-Konten und eingereichte Rezepte"
     rechtsgrundlage: "Art. 6, 13 DSGVO"
-    status: fix-needed
-    befund: "Supabase als AV benannt; UGC-/Konto-spezifische Verarbeitung in DSE noch nicht beschrieben."
+    status: ok
+    befund: "BEHOBEN 2026-06-13 (Commit 968e835): DSE §8a beschreibt Verarbeitung von Community-Konten + eingereichten Rezepten (Inhalte, Anzeigename, Status), Rechtsgrundlage Art. 6 Abs. 1 lit. b + f, Speicherdauer bis Lösch-/Widerruf durch Nutzer."

@@ -199,7 +199,7 @@ komponenten:
     pruefung: "Jede Affiliate-Empfehlung trägt unmittelbar erkennbar das deutsche Label 'Anzeige' (nicht nur Fußnote); Affiliate-Links mit rel='sponsored'; Amazon-Pflichthinweis + zentrale /affiliate-disclosure verlinkt"
     rechtsgrundlage: "§ 5a Abs. 4 UWG; Amazon-PartnerNet-Bedingungen"
     status: ok
-    befund: "BEHOBEN 2026-06-13 (Abmahn-Check): alle 6 Affiliate-Komponenten tragen sichtbares 'Anzeige'-Label — ComparisonTable + BuyingGuideBlock nachgezogen (vorher nur Fußnote = Risiko). Alle Affiliate-Links auf rel='sponsored nofollow noopener' umgestellt (Checkout-/Digistore24-Links bewusst NICHT, da kein Affiliate). Preis-Disclaimer um Unverbindlichkeit/Aktualität ergänzt (PAngV/§5 UWG). Amazon-Hinweis in EquipmentFooter + /affiliate-disclosure."
+    befund: "BEHOBEN 2026-06-13 (Abmahn-Check): alle 6 Affiliate-Komponenten tragen sichtbares 'Anzeige'-Label — ComparisonTable + BuyingGuideBlock nachgezogen (vorher nur Fußnote = Risiko). Alle Affiliate-Links auf rel='sponsored nofollow noopener' umgestellt (Checkout-/Digistore24-Links bewusst NICHT, da kein Affiliate). Preis-Disclaimer um Unverbindlichkeit/Aktualität ergänzt (PAngV/§5 UWG). Amazon-Pflichthinweis jetzt site-weit im globalen Footer + EquipmentFooter + /affiliate-disclosure (Label-Wording dort auf 'Anzeige' angeglichen)."
 
   - id: newsletter-double-opt-in
     titel: "Newsletter: Double-Opt-In & Einwilligung"
@@ -208,7 +208,7 @@ komponenten:
     pruefung: "DOI technisch erzwungen (kein Eintrag/Versand vor Bestätigungsklick); Einwilligungshinweis + DSE-Link am Anmeldepunkt; kein Kopplungszwang; Nachweisbarkeit der Einwilligung"
     rechtsgrundlage: "§ 7 Abs. 2 UWG; Art. 6 Abs. 1 lit. a, Art. 7 DSGVO"
     status: ok
-    befund: "Verifiziert 2026-06-13 (Abmahn-Check): api/newsletter erzeugt Token + Bestätigungsmail VOR Anlage; Kontakt erst nach /confirm mit 'subscribed:true'. DOI-Hinweis + DSE-Link auf /newsletter. Loops als AV in DSE §6. Kein Kopplungszwang (Kurse/Gutschein newsletter-unabhängig)."
+    befund: "Verifiziert 2026-06-13 (Abmahn-Check): api/newsletter erzeugt Token + Bestätigungsmail VOR Anlage; Kontakt erst nach /confirm mit 'subscribed:true'. DOI-Hinweis + DSE-Link auf /newsletter; 2026-06-13 auch an den Erfassungspunkten NewsletterCapture + ExitIntent ergänzt (DOI-Hinweis + Datenschutz-Link am Formular). Loops als AV in DSE §6. Kein Kopplungszwang (Kurse/Gutschein newsletter-unabhängig)."
 
   - id: health-claims-irrefuehrung
     titel: "Health-Claims & irreführende (Lebensmittel-)Werbung"

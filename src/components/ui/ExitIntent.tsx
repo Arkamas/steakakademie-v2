@@ -212,9 +212,14 @@ export default function ExitIntent() {
                       </button>
                     </form>
 
+                    <p className="text-[10px] font-sans text-text-muted/50 leading-relaxed mt-3">
+                      Anmeldung per Double-Opt-in · jederzeit abmeldbar. Mehr in der{' '}
+                      <a href="/datenschutz" className="underline hover:text-text-muted">Datenschutzerklärung</a>.
+                    </p>
+
                     <button
                       onClick={() => setVisible(false)}
-                      className="w-full text-center text-[10px] font-sans text-text-muted/50 hover:text-text-muted transition-colors mt-3"
+                      className="w-full text-center text-[10px] font-sans text-text-muted/50 hover:text-text-muted transition-colors mt-2"
                     >
                       Nein danke, ich verpasse das lieber
                     </button>

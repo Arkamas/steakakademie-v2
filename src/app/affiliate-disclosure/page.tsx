@@ -97,12 +97,12 @@ export default function AffiliateDisclosurePage() {
             <section>
               <h2 className={h2Class}>Kennzeichnung</h2>
               <p>
-                Affiliate-Links sind auf dieser Website mit dem Hinweis{' '}
+                Werbliche Empfehlungen mit Affiliate-Links sind auf dieser Website unmittelbar
+                am bzw. neben dem Empfehlungs-Element mit dem Hinweis{' '}
                 <span className="font-sans text-xs font-bold tracking-wide uppercase bg-surface-base border border-border-subtle px-2 py-0.5 text-text-muted">
-                  Affiliate-Link
+                  Anzeige
                 </span>{' '}
-                oder einem entsprechenden Hinweis im Artikel-Text kenntlich gemacht, sofern
-                gesetzlich erforderlich.
+                gekennzeichnet; ergänzend weisen Fußnoten im Artikel-Text auf den Affiliate-Charakter hin.
               </p>
             </section>
 

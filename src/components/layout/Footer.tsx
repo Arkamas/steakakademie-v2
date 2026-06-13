@@ -85,6 +85,7 @@ export default function Footer() {
             <strong className="text-text-light/50">Affiliate-Hinweis:</strong> Einige Links auf dieser Seite sind Affiliate-Links.
             Wenn du über sie kaufst, erhalten wir eine kleine Provision — der Preis für dich ändert sich nicht.
             Wir empfehlen nur Produkte, die wir selbst getestet haben oder für qualitativ hochwertig halten.
+            {' '}Als Amazon-Partner verdienen wir an qualifizierten Verkäufen.
           </p>
           {/* Gesetzlicher Widerrufsbutton (ab 19.06.2026) — ständig und leicht auffindbar, farblich hervorgehoben */}
           <Link

@@ -93,8 +93,10 @@ export default function NewsletterCapture({ context = 'BBQ-Meister' }: Newslette
             <p className="text-xs text-brand-fire mt-2">Fehler — bitte nochmal versuchen.</p>
           )}
 
-          <p className="text-[10px] font-sans text-text-muted/60 mt-2">
-            Kostenlos · Jederzeit abmeldbar · Kein Weitergabe
+          <p className="text-[10px] font-sans text-text-muted/60 mt-2 leading-relaxed">
+            Mit der Anmeldung bestätigst du den Erhalt des Newsletters (Double-Opt-in).
+            Kostenlos · jederzeit abmeldbar · keine Weitergabe. Mehr in der{' '}
+            <a href="/datenschutz" className="underline hover:text-brand-gold">Datenschutzerklärung</a>.
           </p>
         </div>
       </div>

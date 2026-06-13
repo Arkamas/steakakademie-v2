@@ -1,7 +1,7 @@
 # Agent-Matrix — Steakakademie
 
 > **Quelle der Wahrheit:** `CLAUDE.md` → Branch `[agenten]`. Diese Seite ist ein Spiegel für die Confluence-Übersicht.
-> **Ehrlicher Status (Audit 03.06.2026, claude-mem obs 2947/2948/2995):** 12 Agenten geplant, **4–5 tatsächlich aktiv.** Die Lücke ist bewusst dokumentiert, nicht beschönigt.
+> **Ehrlicher Status (Audit 03.06.2026, akt. 13.06.2026, claude-mem obs 2947/2948/2995):** 12 Agenten geplant, **5–6 tatsächlich aktiv.** Die Lücke ist bewusst dokumentiert, nicht beschönigt.
 
 ## Tatsächlich aktiv (laufen heute)
 
@@ -9,6 +9,7 @@
 |---|-------|----------|---------|--------|
 | 1 | **AGB/Rechts-Compliance-Scanner** | CronCreate (Remote) gegen `compliance/website-rechtscheck.yaml` (21 Komponenten) | täglich 06:00 UTC | ✅ aktiv |
 | 5 | **Affiliate-Link-Checker** | GitHub Actions `check-affiliate-links.yml` → `npm run check-links:json`, öffnet/schließt GitHub Issue | Mo 08:00 UTC | ✅ aktiv |
+| 6 | **Social Media Senior Director** | `scripts/social-posts.mjs` (Claude Haiku) → Post-Entwürfe nach `social-drafts/`; trägt Werbekennzeichnungs-Pflicht (LG Köln 12.05.2026) | manuell (`--only`/`--limit`) | ✅ aktiv (human-gated, **kein** Auto-Posten) |
 | 11 | **Glossar-Agent** | GitHub Actions `glossary-grow.yml` → `scripts/glossary-agent.mjs` (Claude Haiku), committet `content/glossar` | So 03:00 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
 | 12 | **Rezept-Agent** | GitHub Actions `recipe-grow.yml` → `scripts/recipe-agent.mjs` (Claude Sonnet) + `recipe-images.mjs` (FLUX.1/FAL) | So 03:30 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
 | — | **Auto-Fix-Agent** | GitHub Actions `auto-fix.yml` → `claude-code-action@beta`, öffnet PR bei Issue-Label `auto-fix` | event-driven | ⚠️ vorhanden, aber **verwaist** — hängt am nicht existenten „Mingma Post-Agent" |
@@ -21,7 +22,6 @@
 | 2 | SEO-Monitor | GSC Service Account | KAN-21 |
 | 3 | Content-Pipeline (Recherche→Übersetzung→DE) | DeepL, Notion, `recipe-scraper/` (gelöscht) | — |
 | 4 | Newsletter/DOI-Monitor | Loops.so API | — |
-| 6 | Social Media Senior Director (Content-Generator, `scripts/social-posts.mjs`) | Notion, FAL | — |
 | 7 | Konkurrenz-Monitor (Frühwarnung „Präsenz-Player geht online") | Nimble/Brightdata, Searchfit | — |
 | 8 | Rechts-Update-Scanner | WebFetch (bmj.de, eur-lex) | — |
 | 9 | Digistore24-Performance-Report | Digistore24 API | — |

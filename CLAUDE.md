@@ -26,7 +26,7 @@ Kanonische Registry. Stand: **Konsistenz-Audit 2026-06-13**.
 | # | Agent | Runner | Trigger | Status |
 |---|-------|--------|---------|--------|
 | 1 | AGB/Rechts-Compliance-Scanner | CronCreate (Remote) gegen `compliance/website-rechtscheck.yaml` (33 Komponenten) | täglich 06:00 UTC | aktiv |
-| 3 | Content-Pipeline (Scout→Draft) | `content-grow.yml` → `scripts/cron-scout.mjs` → Claude → Supabase `content_drafts` | So 04:00 UTC + manuell | aktiv, human-gated (ggf. KAN-15-blockiert) |
+| 3 | Content-Pipeline (Scout→Draft) | `content-grow.yml` → `scripts/cron-scout.mjs` → Claude → Supabase `content_drafts` | So 04:00 UTC + manuell | aktiv (human-gated via `/admin/review`) |
 | 5 | Affiliate-Link-Checker | `check-affiliate-links.yml` → `npm run check-links:json` | Mo 08:00 UTC | aktiv |
 | 11 | Glossar-Agent | `glossary-grow.yml` → `scripts/glossary-agent.mjs` (Claude Haiku) | So 03:00 UTC | aktiv |
 | 12 | Rezept-Agent | `recipe-grow.yml` → `scripts/recipe-agent.mjs` (Claude Sonnet) + `recipe-images.mjs` | So 03:30 UTC | aktiv |
@@ -34,6 +34,10 @@ Kanonische Registry. Stand: **Konsistenz-Audit 2026-06-13**.
 Event-/Dispatch-Runner: `auto-fix.yml` (Issue-Label `auto-fix` → PR; aktuell
 verwaist, kein Label-Erzeuger), `regenerate-recipe-images.yml` (manuell),
 `vercel-deploy-alert.yml` (Deploy-Event → Jira), `test-ops-hook.yml` (manuell).
+
+> **KAN-15 (`ADMIN_PASSWORD` rotieren)** betrifft nur die `/admin`-Auth
+> (`src/app/api/admin/*`, Review-UI) — `cron-scout.mjs` (Agent 3) nutzt
+> Supabase-Service-Role + Anthropic und ist davon **nicht** blockiert.
 
 ### Teilweise gebaut
 

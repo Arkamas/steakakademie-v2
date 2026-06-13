@@ -1,25 +1,25 @@
 # Agent-Matrix — Steakakademie
 
 > **Quelle der Wahrheit:** `CLAUDE.md` (Repo-Root, Abschnitt `## [agenten]`). Diese Seite ist ein Spiegel für die Confluence-Übersicht.
-> **Ehrlicher Status (Audit 03.06.2026, claude-mem obs 2947/2948/2995):** 12 Agenten geplant, **4–5 tatsächlich aktiv.** Die Lücke ist bewusst dokumentiert, nicht beschönigt.
+> **Ehrlicher Status (Konsistenz-Audit 2026-06-13):** 12 Agenten geplant, **5–6 tatsächlich aktiv** (Agent 3 nach KAN-15-Klärung reklassifiziert). Mit Agent 6 (PR #3) → 6–7; beim Merge angleichen. Die Lücke ist bewusst dokumentiert, nicht beschönigt.
 
 ## Tatsächlich aktiv (laufen heute)
 
 | # | Agent | Mechanik | Trigger | Status |
 |---|-------|----------|---------|--------|
 | 1 | **AGB/Rechts-Compliance-Scanner** | CronCreate (Remote) gegen `compliance/website-rechtscheck.yaml` (33 Komponenten, Stand 2026-06-13) | täglich 06:00 UTC | ✅ aktiv |
+| 3 | **Content-Pipeline (Scout→Draft)** | GitHub Actions `content-grow.yml` → `scripts/cron-scout.mjs` (Claude) → Supabase `content_drafts`; RSS-Quellen | So 04:00 UTC + manuell | ✅ aktiv (human-gated via `/admin/review`) |
 | 5 | **Affiliate-Link-Checker** | GitHub Actions `check-affiliate-links.yml` → `npm run check-links:json`, öffnet/schließt GitHub Issue | Mo 08:00 UTC | ✅ aktiv |
 | 11 | **Glossar-Agent** | GitHub Actions `glossary-grow.yml` → `scripts/glossary-agent.mjs` (Claude Haiku), committet `content/glossar` | So 03:00 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
 | 12 | **Rezept-Agent** | GitHub Actions `recipe-grow.yml` → `scripts/recipe-agent.mjs` (Claude Sonnet) + `recipe-images.mjs` (FLUX.1/FAL) | So 03:30 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
 | — | **Auto-Fix-Agent** | GitHub Actions `auto-fix.yml` → `claude-code-action@beta`, öffnet PR bei Issue-Label `auto-fix` | event-driven | ⚠️ vorhanden, aber **verwaist** — hängt am nicht existenten „Mingma Post-Agent" |
-| — | **cron-scout** | `scripts/cron-scout.mjs` (auch via `content-grow.yml`) | So 04:00 UTC + manuell/`cron:scout` | ⚠️ Runner gebaut, ggf. blockiert bis ADMIN_PASSWORD rotiert (KAN-15) |
+| — | **cron-scout** (Engine von Agent 3) | `scripts/cron-scout.mjs` (Supabase Service-Role + Anthropic) | scheduled via Agent 3 + manuell/`cron:scout` | ✅ läuft — KAN-15 (`ADMIN_PASSWORD` rotieren) betrifft nur die `/admin`-Review-UI, **nicht** den Agentenlauf |
 
 ## Geplant, noch nicht gebaut
 
 | # | Agent | Benötigt | Jira |
 |---|-------|----------|------|
 | 2 | SEO-Monitor | GSC Service Account | KAN-21 |
-| 3 | Content-Pipeline (Recherche→Übersetzung→DE) | DeepL, Notion, `recipe-scraper/` (gelöscht) | — |
 | 4 | Newsletter/DOI-Monitor | Loops.so API | — |
 | 6 | Social-Media-Content-Generator | Notion, FAL | — |
 | 7 | Konkurrenz-Monitor (Frühwarnung „Präsenz-Player geht online") | Nimble/Brightdata, Searchfit | — |
@@ -36,10 +36,16 @@ für Affiliate/Glossar/Rezept stimmen). Korrekturen:
 - **SSoT-Verweis** auf real existierende `CLAUDE.md` (Repo-Root, `## [agenten]`)
   umgestellt — der bisherige Verweis auf „Branch `[agenten]`" zeigte ins Leere.
 - **Agent 1**: Komponentenzahl 21 → **33** (Stand des Compliance-Katalogs).
-- **Agent 3 (Content-Pipeline)** ist NICHT „noch nicht gebaut": Der Runner
-  `content-grow.yml` läuft geplant **So 04:00 UTC** (`cron-scout.mjs` → Claude →
-  Supabase `content_drafts`, Mechanik RSS statt des gelöschten `recipe-scraper/`).
-  → Reklassifizieren nach „aktiv (human-gated, ggf. KAN-15-blockiert)".
+- **Agent 3 (Content-Pipeline)** → **reklassifiziert auf „aktiv"** (in die
+  Aktiv-Tabelle verschoben, aus „Geplant" entfernt). Runner `content-grow.yml`
+  läuft geplant **So 04:00 UTC** (`cron-scout.mjs` → Claude → Supabase
+  `content_drafts`, RSS statt des gelöschten `recipe-scraper/`); Freigabe
+  human-gated über `/admin/review`.
+  **KAN-15 geklärt:** `ADMIN_PASSWORD` sichert nur die `/admin`-Auth
+  (`src/app/api/admin/*`) — `cron-scout.mjs` nutzt Supabase-Service-Role +
+  Anthropic, **kein `ADMIN_PASSWORD`**. KAN-15 blockiert also die Review-UI-
+  Sicherheit, nicht den Agentenlauf. (Jira-Ticket-Status selbst nicht geprüft —
+  Atlassian-MCP genehmigungspflichtig.)
 - **Agent 6 (Social-Media)**: Skripte `social-posts.mjs`, `promo-machine.mjs`,
   `postiz-push.mjs` existieren bereits auf `main` (Runner fehlt noch auf main).
   Der offene **PR #3** schaltet ihn aktiv + ergänzt `social-grow.yml` und pflegt

@@ -21,7 +21,7 @@
 | 2 | SEO-Monitor | GSC Service Account | KAN-21 |
 | 3 | Content-Pipeline (Recherche→Übersetzung→DE) | DeepL, Notion, `recipe-scraper/` (gelöscht) | — |
 | 4 | Newsletter/DOI-Monitor | Loops.so API | — |
-| 6 | Social-Media-Content-Generator | Notion, FAL | — |
+| 6 | Social Media Senior Director (Content-Generator, `scripts/social-posts.mjs`) | Notion, FAL | — |
 | 7 | Konkurrenz-Monitor (Frühwarnung „Präsenz-Player geht online") | Nimble/Brightdata, Searchfit | — |
 | 8 | Rechts-Update-Scanner | WebFetch (bmj.de, eur-lex) | — |
 | 9 | Digistore24-Performance-Report | Digistore24 API | — |

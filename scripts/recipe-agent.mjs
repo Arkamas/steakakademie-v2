@@ -20,7 +20,7 @@
 import { anthropic } from '@ai-sdk/anthropic'
 import { generateText } from 'ai'
 import { readFile, writeFile, mkdir, access } from 'fs/promises'
-import { existsSync } from 'fs'
+import { existsSync, appendFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
@@ -573,7 +573,14 @@ async function main() {
         const outFile = join(REZEPTE, `${s.slug}.mdx`)
         return !cache[s.slug] && !existsSync(outFile)   // Cache ODER existierende Datei → skip
       })
+  const pendingTotal = toGenerate.length
   if (LIMIT > 0) toGenerate = toGenerate.slice(0, LIMIT)   // „täglich 1" etc.
+
+  // Seed-Liste trockengelaufen → Signal für CI-Benachrichtigung (Jira),
+  // damit Uwe neue Cuts nachlegt. Nur im echten Wachstums-Lauf (nicht --force/--slug).
+  if (!FORCE && !SLUG_ONLY && pendingTotal === 0 && process.env.GITHUB_OUTPUT) {
+    appendFileSync(process.env.GITHUB_OUTPUT, 'seeds_exhausted=true\n')
+  }
 
   console.log(`  ${seeds.length} Rezepte in Seed-Liste`)
   console.log(`  ${seeds.length - toGenerate.length} bereits generiert (Cache)`)

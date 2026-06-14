@@ -33,16 +33,6 @@ export default function AnimalDiagram({
 
       {species === 'rind' ? <CowSilhouette /> : <PigSilhouette />}
 
-      {/* Trennlinien zwischen den Teilstücken */}
-      <g stroke="#0D0A06" strokeWidth="2.5" fill="none" opacity="0.45">
-        <line x1="322" y1="220" x2="345" y2="352" />
-        <line x1="405" y1="197" x2="405" y2="356" />
-        <line x1="498" y1="191" x2="498" y2="357" />
-        <line x1="612" y1="189" x2="612" y2="357" />
-        <line x1="700" y1="190" x2="700" y2="352" />
-        <line x1="345" y1="289" x2="700" y2="289" />
-      </g>
-
       {/* Klickbare Teilstück-Zonen + Beschriftung */}
       {primals.map((p) => {
         const isSel = selectedPrimal === p.id;
@@ -121,18 +111,52 @@ function CowSilhouette() {
       <path d="M 700,350 L 722,350 L 720,470 L 726,508 L 702,508 L 696,470 Z" fill={BODY_CREAM} />
       {/* Euter */}
       <path d="M 640,352 C 660,352 672,366 668,384 C 664,398 648,400 636,392 C 628,382 628,360 640,352 Z" fill={BODY_CREAM} />
+      {/* Trennlinien */}
+      <g stroke="#0D0A06" strokeWidth="2.5" fill="none" opacity="0.45">
+        <line x1="322" y1="220" x2="345" y2="352" />
+        <line x1="405" y1="197" x2="405" y2="356" />
+        <line x1="498" y1="191" x2="498" y2="357" />
+        <line x1="612" y1="189" x2="612" y2="357" />
+        <line x1="700" y1="190" x2="700" y2="352" />
+        <line x1="345" y1="289" x2="700" y2="289" />
+      </g>
     </g>
   );
 }
 
 function PigSilhouette() {
-  // Platzhalter — die echte Schwein-Silhouette folgt mit dem Schwein-Katalog.
   return (
-    <g fill={BODY_CREAM}>
-      <ellipse cx="500" cy="260" rx="220" ry="100" />
-      <text x="500" y="430" textAnchor="middle" fill="#9a7548" fontSize="18" fontFamily="DM Sans, sans-serif">
-        Schwein folgt
-      </text>
+    <g>
+      {/* Körper + Kopf (verschmolzen) */}
+      <path
+        d="M 62,250 C 58,232 60,214 78,206 C 96,198 112,196 126,196 C 150,184 196,182 214,196 C 320,182 460,178 600,180 C 680,182 722,186 750,200 C 788,212 808,236 812,272 C 814,306 804,336 784,352 C 740,372 600,392 440,392 C 360,392 300,384 268,366 C 250,356 232,350 214,352 C 150,356 104,342 86,312 C 74,290 66,270 62,250 Z"
+        fill={BODY_CREAM}
+      />
+      {/* Rüssel */}
+      <ellipse cx="64" cy="262" rx="14" ry="26" fill={HORN_CREAM} />
+      <circle cx="58" cy="252" r="3.5" fill="#0D0A06" />
+      <circle cx="58" cy="272" r="3.5" fill="#0D0A06" />
+      {/* Ohr */}
+      <path d="M 150,184 C 138,158 150,138 174,138 C 182,160 178,182 168,196 Z" fill={HORN_CREAM} />
+      {/* Auge */}
+      <circle cx="128" cy="232" r="5.5" fill="#0D0A06" />
+      {/* Ringelschwanz */}
+      <path
+        d="M 808,262 C 832,256 842,236 832,222 C 824,210 808,212 804,226 C 801,238 812,244 820,238"
+        fill="none" stroke={BODY_CREAM} strokeWidth="9" strokeLinecap="round"
+      />
+      {/* Beine mit Klauen */}
+      <path d="M 300,378 L 326,378 L 326,468 L 332,496 L 322,496 L 318,470 L 308,470 L 304,496 L 294,496 L 300,468 Z" fill={BODY_CREAM} />
+      <path d="M 352,384 L 378,384 L 378,468 L 384,496 L 374,496 L 370,470 L 360,470 L 356,496 L 346,496 L 352,468 Z" fill={BODY_CREAM} />
+      <path d="M 700,382 L 726,382 L 726,468 L 732,496 L 722,496 L 718,470 L 708,470 L 704,496 L 694,496 L 700,468 Z" fill={BODY_CREAM} />
+      <path d="M 748,372 L 774,372 L 774,468 L 780,496 L 770,496 L 766,470 L 756,470 L 752,496 L 742,496 L 748,468 Z" fill={BODY_CREAM} />
+      {/* Trennlinien */}
+      <g stroke="#0D0A06" strokeWidth="2.5" fill="none" opacity="0.4">
+        <line x1="205" y1="200" x2="210" y2="345" />
+        <line x1="330" y1="186" x2="330" y2="388" />
+        <line x1="560" y1="182" x2="560" y2="390" />
+        <line x1="210" y1="288" x2="560" y2="288" />
+      </g>
     </g>
   );
 }

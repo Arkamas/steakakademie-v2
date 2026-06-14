@@ -4,18 +4,18 @@ import { ChevronRight, Sparkles } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CutAtlasClient from '@/components/cuts/CutAtlasClient';
-import { getCutsBySpecies, getPrimalsBySpecies } from '@/lib/cuts-catalog';
+import { getCutsBySpecies, getPrimalsBySpecies, ALL_CUTS } from '@/lib/cuts-catalog';
 import { buildCutRecipeMap } from '@/lib/cut-recipes';
 
 export const metadata: Metadata = {
-  title: 'Cut-Atlas — Alle Rinder-Cuts interaktiv erklärt | Steakakademie',
+  title: 'Cut-Atlas — Alle Rinder- & Schweine-Cuts interaktiv erklärt | Steakakademie',
   description:
-    'Der interaktive Cut-Atlas: Klicke dich durch alle Rinder-Teilstücke — von Ribeye und Tomahawk bis Flank, Onglet und Brisket. Mit Cut-DNA, Garstufe, Kerntemperatur, passenden Rezepten und Bezugsquelle.',
+    'Der interaktive Cut-Atlas: Klicke dich durch alle Rinder- und Schweine-Teilstücke — von Ribeye, Tomahawk und Brisket bis Secreto, Schäufele und Spareribs. Mit Cut-DNA, Garstufe, Kerntemperatur, passenden Rezepten und Bezugsquelle.',
   alternates: { canonical: 'https://steakakademie.de/cuts' },
   openGraph: {
-    title: 'Cut-Atlas — Alle Rinder-Cuts interaktiv',
+    title: 'Cut-Atlas — Alle Rinder- & Schweine-Cuts interaktiv',
     description:
-      'Wo sitzt welcher Cut? Interaktiver Atlas für alle Rinder-Teilstücke — mit Cut-DNA, Garstufe, Rezepten und Bezugsquelle.',
+      'Wo sitzt welcher Cut? Interaktiver Atlas für alle Rinder- und Schweine-Teilstücke — mit Cut-DNA, Garstufe, Rezepten und Bezugsquelle.',
     url: 'https://steakakademie.de/cuts',
     images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
@@ -23,17 +23,19 @@ export const metadata: Metadata = {
 };
 
 export default function CutsPage() {
-  const cuts = getCutsBySpecies('rind');
-  const primals = getPrimalsBySpecies('rind');
-  const recipeMap = buildCutRecipeMap(cuts);
+  const bySpecies = {
+    rind: { cuts: getCutsBySpecies('rind'), primals: getPrimalsBySpecies('rind') },
+    schwein: { cuts: getCutsBySpecies('schwein'), primals: getPrimalsBySpecies('schwein') },
+  };
+  const recipeMap = buildCutRecipeMap(ALL_CUTS);
 
   // ItemList-Schema für die Cut-Sammlung (GEO/Rich Results)
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Rinder-Cuts — Steakakademie Cut-Atlas',
-    numberOfItems: cuts.length,
-    itemListElement: cuts.map((c, i) => ({
+    name: 'Rinder- & Schweine-Cuts — Steakakademie Cut-Atlas',
+    numberOfItems: ALL_CUTS.length,
+    itemListElement: ALL_CUTS.map((c, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       name: c.nameDE,
@@ -59,12 +61,12 @@ export default function CutsPage() {
                 Steakakademie · Cut-Atlas
               </span>
               <h1 className="font-serif text-4xl lg:text-5xl font-bold text-text-light leading-tight mb-4">
-                Das Rind, Cut für Cut
+                Rind &amp; Schwein, Cut für Cut
               </h1>
               <p className="font-body text-lg text-text-light/70 leading-relaxed">
-                Wähle ein Teilstück oder klicke direkt auf einen Cut. Du erfährst die Lage am Tier,
-                die Cut-DNA, die ideale Garstufe und Kerntemperatur — plus passende Rezepte und wo du
-                ihn bekommst.
+                Wechsle zwischen Rind und Schwein, wähle ein Teilstück oder klicke direkt auf einen
+                Cut. Du erfährst die Lage am Tier, die Cut-DNA, die ideale Garstufe und Kerntemperatur
+                — plus passende Rezepte und wo du ihn bekommst.
               </p>
             </div>
 
@@ -85,17 +87,7 @@ export default function CutsPage() {
 
         {/* Atlas */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* Spezies-Umschalter */}
-          <div className="flex items-center gap-2 mb-8">
-            <span className="px-4 py-2 text-sm font-sans font-bold bg-brand-gold/15 border border-brand-gold/50 text-brand-gold">
-              🐄 Rind
-            </span>
-            <span className="px-4 py-2 text-sm font-sans font-bold border border-border-subtle text-text-light/35 cursor-not-allowed">
-              🐖 Schwein · bald
-            </span>
-          </div>
-
-          <CutAtlasClient cuts={cuts} primals={primals} recipeMap={recipeMap} />
+          <CutAtlasClient bySpecies={bySpecies} recipeMap={recipeMap} />
         </section>
 
         {/* CTA */}

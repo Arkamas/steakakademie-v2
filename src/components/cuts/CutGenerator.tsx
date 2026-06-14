@@ -12,14 +12,20 @@ import {
   type Cut,
   type Occasion,
   type CookMethod,
+  type Species,
 } from '@/lib/cuts-catalog';
 import { getMeatOffer } from '@/lib/cut-affiliate';
 import type { CutRecipeRef } from '@/lib/cut-recipes';
 
 interface CutGeneratorProps {
-  cuts: Cut[];
+  bySpecies: Record<Species, Cut[]>;
   recipeMap: Record<string, CutRecipeRef[]>;
 }
+
+const SPECIES_TABS: { id: Species; label: string }[] = [
+  { id: 'rind', label: '🐄 Rind' },
+  { id: 'schwein', label: '🐖 Schwein' },
+];
 
 type Budget = 'spar' | 'mittel' | 'premium';
 type Profile = 'zart' | 'marmoriert' | 'aromatisch' | 'mager';
@@ -61,18 +67,32 @@ function scoreCut(cut: Cut, a: Answers): number {
   return s;
 }
 
-export default function CutGenerator({ cuts, recipeMap }: CutGeneratorProps) {
+export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps) {
+  const [species, setSpecies] = useState<Species>('rind');
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [resultId, setResultId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
+  const cuts = bySpecies[species];
+
   // Deep-Link: /cut-generator?cut=<id> springt direkt zum Ergebnis (für geteilte Links)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('cut');
-    if (id && cuts.some((c) => c.id === id)) setResultId(id);
-  }, [cuts]);
+    if (!id) return;
+    const inPork = bySpecies.schwein.some((c) => c.id === id);
+    const inBeef = bySpecies.rind.some((c) => c.id === id);
+    if (inPork) setSpecies('schwein');
+    if (inPork || inBeef) setResultId(id);
+  }, [bySpecies]);
+
+  const switchSpecies = (s: Species) => {
+    setSpecies(s);
+    setAnswers({});
+    setStep(0);
+    setResultId(null);
+  };
 
   const ranked = useMemo(() => {
     return [...cuts]
@@ -222,6 +242,23 @@ export default function CutGenerator({ cuts, recipeMap }: CutGeneratorProps) {
   const current = STEPS[step];
   return (
     <div className="border border-brand-gold/20 bg-surface-dark p-6 sm:p-10">
+      {/* Spezies-Umschalter */}
+      <div className="flex items-center gap-2 mb-7">
+        {SPECIES_TABS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => switchSpecies(t.id)}
+            className={`px-4 py-2 text-sm font-sans font-bold border transition-colors ${
+              species === t.id
+                ? 'bg-brand-gold/15 border-brand-gold/50 text-brand-gold'
+                : 'border-border-subtle text-text-light/45 hover:border-brand-gold/30'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       {/* Fortschritt */}
       <div className="flex items-center gap-2 mb-8">
         {STEPS.map((s, i) => (

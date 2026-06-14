@@ -7,15 +7,19 @@ import { ChevronRight, X, Flame, Thermometer, BookOpen, ShoppingCart } from 'luc
 import AnimalDiagram from './AnimalDiagram';
 import CutDnaRadar from './CutDnaRadar';
 import CutImage from './CutImage';
-import { METHOD_LABEL, type Cut, type Primal } from '@/lib/cuts-catalog';
+import { METHOD_LABEL, type Cut, type Primal, type Species } from '@/lib/cuts-catalog';
 import { getMeatOffer } from '@/lib/cut-affiliate';
 import type { CutRecipeRef } from '@/lib/cut-recipes';
 
 interface CutAtlasClientProps {
-  cuts: Cut[];
-  primals: Primal[];
+  bySpecies: Record<Species, { cuts: Cut[]; primals: Primal[] }>;
   recipeMap: Record<string, CutRecipeRef[]>;
 }
+
+const SPECIES_TABS: { id: Species; label: string }[] = [
+  { id: 'rind', label: '🐄 Rind' },
+  { id: 'schwein', label: '🐖 Schwein' },
+];
 
 function PriceLevel({ level }: { level: number }) {
   return (
@@ -41,14 +45,23 @@ function LevelDots({ level }: { level: number }) {
   );
 }
 
-export default function CutAtlasClient({ cuts, primals, recipeMap }: CutAtlasClientProps) {
+export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientProps) {
+  const [species, setSpecies] = useState<Species>('rind');
   const [selectedPrimal, setSelectedPrimal] = useState<string | null>(null);
   const [selectedCutId, setSelectedCutId] = useState<string | null>(null);
+
+  const { cuts, primals } = bySpecies[species];
 
   const visibleCuts = useMemo(
     () => (selectedPrimal ? cuts.filter((c) => c.primal === selectedPrimal) : cuts),
     [cuts, selectedPrimal]
   );
+
+  const switchSpecies = (s: Species) => {
+    setSpecies(s);
+    setSelectedPrimal(null);
+    setSelectedCutId(null);
+  };
 
   const selectedCut = selectedCutId ? cuts.find((c) => c.id === selectedCutId) ?? null : null;
   const primalById = useMemo(() => Object.fromEntries(primals.map((p) => [p.id, p])), [primals]);
@@ -60,10 +73,27 @@ export default function CutAtlasClient({ cuts, primals, recipeMap }: CutAtlasCli
 
   return (
     <div>
+      {/* ── Spezies-Umschalter ──────────────────────────────────────────────── */}
+      <div className="flex items-center gap-2 mb-6">
+        {SPECIES_TABS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => switchSpecies(t.id)}
+            className={`px-4 py-2 text-sm font-sans font-bold border transition-colors ${
+              species === t.id
+                ? 'bg-brand-gold/15 border-brand-gold/50 text-brand-gold'
+                : 'border-border-subtle text-text-light/45 hover:border-brand-gold/30'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       {/* ── Interaktive Silhouette ──────────────────────────────────────────── */}
       <div className="border border-brand-gold/15 bg-[#0D0A06] overflow-hidden">
         <AnimalDiagram
-          species="rind"
+          species={species}
           primals={primals}
           selectedPrimal={selectedPrimal}
           onSelectPrimal={handlePrimal}

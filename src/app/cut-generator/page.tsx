@@ -4,7 +4,7 @@ import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CutGenerator from '@/components/cuts/CutGenerator';
-import { getCutsBySpecies, getCutById } from '@/lib/cuts-catalog';
+import { getCutsBySpecies, getCutById, ALL_CUTS } from '@/lib/cuts-catalog';
 import { buildCutRecipeMap } from '@/lib/cut-recipes';
 
 interface PageProps {
@@ -36,8 +36,11 @@ export function generateMetadata({ searchParams }: PageProps): Metadata {
 }
 
 export default function CutGeneratorPage() {
-  const cuts = getCutsBySpecies('rind');
-  const recipeMap = buildCutRecipeMap(cuts);
+  const bySpecies = {
+    rind: getCutsBySpecies('rind'),
+    schwein: getCutsBySpecies('schwein'),
+  };
+  const recipeMap = buildCutRecipeMap(ALL_CUTS);
 
   return (
     <>
@@ -68,7 +71,7 @@ export default function CutGeneratorPage() {
         </section>
 
         <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <CutGenerator cuts={cuts} recipeMap={recipeMap} />
+          <CutGenerator bySpecies={bySpecies} recipeMap={recipeMap} />
 
           <p className="text-center text-text-light/40 text-sm font-sans mt-8">
             Lieber selbst stöbern?{' '}

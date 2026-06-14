@@ -60,7 +60,7 @@ async function parseCuts() {
 // Schwein sonst ins Rote.
 function buildPrompt(brief, species) {
   const colour = species === 'schwein'
-    ? 'fresh pale pink raw pork with creamy white fat and natural texture'
+    ? 'fresh pale pink raw pork, light blush-pink lean meat with soft creamy white fat, distinctly pale, NOT red, not dark red, not beef-coloured'
     : 'fresh deep-red raw beef with natural marbling and texture'
   return `${brief}, a single isolated cut of raw meat centered in frame on a dark charcoal slate surface, `
     + `professional studio product photography, soft even softbox lighting from above, `
@@ -68,9 +68,10 @@ function buildPrompt(brief, species) {
     + `clean dark moody background, no garnish, no herbs, no text, no watermark, no people, no hands`
 }
 
-// LoRA-Stärke: Rind 0.45 (Hausstil ok), Schwein 0.3 (Rind-/Rot-Bias zurücknehmen).
+// LoRA-Stärke: Rind 0.45 (Hausstil ok), Schwein 0.2 (Rind-/Rot-Bias stärker
+// zurücknehmen — bei großen Fleischmassen wie Bauch/Schulter zog 0.3 noch rot).
 function loraScale(species) {
-  return species === 'schwein' ? 0.3 : 0.45
+  return species === 'schwein' ? 0.2 : 0.45
 }
 
 // Hausstil-LoRA dezent (Stil ja, isoliertes Produkt-Framing dominiert).

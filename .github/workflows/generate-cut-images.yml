@@ -1,0 +1,78 @@
+name: Cut-Fotos generieren
+
+# Manueller Knopf: generiert die freigestellten Cut-Fotos (Carneo-Look) für den
+# Cut-Atlas / Cut-Generator mit FLUX.1 via fal.ai + hauseigenem sa_foodstyle-LoRA.
+# Nutzt das vorhandene GitHub-Secret FAL_KEY. Idempotent: erzeugt standardmäßig nur
+# fehlende Bilder; "force" überschreibt vorhandene.
+# Tipp: erst mit ein paar Test-Slugs (Feld "only") starten, dann alle.
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: 'Nur diese Slugs (kommagetrennt, z. B. "ribeye,tomahawk,schweinebauch"). Leer = ALLE fehlenden.'
+        required: false
+        default: ''
+      force:
+        description: 'Vorhandene Bilder überschreiben?'
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  generate:
+    name: Cut-Fotos generieren (FLUX.1, Carneo-Look)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Cut-Fotos generieren
+        env:
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
+          if [ -n "${{ inputs.only }}" ]; then ARGS="$ARGS --only ${{ inputs.only }}"; fi
+          echo "Starte: node scripts/cut-images.mjs $ARGS"
+          node scripts/cut-images.mjs $ARGS
+
+      - name: Geänderte Bilder committen + pushen
+        run: |
+          if [ -z "$(git status --porcelain public/images/cuts)" ]; then
+            echo "## 🥩 Keine Bildänderungen" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          N=$(git status --porcelain public/images/cuts | grep -cE '\.jpg$' || true)
+          git config user.name  "cut-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/images/cuts
+          git commit -m "chore(cuts): ${N} Cut-Fotos generiert (FLUX, Carneo-Look)"
+          git push
+          echo "## 🥩 ${N} Cut-Fotos generiert" >> $GITHUB_STEP_SUMMARY
+          echo "Committet + gepusht → löst Deploy aus." >> $GITHUB_STEP_SUMMARY
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Cut-Foto-Generierung fehlgeschlagen'
+          ALERT_DESCRIPTION: 'Der Cut-Foto-Lauf (generate-cut-images, FLUX) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-cutimages-failed'
+        run: node scripts/ops-alert-to-jira.mjs

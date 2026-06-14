@@ -1,0 +1,20 @@
+{
+  "url": "https://v3b.fal.media/files/b/0a9e4d03/uRLUuOeO-MPTLN2GO8qVF_pytorch_lora_weights.safetensors",
+  "trigger": "sa_pork",
+  "scale": 1,
+  "steps": 1200,
+  "dataset": [
+    "eisbein",
+    "haxe",
+    "kasseler",
+    "kotelett",
+    "nuss-schwein",
+    "schaeufele",
+    "schinkenbraten",
+    "schweinebauch",
+    "schweinefilet",
+    "schweinegulasch",
+    "schweineschnitzel"
+  ],
+  "trained_at": "2026-06-14"
+}

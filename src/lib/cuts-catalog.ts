@@ -81,10 +81,12 @@ export interface Primal {
   nameDE: string;
   nameEN: string;
   blurb: string;
-  // SVG-Region im Koordinatensystem der jeweiligen Tier-Silhouette (viewBox 0 0 900 440)
+  // Klickbare Region im Koordinatensystem der Tier-Silhouette (viewBox 0 0 1000 560)
   points: string;
   labelX: number;
   labelY: number;
+  fontSize?: number;
+  labelColor?: string; // Override für Labels außerhalb des hellen Körpers
   color: string;
 }
 
@@ -96,20 +98,20 @@ export const BEEF_PRIMALS: Primal[] = [
   {
     id: 'hals',
     species: 'rind',
-    nameDE: 'Hals & Nacken',
+    nameDE: 'Hals',
     nameEN: 'Neck',
     blurb: 'Stark gearbeiteter Muskel — viel Bindegewebe, ideal für Schmorgerichte und Gulasch.',
-    points: '120,150 200,120 215,250 150,260 118,210',
-    labelX: 168, labelY: 96, color: '#7c3a10',
+    points: '248,208 322,214 322,298 252,312 226,298 238,250',
+    labelX: 282, labelY: 258, fontSize: 15, color: '#7c3a10',
   },
   {
     id: 'bug',
     species: 'rind',
-    nameDE: 'Bug & Schulter',
+    nameDE: 'Bug',
     nameEN: 'Chuck',
     blurb: 'Aromatisch und vielseitig: vom günstigen Schmorbraten bis zum überraschend zarten Flat Iron.',
-    points: '200,120 330,116 326,262 215,250',
-    labelX: 268, labelY: 92, color: '#92400e',
+    points: '322,214 405,197 405,289 330,289',
+    labelX: 370, labelY: 250, fontSize: 17, color: '#92400e',
   },
   {
     id: 'hochrippe',
@@ -117,17 +119,17 @@ export const BEEF_PRIMALS: Primal[] = [
     nameDE: 'Hochrippe',
     nameEN: 'Rib',
     blurb: 'Die Königsklasse der Marmorierung — Heimat von Ribeye, Tomahawk und Côte de Bœuf.',
-    points: '330,116 452,114 448,262 326,262',
-    labelX: 390, labelY: 90, color: '#b45309',
+    points: '405,197 498,191 498,289 405,289',
+    labelX: 451, labelY: 234, fontSize: 13, color: '#b45309',
   },
   {
     id: 'roastbeef',
     species: 'rind',
-    nameDE: 'Roastbeef & Filet',
+    nameDE: 'Roastbeef',
     nameEN: 'Short Loin',
     blurb: 'Das edelste Teilstück: Roastbeef, Filet, T-Bone und Porterhouse stammen alle von hier.',
-    points: '452,114 580,116 576,264 448,262',
-    labelX: 514, labelY: 90, color: '#c2610c',
+    points: '498,191 612,189 612,288 498,289',
+    labelX: 557, labelY: 228, fontSize: 14, color: '#c2610c',
   },
   {
     id: 'huefte',
@@ -135,8 +137,8 @@ export const BEEF_PRIMALS: Primal[] = [
     nameDE: 'Hüfte',
     nameEN: 'Sirloin',
     blurb: 'Charaktervoll und vielseitig — von der brasilianischen Picanha bis zum Tri-Tip.',
-    points: '580,116 668,126 662,286 576,264',
-    labelX: 624, labelY: 92, color: '#a16207',
+    points: '612,189 700,190 700,288 612,288',
+    labelX: 656, labelY: 228, fontSize: 15, color: '#a16207',
   },
   {
     id: 'keule',
@@ -144,8 +146,8 @@ export const BEEF_PRIMALS: Primal[] = [
     nameDE: 'Keule',
     nameEN: 'Round',
     blurb: 'Mageres, festes Fleisch vom Hinterbein — die Basis für Tafelspitz, Rouladen und Sauerbraten.',
-    points: '668,126 792,142 800,330 715,352 662,286',
-    labelX: 748, labelY: 100, color: '#78350f',
+    points: '700,190 815,210 812,300 766,344 700,351',
+    labelX: 760, labelY: 256, fontSize: 17, color: '#78350f',
   },
   {
     id: 'brust',
@@ -153,26 +155,26 @@ export const BEEF_PRIMALS: Primal[] = [
     nameDE: 'Brust',
     nameEN: 'Brisket',
     blurb: 'Der heilige Gral des American BBQ — 12+ Stunden im Smoker verwandeln Kollagen in Zartheit.',
-    points: '150,260 326,262 308,360 200,366',
-    labelX: 240, labelY: 398, color: '#92400e',
+    points: '330,289 405,289 405,355 350,351',
+    labelX: 372, labelY: 328, fontSize: 13, color: '#92400e',
   },
   {
     id: 'duennung',
     species: 'rind',
-    nameDE: 'Dünnung & Bauch',
+    nameDE: 'Dünnung',
     nameEN: 'Plate & Flank',
     blurb: 'Die Geheimtipps der Kenner: grobfaserig, maximal aromatisch — Flank, Bavette, Skirt, Onglet.',
-    points: '326,262 662,286 654,372 308,360',
-    labelX: 488, labelY: 398, color: '#a16207',
+    points: '405,289 700,288 700,355 405,355',
+    labelX: 548, labelY: 328, fontSize: 14, color: '#a16207',
   },
   {
     id: 'beinscheibe',
     species: 'rind',
-    nameDE: 'Beinscheibe & Wade',
+    nameDE: 'Beinscheibe',
     nameEN: 'Shank',
     blurb: 'Kollagenreich und kräftig — Osso Buco und kräftige Fonds entstehen hier.',
-    points: '715,352 800,330 800,420 745,420',
-    labelX: 772, labelY: 408, color: '#5c2c0a',
+    points: '696,351 768,347 770,460 736,460 730,400 700,400',
+    labelX: 731, labelY: 536, fontSize: 13, labelColor: '#b89066', color: '#5c2c0a',
   },
 ];
 

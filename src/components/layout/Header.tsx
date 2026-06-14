@@ -24,10 +24,11 @@ const NAV_CATEGORIES = [
     name: 'Cuts & Fleischkunde',
     href: '/cuts',
     sub: [
+      { label: '★ Cut-Generator', href: '/cut-generator' },
+      { label: 'Cut-Atlas', href: '/cuts' },
       { label: 'Ribeye', href: '/cuts/ribeye' },
       { label: 'Brisket', href: '/cuts/brisket' },
-      { label: 'Pulled Pork', href: '/cuts' },
-      { label: 'Tomahawk', href: '/cuts' },
+      { label: 'Tomahawk', href: '/cuts#tomahawk' },
     ],
   },
   {

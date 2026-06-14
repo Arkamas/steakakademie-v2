@@ -33,7 +33,10 @@
     "cron:scout:dry": "node scripts/cron-scout.mjs --dry-run",
     "cron:scout:only": "node scripts/cron-scout.mjs --scout-only",
     "cron:scout:qof": "node scripts/cron-scout.mjs --source src_die_frau_am_grill",
-    "cron:scout:de": "node scripts/cron-scout.mjs --source src_gbaev"
+    "cron:scout:de": "node scripts/cron-scout.mjs --source src_gbaev",
+    "cut-images": "node scripts/cut-images.mjs",
+    "cut-images:dry": "node scripts/cut-images.mjs --dry-run",
+    "cut-images:force": "node scripts/cut-images.mjs --force"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",

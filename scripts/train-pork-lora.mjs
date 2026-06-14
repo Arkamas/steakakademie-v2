@@ -26,13 +26,16 @@ const CUTS = join(ROOT, 'public', 'images', 'cuts')
 if (!process.env.FAL_KEY) { console.error('✖ FAL_KEY fehlt (nur in GitHub Actions verfügbar).'); process.exit(1) }
 fal.config({ credentials: process.env.FAL_KEY })
 
-// Kuratierter Trainings-Datensatz: saubere, blass-rosa Schwein-Cuts mit breiter Vielfalt.
+// Kuratierter Trainings-Datensatz: saubere, blass-rosa Schwein-Cuts mit breiter
+// Vielfalt. v2 (14.06.): von 11 auf 16 erweitert (mehr Cut-Typen → bessere
+// Generalisierung), garnitur-frei priorisiert.
 const CURATED = [
-  'eisbein', 'haxe', 'kasseler', 'kotelett', 'nuss-schwein', 'schaeufele',
-  'schinkenbraten', 'schweinebauch', 'schweinefilet', 'schweinegulasch', 'schweineschnitzel',
+  'bauchspeck', 'kasseler', 'kotelett', 'nuss-schwein', 'schaeufele', 'schinkenbraten',
+  'schweinebauch', 'schweinefilet', 'schweineschnitzel', 'schweinebacke', 'schulterbraten',
+  'nackensteak', 'abanico', 'oberschale-schwein', 'schweinenacken', 'secreto',
 ]
 const TRIGGER = 'sa_pork'
-const STEPS = parseInt(process.env.PORK_STEPS || '1200', 10)
+const STEPS = parseInt(process.env.PORK_STEPS || '1600', 10)
 
 const caption = (slug) =>
   `${TRIGGER}, ${slug.replace(/-/g, ' ')}, a single fresh pale pink raw pork cut, `

@@ -41,6 +41,14 @@ if (!FAL_KEY && existsSync(join(ROOT, '.env.local'))) {
   if (m) FAL_KEY = m[1].trim()
 }
 
+// Hauseigener Schwein-LoRA (vom Trainings-Workflow geschrieben). Falls vorhanden,
+// rendert Schwein nativ blass-rosa statt per Prompt gegen den Rind-LoRA zu kämpfen.
+let PORK_LORA = null
+const PORK_CFG = join(__dirname, 'pork-lora.json')
+if (existsSync(PORK_CFG)) {
+  try { PORK_LORA = JSON.parse(await readFile(PORK_CFG, 'utf8')) } catch {}
+}
+
 const c = { g: s => `\x1b[32m${s}\x1b[0m`, y: s => `\x1b[33m${s}\x1b[0m`, r: s => `\x1b[31m${s}\x1b[0m`, d: s => `\x1b[2m${s}\x1b[0m` }
 
 // Cuts aus dem TS-Katalog extrahieren (slug + species + visualBrief je Objekt).
@@ -68,26 +76,30 @@ function buildPrompt(brief, species) {
     + `clean dark moody background, no garnish, no herbs, no text, no watermark, no people, no hands`
 }
 
-// LoRA-Stärke: Rind 0.45 (Hausstil ok), Schwein 0.2 (Rind-/Rot-Bias stärker
-// zurücknehmen — bei großen Fleischmassen wie Bauch/Schulter zog 0.3 noch rot).
-function loraScale(species) {
-  return species === 'schwein' ? 0.2 : 0.45
+// LoRA-Wahl je Spezies. Schwein nutzt — falls trainiert — den eigenen Pork-LoRA
+// (nativ blass-rosa, Trigger sa_pork). Sonst Fallback: Rind-Haus-LoRA mit
+// reduziertem Scale 0.2 (Rind-/Rot-Bias zurücknehmen).
+function loraFor(species) {
+  if (species === 'schwein' && PORK_LORA?.url) {
+    return { lora: PORK_LORA.url, scale: PORK_LORA.scale ?? 1.0, trigger: PORK_LORA.trigger || 'sa_pork' }
+  }
+  return { lora: FOODSTYLE_LORA, scale: species === 'schwein' ? 0.2 : 0.45, trigger: 'sa_foodstyle' }
 }
 
 // Hausstil-LoRA dezent (Stil ja, isoliertes Produkt-Framing dominiert).
 const FOODSTYLE_LORA = process.env.FAL_LORA_FOODSTYLE
   || 'https://v3b.fal.media/files/b/0a9cfb28/4f5c21hz9uGU5ia2PWRnR_pytorch_lora_weights.safetensors'
 
-async function generateOnce(prompt, scale) {
+async function generateOnce(prompt, { lora, scale, trigger }) {
   const res = await fetch('https://fal.run/fal-ai/flux-lora', {
     method: 'POST',
     headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      prompt: `sa_foodstyle, ${prompt}`,
+      prompt: `${trigger}, ${prompt}`,
       image_size: 'landscape_4_3',
       num_images: 1,
       enable_safety_checker: true,
-      loras: [{ path: FOODSTYLE_LORA, scale }],
+      loras: [{ path: lora, scale }],
     }),
   })
   if (!res.ok) throw new Error(`fal ${res.status}: ${(await res.text()).slice(0, 160)}`)
@@ -99,11 +111,11 @@ async function generateOnce(prompt, scale) {
 }
 
 // Retry gegen transiente Fehler (z. B. „fetch failed" beim LoRA-Kaltstart).
-async function generate(prompt, scale, tries = 3) {
+async function generate(prompt, cfg, tries = 3) {
   let last
   for (let i = 1; i <= tries; i++) {
     try {
-      return await generateOnce(prompt, scale)
+      return await generateOnce(prompt, cfg)
     } catch (e) {
       last = e
       if (i < tries) await new Promise(r => setTimeout(r, i * 4000))
@@ -132,7 +144,7 @@ async function main() {
 
     try {
       process.stdout.write(c.d(`◇ ${slug} … `))
-      const buf = await generate(prompt, loraScale(species))
+      const buf = await generate(prompt, loraFor(species))
       await writeFile(target, buf)
       console.log(c.g(`✓ ${(buf.length / 1024).toFixed(0)} KB`))
       done++

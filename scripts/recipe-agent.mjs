@@ -37,6 +37,10 @@ const FORCE      = process.argv.includes('--force')
 const SLUG_ONLY  = process.argv.includes('--slug')
   ? process.argv[process.argv.indexOf('--slug') + 1]
   : null
+// --limit N → max. N neue Rezepte pro Lauf (z. B. „täglich 1"). 0/fehlt = unbegrenzt.
+const LIMIT = process.argv.includes('--limit')
+  ? parseInt(process.argv[process.argv.indexOf('--limit') + 1], 10) || 0
+  : 0
 
 const TODAY = new Date().toISOString().split('T')[0]
 
@@ -563,12 +567,13 @@ async function main() {
     }
   }
 
-  const toGenerate = FORCE
+  let toGenerate = FORCE
     ? seeds
     : seeds.filter(s => {
         const outFile = join(REZEPTE, `${s.slug}.mdx`)
         return !cache[s.slug] && !existsSync(outFile)   // Cache ODER existierende Datei → skip
       })
+  if (LIMIT > 0) toGenerate = toGenerate.slice(0, LIMIT)   // „täglich 1" etc.
 
   console.log(`  ${seeds.length} Rezepte in Seed-Liste`)
   console.log(`  ${seeds.length - toGenerate.length} bereits generiert (Cache)`)

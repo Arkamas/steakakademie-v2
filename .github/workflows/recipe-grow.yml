@@ -5,7 +5,7 @@ name: Rezepte wachsen lassen
 # Build-Lauf erzeugt sie sonst nur ephemer pro Deploy).
 on:
   schedule:
-    - cron: '30 3 * * 0'   # Jeden Sonntag 03:30 UTC (~30 Min nach dem Glossar-Lauf)
+    - cron: '30 3 * * *'   # Täglich 03:30 UTC (~30 Min nach dem Glossar-Lauf) — 1 Rezept/Tag
   workflow_dispatch:        # + manuell auslösbar
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
       - name: Rezept-Agent ausführen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: node scripts/recipe-agent.mjs
+        run: node scripts/recipe-agent.mjs --limit 1
 
       - name: Hero-Bilder generieren (FLUX.1 dev)
         env:

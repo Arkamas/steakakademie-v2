@@ -24,6 +24,7 @@ Volltext, wartet auf spätere Volltext-Lieferung mit gleichem `Titel`).
 | `wissensdatenbank-2.3.csv` | `modernist` | Fortsetzung: Aromen/Enfleurage, Saftgewinnung, Filtern/Schönen, Konzentrieren — mit Volltext |
 | `wissensdatenbank-2.4.csv` | `modernist` | Fortsetzung: Zerkleinern (Pacojet/Homogenisatoren), Trocknen, Gefriertrocknung, Cryogene/Karbonisieren — mit Volltext |
 | `wissensdatenbank-3.csv`   | `modernist` | Pflanzen als Lebensmittel: Zellwände, Stärke, Enzyme/Reifung, Konservieren, kulinarischer Illusionismus — mit Volltext |
+| `wissensdatenbank-4.csv`   | `modernist` | Texturen: Verdickungsmittel, Gele/Sphärifikation, Emulsionen, Schäume (Hydrokolloide) — mit Volltext |
 
 `--source` ist nur ein **Namespace für Dedup/Merge**: gleicher `Titel` innerhalb
 derselben `source` ergänzt einen vorhandenen Eintrag (Platzhalter → Volltext),
@@ -38,6 +39,7 @@ node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.2.c
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.3.csv --source modernist
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.4.csv --source modernist
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-3.csv   --source modernist
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-4.csv   --source modernist
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-1.csv   --source mcgee
 # Vorschau ohne API-Calls:
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.csv   --source modernist --dry-run

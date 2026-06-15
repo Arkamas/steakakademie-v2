@@ -17,7 +17,7 @@ import { anthropic } from '@ai-sdk/anthropic';
 import { generateText } from 'ai';
 import { NextResponse } from 'next/server';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
-import { embedQuery } from '@/lib/kochwissen/voyage';
+import { searchKochwissen, buildKontext, type Treffer } from '@/lib/kochwissen/retrieval';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -35,18 +35,6 @@ Regeln:
 - Wenn der Kontext die Frage nicht beantwortet, sage das offen, statt zu raten.
 - Antworte auf Deutsch, präzise und praxisnah.
 - Nenne am Ende die genutzten Quellen als Liste der "Quelle-Fundstelle"-Angaben.`;
-
-type Treffer = {
-  id: string;
-  titel: string;
-  kategorie: string | null;
-  cut_zutat: string | null;
-  schwierigkeit: string | null;
-  keywords: string[] | null;
-  quelle: string | null;
-  inhalt: string | null;
-  similarity: number;
-};
 
 export async function POST(req: Request) {
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -81,15 +69,7 @@ export async function POST(req: Request) {
   // 2) Query-Embedding + Vektor-Retrieval
   let treffer: Treffer[];
   try {
-    const query_embedding = await embedQuery(frage);
-    const { data, error } = await admin.rpc('match_kochwissen', {
-      query_embedding,
-      match_count: limit,
-      filter_kategorie: kategorie,
-      filter_cut: cut,
-    });
-    if (error) throw error;
-    treffer = (data ?? []) as Treffer[];
+    treffer = await searchKochwissen(admin, frage, { kategorie, cut, limit });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
     return NextResponse.json({ error: `Retrieval fehlgeschlagen: ${msg}` }, { status: 502 });
@@ -103,9 +83,7 @@ export async function POST(req: Request) {
   }
 
   // 3) Kontext bauen + geerdete Antwort
-  const kontext = treffer
-    .map((t, i) => `[#${i + 1}] ${t.titel}${t.quelle ? ` (Quelle: ${t.quelle})` : ''}\n${t.inhalt ?? ''}`)
-    .join('\n\n');
+  const kontext = buildKontext(treffer);
 
   let antwort: string;
   try {

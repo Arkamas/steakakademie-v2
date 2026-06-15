@@ -25,7 +25,7 @@ Volltext, wartet auf spätere Volltext-Lieferung mit gleichem `Titel`).
 | `wissensdatenbank-2.4.csv` | `modernist` | Fortsetzung: Zerkleinern (Pacojet/Homogenisatoren), Trocknen, Gefriertrocknung, Cryogene/Karbonisieren — mit Volltext |
 | `wissensdatenbank-3.csv`   | `modernist` | Pflanzen als Lebensmittel: Zellwände, Stärke, Enzyme/Reifung, Konservieren, kulinarischer Illusionismus — mit Volltext |
 | `wissensdatenbank-4.csv`   | `modernist` | Texturen & Kaffee: Viskosität/Verdickungsmittel, Gele/Sphärifikation, Emulsionen, Schäume, Kaffee/Espresso (Kap. 13–18) — mit Volltext |
-| `wissensdatenbank-5.csv`   | `modernist` | Band 5 (Chefgerichte), Kap. 19–20 „Zartes/Festes Fleisch": Rezeptmethodik + Techniken/Parameter (Sous-vide, Activa, BBQ, Fermentation …); aus PDF-Rohtext extrahiert; `Quelle = "Band 5: …"` |
+| `wissensdatenbank-5.csv`   | `modernist` | Band 5 (Chefgerichte) **komplett, Kap. 19–24** „Fleisch, Geflügel, Fisch, Meeresfrüchte, Eier": übertragbare Techniken/Parameter & Lebensmittel-Wissenschaft (Sous-vide, Activa, BBQ, Fermentation, Schaumteig, Girardet-Methode, Pökeln, Cryogaren …); aus PDF-Rohtext nach 1:1-Atomprinzip extrahiert (keine Einzelrezept-Tabellen); `Quelle = "Band 5: …"` |
 
 `--source` ist nur ein **Namespace für Dedup/Merge**: gleicher `Titel` innerhalb
 derselben `source` ergänzt einen vorhandenen Eintrag (Platzhalter → Volltext),

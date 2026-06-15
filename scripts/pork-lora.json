@@ -1,25 +1,26 @@
 {
-  "url": "https://v3b.fal.media/files/b/0a9e4d92/bZkE0VhJsWagiIGxUjsr5_pytorch_lora_weights.safetensors",
+  "url": "https://v3b.fal.media/files/b/0a9e62b8/2xA5CO4ZAkgZQ7iegAkZp_pytorch_lora_weights.safetensors",
   "trigger": "sa_pork",
   "scale": 1,
-  "steps": 1600,
+  "steps": 1200,
   "dataset": [
-    "bauchspeck",
-    "kasseler",
-    "kotelett",
-    "nuss-schwein",
-    "schaeufele",
-    "schinkenbraten",
+    "keule-schnitzel",
+    "minutensteak",
+    "nacken-am-knochen",
+    "nacken-block",
+    "nacken-marmoriert",
+    "nacken-scheiben",
+    "nacken-stueck",
+    "nackensteak",
+    "oberschale-schnitzel",
+    "pluma",
+    "pluma-iberico",
+    "schulter-schwarte",
+    "schulterdreieck",
     "schweinebauch",
     "schweinefilet",
-    "schweineschnitzel",
-    "schweinebacke",
-    "schulterbraten",
-    "nackensteak",
-    "abanico",
-    "oberschale-schwein",
-    "schweinenacken",
-    "secreto"
+    "schweinekeule",
+    "schweinelachs"
   ],
-  "trained_at": "2026-06-14"
+  "trained_at": "2026-06-15"
 }

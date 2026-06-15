@@ -8,6 +8,7 @@ import ArticleCard from '@/components/article/ArticleCard';
 import ProductCard from '@/components/affiliate/ProductCard';
 import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
 import PlattformPuls from '@/components/home/PlattformPuls';
+import ToolBoxes from '@/components/home/ToolBoxes';
 import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
 import { getRecommendedProducts } from '@/lib/products';
 import { getPlattformPuls } from '@/lib/plattform-puls';
@@ -180,6 +181,9 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ── WERKZEUGE — Head-Boxen (Cut-Atlas · Foodpairing · Rezept-Schmiede) ── */}
+        <ToolBoxes />
 
         {/* ── HERO — Full-Bleed 70vh ────────────────────────────────────── */}
         <section className="hero-fullbleed" style={{ height: '70vh', minHeight: '520px' }}>

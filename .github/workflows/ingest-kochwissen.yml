@@ -1,0 +1,117 @@
+name: Kochwissen ingestieren (Supabase + Voyage)
+
+# Manueller Knopf: liest alle CSV-Lieferungen aus data/kochwissen/ ein,
+# erzeugt Voyage-Embeddings und upsertet sie idempotent in die Supabase-Tabelle
+# `kochwissen` (siehe docs/wissensdatenbank-architektur.md). Danach optional
+# Anker-Auflösung (McGee-Index-Platzhalter mit Volltext verschmelzen).
+#
+# Schreibt NUR nach Supabase – keine Dateiänderungen, kein Commit.
+#
+# Benötigte GitHub-Secrets:
+#   NEXT_PUBLIC_SUPABASE_URL   – Projekt-URL (https://xxx.supabase.co)
+#   SUPABASE_SERVICE_ROLE_KEY  – Service-Role-Key (nur serverseitig!)
+#   VOYAGE_API_KEY             – Voyage-AI-Key (Embeddings, voyage-3.5)
+#
+# Voraussetzung: Migration supabase/migrations/20260615_kochwissen.sql ist eingespielt.
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Trockenlauf? (nur Vorschau, keine API-/DB-Schreibvorgänge)'
+        type: boolean
+        required: false
+        default: false
+      resolve_anchors:
+        description: 'Nach der Ingestion Anker auflösen (Index-Platzhalter → Volltext)?'
+        type: boolean
+        required: false
+        default: true
+      apply_anchors:
+        description: 'Anker wirklich zusammenführen (sonst nur Report)?'
+        type: boolean
+        required: false
+        default: true
+      min_score:
+        description: 'Mindest-Score (Titel-Ähnlichkeit) für die Anker-Auflösung.'
+        required: false
+        default: '0.5'
+
+concurrency:
+  group: kochwissen-ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    name: CSVs einlesen + embedden (Voyage → Supabase)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: CSV-Lieferungen ingestieren
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+        run: |
+          DRY=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then DRY="--dry-run"; fi
+          echo "## 📚 Kochwissen-Ingestion" >> $GITHUB_STEP_SUMMARY
+          if [ -n "$DRY" ]; then echo "_Trockenlauf – keine Schreibvorgänge._" >> $GITHUB_STEP_SUMMARY; fi
+          for f in data/kochwissen/wissensdatenbank-*.csv; do
+            base=$(basename "$f")
+            # Source-Namespace pro Lieferung (siehe data/kochwissen/README.md):
+            # Datei 1 = McGee-Index (Platzhalter), alle übrigen = Modernist Cuisine.
+            case "$base" in
+              wissensdatenbank-1.csv) SRC=mcgee ;;
+              *)                      SRC=modernist ;;
+            esac
+            echo "→ $base  (source=$SRC)"
+            node scripts/kochwissen-ingest.mjs --file "$f" --source "$SRC" $DRY
+            echo "- \`$base\` → source \`$SRC\`" >> $GITHUB_STEP_SUMMARY
+          done
+
+      - name: Anker auflösen (Platzhalter → Volltext)
+        if: ${{ inputs.resolve_anchors }}
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          VOYAGE_API_KEY: ${{ secrets.VOYAGE_API_KEY }}
+        run: |
+          ARGS="--min-score ${{ inputs.min_score }}"
+          # Beim Trockenlauf niemals --apply, sonst auf Wunsch zusammenführen.
+          if [ "${{ inputs.dry_run }}" != "true" ] && [ "${{ inputs.apply_anchors }}" = "true" ]; then
+            ARGS="$ARGS --apply"
+          fi
+          echo "Starte: node scripts/kochwissen-resolve-anchors.mjs $ARGS"
+          node scripts/kochwissen-resolve-anchors.mjs $ARGS
+          echo "## 🔗 Anker-Auflösung (\`$ARGS\`)" >> $GITHUB_STEP_SUMMARY
+
+      - name: Abschlussnotiz
+        run: |
+          echo "✅ Kochwissen-Ingestion abgeschlossen." >> $GITHUB_STEP_SUMMARY
+          echo "Die Endpoints /api/kochwissen und /api/kochwissen/generieren nutzen ab jetzt den aktualisierten Bestand." >> $GITHUB_STEP_SUMMARY
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Kochwissen-Ingestion fehlgeschlagen'
+          ALERT_DESCRIPTION: 'Der Ingestion-Lauf (ingest-kochwissen, Voyage → Supabase) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-kochwissen-ingest-failed'
+        run: node scripts/ops-alert-to-jira.mjs

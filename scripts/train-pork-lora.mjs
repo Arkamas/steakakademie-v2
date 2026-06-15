@@ -6,7 +6,8 @@
  * rohes Fleisch rendert — statt per Prompt gegen den rind-trainierten sa_foodstyle-LoRA
  * anzukämpfen. Grundlage für alle künftigen Schwein-Bilder (Cuts, Rezepte, Social).
  *
- * Datensatz: handverlesene, saubere Blass-Rosa-Cut-Fotos aus public/images/cuts/.
+ * Datensatz: rechtefreie Cut-Fotos aus training/lora-pork/dataset/ (privat, ausserhalb
+ * public/ -> NICHT auf der Website; nur die spaeter generierten Bilder gehen oeffentlich).
  * Läuft NUR in GitHub Actions (FAL_KEY = Secret). Output: scripts/pork-lora.json.
  *
  * Aufruf (im Workflow): node scripts/train-pork-lora.mjs
@@ -14,26 +15,25 @@
  */
 
 import { fal } from '@fal-ai/client'
-import { readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync } from 'fs'
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync, readdirSync } from 'fs'
 import { execFileSync } from 'child_process'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
-const CUTS = join(ROOT, 'public', 'images', 'cuts')
+const DATASET = join(ROOT, 'training', 'lora-pork', 'dataset')
 
 if (!process.env.FAL_KEY) { console.error('✖ FAL_KEY fehlt (nur in GitHub Actions verfügbar).'); process.exit(1) }
 fal.config({ credentials: process.env.FAL_KEY })
 
-// Kuratierter Trainings-Datensatz: saubere, blass-rosa Schwein-Cuts mit breiter
-// Vielfalt. v2 (14.06.): von 11 auf 16 erweitert (mehr Cut-Typen → bessere
-// Generalisierung), garnitur-frei priorisiert.
-const CURATED = [
-  'bauchspeck', 'kasseler', 'kotelett', 'nuss-schwein', 'schaeufele', 'schinkenbraten',
-  'schweinebauch', 'schweinefilet', 'schweineschnitzel', 'schweinebacke', 'schulterbraten',
-  'nackensteak', 'abanico', 'oberschale-schwein', 'schweinenacken', 'secreto',
-]
+// Trainings-Datensatz: alle JPGs aus training/lora-pork/dataset/ (Dateiname = Cut-Slug).
+// v3 (15.06.): reale, rechtefreie Iberico/Duroc-Cuts; Quelle entkoppelt von public/.
+const SLUGS = readdirSync(DATASET)
+  .filter((f) => /\.jpe?g$/i.test(f))
+  .map((f) => f.replace(/\.jpe?g$/i, ''))
+  .sort()
+if (SLUGS.length === 0) { console.error('✖ Keine Bilder in training/lora-pork/dataset/.'); process.exit(1) }
 const TRIGGER = 'sa_pork'
 const STEPS = parseInt(process.env.PORK_STEPS || '1600', 10)
 
@@ -47,11 +47,11 @@ async function main() {
   const ds = '/tmp/pork-dataset'
   try { rmSync(ds, { recursive: true, force: true }) } catch {}
   mkdirSync(ds, { recursive: true })
-  for (const slug of CURATED) {
-    copyFileSync(join(CUTS, `${slug}.jpg`), join(ds, `${slug}.jpg`))
+  for (const slug of SLUGS) {
+    copyFileSync(join(DATASET, `${slug}.jpg`), join(ds, `${slug}.jpg`))
     writeFileSync(join(ds, `${slug}.txt`), caption(slug))
   }
-  console.log(`📦 Datensatz: ${CURATED.length} Bilder + Captions`)
+  console.log(`📦 Datensatz: ${SLUGS.length} Bilder + Captions`)
 
   // 2) Zip (ubuntu-runner hat `zip`)
   const zipPath = '/tmp/pork-dataset.zip'
@@ -90,7 +90,7 @@ async function main() {
     trigger: TRIGGER,
     scale: 1.0,
     steps: STEPS,
-    dataset: CURATED,
+    dataset: SLUGS,
     trained_at: new Date().toISOString().slice(0, 10),
   }
   writeFileSync(join(__dirname, 'pork-lora.json'), JSON.stringify(cfg, null, 2) + '\n')

@@ -21,6 +21,7 @@ Volltext, wartet auf spätere Volltext-Lieferung mit gleichem `Titel`).
 | `wissensdatenbank-1.csv`   | `mcgee`     | Index mit Seitenzahlen (z. B. „S. 267"), **ohne** Volltext → Platzhalter |
 | `wissensdatenbank-2.csv`   | `modernist` | Garmethoden (Grillen, Braten, Wok, Schmoren, Backen, Frittieren …) mit Volltext |
 | `wissensdatenbank-2.2.csv` | `modernist` | Fortsetzung: Sous-vide, Fonds/Brühen, Geschmack extrahieren — mit Volltext |
+| `wissensdatenbank-2.3.csv` | `modernist` | Fortsetzung: Aromen/Enfleurage, Saftgewinnung, Filtern/Schönen, Konzentrieren — mit Volltext |
 
 `--source` ist nur ein **Namespace für Dedup/Merge**: gleicher `Titel` innerhalb
 derselben `source` ergänzt einen vorhandenen Eintrag (Platzhalter → Volltext),
@@ -32,6 +33,7 @@ Bücher abweichen.
 ```bash
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.csv   --source modernist
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.2.csv --source modernist
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.3.csv --source modernist
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-1.csv   --source mcgee
 # Vorschau ohne API-Calls:
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.csv   --source modernist --dry-run

@@ -4,8 +4,9 @@
  * Erzeugt aus dem abgerufenen Wissen ein NEUES Rezept oder einen Artikel —
  * streng geerdet an den gefundenen Einträgen (kein freies Halluzinieren).
  *
- * Body: { auftrag: string, art?: 'rezept' | 'artikel', kategorie?: string, cut?: string, limit?: number }
- * Antwort: { ergebnis: string, verwendete_quellen: Array<{ titel, quelle, similarity }> }
+ * Body: { auftrag: string, art?: 'rezept' | 'artikel', niveau?: 1 | 2 | 3,
+ *         kategorie?: string, cut?: string, limit?: number }
+ * Antwort: { ergebnis: string, niveau, verwendete_quellen: Array<{ titel, quelle, similarity }> }
  *
  * Siehe docs/wissensdatenbank-architektur.md („neu kreieren" mit Grounding).
  */
@@ -34,6 +35,23 @@ Regeln:
 Bei art="rezept": Struktur = Titel, kurze Einleitung, Zutaten (Liste), Zubereitung (nummerierte Schritte), Profi-Tipps.
 Bei art="artikel": Struktur = Überschrift, Einleitung, Fließtext mit Zwischenüberschriften, Fazit.`;
 
+// Schwierigkeitsstufen (⭐/⭐⭐/⭐⭐⭐): identische Wissensbasis, andere Flughöhe.
+// Jede Stufe schränkt Technik & Equipment ein — gegroundet bleibt die Generierung.
+const NIVEAU_REGELN: Record<1 | 2 | 3, string> = {
+  1: `NIVEAU: ⭐ Einsteiger.
+- Nur Standard-Haushaltsgeräte: Topf, Pfanne, Backofen, Grill, ggf. Küchenthermometer.
+- VERBOTEN: Sous-vide/Vakuumgaren, Hydrokolloide (Xanthan, Agar, Gellan, Alginat, Sphärifikation), Flüssigstickstoff, Activa/Transglutaminase, Pacojet, Zentrifuge, Dörrschrank, Sahnesiphon, Rotationsverdampfer.
+- Supermarkt-Zutaten, höchstens 3–4 Komponenten, lineare Schritte. Fachbegriffe kurz erklären.
+- Wähle aus den Einträgen nur die konventionell umsetzbaren Methoden; lasse modernistische Schritte weg.`,
+  2: `NIVEAU: ⭐⭐ Fortgeschritten.
+- Erlaubt: Sous-vide, präzise Kerntemperaturen, getrennt gegarte Komponenten, einfache Reduktionen/Emulsionen, eine Prise Xanthan zum Binden.
+- VERBOTEN: Flüssigstickstoff, Activa, Sphärifikation, Zentrifuge, Gefriertrocknung, exotische Texturas.
+- Bis ~5 Komponenten, etwas Anspruch, aber zuhause gut machbar.`,
+  3: `NIVEAU: ⭐⭐⭐ Profi / Modernist.
+- Alle Techniken & Zutaten der Wissensbasis erlaubt (Vakuum, Hydrokolloide, Activa, Flüssigstickstoff, Sphärifikation, Zentrifuge …).
+- Mehrkomponentig auf Restaurant-Niveau; nenne Spezialgeräte und exakte Parameter.`,
+};
+
 export async function POST(req: Request) {
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json({ error: 'ANTHROPIC_API_KEY fehlt.' }, { status: 500 });
@@ -45,6 +63,7 @@ export async function POST(req: Request) {
   // 1) Eingabe
   let auftrag: string;
   let art: 'rezept' | 'artikel';
+  let niveau: 1 | 2 | 3;
   let kategorie: string | null;
   let cut: string | null;
   let limit: number;
@@ -52,6 +71,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     auftrag = String(body.auftrag ?? '').trim();
     art = body.art === 'artikel' ? 'artikel' : 'rezept';
+    const n = parseInt(body.niveau, 10);
+    niveau = n === 1 || n === 3 ? n : 2; // Default: ⭐⭐ Fortgeschritten
     kategorie = body.kategorie ? String(body.kategorie) : null;
     cut = body.cut ? String(body.cut) : null;
     limit = Math.min(Math.max(parseInt(body.limit, 10) || 12, 1), 20);
@@ -88,8 +109,8 @@ export async function POST(req: Request) {
   try {
     const { text } = await generateText({
       model: anthropic(MODEL),
-      system: SYSTEM_PROMPT,
-      prompt: `art=${art}\n\nAuftrag: ${auftrag}\n\nWissenseinträge (einzige erlaubte Faktenbasis):\n${kontext}`,
+      system: `${SYSTEM_PROMPT}\n\n${NIVEAU_REGELN[niveau]}`,
+      prompt: `art=${art}\nniveau=${niveau}\n\nAuftrag: ${auftrag}\n\nWissenseinträge (einzige erlaubte Faktenbasis):\n${kontext}`,
     });
     ergebnis = text;
   } catch (e: unknown) {
@@ -99,6 +120,7 @@ export async function POST(req: Request) {
 
   return NextResponse.json({
     ergebnis,
+    niveau,
     verwendete_quellen: treffer.map((t) => ({
       titel: t.titel,
       quelle: t.quelle,

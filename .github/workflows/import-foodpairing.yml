@@ -1,0 +1,103 @@
+name: Foodpairing importieren (Aroma-Netzwerk → Supabase)
+
+# Manueller Knopf: lädt ein offenes Aroma-Netzwerk-Dataset (3 Dateien) von den
+# angegebenen URLs, importiert es via scripts/foodpairing-import.mjs nach Supabase
+# (aroma_ingredient / aroma_compound / aroma_ingredient_compound).
+#
+# Schreibt NUR nach Supabase – keine Dateiänderungen, kein Commit.
+# Die Rohdaten liegen bewusst NICHT im Repo (.gitignore, Lizenz) und werden hier
+# zur Laufzeit geladen.
+#
+# ⚖️  RECHTLICH: Nur auf ein offenes, kommerziell freigegebenes Dataset zeigen
+#     (z. B. das offen publizierte Flavor-Network, Ahn et al. 2008).
+#     "Frei einsehbar" ≠ "frei weiterverbreitbar" — Lizenz vorab prüfen
+#     (siehe docs/foodpairing-steckbrief.md).
+#
+# Benötigte GitHub-Secrets:
+#   NEXT_PUBLIC_SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY
+# Voraussetzung: Migration supabase/migrations/20260615_aroma_pairings.sql eingespielt.
+on:
+  workflow_dispatch:
+    inputs:
+      ingr_url:
+        description: 'URL der Zutaten-Datei (TSV/CSV: id  name  category). Leer = Datei muss bereits in data/foodpairing/ liegen.'
+        required: false
+        default: ''
+      comp_url:
+        description: 'URL der Molekül-Datei (TSV/CSV: id  name  CAS).'
+        required: false
+        default: ''
+      edge_url:
+        description: 'URL der Kanten-Datei (TSV/CSV: ingredient_id  compound_id).'
+        required: false
+        default: ''
+      dry_run:
+        description: 'Trockenlauf? (nur zählen, keine DB-Schreibvorgänge)'
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  group: foodpairing-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    name: Aroma-Netzwerk importieren
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Dataset bereitstellen (von URLs laden, falls angegeben)
+        run: |
+          mkdir -p data/foodpairing
+          dl() {  # dl <url> <zieldatei>
+            if [ -n "$1" ]; then
+              echo "↓ $2  ←  $1"
+              curl -fsSL "$1" -o "data/foodpairing/$2"
+            elif [ -f "data/foodpairing/$2" ]; then
+              echo "• $2 bereits vorhanden"
+            else
+              echo "::error::Weder URL noch vorhandene Datei für $2"; exit 1
+            fi
+          }
+          dl "${{ inputs.ingr_url }}" ingr_info.tsv
+          dl "${{ inputs.comp_url }}" comp_info.tsv
+          dl "${{ inputs.edge_url }}" ingr_comp.tsv
+
+      - name: Importieren (→ Supabase)
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          ARGS="--dir data/foodpairing"
+          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          echo "Starte: node scripts/foodpairing-import.mjs $ARGS"
+          node scripts/foodpairing-import.mjs $ARGS
+          echo "## 🧪 Foodpairing-Import (\`$ARGS\`)" >> $GITHUB_STEP_SUMMARY
+          echo "Die Box /api/foodpairing nutzt ab jetzt den aktualisierten Bestand." >> $GITHUB_STEP_SUMMARY
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Foodpairing-Import fehlgeschlagen'
+          ALERT_DESCRIPTION: 'Der Import-Lauf (import-foodpairing → Supabase) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-foodpairing-import-failed'
+        run: node scripts/ops-alert-to-jira.mjs

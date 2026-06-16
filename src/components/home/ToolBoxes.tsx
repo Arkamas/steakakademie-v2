@@ -10,7 +10,7 @@
  * zeigen einen Demo-/„Bald verfügbar"-Zustand — nichts wirkt kaputt.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2 } from 'lucide-react';
 
@@ -127,6 +127,16 @@ function RezeptSchmiedeBox() {
   const [ergebnis, setErgebnis] = useState<string | null>(null);
   const [hinweis, setHinweis] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+
+  // Live-Sekundenzähler während der Generierung — beruhigt und setzt die Erwartung,
+  // damit niemand vorzeitig abbricht.
+  useEffect(() => {
+    if (!loading) return;
+    setElapsed(0);
+    const t = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => clearInterval(t);
+  }, [loading]);
 
   async function erstellen(e: React.FormEvent) {
     e.preventDefault();
@@ -194,6 +204,15 @@ function RezeptSchmiedeBox() {
         </button>
       </form>
 
+      {loading && (
+        <div className="mt-3 flex items-center gap-2 text-[11px] text-brand-gold">
+          <Loader2 size={13} className="animate-spin shrink-0" />
+          <span>
+            Claude schreibt dein Rezept … {elapsed}s{' '}
+            <span className="text-text-muted">(meist 10–20 s)</span>
+          </span>
+        </div>
+      )}
       {hinweis && <p className="mt-3 text-[11px] text-text-muted italic">{hinweis}</p>}
       {ergebnis && (
         <div className="mt-3 max-h-56 overflow-y-auto rounded-lg border border-border-subtle bg-surface-base p-3 text-xs text-text-primary whitespace-pre-wrap">

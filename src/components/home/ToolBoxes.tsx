@@ -10,7 +10,7 @@
  * zeigen einen Demo-/„Bald verfügbar"-Zustand — nichts wirkt kaputt.
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -34,7 +34,7 @@ function Bar({ value, max }: { value: number; max: number }) {
   );
 }
 
-function FoodpairingBox() {
+function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partner: string) => void }) {
   const [zutat, setZutat] = useState('');
   const [treffer, setTreffer] = useState<Pairing[] | null>(null);
   const [demo, setDemo] = useState(false);
@@ -103,12 +103,19 @@ function FoodpairingBox() {
             <div key={t.partner} className="text-sm">
               <div className="flex items-baseline justify-between gap-2">
                 <span className="text-text-light font-medium">{t.partner}</span>
-                <span className="text-xs text-text-muted">{t.shared} Moleküle</span>
+                <button
+                  type="button"
+                  onClick={() => onSeedRezept(zutat, t.partner)}
+                  className="shrink-0 text-[10px] font-bold uppercase tracking-wide text-brand-gold hover:text-brand-fire"
+                  title={`Rezept: ${zutat} mit ${t.partner}`}
+                >
+                  → Rezept
+                </button>
               </div>
               <Bar value={t.shared} max={max} />
-              {t.shared_examples?.length ? (
-                <p className="text-[11px] text-text-muted truncate">teilt u. a. {t.shared_examples.join(', ')}</p>
-              ) : null}
+              <p className="text-[11px] text-text-muted truncate">
+                {t.shared} Moleküle{t.shared_examples?.length ? ` · ${t.shared_examples.join(', ')}` : ''}
+              </p>
             </div>
           ))}
         </div>
@@ -123,7 +130,8 @@ const NIVEAUS = [
   { n: 3, label: '⭐⭐⭐ Profi' },
 ] as const;
 
-function RezeptSchmiedeBox() {
+function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } | null }) {
+  const boxRef = useRef<HTMLDivElement>(null);
   const [auftrag, setAuftrag] = useState('');
   const [niveau, setNiveau] = useState<1 | 2 | 3>(2);
   const [ergebnis, setErgebnis] = useState<string | null>(null);
@@ -140,9 +148,8 @@ function RezeptSchmiedeBox() {
     return () => clearInterval(t);
   }, [loading]);
 
-  async function erstellen(e: React.FormEvent) {
-    e.preventDefault();
-    const q = auftrag.trim();
+  async function generate(text: string) {
+    const q = text.trim();
     if (!q) return;
     setLoading(true);
     setErgebnis(null);
@@ -166,8 +173,23 @@ function RezeptSchmiedeBox() {
     }
   }
 
+  function erstellen(e: React.FormEvent) {
+    e.preventDefault();
+    generate(auftrag);
+  }
+
+  // Verkettung: eine Vorgabe aus der Foodpairing-Box füllt das Feld und erzeugt
+  // direkt ein Rezept — der Loop Aroma → Gericht.
+  useEffect(() => {
+    if (!seed) return;
+    setAuftrag(seed.auftrag);
+    boxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    generate(seed.auftrag);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seed?.nonce]);
+
   return (
-    <div className="flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5">
+    <div ref={boxRef} className="flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5">
       <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
         <ChefHat size={18} />
         <h3 className="font-serif text-lg font-bold text-text-light">Rezept-Schmiede</h3>
@@ -228,6 +250,8 @@ function RezeptSchmiedeBox() {
 }
 
 export default function ToolBoxes() {
+  // Verkettung: Foodpairing → Rezept-Schmiede (nonce, damit auch gleiche Vorgabe erneut auslöst).
+  const [seed, setSeed] = useState<{ auftrag: string; nonce: number } | null>(null);
   return (
     <section className="bg-surface-dark border-b border-brand-gold/15">
       <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
@@ -258,8 +282,10 @@ export default function ToolBoxes() {
             </span>
           </Link>
 
-          <FoodpairingBox />
-          <RezeptSchmiedeBox />
+          <FoodpairingBox
+            onSeedRezept={(z, p) => setSeed({ auftrag: `${z} mit ${p}`, nonce: Date.now() })}
+          />
+          <RezeptSchmiedeBox seed={seed} />
         </div>
       </div>
     </section>

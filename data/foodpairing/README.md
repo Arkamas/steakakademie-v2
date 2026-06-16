@@ -5,12 +5,14 @@ Ablageort für das **bipartite Zutat↔Aromamolekül-Dataset**, das
 (Tabellen `aroma_ingredient` / `aroma_compound` / `aroma_ingredient_compound`).
 Architektur & Rechtslage: `docs/foodpairing-steckbrief.md`.
 
-> ⚖️ **Nur ein offenes, kommerziell freigegebenes Dataset hier ablegen.**
-> „Frei einsehbar" ≠ „frei weiterverbreitbar". Empfohlen ist das offen publizierte
-> Flavor-Network (Ahn et al. 2011, Sci. Rep. 1:196, DOI 10.1038/srep00196, CC BY 4.0).
-> **VCF, FlavorDB (CC-BY-NC), FoodKG, FEMA-Liste,
-> Aroma-Wheel** sind hier NICHT zulässig. Diese Dateien sind bewusst **nicht** im
-> Repo eingecheckt — Lizenz vor dem Einspielen klären.
+> ⚖️ **Hier liegt unsere EIGENE kuratierte Seed-Kuration** (`ingr_info.tsv`,
+> `comp_info.tsv`, `ingr_comp.tsv` — siehe `SOURCES.md`): kommerziell sauber, aus
+> öffentlich-freier Aromachemie + eigenem CC-BY-Wissen. Diese drei Dateien **sind**
+> eingecheckt.
+>
+> **NICHT zulässig** (NonCommercial bzw. Copyright): **Ahn-Flavor-Network**
+> (Sci. Rep. 2011, **CC BY-NC-SA**), **FlavorDB/FooDB** (CC-BY-NC), **VCF** (Abo),
+> **FEMA-Liste**, **Aroma-Wheels**. Solche Fremd-Datasets niemals hier ablegen.
 
 ## Erwartete Dateien
 

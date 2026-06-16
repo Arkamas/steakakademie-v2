@@ -14,14 +14,15 @@ Verifiziert (Stand 2026-06-15). **„Einsehbar" ≠ „weiterverwendbar".** Da s
 
 | Quelle | Lizenz | Nutzung |
 |---|---|---|
-| **Ahn et al. 2011 „Flavor Network"** (Sci. Rep. 1:196, DOI 10.1038/srep00196) | **CC BY 4.0** (Scientific Reports, inkl. Supplementary) → kommerziell mit Attribution | **Basis** des Netzwerks → eigene abgeleitete Tabelle |
+| **Eigene Kuration** (Steakakademie: öffentl. Aromachemie + CC-BY-`foods-oa`) | unser Eigentum → kommerziell frei | **Basis** der `aroma_*`-Tabellen (steak-fokussiert) |
 | **PubChem** (NCBI) | Public Domain, freie API | Molekül-Stammdaten (`pubchem_cid`) |
 | **Open Food Facts** | ODbL (Share-alike!) | Zutat-/Produktdaten — **separat** offen halten |
 | **`kochwissen`-DB** | unser Eigentum | Verzahnung mit Technik-/Maillard-Wissen |
 
-**Gesperrt** (nur erwähnen/verlinken, **nie** integrieren): VCF (Abo 1.485 €/J.),
-FEMA-GRAS-Liste (Copyright), UC-Davis-Aroma-Wheel (Copyright), FlavorDB & FoodKG
-(CC-BY-**NC**), Foodpairing.com, The Flavor Bible, Aromyx, Nielsen-Massey, ChefSteps.
+**Gesperrt** (nur erwähnen/verlinken, **nie** integrieren): **Ahn-Flavor-Network
+(CC BY-NC-SA)**, VCF (Abo 1.485 €/J.), FEMA-GRAS-Liste (Copyright), UC-Davis-Aroma-Wheel
+(Copyright), FlavorDB & FoodKG (CC-BY-**NC**), Foodpairing.com, The Flavor Bible, Aromyx,
+Nielsen-Massey, ChefSteps.
 
 > ⚖️ **Vor Live-Gang:** Kurze juristische Prüfung der Ahn-Daten-Nachnutzung
 > (Teile stammen ursprünglich aus Fenaroli's Handbook) und der ODbL-Share-alike-Pflicht.
@@ -30,38 +31,31 @@ FEMA-GRAS-Liste (Copyright), UC-Davis-Aroma-Wheel (Copyright), FlavorDB & FoodKG
 
 ---
 
-## 1b · Bezugsquelle des Aroma-Datasets (Ahn-Flavor-Network)
+## 1b · Aroma-Dataset — eigene Kuration (statt Ahn)
 
-**Paper / Primärquelle (autoritativ, CC BY 4.0):**
-Ahn, Ahnert, Bagrow, Barabási — *„Flavor network and the principles of food pairing"*,
-**Scientific Reports 1:196 (2011)**, DOI **10.1038/srep00196**.
-→ `nature.com/articles/srep00196` → Abschnitt **Supplementary Information** (CC BY 4.0).
-Datensatz: **1.530 Zutaten × 1.106 Aromamoleküle** (bipartiter Graph).
+**Wichtige Lizenz-Korrektur:** Das Ahn-Flavor-Network (Sci. Rep. 1:196, 2011,
+DOI 10.1038/srep00196) steht unter **CC BY-NC-SA 3.0** — also **NonCommercial**.
+Für steakakademie.de (kommerziell) damit **nicht** nutzbar. Ein früherer Hinweis auf
+„CC BY 4.0" war falsch (das ist die heutige Scientific-Reports-Policy, nicht die dieses
+Papers von 2011).
 
-**Attribution (Pflicht bei CC BY):** „Aromadaten: Ahn et al., Sci. Rep. 1:196 (2011),
-DOI 10.1038/srep00196, CC BY 4.0." — im UI-Footer der Foodpairing-Box hinterlegen.
+**Stattdessen: eigene Seed-Kuration** in `data/foodpairing/` (`ingr_info.tsv`,
+`comp_info.tsv`, `ingr_comp.tsv`; siehe `SOURCES.md`) — gebaut aus öffentlich-freier
+Aromachemie (Fakten sind nicht schützbar) + unserem CC-BY-`foods-oa`-Wissen.
+Kommerziell sauber, klein, steak-fokussiert, eingecheckt. Format:
 
-**Zwei Bezugswege:**
-1. **Nature-Supplementary (sauberste Quelle):** offizielle CC-BY-Datei von nature.com laden.
-   Liegt als **eine** kombinierte Tabelle vor → kleiner Konverter nötig (Aufteilung in
-   `ingr_info` / `comp_info` / `ingr_comp`). *(Ich baue den Konverter, sobald die Datei vorliegt.)*
-2. **GitHub-Mirror (bequem):** Repos wie `lingcheng99/Flavor-Network` oder `Pepton21/flavor-network`
-   spiegeln die Daten — teils bereits in tabellarischer Form. Vor Nutzung Format prüfen und
-   **immer das Paper als Quelle nennen** (der Mirror ist nur Weiterverteilung der CC-BY-Daten).
-
-**Format, das unser Import-Skript erwartet** (`data/foodpairing/`):
 | Datei | Spalten |
 |---|---|
 | `ingr_info.tsv` | `id  name  category` |
 | `comp_info.tsv` | `id  name  CAS` |
 | `ingr_comp.tsv` | `ingredient_id  compound_id` |
 
-**Live schalten:** Dateien in `data/foodpairing/` legen **oder** ihre URLs an den
-Workflow `import-foodpairing.yml` geben → Import nach Supabase → Foodpairing-Box wird echt.
+**Live schalten:** `import-foodpairing.yml` **ohne URLs** starten → nutzt die
+eingecheckten Dateien → Import nach Supabase → Foodpairing-Box wird echt.
 
-> ⚖️ **Provenienz-Hinweis:** Die zugrunde liegenden Zutat-Molekül-Zuordnungen stammen
-> teils aus *Fenaroli's Handbook* (proprietär). Die CC-BY-Publikation des **abgeleiteten
-> Netzwerks** ist die rechtliche Basis; vor Live-Gang ein kurzer juristischer Blick ist klug.
+**Erweiterung (optional):** weitere CC-BY-Paper, oder ein **kommerziell lizenziertes**
+Dataset nach schriftlicher Freigabe der Autoren (z. B. FlavorDB/FooDB). Niemals ein
+NC-Dataset kommerziell einspielen.
 
 ---
 

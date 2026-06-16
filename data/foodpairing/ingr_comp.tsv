@@ -1,0 +1,64 @@
+# Kanten Zutat→Molekül — ingredient_id  compound_id
+# Röst-Pyrazine (1)
+1	1
+3	1
+7	1
+8	1
+9	1
+10	1
+11	1
+13	1
+20	1
+21	1
+# 2-Methyl-3-furanthiol (2)
+1	2
+2	2
+4	2
+6	2
+7	2
+20	2
+21	2
+# 1-Octen-3-ol (3)
+1	3
+2	3
+3	3
+4	3
+12	3
+20	3
+21	3
+# 2-Acetyl-1-pyrrolin (4)
+9	4
+12	4
+13	4
+14	4
+15	4
+# Strecker-Aldehyde (5)
+1	5
+7	5
+8	5
+13	5
+20	5
+21	5
+# (E,E)-2,4-Decadienal (6)
+4	6
+5	6
+19	6
+# Räucherphenole (7)
+1	7
+5	7
+17	7
+18	7
+20	7
+21	7
+# Gamma-Lactone (8)
+4	8
+16	8
+# Eugenol (9)
+17	9
+18	9
+# 12-Methyltridecanal (10)
+1	10
+20	10
+21	10
+# 4-Methyloctansäure (11)
+3	11

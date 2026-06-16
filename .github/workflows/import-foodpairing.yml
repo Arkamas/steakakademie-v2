@@ -53,7 +53,7 @@ jobs:
       - name: Node.js einrichten
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'   # 22+ wegen nativem WebSocket (supabase-js braucht es)
           cache: 'npm'
 
       - name: Dependencies installieren

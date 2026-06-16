@@ -1,0 +1,68 @@
+name: Social-Media-Entwürfe generieren
+
+# Aktiviert den "Social Media Senior Director" (scripts/social-posts.mjs): erzeugt
+# wöchentlich Post-ENTWÜRFE aus den Rezepten (Brand-Voice + Werbekennzeichnungs-
+# Pflicht LG Köln 12.05.2026). Human-gated: KEIN Auto-Posten — die Entwürfe werden
+# als Artifact zum Review hochgeladen (social-drafts/ ist bewusst gitignored).
+on:
+  schedule:
+    - cron: '0 4 * * 0'   # Jeden Sonntag 04:00 UTC (~30 Min nach dem Rezept-Lauf)
+  workflow_dispatch:        # + manuell auslösbar
+    inputs:
+      limit:
+        description: 'Anzahl der zu generierenden Entwürfe'
+        required: false
+        default: '5'
+
+jobs:
+  social-drafts:
+    name: Post-Entwürfe generieren (human-gated)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Social Media Senior Director ausführen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/social-posts.mjs --limit ${{ github.event.inputs.limit || '5' }}
+
+      - name: Entwürfe als Artifact hochladen (zum Review)
+        uses: actions/upload-artifact@v4
+        with:
+          name: social-drafts
+          path: social-drafts/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Zusammenfassung
+        run: |
+          COUNT=$(ls -1 social-drafts/*.md 2>/dev/null | wc -l | tr -d ' ')
+          echo "## 📣 Social-Media-Entwürfe" >> $GITHUB_STEP_SUMMARY
+          echo "Senior Director hat Entwürfe erzeugt → als Artifact **social-drafts** verfügbar." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Human-gated:** prüfen, anpassen, dann manuell posten/planen (z.B. Postiz). KEIN Auto-Posten." >> $GITHUB_STEP_SUMMARY
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Social Media Senior Director fehlgeschlagen'
+          ALERT_DESCRIPTION: 'Der wöchentliche Social-Media-Entwurfslauf (social-grow) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-social-media'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-social-failed'
+        run: node scripts/ops-alert-to-jira.mjs

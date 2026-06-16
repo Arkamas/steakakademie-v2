@@ -46,6 +46,7 @@ Kerntemperaturen · Cuts · Technik — präzise & ehrlich
 - **Link in Bio:** https://steakakademie.de/newsletter *(Website-Link im TikTok-Business-Konto aktivieren)*
 - **Konto-Typ:** Business · **Kategorie:** Education
 - **Profilbild:** identisch zu Instagram
+- **Story-Highlights:** Aktiv nutzen — TikTok belohnt Nutzung neuer Funktionen algorithmisch mit mehr Reichweite. Highlights immer benennen (`Cuts` · `Kerntemps` · `Technik` · `Rezepte` · `Tools`), damit Zuschauer den Inhalt sofort erkennen. *(Tipp 16.06.2026)*
 
 ---
 

@@ -46,7 +46,11 @@ const flag = (name, def = undefined) => {
 const FILE      = flag('file')
 const MODEL     = flag('model', 'voyage-3.5')   // 1024 Dimensionen (passt zu vector(1024))
 const DRY_RUN   = !!flag('dry-run', false)
-const BATCH     = 96                            // Voyage-Batchgroesse fuer Embeddings
+// Gratis-Voyage (ohne Zahlungsmethode) drosselt auf 3 RPM / 10K TPM. Daher kleine
+// Batches + Pause zwischen Requests; mit Zahlungsmethode: --batch 96 --throttle-ms 0
+const BATCH       = parseInt(flag('batch', '16'), 10) || 16        // Voyage-Batchgroesse fuer Embeddings
+const THROTTLE_MS = parseInt(flag('throttle-ms', '21000'), 10) || 0 // Pause zwischen Embedding-Requests (≤3 RPM)
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 if (!FILE) {
   console.error('Fehlt: --file <csv>. Beispiel: --file daten/wissen2.csv --source modernist')
@@ -111,7 +115,7 @@ function parseCsv(text) {
 }
 
 // ─── Voyage Embeddings ────────────────────────────────────────────────────────
-async function embedBatch(texts) {
+async function embedBatch(texts, attempt = 0) {
   const res = await fetch('https://api.voyageai.com/v1/embeddings', {
     method: 'POST',
     headers: {
@@ -120,6 +124,16 @@ async function embedBatch(texts) {
     },
     body: JSON.stringify({ input: texts, model: MODEL, input_type: 'document' }),
   })
+  // 429 (Rate-Limit) / 5xx: mit Backoff erneut versuchen (Gratis-Tier: 3 RPM / 10K TPM)
+  if ((res.status === 429 || res.status >= 500) && attempt < 6) {
+    const retryAfter = parseInt(res.headers.get('retry-after') || '', 10)
+    const waitMs = Number.isFinite(retryAfter)
+      ? retryAfter * 1000
+      : Math.min(60000, 15000 * 2 ** attempt)
+    console.log(`  ⏳ Voyage ${res.status} — warte ${Math.round(waitMs / 1000)}s (Versuch ${attempt + 1}/6)`)
+    await sleep(waitMs)
+    return embedBatch(texts, attempt + 1)
+  }
   if (!res.ok) throw new Error(`Voyage ${res.status}: ${await res.text()}`)
   const json = await res.json()
   // Reihenfolge entspricht der Eingabe; nach index sortieren zur Sicherheit
@@ -161,6 +175,7 @@ async function main() {
     const vecs = await embedBatch(slice.map((r) => `${r.titel}\n\n${r.inhalt}`))
     slice.forEach((r, j) => embeddings.set(r.titel_key, vecs[j]))
     console.log(`  Embeddings ${Math.min(i + BATCH, withText.length)}/${withText.length}`)
+    if (THROTTLE_MS > 0 && i + BATCH < withText.length) await sleep(THROTTLE_MS)
   }
 
   // 5. Merge-Upsert: vorhandene (source,titel_key) ergaenzen statt ueberschreiben

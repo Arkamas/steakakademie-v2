@@ -36,12 +36,16 @@
 
 ## Virtuelle AI-Workforce (Rovo-Orchestrator-Ebene)
 
-Mapping der vier Orchestrator-Rollen auf die reale Arbeit — **keine Doppelung** der obigen Automation, sondern Zuständigkeits-Linsen:
+> **Vollständiges Betriebsmodell** (Hierarchie, Prioritäten, Pipeline „wer beginnt, was
+> kommt als Nächstes", RACI je Marketing-Frage): siehe `04-MARKETING-AGENCY-MODEL.md`.
+
+Mapping der Orchestrator-Rollen auf die reale Arbeit — **keine Doppelung** der obigen Automation, sondern Zuständigkeits-Linsen:
 
 | Rolle | Deckt ab | Reale Artefakte |
 |-------|----------|-----------------|
 | Content & Culinary Expert | Pitmaster-Doktrin, Rezepte, Glossar, Lektionen | Agent 11/12, `content/` |
-| SEO & Growth Hacker | Keywords, interne Links, Outreach/Backlinks | KAN-1, KAN-18, KAN-24, Searchfit |
-| **GEO Manager** | KI-Zitierbarkeit (ChatGPT/Perplexity/Gemini), Schema/Entity, **Ganzseiten-Re-Check bei jedem neuen Text** | `docs/geo-manager-agent.md`, `docs/geo-llm-ranking-factors.md` |
+| **SEO Manager** | In Google ranken: Keywords, technisches SEO, Schema, interne Links, Backlinks/Outreach, SERP | KAN-1, KAN-18, KAN-24, Searchfit |
+| **GEO Manager** | KI-Zitierbarkeit (ChatGPT/Perplexity/Gemini), Entity/Wikidata, **Ganzseiten-Re-Check bei jedem neuen Text** | `docs/geo-manager-agent.md`, `scripts/geo-check.mjs` |
+| Social Media Senior Director | Reichweite, Community, Kanäle (Agent 6) | `scripts/social-posts.mjs`, `social-grow.yml` |
 | Tech & Automation Engineer | Code, Supabase, GitHub Actions, Deploy | KAN-6, alle Agenten-Workflows |
 | Brand & UX Designer | „High-Tech & Smoke"-Design, FLUX-Bilder | Design-System, FAL-Pipeline |

@@ -116,7 +116,17 @@ async function main() {
   const admin = createClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } })
 
   await upsert(admin, 'aroma_ingredient', ingredients, 'id')
-  await upsert(admin, 'aroma_compound', compounds, 'id')
+  // Robust: falls die Hub-Spalten (is_hub/hub_role) im Schema noch fehlen,
+  // ohne sie importieren (Hub-Migration später nachziehen, Re-Import übernimmt sie).
+  try {
+    await upsert(admin, 'aroma_compound', compounds, 'id')
+  } catch (e) {
+    if (/is_hub|hub_role|column|schema cache/i.test(e.message)) {
+      console.warn('   ⚠️ Hub-Spalten fehlen im Schema — importiere Moleküle ohne is_hub/hub_role.')
+      const lean = compounds.map(({ is_hub: _h, hub_role: _r, ...rest }) => rest)
+      await upsert(admin, 'aroma_compound', lean, 'id')
+    } else throw e
+  }
   await upsert(admin, 'aroma_ingredient_compound', edges, 'ingredient_id,compound_id')
   console.log('✅ Import abgeschlossen.')
 }

@@ -27,6 +27,7 @@ Volltext, wartet auf spätere Volltext-Lieferung mit gleichem `Titel`).
 | `wissensdatenbank-4.csv`   | `modernist` | Texturen & Kaffee: Viskosität/Verdickungsmittel, Gele/Sphärifikation, Emulsionen, Schäume, Kaffee/Espresso (Kap. 13–18) — mit Volltext |
 | `wissensdatenbank-5.csv`   | `modernist` | Band 5 (Chefgerichte) **komplett, Kap. 19–24** „Fleisch, Geflügel, Fisch, Meeresfrüchte, Eier": übertragbare Techniken/Parameter & Lebensmittel-Wissenschaft (Sous-vide, Activa, BBQ, Fermentation, Schaumteig, Girardet-Methode, Pökeln, Cryogaren …); aus PDF-Rohtext nach 1:1-Atomprinzip extrahiert (keine Einzelrezept-Tabellen); `Quelle = "Band 5: …"` |
 | `foods-oa-1.csv`           | `foods-oa`  | **Open-Access-Aromawissenschaft (CC BY)**: Maillard/Strecker/Lipidoxidation, Aroma-Molekül-Brücken fürs Foodpairing (Pyrazine↔Kaffee/Kakao, 2-Methyl-3-furanthiol↔Thunfisch, 1-Octen-3-ol↔Pilze), Dry-Aging-Leitstoffe, Rinderfett-Aromen. Quellen: MDPI *Molecules*/*Foods* (CC BY 4.0) + öffentlich-freie Aromachemie. **DOI/Quelle steht je Eintrag im `Quelle`-Feld = CC-BY-Attribution.** Nur CC-BY-Paper; **kein** FlavorDB/FooDB/FEMA/VCF (Lizenz). |
+| `foods-oa-2.csv`           | `foods-oa`  | **Fortsetzung — arttypische Aromen & BBQ-Rauch**: Räucherphenole (Guaiacol/Syringol/Eugenol, Kreosot), Lamm (verzweigtkettige Fettsäuren + Skatol, Alterseffekt), Schwein (Ebergeruch: Androstenon/Skatol), Geflügel (2,4-Decadienal, Lactone), Fisch (TMA, (Z)-4-Heptenal, Zitrone-bindet-TMA). Quellen je Eintrag im `Quelle`-Feld (CC-BY-Paper, wo zutreffend, sonst öffentliche Aromachemie). |
 
 `--source` ist nur ein **Namespace für Dedup/Merge**: gleicher `Titel` innerhalb
 derselben `source` ergänzt einen vorhandenen Eintrag (Platzhalter → Volltext),
@@ -45,6 +46,7 @@ node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-4.csv
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-5.csv   --source modernist
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-1.csv   --source mcgee
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/foods-oa-1.csv           --source foods-oa
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/foods-oa-2.csv           --source foods-oa
 # Vorschau ohne API-Calls:
 node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.csv   --source modernist --dry-run
 ```

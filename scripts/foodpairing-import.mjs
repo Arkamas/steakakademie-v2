@@ -88,7 +88,14 @@ async function main() {
     .filter((r) => Number.isFinite(r.id) && r.name)
 
   const compounds = compRows
-    .map(([id, name, cas]) => ({ id: parseInt(id, 10), name, cas: cas || null, pubchem_cid: null }))
+    .map(([id, name, cas, hubRole]) => ({
+      id: parseInt(id, 10),
+      name,
+      cas: cas || null,
+      pubchem_cid: null,
+      hub_role: hubRole && hubRole.trim() ? hubRole.trim() : null,
+      is_hub: !!(hubRole && hubRole.trim()),
+    }))
     .filter((r) => Number.isFinite(r.id) && r.name)
 
   const edges = edgeRows

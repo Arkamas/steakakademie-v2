@@ -65,9 +65,19 @@ Bipartites Graph-Modell — **keine** Embeddings nötig.
 
 ```
 aroma_ingredient (id, name, slug, category)
-aroma_compound   (id, name, cas, pubchem_cid)
-aroma_ingredient_compound (ingredient_id → compound_id)   -- die Kanten
+aroma_compound   (id, name, cas, pubchem_cid, is_hub, hub_role)   -- is_hub = Schaltzentrale
+aroma_ingredient_compound (ingredient_id → compound_id)            -- die Kanten
 ```
+
+### Hub-Ebene (oberste Ebene)
+**`is_hub`** markiert die **Schaltzentralen** — die wenigen Leit-Aromastoffe, an die
+alles andockt (Hub-and-Spoke): Röst-Pyrazine, 2-Methyl-3-furanthiol, 1-Octen-3-ol,
+2-Acetyl-1-pyrrolin, Strecker-Aldehyde, Räucherphenole. `hub_role` beschreibt die Nabe.
+- `aroma_hub_overview()` — RPC: Hubs mit Reichweite (Zutaten-Zahl) + Beispiel-Zutaten.
+- `aroma_ingredient_ohne_hub` — View/Qualitätsregel: Zutaten, die an **keinen** Hub
+  andocken (sollte leer sein → jede Zutat muss an die oberste Ebene andocken).
+- Rezept-Generator (`/api/kochwissen/generieren`): verankert jedes Gericht an den
+  Leit-/Hub-Aromastoffen (Prompt-Regel) → der Hub ist auch bei Rezepten die Spine.
 
 **Pairing = geteilte Moleküle** (Food-Pairing-Prinzip): Die RPC `match_foodpairing(zutat, limit)`
 findet zur Ziel-Zutat alle Partner, sortiert nach Anzahl gemeinsamer Moleküle, plus bis zu

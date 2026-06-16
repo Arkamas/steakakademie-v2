@@ -62,7 +62,7 @@ STABLE
 SET search_path = public
 AS $$
   WITH target AS (
-    SELECT id FROM aroma_ingredient
+    SELECT id, category FROM aroma_ingredient
     WHERE slug = lower(regexp_replace(p_ingredient, '[^a-zA-Z0-9]+', '_', 'g'))
        OR name ILIKE p_ingredient
     ORDER BY (name ILIKE p_ingredient) DESC
@@ -81,6 +81,8 @@ AS $$
   JOIN aroma_compound   c ON c.id = ic.compound_id
   WHERE ic.compound_id IN (SELECT compound_id FROM my_comp)
     AND ic.ingredient_id <> (SELECT id FROM target)
+    -- gleiche Kategorie ausblenden (keine Rind↔Ribeye/Steak/Schwein-Treffer)
+    AND i.category IS DISTINCT FROM (SELECT category FROM target)
   GROUP BY i.name, i.category
   ORDER BY shared DESC, partner
   LIMIT p_limit

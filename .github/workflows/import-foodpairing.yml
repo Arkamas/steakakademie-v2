@@ -9,7 +9,8 @@ name: Foodpairing importieren (Aroma-Netzwerk → Supabase)
 # zur Laufzeit geladen.
 #
 # ⚖️  RECHTLICH: Nur auf ein offenes, kommerziell freigegebenes Dataset zeigen
-#     (z. B. das offen publizierte Flavor-Network, Ahn et al. 2008).
+#     (z. B. das offen publizierte Flavor-Network, Ahn et al. 2011,
+#     DOI 10.1038/srep00196, CC BY 4.0 — Quelle nennen).
 #     "Frei einsehbar" ≠ "frei weiterverbreitbar" — Lizenz vorab prüfen
 #     (siehe docs/foodpairing-steckbrief.md).
 #

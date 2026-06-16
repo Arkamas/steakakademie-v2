@@ -4,7 +4,7 @@
 --
 -- Speichert ein bipartites Zutat<->Aromamolekül-Netzwerk und beantwortet
 -- "Was passt zu X?" über die Zahl GETEILTER Moleküle (Food-Pairing-Prinzip
--- nach Ahn et al. 2008). Quelle-agnostisch: importiert wird ein offenes,
+-- nach Ahn et al. 2011, DOI 10.1038/srep00196). Quelle-agnostisch: importiert wird ein offenes,
 -- kommerziell freigegebenes Dataset (siehe docs/foodpairing-steckbrief.md).
 --
 -- KEINE Embeddings — reines Graph-/Mengen-Modell. Idempotent (re-runnable).

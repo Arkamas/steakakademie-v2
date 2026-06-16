@@ -7,7 +7,8 @@
  * Quelle-agnostisch: erwartet drei TSV/CSV-Dateien im --dir.
  *
  * ⚖️  RECHTLICH: Nur ein offenes, kommerziell freigegebenes Dataset einspielen.
- *     Empfohlen: das offen publizierte Flavor-Network (Ahn et al. 2008).
+ *     Empfohlen: das offen publizierte Flavor-Network (Ahn et al. 2011,
+ *     Sci. Rep. 1:196, DOI 10.1038/srep00196, CC BY 4.0 — Quelle nennen).
  *     "Frei einsehbar" ≠ "frei weiterverbreitbar" — Lizenz vor Live-Gang prüfen
  *     (siehe docs/foodpairing-steckbrief.md). Dieses Skript lädt NICHTS herunter;
  *     die Dateien legst du selbst rechtssicher in data/foodpairing/ ab.

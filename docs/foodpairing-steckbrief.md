@@ -14,7 +14,7 @@ Verifiziert (Stand 2026-06-15). **„Einsehbar" ≠ „weiterverwendbar".** Da s
 
 | Quelle | Lizenz | Nutzung |
 |---|---|---|
-| **Ahn et al. 2008 „Flavor Network"** | offen publiziert, Rohdaten öffentlich | **Basis** des Netzwerks → eigene abgeleitete Tabelle |
+| **Ahn et al. 2011 „Flavor Network"** (Sci. Rep. 1:196, DOI 10.1038/srep00196) | **CC BY 4.0** (Scientific Reports, inkl. Supplementary) → kommerziell mit Attribution | **Basis** des Netzwerks → eigene abgeleitete Tabelle |
 | **PubChem** (NCBI) | Public Domain, freie API | Molekül-Stammdaten (`pubchem_cid`) |
 | **Open Food Facts** | ODbL (Share-alike!) | Zutat-/Produktdaten — **separat** offen halten |
 | **`kochwissen`-DB** | unser Eigentum | Verzahnung mit Technik-/Maillard-Wissen |
@@ -27,6 +27,41 @@ FEMA-GRAS-Liste (Copyright), UC-Davis-Aroma-Wheel (Copyright), FlavorDB & FoodKG
 > (Teile stammen ursprünglich aus Fenaroli's Handbook) und der ODbL-Share-alike-Pflicht.
 > Das Import-Skript ist quelle-agnostisch — wir können jederzeit auf ein anderes
 > freigegebenes Dataset wechseln, ohne Schema/Endpoint zu ändern.
+
+---
+
+## 1b · Bezugsquelle des Aroma-Datasets (Ahn-Flavor-Network)
+
+**Paper / Primärquelle (autoritativ, CC BY 4.0):**
+Ahn, Ahnert, Bagrow, Barabási — *„Flavor network and the principles of food pairing"*,
+**Scientific Reports 1:196 (2011)**, DOI **10.1038/srep00196**.
+→ `nature.com/articles/srep00196` → Abschnitt **Supplementary Information** (CC BY 4.0).
+Datensatz: **1.530 Zutaten × 1.106 Aromamoleküle** (bipartiter Graph).
+
+**Attribution (Pflicht bei CC BY):** „Aromadaten: Ahn et al., Sci. Rep. 1:196 (2011),
+DOI 10.1038/srep00196, CC BY 4.0." — im UI-Footer der Foodpairing-Box hinterlegen.
+
+**Zwei Bezugswege:**
+1. **Nature-Supplementary (sauberste Quelle):** offizielle CC-BY-Datei von nature.com laden.
+   Liegt als **eine** kombinierte Tabelle vor → kleiner Konverter nötig (Aufteilung in
+   `ingr_info` / `comp_info` / `ingr_comp`). *(Ich baue den Konverter, sobald die Datei vorliegt.)*
+2. **GitHub-Mirror (bequem):** Repos wie `lingcheng99/Flavor-Network` oder `Pepton21/flavor-network`
+   spiegeln die Daten — teils bereits in tabellarischer Form. Vor Nutzung Format prüfen und
+   **immer das Paper als Quelle nennen** (der Mirror ist nur Weiterverteilung der CC-BY-Daten).
+
+**Format, das unser Import-Skript erwartet** (`data/foodpairing/`):
+| Datei | Spalten |
+|---|---|
+| `ingr_info.tsv` | `id  name  category` |
+| `comp_info.tsv` | `id  name  CAS` |
+| `ingr_comp.tsv` | `ingredient_id  compound_id` |
+
+**Live schalten:** Dateien in `data/foodpairing/` legen **oder** ihre URLs an den
+Workflow `import-foodpairing.yml` geben → Import nach Supabase → Foodpairing-Box wird echt.
+
+> ⚖️ **Provenienz-Hinweis:** Die zugrunde liegenden Zutat-Molekül-Zuordnungen stammen
+> teils aus *Fenaroli's Handbook* (proprietär). Die CC-BY-Publikation des **abgeleiteten
+> Netzwerks** ist die rechtliche Basis; vor Live-Gang ein kurzer juristischer Blick ist klug.
 
 ---
 

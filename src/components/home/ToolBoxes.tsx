@@ -13,6 +13,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 type Pairing = { partner: string; category: string | null; shared: number; shared_examples: string[] | null };
 
@@ -215,8 +217,10 @@ function RezeptSchmiedeBox() {
       )}
       {hinweis && <p className="mt-3 text-[11px] text-text-muted italic">{hinweis}</p>}
       {ergebnis && (
-        <div className="mt-3 max-h-56 overflow-y-auto rounded-lg border border-border-subtle bg-surface-base p-3 text-xs text-text-primary whitespace-pre-wrap">
-          {ergebnis}
+        <div className="mt-3 max-h-72 overflow-y-auto rounded-lg border border-border-subtle bg-surface-base p-3">
+          <div className="prose prose-sm max-w-none prose-headings:text-text-light prose-headings:font-serif">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{ergebnis}</ReactMarkdown>
+          </div>
         </div>
       )}
     </div>

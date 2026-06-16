@@ -19,9 +19,10 @@ import { searchKochwissen, buildKontext, type Treffer } from '@/lib/kochwissen/r
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-export const maxDuration = 120;
+export const maxDuration = 90;
 
-const MODEL = 'claude-opus-4-8';
+// Im Projekt erprobtes, gültiges API-Modell (wie contentAgent/pm-agent).
+const MODEL = 'claude-sonnet-4-6';
 
 const SYSTEM_PROMPT = `Du bist Rezept- und Content-Autor der Steakakademie.
 Erstelle den gewünschten Inhalt STRENG auf Basis der bereitgestellten Wissenseinträge.

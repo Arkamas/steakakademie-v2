@@ -2,7 +2,7 @@
  * POST /api/foodpairing   (application/json)
  *
  * "Was passt zu X?" — liefert Zutaten, die mit der Eingabe die meisten
- * Aromamoleküle teilen (Food-Pairing-Prinzip nach Ahn et al. 2008).
+ * Aromamoleküle teilen (Food-Pairing-Prinzip nach Ahn et al. 2011).
  * Datenbasis: offenes Aroma-Netzwerk (siehe docs/foodpairing-steckbrief.md),
  * abgefragt über die RPC match_foodpairing (rein server-seitig, service_role).
  *

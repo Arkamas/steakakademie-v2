@@ -23,9 +23,8 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
-// Qualitätssensibel (präzise Technik/Temperatur) → Opus. Für Kosten ggf. auf
-// 'claude-sonnet-4-6' wechseln.
-const MODEL = 'claude-opus-4-8';
+// Im Projekt erprobtes, gültiges API-Modell (wie contentAgent/pm-agent).
+const MODEL = 'claude-sonnet-4-6';
 
 const SYSTEM_PROMPT = `Du bist der Wissens-Assistent der Steakakademie.
 Beantworte die Frage AUSSCHLIESSLICH auf Basis der bereitgestellten Wissenseinträge.

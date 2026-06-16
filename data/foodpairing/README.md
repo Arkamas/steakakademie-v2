@@ -7,7 +7,8 @@ Architektur & Rechtslage: `docs/foodpairing-steckbrief.md`.
 
 > ⚖️ **Nur ein offenes, kommerziell freigegebenes Dataset hier ablegen.**
 > „Frei einsehbar" ≠ „frei weiterverbreitbar". Empfohlen ist das offen publizierte
-> Flavor-Network (Ahn et al. 2008). **VCF, FlavorDB (CC-BY-NC), FoodKG, FEMA-Liste,
+> Flavor-Network (Ahn et al. 2011, Sci. Rep. 1:196, DOI 10.1038/srep00196, CC BY 4.0).
+> **VCF, FlavorDB (CC-BY-NC), FoodKG, FEMA-Liste,
 > Aroma-Wheel** sind hier NICHT zulässig. Diese Dateien sind bewusst **nicht** im
 > Repo eingecheckt — Lizenz vor dem Einspielen klären.
 

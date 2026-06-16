@@ -61,12 +61,21 @@ const jaccard = (a, b) => {
 }
 
 // ─── Voyage-Embedding (fuer den gemergten Eintrag) ────────────────────────────
-async function embed(text) {
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+async function embed(text, attempt = 0) {
   const res = await fetch('https://api.voyageai.com/v1/embeddings', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.VOYAGE_API_KEY}` },
     body: JSON.stringify({ input: [text], model: MODEL, input_type: 'document' }),
   })
+  // 429 (Rate-Limit) / 5xx: mit Backoff erneut versuchen (Gratis-Tier: 3 RPM / 10K TPM)
+  if ((res.status === 429 || res.status >= 500) && attempt < 6) {
+    const retryAfter = parseInt(res.headers.get('retry-after') || '', 10)
+    const waitMs = Number.isFinite(retryAfter) ? retryAfter * 1000 : Math.min(60000, 15000 * 2 ** attempt)
+    console.log(`  ⏳ Voyage ${res.status} — warte ${Math.round(waitMs / 1000)}s (Versuch ${attempt + 1}/6)`)
+    await sleep(waitMs)
+    return embed(text, attempt + 1)
+  }
   if (!res.ok) throw new Error(`Voyage ${res.status}: ${await res.text()}`)
   const json = await res.json()
   return json.data[0].embedding

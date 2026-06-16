@@ -55,7 +55,7 @@ Für den **deutschen Markt** und Perplexity/Gemini können Gewichte abweichen �
 
 - **Heute (manuell/redaktionell):** Der GEO Manager ist als Zuständigkeits-Linse aktiv;
   bei jedem neuen `content/`-Text greift die Ganzseiten-Checkliste oben.
-- **Geplante Automatisierung (Opt-in):** Ein Workflow `geo-check.yml`, der bei Änderungen
-  unter `content/` die Checkliste (interne Links, Entity-Konsistenz, Schema, Wert-Abgleich)
-  automatisiert prüft und einen Report/Issue erzeugt — analog `build-guard.yml`. Noch nicht
-  gebaut; auf Anforderung umsetzbar.
+- **Automatisierung (aktiv):** Workflow `.github/workflows/geo-check.yml` läuft bei jeder
+  Änderung unter `content/` und prüft via `scripts/geo-check.mjs` ALLE Texte (Domain-Effekt):
+  title/Beschreibung (hart), E-E-A-T, Description-Länge, interne Verlinkung, Recipe-Schema.
+  Harte Defekte → CI rot + KAN-Ticket; Warnungen → Report als priorisierter GEO-Backlog.

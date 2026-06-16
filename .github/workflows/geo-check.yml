@@ -1,0 +1,46 @@
+name: GEO-Check
+
+# GEO Manager — Ganzseiten-Re-Check bei jedem neuen Text (docs/geo-manager-agent.md).
+# Läuft bei Änderungen unter content/: prüft ALLE Texte (Domain-Effekt) gegen die
+# GEO-Checkliste (title/Beschreibung, E-E-A-T, Description-Länge, interne Verlinkung,
+# Recipe-Schema). HARTE Defekte → CI rot + KAN-Ticket. Warnungen → Report (Backlog).
+# Hinweis: blockiert NICHT den Deploy (läuft parallel) — Frühwarn-Signal, wie build-guard.
+
+on:
+  push:
+    branches: [main]
+    paths: ['content/**', 'scripts/geo-check.mjs']
+  pull_request:
+    paths: ['content/**', 'scripts/geo-check.mjs']
+  workflow_dispatch:
+
+jobs:
+  geo:
+    name: GEO-Ganzseiten-Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: GEO-Check ausführen
+        run: node scripts/geo-check.mjs
+
+      - name: Bei hartem Defekt → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 GEO-Check: harte GEO-Defekte erkannt'
+          ALERT_DESCRIPTION: 'Der GEO-Check hat harte Defekte gefunden (fehlender title/Beschreibung = kein Entity-/Snippet-Block). Run-Log mit Details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,content,agent-geo-manager'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-geocheck-failed'
+        run: node scripts/ops-alert-to-jira.mjs

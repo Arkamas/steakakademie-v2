@@ -41,6 +41,7 @@ Mapping der vier Orchestrator-Rollen auf die reale Arbeit — **keine Doppelung*
 | Rolle | Deckt ab | Reale Artefakte |
 |-------|----------|-----------------|
 | Content & Culinary Expert | Pitmaster-Doktrin, Rezepte, Glossar, Lektionen | Agent 11/12, `content/` |
-| SEO & Growth Hacker | Keywords, Schema/GEO, interne Links | KAN-1, KAN-18, KAN-24, Searchfit |
+| SEO & Growth Hacker | Keywords, interne Links, Outreach/Backlinks | KAN-1, KAN-18, KAN-24, Searchfit |
+| **GEO Manager** | KI-Zitierbarkeit (ChatGPT/Perplexity/Gemini), Schema/Entity, **Ganzseiten-Re-Check bei jedem neuen Text** | `docs/geo-manager-agent.md`, `docs/geo-llm-ranking-factors.md` |
 | Tech & Automation Engineer | Code, Supabase, GitHub Actions, Deploy | KAN-6, alle Agenten-Workflows |
 | Brand & UX Designer | „High-Tech & Smoke"-Design, FLUX-Bilder | Design-System, FAL-Pipeline |

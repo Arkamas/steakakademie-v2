@@ -1,0 +1,53 @@
+# Kochwissen — Rohdaten (CSV-Lieferungen)
+
+Quell-CSVs für die Wissensdatenbank. Sie sind die **Roh-Lieferungen**; der
+durchsuchbare Index entsteht daraus per `scripts/kochwissen-ingest.mjs`
+(→ Supabase-Tabelle `kochwissen`). Architektur: `docs/wissensdatenbank-architektur.md`.
+
+> Interne Wissensbasis (RAG-Kontext für Claude). Für **öffentliche** Inhalte auf
+> steakakademie.de werden daraus eigene Formulierungen generiert, nicht der 1:1-Text.
+
+## Format
+
+`Titel; Kategorie; Cut/Zutat; Schwierigkeit; Keywords; Quelle-Fundstelle; Inhalt_normalisiert`
+
+Die Inhaltsspalte darf fehlen → reiner **Index-/Platzhalter-Import** (Eintrag ohne
+Volltext, wartet auf spätere Volltext-Lieferung mit gleichem `Titel`).
+
+## Lieferungen & empfohlene `--source`-Namespaces
+
+| Datei | `--source` | Inhalt |
+|---|---|---|
+| `wissensdatenbank-1.csv`   | `mcgee`     | Index mit Seitenzahlen (z. B. „S. 267"), **ohne** Volltext → Platzhalter |
+| `wissensdatenbank-2.csv`   | `modernist` | Garmethoden (Grillen, Braten, Wok, Schmoren, Backen, Frittieren …) mit Volltext |
+| `wissensdatenbank-2.2.csv` | `modernist` | Fortsetzung: Sous-vide, Fonds/Brühen, Geschmack extrahieren — mit Volltext |
+| `wissensdatenbank-2.3.csv` | `modernist` | Fortsetzung: Aromen/Enfleurage, Saftgewinnung, Filtern/Schönen, Konzentrieren — mit Volltext |
+| `wissensdatenbank-2.4.csv` | `modernist` | Fortsetzung: Zerkleinern (Pacojet/Homogenisatoren), Trocknen, Gefriertrocknung, Cryogene/Karbonisieren — mit Volltext |
+| `wissensdatenbank-3.csv`   | `modernist` | Pflanzen als Lebensmittel: Zellwände, Stärke, Enzyme/Reifung, Konservieren, kulinarischer Illusionismus — mit Volltext |
+| `wissensdatenbank-4.csv`   | `modernist` | Texturen & Kaffee: Viskosität/Verdickungsmittel, Gele/Sphärifikation, Emulsionen, Schäume, Kaffee/Espresso (Kap. 13–18) — mit Volltext |
+| `wissensdatenbank-5.csv`   | `modernist` | Band 5 (Chefgerichte) **komplett, Kap. 19–24** „Fleisch, Geflügel, Fisch, Meeresfrüchte, Eier": übertragbare Techniken/Parameter & Lebensmittel-Wissenschaft (Sous-vide, Activa, BBQ, Fermentation, Schaumteig, Girardet-Methode, Pökeln, Cryogaren …); aus PDF-Rohtext nach 1:1-Atomprinzip extrahiert (keine Einzelrezept-Tabellen); `Quelle = "Band 5: …"` |
+| `foods-oa-1.csv`           | `foods-oa`  | **Open-Access-Aromawissenschaft (CC BY)**: Maillard/Strecker/Lipidoxidation, Aroma-Molekül-Brücken fürs Foodpairing (Pyrazine↔Kaffee/Kakao, 2-Methyl-3-furanthiol↔Thunfisch, 1-Octen-3-ol↔Pilze), Dry-Aging-Leitstoffe, Rinderfett-Aromen. Quellen: MDPI *Molecules*/*Foods* (CC BY 4.0) + öffentlich-freie Aromachemie. **DOI/Quelle steht je Eintrag im `Quelle`-Feld = CC-BY-Attribution.** Nur CC-BY-Paper; **kein** FlavorDB/FooDB/FEMA/VCF (Lizenz). |
+
+`--source` ist nur ein **Namespace für Dedup/Merge**: gleicher `Titel` innerhalb
+derselben `source` ergänzt einen vorhandenen Eintrag (Platzhalter → Volltext),
+statt zu duplizieren. Die Labels sind frei wählbar — anpassen, falls die echten
+Bücher abweichen.
+
+## Ingestion
+
+```bash
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.csv   --source modernist
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.2.csv --source modernist
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.3.csv --source modernist
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.4.csv --source modernist
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-3.csv   --source modernist
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-4.csv   --source modernist
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-5.csv   --source modernist
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-1.csv   --source mcgee
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/foods-oa-1.csv           --source foods-oa
+# Vorschau ohne API-Calls:
+node scripts/kochwissen-ingest.mjs --file data/kochwissen/wissensdatenbank-2.csv   --source modernist --dry-run
+```
+
+Voraussetzung: Migration `supabase/migrations/20260615_kochwissen.sql` eingespielt
+und `SUPABASE_SERVICE_ROLE_KEY` + `VOYAGE_API_KEY` in `.env.local`.

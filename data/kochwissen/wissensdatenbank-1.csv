@@ -1,0 +1,108 @@
+Titel; Kategorie; Cut/Zutat; Schwierigkeit; Keywords; Quelle-Fundstelle
+Sous-vide-Garen; Technik; ; ; Sous-vide, Vakuumgaren, Wasserbad; S. 5, S. 40-42
+Spezifische Wärmekapazität; Grundlagen; ; ; Wärmekapazität, Joule, Energie; S. 267
+PID-Regler; Equipment; ; ; PID-Regler, Temperaturkontrolle, Sous-vide; S. 269
+SousVideMagic PID-Regler; Equipment; ; ; SousVideMagic, PID, Reiskocher; S. 269
+Fleischzartmacher Jaccard; Technik; Fleisch; ; Jaccard, Fleischzartmacher, Kontamination; S. 177
+Mikrowellen-Dehydratisierung; Technik; ; ; Mikrowelle, Dehydratisierung, Tomatenpulver; S. 79 (Zeittafel)
+Vakuumkompression; Technik; ; ; Vakuum, Komprimieren, Sous-vide; S. 79 (Zeittafel)
+Hyperdekantieren; Technik; Wein; ; Hyperdekantieren, Wein; S. 79 (Zeittafel)
+Cryopochieren; Technik; ; ; Cryopochieren, flüssiger Stickstoff; S. 79 (Zeittafel)
+Gefrierkonzentration; Technik; ; ; Gefrierkonzentration, Konzentration; S. 304
+Blanchieren; Technik; ; ; Blanchieren, Fleisch, Kontamination; S. 177
+Gramfärbung (Bakterienidentifikation); Glossar; ; ; Gramfärbung, Bakterien, grampositiv, gramnegativ; S. 106
+Infektiöse Dosis (ID50); Glossar; ; ; infektiöse Dosis, ID50, Pathogene; S. 115
+Botulinumtoxin; Glossar; ; ; Botulinumtoxin, Clostridium botulinum, Lebensmittelvergiftung; S. 139-140
+Clostridium perfringens; Glossar; ; ; Clostridium perfringens, Sporen, Gasbrand; S. 110, 141
+Noroviren; Glossar; ; ; Norovirus, Gastroenteritis, Lebensmittelvergiftung; S. 152-153
+Prionen; Glossar; ; ; Prionen, BSE, Rinderwahn, Creutzfeldt-Jakob; S. 156-157
+Anisakiasis (Heringswurmkrankheit); Fleischkunde; Fisch; ; Anisakis, Sushi, Fisch, Parasit; S. 120-121
+Toxoplasma gondii; Glossar; ; ; Toxoplasma, Katzenkot, Schwangerschaft; S. 126-127
+Laktoseintoleranz; Zutaten-Wissenschaft; Milch; ; Laktose, Laktoseintoleranz, Milchzucker; S. 239
+Zöliakie (Glutenunverträglichkeit); Zutaten-Wissenschaft; Gluten, Weizen; ; Zöliakie, Gluten, Unverträglichkeit; S. 239
+Gefahrenzone (Lebensmittelsicherheit); Grundlagen; ; ; Gefahrenzone, Temperatur, Bakterienwachstum; S. 176-177
+6,5D-Reduktion (Salmonellen); Grundlagen; ; ; D-Reduktion, Salmonellen, Pasteurisierung; S. 166, 187
+12D-Reduktion (Konserven); Grundlagen; ; ; 12D-Reduktion, Konserven, Sterilisation; S. 148
+HACCP (Risikoanalyse); Grundlagen; ; ; HACCP, Risikoanalyse, Kontrollpunkt; S. 195
+Händewaschen in der Küche; Technik; ; ; Hygiene, Händewaschen, Desinfektion; S. 196-199
+Desinfektion mit Chlorbleiche; Technik; ; ; Chlorbleiche, Desinfektion, Bleichlösung; S. 202
+Schneidebretter: Holz oder Kunststoff; Equipment; ; ; Schneidebrett, Holz, Kunststoff, Hygiene; S. 202
+Gefrierpunkt von Wasser; Grundlagen; ; ; Gefrierpunkt, Wasser, Eis; S. 298, 302
+Siedepunkt von Wasser; Grundlagen; ; ; Siedepunkt, Wasser, Dampf; S. 298, 302
+Latente Verdampfungswärme; Grundlagen; ; ; Verdampfungswärme, Wasser, Energie; S. 298, 300
+Latente Schmelzwärme (Eis); Grundlagen; ; ; Schmelzwärme, Eis, Wasser; S. 300
+Wasserdampf vs. Nebel; Grundlagen; ; ; Dampf, Nebel, Kondensation; S. 316
+Thermische Abtötungskurve; Grundlagen; ; ; Abtötungskurve, Bakterien, Pasteurisierung; S. 149
+65-°C-Ei (Hervé This); Technik; Ei; ; 65°C-Ei, Hervé This, Ei; S. 79 (Zeittafel)
+Activa (Transglutaminase); Zutaten-Wissenschaft; ; ; Activa, Transglutaminase, Fleischkleber; S. 79 (Zeittafel), S. 256
+Agar-Agar; Zutaten-Wissenschaft; ; ; Agar, Gelier, Algen; S. 256
+Carrageen; Zutaten-Wissenschaft; ; ; Carrageen, Algen, Verdickungsmittel; S. 256
+Alginat; Zutaten-Wissenschaft; ; ; Alginat, Seetang, Sphärifikation; S. 256
+Xanthan; Zutaten-Wissenschaft; ; ; Xanthan, Bakterien, Stabilisator; S. 256
+Gellan; Zutaten-Wissenschaft; ; ; Gellan, Fermentation, Gelier; S. 79, 255
+Pektin; Zutaten-Wissenschaft; ; ; Pektin, Orangenschalen, Geliermittel; S. 256
+Modifizierte Stärke; Zutaten-Wissenschaft; ; ; modifizierte Stärke, Maniok, Verdickungsmittel; S. 256
+Mikrowellengaren (FDA-Vorschrift); Technik; ; ; Mikrowelle, FDA, Kerntemperatur; S. 188
+Sous-vide-Garzeiten-Tabelle; Technik; ; ; Sous-vide, Garzeiten, Tabelle; S. 79 (Zeittafel)
+Anti-Griddle; Equipment; ; ; Anti-Griddle, Gefrieren, Tisch; S. 79 (Zeittafel)
+Pacojet; Equipment; ; ; Pacojet, Püree, Gefrieren; S. 79 (Zeittafel)
+CVap (Controlled Vapor); Equipment; ; ; CVap, Winston Shelton, Dampfgarer; S. 79 (Zeittafel)
+Kombidämpfer; Equipment; ; ; Kombidämpfer, Rational, Dampfbackofen; S. 79 (Zeittafel)
+Rotationsverdampfer; Equipment; ; ; Rotationsverdampfer, Destillation, Aromen; S. 79 (Zeittafel)
+Gefriertrockner; Equipment; ; ; Gefriertrocknung, Pulver, Aromen; S. 79 (Zeittafel)
+Sprühtrockner; Equipment; ; ; Sprühtrocknen, Pulver, Aromen; S. 79 (Zeittafel)
+Zentrifuge (kulinarisch); Equipment; ; ; Zentrifuge, Klärung, Brühe; S. 79 (Zeittafel)
+Umgekehrte Sphärifikation; Technik; ; ; Sphärifikation, Calcium, Alginat; S. 79 (Zeittafel)
+Sphärifikation mit Feststoffen; Technik; ; ; Sphärifikation, Feststoffe, Kugeln; S. 79 (Zeittafel)
+Dekonstruktion (kulinarisch); Technik; ; ; Dekonstruktion, Ferran Adrià, Konzept; S. 37, S. 79
+Microplane-Reibe; Equipment; ; ; Microplane, Reibe, Adrià; S. 36, S. 79
+Herzhafte Espuma (Schaum); Technik; ; ; Espuma, Schaum, Siphon; S. 36, S. 79
+Flüssiggel auf Eibasis; Technik; Ei; ; Flüssiggel, Ei, Gelierung; S. 79 (Zeittafel)
+Sous-vide: Kerntemperatur vs. Außentemperatur (FDA); Grundlagen; ; ; FDA, Steak, Oberflächentemperatur; S. 174
+Empfohlene Kochtemperaturen für Schweinefleisch (Trichinen); Fleischkunde; Schweinefleisch; ; Schweinefleisch, Trichinen, FDA, Kerntemperatur; S. 179
+Empfohlene Kochtemperaturen für Hähnchenfleisch (Salmonellen); Fleischkunde; Hähnchen, Geflügel; ; Hähnchen, Salmonellen, FDA, Kerntemperatur; S. 180-181
+Dampfgaren vs. Kochen; Technik; ; ; Dämpfen, Kochen, Gemüse; S. 317
+Leidenfrost-Phänomen; Grundlagen; ; ; Leidenfrost, Wassertropfen, Dampf; S. 315
+Gaslöslichkeit in Wasser (Temperaturabhängigkeit); Grundlagen; ; ; Gaslöslichkeit, Temperatur, Kohlensäure; S. 333
+Druckwechselgefrieren; Technik; ; ; Druckwechselgefrieren, Unterkühlung, Eiskristalle; S. 307
+Eiskristallwachstum bei langer Lagerung; Grundlagen; ; ; Gefrierbrand, Eiskristalle, Lagerung; S. 305
+Glasumwandlungstemperatur (Tiefkühlung); Grundlagen; ; ; Glasumwandlung, Tiefkühlen, Qualität; S. 305
+Schnellgefriergeräte (Schockfroster); Equipment; ; ; Schockfroster, Schnellkühler, Gastronomie; S. 306
+Flüssiger Stickstoff zum Einfrieren; Technik; ; ; Flüssigstickstoff, Kryokochen, Einfrieren; S. 308-309
+Eis-Salz-Mischung zum Einfrieren; Technik; ; ; Eis, Salz, Gefrierpunkt, Kühlbox; S. 308
+Wasseraktivität (aw-Wert); Grundlagen; ; ; Wasseraktivität, aw-Wert, Haltbarkeit; S. 307
+Haltbarkeit von Sous-vide-Lebensmitteln (FDA); Grundlagen; ; ; Sous-vide, Lagerung, FDA; S. 186, 194
+Gefrierbrand vermeiden; Technik; ; ; Gefrierbrand, Vakuum, Sous-vide; S. 306
+Ranzigwerden von Fetten bei Kälte; Grundlagen; ; ; Oxidation, ranzig, Tiefkühlung; S. 306
+Maillard-Reaktion und HCAs; Grundlagen; Fleisch; ; Maillard-Reaktion, HCA, Krebs; S. 220
+Ballaststoffe und Darmkrebs (wissenschaftlicher Stand); Ernährung; ; ; Ballaststoffe, Darmkrebs, Studie; S. 214-216
+Gesättigte Fette und Herzkrankheit (aktuelle Studien); Ernährung; ; ; gesättigte Fette, Herzkrankheit, Metaanalyse; S. 224, 228
+Transfette (Margarine) als Gesundheitsrisiko; Ernährung; ; ; Transfette, Margarine, Herzkrankheit; S. 228-229
+Salz und Blutdruck (wissenschaftliche Kontroverse); Ernährung; ; ; Salz, Blutdruck, Hypertonie; S. 234-236
+DASH-Diät (Blutdrucksenkung); Ernährung; ; ; DASH-Diät, Blutdruck, Obst, Gemüse; S. 236-237
+Glutamat (MSG) – Sicherheitsbewertung; Zutaten-Wissenschaft; ; ; MSG, Glutamat, Unbedenklichkeit; S. 212
+Mittelmeerdiät; Ernährung; ; ; Mittelmeerdiät, Olivenöl, Mortalität; S. 241
+Weight Watchers – Wirksamkeit; Ernährung; ; ; Weight Watchers, Gewichtsabnahme, Studie; S. 240
+Rohkost-Diät – Risiken; Ernährung; ; ; Rohkost, Mangelernährung, Knochendichte; S. 246-247
+Ökologisch erzeugte Lebensmittel – Nährwert; Ernährung; ; ; Bio, Nährstoffe, Studie; S. 244-245
+Natürliche Toxine in Pflanzen; Zutaten-Wissenschaft; Kartoffel, Bohnen, Rhabarber, Pastinake; ; Toxine, Glykokaloide, Phytohämagglutinin, Oxalsäure; S. 248
+GRAS-Status (Generally Recognized as Safe); Glossar; ; ; GRAS, Lebensmittelzusatzstoffe, Sicherheit; S. 255
+Wasserenthärtung (Ionenaustausch, Umkehrosmose); Technik; ; ; Wasserenthärtung, Ionenaustauscher, Umkehrosmose; S. 335
+Karbonisierung von Getränken (Übersättigung); Grundlagen; ; ; Karbonisierung, CO2, übersättigt; S. 334
+Emulsion (Definition); Grundlagen; ; ; Emulsion, Emulgator, Öl, Wasser; S. 333
+Wärmeübertragungskoeffizient (verschiedene Garmethoden); Grundlagen; ; ; Wärmeübertragung, Konvektion, Garmethode; S. 283
+Strahlungsgesetz (Stefan-Boltzmann); Grundlagen; ; ; Strahlung, Temperatur, Schwarzkörper; S. 285
+Farbe und Temperatur (Glühen von Kochgeschirr); Grundlagen; ; ; Farbtemperatur, glühen, Wok; S. 287
+Verdunstungskühlung (Anpusten von Suppe); Grundlagen; ; ; Verdunstung, Kühlung, Suppe; S. 288
+Kaffee mit Sahne: Abkühlverhalten; Grundlagen; Kaffee, Sahne; ; Kaffee, Sahne, Abkühlung; S. 288
+Oberflächenspannung von Wasser; Grundlagen; ; ; Oberflächenspannung, Wassertropfen; S. 298
+Wasserstoffbrückenbindungen; Grundlagen; ; ; Wasserstoffbrücke, Wassereigenschaften; S. 298
+Klare Eiswürfel herstellen; Technik; ; ; Eiswürfel, klar, Luftblasen; S. 333
+Harte vs. weiche Wasserqualität beim Kochen; Grundlagen; ; ; hartes Wasser, weiches Wasser, Gemüse; S. 334-335
+Mikroskopie in der Lebensmittelwissenschaft; Equipment; ; ; Mikroskop, Bakterien, Forschung; S. 106-107
+pH-Wert und Bakterienwachstum; Grundlagen; ; ; pH-Wert, Bakterien, Wachstum; S. 144-145
+Sporenbildende Bakterien (Clostridium, Bacillus); Glossar; ; ; Sporen, Botulismus, Bacillus cereus; S. 138-140
+Fischkonservierung durch Kühlung (Histamin); Fleischkunde; Fisch; ; Histamin, Skombrotoxismus, Fisch; S. 139
+Fäkale Kontamination als Hauptursache für Lebensmittelkrankheiten; Grundlagen; ; ; Fäkalien, Kontamination, Hygiene; S. 114-116
+Korrekte Lagerung von Eiern (FDA); Grundlagen; Eier; ; Eier, Lagerung, FDA; S. 176
+Mikrowellen-Popcorn-Pudding (Wylie Dufresne); Technik; ; ; Mikrowelle, Pudding, Dufresne; S. 79

@@ -80,3 +80,6 @@ promo-output/
 
 # AGB-Export (one-off-Artefakt)
 Steakakademie-AGB.pdf
+
+# Claude Code lokale Permissions (nicht committen)
+.claude/settings.local.json

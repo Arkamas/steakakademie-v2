@@ -1,0 +1,136 @@
+# Foodpairing-Tool — Technischer Steckbrief
+
+> **Zweck:** „Was passt zu **X**?" — ein interaktiver User-Magnet im Head-Bereich von
+> steakakademie.de (analog zum Cut-Generator), der wissenschaftlich fundierte
+> Aroma-Pairings über **geteilte Aromamoleküle** anzeigt und später den
+> Rezept-Generator füttert.
+
+---
+
+## 1 · Rechtssicherer Quellen-Stack
+
+Verifiziert (Stand 2026-06-15). **„Einsehbar" ≠ „weiterverwendbar".** Da steakakademie.de
+**kommerziell** ist (Affiliate/Shop), fallen alle **NC**-Lizenzen weg.
+
+| Quelle | Lizenz | Nutzung |
+|---|---|---|
+| **Ahn et al. 2008 „Flavor Network"** | offen publiziert, Rohdaten öffentlich | **Basis** des Netzwerks → eigene abgeleitete Tabelle |
+| **PubChem** (NCBI) | Public Domain, freie API | Molekül-Stammdaten (`pubchem_cid`) |
+| **Open Food Facts** | ODbL (Share-alike!) | Zutat-/Produktdaten — **separat** offen halten |
+| **`kochwissen`-DB** | unser Eigentum | Verzahnung mit Technik-/Maillard-Wissen |
+
+**Gesperrt** (nur erwähnen/verlinken, **nie** integrieren): VCF (Abo 1.485 €/J.),
+FEMA-GRAS-Liste (Copyright), UC-Davis-Aroma-Wheel (Copyright), FlavorDB & FoodKG
+(CC-BY-**NC**), Foodpairing.com, The Flavor Bible, Aromyx, Nielsen-Massey, ChefSteps.
+
+> ⚖️ **Vor Live-Gang:** Kurze juristische Prüfung der Ahn-Daten-Nachnutzung
+> (Teile stammen ursprünglich aus Fenaroli's Handbook) und der ODbL-Share-alike-Pflicht.
+> Das Import-Skript ist quelle-agnostisch — wir können jederzeit auf ein anderes
+> freigegebenes Dataset wechseln, ohne Schema/Endpoint zu ändern.
+
+---
+
+## 2 · Datenmodell  (`supabase/migrations/20260615_aroma_pairings.sql`)
+
+Bipartites Graph-Modell — **keine** Embeddings nötig.
+
+```
+aroma_ingredient (id, name, slug, category)
+aroma_compound   (id, name, cas, pubchem_cid)
+aroma_ingredient_compound (ingredient_id → compound_id)   -- die Kanten
+```
+
+**Pairing = geteilte Moleküle** (Food-Pairing-Prinzip): Die RPC `match_foodpairing(zutat, limit)`
+findet zur Ziel-Zutat alle Partner, sortiert nach Anzahl gemeinsamer Moleküle, plus bis zu
+3 Beispielmoleküle für die Erklärung. On-the-fly (kein Vorberechnen aller ~1530² Paare).
+
+RLS: nur `service_role` (Zugriff ausschließlich server-seitig, wie bei `kochwissen`).
+
+---
+
+## 3 · Ablauf
+
+```
+User tippt "Ribeye"
+      │
+      ▼
+POST /api/foodpairing  { zutat: "Ribeye", limit: 20 }
+      │  (admin client, service_role)
+      ▼
+RPC match_foodpairing  → Partner nach geteilten Molekülen
+      │
+      ▼
+{ zutat, treffer: [ { partner:"Kakao", shared:7, shared_examples:[...] }, … ] }
+```
+
+**Import** (einmalig / bei Daten-Update):
+```bash
+# Dateien rechtssicher in data/foodpairing/ ablegen (ingr_info / comp_info / ingr_comp)
+node scripts/foodpairing-import.mjs --dir data/foodpairing            # → Supabase
+node scripts/foodpairing-import.mjs --dir data/foodpairing --dry-run  # Vorschau
+```
+
+---
+
+## 4 · Endpoint-Vertrag
+
+`POST /api/foodpairing`
+
+| Feld | Typ | |
+|---|---|---|
+| `zutat` | string | **Pflicht** |
+| `limit` | int 1–50 | optional, Default 20 |
+
+Antwort `200`: `{ zutat, treffer: [{ partner, category, shared, shared_examples }] }`
+· `404` wenn Zutat nicht im Netzwerk · `400` ungültige Eingabe · `502` RPC-Fehler.
+
+---
+
+## 5 · UI — Head-Box (Skizze)
+
+```
+┌───────────────────────────────────────────┐
+│  🧪  FOODPAIRING                           │
+│  „Was passt zu …?"                         │
+│  ┌─────────────────────────┐  [ Finden ]   │
+│  │ Ribeye                  │               │
+│  └─────────────────────────┘               │
+│                                            │
+│  Top-Treffer für Ribeye:                   │
+│  ● Kakao        ▓▓▓▓▓▓▓  7 Moleküle        │
+│  ● Röstzwiebel  ▓▓▓▓▓    5                 │
+│  ● Butter       ▓▓▓▓     4                 │
+│    └ teilen u.a. 4-Methylpentansäure …     │
+│                                            │
+│  [ → Rezept daraus erstellen ]  ⭐⭐        │
+└───────────────────────────────────────────┘
+```
+
+Drei Head-Boxen gesamt: 🔥 Cut-Generator · 🧪 Foodpairing · 🍳 Rezept-Schmiede.
+
+---
+
+## 6 · Verzahnung mit dem Rezept-Generator (der Burggraben)
+
+Der Knopf **„→ Rezept daraus erstellen"** reicht die Brücken-Zutat an
+`POST /api/kochwissen/generieren` weiter — inkl. **⭐-Niveau**:
+
+```
+Foodpairing (Aroma)  →  Brücken-Zutat Z
+        └──────────────►  generieren { auftrag:"Ribeye mit Z", niveau:2 }
+                          → technisch korrektes Rezept, geerdet in kochwissen
+```
+
+Das kann kein Wettbewerber mit reiner Aromadatenbank nachbauen — uns fehlt die
+Technik-Ebene (`kochwissen`) **nicht**.
+
+---
+
+## 7 · Offene To-dos vor Live
+
+- [ ] Migration `20260615_aroma_pairings.sql` in Supabase einspielen
+- [ ] Freigegebenes Dataset in `data/foodpairing/` ablegen + `foodpairing-import.mjs` laufen lassen
+- [ ] `pubchem_cid` optional anreichern (PubChem-API, public domain)
+- [ ] Juristischer Kurz-Check (Ahn-Nachnutzung, ODbL-Share-alike)
+- [ ] Head-Box-Komponente + „→ Rezept"-Verkettung im Frontend
+- [ ] Optional: CI-Workflow `import-foodpairing.yml` (analog `ingest-kochwissen.yml`)

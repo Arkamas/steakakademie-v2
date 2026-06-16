@@ -31,6 +31,7 @@ Regeln:
 - Erfinde keine Temperaturen, Zeiten oder Mengen. Fehlt ein nötiger Wert, schreibe "(zu prüfen)".
 - Übernimm Zahlenwerte (Temperaturen, Zeiten) wörtlich aus den Einträgen.
 - Schreibe in der Markenstimme der Steakakademie: fachkundig, präzise, praxisnah, auf Deutsch.
+- Verankere das Gericht an den Leit-/Hub-Aromastoffen (Röst-Pyrazine, 2-Methyl-3-furanthiol, 1-Octen-3-ol, 2-Acetyl-1-pyrrolin, Strecker-Aldehyde, Räucherphenole): nenne kurz, auf welchen es aufbaut und warum die Kombination harmoniert — sofern die Einträge das belegen.
 - Nenne am Ende einen Abschnitt "Quellen" mit den genutzten "Quelle-Fundstelle"-Angaben.
 
 Bei art="rezept": Struktur = Titel, kurze Einleitung, Zutaten (Liste), Zubereitung (nummerierte Schritte), Profi-Tipps.

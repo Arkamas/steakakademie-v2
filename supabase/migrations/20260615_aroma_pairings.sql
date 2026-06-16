@@ -20,13 +20,21 @@ CREATE TABLE IF NOT EXISTS aroma_ingredient (
 );
 CREATE UNIQUE INDEX IF NOT EXISTS aroma_ingredient_slug_idx ON aroma_ingredient (slug);
 
--- Aromamoleküle (cas/pubchem_cid als Anker auf öffentliche Stammdaten, z.B. PubChem)
+-- Aromamoleküle. is_hub = "Schaltzentrale" (Hub-Aromastoff = oberste Ebene, an die
+-- alles andockt); hub_role beschreibt die Nabe. cas/pubchem_cid = Anker auf
+-- öffentliche Stammdaten (z.B. PubChem).
 CREATE TABLE IF NOT EXISTS aroma_compound (
   id           integer PRIMARY KEY,
   name         text NOT NULL,
   cas          text,
-  pubchem_cid  text
+  pubchem_cid  text,
+  is_hub       boolean NOT NULL DEFAULT false,
+  hub_role     text
 );
+-- Spalten nachziehen, falls Tabelle schon existierte
+ALTER TABLE aroma_compound ADD COLUMN IF NOT EXISTS is_hub   boolean NOT NULL DEFAULT false;
+ALTER TABLE aroma_compound ADD COLUMN IF NOT EXISTS hub_role text;
+CREATE INDEX IF NOT EXISTS aroma_compound_hub_idx ON aroma_compound (is_hub) WHERE is_hub;
 
 -- Bipartite Kante: Zutat enthält Molekül
 CREATE TABLE IF NOT EXISTS aroma_ingredient_compound (
@@ -78,6 +86,38 @@ AS $$
   LIMIT p_limit
 $$;
 
+-- ── 2b. Hub-Ebene (Schaltzentralen / oberste Ebene) ─────────
+-- Übersicht der Hub-Aromastoffe mit Reichweite (Anzahl andockender Zutaten) und
+-- Beispiel-Zutaten. Das ist die "oberste Ebene", an die jede Zutat/jedes Rezept andockt.
+CREATE OR REPLACE FUNCTION aroma_hub_overview()
+RETURNS TABLE (
+  hub        text,
+  hub_role   text,
+  zutaten    int,
+  beispiele  text[]
+)
+LANGUAGE sql STABLE SET search_path = public AS $$
+  SELECT c.name, c.hub_role,
+         count(ic.ingredient_id)::int AS zutaten,
+         (array_agg(i.name ORDER BY i.name))[1:5] AS beispiele
+  FROM aroma_compound c
+  LEFT JOIN aroma_ingredient_compound ic ON ic.compound_id = c.id
+  LEFT JOIN aroma_ingredient i ON i.id = ic.ingredient_id
+  WHERE c.is_hub
+  GROUP BY c.name, c.hub_role
+  ORDER BY zutaten DESC
+$$;
+
+-- Qualitätsregel: Zutaten, die an KEINEN Hub-Aromastoff andocken (sollte leer sein).
+CREATE OR REPLACE VIEW aroma_ingredient_ohne_hub AS
+  SELECT i.id, i.name, i.category
+  FROM aroma_ingredient i
+  WHERE NOT EXISTS (
+    SELECT 1 FROM aroma_ingredient_compound ic
+    JOIN aroma_compound c ON c.id = ic.compound_id
+    WHERE ic.ingredient_id = i.id AND c.is_hub
+  );
+
 -- ── 3. RLS — Zugriff ausschließlich server-seitig (service_role) ──
 ALTER TABLE aroma_ingredient          ENABLE ROW LEVEL SECURITY;
 ALTER TABLE aroma_compound            ENABLE ROW LEVEL SECURITY;
@@ -97,3 +137,5 @@ CREATE POLICY "service_role_all_aroma_ic"
 
 REVOKE ALL ON FUNCTION match_foodpairing(text, int) FROM public, anon, authenticated;
 GRANT EXECUTE ON FUNCTION match_foodpairing(text, int) TO service_role;
+REVOKE ALL ON FUNCTION aroma_hub_overview() FROM public, anon, authenticated;
+GRANT EXECUTE ON FUNCTION aroma_hub_overview() TO service_role;

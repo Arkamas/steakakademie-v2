@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -55,17 +56,30 @@ export default function CutGeneratorPage() {
               <ChevronRight size={12} />
               <span className="text-text-light/65">Cut-Generator</span>
             </nav>
-            <div className="max-w-2xl">
-              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Steakakademie · Cut-Generator
-              </span>
-              <h1 className="font-serif text-4xl lg:text-5xl font-bold text-text-light leading-tight mb-4">
-                Welcher Cut passt zu dir?
-              </h1>
-              <p className="font-body text-lg text-text-light/70 leading-relaxed">
-                Vier Fragen — ein perfekter Cut. Inklusive Cut-DNA, passendem Rezept und Bezugsquelle.
-                Dein Ergebnis kannst du teilen.
-              </p>
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div className="max-w-2xl">
+                <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
+                  Steakakademie · Cut-Generator
+                </span>
+                <h1 className="font-serif text-4xl lg:text-5xl font-bold text-text-light leading-tight mb-4">
+                  Welcher Cut passt zu dir?
+                </h1>
+                <p className="font-body text-lg text-text-light/70 leading-relaxed">
+                  Vier Fragen — ein perfekter Cut. Inklusive Cut-DNA, passendem Rezept und Bezugsquelle.
+                  Dein Ergebnis kannst du teilen.
+                </p>
+              </div>
+              <div className="relative">
+                <Image
+                  src="/images/cut-atlas-stier.jpg"
+                  alt="Kräftiger schwarzer Stier in Glut-Atmosphäre — Wahrzeichen des Steakakademie Cut-Generators"
+                  width={1264}
+                  height={842}
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="w-full h-auto rounded-lg ring-1 ring-brand-gold/15 shadow-2xl shadow-black/40"
+                />
+              </div>
             </div>
           </div>
         </section>

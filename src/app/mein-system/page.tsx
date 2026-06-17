@@ -55,7 +55,9 @@ const SAULEN = [
     href:        '/agentur-killer-sprint',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
-    checkoutUrl: 'https://www.digistore24.com/product/695900' as string | null,
+    // 695900 steht laut Reaktivierungs-Checkliste auf „In Vorbereitung" (kein Kurs/DB-Mapping
+    // → würde kassieren ohne Auslieferung). Checkout AUS bis Substanz + Testkauf verifiziert.
+    checkoutUrl: null as string | null,
   },
 ] as const;
 

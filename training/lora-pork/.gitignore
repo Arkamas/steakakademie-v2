@@ -1,8 +1,4 @@
-# Trainingsbilder gehören NICHT ins Repo/Deploy — nur die README wird versioniert.
-*.jpg
-*.jpeg
-*.png
-*.webp
-*.avif
+# Diese Bilder sind TRAININGSQUELLE (rechtefrei, aber NICHT oeffentlich):
+# sie liegen ausserhalb public/ -> werden nie auf der Website ausgeliefert,
+# aber versioniert, damit die GitHub-Action sie sieht. Nur Zips ignorieren.
 *.zip
-dataset/

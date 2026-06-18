@@ -13,3 +13,4 @@ freigestellt und farblich an den Atlas-Stil angepasst.
 | denver | Denver Cut | sergey-kotenev | ZKv9WGWMOLk |
 | onglet | Onglet / Nierenzapfen (Hanging Tender) | sergey-kotenev | U2hp6Im0ZSg |
 | filet | Rinderfilet + Filet-Kopf | david-foodphototasty | U5lLwx17rWs |
+| ribeye | Ribeye (boneless) | jakob-trost | SckH8spaAtk |

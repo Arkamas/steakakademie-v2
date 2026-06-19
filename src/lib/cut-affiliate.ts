@@ -10,7 +10,7 @@
 
 import type { Cut } from './cuts-catalog';
 
-const AMAZON_TAG = 'steakakademie-21';
+export const AMAZON_TAG = 'steakakademie-21';
 
 type PartnerStatus = 'planned' | 'active';
 

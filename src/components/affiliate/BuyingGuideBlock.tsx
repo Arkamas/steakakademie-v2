@@ -74,15 +74,20 @@ export default function BuyingGuideBlock({
                 : `${product.price} €`}
             </span>
 
-            <Link
-              href={affiliateHref}
-              className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-sm font-bold tracking-wide px-5 py-2.5 hover:bg-[#d4891a] transition-colors self-start sm:self-auto plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-              rel="nofollow noopener"
-              target="_blank"
-            >
-              <ExternalLink size={14} />
-              Zum Shop →
-            </Link>
+            <div className="flex flex-col items-start gap-1 self-start sm:self-auto">
+              <span className="text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted">
+                Anzeige
+              </span>
+              <Link
+                href={affiliateHref}
+                className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-sm font-bold tracking-wide px-5 py-2.5 hover:bg-[#d4891a] transition-colors plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
+                rel="nofollow noopener"
+                target="_blank"
+              >
+                <ExternalLink size={14} />
+                Zum Shop →
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -276,7 +276,7 @@ export default function AgbPage() {
             </section>
 
             <section id="community" className="scroll-mt-24">
-              <h2 className={h2Class}>§ 13 Community-Rezepte &amp; nutzergenerierte Inhalte</h2>
+              <h2 className={h2Class}>§ 12 Community-Rezepte &amp; nutzergenerierte Inhalte</h2>
               <p className="mb-3">
                 Eingeloggte Nutzer können eigene Rezepte einreichen, die nach automatisierter
                 Prüfung auf steakakademie.de veröffentlicht werden können. Für diese Inhalte gilt:
@@ -330,7 +330,7 @@ export default function AgbPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 14 Anwendbares Recht</h2>
+              <h2 className={h2Class}>§ 13 Anwendbares Recht</h2>
               <p>
                 Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand ist
                 Wuppertal, sofern du Kaufmann oder juristische Person des öffentlichen

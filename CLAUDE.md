@@ -94,3 +94,12 @@ Analytics & Data · CRM & Monetization.
 - **Was NICHT in Git lebt** (Supabase-DB, Account-Zugänge), muss separat gesichert werden
   (Supabase-Backups, 2FA + Recovery-Codes offline, lokale Repo-Kopie).
 - Confluence-Spiegel `docs/confluence/` für die menschliche Übersicht aktuell halten.
+
+### Zwei-Dateien-Gedächtnis (Uwe, 25.06.2026)
+- **`CLAUDE.md` = REGELN** (Strategie, Doktrin, Was-gilt) — bewusst gepflegt.
+- **`memory.md` = LERN-ERKENNTNISSE** — was Claude beim Problemlösen lernt; nach jeder Session
+  automatisch ergänzt (Stop-Hook, Haiku-Synthese aus claude-mem). Committet + gepusht = dauerhaft.
+  Repo-Backup des Hooks: `scripts/gf3-lesson.cjs` (aktiv läuft die Kopie in `~/.claude/scripts/`).
+- Transkript-Aufbewahrung auf **3650 Tage** erhöht (war Default 30 → frühe Tage wären gelöscht worden).
+
+@memory.md

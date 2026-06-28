@@ -8,10 +8,12 @@ import ArticleCard from '@/components/article/ArticleCard';
 import ProductCard from '@/components/affiliate/ProductCard';
 import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
 import PlattformPuls from '@/components/home/PlattformPuls';
+import FrischSaisonal from '@/components/home/FrischSaisonal';
 import ToolBoxes from '@/components/home/ToolBoxes';
 import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
 import { getRecommendedProducts } from '@/lib/products';
 import { getPlattformPuls } from '@/lib/plattform-puls';
+import { getFrischSaisonal } from '@/lib/frisch-saisonal';
 import { getNewsItems } from '@/lib/bbq-news';
 import type { ArticleMeta } from '@/types';
 
@@ -136,6 +138,7 @@ export default async function HomePage() {
 
   // Plattform-Puls: echte, automatisch wachsende Content-Zahlen + frisch dazugekommene Inhalte
   const puls = getPlattformPuls();
+  const frischSaisonal = getFrischSaisonal();
 
   // BBQ-News-Teaser aus derselben Quelle wie /bbq-news (kein hardcoded Drift)
   const news        = await getNewsItems();
@@ -229,6 +232,9 @@ export default async function HomePage() {
 
         {/* ── PLATTFORM-PULS — lebendige, wachsende Wissensbasis ───────────── */}
         <PlattformPuls data={puls} />
+
+        {/* ── FRISCH & SAISONAL — rotierendes Spotlight (Bewegung/Leben) ────── */}
+        <FrischSaisonal data={frischSaisonal} />
 
         {/* ── MANIFESTO — Dunkle Ember-Karte ──────────────────────────────── */}
         <section className="py-8 sm:py-12">
@@ -467,18 +473,4 @@ export default async function HomePage() {
                 { stat: '100%', label: 'Affiliate-transparent' },
                 { stat: '2026', label: 'Inhalte aktuell' },
               ].map(({ stat, label }) => (
-                <div key={label}>
-                  <p className="stat-number">{stat}</p>
-                  <p className="text-xs font-sans text-text-muted mt-2 tracking-wide">{label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-      </main>
-
-      <Footer />
-    </>
-  );
-}
+           

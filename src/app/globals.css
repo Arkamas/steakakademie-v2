@@ -44,6 +44,20 @@
 /* Callout-Hervorhebungen folgen der Theme-Variable (dunkel/hell adaptiv) */
 .callout-body strong { color: var(--callout-strong); font-weight: 700; }
 
+/* Token-basierte Komponenten (z. B. Affiliate-Boxen) im hellen Lese-Layer
+   aufhellen. Greift NUR innerhalb .reading-light — dunkle Seiten bleiben
+   unveraendert. Der orange CTA-Button (.btn-affiliate / bg-brand-fire) bleibt
+   bewusst kraeftig. */
+.reading-light .bg-surface-card,
+.reading-light .bg-surface-elevated { background-color: #FFFFFF !important; }
+.reading-light .bg-surface-base     { background-color: #F4ECDF !important; }
+.reading-light .border-border-subtle { border-color: #E3D7C2 !important; }
+.reading-light .text-text-primary   { color: #1C140D !important; }
+.reading-light .text-text-secondary { color: #4A3C2E !important; }
+.reading-light .text-text-muted     { color: #6B5A48 !important; }
+.reading-light .fill-border-subtle  { fill:  #D8C7AE !important; }
+.reading-light .text-border-subtle  { color: #D8C7AE !important; }
+
 /* Fallback-Farbe für Crawler & Old Browsers */
 html {
   -webkit-font-smoothing: antialiased;
@@ -225,25 +239,4 @@ body::before {
 /* ── AD PLACEHOLDER ──────────────────────────────────────────────────── */
 
 .ad-placeholder {
-  @apply flex items-center justify-center text-xs font-sans tracking-widest uppercase;
-  background: rgba(200, 136, 42, 0.04);
-  color: rgba(200, 136, 42, 0.4);
-  border: 1px solid rgba(200, 136, 42, 0.1);
-}
-
-/* ── SCHARFE NAV-SCHRIFT (kein Anti-Alias-Schleier auf dunkel) ──────── */
-
-nav a, header button, .nav-sharp {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-/* ── SELECTION ───────────────────────────────────────────────────────── */
-
-::selection {
-  background-color: rgba(200, 136, 42, 0.28);
-  color: #F0E8D8;
-}
-
-/* ── FOCUS ──────────────────────────────────────────────────────�
+  @apply flex items-center justify-center text-xs font-sans tr

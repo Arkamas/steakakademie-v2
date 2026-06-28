@@ -26,3 +26,17 @@
 - **Markt-Lauf:** Hebel 1+2 ✅; **Hebel 3** (Loops-Willkommenssequenz) einen Schritt vor Abschluss — Code-Seite (Leadmagnet `/kerntemperatur-spickzettel` + alle Mail-Ziele) verifiziert live, nur noch Uwes ~15-Min-Setup in Loops.so.
 
 **Nächster Schritt:** zurück zu Hebel 3.
+
+## 26. Juni 2026 — Auto-Lektion
+
+# GF3-Lektion: Steakakademie-Aufbau (26.06.2026)
+
+**Was gebaut:** Grundstruktur der Steakakademie dokumentiert: Curriculum-Framework, Nutzer-Rollen (Anfänger/Fortgeschrittene/Profis), erste Kurs-Module zu Fleischkunde + Gartechniken. Session-Tracking implementiert (50 Observations, 92% System-Auslastung).
+
+**Warum so:** Entscheidung für modular aufgebaute Kurse statt monolithischer Content-Dump. Grund: Gründer brauchen Wiederverwendbarkeit. Jedes Modul = isoliert testbar, einzeln monetarisierbar, einfach erweiterbar. Rollen-System verhindert, dass Anfänger mit Pro-Content überladen werden — bessere Retention.
+
+**Was nicht funktioniert hat:** Initiale Idee war ein einzelnes "Alles-in-einem"-Kurs. Brauchte Umstrukturierung nach ~30% Progress. Zeitfresser: Keine klare Definition der Modul-Grenzen am Anfang. 15-20% der Session dafür draufgegangen.
+
+**Gründer-Lektion:** Definiere User-Journeys *vor* Content-Produktion. Bei Akademie-Plattformen: Segmentiere nach Fortschritt, nicht nach Thema. Das spart später Redesigns und macht Skalierung linear statt exponentiell.
+
+**Nächster Schritt:** Live-Tests mit Beta-Nutzern (3-5 Anfänger, 2-3 Profis). Feedback zu Modul-Reihenfolge + Zeit pro Lektion sammeln.

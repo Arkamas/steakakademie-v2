@@ -21,7 +21,28 @@
   --page-bg-center:     #2D2218;
   --page-bg-edge:       #120C07;
   --surface-editorial:  #1E1410;
+
+  /* Callout-Textfarben — Dunkel-Defaults (unverändert auf dunklen Seiten).
+     Werden innerhalb von .reading-light auf dunkle Schrift umgeschaltet. */
+  --callout-text:       #C4A882;
+  --callout-strong:     #E6D5C3;
 }
+
+/* ── HELLER LESE-LAYER ───────────────────────────────────────────────────────
+   Warme „Pergament"-Lesefläche für Inhalts-Bodys (Grilltechniken, später
+   Rezepte/Artikel). Hält den dunklen Marken-Rahmen (Hero/Header/Footer), gibt
+   aber dem eigentlichen Text Luft und lässt Food-Bilder leuchten. */
+.reading-light {
+  background: linear-gradient(180deg, #FBF7F0 0%, #F4ECDF 100%);
+  color: #2A211A;
+  /* Callouts in diesem Layer: dunkle, kontraststarke Schrift */
+  --callout-text:   #5B4A3A;
+  --callout-strong: #241A12;
+}
+.reading-light ::selection { background: rgba(232, 80, 24, 0.18); }
+
+/* Callout-Hervorhebungen folgen der Theme-Variable (dunkel/hell adaptiv) */
+.callout-body strong { color: var(--callout-strong); font-weight: 700; }
 
 /* Fallback-Farbe für Crawler & Old Browsers */
 html {
@@ -230,43 +251,4 @@ nav a, header button, .nav-sharp {
   outline-offset: 3px;
 }
 
-/* ── HERO FULL-BLEED — atmosphärischer 60-80vh Page-Hero ────────────── */
-
-.hero-fullbleed {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-.hero-fullbleed-image {
-  filter: brightness(0.52) contrast(1.07) saturate(0.72);
-}
-.hero-fullbleed-overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(23,16,11,0.15) 0%,
-      rgba(23,16,11,0.38) 35%,
-      rgba(23,16,11,0.78) 68%,
-      rgba(23,16,11,0.97) 88%,
-      #17100B 100%
-    );
-  pointer-events: none;
-}
-.hero-fullbleed-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
-/* ── SCROLLBAR ───────────────────────────────────────────────────────── */
-
-@media (min-width: 768px) {
-  ::-webkit-scrollbar        { width: 8px; }
-  ::-webkit-scrollbar-track  { background: #120C07; }
-  ::-webkit-scrollbar-thumb  { background: #3D2210; border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: #5A3A18; }
-}
+/* ── HERO FULL-BLEED — atmosphärischer 60-80vh Page-H

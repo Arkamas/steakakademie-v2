@@ -109,7 +109,7 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
                       />
                       <div
                         className="absolute inset-0"
-                        style={{ background: 'linear-gradient(180deg, rgba(15,10,6,0) 35%, rgba(15,10,6,0.92) 100%)' }}
+                        style={{ background: 'linear-gradient(180deg, rgba(15,10,6,0) 50%, rgba(15,10,6,0.55) 100%)' }}
                       />
                       {/* Badge oben links */}
                       <span

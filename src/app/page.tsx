@@ -151,8 +151,14 @@ export default async function HomePage() {
 
       <main>
 
-        {/* ── VALUE-PROP-BAND — Need + Identität (Marketing-Feedback M. Kraemer, 04.06.2026) ── */}
-        <section className="bg-surface-dark border-b border-brand-gold/15">
+        {/* ── VALUE-PROP-BAND — erster Eindruck: warme Glut statt flachem Schwarz ── */}
+        <section
+          className="border-b border-brand-gold/15"
+          style={{
+            background:
+              'radial-gradient(125% 105% at 50% 118%, rgba(232,80,24,0.34) 0%, rgba(232,80,24,0.10) 38%, rgba(200,136,42,0.05) 58%, transparent 72%), linear-gradient(180deg, #20130A 0%, #130C07 100%)',
+          }}
+        >
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-14 text-center">
             <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.22em] uppercase text-brand-fire mb-4">
               <Flame size={12} /> Die methodisch tiefste BBQ-Plattform auf Deutsch
@@ -469,8 +475,4 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
                 { stat: '200+', label: 'Cuts analysiert' },
-                { stat: '8',    label: 'Thermometer selbst getestet' },
-                { stat: '100%', label: 'Affiliate-transparent' },
-                { stat: '2026', label: 'Inhalte aktuell' },
-              ].map(({ stat, label }) => (
-           
+   

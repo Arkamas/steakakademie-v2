@@ -33,7 +33,9 @@
    Rezepte/Artikel). Hält den dunklen Marken-Rahmen (Hero/Header/Footer), gibt
    aber dem eigentlichen Text Luft und lässt Food-Bilder leuchten. */
 .reading-light {
-  background: linear-gradient(180deg, #FBF7F0 0%, #F4ECDF 100%);
+  /* Warmes „gealtertes Pergament" statt klinischem Weiss — harmoniert mit dem
+     dunklen Ember-Marken-Rahmen, wirkt nicht als Fremdkoerper. */
+  background: linear-gradient(180deg, #F1E5CC 0%, #E9DABC 100%);
   color: #2A211A;
   /* Callouts in diesem Layer: dunkle, kontraststarke Schrift */
   --callout-text:   #5B4A3A;
@@ -49,8 +51,8 @@
    unveraendert. Der orange CTA-Button (.btn-affiliate / bg-brand-fire) bleibt
    bewusst kraeftig. */
 .reading-light .bg-surface-card,
-.reading-light .bg-surface-elevated { background-color: #FFFFFF !important; }
-.reading-light .bg-surface-base     { background-color: #F4ECDF !important; }
+.reading-light .bg-surface-elevated { background-color: #FBF5E6 !important; }
+.reading-light .bg-surface-base     { background-color: #EEE0C6 !important; }
 .reading-light .border-border-subtle { border-color: #E3D7C2 !important; }
 .reading-light .text-text-primary   { color: #1C140D !important; }
 .reading-light .text-text-secondary { color: #4A3C2E !important; }
@@ -236,7 +238,4 @@ body::before {
   line-height: 1;
 }
 
-/* ── AD PLACEHOLDER ──────────────────────────────────────────────────── */
-
-.ad-placeholder {
-  @apply flex items-center justify-center text-xs font-sans tr
+/* ── AD PLACEHOLDER ──────────────────────────────�

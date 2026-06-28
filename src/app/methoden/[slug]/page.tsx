@@ -211,7 +211,7 @@ export default function MethodePage({ params }: Props) {
                   <EquipmentFooter title={zones.footer.title} productIds={zones.footer.productIds} />
                 )}
 
-                <div className="mt-10 p-5 bg-white border border-[#E3D7C2] rounded-md flex gap-4 shadow-sm">
+                <div className="mt-10 p-5 bg-[#FBF5E6] border border-[#E3D7C2] rounded-md flex gap-4 shadow-sm">
                   <div className="w-14 h-14 bg-[#EDE3D2] rounded-full shrink-0" />
                   <div>
                     <Link href={`/autoren/${methode.authorSlug}`} className="font-sans font-bold text-sm text-[#1C140D] hover:text-brand-fire transition-colors">
@@ -229,7 +229,7 @@ export default function MethodePage({ params }: Props) {
                   <HeroRecommendation productId={zones.hero.productId} pitch={zones.hero.pitch} />
                 )}
 
-                <div className="bg-white border border-[#E3D7C2] rounded-md p-5 shadow-sm">
+                <div className="bg-[#FBF5E6] border border-[#E3D7C2] rounded-md p-5 shadow-sm">
                   <div className="border-t-2 border-brand-fire -mt-5 mb-4 pt-4">
                     <h3 className="font-sans font-bold text-sm text-[#1C140D] flex items-center gap-2">
                       <Flame size={14} className="text-brand-fire" /> Methoden-Info
@@ -251,7 +251,7 @@ export default function MethodePage({ params }: Props) {
                   </dl>
                 </div>
 
-                <div className="bg-white border border-[#E3D7C2] rounded-md p-5 shadow-sm">
+                <div className="bg-[#FBF5E6] border border-[#E3D7C2] rounded-md p-5 shadow-sm">
                   <div className="border-t-2 border-brand-gold -mt-5 mb-4 pt-4">
                     <h3 className="font-sans font-bold text-sm text-[#1C140D]">Weiterlernen</h3>
                   </div>
@@ -265,4 +265,4 @@ export default function MethodePage({ params }: Props) {
                       <li key={href}>
                         <Link href={href} className="flex items-center justify-between text-sm font-sans text-[#4A3C2E] hover:text-brand-fire transition-colors group py-1.5 border-b border-[#E3D7C2]">
                           {label}
-                          <ChevronRight size={13} className="opacity-0 group-hover:
+                          <ChevronRight size={13} className="opacity-0 

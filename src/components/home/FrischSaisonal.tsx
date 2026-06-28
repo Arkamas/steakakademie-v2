@@ -83,8 +83,8 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
             onBlurCapture={() => setPaused(false)}
           >
             <div
-              className="relative rounded-xl overflow-hidden bg-white shadow-md"
-              style={{ border: '1px solid #E3D7C2' }}
+              className="relative rounded-xl overflow-hidden"
+              style={{ background: '#FBF5E6', border: '1px solid #E3D7C2', boxShadow: '0 16px 38px -18px rgba(60,40,18,0.5)' }}
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -183,4 +183,4 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
     </section>
   );
 }
-                                                                                                                                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                                        

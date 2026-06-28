@@ -86,13 +86,13 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
               className="relative rounded-xl overflow-hidden"
               style={{ background: '#FBF5E6', border: '1px solid #E3D7C2', boxShadow: '0 16px 38px -18px rgba(60,40,18,0.5)' }}
             >
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={slide.url}
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -14 }}
-                  transition={{ duration: 0.45, ease: 'easeOut' }}
+                  initial={{ y: 12 }}
+                  animate={{ y: 0 }}
+                  exit={{ y: -12 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
                 >
                   <Link href={slide.url} className="group block">
                     {/* Bild */}
@@ -183,4 +183,4 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
     </section>
   );
 }
-                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                             

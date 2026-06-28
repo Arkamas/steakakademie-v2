@@ -54,7 +54,9 @@ html {
 /* Atmosphärischer Radial-Gradient — als fixed pseudo-element statt body-bg
    Vermeidet Scroll-Jank auf Mobile durch background-attachment: fixed */
 html {
-  background: radial-gradient(circle at center, #2D2218 0%, #120C07 100%);
+  /* Wärmerer, breiterer Verlauf mit mehr Helligkeits-Spielraum, damit der
+     Gradient sichtbar „atmet" statt schwarz-in-schwarz zu verschwinden. */
+  background: radial-gradient(circle at 50% 18%, #3E2D1C 0%, #241A11 45%, #120C07 100%);
   min-height: 100vh;
 }
 
@@ -79,8 +81,8 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(58% 48% at 50% 28%, rgba(232, 80, 24, 0.11), transparent 70%),
-    radial-gradient(42% 34% at 50% 20%, rgba(200, 136, 42, 0.09), transparent 66%);
+    radial-gradient(62% 52% at 50% 26%, rgba(232, 80, 24, 0.18), transparent 72%),
+    radial-gradient(46% 38% at 50% 18%, rgba(200, 136, 42, 0.15), transparent 68%);
 }
 
 /* ── TYPOGRAFIE-UTILITIES ──────────────────────────────────────────────── */
@@ -244,11 +246,4 @@ nav a, header button, .nav-sharp {
   color: #F0E8D8;
 }
 
-/* ── FOCUS ───────────────────────────────────────────────────────────── */
-
-:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 3px;
-}
-
-/* ── HERO FULL-BLEED — atmosphärischer 60-80vh Page-H
+/* ── FOCUS ──────────────────────────────────────────────────────�

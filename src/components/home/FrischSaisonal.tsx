@@ -84,7 +84,7 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
           >
             <div
               className="relative rounded-xl overflow-hidden"
-              style={{ background: '#FBF5E6', border: '1px solid #E3D7C2', boxShadow: '0 16px 38px -18px rgba(60,40,18,0.5)' }}
+              style={{ background: '#E4D2AC', border: '1px solid #C3AB80', boxShadow: '0 16px 38px -18px rgba(40,28,12,0.5)' }}
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div

@@ -51,7 +51,7 @@ const difficultyColor: Record<string, string> = {
 // Heller Lese-Layer: dunkle Schrift auf warmem Pergament (.reading-light).
 const mdxComponents = {
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1C140D] mt-10 mb-4 leading-tight border-b border-[#E3D7C2] pb-3" {...props}>{children}</h2>
+    <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1C140D] mt-10 mb-4 leading-tight border-b border-[#C3AB80] pb-3" {...props}>{children}</h2>
   ),
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h3 className="font-serif text-xl font-bold text-[#1C140D] mt-8 mb-3" {...props}>{children}</h3>
@@ -66,8 +66,8 @@ const mdxComponents = {
     <ol className="list-decimal list-outside ml-5 space-y-2 mb-5 font-body text-[1.0625rem] text-[#2C2218]" {...props}>{children}</ol>
   ),
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="overflow-x-auto mb-6 -mx-4 sm:mx-0 rounded-md ring-1 ring-[#E3D7C2]">
-      <table className="min-w-full border-collapse font-sans text-sm bg-white/60" {...props}>{children}</table>
+    <div className="overflow-x-auto mb-6 -mx-4 sm:mx-0 rounded-md ring-1 ring-[#C3AB80]">
+      <table className="min-w-full border-collapse font-sans text-sm bg-[#E8D8B4]" {...props}>{children}</table>
     </div>
   ),
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
@@ -77,7 +77,7 @@ const mdxComponents = {
     <th className="px-4 py-3 text-left text-[11px] font-bold tracking-[0.1em] uppercase" {...props}>{children}</th>
   ),
   td: ({ children, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) => (
-    <td className="px-4 py-3 border-b border-[#E3D7C2] text-[#3A2E22]" {...props}>{children}</td>
+    <td className="px-4 py-3 border-b border-[#C3AB80] text-[#3A2E22]" {...props}>{children}</td>
   ),
   blockquote: ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
     <blockquote className="border-l-4 border-brand-gold pl-5 my-6 font-body text-lg italic text-[#4A3C2E]" {...props}>{children}</blockquote>
@@ -85,7 +85,7 @@ const mdxComponents = {
   strong: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
     <strong className="font-bold text-[#1C140D]" {...props}>{children}</strong>
   ),
-  hr: () => <hr className="border-[#E3D7C2] my-10" />,
+  hr: () => <hr className="border-[#C3AB80] my-10" />,
   BBQPairing,
   Schnelluebersicht, Achtung, ProTipp, TempBox,
   InlineAffiliate,
@@ -211,7 +211,7 @@ export default function MethodePage({ params }: Props) {
                   <EquipmentFooter title={zones.footer.title} productIds={zones.footer.productIds} />
                 )}
 
-                <div className="mt-10 p-5 bg-[#FBF5E6] border border-[#E3D7C2] rounded-md flex gap-4 shadow-sm">
+                <div className="mt-10 p-5 bg-[#E4D2AC] border border-[#C3AB80] rounded-md flex gap-4 shadow-sm">
                   <div className="w-14 h-14 bg-[#EDE3D2] rounded-full shrink-0" />
                   <div>
                     <Link href={`/autoren/${methode.authorSlug}`} className="font-sans font-bold text-sm text-[#1C140D] hover:text-brand-fire transition-colors">
@@ -229,7 +229,7 @@ export default function MethodePage({ params }: Props) {
                   <HeroRecommendation productId={zones.hero.productId} pitch={zones.hero.pitch} />
                 )}
 
-                <div className="bg-[#FBF5E6] border border-[#E3D7C2] rounded-md p-5 shadow-sm">
+                <div className="bg-[#E4D2AC] border border-[#C3AB80] rounded-md p-5 shadow-sm">
                   <div className="border-t-2 border-brand-fire -mt-5 mb-4 pt-4">
                     <h3 className="font-sans font-bold text-sm text-[#1C140D] flex items-center gap-2">
                       <Flame size={14} className="text-brand-fire" /> Methoden-Info
@@ -251,7 +251,7 @@ export default function MethodePage({ params }: Props) {
                   </dl>
                 </div>
 
-                <div className="bg-[#FBF5E6] border border-[#E3D7C2] rounded-md p-5 shadow-sm">
+                <div className="bg-[#E4D2AC] border border-[#C3AB80] rounded-md p-5 shadow-sm">
                   <div className="border-t-2 border-brand-gold -mt-5 mb-4 pt-4">
                     <h3 className="font-sans font-bold text-sm text-[#1C140D]">Weiterlernen</h3>
                   </div>
@@ -263,6 +263,6 @@ export default function MethodePage({ params }: Props) {
                       { label: 'Thermometer Vergleich', href: '/vergleich/fleischthermometer' },
                     ].map(({ label, href }) => (
                       <li key={href}>
-                        <Link href={href} className="flex items-center justify-between text-sm font-sans text-[#4A3C2E] hover:text-brand-fire transition-colors group py-1.5 border-b border-[#E3D7C2]">
+                        <Link href={href} className="flex items-center justify-between text-sm font-sans text-[#4A3C2E] hover:text-brand-fire transition-colors group py-1.5 border-b border-[#C3AB80]">
                           {label}
-                          <ChevronRight size={13} className="opacity-0 
+                          <ChevronRight size={13} className="opacity-0

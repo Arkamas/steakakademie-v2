@@ -44,4 +44,5 @@ export function ProTipp({ children }: { children: ReactNode }) {
 }
 
 export function TempBox({ children }: { children: ReactNode }) {
-  return <Box icon={<Thermometer size={15} />} label="Kerntemperatur" accent="#
+  return <Box icon={<Thermometer size={15} />} label="Kerntemperatur" accent="#C8882A">{children}</Box>;
+}

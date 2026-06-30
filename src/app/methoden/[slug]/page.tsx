@@ -265,4 +265,18 @@ export default function MethodePage({ params }: Props) {
                       <li key={href}>
                         <Link href={href} className="flex items-center justify-between text-sm font-sans text-[#4A3C2E] hover:text-brand-fire transition-colors group py-1.5 border-b border-[#C3AB80]">
                           {label}
-                          <ChevronRight size={13} className="opacity-0
+                          <ChevronRight size={13} className="opacity-0 group-hover:opacity-100 transition-opacity text-brand-fire" />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </>
+  );
+}

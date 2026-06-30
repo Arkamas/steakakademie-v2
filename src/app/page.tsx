@@ -475,4 +475,22 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
                 { stat: '200+', label: 'Cuts analysiert' },
-   
+                { stat: '8',    label: 'Thermometer selbst getestet' },
+                { stat: '100%', label: 'Affiliate-transparent' },
+                { stat: '2026', label: 'Inhalte aktuell' },
+              ].map(({ stat, label }) => (
+                <div key={label}>
+                  <p className="stat-number">{stat}</p>
+                  <p className="text-xs font-sans text-text-muted mt-2 tracking-wide">{label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <Footer />
+    </>
+  );
+}

@@ -1,0 +1,28 @@
+name: Weekly Newsletter
+
+on:
+  schedule:
+    # Jeden Freitag 08:00 UTC (10:00 MEZ / 09:00 MESZ)
+    - cron: '0 8 * * 5'
+  workflow_dispatch:
+    # Manuell auslösbar (zum Testen)
+
+jobs:
+  send-newsletter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run newsletter script
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LOOPS_API_KEY: ${{ secrets.LOOPS_API_KEY }}
+        run: node scripts/newsletter-weekly.mjs

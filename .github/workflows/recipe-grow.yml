@@ -35,6 +35,7 @@ jobs:
         run: node scripts/recipe-agent.mjs --limit 1
 
       - name: Hero-Bilder generieren (FLUX.1 dev)
+        if: steps.agent.outputs.seeds_exhausted != 'true'
         env:
           FAL_KEY: ${{ secrets.FAL_KEY }}
         run: node scripts/recipe-images.mjs
@@ -57,6 +58,7 @@ jobs:
 
       - name: Seed-Liste leer → Jira-Hinweis (KAN, dedup)
         if: steps.agent.outputs.seeds_exhausted == 'true'
+        continue-on-error: true
         env:
           JIRA_BASE_URL: https://steakakademie.atlassian.net
           JIRA_PROJECT_KEY: KAN
@@ -71,6 +73,7 @@ jobs:
 
       - name: Bei Fehler → Jira-Ticket (KAN)
         if: failure()
+        continue-on-error: true
         env:
           JIRA_BASE_URL: https://steakakademie.atlassian.net
           JIRA_PROJECT_KEY: KAN

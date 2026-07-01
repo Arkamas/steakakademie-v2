@@ -37,7 +37,7 @@ export default function KiDisclaimerPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             KI-Systeme &amp; KI-Disclaimer
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juli 2026</p>
 
           <div className="max-w-content space-y-10 font-body text-text-secondary leading-relaxed">
 
@@ -125,12 +125,28 @@ export default function KiDisclaimerPage() {
                   <span className="shrink-0 text-green-400 font-bold">✅</span>
                   <div>
                     <span className="font-semibold text-text-primary">
-                      Art. 50 Abs. 2 &amp; 4 EU AI Act — Kennzeichnung KI-erzeugter Inhalte:
+                      Art. 50 Abs. 4 EU AI Act — Sichtbare Kennzeichnung KI-erzeugter Inhalte (Deployer-Pflicht):
                     </span>{' '}
-                    Bilder zu Community-Rezepten werden durch KI erzeugt. Sie sind auf der
-                    Website sichtbar als „KI-Symbolbild" gekennzeichnet und können vom
-                    tatsächlichen Gericht abweichen. Die Transparenzpflichten nach Art. 50
-                    gelten ab dem 2. August 2026; wir setzen die Kennzeichnung bereits jetzt um.
+                    Bilder zu Community-Rezepten werden durch KI (FLUX via fal.ai) erzeugt. Sie
+                    sind sichtbar als „KI-Symbolbild" gekennzeichnet und können vom tatsächlichen
+                    Gericht abweichen. Die Transparenzpflicht nach Art. 50 Abs. 4 gilt ab dem
+                    2. August 2026; wir setzen die Kennzeichnung bereits jetzt um.
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="shrink-0 text-yellow-400 font-bold">⚠</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Art. 50 Abs. 2 EU AI Act — Maschinenlesbare Kennzeichnung (Provider-Pflicht, Frist 02.08.2026):
+                    </span>{' '}
+                    Die Pflicht zur maschinenlesbaren Einbettung von Content Credentials (z.&nbsp;B.
+                    C2PA-Metadaten) in KI-generierte Bilder liegt beim <em>Anbieter</em> des
+                    KI-Systems — hier fal.ai als Betreiber des FLUX-Bildgenerators. Als{' '}
+                    <em>Deployer</em> haben wir fal.ai zu dieser Anforderung kontaktiert und
+                    fordern vertraglich konforme Umsetzung ein. Bis zur bestätigten Lieferung
+                    von Content Credentials durch fal.ai kompensieren wir durch die sichtbare
+                    Kennzeichnung nach Art. 50 Abs. 4 und dokumentieren den Sachverhalt hier
+                    transparent.
                   </div>
                 </li>
                 <li className="flex gap-3">

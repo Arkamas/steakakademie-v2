@@ -27,16 +27,26 @@ const BULL_SILHOUETTE =
  */
 // color = Hover-Füllung/Glow der Zone. Marken-Gold #C8882A durchgängig; die
 // Auswahl (Selected) rendert die Komponente in Glut #E85018 (Brief §4/§7).
+// Lückenlose Kachelung: aneinandergrenzende Rechteck-Zonen, per clipPath exakt
+// an der Körperkontur beschnitten → vollständige Metzger-Karte, kein Überstand,
+// keine Lücken. Grenzen auf die ¾-Frontale von cut-atlas-stier.jpg kalibriert
+// (Tier x≈19–80). IDs = echte Primal-IDs (Label + Grid-Filter). color = Gold für
+// Hover-Glow; Selected rendert die Komponente in Glut #E85018.
 export const BULL_ZONES: BullZone[] = [
-  { id: 'hals', color: '#C8882A', points: '37,24 47,22 48,34 45,42 40,42 36,33 37,26' },
-  { id: 'bug', color: '#C8882A', points: '47,24 54,24 54,41 51,52 46,56 43,49 43,36 45,28' },
-  { id: 'hochrippe', color: '#C8882A', points: '54,24 63,24 63,40 54,40' },
-  { id: 'roastbeef', color: '#C8882A', points: '63,24 71,25 71,40 63,40' },
-  { id: 'huefte', color: '#C8882A', points: '71,25 79,26 79,40 71,40' },
-  { id: 'keule', color: '#C8882A', points: '79,26 84,30 84,47 81,56 77,61 72,57 71,45 71,40 79,40' },
-  { id: 'brust', color: '#C8882A', points: '38,44 49,44 50,60 46,66 41,64 37,52' },
-  { id: 'duennung', color: '#C8882A', points: '49,41 71,40 79,41 78,58 64,63 51,63 49,53' },
-  { id: 'beinscheibe', color: '#C8882A', points: '44,63 52,63 52,90 45,91 43,80 43,69' },
+  // Vorderfront: Kopf, Backe & Hals
+  { id: 'hals', color: '#C8882A', points: '0,0 44,0 44,50 0,50' },
+  // Rücken-Band entlang der Wirbelsäule (vorne → hinten)
+  { id: 'bug', color: '#C8882A', points: '44,0 54,0 54,50 44,50' },
+  { id: 'hochrippe', color: '#C8882A', points: '54,0 61,0 61,50 54,50' },
+  { id: 'roastbeef', color: '#C8882A', points: '61,0 68,0 68,50 61,50' },
+  { id: 'huefte', color: '#C8882A', points: '68,0 75,0 75,50 68,50' },
+  // Hinterviertel (Keule/Rump, volle Höhe hinten)
+  { id: 'keule', color: '#C8882A', points: '75,0 100,0 100,64 75,64' },
+  // Untere Körpermitte
+  { id: 'brust', color: '#C8882A', points: '0,50 44,50 44,64 0,64' },
+  { id: 'duennung', color: '#C8882A', points: '44,50 75,50 75,64 44,64' },
+  // Beine (Shank inkl. Beinscheibe/Ochsenschwanz), unteres Band
+  { id: 'beinscheibe', color: '#C8882A', points: '0,64 100,64 100,100 0,100' },
 ];
 
 interface Props {

@@ -47,6 +47,14 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    **kein persönlicher Auftritt von Uwe** (Avatar-System Marco/Jonas/Elena).
 4. **Human-gated:** Agenten produzieren Entwürfe, **Uwe gibt frei**. Kein Auto-Posting.
 5. **No black-hat:** kein Spam, Mass-Follow, Fake-Entities.
+6. **Rechtssicherheit → autonom fixen (Uwe, 01.07.2026).** Was Claude bei einem Audit
+   feststellt und was **zu mehr Rechtssicherheit führt, wird SOFORT autonom umgesetzt**
+   (Code + committen + pushen) — **kein** vorheriges Freigabe-Warten. Gilt für den
+   Rechts-Update-Scanner **und jedes weitere/zukünftige Audit**. Diese Regel überschreibt
+   ausdrücklich das „nur Report, kein Commit" des Scanner-Auftrags. Abgrenzung zu Regel 4:
+   Human-gated bleibt für Marketing/Publishing/Außenauftritt; **defensive Compliance-Fixes
+   (AGB, Datenschutz, Impressum, Widerruf, KI-Disclaimer, Kennzeichnung) laufen autonom**.
+   Danach Uwe kurz informieren, was gefixt wurde.
 
 ---
 

@@ -151,7 +151,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
         {/* Rechts (1/3): kompakte Info-Karte zum gewählten Teilstück */}
         <div className="lg:col-span-1">
           <div className="lg:sticky lg:top-6 min-h-[280px] rounded-lg border border-brand-gold/15 bg-surface-dark p-5">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
               {activePrimal ? (
                 <motion.div
                   key={activePrimal.id}
@@ -240,15 +240,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
           )}
         </div>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedPrimal ?? 'all'}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
-          >
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {filteredCuts.map((cut) => (
               <button
                 key={cut.id}
@@ -272,8 +264,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
                 </div>
               </button>
             ))}
-          </motion.div>
-        </AnimatePresence>
+        </div>
       </div>
 
       {/* ── Detail-Overlay ─────────────────────────────────────────────────── */}

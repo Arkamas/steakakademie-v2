@@ -3,12 +3,12 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronRight, X, Flame, Thermometer, BookOpen, ShoppingCart, MousePointerClick } from 'lucide-react';
+import { X, Flame, Thermometer, BookOpen, ShoppingCart, MousePointerClick } from 'lucide-react';
 import AnimalDiagram from './AnimalDiagram';
 import BullPrimalMap from './BullPrimalMap';
 import CutDnaRadar from './CutDnaRadar';
 import CutImage from './CutImage';
-import { METHOD_LABEL, type CookMethod, type Cut, type Primal, type Species } from '@/lib/cuts-catalog';
+import { METHOD_LABEL, type Cut, type Primal, type Species } from '@/lib/cuts-catalog';
 import { getMeatOffer } from '@/lib/cut-affiliate';
 import type { CutRecipeRef } from '@/lib/cut-recipes';
 
@@ -21,17 +21,6 @@ const SPECIES_TABS: { id: Species; label: string }[] = [
   { id: 'rind', label: '🐄 Rind' },
   { id: 'schwein', label: '🐖 Schwein' },
 ];
-
-// Kompakte Badge-Kürzel der Garmethoden fürs Info-Panel
-const METHOD_BADGE: Record<CookMethod, string> = {
-  'grill-direkt': 'Direkt',
-  'grill-indirekt': 'Indirekt',
-  pfanne: 'Pfanne',
-  smoker: 'Smoker',
-  'sous-vide': 'Sous-vide',
-  schmoren: 'Schmoren',
-  ofen: 'Ofen',
-};
 
 function PriceLevel({ level }: { level: number }) {
   return (
@@ -57,6 +46,17 @@ function LevelDots({ level }: { level: number }) {
   );
 }
 
+// Marmorierungs-Balken für die Rasterkarte (Marken-Gold).
+function MarblingBars({ level }: { level: number }) {
+  return (
+    <span className="flex gap-0.5">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <span key={i} className="h-1 w-3" style={{ background: i <= level ? '#C8882A' : '#3a2818' }} />
+      ))}
+    </span>
+  );
+}
+
 export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientProps) {
   const [species, setSpecies] = useState<Species>('rind');
   const [selectedPrimal, setSelectedPrimal] = useState<string | null>(null);
@@ -64,8 +64,10 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
 
   const { cuts, primals } = bySpecies[species];
   const primalById = useMemo(() => Object.fromEntries(primals.map((p) => [p.id, p])), [primals]);
+
+  // Grid zeigt ALLE Cuts der Spezies; ein gewähltes Teilstück filtert auf dessen Cuts.
   const filteredCuts = useMemo(
-    () => (selectedPrimal ? cuts.filter((c) => c.primal === selectedPrimal) : []),
+    () => (selectedPrimal ? cuts.filter((c) => c.primal === selectedPrimal) : cuts),
     [cuts, selectedPrimal]
   );
 
@@ -101,7 +103,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
         ))}
       </div>
 
-      {/* ── Master-Detail-Dashboard ────────────────────────────────────────── */}
+      {/* ── Oben: interaktives Tier + kompakte Info-Karte ──────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Links (2/3): interaktives Tier */}
         <div className="lg:col-span-2">
@@ -146,9 +148,9 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
           </div>
         </div>
 
-        {/* Rechts (1/3): dynamisches Info-Panel */}
+        {/* Rechts (1/3): kompakte Info-Karte zum gewählten Teilstück */}
         <div className="lg:col-span-1">
-          <div className="lg:sticky lg:top-6 min-h-[420px] rounded-lg border border-brand-gold/15 bg-surface-dark p-5">
+          <div className="lg:sticky lg:top-6 min-h-[280px] rounded-lg border border-brand-gold/15 bg-surface-dark p-5">
             <AnimatePresence mode="wait">
               {activePrimal ? (
                 <motion.div
@@ -158,7 +160,6 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
                   exit={{ opacity: 0, x: -14 }}
                   transition={{ duration: 0.25, ease: 'easeOut' }}
                 >
-                  {/* Kopf */}
                   <div className="flex items-start justify-between gap-2 border-b border-brand-gold/10 pb-3">
                     <div>
                       <h3 className="font-serif text-2xl font-bold text-text-light leading-tight">
@@ -178,50 +179,13 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
                     </button>
                   </div>
 
-                  {/* Cut-Liste */}
-                  <div className="mt-4 space-y-2.5 max-h-[52vh] overflow-y-auto pr-1">
-                    {filteredCuts.map((cut) => (
-                      <button
-                        key={cut.id}
-                        onClick={() => setSelectedCutId(cut.id)}
-                        className="group flex w-full items-center gap-3 rounded-md border border-border-subtle bg-surface-base p-2 text-left transition-colors hover:border-brand-gold/40"
-                      >
-                        <CutImage
-                          src={cut.image}
-                          alt={`${cut.nameDE} (${cut.nameEN})`}
-                          label={cut.nameDE}
-                          accent={activePrimal.color}
-                          className="h-14 w-14 shrink-0 rounded"
-                        />
-                        <span className="min-w-0 flex-1">
-                          <span className="block font-serif font-bold text-sm text-text-light leading-tight transition-colors group-hover:text-brand-gold">
-                            {cut.nameDE}
-                          </span>
-                          <span className="block truncate text-[11px] italic text-text-light/40">
-                            {cut.nameEN}
-                          </span>
-                          <span className="mt-1 flex flex-wrap gap-1">
-                            {cut.methods.slice(0, 3).map((m) => (
-                              <span
-                                key={m}
-                                className="rounded-sm border border-brand-gold/15 bg-surface-elevated px-1.5 py-0.5 text-[9px] font-sans font-bold uppercase tracking-wide text-brand-gold/80"
-                              >
-                                {METHOD_BADGE[m]}
-                              </span>
-                            ))}
-                          </span>
-                        </span>
-                        <ChevronRight
-                          size={16}
-                          className="shrink-0 text-text-light/30 transition-colors group-hover:text-brand-gold"
-                        />
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Kulinarische Beschreibung der Muskelgruppe */}
-                  <p className="mt-4 border-t border-brand-gold/10 pt-3 font-body text-sm leading-relaxed text-text-light/65">
+                  <p className="mt-4 font-body text-sm leading-relaxed text-text-light/70">
                     {activePrimal.blurb}
+                  </p>
+
+                  <p className="mt-4 flex items-center gap-1.5 text-xs font-sans font-bold uppercase tracking-[0.12em] text-brand-fire">
+                    <Flame size={13} />
+                    {filteredCuts.length} {filteredCuts.length === 1 ? 'Cut' : 'Cuts'} im Raster unten
                   </p>
                 </motion.div>
               ) : (
@@ -230,7 +194,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="flex h-full min-h-[380px] flex-col items-center justify-center px-4 text-center"
+                  className="flex h-full min-h-[240px] flex-col items-center justify-center px-4 text-center"
                 >
                   <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-brand-gold/25 text-brand-gold">
                     <MousePointerClick size={24} />
@@ -238,13 +202,78 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
                   <h3 className="font-serif text-xl font-bold text-text-light">Wähle eine Muskelgruppe</h3>
                   <p className="mt-2 max-w-xs font-body text-sm text-text-light/50">
                     Klicke {species === 'rind' ? 'auf dem Stier' : 'auf dem Tier'} auf ein Teilstück —
-                    hier erscheinen alle passenden Cuts mit Garmethode, Kerntemperatur und Rezepten.
+                    das Raster unten filtert dann auf die passenden Cuts.
                   </p>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
         </div>
+      </div>
+
+      {/* ── Darunter: volles Cut-Raster (filtert bei Teilstück-Wahl) ────────── */}
+      <div className="mt-10">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-brand-gold/10 pb-3">
+          <h2 className="font-serif text-xl font-bold text-text-light">
+            {activePrimal ? (
+              <>
+                {activePrimal.nameDE}{' '}
+                <span className="text-text-light/40 text-base font-normal italic">
+                  · {activePrimal.nameEN}
+                </span>
+              </>
+            ) : (
+              <>Alle Cuts</>
+            )}
+            <span className="ml-2 text-brand-gold/60 text-sm font-sans font-bold">
+              {filteredCuts.length}
+            </span>
+          </h2>
+          {selectedPrimal && (
+            <button
+              onClick={() => setSelectedPrimal(null)}
+              className="inline-flex items-center gap-1.5 rounded border border-brand-fire/50 px-3 py-1.5 text-xs font-sans font-bold uppercase tracking-[0.08em] text-brand-fire transition-colors hover:bg-brand-fire/10"
+            >
+              Filter: {activePrimal?.nameDE}
+              <X size={13} />
+            </button>
+          )}
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedPrimal ?? 'all'}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
+          >
+            {filteredCuts.map((cut) => (
+              <button
+                key={cut.id}
+                onClick={() => setSelectedCutId(cut.id)}
+                className="group overflow-hidden rounded-md border border-border-subtle bg-surface-card text-left transition-colors hover:border-brand-gold/40"
+              >
+                <CutImage
+                  src={cut.image}
+                  alt={`${cut.nameDE} (${cut.nameEN})`}
+                  label={cut.nameDE}
+                  accent={primalById[cut.primal]?.color ?? '#C8882A'}
+                  className="aspect-[4/3]"
+                />
+                <div className="p-3">
+                  <h3 className="font-serif font-bold text-text-light text-sm leading-tight">{cut.nameDE}</h3>
+                  <p className="mt-0.5 text-text-light/40 text-xs font-sans italic">{cut.nameEN}</p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <MarblingBars level={cut.dna.marbling} />
+                    <PriceLevel level={cut.price} />
+                  </div>
+                </div>
+              </button>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* ── Detail-Overlay ─────────────────────────────────────────────────── */}

@@ -28,14 +28,14 @@ const BULL_SILHOUETTE =
 // color = Hover-Füllung/Glow der Zone. Marken-Gold #C8882A durchgängig; die
 // Auswahl (Selected) rendert die Komponente in Glut #E85018 (Brief §4/§7).
 export const BULL_ZONES: BullZone[] = [
-  { id: 'hals', color: '#C8882A', points: '37,24 47,20 49,34 45,42 40,42 36,33 37,26' },
-  { id: 'bug', color: '#C8882A', points: '47,22 56,20 57,42 55,55 48,60 44,54 44,40 45,30' },
-  { id: 'hochrippe', color: '#C8882A', points: '55,17 63,16 64,46 56,48 55,32' },
-  { id: 'roastbeef', color: '#C8882A', points: '63,16 71,16 71,46 64,46' },
-  { id: 'huefte', color: '#C8882A', points: '71,16 77,19 79,47 71,46' },
-  { id: 'keule', color: '#C8882A', points: '77,18 84,24 84,45 83,56 79,63 72,60 69,47 77,45' },
+  { id: 'hals', color: '#C8882A', points: '37,24 47,22 48,34 45,42 40,42 36,33 37,26' },
+  { id: 'bug', color: '#C8882A', points: '47,24 54,24 54,41 51,52 46,56 43,49 43,36 45,28' },
+  { id: 'hochrippe', color: '#C8882A', points: '54,24 63,24 63,40 54,40' },
+  { id: 'roastbeef', color: '#C8882A', points: '63,24 71,25 71,40 63,40' },
+  { id: 'huefte', color: '#C8882A', points: '71,25 79,26 79,40 71,40' },
+  { id: 'keule', color: '#C8882A', points: '79,26 84,30 84,47 81,56 77,61 72,57 71,45 71,40 79,40' },
   { id: 'brust', color: '#C8882A', points: '38,44 49,44 50,60 46,66 41,64 37,52' },
-  { id: 'duennung', color: '#C8882A', points: '49,52 66,50 72,54 71,66 53,69 49,64' },
+  { id: 'duennung', color: '#C8882A', points: '49,41 71,40 79,41 78,58 64,63 51,63 49,53' },
   { id: 'beinscheibe', color: '#C8882A', points: '44,63 52,63 52,90 45,91 43,80 43,69' },
 ];
 

@@ -33,20 +33,24 @@ const BULL_SILHOUETTE =
 // (Tier x≈19–80). IDs = echte Primal-IDs (Label + Grid-Filter). color = Gold für
 // Hover-Glow; Selected rendert die Komponente in Glut #E85018.
 export const BULL_ZONES: BullZone[] = [
-  // Vorderfront: Kopf, Backe & Hals
-  { id: 'hals', color: '#C8882A', points: '0,0 44,0 44,50 0,50' },
+  // Vorderfront: Kopf/Backe + Nacken
+  { id: 'kopf_backe', color: '#C8882A', points: '0,0 38,0 38,50 0,50' },
+  { id: 'nacken', color: '#C8882A', points: '38,0 46,0 46,50 38,50' },
   // Rücken-Band entlang der Wirbelsäule (vorne → hinten)
-  { id: 'bug', color: '#C8882A', points: '44,0 54,0 54,50 44,50' },
+  { id: 'bug', color: '#C8882A', points: '46,0 54,0 54,50 46,50' },
   { id: 'hochrippe', color: '#C8882A', points: '54,0 61,0 61,50 54,50' },
   { id: 'roastbeef', color: '#C8882A', points: '61,0 68,0 68,50 61,50' },
   { id: 'huefte', color: '#C8882A', points: '68,0 75,0 75,50 68,50' },
-  // Hinterviertel (Keule/Rump, volle Höhe hinten)
-  { id: 'keule', color: '#C8882A', points: '75,0 100,0 100,64 75,64' },
+  // Hinterviertel (Keule/Rump)
+  { id: 'keule', color: '#C8882A', points: '75,0 100,0 100,58 75,58' },
   // Untere Körpermitte
-  { id: 'brust', color: '#C8882A', points: '0,50 44,50 44,64 0,64' },
-  { id: 'duennung', color: '#C8882A', points: '44,50 75,50 75,64 44,64' },
-  // Beine (Shank inkl. Beinscheibe/Ochsenschwanz), unteres Band
-  { id: 'beinscheibe', color: '#C8882A', points: '0,64 100,64 100,100 0,100' },
+  { id: 'brust', color: '#C8882A', points: '0,50 46,50 46,64 0,64' },
+  { id: 'duennung', color: '#C8882A', points: '46,50 75,50 75,58 71,58 71,64 46,64' },
+  // Schwanz (hinterer Rumpf, klickbar auf dem Tier)
+  { id: 'ochsenschwanz', color: '#C8882A', points: '71,58 84,58 84,74 71,74' },
+  // Beine (Vorder- / Hinterhaxe), unteres Band
+  { id: 'beinscheibe_vorn', color: '#C8882A', points: '0,64 58,64 58,100 0,100' },
+  { id: 'beinscheibe_hinten', color: '#C8882A', points: '58,64 71,64 71,74 100,74 100,100 58,100' },
 ];
 
 interface Props {

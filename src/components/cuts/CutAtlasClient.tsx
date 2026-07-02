@@ -3,13 +3,15 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronRight, X, Flame, Thermometer, BookOpen, ShoppingCart } from 'lucide-react';
+import { X, Flame, Thermometer, BookOpen, ShoppingCart, MousePointerClick } from 'lucide-react';
 import AnimalDiagram from './AnimalDiagram';
+import BullButcherMap from './BullButcherMap';
 import CutDnaRadar from './CutDnaRadar';
 import CutImage from './CutImage';
 import { METHOD_LABEL, type Cut, type Primal, type Species } from '@/lib/cuts-catalog';
 import { getMeatOffer } from '@/lib/cut-affiliate';
 import type { CutRecipeRef } from '@/lib/cut-recipes';
+import { trackEvent } from '@/components/analytics/PlausibleScript';
 
 interface CutAtlasClientProps {
   bySpecies: Record<Species, { cuts: Cut[]; primals: Primal[] }>;
@@ -20,6 +22,37 @@ const SPECIES_TABS: { id: Species; label: string }[] = [
   { id: 'rind', label: '🐄 Rind' },
   { id: 'schwein', label: '🐖 Schwein' },
 ];
+
+// Zerlegekarte (BullButcherMap) → Katalog. Zonen mit exakt passendem Cut öffnen
+// dessen Detail (Raster filtert auf sein Teilstück); Regions-Zonen filtern nur.
+// kopf/zunge haben keinen Katalog-Cut → reine Info, keine Aktion.
+const ZONE_TO_CUT: Record<string, string> = {
+  'backe': 'ochsenbacke',
+  'nacken': 'nacken',
+  'rib-eye': 'ribeye',
+  'falsches-filet': 'falsches-filet',
+  'metzgerstueck': 'onglet', // Metzgerstück = Onglet / Nierenzapfen
+  'roastbeef': 'rumpsteak',
+  'porterhouse': 'porterhouse',
+  'filet': 'filet',
+  't-bone': 't-bone',
+  'skirt-steak': 'skirt',
+  'lappen': 'bavette', // Bauchlappen = Bavette (Flap Steak)
+  'flank-steak': 'flank',
+  'tafelspitz': 'tafelspitz',
+  'buergermeisterstueck': 'tri-tip', // Bürgermeisterstück = Tri-Tip
+  'kugel': 'kugel',
+  'oberschale': 'oberschale',
+  'unterschale': 'unterschale',
+};
+const ZONE_TO_PRIMAL: Record<string, string> = {
+  'hals': 'nacken',
+  'schulter': 'bug',
+  'hohe-rippe': 'hochrippe',
+  'querrippe': 'hochrippe',
+  'brust': 'brust',
+  'huefte': 'huefte',
+};
 
 function PriceLevel({ level }: { level: number }) {
   return (
@@ -45,35 +78,91 @@ function LevelDots({ level }: { level: number }) {
   );
 }
 
+// Marmorierungs-Balken für die Rasterkarte (Marken-Gold).
+function MarblingBars({ level }: { level: number }) {
+  return (
+    <span className="flex gap-0.5">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <span key={i} className="h-1 w-3" style={{ background: i <= level ? '#C8882A' : '#3a2818' }} />
+      ))}
+    </span>
+  );
+}
+
 export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientProps) {
   const [species, setSpecies] = useState<Species>('rind');
   const [selectedPrimal, setSelectedPrimal] = useState<string | null>(null);
   const [selectedCutId, setSelectedCutId] = useState<string | null>(null);
 
   const { cuts, primals } = bySpecies[species];
+  const primalById = useMemo(() => Object.fromEntries(primals.map((p) => [p.id, p])), [primals]);
 
-  const visibleCuts = useMemo(
+  // Grid zeigt ALLE Cuts der Spezies; ein gewähltes Teilstück filtert auf dessen Cuts.
+  const filteredCuts = useMemo(
     () => (selectedPrimal ? cuts.filter((c) => c.primal === selectedPrimal) : cuts),
     [cuts, selectedPrimal]
   );
+
+  // Aktive Zone der Zerlegekarte (hält Karte + Panel/Raster synchron)
+  const [activeZone, setActiveZone] = useState<string | null>(null);
 
   const switchSpecies = (s: Species) => {
     setSpecies(s);
     setSelectedPrimal(null);
     setSelectedCutId(null);
+    setActiveZone(null);
+  };
+  const handlePrimal = (id: string) => {
+    const next = selectedPrimal === id ? null : id;
+    // Nur Aktivierungen tracken (Werbe-Reporting), Toggle-Off nicht.
+    if (next) trackEvent('CutAtlas_Zone', { zone: id, ziel: id, art: 'primal', tier: species });
+    setSelectedPrimal(next);
+    setSelectedCutId(null);
+    setActiveZone(null);
+  };
+  const resetPrimal = () => {
+    setSelectedPrimal(null);
+    setSelectedCutId(null);
+    setActiveZone(null);
+  };
+
+  // Klick auf der Zerlegekarte: Cut-Zone → Detail öffnen + Raster aufs Teilstück
+  // filtern; Regions-Zone → nur filtern (Toggle); Info-Zone (kopf/zunge) → nichts.
+  const handleZoneClick = (zone: { id: string }) => {
+    const cutId = ZONE_TO_CUT[zone.id];
+    if (cutId) {
+      const cut = cuts.find((c) => c.id === cutId);
+      if (cut) {
+        if (activeZone === zone.id) {
+          resetPrimal();
+        } else {
+          setActiveZone(zone.id);
+          setSelectedPrimal(cut.primal);
+          setSelectedCutId(cut.id);
+          trackEvent('CutAtlas_Zone', { zone: zone.id, ziel: cut.slug, art: 'cut', tier: species });
+        }
+        return;
+      }
+    }
+    const primalId = ZONE_TO_PRIMAL[zone.id];
+    if (primalId) {
+      if (activeZone === zone.id) {
+        resetPrimal();
+      } else {
+        setActiveZone(zone.id);
+        setSelectedPrimal(primalId);
+        setSelectedCutId(null);
+        trackEvent('CutAtlas_Zone', { zone: zone.id, ziel: primalId, art: 'primal', tier: species });
+      }
+    }
   };
 
   const selectedCut = selectedCutId ? cuts.find((c) => c.id === selectedCutId) ?? null : null;
-  const primalById = useMemo(() => Object.fromEntries(primals.map((p) => [p.id, p])), [primals]);
-
-  const handlePrimal = (id: string) => {
-    setSelectedPrimal((prev) => (prev === id ? null : id));
-    setSelectedCutId(null);
-  };
+  const activePrimal = selectedPrimal ? primalById[selectedPrimal] ?? null : null;
 
   return (
     <div>
-      {/* ── Spezies-Umschalter ──────────────────────────────────────────────── */}
+      {/* ── Spezies-Umschalter ─────────────────────────────────────────────── */}
       <div className="flex items-center gap-2 mb-6">
         {SPECIES_TABS.map((t) => (
           <button
@@ -90,86 +179,173 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
         ))}
       </div>
 
-      {/* ── Interaktive Silhouette ──────────────────────────────────────────── */}
-      <div className="border border-brand-gold/15 bg-[#0D0A06] overflow-hidden">
-        <AnimalDiagram
-          species={species}
-          primals={primals}
-          selectedPrimal={selectedPrimal}
-          onSelectPrimal={handlePrimal}
-        />
-      </div>
-
-      {/* Teilstück-Filter (Chips) */}
-      <div className="flex flex-wrap gap-2 mt-5">
-        <button
-          onClick={() => { setSelectedPrimal(null); setSelectedCutId(null); }}
-          className={`px-3 py-1.5 text-xs font-sans font-bold uppercase tracking-[0.08em] border transition-colors ${
-            selectedPrimal === null
-              ? 'bg-brand-gold/15 border-brand-gold/50 text-brand-gold'
-              : 'border-border-subtle text-text-light/55 hover:border-brand-gold/30'
-          }`}
-        >
-          Alle ({cuts.length})
-        </button>
-        {primals.map((p) => {
-          const count = cuts.filter((c) => c.primal === p.id).length;
-          if (!count) return null;
-          const active = selectedPrimal === p.id;
-          return (
-            <button
-              key={p.id}
-              onClick={() => handlePrimal(p.id)}
-              className={`px-3 py-1.5 text-xs font-sans font-bold uppercase tracking-[0.08em] border transition-colors ${
-                active
-                  ? 'bg-brand-gold/15 border-brand-gold/50 text-brand-gold'
-                  : 'border-border-subtle text-text-light/55 hover:border-brand-gold/30'
-              }`}
-            >
-              {p.nameDE} ({count})
-            </button>
-          );
-        })}
-      </div>
-
-      {selectedPrimal && primalById[selectedPrimal] && (
-        <p className="mt-4 font-body text-text-light/65 text-sm leading-relaxed max-w-2xl">
-          {primalById[selectedPrimal].blurb}
-        </p>
-      )}
-
-      {/* ── Foto-Galerie ─────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mt-8">
-        {visibleCuts.map((cut) => (
-          <button
-            key={cut.id}
-            onClick={() => setSelectedCutId(cut.id)}
-            className="group text-left border border-border-subtle bg-surface-card hover:border-brand-gold/40 transition-colors overflow-hidden"
-          >
-            <CutImage
-              src={cut.image}
-              alt={`${cut.nameDE} (${cut.nameEN})`}
-              label={cut.nameDE}
-              accent={primalById[cut.primal]?.color ?? '#C8882A'}
-              className="aspect-[4/3]"
-            />
-            <div className="p-3">
-              <h3 className="font-serif font-bold text-text-light text-sm leading-tight">{cut.nameDE}</h3>
-              <p className="text-text-light/40 text-xs font-sans italic mt-0.5">{cut.nameEN}</p>
-              <div className="mt-2 flex items-center justify-between">
-                <span className="flex gap-0.5">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <span key={i} className="h-1 w-3" style={{ background: i <= cut.dna.marbling ? '#C8882A' : '#3a2818' }} />
-                  ))}
-                </span>
-                <PriceLevel level={cut.price} />
-              </div>
+      {/* ── Oben: interaktives Tier + kompakte Info-Karte ──────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Links (2/3): interaktives Tier */}
+        <div className="lg:col-span-2">
+          {species === 'rind' ? (
+            <div className="overflow-hidden rounded-lg border border-brand-gold/15 bg-[#0D0A06]">
+              <BullButcherMap activeZoneId={activeZone} onZoneClick={handleZoneClick} />
             </div>
-          </button>
-        ))}
+          ) : (
+            <div className="overflow-hidden rounded-lg border border-brand-gold/15 bg-[#0D0A06]">
+              <AnimalDiagram
+                species={species}
+                primals={primals}
+                selectedPrimal={selectedPrimal}
+                onSelectPrimal={handlePrimal}
+              />
+            </div>
+          )}
+
+          <p className="mt-3 flex items-center gap-2 text-xs font-sans uppercase tracking-[0.14em] text-brand-gold/60">
+            <MousePointerClick size={14} />
+            {species === 'rind'
+              ? 'Klicke eine Muskelgruppe auf dem Stier'
+              : 'Klicke ein Teilstück auf dem Tier'}
+          </p>
+
+          {/* Mobile-Fallback: kompakte Teilstück-Chips (Desktop nutzt das Tier) */}
+          <div className="mt-3 flex flex-wrap gap-1.5 lg:hidden">
+            {primals.map((p) => {
+              const active = selectedPrimal === p.id;
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => handlePrimal(p.id)}
+                  className={`px-2.5 py-1 text-[11px] font-sans font-bold uppercase tracking-[0.06em] border transition-colors ${
+                    active
+                      ? 'bg-brand-gold/15 border-brand-gold/50 text-brand-gold'
+                      : 'border-border-subtle text-text-light/55 hover:border-brand-gold/30'
+                  }`}
+                >
+                  {p.nameDE}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Rechts (1/3): kompakte Info-Karte zum gewählten Teilstück */}
+        <div className="lg:col-span-1">
+          <div className="lg:sticky lg:top-6 min-h-[280px] rounded-lg border border-brand-gold/15 bg-surface-dark p-5">
+            <AnimatePresence mode="wait" initial={false}>
+              {activePrimal ? (
+                <motion.div
+                  key={activePrimal.id}
+                  initial={{ opacity: 0, x: 14 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -14 }}
+                  transition={{ duration: 0.25, ease: 'easeOut' }}
+                >
+                  <div className="flex items-start justify-between gap-2 border-b border-brand-gold/10 pb-3">
+                    <div>
+                      <h3 className="font-serif text-2xl font-bold text-text-light leading-tight">
+                        {activePrimal.nameDE}
+                      </h3>
+                      <p className="mt-0.5 text-brand-gold/60 text-xs font-sans uppercase tracking-[0.12em]">
+                        {activePrimal.nameEN} · {filteredCuts.length}{' '}
+                        {filteredCuts.length === 1 ? 'Cut' : 'Cuts'}
+                      </p>
+                    </div>
+                    <button
+                      onClick={resetPrimal}
+                      aria-label="Auswahl zurücksetzen"
+                      className="p-1.5 text-text-light/50 hover:text-brand-gold transition-colors"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+
+                  <p className="mt-4 font-body text-sm leading-relaxed text-text-light/70">
+                    {activePrimal.blurb}
+                  </p>
+
+                  <p className="mt-4 flex items-center gap-1.5 text-xs font-sans font-bold uppercase tracking-[0.12em] text-brand-fire">
+                    <Flame size={13} />
+                    {filteredCuts.length} {filteredCuts.length === 1 ? 'Cut' : 'Cuts'} im Raster unten
+                  </p>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex h-full min-h-[240px] flex-col items-center justify-center px-4 text-center"
+                >
+                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-brand-gold/25 text-brand-gold">
+                    <MousePointerClick size={24} />
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-text-light">Wähle eine Muskelgruppe</h3>
+                  <p className="mt-2 max-w-xs font-body text-sm text-text-light/50">
+                    Klicke {species === 'rind' ? 'auf dem Stier' : 'auf dem Tier'} auf ein Teilstück —
+                    das Raster unten filtert dann auf die passenden Cuts.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
 
-      {/* ── Detail-Overlay ───────────────────────────────────────────────────── */}
+      {/* ── Darunter: volles Cut-Raster (filtert bei Teilstück-Wahl) ────────── */}
+      <div className="mt-10">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-brand-gold/10 pb-3">
+          <h2 className="font-serif text-xl font-bold text-text-light">
+            {activePrimal ? (
+              <>
+                {activePrimal.nameDE}{' '}
+                <span className="text-text-light/40 text-base font-normal italic">
+                  · {activePrimal.nameEN}
+                </span>
+              </>
+            ) : (
+              <>Alle Cuts</>
+            )}
+            <span className="ml-2 text-brand-gold/60 text-sm font-sans font-bold">
+              {filteredCuts.length}
+            </span>
+          </h2>
+          {selectedPrimal && (
+            <button
+              onClick={resetPrimal}
+              className="inline-flex items-center gap-1.5 rounded border border-brand-fire/50 px-3 py-1.5 text-xs font-sans font-bold uppercase tracking-[0.08em] text-brand-fire transition-colors hover:bg-brand-fire/10"
+            >
+              Filter: {activePrimal?.nameDE}
+              <X size={13} />
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            {filteredCuts.map((cut) => (
+              <button
+                key={cut.id}
+                onClick={() => setSelectedCutId(cut.id)}
+                className="group overflow-hidden rounded-md border border-border-subtle bg-surface-card text-left transition-colors hover:border-brand-gold/40"
+              >
+                <CutImage
+                  src={cut.image}
+                  alt={`${cut.nameDE} (${cut.nameEN})`}
+                  label={cut.nameDE}
+                  accent={primalById[cut.primal]?.color ?? '#C8882A'}
+                  className="aspect-[4/3]"
+                />
+                <div className="p-3">
+                  <h3 className="font-serif font-bold text-text-light text-sm leading-tight">{cut.nameDE}</h3>
+                  <p className="mt-0.5 text-text-light/40 text-xs font-sans italic">{cut.nameEN}</p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <MarblingBars level={cut.dna.marbling} />
+                    <PriceLevel level={cut.price} />
+                  </div>
+                </div>
+              </button>
+            ))}
+        </div>
+      </div>
+
+      {/* ── Detail-Overlay ─────────────────────────────────────────────────── */}
       <AnimatePresence>
         {selectedCut && (
           <motion.div
@@ -195,7 +371,11 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
                 <X size={18} />
               </button>
 
-              <CutDetail cut={selectedCut} primal={primalById[selectedCut.primal]} recipes={recipeMap[selectedCut.id] ?? []} />
+              <CutDetail
+                cut={selectedCut}
+                primal={primalById[selectedCut.primal]}
+                recipes={recipeMap[selectedCut.id] ?? []}
+              />
             </motion.div>
           </motion.div>
         )}

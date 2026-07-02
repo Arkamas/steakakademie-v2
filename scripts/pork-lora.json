@@ -1,0 +1,26 @@
+{
+  "url": "https://v3b.fal.media/files/b/0a9e62b8/2xA5CO4ZAkgZQ7iegAkZp_pytorch_lora_weights.safetensors",
+  "trigger": "sa_pork",
+  "scale": 1,
+  "steps": 1200,
+  "dataset": [
+    "keule-schnitzel",
+    "minutensteak",
+    "nacken-am-knochen",
+    "nacken-block",
+    "nacken-marmoriert",
+    "nacken-scheiben",
+    "nacken-stueck",
+    "nackensteak",
+    "oberschale-schnitzel",
+    "pluma",
+    "pluma-iberico",
+    "schulter-schwarte",
+    "schulterdreieck",
+    "schweinebauch",
+    "schweinefilet",
+    "schweinekeule",
+    "schweinelachs"
+  ],
+  "trained_at": "2026-06-15"
+}

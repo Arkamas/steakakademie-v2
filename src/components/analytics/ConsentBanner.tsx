@@ -15,6 +15,10 @@ import { CONSENT_OPEN_EVENT, getConsent, setConsent } from '@/lib/consent';
  *  - Kein vorab gesetztes Häkchen, keine Vorauswahl; ohne Zustimmung wird nichts geladen.
  *  - Schließen ohne Wahl ist nicht möglich (nur über die beiden Buttons).
  */
+// Beide Consent-Buttons nutzen exakt dieselbe Klasse → gleiche Größe UND Farbe.
+const CONSENT_BTN =
+  'w-full rounded-md border border-brand-gold/60 bg-surface-elevated px-5 py-3 text-sm font-sans font-bold uppercase tracking-[0.08em] text-brand-gold transition-colors hover:bg-brand-gold/10 hover:border-brand-gold';
+
 export default function ConsentBanner() {
   const [open, setOpen] = useState(false);
 
@@ -52,18 +56,13 @@ export default function ConsentBanner() {
           </Link>
         </p>
 
-        {/* Erste Ebene: zwei gleichwertige Buttons (gleiche Größe/Prominenz) */}
+        {/* Erste Ebene: zwei gleichwertige Buttons — identische Größe UND Farbe,
+            keiner wird hervorgehoben (kein Nudging). */}
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <button
-            onClick={() => decide(false)}
-            className="w-full rounded-md border border-brand-gold/40 bg-surface-elevated px-5 py-3 text-sm font-sans font-bold uppercase tracking-[0.08em] text-text-light transition-colors hover:border-brand-gold/70"
-          >
+          <button onClick={() => decide(false)} className={CONSENT_BTN}>
             Ablehnen
           </button>
-          <button
-            onClick={() => decide(true)}
-            className="w-full rounded-md border border-brand-gold bg-brand-gold px-5 py-3 text-sm font-sans font-bold uppercase tracking-[0.08em] text-ink transition-colors hover:bg-[#b07020]"
-          >
+          <button onClick={() => decide(true)} className={CONSENT_BTN}>
             Alles akzeptieren
           </button>
         </div>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Flame } from 'lucide-react';
+import ConsentSettingsLink from '@/components/analytics/ConsentSettingsLink';
 
 const FOOTER_LINKS = {
   Wissen: [
@@ -97,6 +98,7 @@ export default function Footer() {
             <span>© {year} Steakakademie</span>
             <Link href="/impressum" className="hover:text-text-light/60 transition-colors">Impressum</Link>
             <Link href="/datenschutz" className="hover:text-text-light/60 transition-colors">Datenschutz</Link>
+            <ConsentSettingsLink className="hover:text-text-light/60 transition-colors" />
             <Link href="/agb" className="hover:text-text-light/60 transition-colors">AGB</Link>
             <Link href="/nutzungsbedingungen" className="hover:text-text-light/60 transition-colors">Nutzungsbedingungen</Link>
             <Link href="/affiliate-disclosure" className="hover:text-text-light/60 transition-colors">Affiliate-Disclosure</Link>

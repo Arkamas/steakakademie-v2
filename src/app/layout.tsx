@@ -3,6 +3,8 @@ import { Playfair_Display, Source_Serif_4, DM_Sans } from 'next/font/google';
 import MarcoWidget from '@/components/ai/MarcoWidget';
 import SmokeEffect from '@/components/ui/SmokeEffect';
 import PlausibleScript from '@/components/analytics/PlausibleScript';
+import ClarityScript from '@/components/analytics/ClarityScript';
+import ConsentBanner from '@/components/analytics/ConsentBanner';
 import ExitIntent from '@/components/ui/ExitIntent';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
 import './globals.css';
@@ -91,8 +93,11 @@ export default function RootLayout({
         <SmokeEffect />
         <MarcoWidget />
         <ExitIntent />
-        {/* Nur Plausible — cookieless, ohne Einwilligung (TTDSG §25 Abs.2). Kein GA4/Clarity, kein Consent-Banner nötig. */}
+        {/* Plausible: cookieless, ohne Einwilligung (§ 25 Abs. 2 TDDDG) — läuft immer. */}
         <PlausibleScript />
+        {/* Microsoft Clarity: einwilligungspflichtig — lädt nur nach Opt-in über den Banner. */}
+        <ClarityScript />
+        <ConsentBanner />
       </body>
     </html>
   );

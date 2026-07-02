@@ -11,6 +11,7 @@ import CutImage from './CutImage';
 import { METHOD_LABEL, type Cut, type Primal, type Species } from '@/lib/cuts-catalog';
 import { getMeatOffer } from '@/lib/cut-affiliate';
 import type { CutRecipeRef } from '@/lib/cut-recipes';
+import { trackEvent } from '@/components/analytics/PlausibleScript';
 
 interface CutAtlasClientProps {
   bySpecies: Record<Species, { cuts: Cut[]; primals: Primal[] }>;
@@ -112,7 +113,10 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
     setActiveZone(null);
   };
   const handlePrimal = (id: string) => {
-    setSelectedPrimal((prev) => (prev === id ? null : id));
+    const next = selectedPrimal === id ? null : id;
+    // Nur Aktivierungen tracken (Werbe-Reporting), Toggle-Off nicht.
+    if (next) trackEvent('CutAtlas_Zone', { zone: id, ziel: id, art: 'primal', tier: species });
+    setSelectedPrimal(next);
     setSelectedCutId(null);
     setActiveZone(null);
   };
@@ -135,6 +139,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
           setActiveZone(zone.id);
           setSelectedPrimal(cut.primal);
           setSelectedCutId(cut.id);
+          trackEvent('CutAtlas_Zone', { zone: zone.id, ziel: cut.slug, art: 'cut', tier: species });
         }
         return;
       }
@@ -147,6 +152,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
         setActiveZone(zone.id);
         setSelectedPrimal(primalId);
         setSelectedCutId(null);
+        trackEvent('CutAtlas_Zone', { zone: zone.id, ziel: primalId, art: 'primal', tier: species });
       }
     }
   };

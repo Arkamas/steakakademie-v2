@@ -3,10 +3,8 @@ import { Playfair_Display, Source_Serif_4, DM_Sans } from 'next/font/google';
 import MarcoWidget from '@/components/ai/MarcoWidget';
 import SmokeEffect from '@/components/ui/SmokeEffect';
 import PlausibleScript from '@/components/analytics/PlausibleScript';
-// DIAGNOSE (Crash-Bisect): Consent/Clarity temporär deaktiviert, um zu prüfen,
-// ob der Preview-Runtime-Crash von hier kommt. Wird nach dem Test wieder aktiviert.
-// import ClarityScript from '@/components/analytics/ClarityScript';
-// import ConsentBanner from '@/components/analytics/ConsentBanner';
+import ClarityScript from '@/components/analytics/ClarityScript';
+import ConsentBanner from '@/components/analytics/ConsentBanner';
 import ExitIntent from '@/components/ui/ExitIntent';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
 import './globals.css';
@@ -97,9 +95,9 @@ export default function RootLayout({
         <ExitIntent />
         {/* Plausible: cookieless, ohne Einwilligung (§ 25 Abs. 2 TDDDG) — läuft immer. */}
         <PlausibleScript />
-        {/* DIAGNOSE (Crash-Bisect): temporär deaktiviert.
+        {/* Microsoft Clarity: einwilligungspflichtig — lädt nur nach Opt-in über den Banner. */}
         <ClarityScript />
-        <ConsentBanner /> */}
+        <ConsentBanner />
       </body>
     </html>
   );

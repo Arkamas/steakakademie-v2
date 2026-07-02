@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { X, Flame, Thermometer, BookOpen, ShoppingCart, MousePointerClick } from 'lucide-react';
 import AnimalDiagram from './AnimalDiagram';
-import BullPrimalMap from './BullPrimalMap';
+import BullButcherMap from './BullButcherMap';
 import CutDnaRadar from './CutDnaRadar';
 import CutImage from './CutImage';
 import { METHOD_LABEL, type Cut, type Primal, type Species } from '@/lib/cuts-catalog';
@@ -21,6 +21,37 @@ const SPECIES_TABS: { id: Species; label: string }[] = [
   { id: 'rind', label: '🐄 Rind' },
   { id: 'schwein', label: '🐖 Schwein' },
 ];
+
+// Zerlegekarte (BullButcherMap) → Katalog. Zonen mit exakt passendem Cut öffnen
+// dessen Detail (Raster filtert auf sein Teilstück); Regions-Zonen filtern nur.
+// kopf/zunge haben keinen Katalog-Cut → reine Info, keine Aktion.
+const ZONE_TO_CUT: Record<string, string> = {
+  'backe': 'ochsenbacke',
+  'nacken': 'nacken',
+  'rib-eye': 'ribeye',
+  'falsches-filet': 'falsches-filet',
+  'metzgerstueck': 'onglet', // Metzgerstück = Onglet / Nierenzapfen
+  'roastbeef': 'rumpsteak',
+  'porterhouse': 'porterhouse',
+  'filet': 'filet',
+  't-bone': 't-bone',
+  'skirt-steak': 'skirt',
+  'lappen': 'bavette', // Bauchlappen = Bavette (Flap Steak)
+  'flank-steak': 'flank',
+  'tafelspitz': 'tafelspitz',
+  'buergermeisterstueck': 'tri-tip', // Bürgermeisterstück = Tri-Tip
+  'kugel': 'kugel',
+  'oberschale': 'oberschale',
+  'unterschale': 'unterschale',
+};
+const ZONE_TO_PRIMAL: Record<string, string> = {
+  'hals': 'nacken',
+  'schulter': 'bug',
+  'hohe-rippe': 'hochrippe',
+  'querrippe': 'hochrippe',
+  'brust': 'brust',
+  'huefte': 'huefte',
+};
 
 function PriceLevel({ level }: { level: number }) {
   return (
@@ -71,14 +102,53 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
     [cuts, selectedPrimal]
   );
 
+  // Aktive Zone der Zerlegekarte (hält Karte + Panel/Raster synchron)
+  const [activeZone, setActiveZone] = useState<string | null>(null);
+
   const switchSpecies = (s: Species) => {
     setSpecies(s);
     setSelectedPrimal(null);
     setSelectedCutId(null);
+    setActiveZone(null);
   };
   const handlePrimal = (id: string) => {
     setSelectedPrimal((prev) => (prev === id ? null : id));
     setSelectedCutId(null);
+    setActiveZone(null);
+  };
+  const resetPrimal = () => {
+    setSelectedPrimal(null);
+    setSelectedCutId(null);
+    setActiveZone(null);
+  };
+
+  // Klick auf der Zerlegekarte: Cut-Zone → Detail öffnen + Raster aufs Teilstück
+  // filtern; Regions-Zone → nur filtern (Toggle); Info-Zone (kopf/zunge) → nichts.
+  const handleZoneClick = (zone: { id: string }) => {
+    const cutId = ZONE_TO_CUT[zone.id];
+    if (cutId) {
+      const cut = cuts.find((c) => c.id === cutId);
+      if (cut) {
+        if (activeZone === zone.id) {
+          resetPrimal();
+        } else {
+          setActiveZone(zone.id);
+          setSelectedPrimal(cut.primal);
+          setSelectedCutId(cut.id);
+        }
+        return;
+      }
+    }
+    const primalId = ZONE_TO_PRIMAL[zone.id];
+    if (primalId) {
+      if (activeZone === zone.id) {
+        resetPrimal();
+      } else {
+        setActiveZone(zone.id);
+        setSelectedPrimal(primalId);
+        setSelectedCutId(null);
+      }
+    }
   };
 
   const selectedCut = selectedCutId ? cuts.find((c) => c.id === selectedCutId) ?? null : null;
@@ -108,7 +178,9 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
         {/* Links (2/3): interaktives Tier */}
         <div className="lg:col-span-2">
           {species === 'rind' ? (
-            <BullPrimalMap primals={primals} selectedPrimal={selectedPrimal} onSelect={handlePrimal} />
+            <div className="overflow-hidden rounded-lg border border-brand-gold/15 bg-[#0D0A06]">
+              <BullButcherMap activeZoneId={activeZone} onZoneClick={handleZoneClick} />
+            </div>
           ) : (
             <div className="overflow-hidden rounded-lg border border-brand-gold/15 bg-[#0D0A06]">
               <AnimalDiagram
@@ -171,7 +243,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
                       </p>
                     </div>
                     <button
-                      onClick={() => setSelectedPrimal(null)}
+                      onClick={resetPrimal}
                       aria-label="Auswahl zurücksetzen"
                       className="p-1.5 text-text-light/50 hover:text-brand-gold transition-colors"
                     >
@@ -231,7 +303,7 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
           </h2>
           {selectedPrimal && (
             <button
-              onClick={() => setSelectedPrimal(null)}
+              onClick={resetPrimal}
               className="inline-flex items-center gap-1.5 rounded border border-brand-fire/50 px-3 py-1.5 text-xs font-sans font-bold uppercase tracking-[0.08em] text-brand-fire transition-colors hover:bg-brand-fire/10"
             >
               Filter: {activePrimal?.nameDE}

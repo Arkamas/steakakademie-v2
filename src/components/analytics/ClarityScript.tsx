@@ -15,8 +15,11 @@ import { CONSENT_CHANGE_EVENT, hasStatisticsConsent, type ConsentState } from '@
  *  1. clarity.microsoft.com → Projekt für steakakademie.de anlegen
  *  2. Project-ID (z. B. "abcd1234ef") als NEXT_PUBLIC_CLARITY_ID in .env(.local) setzen
  *  3. Im Clarity-Projekt: Masking auf "strict" + AVV/DPA bestätigen
+ *
+ * Die Project-ID ist öffentlich (steht ohnehin im Client-Code) und daher fest
+ * hinterlegt — analog zur Plausible-Domain. Per NEXT_PUBLIC_CLARITY_ID überschreibbar.
  */
-const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID;
+const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID || 'wv3l573awi';
 
 let injected = false;
 

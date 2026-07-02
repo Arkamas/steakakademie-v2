@@ -147,6 +147,14 @@ export default function DatenschutzPage() {
                 USA ist möglich. Microsoft ist unter dem EU-US Data Privacy Framework zertifiziert; zusätzlich
                 besteht ein Auftragsverarbeitungsvertrag (Art. 28 DSGVO).
               </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Sitzungsaufzeichnungen speichert
+                Microsoft für <strong className="text-text-primary">30 Tage</strong> (einzelne markierte
+                Aufzeichnungen bis zu 13 Monate), aggregierte Heatmap-Daten für{' '}
+                <strong className="text-text-primary">13 Monate</strong>; danach werden die Daten inklusive
+                Backups unwiederbringlich gelöscht. Die gesetzten Cookies haben Laufzeiten von einem Tag
+                (Sitzungs-Cookie) bis zu ca. einem Jahr.
+              </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) i. V. m. § 25 Abs. 1 TDDDG. Details:{' '}
                 <a href="https://learn.microsoft.com/clarity/setup-and-installation/faq" target="_blank" rel="noopener noreferrer" className={linkClass}>

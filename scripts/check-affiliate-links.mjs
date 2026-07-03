@@ -128,4 +128,46 @@ async function main() {
     const result = await checkUrl(p.url);
     results.push({ id: p.id, name: p.name, url: p.url, ...result });
 
-   
+    if (!AS_JSON) {
+      const icon = result.ok ? '✅' : '❌';
+      const label = result.ok ? result.reason : `${result.reason}`;
+      console.log(`${icon} [${p.id}] ${label}`);
+      if (!result.ok) {
+        console.log(`   URL: ${p.url}`);
+      }
+    }
+
+    if (!FAST && !result.ok) {
+      // Kurze Pause nach Fehlern um Rate-Limits zu vermeiden
+      await new Promise(r => setTimeout(r, 500));
+    }
+  }
+
+  const errors = results.filter(r => !r.ok);
+  const ok     = results.filter(r => r.ok);
+
+  if (AS_JSON) {
+    console.log(JSON.stringify({ total: results.length, ok: ok.length, errors: errors.length, results }, null, 2));
+    process.exit(errors.length > 0 ? 1 : 0);
+  }
+
+  console.log(`\n────────────────────────────────`);
+  console.log(`✅ OK:      ${ok.length}`);
+  console.log(`❌ Fehler:  ${errors.length}`);
+  console.log(`📊 Gesamt:  ${results.length}`);
+
+  if (errors.length > 0) {
+    console.log(`\n⚠️  Fehlerhafte Links:\n`);
+    for (const e of errors) {
+      console.log(`  • ${e.id} (${e.name})`);
+      console.log(`    Grund:  ${e.reason}`);
+      console.log(`    URL:    ${e.url}\n`);
+    }
+    process.exit(1);
+  } else {
+    console.log(`\n🎉 Alle Links erreichbar.\n`);
+    process.exit(0);
+  }
+}
+
+main().catch(err => { console.error(err); process.exit(1); });

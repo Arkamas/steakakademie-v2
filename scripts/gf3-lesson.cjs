@@ -271,4 +271,37 @@ async function main() {
   try {
     const healthy = await workerHealthy();
     if (!healthy) {
-      process.stderr.w
+      process.stderr.write('[gf3] Worker nicht erreichbar — übersprungen\n');
+      return;
+    }
+
+    const observations = await getRecentObservations();
+    if (!observations.length) {
+      process.stderr.write('[gf3] Keine Observations — übersprungen\n');
+      return;
+    }
+
+    const lesson = await synthesizeLesson(observations);
+    if (!lesson) {
+      process.stderr.write('[gf3] Synthese fehlgeschlagen — übersprungen\n');
+      return;
+    }
+
+    // Immer lokal speichern
+    saveToLocalLog(lesson, observations);
+    process.stdout.write(`[gf3] ✅ GF3-Lektion lokal gespeichert (${GF3_LOG_FILE})\n`);
+
+    // Dauerhaft ins committete memory.md (überlebt Rechner-Verlust via Git)
+    appendToMemoryMd(lesson);
+
+    // Zusätzlich in claude-mem (Fehler werden ignoriert)
+    await saveToClaudeMem(lesson);
+
+    process.stdout.write('[gf3] ✅ Session dokumentiert\n');
+
+  } catch (err) {
+    process.stderr.write(`[gf3] Unerwarteter Fehler: ${err.message}\n`);
+  }
+}
+
+main().then(() => process.exit(0)).catch(() => process.exit(0));

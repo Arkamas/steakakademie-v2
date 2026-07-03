@@ -48,6 +48,20 @@ function loadRegistry() {
 }
 
 // ── HTTP Check ─────────────────────────────────────────────────────────────
+// Amazon-Suchlink-Erkennung (Fix 03.07.2026, KAN-59):
+// Für Produkte ohne eigene ASIN/Herstellerseite nutzen wir bewusst generische
+// amazon.de/s?k=... Suchlinks statt toter /dp/-Deep-Links (siehe memory.md,
+// 25.06.). Amazon blockt automatisierte Requests (Bot-/WAF-Schutz, v.a. von
+// GitHub-Actions-IPs) auf Suchseiten fast immer mit HTTP 503 — unabhängig
+// davon, ob der Link für echte Nutzer im Browser funktioniert. Das erzeugte
+// jede Woche einen falschen P0-Alarm (KAN-59: "22 defekte Links", alles
+// amazon.de/s?-Suchlinks mit 503). Diese Links lassen sich durch einen
+// simplen HTTP-Check technisch nicht sauber verifizieren — wir markieren sie
+// bei 503 daher explizit als "unverifizierbar" statt als Fehler.
+function isAmazonSearchUrl(url) {
+  return /amazon\.[a-z.]+\/s\?/i.test(url);
+}
+
 async function checkUrl(url) {
   // Placeholder direkt ablehnen
   if (url.includes('PLACEHOLDER')) {
@@ -68,6 +82,13 @@ async function checkUrl(url) {
     });
     clearTimeout(timer);
 
+    if (res.status === 503 && isAmazonSearchUrl(url)) {
+      return {
+        ok: true, status: 503, warn: true,
+        reason: 'Amazon Bot-Block vermutet (503) — Suchlink, für echte Nutzer im Browser i.d.R. erreichbar, technisch nicht verifizierbar',
+      };
+    }
+
     if (res.status === 405) {
       // HEAD nicht erlaubt → GET versuchen
       const res2 = await fetch(url, {
@@ -76,6 +97,12 @@ async function checkUrl(url) {
         redirect: 'follow',
         headers: { 'User-Agent': 'Steakakademie-LinkChecker/1.0' },
       });
+      if (res2.status === 503 && isAmazonSearchUrl(url)) {
+        return {
+          ok: true, status: 503, warn: true,
+          reason: 'Amazon Bot-Block vermutet (503) — Suchlink, für echte Nutzer im Browser i.d.R. erreichbar, technisch nicht verifizierbar',
+        };
+      }
       return { ok: res2.ok, status: res2.status, reason: res2.ok ? 'OK (GET)' : `HTTP ${res2.status}` };
     }
 
@@ -101,46 +128,4 @@ async function main() {
     const result = await checkUrl(p.url);
     results.push({ id: p.id, name: p.name, url: p.url, ...result });
 
-    if (!AS_JSON) {
-      const icon = result.ok ? '✅' : '❌';
-      const label = result.ok ? result.reason : `${result.reason}`;
-      console.log(`${icon} [${p.id}] ${label}`);
-      if (!result.ok) {
-        console.log(`   URL: ${p.url}`);
-      }
-    }
-
-    if (!FAST && !result.ok) {
-      // Kurze Pause nach Fehlern um Rate-Limits zu vermeiden
-      await new Promise(r => setTimeout(r, 500));
-    }
-  }
-
-  const errors = results.filter(r => !r.ok);
-  const ok     = results.filter(r => r.ok);
-
-  if (AS_JSON) {
-    console.log(JSON.stringify({ total: results.length, ok: ok.length, errors: errors.length, results }, null, 2));
-    process.exit(errors.length > 0 ? 1 : 0);
-  }
-
-  console.log(`\n────────────────────────────────`);
-  console.log(`✅ OK:      ${ok.length}`);
-  console.log(`❌ Fehler:  ${errors.length}`);
-  console.log(`📊 Gesamt:  ${results.length}`);
-
-  if (errors.length > 0) {
-    console.log(`\n⚠️  Fehlerhafte Links:\n`);
-    for (const e of errors) {
-      console.log(`  • ${e.id} (${e.name})`);
-      console.log(`    Grund:  ${e.reason}`);
-      console.log(`    URL:    ${e.url}\n`);
-    }
-    process.exit(1);
-  } else {
-    console.log(`\n🎉 Alle Links erreichbar.\n`);
-    process.exit(0);
-  }
-}
-
-main().catch(err => { console.error(err); process.exit(1); });
+   

@@ -70,26 +70,28 @@ async function workerHealthy() {
 }
 
 // ── 2. Jüngste Observations holen ──────────────────────────────────────────
+// WICHTIG (Fix 03.07.2026): Der frühere Fallback auf /api/context/inject
+// nahm einen generischen Meta-Text (Token-/Observation-Statistiken, keine
+// echten Session-Fakten) und reichte ihn als "Observation" an Haiku weiter.
+// Ergebnis: Haiku halluzinierte plausibel klingende, aber frei erfundene
+// GF3-Lektionen (falsche Payment-Provider, erfundene Nutzerzahlen etc.),
+// die dauerhaft in memory.md landeten. Der Fallback ist deshalb entfernt —
+// ohne echte, konkrete Observations wird lieber NICHTS geschrieben
+// (siehe "Keine Observations — übersprungen" in main()).
 async function getRecentObservations() {
   try {
-    // Try search endpoint with project filter
     const r = await httpRequest({
       hostname: 'localhost', port: WORKER_PORT,
       path: `/api/search?query=*&project=${PROJECT}&limit=${OBS_LIMIT}`,
       method: 'GET'
     });
-    if (r.status === 200 && Array.isArray(r.data)) return r.data;
-
-    // Fallback: context inject (recent window, not full)
-    const r2 = await httpRequest({
-      hostname: 'localhost', port: WORKER_PORT,
-      path: `/api/context/inject?project=${PROJECT}`,
-      method: 'GET'
-    });
-    if (r2.status === 200) {
-      // Returns markdown text — extract first 20 lines as summary
-      const lines = String(r2.data).split('\n').filter(l => l.trim()).slice(0, 30);
-      return [{ type: 'context', title: 'Session Context', narrative: lines.join('\n') }];
+    if (r.status === 200 && Array.isArray(r.data)) {
+      // Qualitäts-Gate: nur Observations mit echtem Inhalt (narrative/facts
+      // von sinnvoller Länge) zählen — reine Platzhalter/Leerobjekte raus.
+      return r.data.filter((o) => {
+        const text = (o && (o.narrative || o.facts)) ? String(o.narrative || o.facts) : '';
+        return text.trim().length >= 40;
+      });
     }
   } catch (err) {
     process.stderr.write(`[gf3] fetch obs error: ${err.message}\n`);
@@ -124,6 +126,13 @@ Aktuelle Session-Aktivitäten (claude-mem Observations):
 ${obsText}
 ---
 
+WICHTIG: Nutze AUSSCHLIESSLICH konkrete Fakten, die oben tatsächlich stehen
+(echte Dateinamen, Produktnamen, Tickets, Zahlen). Erfinde NICHTS dazu — keine
+Nutzerzahlen, Zahlungsanbieter, Architektur-Entscheidungen o.ä., die nicht
+explizit in den Observations genannt sind. Falls die Observations zu vage oder
+generisch sind, um daraus etwas Konkretes und Wahres zu extrahieren, antworte
+exakt mit "SKIP" (nur dieses eine Wort) statt zu spekulieren.
+
 Erstelle eine kompakte GF3-Lektion (max 220 Wörter) exakt in diesem Format:
 
 **Was gebaut:** [1-2 Sätze: Was wurde konkret implementiert/entschieden?]
@@ -157,7 +166,12 @@ Ton: direkt, ehrlich, keine Marketingsprache. Schreibe für jemanden, der das Sy
     }, body);
 
     if (r.status === 200 && r.data?.content?.[0]?.text) {
-      return r.data.content[0].text;
+      const text = r.data.content[0].text.trim();
+      if (text === 'SKIP' || text.startsWith('SKIP')) {
+        process.stderr.write('[gf3] Modell meldet SKIP — zu vage für eine belastbare Lektion\n');
+        return null;
+      }
+      return text;
     }
     process.stderr.write(`[gf3] Anthropic error ${r.status}\n`);
     return null;
@@ -257,37 +271,4 @@ async function main() {
   try {
     const healthy = await workerHealthy();
     if (!healthy) {
-      process.stderr.write('[gf3] Worker nicht erreichbar — übersprungen\n');
-      return;
-    }
-
-    const observations = await getRecentObservations();
-    if (!observations.length) {
-      process.stderr.write('[gf3] Keine Observations — übersprungen\n');
-      return;
-    }
-
-    const lesson = await synthesizeLesson(observations);
-    if (!lesson) {
-      process.stderr.write('[gf3] Synthese fehlgeschlagen — übersprungen\n');
-      return;
-    }
-
-    // Immer lokal speichern
-    saveToLocalLog(lesson, observations);
-    process.stdout.write(`[gf3] ✅ GF3-Lektion lokal gespeichert (${GF3_LOG_FILE})\n`);
-
-    // Dauerhaft ins committete memory.md (überlebt Rechner-Verlust via Git)
-    appendToMemoryMd(lesson);
-
-    // Zusätzlich in claude-mem (Fehler werden ignoriert)
-    await saveToClaudeMem(lesson);
-
-    process.stdout.write('[gf3] ✅ Session dokumentiert\n');
-
-  } catch (err) {
-    process.stderr.write(`[gf3] Unerwarteter Fehler: ${err.message}\n`);
-  }
-}
-
-main().then(() => process.exit(0)).catch(() => process.exit(0));
+      process.stderr.w

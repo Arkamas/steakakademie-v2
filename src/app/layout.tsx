@@ -33,6 +33,12 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://steakakademie.de'),
+  // Seitenweiter Canonical-Fallback: './' wird von Next gegen den aktuellen
+  // Routen-Pfad aufgelöst (per-Page-Canonical). Seiten mit eigenem
+  // `alternates` überschreiben dies. SEO-Fix 03.07.2026 (Duplicate-Content-Schutz).
+  alternates: {
+    canonical: './',
+  },
   title: {
     default: 'Steakakademie — Deutschlands BBQ-Wissensplattform',
     template: '%s | Steakakademie',

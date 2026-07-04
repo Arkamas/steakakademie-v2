@@ -77,16 +77,24 @@ function buildPrompt(brief, species) {
 }
 
 // LoRA-Wahl je Spezies. Schwein nutzt — falls trainiert — den eigenen Pork-LoRA
-// (nativ blass-rosa, Trigger sa_pork). Sonst Fallback: Rind-Haus-LoRA mit
-// reduziertem Scale 0.2 (Rind-/Rot-Bias zurücknehmen).
+// (nativ blass-rosa, Trigger sa_pork). Sonst: dedizierter Rohfleisch-LoRA
+// (sa_rawcut, trainiert 04.06.2026 für rohe Metzger-Cuts) statt des vorherigen
+// sa_foodstyle-LoRA (der war für angerichtete/gegrillte Rezeptfotos trainiert
+// und passte nicht zur rohen Cut-Anatomie — vermutliche Ursache der 03.07.2026
+// entdeckten anatomischen Fehler, siehe training/cut-review/rejected-2026-07-03/).
 function loraFor(species) {
   if (species === 'schwein' && PORK_LORA?.url) {
     return { lora: PORK_LORA.url, scale: PORK_LORA.scale ?? 1.0, trigger: PORK_LORA.trigger || 'sa_pork' }
   }
-  return { lora: FOODSTYLE_LORA, scale: species === 'schwein' ? 0.2 : 0.45, trigger: 'sa_foodstyle' }
+  return { lora: RAWCUT_LORA, scale: 0.9, trigger: 'sa_rawcut' }
 }
 
-// Hausstil-LoRA dezent (Stil ja, isoliertes Produkt-Framing dominiert).
+// Rohfleisch-Stil-LoRA (training/lora-rawcut/README.md) — dunkles/warmes
+// Holzbrett, Metzger-Stil, für ROHE Cuts. Ersetzt den vorherigen sa_foodstyle-LoRA.
+const RAWCUT_LORA = process.env.FAL_LORA_RAWCUT
+  || 'https://v3b.fal.media/files/b/0a9cfb6d/As_0SxQomWhTxnCArXtU7_pytorch_lora_weights.safetensors'
+
+// Alter Hausstil-LoRA (Rezept-/Grill-Fotos) — nicht mehr für Cuts genutzt, Referenz gelassen.
 const FOODSTYLE_LORA = process.env.FAL_LORA_FOODSTYLE
   || 'https://v3b.fal.media/files/b/0a9cfb28/4f5c21hz9uGU5ia2PWRnR_pytorch_lora_weights.safetensors'
 
@@ -140,21 +148,4 @@ async function main() {
     if (!FORCE && existsSync(target)) { skipped++; continue }
 
     const prompt = buildPrompt(brief, species)
-    if (DRY) { console.log(c.y(`◇ ${slug} (${species})`)); console.log(c.d(`  ${prompt}\n`)); done++; continue }
-
-    try {
-      process.stdout.write(c.d(`◇ ${slug} … `))
-      const buf = await generate(prompt, loraFor(species))
-      await writeFile(target, buf)
-      console.log(c.g(`✓ ${(buf.length / 1024).toFixed(0)} KB`))
-      done++
-    } catch (e) {
-      console.log(c.r(`✗ ${e.message}`))
-      failed++
-    }
-  }
-
-  console.log(`\n${c.g(`✓ ${done} generiert`)} · ${c.d(`${skipped} übersprungen`)} · ${failed ? c.r(`${failed} Fehler`) : '0 Fehler'}\n`)
-}
-
-main().catch(e => { console.error(c.r(e.stack || e.message)); process.exit(1) })
+    if (DRY) { console.log(c.y(`◇ ${slug} (${species})`)); console.log(c.d(`  ${prompt}\n`)); 

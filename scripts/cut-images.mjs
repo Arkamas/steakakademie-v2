@@ -63,17 +63,28 @@ async function parseCuts() {
   return cuts
 }
 
+// Kräuter-Rotation (deterministisch je Slug, Uwe 06.07.2026) — Deko erlaubt und
+// gewünscht ("macht das Gesamtbild schöner"), aber wechselnd statt immer Rosmarin.
+// Gleiches Prinzip wie PERSPECTIVES/pickPerspective() in recipe-images.mjs.
+const HERBS = ['rosemary', 'fresh thyme', 'sage leaves', 'bay leaves', 'flat-leaf parsley', 'fresh chives']
+function pickHerb(seed) {
+  let h = 0
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0
+  return HERBS[h % HERBS.length]
+}
+
 // Carneo-Look: freigestelltes Teilstück, dunkler Grund, Studio-Produktfoto.
 // Fleischfarbe je Spezies — der hauseigene LoRA ist auf RIND trainiert und zieht
 // Schwein sonst ins Rote.
-function buildPrompt(brief, species) {
+function buildPrompt(brief, species, slug = '') {
   const colour = species === 'schwein'
     ? 'fresh pale pink raw pork, light blush-pink lean meat with soft creamy white fat, distinctly pale, NOT red, not dark red, not beef-coloured'
     : 'fresh deep-red raw beef with natural marbling and texture'
+  const herb = pickHerb(slug || brief)
   return `${brief}, a single isolated cut of raw meat centered in frame on a dark charcoal slate surface, `
     + `professional studio product photography, soft even softbox lighting from above, `
-    + `${colour}, crisp focus, subtle shadow, `
-    + `clean dark moody background, no garnish, no herbs, no text, no watermark, no people, no hands`
+    + `${colour}, crisp focus, subtle shadow, a small sprig of ${herb} placed elegantly beside the meat for a natural touch, `
+    + `clean dark moody background, no text, no watermark, no people, no hands`
 }
 
 // LoRA-Wahl je Spezies. Schwein nutzt — falls trainiert — den eigenen Pork-LoRA
@@ -147,5 +158,22 @@ async function main() {
     const target = join(IMG_DIR, `${slug}.jpg`)
     if (!FORCE && existsSync(target)) { skipped++; continue }
 
-    const prompt = buildPrompt(brief, species)
-    if (DRY) { console.log(c.y(`◇ ${slug} (${species})`)); console.log(c.d(`  ${prompt}\n`)); 
+    const prompt = buildPrompt(brief, species, slug)
+    if (DRY) { console.log(c.y(`◇ ${slug} (${species})`)); console.log(c.d(`  ${prompt}\n`)); done++; continue }
+
+    try {
+      process.stdout.write(c.d(`◇ ${slug} … `))
+      const buf = await generate(prompt, loraFor(species))
+      await writeFile(target, buf)
+      console.log(c.g(`✓ ${(buf.length / 1024).toFixed(0)} KB`))
+      done++
+    } catch (e) {
+      console.log(c.r(`✗ ${e.message}`))
+      failed++
+    }
+  }
+
+  console.log(`\n${c.g(`✓ ${done} generiert`)} · ${c.d(`${skipped} übersprungen`)} · ${failed ? c.r(`${failed} Fehler`) : '0 Fehler'}\n`)
+}
+
+main().catch(e => { console.error(c.r(e.stack || e.message)); process.exit(1) })

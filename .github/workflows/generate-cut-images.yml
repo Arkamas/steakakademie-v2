@@ -77,4 +77,22 @@ jobs:
           git push origin "$BRANCH"
           gh pr create \
             --title "🥩 ${N} neue Cut-Fotos — bitte gegen Cut-Anatomie prüfen (Regel 8c)" \
-            --body "Automatisch generiert (F
+            --body "Automatisch generiert (FLUX.1 + sa_rawcut-LoRA). **Vor dem Mergen jedes Bild einzeln gegen \`visualBrief\` in \`src/lib/cuts-catalog.ts\` prüfen** — stimmt Form/Knochen/Fett mit dem behaupteten Cut überein? Erst nach Freigabe mergen; Merge löst den Deploy aus." \
+            --base main \
+            --head "$BRANCH"
+          echo "## 🥩 ${N} Cut-Fotos generiert — PR zur Prüfung geöffnet" >> $GITHUB_STEP_SUMMARY
+          echo "KEIN Auto-Deploy. Merge erst nach manueller Sichtprüfung." >> $GITHUB_STEP_SUMMARY
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Cut-Foto-Generierung fehlgeschlagen'
+          ALERT_DESCRIPTION: 'Der Cut-Foto-Lauf (generate-cut-images, FLUX) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-cutimages-failed'
+        run: node scripts/ops-alert-to-jira.mjs

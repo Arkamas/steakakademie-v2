@@ -5,7 +5,7 @@ import Footer from '@/components/layout/Footer';
 import NewsletterCapture from '@/components/persoenlichkeiten/NewsletterCapture';
 
 export const metadata: Metadata = {
-  title: 'Der Wissens-Brief — kostenlose BBQ-Tipps per Mail | Steakakademie',
+  title: 'Der Wissens-Brief — kostenlose BBQ-Tipps per Mail',
   description:
     'Jeden Freitag ein Stück BBQ-Wissen, das bleibt: Kerntemperaturen, Cuts, Technik — präzise und ehrlich. Kostenlos, jederzeit abmeldbar. Die Steakakademie direkt ins Postfach.',
   alternates: { canonical: 'https://steakakademie.de/newsletter' },

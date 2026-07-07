@@ -10,7 +10,7 @@ import DiagnoseForm from './DiagnoseForm';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Diagnose — Steak-Beichte | Steakakademie',
+  title: 'Diagnose — Steak-Beichte',
   description: 'Beichte deine missglückte Grillsitzung — die KI liefert die ehrliche Diagnose.',
   robots: { index: false, follow: false },
 };

@@ -6,7 +6,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'The Pitmaster Pilgrimage — US-BBQ-Expedition | Steakakademie',
+  title: 'The Pitmaster Pilgrimage — US-BBQ-Expedition',
   description:
     'Die heiligen Vier Stile, US-Zertifikate, Camp Brisket an der Texas A&M und geführte BBQ-Roadtrips. Die ultimative Pilgerstätten-Karte für ernsthafte Grillmeister.',
 };

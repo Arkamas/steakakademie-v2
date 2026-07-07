@@ -3,9 +3,10 @@ User-agent: *
 Allow: /
 Disallow: /go/
 Disallow: /api/
+Disallow: /admin/
 
 # Host
 Host: https://steakakademie.de
 
 # Sitemaps
-Sitemap: https://steakakademie.de/sitemap.xml
+Sitemap: https://steakakademie.de/si

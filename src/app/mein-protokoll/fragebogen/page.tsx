@@ -9,7 +9,7 @@ import FragebogenForm from './FragebogenForm';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Fragebogen — Mein Protokoll | Steakakademie',
+  title: 'Fragebogen — Mein Protokoll',
   description: 'Beantworte 5 Fragen — das System generiert deinen persönlichen 8-Wochen-Grillplan.',
   robots: { index: false, follow: false },
 };

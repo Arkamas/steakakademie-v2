@@ -8,7 +8,7 @@ import { getCutsBySpecies, getPrimalsBySpecies, ALL_CUTS } from '@/lib/cuts-cata
 import { buildCutRecipeMap } from '@/lib/cut-recipes';
 
 export const metadata: Metadata = {
-  title: 'Cut-Atlas — Alle Rinder- & Schweine-Cuts interaktiv erklärt | Steakakademie',
+  title: 'Cut-Atlas — Alle Rinder- & Schweine-Cuts interaktiv erklärt',
   description:
     'Der interaktive Cut-Atlas: Klicke dich durch alle Rinder- und Schweine-Teilstücke — von Ribeye, Tomahawk und Brisket bis Secreto, Schäufele und Spareribs. Mit Cut-DNA, Garstufe, Kerntemperatur, passenden Rezepten und Bezugsquelle.',
   alternates: { canonical: 'https://steakakademie.de/cuts' },

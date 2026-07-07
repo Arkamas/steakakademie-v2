@@ -42,7 +42,7 @@ async function loadProfile(slug: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await loadProfile(params.slug);
-  if (!data) return { title: 'Grillmeister-Profil | Steakakademie' };
+  if (!data) return { title: 'Grillmeister-Profil' };
   const name = data.profile.display_name ?? 'Grillmeister';
   return {
     title: `${name} — Grillmeister-Vita | Steakakademie`,

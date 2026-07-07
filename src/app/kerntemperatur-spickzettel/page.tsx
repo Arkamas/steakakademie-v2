@@ -9,7 +9,7 @@ import Footer from '@/components/layout/Footer';
 import PrintButton from '@/components/gutschein/PrintButton';
 
 export const metadata: Metadata = {
-  title: 'Kerntemperatur-Spickzettel — alle Werte zum Ausdrucken | Steakakademie',
+  title: 'Kerntemperatur-Spickzettel — alle Werte zum Ausdrucken',
   description:
     'Der Kerntemperatur-Spickzettel der Steakakademie: alle Garstufen für Rind, Schwein, Lamm, Geflügel und Fisch auf einer Seite — autoritative Werte der Pitmaster-Doktrin, druckfertig für die Grillstation.',
   alternates: { canonical: 'https://steakakademie.de/kerntemperatur-spickzettel' },

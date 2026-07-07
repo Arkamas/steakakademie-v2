@@ -8,7 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Steak-Beichte — KI-Diagnose für dein Grill-Problem | Steakakademie',
+  title: 'Steak-Beichte — KI-Diagnose für dein Grill-Problem',
   description:
     'Beschreibe was schiefgelaufen ist — du bekommst die genaue Ursache und ein Korrektur-Protokoll für das nächste Mal. Kein Forum, kein Raten, keine allgemeinen Tipps.',
   alternates: { canonical: 'https://steakakademie.de/steak-beichte' },
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
       'Zu trocken, Kruste falsch, innen roh? Beschreibe dein Ergebnis — KI-Analyse liefert Ursache + Korrektur-Protokoll. Pro Diagnose oder als 5er-Pack.',
     url: 'https://steakakademie.de/steak-beichte',
     type: 'website',
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
 };
 

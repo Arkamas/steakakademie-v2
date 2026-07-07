@@ -3,7 +3,7 @@ import DiplomeClient from './DiplomeClient';
 import { getPlattformPuls } from '@/lib/plattform-puls';
 
 export const metadata: Metadata = {
-  title: 'Grillmeister-Diplom — 10 Level BBQ-Ausbildung | Steakakademie',
+  title: 'Grillmeister-Diplom — 10 Level BBQ-Ausbildung',
   description: 'Das einzige strukturierte BBQ-Diplom-System auf Deutsch: 10 Level von Bronze bis Grillmeister. Lerne systematisch, schalte Level frei, erhalte echte Urkunden per Post.',
   alternates: { canonical: 'https://steakakademie.de/diplome' },
   openGraph: {

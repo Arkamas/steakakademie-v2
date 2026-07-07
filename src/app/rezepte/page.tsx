@@ -9,7 +9,7 @@ import { breadcrumbSchema } from '@/lib/schema';
 import RecipeSubmitModal from '@/components/recipe/RecipeSubmitModal';
 
 export const metadata: Metadata = {
-  title: 'BBQ-Rezepte — Geprüfte Rezepte vom Grill | Steakakademie',
+  title: 'BBQ-Rezepte — Geprüfte Rezepte vom Grill',
   description:
     'Präzise BBQ-Rezepte mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach. Sous-Vide, Reverse Sear, Low & Slow — jedes Rezept mehrfach getestet.',
   alternates: { canonical: 'https://steakakademie.de/rezepte' },

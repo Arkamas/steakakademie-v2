@@ -5,6 +5,18 @@
 # (entspricht metadataBase in src/app/layout.tsx).
 
 [[redirects]]
+  from = "https://www.steakakademie.de/"
+  to = "https://steakakademie.de/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.steakakademie.de/"
+  to = "https://steakakademie.de/"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "https://www.steakakademie.de/*"
   to = "https://steakakademie.de/:splat"
   status = 301

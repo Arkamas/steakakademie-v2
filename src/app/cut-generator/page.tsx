@@ -15,8 +15,8 @@ interface PageProps {
 export function generateMetadata({ searchParams }: PageProps): Metadata {
   const cut = searchParams.cut ? getCutById(searchParams.cut) : undefined;
   const title = cut
-    ? `Mein perfekter Cut: ${cut.nameDE} | Steakakademie`
-    : 'Cut-Generator — Finde deinen perfekten Steak-Cut | Steakakademie';
+    ? `Mein perfekter Cut: ${cut.nameDE}`
+    : 'Cut-Generator — Finde deinen perfekten Steak-Cut';
   const description = cut
     ? `${cut.nameDE} (${cut.nameEN}) — ${cut.blurb} Finde mit dem Cut-Generator deinen perfekten Steak-Cut.`
     : 'Beantworte 4 Fragen und der Cut-Generator findet deinen perfekten Rinder-Cut — mit Cut-DNA, passendem Rezept und Bezugsquelle. Teilbar für Social Media.';

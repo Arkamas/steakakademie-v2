@@ -8,7 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Mein Protokoll — Dein persönlicher 8-Wochen-Grillplan | Steakakademie',
+  title: 'Mein Protokoll — Dein persönlicher 8-Wochen-Grillplan',
   description:
     'Kein generischer Kurs. Ein Plan der zu deinem Grill, deiner Zeit und deinen Zielen passt — in 5 Minuten generiert. 8 Wochen, konkrete Sessions, progressive Schwierigkeit.',
   alternates: { canonical: 'https://steakakademie.de/mein-protokoll' },
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
       'Fragebogen ausfüllen, KI generiert deinen Plan. Grilltyp, Erfahrungsstand, verfügbare Zeit, Ziele — dein Protokoll ist auf dich zugeschnitten, nicht auf irgendjemanden.',
     url: 'https://steakakademie.de/mein-protokoll',
     type: 'website',
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
 };
 

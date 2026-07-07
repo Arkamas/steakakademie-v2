@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Bestellung bestätigt — Steak-Beichte | Steakakademie',
+  title: 'Bestellung bestätigt — Steak-Beichte',
   description: 'Deine Steak-Beichte wurde erfolgreich gebucht.',
   robots: { index: false, follow: false },
 }

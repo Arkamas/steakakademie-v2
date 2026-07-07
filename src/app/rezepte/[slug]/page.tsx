@@ -214,7 +214,6 @@ export default function RezeptKategoriePage({ params }: Props) {
             sizes="100vw"
             className="object-cover"
             priority
-            unoptimized
           />
           <div
             className="absolute inset-0"

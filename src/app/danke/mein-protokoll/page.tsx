@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Bestellung bestätigt — Mein Protokoll | Steakakademie',
+  title: 'Bestellung bestätigt — Mein Protokoll',
   description: 'Dein persönlicher 8-Wochen-Grillplan wird erstellt.',
   robots: { index: false, follow: false },
 }

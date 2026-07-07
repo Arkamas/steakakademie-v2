@@ -9,6 +9,7 @@ import { ChevronRight, BookOpen, Lock, ArrowRight } from 'lucide-react';
 export const metadata: Metadata = {
   title:       'Meine Kurse — Steakakademie',
   description: 'Deine gebuchten Kurse und Diplom-Fortschritt auf Steakakademie.de.',
+  robots: { index: false, follow: false },
 };
 
 interface Booking {

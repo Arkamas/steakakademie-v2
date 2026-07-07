@@ -10,7 +10,7 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Erste-Kunden-Sprint — Von der Gründung zu ersten Aufträgen in 72h | Steakakademie',
+  title: 'Erste-Kunden-Sprint — Von der Gründung zu ersten Aufträgen in 72h',
   description:
     'Gewerbe angemeldet, Website live — und jetzt? In 72 Stunden zum ersten bezahlten Auftrag. Positionierung, Angebot, Direktansprache. Kein Marketing-Kurs, kein Kaltakquise-Script.',
   alternates: { canonical: 'https://steakakademie.de/erste-kunden-sprint' },
@@ -312,7 +312,6 @@ export default async function ErsteKundenSprintPage() {
                       width={128}
                       height={128}
                       className="w-full h-full object-cover"
-                      unoptimized
                     />
                   </div>
                 </div>

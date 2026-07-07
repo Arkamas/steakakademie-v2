@@ -18,9 +18,14 @@ module.exports = {
     '/diplome/urkunde',
     '/diplome/simulation',
     '/diplome/roadmap',
-    '/steak-beichte',
-    '/mein-protokoll',
     '/fleischpass',
+    '/steak-beichte/diagnose',
+    '/steak-beichte/diagnose/*',
+    '/mein-protokoll/fragebogen',
+    '/mein-protokoll/plan',
+    '/prive',
+    '/icon.svg',
+    '/diplome/profil',
     '/tools/*',
     '/zzp-niche',
     '/zzp-niche/*',
@@ -32,6 +37,16 @@ module.exports = {
     '/impressum',
     '/kontakt',
   ],
+  // SSR-Seiten (dynamisch wegen Supabase-Preisen) fehlen im Prerender-Manifest
+  // → next-sitemap sieht sie nicht. Verkaufs-Landingpages hier explizit aufnehmen.
+  additionalPaths: async () => {
+    const ssrPaths = [
+      '/gruender-schmiede', '/ehrliches-system', '/steuer-matrix',
+      '/agentur-killer-sprint', '/erste-kunden-sprint', '/seo-sprint',
+      '/cut-generator', '/steak-beichte', '/mein-protokoll', '/rezepte/community',
+    ];
+    return ssrPaths.map((loc) => ({ loc, changefreq: 'weekly', priority: 0.8 }));
+  },
   robotsTxtOptions: {
     additionalSitemaps: [],
     policies: [
@@ -46,15 +61,15 @@ module.exports = {
   transform: async (config, path) => {
     // Pillar Pages: höchste Priorität
     if (path === '/ehrliches-system' || path.startsWith('/cuts/') || path.startsWith('/vergleich/') || path.startsWith('/methoden/')) {
-      return { loc: path, changefreq: 'monthly', priority: 0.9, lastmod: new Date().toISOString() };
+      return { loc: path, changefreq: 'monthly', priority: 0.9 };
     }
     // Artikel
     if (path.startsWith('/artikel/')) {
-      return { loc: path, changefreq: 'monthly', priority: 0.8, lastmod: new Date().toISOString() };
+      return { loc: path, changefreq: 'monthly', priority: 0.8 };
     }
     // Homepage
     if (path === '/') {
-      return { loc: path, changefreq: 'daily', priority: 1.0, lastmod: new Date().toISOString() };
+      return { loc: path, changefreq: 'daily', priority: 1.0 };
     }
     return { loc: path, changefreq: config.changefreq, priority: config.priority };
   },

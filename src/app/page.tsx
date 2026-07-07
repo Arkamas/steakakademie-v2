@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   title: 'Steakakademie — BBQ Wissen, Cuts & Grillmeister-Diplome',
   description:
     'Die methodisch tiefste BBQ-Wissensplattform auf Deutsch. Cuts, Grilltechniken, Thermometer-Tests und Grillmeister-Diplome für ernsthafte Hobbygriller.',
+  alternates: { canonical: '/' },
 };
 
 const PLACEHOLDER_ARTICLES: ArticleMeta[] = [

@@ -8,7 +8,7 @@ import { getApprovedDrafts } from '@/lib/content-feed';
 export const revalidate = 86400;
 
 export const metadata: Metadata = {
-  title: 'Grillstil — Grillen, Genuss & Lifestyle für Frauen | Steakakademie',
+  title: 'Grillstil — Grillen, Genuss & Lifestyle für Frauen',
   description:
     'Grillen ist kein Männerthema. Grillstil verbindet Feuer und Eleganz: kuratierte Rezepte, schön gedeckte Tische, Tischdekoration und entspannter Genuss — stilvoll und selbstbewusst.',
   alternates: { canonical: 'https://steakakademie.de/grillstil' },

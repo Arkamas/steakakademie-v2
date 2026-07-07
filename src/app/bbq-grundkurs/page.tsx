@@ -10,7 +10,7 @@ import Footer from '@/components/layout/Footer';
 // â”€â”€ Metadata â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const metadata: Metadata = {
-  title: 'BBQ Grundkurs — Systematisch besser grillen | Steakakademie',
+  title: 'BBQ Grundkurs — Systematisch besser grillen',
   description:
     'Der erste vollständige BBQ-Videokurs der Steakakademie. Feuer, Temperatur, 5 Cuts, echte Technik. Aktuell in Vorbereitung — Kursstart geplant 2026.',
   alternates: { canonical: 'https://steakakademie.de/bbq-grundkurs' },

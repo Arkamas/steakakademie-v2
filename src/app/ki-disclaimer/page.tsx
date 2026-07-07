@@ -5,7 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'KI-Disclaimer — Hinweise zu unseren KI-Assistenten | Steakakademie',
+  title: 'KI-Disclaimer — Hinweise zu unseren KI-Assistenten',
   description:
     'Rechtliche Hinweise zu den KI-Assistenten der Steakakademie. Leistungsumfang, Datenschutz, EU AI Act Konformität.',
   alternates: { canonical: 'https://steakakademie.de/ki-disclaimer' },

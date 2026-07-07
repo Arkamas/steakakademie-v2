@@ -100,7 +100,6 @@ export default function UeberUnsPage() {
                     width={176}
                     height={176}
                     className="w-full h-full object-cover object-top"
-                    unoptimized
                     priority
                   />
                 </div>

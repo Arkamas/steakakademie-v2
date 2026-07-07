@@ -8,6 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ProductCard from '@/components/affiliate/ProductCard';
 import { getProductsByCategory, getProductById } from '@/lib/products';
+import { authorSchemaRef } from '@/lib/schema';
 import { cn } from '@/lib/utils';
 import { Clock, Calendar, ChevronRight, RotateCcw } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
@@ -136,25 +137,13 @@ export default function CutPage({ params }: Props) {
     '@type': 'Article',
     headline: cut.title,
     description: cut.excerpt,
-    image: cut.image,
+    image: cut.image.startsWith('http') ? cut.image : `https://steakakademie.de${cut.image}`,
     inLanguage: 'de-DE',
     articleSection: 'Cuts & Fleischkunde',
     datePublished: cut.publishedAt,
     dateModified: cut.updatedAt ?? cut.publishedAt,
-    author: {
-      '@type': 'Person',
-      name: cut.author,
-      url: `https://steakakademie.de/autoren/${cut.authorSlug}`,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Steakakademie',
-      url: 'https://steakakademie.de',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://steakakademie.de/images/og-image.svg',
-      },
-    },
+    author: authorSchemaRef(cut.authorSlug),
+    publisher: { '@id': 'https://steakakademie.de/#organization' },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `https://steakakademie.de${cut.url}`,

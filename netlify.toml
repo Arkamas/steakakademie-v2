@@ -25,5 +25,14 @@
 [[redirects]]
   from = "http://www.steakakademie.de/*"
   to = "https://steakakademie.de/:splat"
+  s
+# Slug-Fix Diakritika (SEO-Audit 07.07.2026): alte kaputte Glossar-Slugs
+[[redirects]]
+  from = "/glossar/entrec-te"
+  to = "/glossar/entrecote"
   status = 301
-  force = true
+
+[[redirects]]
+  from = "/glossar/ib-rico"
+  to = "/glossar/iberico"
+  status = 301

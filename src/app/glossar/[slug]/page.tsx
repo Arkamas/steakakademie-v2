@@ -6,7 +6,7 @@ import { allGlossars } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { breadcrumbSchema } from '@/lib/schema';
+import { breadcrumbSchema, definedTermSchema } from '@/lib/schema';
 
 interface Props {
   params: { slug: string };
@@ -82,17 +82,11 @@ export default function GlossarEntryPage({ params }: Props) {
     { name: entry.title, url: entry.url },
   ]);
 
-  const definitionSch = {
-    '@context': 'https://schema.org',
-    '@type': 'DefinedTerm',
-    name: entry.title,
-    description: entry.shortDefinition,
-    inDefinedTermSet: {
-      '@type': 'DefinedTermSet',
-      name: 'Steakakademie BBQ-Glossar',
-      url: 'https://steakakademie.de/glossar',
-    },
-  };
+  const definitionSch = definedTermSchema({
+    title: entry.title,
+    url: entry.url,
+    shortDefinition: entry.shortDefinition,
+  });
 
   return (
     <>

@@ -101,7 +101,7 @@ export default function SprintModulPage({ params }: Props) {
     learningResourceType: 'Lesson',
     educationalLevel: 'Gründer-Schmiede',
     datePublished: modul.publishedAt,
-    inLanguage: 'de',
+    inLanguage: 'de-DE',
     isPartOf: {
       '@type': 'Course',
       name: 'KI-Projektsteuerung',

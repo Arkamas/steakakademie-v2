@@ -106,11 +106,7 @@ export default function DiplomLektionPage({ params }: Props) {
     learningResourceType: 'Lesson',
     datePublished: lektion.publishedAt,
     inLanguage: 'de',
-    isPartOf: {
-      '@type': 'Course',
-      name: 'Grillmeister-Ausbildung',
-      provider: { '@type': 'Organization', name: 'Steakakademie', url: 'https://steakakademie.de' },
-    },
+    isPartOf: { '@id': 'https://steakakademie.de/diplome#course' },
   };
 
   const breadcrumb = breadcrumbSchema([

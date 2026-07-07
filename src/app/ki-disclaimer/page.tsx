@@ -94,7 +94,10 @@ export default function KiDisclaimerPage() {
               <p className="mt-4 text-xs text-text-muted">
                 Marco ist eine KI-gesteuerte Persona — kein menschlicher Berater.
                 Alle Antworten werden in Echtzeit durch das KI-Modell generiert und
-                können inhaltliche Fehler enthalten.
+                können inhaltliche Fehler enthalten. Das gilt auch für unsere redaktionellen
+                Personas Marco, Jonas und Elena: Artikel unter ihren Namen entstehen
+                KI-unterstützt und werden fachlich geprüft und verantwortet von
+                Gründer Uwe Yendell.
               </p>
             </section>
 

@@ -44,9 +44,9 @@ const KOMPETENZEN = [
   },
   {
     kicker: 'Der Marketing-Manager',
-    titel: '30 Jahre Marken, Zahlen, Realität',
+    titel: 'Zertifiziert auf Master-Niveau',
     text:
-      'Drei Jahrzehnte in Marketing und Vertrieb: Budgets verantwortet, Kampagnen gesteuert, Agenturen briefed und hinterfragt. Ich weiß, was Agenturen Ihnen verkaufen — und was sie Ihnen schulden.',
+      'Intensive Marketing-Fachausbildung auf Master-Niveau, dazu Praxis in Marketing und Vertrieb: Budgets verantwortet, Kampagnen gesteuert, Agenturen briefed und hinterfragt. Ich weiß, was Agenturen Ihnen verkaufen — und was sie Ihnen schulden.',
   },
   {
     kicker: 'Der Trainer',

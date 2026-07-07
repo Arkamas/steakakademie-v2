@@ -475,8 +475,8 @@ export default async function HomePage() {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
-                { stat: '200+', label: 'Cuts analysiert' },
-                { stat: '8',    label: 'Thermometer selbst getestet' },
+                { stat: '35',   label: 'Diplom-Lektionen — Bronze bis Meister' },
+                { stat: '3',    label: 'Thermometer im 8-Wochen-Test' },
                 { stat: '100%', label: 'Affiliate-transparent' },
                 { stat: '2026', label: 'Inhalte aktuell' },
               ].map(({ stat, label }) => (

@@ -51,17 +51,7 @@ export default function RezepteIndexPage() {
     itemListElement: recipes.map((r, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      item: {
-        '@type': 'Recipe',
-        name: r.title,
-        url: `https://steakakademie.de${r.url}`,
-        image: r.image,
-        description: r.description,
-        prepTime: r.prepTime,
-        cookTime: r.cookTime,
-        totalTime: r.totalTime,
-        recipeYield: `${r.servings} Portionen`,
-      },
+      url: `https://steakakademie.de${r.url}`,
     })),
   };
 

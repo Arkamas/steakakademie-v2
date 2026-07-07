@@ -35,8 +35,10 @@ export default function AutorPage({ params }: Props) {
   const authorArtikel = allArtikels.filter((a) => a.authorSlug === author.slug);
   const totalArticles = authorCuts.length + authorArtikel.length;
 
-  // Schema.org Person (E-E-A-T: reicher für reale Autoren)
-  const schema = {
+  // Schema.org Person — NUR für reale Autoren (KI-Personas bekommen kein
+  // Person-Markup: maschinenlesbare Behauptung einer echten Person wäre
+  // irreführend; SEO-Audit 07.07.2026).
+  const schema = author.realPerson ? {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: author.name,
@@ -54,7 +56,7 @@ export default function AutorPage({ params }: Props) {
       ? { hasCredential: { '@type': 'EducationalOccupationalCredential', name: author.credential } }
       : {}),
     ...(author.sameAs && author.sameAs.length ? { sameAs: author.sameAs } : {}),
-  };
+  } : null;
 
   const breadcrumb = breadcrumbSchema([
     { name: 'Autoren', url: '/autoren' },
@@ -65,10 +67,12 @@ export default function AutorPage({ params }: Props) {
     <>
       <Header />
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      />
+      {schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
@@ -96,8 +100,18 @@ export default function AutorPage({ params }: Props) {
               </div>
             </div>
             <div className="flex-1">
-              <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-2">Autor</p>
+              <p className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire mb-2">
+                {author.realPerson ? 'Autor' : 'KI-Redaktionspersona'}
+              </p>
               <h1 className="font-serif text-3xl sm:text-4xl font-bold text-text-primary mb-3">{author.name}</h1>
+              {!author.realPerson && (
+                <p className="text-xs font-sans text-text-muted mb-3">
+                  {author.name.split(' ')[0]} ist eine KI-gestützte Redaktionspersona der Steakakademie.
+                  Alle Inhalte werden fachlich geprüft und verantwortet von{' '}
+                  <Link href="/autoren/uwe-yendell" className="underline hover:text-brand-fire">Uwe Yendell</Link>.{' '}
+                  <Link href="/ki-disclaimer" className="underline hover:text-brand-fire">Mehr im KI-Disclaimer</Link>.
+                </p>
+              )}
               {author.statsLabel && (
                 <p className="text-sm font-sans font-bold text-text-secondary mb-4">{author.statsLabel}</p>
               )}

@@ -261,7 +261,7 @@ export default function ProductCard({
           <div className="flex items-center gap-2 mb-2">
             <StarRow rating={product.rating} />
             <span className="text-xs font-sans text-text-muted">
-              {product.rating.toFixed(1)}
+              {product.rating.toFixed(1)} <span title="Durchschnittliche Amazon-Kundenbewertung">(Ø Amazon)</span>
             </span>
           </div>
         )}
@@ -389,7 +389,7 @@ export default function ProductCard({
             <span className="text-sm font-sans text-text-secondary">
               {product.rating.toFixed(1)}
               {product.ratingCount && (
-                <span className="text-text-muted"> ({product.ratingCount.toLocaleString('de-DE')})</span>
+                <span className="text-text-muted"> ({product.ratingCount.toLocaleString('de-DE')} Amazon-Bewertungen)</span>
               )}
             </span>
           </div>

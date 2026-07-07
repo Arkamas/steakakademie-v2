@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import DiplomeClient from './DiplomeClient';
 import { getPlattformPuls } from '@/lib/plattform-puls';
+import { courseSchema, breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Grillmeister-Diplom — 10 Level BBQ-Ausbildung',
@@ -16,5 +17,26 @@ export const metadata: Metadata = {
 };
 
 export default function DiplomePage() {
-  return <DiplomeClient puls={getPlattformPuls()} />;
+  // Schema.org — Course (ohne Offer: Kursinhalt in Vorbereitung) + Breadcrumb
+  const courseSch = courseSchema({
+    name: 'Grillmeister-Ausbildung',
+    description:
+      'Das einzige strukturierte BBQ-Diplom-System auf Deutsch: 10 Level von Bronze bis Grillmeister. Lerne systematisch, schalte Level frei, erhalte echte Urkunden per Post.',
+    url: '/diplome',
+  });
+  const breadcrumbSch = breadcrumbSchema([{ name: 'Diplome', url: '/diplome' }]);
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSch) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSch) }}
+      />
+      <DiplomeClient puls={getPlattformPuls()} />
+    </>
+  );
 }

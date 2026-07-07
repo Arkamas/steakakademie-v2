@@ -11,6 +11,7 @@ import { Clock, Calendar, ChevronRight, RotateCcw, Flame } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import { getMethodZones } from '@/lib/affiliate-zones';
+import { authorSchemaRef } from '@/lib/schema';
 import HeroRecommendation from '@/components/affiliate/HeroRecommendation';
 import EquipmentFooter from '@/components/affiliate/EquipmentFooter';
 import InlineAffiliate from '@/components/affiliate/InlineAffiliate';
@@ -98,25 +99,16 @@ export default function MethodePage({ params }: Props) {
   const MDXContent = useMDXComponent(methode.body.code);
   const zones = getMethodZones(methode.slug);
 
-  const howToSchema = {
-    '@type': 'HowTo',
-    name: methode.title,
+  const articleSchema = {
+    '@type': 'Article',
+    headline: methode.title,
     description: methode.excerpt,
-    image: methode.image,
+    image: methode.image.startsWith('http') ? methode.image : `https://steakakademie.de${methode.image}`,
     inLanguage: 'de-DE',
     datePublished: methode.publishedAt,
     dateModified: methode.updatedAt ?? methode.publishedAt,
-    author: {
-      '@type': 'Person',
-      name: methode.author,
-      url: `https://steakakademie.de/autoren/${methode.authorSlug}`,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Steakakademie',
-      url: 'https://steakakademie.de',
-      logo: { '@type': 'ImageObject', url: 'https://steakakademie.de/images/og-image.svg' },
-    },
+    author: authorSchemaRef(methode.authorSlug),
+    publisher: { '@id': 'https://steakakademie.de/#organization' },
   };
 
   const breadcrumbSchema = {
@@ -128,7 +120,7 @@ export default function MethodePage({ params }: Props) {
     ],
   };
 
-  const schema = { '@context': 'https://schema.org', '@graph': [howToSchema, breadcrumbSchema] };
+  const schema = { '@context': 'https://schema.org', '@graph': [articleSchema, breadcrumbSchema] };
 
   return (
     <>

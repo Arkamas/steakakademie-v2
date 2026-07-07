@@ -8,11 +8,19 @@ import CutBestellen from './recipe/CutBestellen';
 import BBQPairing from './article/BBQPairing';
 import ProductCard from './affiliate/ProductCard';
 import type { Product } from '@/types';
+import { authorSchemaRef } from '@/lib/schema';
 import type { RecipeIngredient } from './recipe/PortionCalculator';
 import type { RecipeStep } from './recipe/CookCoach';
 import RecipeSubmitModal from './recipe/RecipeSubmitModal';
 
 // ── Hilfsfunktionen ──────────────────────────────────────────────────────────
+
+// Schema.org recipeCategory aus dem Frontmatter-Feld `kategorie` ableiten
+const RECIPE_CATEGORY: Record<string, string> = {
+  beilagen: 'Beilage',
+  desserts: 'Dessert',
+  'saucen-rubs': 'Sauce',
+};
 
 function parseDuration(iso: string): string {
   const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
@@ -84,20 +92,16 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
     '@type':    'Recipe',
     name:        recipe.title,
     description: recipe.description,
-    image:       recipe.image,
-    author: {
-      '@type': 'Person',
-      name:    recipe.author,
-      url:     `https://steakakademie.de/autoren/${recipe.authorSlug}`,
-    },
+    image:       recipe.image.startsWith('http') ? recipe.image : `https://steakakademie.de${recipe.image}`,
+    author:      authorSchemaRef(recipe.authorSlug),
     datePublished: recipe.publishedAt,
     ...(recipe.updatedAt && { dateModified: recipe.updatedAt }),
     prepTime:    recipe.prepTime,
     cookTime:    recipe.cookTime,
     totalTime:   recipe.totalTime,
     recipeYield: `${recipe.servings} Portionen`,
-    recipeCategory: 'Hauptgericht',
-    recipeCuisine:  'BBQ / Grillen',
+    recipeCategory: RECIPE_CATEGORY[recipe.kategorie as string] ?? 'Hauptgericht',
+    recipeCuisine:  recipe.land || 'BBQ',
     keywords:       recipe.keywords?.join(', '),
     recipeIngredient: ingredients.map((i) =>
       ['Prise', 'n.B.', 'etwas'].includes(i.unit)

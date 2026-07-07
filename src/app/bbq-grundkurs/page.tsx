@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { courseSchema, breadcrumbSchema } from '@/lib/schema';
 
 // â”€â”€ Metadata â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -102,9 +103,36 @@ const FAQ = [
 // â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function BbqGrundkursPage() {
+  // Schema.org — Course (ohne Offer: Produkt "In Vorbereitung") + Breadcrumb
+  const courseSch = courseSchema({
+    name: 'BBQ Grundkurs',
+    description:
+      'Der erste vollständige BBQ-Videokurs der Steakakademie. Feuer, Temperatur, 5 Cuts, echte Technik. Aktuell in Vorbereitung — Kursstart geplant 2026.',
+    url: '/bbq-grundkurs',
+    teaches: [
+      'Direkte und indirekte Hitze & Temperaturzonen',
+      'Kerntemperatur, Carryover Cooking & Timing',
+      'Die 5 Grundcuts: Ribeye, Entrecôte, Rumpsteak, Flank Steak, Hähnchenbrust',
+      'Reverse Sear, Searing & Maillard-Kruste',
+      'Troubleshooting typischer Grillfehler',
+    ],
+  });
+  const breadcrumbSch = breadcrumbSchema([
+    { name: 'Kurse', url: '/diplome' },
+    { name: 'BBQ Grundkurs', url: '/bbq-grundkurs' },
+  ]);
+
   return (
     <>
       <Header />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSch) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSch) }}
+      />
       <main className="min-h-screen">
 
         {/* â”€â”€ Breadcrumb â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}

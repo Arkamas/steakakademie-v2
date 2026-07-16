@@ -9,7 +9,7 @@ import Footer from '@/components/layout/Footer';
 import { breadcrumbSchema } from '@/lib/schema';
 import SeriesBadge from '@/components/persoenlichkeiten/SeriesBadge';
 import DiplomFunnel from '@/components/persoenlichkeiten/DiplomFunnel';
-import NewsletterCapture from '@/components/persoenlichkeiten/NewsletterCapture';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import KnowledgeBreak from '@/components/persoenlichkeiten/KnowledgeBreak';
 
 interface Props {
@@ -312,7 +312,11 @@ export default function PersoenlichkeitPage({ params }: Props) {
               </div>
 
               {/* Newsletter capture — after article, before funnel */}
-              <NewsletterCapture context={person.category} />
+              <NewsletterSignup
+                source={`persoenlichkeiten-article-${person.category}`}
+                headline="Solche Meister-Porträts jede Woche — kostenlos."
+                subline="Ein Meister, eine Technik, ein Rezept. Jeden Freitag der Steakakademie-Wissens-Brief direkt ins Postfach."
+              />
 
             </article>
           </div>

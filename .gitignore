@@ -84,3 +84,9 @@ Steakakademie-AGB.pd
 # Build-Artefakte (postbuild next-sitemap überschreibt sie ohnehin)
 public/sitemap.xml
 public/sitemap-0.xml
+
+# Generierter Knowledge-Graph-Output (graphify)
+graphify-out/
+
+# Projektfremder Ordner (liegt nur lokal im Repo-Root)
+Existenzgruendung-Jobcenter/

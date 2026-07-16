@@ -21,7 +21,7 @@ Scope-Korrektur (Uwe): DACH-weit, kein Local SEO Wuppertal.
 
 ## Offene Messpunkte — Update 07.07.2026 (Vorarbeit erledigt)
 1. ✅ Google-Baseline erhoben (`docs/geo-baseline.md`): „Kerntemperatur Steak" Top 10 = KEIN steakakademie.de (es ranken Grillfürst, Block House, Weber). Brand-Query = Platz 1, /temperatur-guide indexiert. Befund: Content da, Autorität/Entity fehlt. Caveat: US-basierte Suche, dt. SERP kann abweichen.
-2. ⏳ UWE (~10 Min): 3 AI-Abfragen (ChatGPT/Perplexity/Google AI Overview) — Tabelle in docs/geo-baseline.md ausfüllen.
+2. ✅ AI-Baseline erhoben (07.07. abends, docs/geo-baseline.md): ChatGPT ❌ (Modellwissen, keine Quellen) · Perplexity ❌ (zitiert Fleisch24, Grillfürst u. a.) · Google AI Overview ❌ (zitiert Block House, Grillcenter Nord). Zusatz: echte DE-SERP geprüft — Top 10 ohne uns, AI-Overview-Quellen ⊂ SERP-Gewinner → bestätigt Doktrin „GEO folgt SEO". Re-Check alle 4 Wochen.
 3. ✅ Wikidata vorgeprüft: KEIN Item vorhanden. Fertige Spec: `docs/wikidata-item-spec.md` (inkl. DPMA-Markenanmeldung als Notability-Anker; Löschrisiko ohne externe Belege vermerkt). ⏳ UWE (~10 Min): Item anlegen → Q-ID zurückmelden → sameAs-Verdrahtung folgt.
 4. ⏳ /llms.txt nach Deploy live testen.
 

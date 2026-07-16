@@ -10,6 +10,8 @@ interface CutImageProps {
   className?: string;
   /** Akzentfarbe für den Platzhalter-Verlauf */
   accent?: string;
+  /** Skalierung: 'contain' zeigt den Cut komplett (Default), 'cover' füllt/beschneidet */
+  fit?: 'cover' | 'contain';
 }
 
 /**
@@ -18,7 +20,7 @@ interface CutImageProps {
  * Cut-Namen statt eines kaputten Bild-Icons. Sobald das Foto existiert,
  * überlagert es den Platzhalter automatisch.
  */
-export default function CutImage({ src, alt, label, className = '', accent = '#C8882A' }: CutImageProps) {
+export default function CutImage({ src, alt, label, className = '', accent = '#C8882A', fit = 'contain' }: CutImageProps) {
   const [failed, setFailed] = useState(false);
 
   return (
@@ -35,7 +37,7 @@ export default function CutImage({ src, alt, label, className = '', accent = '#C
           alt={alt}
           loading="lazy"
           onError={() => setFailed(true)}
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full ${fit === 'cover' ? 'object-cover' : 'object-contain'}`}
         />
       ) : (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-2">

@@ -10,6 +10,7 @@ import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
 import PlattformPuls from '@/components/home/PlattformPuls';
 import FrischSaisonal from '@/components/home/FrischSaisonal';
 import ToolBoxes from '@/components/home/ToolBoxes';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
 import { getRecommendedProducts } from '@/lib/products';
 import { getPlattformPuls } from '@/lib/plattform-puls';
@@ -399,38 +400,13 @@ export default async function HomePage() {
             <aside className="space-y-6">
 
               {/* Newsletter-Box — redaktionelle Karte */}
-              <div className="bg-surface-card border border-border-subtle p-5">
-                <div className="border-t-2 border-brand-gold -mt-5 mb-4 pt-4">
-                  <h3 className="font-serif text-lg font-bold text-text-primary">
-                    BBQ-Insider Newsletter
-                  </h3>
-                </div>
-                <p className="text-sm font-sans text-text-secondary mb-4 leading-relaxed">
-                  Neue Tests, Guides und saisonale Tipps — 2× im Monat. Kein Spam.
-                </p>
-                <form className="space-y-2" action="/api/newsletter" method="POST">
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="deine@email.de"
-                    required
-                    className="w-full border border-border-subtle px-3 py-2.5 text-sm font-sans text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-gold transition-colors bg-surface-base"
-                  />
-                  <button
-                    type="submit"
-                    className="btn-gold w-full justify-center text-xs font-bold tracking-widest uppercase py-2.5 plausible-event-name=Newsletter-Anmeldung plausible-event-source=homepage-footer"
-                  >
-                    Anmelden
-                  </button>
-                </form>
-                <p className="text-[10px] font-sans text-text-muted mt-2 text-center">
-                  Mit der Anmeldung stimmst du der Zusendung des Newsletters zu.
-                  Jederzeit abmeldbar.{' '}
-                  <Link href="/datenschutz" className="underline hover:text-text-secondary transition-colors">
-                    Datenschutz
-                  </Link>
-                </p>
-              </div>
+              <NewsletterSignup
+                source="homepage-banner"
+                eyebrow="BBQ-Insider Newsletter"
+                headline="Neue Tests, Guides und saisonale Tipps."
+                subline="2× im Monat das Wichtigste aus der Akademie — kompakt, ehrlich, kein Spam."
+                cta="Anmelden"
+              />
 
               {/* Beliebte Themen */}
               <div className="bg-surface-card border border-border-subtle p-5">

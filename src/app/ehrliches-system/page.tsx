@@ -240,7 +240,8 @@ export default async function EhrlichesSystemPage() {
               return (
                 <div
                   key={pillar.slug}
-                  className="bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-all duration-200 p-7 flex flex-col"
+                  id={`saule-${pillar.number.toLowerCase()}`}
+                  className="scroll-mt-24 bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-all duration-200 p-7 flex flex-col"
                 >
                   {/* Header */}
                   <div className="flex items-start justify-between mb-5">

@@ -28,6 +28,22 @@ interface Booking {
 const G_BORDER = { borderColor: 'rgba(200,136,42,0.22)' } as const;
 const G_BG     = { background: 'linear-gradient(135deg, rgba(200,136,42,0.08) 0%, rgba(232,80,24,0.02) 100%)' } as const;
 
+// Kurs-Slug → reale Route (es gibt keine /kurse/[slug]-Route; jeder Kurs hat eine Top-Level-Seite)
+const COURSE_ROUTES: Record<string, string> = {
+  'steak-beichte': '/steak-beichte',
+  'mein-protokoll': '/mein-protokoll',
+  'bbq-grundkurs': '/bbq-grundkurs',
+  'gruender-schmiede': '/gruender-schmiede',
+  'gruendung-sprint': '/gruender-schmiede', // Legacy-Slug (Migration 006)
+  'steuer-matrix': '/steuer-matrix',
+  'agentur-killer-sprint': '/agentur-killer-sprint',
+};
+
+/** Route zu einem Kurs; Fallback: Konvention Top-Level-Route = Slug. */
+function courseHref(slug: string): string {
+  return COURSE_ROUTES[slug] ?? `/${slug}`;
+}
+
 const STATUS_LABEL: Record<string, { label: string; color: string }> = {
   confirmed:  { label: 'Aktiv',         color: '#4ade80' },
   pending:    { label: 'Ausstehend',    color: '#C8882A' },
@@ -163,7 +179,7 @@ export default async function MeineKursePage() {
                         </p>
                       </div>
                       <Link
-                        href={`/kurse/${booking.courses.slug}`}
+                        href={courseHref(booking.courses.slug)}
                         className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 font-sans font-bold text-xs rounded-sm transition-opacity hover:opacity-90"
                         style={{ background: 'rgba(200,136,42,0.15)', color: '#C8882A', border: '1px solid rgba(200,136,42,0.3)' }}
                       >

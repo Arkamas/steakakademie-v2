@@ -322,8 +322,9 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
             {filteredCuts.map((cut) => (
               <button
                 key={cut.id}
+                id={cut.id}
                 onClick={() => setSelectedCutId(cut.id)}
-                className="group overflow-hidden rounded-md border border-border-subtle bg-surface-card text-left transition-colors hover:border-brand-gold/40"
+                className="group scroll-mt-24 overflow-hidden rounded-md border border-border-subtle bg-surface-card text-left transition-colors hover:border-brand-gold/40"
               >
                 <CutImage
                   src={cut.image}

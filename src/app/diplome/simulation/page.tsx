@@ -303,8 +303,8 @@ export default function DiplomSimulation() {
                 {/* Key insight */}
                 <div className="border-l-2 border-brand-gold pl-4 mb-8">
                   <p className="text-sm font-body text-text-secondary italic">
-                    "Wer Hitze steuert, steuert Ergebnisse. Die Zwei-Zonen-Methode ist
-                    der erste Schritt vom Raten zum Wissen."
+                    &quot;Wer Hitze steuert, steuert Ergebnisse. Die Zwei-Zonen-Methode ist
+                    der erste Schritt vom Raten zum Wissen.&quot;
                   </p>
                 </div>
 

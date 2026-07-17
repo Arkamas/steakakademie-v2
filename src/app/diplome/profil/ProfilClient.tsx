@@ -154,7 +154,7 @@ export default function ProfilClient() {
 
           {state === 'ready' && (
             <div className="mt-6 border border-border-subtle bg-surface-elevated p-6">
-              <h2 className="font-serif text-lg font-bold text-text-primary mb-1">Wie geht's weiter?</h2>
+              <h2 className="font-serif text-lg font-bold text-text-primary mb-1">Wie geht&apos;s weiter?</h2>
               <p className="font-body text-sm text-text-secondary mb-5">
                 Dein Profil ist eingerichtet. Jetzt fängt die eigentliche Ausbildung an:
               </p>

@@ -874,7 +874,7 @@ function RoadmapView({
             {s.emoji} {s.title}
           </h1>
           <div className="font-serif italic text-text-secondary mb-4 text-sm sm:text-base">
-            „{s.tagline}"
+            „{s.tagline}&quot;
           </div>
           <div className="flex gap-2 flex-wrap mb-5">
             {s.levels.map((lv, i) => (

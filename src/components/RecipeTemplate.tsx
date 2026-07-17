@@ -73,7 +73,6 @@ const mdxComponents = {
 // ── Typen ─────────────────────────────────────────────────────────────────────
 
 interface RecipeTemplateProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   recipe: any; // Contentlayer-generierter Typ (nach Build verfügbar)
   hardwareProducts: Product[];
 }

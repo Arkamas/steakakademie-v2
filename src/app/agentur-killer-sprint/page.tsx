@@ -340,7 +340,7 @@ export default async function AgenturKillerSprintPage() {
                 <p className="font-serif text-xl lg:text-2xl text-text-light italic leading-relaxed">
                   „72 Stunden von Agentur-Abhängigkeit zu vollständiger Code-Kontrolle.
                   Das ist kein Versprechen — das ist die Timeline, nach der steakakademie.de
-                  aufgebaut wurde."
+                  aufgebaut wurde.&quot;
                 </p>
                 <footer className="mt-4 text-sm font-sans text-text-muted">
                   — Uwe Yendell, Gründer Steakakademie.de

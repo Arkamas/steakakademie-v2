@@ -36,6 +36,8 @@ const SOURCE_CONFIG: Record<string, { userGroup: string }> = {
   'simulation-final-cta': { userGroup: 'high_intent' },
   'exit-intent': { userGroup: 'recovered' },
   'mid-article': { userGroup: 'content_engaged' },
+  'grillstil': { userGroup: 'grillstil' },
+  'mein-protokoll-plan': { userGroup: 'protokoll_active' },
   'footer': { userGroup: 'newsletter' },
   'homepage-banner': { userGroup: 'newsletter' },
   default: { userGroup: 'newsletter' },

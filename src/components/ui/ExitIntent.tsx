@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { X, Flame, Check } from 'lucide-react';
-import { trackEvent } from '@/components/analytics/PlausibleScript';
-
-type State = 'idle' | 'loading' | 'success';
+import { X } from 'lucide-react';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 
 /**
  * Symmetrische Akzent-Leiste (oben & unten) mit dezentem Glimmer-Sweep.
@@ -35,8 +33,6 @@ const EXCLUDED_PATHS = ['/diplome', '/diplome/simulation', '/kontakt', '/impress
 export default function ExitIntent() {
   const [visible, setVisible] = useState(false);
   const [armed, setArmed] = useState(false);
-  const [email, setEmail] = useState('');
-  const [state, setState] = useState<State>('idle');
 
   useEffect(() => {
     // Check session storage — don't show twice
@@ -79,24 +75,6 @@ export default function ExitIntent() {
     return () => window.removeEventListener('keydown', onKey);
   }, [visible]);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email || state !== 'idle') return;
-    setState('loading');
-    try {
-      await fetch('/api/newsletter', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source: 'exit-intent' }),
-      });
-      trackEvent('Newsletter-Anmeldung', { source: 'exit-intent' });
-      setState('success');
-      setTimeout(() => setVisible(false), 2500);
-    } catch {
-      setState('idle');
-    }
-  }
-
   return (
     <AnimatePresence>
       {visible && (
@@ -131,96 +109,31 @@ export default function ExitIntent() {
               {/* Close button */}
               <button
                 onClick={() => setVisible(false)}
-                className="absolute top-4 right-4 text-text-muted hover:text-text-primary transition-colors"
+                className="absolute top-4 right-4 z-10 text-text-muted hover:text-text-primary transition-colors"
                 aria-label="Schließen"
               >
                 <X size={16} />
               </button>
 
-              <div className="p-8">
-                {state === 'success' ? (
-                  /* Success state */
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-4"
-                  >
-                    <div className="w-14 h-14 bg-brand-gold/15 border border-brand-gold/40 flex items-center justify-center mx-auto mb-4">
-                      <Check size={24} className="text-brand-gold" />
-                    </div>
-                    <h3 className="font-serif text-xl font-bold text-text-primary mb-2">
-                      Willkommen an Bord.
-                    </h3>
-                    <p className="text-sm font-body text-text-muted">
-                      Jeden Freitag: das destillierte Wissen der besten Grillmeister der Welt.
-                    </p>
-                  </motion.div>
-                ) : (
-                  /* Capture state */
-                  <>
-                    {/* Icon */}
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className="w-10 h-10 bg-brand-fire/10 border border-brand-fire/25 flex items-center justify-center shrink-0">
-                        <Flame size={18} className="text-brand-fire" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire">
-                          Warte kurz
-                        </p>
-                        <p className="text-xs font-sans text-text-muted">
-                          Bevor du gehst — das hier ist für dich:
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Headline */}
-                    <h2 className="font-serif text-2xl font-bold text-text-primary mb-3 leading-tight">
-                      Jeden Freitag: ein BBQ-Wissen,<br />das wirklich bleibt.
-                    </h2>
-
-                    {/* Value prop bullets */}
-                    <ul className="space-y-2 mb-6">
-                      {[
-                        'Porträts der 50 besten Grillmeister der Welt',
-                        'Techniken, die dein nächstes Grillen verändern',
-                        'Kein Spam · Jederzeit abmeldbar · Einwilligung per Double-Opt-In',
-                      ].map((item) => (
-                        <li key={item} className="flex items-center gap-2 text-sm font-body text-text-secondary">
-                          <div className="w-1 h-1 bg-brand-gold rounded-full shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="flex gap-2">
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="deine@email.de"
-                        required
-                        autoFocus
-                        className="flex-1 bg-surface-elevated border border-brand-gold/20 px-4 py-3 text-sm font-body text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-gold/50 transition-colors"
-                      />
-                      <button
-                        type="submit"
-                        disabled={state === 'loading'}
-                        className="shrink-0 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.1em] uppercase px-5 py-3 hover:bg-[#b07020] transition-colors disabled:opacity-50"
-                      >
-                        {state === 'loading' ? '…' : 'Ja'}
-                      </button>
-                    </form>
-
-                    <button
-                      onClick={() => setVisible(false)}
-                      className="w-full text-center text-[10px] font-sans text-text-muted/50 hover:text-text-muted transition-colors mt-3"
-                    >
-                      Nein danke, ich verpasse das lieber
-                    </button>
-                  </>
-                )}
+              <div className="px-2 pt-2 sm:px-3">
+                {/* Zentrale Anmelde-Komponente (DSGVO-Consent, Honeypot, DOI-Erfolgszustand) —
+                    Rahmen/Hintergrund neutralisiert, damit sie im Modal nicht doppelt rahmt. */}
+                <NewsletterSignup
+                  source="exit-intent"
+                  eyebrow="Warte kurz — bevor du gehst"
+                  headline="Jeden Freitag: ein BBQ-Wissen, das wirklich bleibt."
+                  subline="Porträts der 50 besten Grillmeister der Welt und Techniken, die dein nächstes Grillen verändern. Kein Spam · Double-Opt-In."
+                  cta="Ja, eintragen"
+                  className="border-0 bg-transparent"
+                />
               </div>
+
+              <button
+                onClick={() => setVisible(false)}
+                className="w-full text-center text-[10px] font-sans text-text-muted/50 hover:text-text-muted transition-colors pb-4"
+              >
+                Nein danke, ich verpasse das lieber
+              </button>
 
               {/* Accent line — unten (Symmetrie) */}
               <AccentBar />

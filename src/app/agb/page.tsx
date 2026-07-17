@@ -152,7 +152,7 @@ export default function AgbPage() {
               <p className="mb-3">
                 <strong className="text-text-primary">Elektronische Widerrufsfunktion (§ 356a BGB):</strong>{' '}
                 Du kannst deinen Widerruf bequem über unsere elektronische Widerrufsfunktion
-                erklären. Den Button „Vertrag widerrufen" findest du jederzeit im Footer jeder
+                erklären. Den Button „Vertrag widerrufen&quot; findest du jederzeit im Footer jeder
                 Seite sowie direkt unter:{' '}
                 <Link href="/widerruf" className={linkClass}>steakakademie.de/widerruf</Link>.
                 Nach Bestätigung erhältst du unverzüglich eine elektronische Eingangsbestätigung
@@ -175,7 +175,7 @@ export default function AgbPage() {
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Elektronische Widerrufsfunktion (§ 356a BGB):</strong>{' '}
-                Den Widerruf kannst du über die Schaltfläche „Vertrag widerrufen" im Footer oder
+                Den Widerruf kannst du über die Schaltfläche „Vertrag widerrufen&quot; im Footer oder
                 unter{' '}
                 <Link href="/widerruf" className={linkClass}>steakakademie.de/widerruf</Link>{' '}
                 erklären. Du erhältst eine automatische Eingangsbestätigung per E-Mail.
@@ -199,7 +199,7 @@ export default function AgbPage() {
               <p className="mb-3">
                 Gemäß § 356a BGB stellen wir eine elektronische Widerrufsfunktion bereit.
                 Du findest die Schaltfläche{' '}
-                <strong className="text-text-primary">„Vertrag widerrufen"</strong>{' '}
+                <strong className="text-text-primary">„Vertrag widerrufen&quot;</strong>{' '}
                 im Footer jeder Seite sowie unter{' '}
                 <Link href="/widerruf" className={linkClass}>steakakademie.de/widerruf</Link>.
                 Der Widerruf wird zweistufig bestätigt; du erhältst danach unverzüglich eine
@@ -275,7 +275,7 @@ export default function AgbPage() {
             <section>
               <h2 className={h2Class}>§ 9 KI-gestützte Inhalte (Marco-Widget)</h2>
               <p>
-                Auf steakakademie.de ist ein KI-Assistent ("Marco") verfügbar, der auf Basis
+                Auf steakakademie.de ist ein KI-Assistent (&quot;Marco&quot;) verfügbar, der auf Basis
                 von KI-Sprachmodellen Antworten zu Grillthemen generiert. Diese Antworten sind
                 automatisch erstellt und können Fehler enthalten. Sie ersetzen keine
                 professionelle Beratung — insbesondere nicht in Fragen der Lebensmittelsicherheit,

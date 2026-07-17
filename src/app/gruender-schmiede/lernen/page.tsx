@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default function SprintLernenIndex() {
-  const module = allSprintModuls.slice().sort((a, b) => a.order - b.order);
+  const sprintModule = allSprintModuls.slice().sort((a, b) => a.order - b.order);
 
   const collection = collectionPageSchema(
     'Die Methode: KI-gesteuert ein Business bauen',
@@ -67,7 +67,7 @@ export default function SprintLernenIndex() {
 
           {/* Module cards */}
           <ol className="grid gap-5">
-            {module.map((m) => (
+            {sprintModule.map((m) => (
               <li key={m.slug}>
                 <Link
                   href={m.url}

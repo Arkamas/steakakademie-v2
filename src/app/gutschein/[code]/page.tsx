@@ -74,7 +74,7 @@ export default async function VoucherPage({ params }: { params: { code: string }
               </div>
 
               {voucher.gift_message && (
-                <p className="font-body italic text-text-secondary max-w-md mx-auto mb-6">„{voucher.gift_message}"</p>
+                <p className="font-body italic text-text-secondary max-w-md mx-auto mb-6">„{voucher.gift_message}&quot;</p>
               )}
 
               <p className="text-xs font-sans text-text-muted">
@@ -107,7 +107,7 @@ export default async function VoucherPage({ params }: { params: { code: string }
                 <div className="mt-10 text-left bg-surface-base border border-border-subtle p-6 print:hidden">
                   <h2 className="font-sans font-bold text-sm text-text-primary mb-3">So löst du den Gutschein ein</h2>
                   <ol className="list-decimal list-outside ml-5 space-y-1.5 font-body text-sm text-text-secondary">
-                    <li>Auf „Jetzt einlösen" klicken.</li>
+                    <li>Auf „Jetzt einlösen&quot; klicken.</li>
                     <li>Mit deiner E-Mail anmelden (kostenloses Konto, falls noch keins).</li>
                     <li>Fertig — dein Produkt ist sofort freigeschaltet und gehört dir dauerhaft.</li>
                   </ol>

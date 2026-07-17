@@ -255,7 +255,7 @@ export default function FleischpassPage() {
                     </div>
                     <div className="flex items-center">
                       <p className="font-body text-sm text-text-secondary leading-relaxed italic">
-                        „{insight}"
+                        „{insight}&quot;
                       </p>
                     </div>
                   </div>

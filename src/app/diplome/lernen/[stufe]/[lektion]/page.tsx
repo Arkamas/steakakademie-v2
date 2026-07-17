@@ -171,7 +171,7 @@ export default function DiplomLektionPage({ params }: Props) {
                   </span>
                 </div>
                 <p className="font-serif text-lg italic text-text-primary leading-relaxed">
-                  „{lektion.merksatz}"
+                  „{lektion.merksatz}&quot;
                 </p>
               </div>
 

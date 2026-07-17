@@ -87,18 +87,19 @@ test.describe('Newsletter-Anmeldung', () => {
   });
 
   test('DSGVO-Gating: ohne Consent bleibt der Button deaktiviert', async ({ page }) => {
-    // Gültige Mail, aber Consent bewusst NICHT gesetzt → weiterhin deaktiviert.
-    await expect(async () => {
-      await emailField(page).fill(VALID_EMAIL);
-      await expect(emailField(page)).toHaveValue(VALID_EMAIL);
-      await expect(submitBtn(page)).toBeDisabled({ timeout: 500 });
-    }).toPass({ timeout: 15_000 });
+    // Erst Hydration nachweisbar abwarten (gültige Mail + Consent → Button aktiv).
+    // Vorher direkt zu füllen wäre ein Race: Ein Fill VOR der Hydration setzt nur
+    // den DOM-Wert, nicht den React-State — der spätere Consent-Check liefe dann
+    // gegen einen leeren E-Mail-State und der Button bliebe fälschlich disabled.
+    await enableViaValidInput(page);
 
-    // Gegenprobe: Consent an → aktiv, wieder ab → deaktiviert.
-    await consentBox(page).check();
-    await expect(submitBtn(page)).toBeEnabled();
+    // Consent entziehen → deaktiviert, obwohl die E-Mail gültig bleibt.
     await consentBox(page).uncheck();
     await expect(submitBtn(page)).toBeDisabled();
+
+    // Gegenprobe: Consent wieder an → aktiv.
+    await consentBox(page).check();
+    await expect(submitBtn(page)).toBeEnabled();
   });
 
   test('E-Mail-Validierung: ungültige Formate deaktivieren den Button', async ({ page }) => {

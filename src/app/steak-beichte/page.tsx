@@ -119,7 +119,7 @@ export default function SteakBeichtePage() {
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
                 Du beschreibst dein Grill-Ergebnis — mit oder ohne Foto. Die KI-Diagnose
                 liefert dir die genaue Ursache, eine Fehler-Einordnung und ein konkretes
-                Korrektur-Protokoll für das nächste Mal. Kein Raten. Kein „kommt drauf an".
+                Korrektur-Protokoll für das nächste Mal. Kein Raten. Kein „kommt drauf an&quot;.
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -156,8 +156,8 @@ export default function SteakBeichtePage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 font-body text-text-secondary leading-relaxed">
                 <div className="space-y-4">
                   <p>
-                    Du postest es im Forum. „Zu hohe Temperatur vielleicht?" „Hast du
-                    rested?" „War der Rost sauber?" Zehn Meinungen, null Diagnose.
+                    Du postest es im Forum. „Zu hohe Temperatur vielleicht?&quot; „Hast du
+                    rested?&quot; „War der Rost sauber?&quot; Zehn Meinungen, null Diagnose.
                     Du weißt danach immer noch nicht was wirklich passiert ist.
                   </p>
                   <p>

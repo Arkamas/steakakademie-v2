@@ -140,7 +140,7 @@ export default function DatenschutzPage() {
                 <strong className="text-text-primary">Einwilligung erforderlich:</strong> Clarity wird erst
                 geladen, nachdem du im Cookie-Banner aktiv zugestimmt hast. Ohne Zustimmung findet keine
                 Verarbeitung durch Clarity statt. Du kannst deine Einwilligung jederzeit mit Wirkung für die
-                Zukunft widerrufen – über den Link „Cookie-Einstellungen" im Seitenfuß.
+                Zukunft widerrufen – über den Link „Cookie-Einstellungen&quot; im Seitenfuß.
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Drittlandübermittlung:</strong> Eine Verarbeitung in den
@@ -307,9 +307,9 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>11. KI-Assistenten „Marco" (Anthropic)</h2>
+              <h2 className={h2Class}>11. KI-Assistenten „Marco&quot; (Anthropic)</h2>
               <p className="mb-3">
-                Diese Website bietet den KI-Assistenten „Marco" als Chat-Widget an.
+                Diese Website bietet den KI-Assistenten „Marco&quot; als Chat-Widget an.
               </p>
               <ul className="list-disc pl-5 space-y-2 mb-3">
                 <li>
@@ -409,8 +409,8 @@ export default function DatenschutzPage() {
                 Microsoft Clarity (Abschnitt 6) setzt Cookies für Heatmaps und Sitzungs-Analyse. Diese
                 werden <strong className="text-text-primary">ausschließlich nach deiner aktiven Einwilligung</strong>{' '}
                 über unseren Cookie-Banner gesetzt. Der Banner bietet auf erster Ebene zwei gleichwertige
-                Optionen („Alles akzeptieren" und „Ablehnen"); ohne Zustimmung werden keine solchen Cookies
-                gesetzt. Deine Wahl kannst du jederzeit über „Cookie-Einstellungen" im Seitenfuß ändern oder
+                Optionen („Alles akzeptieren&quot; und „Ablehnen&quot;); ohne Zustimmung werden keine solchen Cookies
+                gesetzt. Deine Wahl kannst du jederzeit über „Cookie-Einstellungen&quot; im Seitenfuß ändern oder
                 widerrufen. Die gespeicherte Einwilligungs-Entscheidung selbst liegt technisch notwendig im
                 localStorage deines Browsers.
               </p>
@@ -430,7 +430,7 @@ export default function DatenschutzPage() {
               </p>
               <p className="mb-3">
                 Produktempfehlungen können Affiliate-Links enthalten (gekennzeichnet mit * oder
-                dem Hinweis „Affiliate-Link"). Bei einem Kauf über solche Links erhalten wir
+                dem Hinweis „Affiliate-Link&quot;). Bei einem Kauf über solche Links erhalten wir
                 eine Provision ohne Mehrkosten für dich.
               </p>
               <p className="mb-3">

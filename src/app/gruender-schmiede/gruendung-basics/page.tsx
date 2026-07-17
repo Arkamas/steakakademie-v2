@@ -49,7 +49,7 @@ export default function GruendungBasicsPage() {
             <p className="mt-4 font-body text-[1.05rem] leading-relaxed text-text-secondary">
               Alles, was du fürs Gründen brauchst, an einer Stelle. Die Methode in der Gründer-Schmiede
               dreht sich darum, wie du KI-gesteuert ein digitales Business aufbaust — aber bevor du
-              loslegst, musst du formal „selbständig" werden, und genau hier verlieren viele den
+              loslegst, musst du formal „selbständig&quot; werden, und genau hier verlieren viele den
               Überblick. Das Komplettikon holt dich ab, auch wenn du noch nie mit Gewerbe oder
               Freiberuflichkeit zu tun hattest: Was du angehen musst, was du beantragst, und was dich
               die ersten 6 Monate kostet.

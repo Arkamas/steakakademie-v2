@@ -184,8 +184,8 @@ export default function MeinProtokollPage() {
                   </p>
                   <p>
                     Ein Plan der zu dir passt — deinem Grill, deiner Zeit, deinem
-                    Niveau — macht den Unterschied zwischen "ich grill schon seit
-                    Jahren und bin immer noch mittelmäßig" und echtem Fortschritt,
+                    Niveau — macht den Unterschied zwischen &quot;ich grill schon seit
+                    Jahren und bin immer noch mittelmäßig&quot; und echtem Fortschritt,
                     der messbar ist.
                   </p>
                 </div>
@@ -275,7 +275,7 @@ export default function MeinProtokollPage() {
                 Was dein Plan enthält
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-light mb-3">
-                Nicht "lern mehr" — sondern "tu das jetzt".
+                Nicht &quot;lern mehr&quot; — sondern &quot;tu das jetzt&quot;.
               </h2>
             </div>
 

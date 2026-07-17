@@ -280,7 +280,7 @@ export default async function GruenderSchmiedePage() {
                   </p>
                   <p>
                     Die Gründer-Schmiede löst beides: eine Methode, die KI zu deinem fokussierten
-                    Mitgründer macht — und „Das Komplettikon", das die Bürokratie ehrlich erklärt.
+                    Mitgründer macht — und „Das Komplettikon&quot;, das die Bürokratie ehrlich erklärt.
                     Genau so habe ich steakakademie.de gebaut.
                   </p>
                 </div>
@@ -301,7 +301,7 @@ export default async function GruenderSchmiedePage() {
               </h2>
               <p className="font-body text-text-light/60 max-w-xl">
                 Das ist meine echte Methode — KI-gesteuert ein Business bauen, von Tag 1
-                dokumentiert. Jedes Modul bringt dich weiter, nicht nur „du weißt jetzt mehr".
+                dokumentiert. Jedes Modul bringt dich weiter, nicht nur „du weißt jetzt mehr&quot;.
               </p>
             </div>
 
@@ -365,7 +365,7 @@ export default async function GruenderSchmiedePage() {
               <blockquote className="border-l-4 border-brand-gold pl-6 py-2 mb-12">
                 <p className="font-serif text-xl lg:text-2xl text-text-primary italic leading-relaxed">
                   „Kein Kurs über Kurse. Die echte Methode, mit der dieses Projekt entstanden ist —
-                  von Tag 1 dokumentiert."
+                  von Tag 1 dokumentiert.&quot;
                 </p>
                 <footer className="mt-4 text-sm font-sans text-text-muted">
                   — Kernprinzip der Gründer-Schmiede

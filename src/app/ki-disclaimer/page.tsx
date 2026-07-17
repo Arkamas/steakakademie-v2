@@ -68,7 +68,7 @@ export default function KiDisclaimerPage() {
                     <tr className="border-b border-white/5">
                       <td className="px-4 py-3">
                         <span className="font-semibold text-text-primary">
-                          Marco „Der Meister"
+                          Marco „Der Meister&quot;
                         </span>
                       </td>
                       <td className="px-4 py-3">Claude Haiku (Anthropic PBC)</td>
@@ -131,7 +131,7 @@ export default function KiDisclaimerPage() {
                       Art. 50 Abs. 4 EU AI Act — Sichtbare Kennzeichnung KI-erzeugter Inhalte (Deployer-Pflicht):
                     </span>{' '}
                     Bilder zu Community-Rezepten werden durch KI (FLUX via fal.ai) erzeugt. Sie
-                    sind sichtbar als „KI-Symbolbild" gekennzeichnet und können vom tatsächlichen
+                    sind sichtbar als „KI-Symbolbild&quot; gekennzeichnet und können vom tatsächlichen
                     Gericht abweichen. Die Transparenzpflicht nach Art. 50 Abs. 4 gilt ab dem
                     2. August 2026; wir setzen die Kennzeichnung bereits jetzt um.
                   </div>
@@ -306,7 +306,7 @@ export default function KiDisclaimerPage() {
                 >
                   pitmaster@steakakademie.de
                 </a>{' '}
-                — Betreff: „KI-Feedback"
+                — Betreff: „KI-Feedback&quot;
               </p>
             </section>
 

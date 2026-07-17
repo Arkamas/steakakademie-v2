@@ -261,7 +261,7 @@ export default async function SeoSprintPage() {
               <blockquote className="border-l-4 border-brand-gold pl-6 py-2 mb-12">
                 <p className="font-serif text-xl lg:text-2xl text-text-primary italic leading-relaxed">
                   „SEO-Agenturen verdienen daran, dass du nicht weißt wie einfach
-                  die Grundlagen sind. Nach diesem Sprint weißt du es."
+                  die Grundlagen sind. Nach diesem Sprint weißt du es.&quot;
                 </p>
                 <footer className="mt-4 text-sm font-sans text-text-muted">
                   — Kernprinzip des SEO-Sprints

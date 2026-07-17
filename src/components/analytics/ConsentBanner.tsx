@@ -50,7 +50,7 @@ export default function ConsentBanner() {
           cookielos, anonym, ohne Einwilligung. Zusätzlich möchten wir mit <strong className="text-text-light/90">Microsoft
           Clarity</strong> (Heatmaps &amp; Sitzungs-Analyse, mit Cookies) verstehen, wie die
           Seite genutzt wird, um sie zu verbessern. Das laden wir nur mit deiner Zustimmung.
-          Du kannst deine Wahl jederzeit im Footer unter „Cookie-Einstellungen" ändern.{' '}
+          Du kannst deine Wahl jederzeit im Footer unter „Cookie-Einstellungen&quot; ändern.{' '}
           <Link href="/datenschutz" className="text-brand-gold underline underline-offset-2 hover:text-brand-gold/80">
             Datenschutzerklärung
           </Link>

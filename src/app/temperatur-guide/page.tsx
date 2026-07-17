@@ -999,7 +999,7 @@ export default function TemperaturGuidePage() {
               <p className="font-body text-sm text-text-secondary leading-relaxed mb-4">
                 Beim Sous-Vide-Garen entspricht die Kerntemperatur am Ende der Garzeit exakt der eingestellten
                 Wassertemperatur — das ist der physikalische Vorteil der Methode. Es gibt kein Übergaren,
-                kein Carryover im klassischen Sinn. Die "Kerntemperatur" ist daher gleichzeitig die Zieltemperatur.
+                kein Carryover im klassischen Sinn. Die &quot;Kerntemperatur&quot; ist daher gleichzeitig die Zieltemperatur.
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse text-xs font-sans" aria-label="Sous Vide Temperaturen">

@@ -110,7 +110,7 @@ export default function DatenschutzPage() {
               <p className="mb-3">
                 Plausible erhebt ausschließlich aggregierte, anonyme Nutzungsstatistiken
                 (Seitenaufrufe, Herkunftsland, Gerätekategorie, Referrer). Es werden keine
-                IP-Adressen gespeichert. Eine Einwilligung nach § 25 TTDSG ist nicht erforderlich.
+                IP-Adressen gespeichert. Eine Einwilligung nach § 25 TDDDG ist nicht erforderlich.
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der
@@ -397,7 +397,7 @@ export default function DatenschutzPage() {
               <h2 className={h2Class}>12. Cookies & lokale Speicherung</h2>
               <p className="mb-3">
                 <strong className="text-text-primary">Technisch notwendige Speichermechanismen</strong>{' '}
-                (keine Einwilligung erforderlich, § 25 Abs. 2 TTDSG):
+                (keine Einwilligung erforderlich, § 25 Abs. 2 TDDDG):
               </p>
               <ul className="list-disc pl-5 space-y-1 mb-3">
                 <li><strong className="text-text-primary">localStorage:</strong> Theme-Einstellung (hell/dunkel) — dauerhaft, lokal im Browser</li>

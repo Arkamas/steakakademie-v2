@@ -373,7 +373,7 @@ export default function MeinProtokollPage() {
                   <strong className="text-text-primary">Hinweis zum Widerrufsrecht:</strong>{' '}
                   Nach Kauf und Fragebogen-Ausfüllung wird der Plan sofort generiert — digitaler
                   Inhalt, kein Widerruf nach Bereitstellung. Der Fragebogen kann vor Generierung
-                  beliebig oft angepasst werden.
+                  beliebig oft angepasst werden. Endpreis in Euro. Als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.
                 </p>
               </div>
             </div>

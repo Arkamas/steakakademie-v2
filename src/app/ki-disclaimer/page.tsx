@@ -37,7 +37,7 @@ export default function KiDisclaimerPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             KI-Systeme &amp; KI-Disclaimer
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juli 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: August 2026</p>
 
           <div className="max-w-content space-y-10 font-body text-text-secondary leading-relaxed">
 
@@ -140,11 +140,14 @@ export default function KiDisclaimerPage() {
                   <span className="shrink-0 text-yellow-400 font-bold">⚠</span>
                   <div>
                     <span className="font-semibold text-text-primary">
-                      Art. 50 Abs. 2 EU AI Act — Maschinenlesbare Kennzeichnung (Provider-Pflicht, Frist 02.08.2026):
+                      Art. 50 Abs. 2 EU AI Act — Maschinenlesbare Kennzeichnung (Provider-Pflicht, Frist 02.12.2026):
                     </span>{' '}
                     Die Pflicht zur maschinenlesbaren Einbettung von Content Credentials (z.&nbsp;B.
                     C2PA-Metadaten) in KI-generierte Bilder liegt beim <em>Anbieter</em> des
-                    KI-Systems — hier fal.ai als Betreiber des FLUX-Bildgenerators. Als{' '}
+                    KI-Systems — hier fal.ai als Betreiber des FLUX-Bildgenerators. Die Frist
+                    wurde durch die Digital-Omnibus-VO (EU) 2026/1744 (in Kraft 27.07.2026)
+                    für vor dem 02.08.2026 in Verkehr gebrachte Systeme auf{' '}
+                    <strong className="text-text-primary">02.12.2026</strong> verlängert. Als{' '}
                     <em>Deployer</em> haben wir fal.ai zu dieser Anforderung kontaktiert und
                     fordern vertraglich konforme Umsetzung ein. Bis zur bestätigten Lieferung
                     von Content Credentials durch fal.ai kompensieren wir durch die sichtbare

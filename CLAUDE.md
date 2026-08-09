@@ -108,6 +108,12 @@ Analytics & Data · CRM & Monetization.
   NICHT Keyword-Stuffing. `docs/geo-llm-ranking-factors.md`. Auto-Check: `geo-check.yml`.
 - **TikTok:** Story-Highlights aktiv nutzen (Reichweiten-Bonus), immer benennen.
 - **Werbekennzeichnung:** siehe §2.1.
+- **Videoproduktion (OpenMontage, 09.08.2026):** agenten-getriebener Video-Stack,
+  installiert per `npm run video:setup` nach `tools/openmontage/` (**gitignored, AGPLv3** —
+  nicht ins Repo vendoren). Marken-Playbook + Pflicht-Briefing liegen kanonisch in
+  `docs/openmontage/` und werden beim Setup eingespielt. Doku:
+  `docs/openmontage-integration.md`. Approval-Gates bleiben an (Regel 4), Paid-Provider
+  erst nach Kostenfreigabe.
 
 ---
 

@@ -36,6 +36,10 @@
     "cron:scout:only": "node scripts/cron-scout.mjs --scout-only",
     "cron:scout:qof": "node scripts/cron-scout.mjs --source src_die_frau_am_grill",
     "cron:scout:de": "node scripts/cron-scout.mjs --source src_gbaev",
+    "video:setup": "bash scripts/openmontage-setup.sh",
+    "video:check": "cd tools/openmontage && PATH=\"$PWD/.venv/bin:$PATH\" make preflight",
+    "video:board": "cd tools/openmontage && PATH=\"$PWD/.venv/bin:$PATH\" .venv/bin/python -m backlot open",
+    "video:demo": "cd tools/openmontage && PATH=\"$PWD/.venv/bin:$PATH\" make demo",
     "cut-images": "node scripts/cut-images.mjs",
     "cut-images:dry": "node scripts/cut-images.mjs --dry-run",
     "cut-images:force": "node scripts/cut-images.mjs --force"

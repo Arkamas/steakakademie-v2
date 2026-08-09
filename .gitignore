@@ -90,3 +90,8 @@ graphify-out/
 
 # Projektfremder Ordner (liegt nur lokal im Repo-Root)
 Existenzgruendung-Jobcenter/
+
+# OpenMontage (AGPLv3, eigenes Upstream-Repo) — wird per
+# `npm run video:setup` installiert, nicht in dieses Repo vendored.
+# Kanonische Steakakademie-Konfiguration liegt in docs/openmontage/.
+tools/openmontage/

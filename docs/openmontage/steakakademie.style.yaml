@@ -1,0 +1,137 @@
+# Steakakademie — Style-Playbook für OpenMontage
+#
+# Kanonische Quelle: docs/openmontage/steakakademie.style.yaml (dieses Repo).
+# Wird von scripts/openmontage-setup.sh nach tools/openmontage/styles/steakakademie.yaml kopiert.
+# NICHT direkt in tools/openmontage/ bearbeiten — das Verzeichnis ist gitignored und
+# wird bei jedem Setup-Lauf überschrieben.
+#
+# Validiert gegen schemas/styles/playbook.schema.json (OpenMontage).
+# Farben/Fonts abgeglichen mit tailwind.config.js + marketing_agent.txt.
+
+identity:
+  name: "Steakakademie"
+  category: cinematic
+  mood: warm, handwerklich, präzise — Glut und Ruhe statt Hektik
+  pace: deliberate
+  best_for: "Kerntemperatur- und Methoden-Erklärvideos, Cut-Porträts, Reverse-Sear/Dry-Aging-Guides, TikTok/YouTube-Shorts der Steakakademie"
+
+visual_language:
+  color_palette:
+    primary: ["#C8882A", "#E85018"]      # Gold (Marke) + Ember (Akzent/Hitze)
+    accent: ["#E6D5C3", "#8C5A22"]       # Pergament (Text-Hell) + gebranntes Kupfer
+    background: "#120C07"                # Marken-Dunkel (fast-schwarzes Braun)
+    text: "#E6D5C3"
+    muted: "#9A8878"
+  composition: "Nahaufnahme des Produkts als Held; Rule-of-Thirds, viel dunkler Negativraum, Kamera ruhig — kein Wackeln, keine schnellen Schwenks"
+  texture: "warmes Filmkorn, weicher Rauch/Dampf, Glut-Bokeh im Hintergrund; keine cleanen Vektor-Flächen"
+
+typography:
+  headings:
+    font: "Playfair Display"
+    weight: 700
+    tracking: "-0.01em"
+  body:
+    font: "Source Serif 4"
+    weight: 400
+    line_height: 1.5
+  stat_card:
+    font: "DM Sans"
+    weight: 700
+    size_multiplier: 3.2
+  scale_system: "major_third"
+  weight_matrix:
+    title: 700
+    heading: 700
+    body: 400
+    caption: 500
+
+motion:
+  transitions: [fade, dissolve, "match-cut"]
+  animation_style: "ease-out, langsame Züge, kein Bounce, kein Zappeln — Handwerk statt Werbespot"
+  pacing_rules:
+    min_scene_hold_seconds: 2.5
+    max_scene_hold_seconds: 10
+    text_card_hold_seconds: 3.5
+    stat_card_hold_seconds: 4.0
+    transition_duration_seconds: 0.5
+  entrance: "sanfter Fade-up mit minimalem Push-in (1.0 -> 1.03)"
+  exit: "fade-to-black über die dunkle Markenfläche"
+
+audio:
+  voice_style: "ruhig, präzise, wissend — Pitmaster-Ton (Avatar Marco). Keine Marktschreier-Energie, keine Uwe-Stimme."
+  music_mood: "warm, minimal, tiefe Akustik-Gitarre oder Drone; tritt nie vor die Stimme"
+  music_volume: 0.07
+  sfx_style: "diegetisch: Brutzeln, Glut-Knistern, Messer auf Brett — keine Whooshes, keine Riser"
+  ducking_threshold_db: -6
+  hero_moment_voice_shift: "beim Kerntemperatur-Wert langsamer, tiefer, kurze Pause davor"
+
+asset_generation:
+  image_prompt_prefix: "cinematic close-up food photography, dry-aged beef steak, warm ember and gold light on a near-black background, shallow depth of field, natural smoke, rustic butcher-block and cast iron, 85mm lens, "
+  image_negative_prompt: "person's face, hands of a named individual, portrait, logo, watermark, text overlay, cartoon, 3d render, flat vector, blue tones, cold lighting, plastic-looking meat, oversaturated, low quality"
+  diagram_style: "warme Linien auf dunklem Grund, Gold (#C8882A) für Werte, Ember (#E85018) nur für Hitze/Warnung; Cut-Schaubilder anatomisch korrekt beschriftet"
+  consistency_anchors:
+    - "Gold #C8882A ist die einzige Primärakzentfarbe in allen Bildern"
+    - "Hintergrund immer dunkel (#120C07 oder dunkler Naturton) — nie weiß"
+    - "Ember #E85018 nur für Glut, Hitze, Kerntemperatur-Warnstufen — nie flächig"
+    - "Kein Gesicht einer realen Person; Avatare (Marco/Jonas/Elena) nur als Stimme/Text, nie als Uwe"
+    - "Fleisch fotorealistisch und appetitlich: sichtbare Marmorierung, korrekte Kruste zum genannten Garpunkt"
+    - "Licht immer warm und gerichtet (Feuer-/Glutquelle), nie kaltes Studioweiß"
+
+overlays:
+  stat_card:
+    bg: "#1C120A"
+    border: "#C8882A"
+    text: "#E6D5C3"
+    radius: 6
+    shadow: "0 4px 20px rgba(0,0,0,0.55)"
+  key_term:
+    bg: "#241708"
+    text: "#C8882A"
+    radius: 4
+  code_block:
+    bg: "#120C07"
+    text: "#E6D5C3"
+    highlight: "#E85018"
+
+quality_rules:
+  - "REGEL 8c — FAKTEN: Jede Kerntemperatur, jeder Cut-Name und jede Reifungsangabe MUSS gegen data/kerntemperatur-referenz.yaml des Steakakademie-Repos geprüft sein. Nie schätzen, nie runden, keine Werte aus dem Modellgedächtnis."
+  - "REGEL 3 — MARKE: Kein persönlicher Auftritt von Uwe Yendell. Sprecher ist das Avatar-System (Marco für Technik, Jonas für Community/Anfänger, Elena für Reportage)."
+  - "REGEL 1 — WERBEKENNZEICHNUNG: Enthält das Video Werbung/Affiliate, muss 'Werbung' oder 'Anzeige' bereits im Cover/Thumbnail lesbar sein — vor dem ersten Klick. 'Ad' zählt nicht (LG Köln, 12.05.2026)."
+  - "KI-TRANSPARENZ: KI-generierte Sprecher/Bilder werden im Video oder in der Beschreibung als solche gekennzeichnet (siehe /ki-disclaimer)."
+  - "Temperaturen und Zahlen mindestens 4,0 s stehen lassen — der Zuschauer muss sie mitschreiben können."
+  - "Mindestkontrast 4,5:1 für jeden Text auf dem dunklen Grund"
+  - "Maximal 3 Farben gleichzeitig im Bild (Hintergrund ausgenommen)"
+  - "Text muss auf einem Handy in 720p lesbar sein — Untertitel Pflicht bei Vertical-Formaten"
+  - "Keine Schnitte unter 2,5 s — Ruhe ist Teil der Marke"
+
+taste_profile:
+  design_read: "Ein Handwerksmeister erklärt am Feuer. Die Kamera hat Zeit, das Fleisch ist der Star, die Zahl ist heilig. Alles, was nach Werbespot oder Stock-Video riecht, ist falsch."
+  visual_variance: 4
+  motion_intensity: 3
+  information_density: 4
+  palette_discipline: "streng: Gold + Ember auf Dunkel; alles andere muss begründet sein"
+  layout_variation: "Produkt-Nahaufnahme als Standard, Textkarte nur für Werte und Merksätze"
+  reference_strategy: "Referenz sind Dry-Aging- und Feuer-Dokumentationen, keine Fast-Food-Werbung"
+  anti_patterns:
+    - "Schnelle Schnittfolgen und Zoom-Bounces (TikTok-Hektik)"
+    - "Kaltes Studiolicht oder weiße Hintergründe"
+    - "Stock-Footage mit lachenden Menschen am Gasgrill"
+    - "Kerntemperaturen als grobe Spanne ohne Quelle"
+    - "Ein reales Gesicht als 'der Gründer'"
+  quality_gates:
+    - "Fakten-Check gegen kerntemperatur-referenz.yaml vor dem Compose"
+    - "Werbekennzeichnung im Thumbnail geprüft, falls Affiliate/Werbung"
+    - "Uwe gibt frei, bevor irgendetwas veröffentlicht wird (Regel 4)"
+
+chart_palette:
+  - "#C8882A"
+  - "#E85018"
+  - "#E6D5C3"
+  - "#8C5A22"
+  - "#6B4A2F"
+  - "#A33B12"
+
+color_rules:
+  harmony_type: "analogous"
+  contrast_validation: true
+  colorblind_safe: true

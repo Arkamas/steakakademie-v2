@@ -50,3 +50,17 @@
 **Git-Korruption gefixt:** `.git/HEAD` war mit Null-Bytes korrumpiert (Repo komplett unbrauchbar, „branch appears to be broken") — behoben. Mehrere Working-Tree-Dateien (u. a. `CLAUDE.md`, `agb/page.tsx`, `datenschutz/page.tsx`, `ki-disclaimer/page.tsx`) waren gegenüber dem letzten Commit abgeschnitten/korrumpiert (kein Datenverlust, da nur lokal unkommittet — auf HEAD-Stand zurückgesetzt). Sandbox-Mount-Eigenheit gemerkt: `unlink`/`rm` schlägt auf diesem Mount mit „Operation not permitted" fehl, `mv` (rename) funktioniert aber — Workaround für „Datei löschen" ist `mv` statt `rm`, auch für hängengebliebene `.git/index.lock`.
 
 **Nächster Schritt:** Hook-Kopie manuell synchronisieren (Uwe); KAN-59 (Affiliate-Link-Checker Fehlalarm bei Amazon-Suchlinks) fixen.
+
+## 09. August 2026 — OpenMontage installiert (Video-Stack) (manuell)
+
+**Was:** OpenMontage (github.com/calesthio/OpenMontage, AGPLv3) als Videoproduktions-Stack eingerichtet. Agenten-getrieben: 13 Pipeline-Manifeste (YAML) + Skills (MD) + ~98 Python-Tools, Zustandsautomat `idea → script → scene_plan → assets → edit → compose → publish` mit Approval-Gate je Stufe — passt zu Regel 4 ohne Umbau.
+
+**Entscheidung Platzierung:** `tools/openmontage/` ist **gitignored**, nicht Submodul und nicht vendored. Gründe: (1) AGPLv3 würde beim Hineinkopieren die Codebasis lizenzrechtlich verkoppeln; (2) Netlify/Vercel initialisieren Submodule automatisch → 160 MB im Build-Pfad hätten den Next-Build ohne Nutzen belastet; (3) Größe. Versioniert ist stattdessen der reproduzierbare Layer: `scripts/openmontage-setup.sh` / `.ps1`, `docs/openmontage/steakakademie.style.yaml` (Marken-Playbook), `docs/openmontage/steakakademie-brief.md` (Regeln 1/3/4/5/7/8c als Pflichtlektüre für Produktions-Agenten), `docs/openmontage-integration.md`.
+
+**Gemessene Realität statt README-Versprechen:** Das README behauptet „works with zero keys". Preflight sagt: **35 von 98** Tools ohne Keys. Voll da sind Komposition (Remotion/HyperFrames), FFmpeg-Post (9/9), Untertitel, Audio-Mix, Character-Animation. **Nicht** da ist Bildmaterial: `image_generation 0/12` — Pexels und Pixabay brauchen Keys (kostenlos, aber Pflicht). Video-Generierung 0/21 und Premium-TTS sind kostenpflichtig.
+
+**Stolperstein Piper-TTS:** Die kostenlose Offline-Stimme wird als `piper-tts` (Python-Paket) installiert, aber die Registry prüft auf `cmd:piper` — das Binary liegt in `.venv/bin/` und ist ohne aktiviertes venv nicht auf dem PATH. Ergebnis: Preflight meldet fälschlich `tts 0/7`. Fix: npm-Scripts (`video:check`, `video:board`, `video:demo`) setzen `PATH="$PWD/.venv/bin:$PATH"` selbst; beim manuellen Arbeiten im Ordner `source .venv/bin/activate` nicht vergessen.
+
+**Verifiziert (Linux-Container):** `make setup` grün · `make test-contracts` **630 passed, 7 skipped** · FFmpeg 7:6.1.1 nachinstalliert (apt brauchte erst `apt-get update`, die ondrej/php-PPA wirft 403 — stört nicht) · Playbook `steakakademie` valide gegen `schemas/styles/playbook.schema.json` **und** ladbar über den eigenen `playbook_loader` · Installer zweimal gelaufen (idempotent). **Nicht verifiziert:** End-to-End-Render mit Ton, Windows-Installer.
+
+**Nächster Schritt:** Zwei kostenlose Keys (Pexels, Pixabay) in `tools/openmontage/.env`, dann ein 60-s-Kerntemperatur-Erklärer als Free-Path-Testlauf.

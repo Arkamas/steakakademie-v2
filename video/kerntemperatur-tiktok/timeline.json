@@ -5,7 +5,7 @@
       "typ": "hero_number",
       "untertitel": "54 Grad entscheiden alles.",
       "start": 0,
-      "dauer": 8.324,
+      "dauer": 8.196,
       "audio": "steakakademie/audio/hook.wav",
       "audioDelay": 0.5,
       "visual": {
@@ -20,8 +20,8 @@
       "id": "problem",
       "typ": "statement",
       "untertitel": "Minuten lügen. Temperatur nicht.",
-      "start": 8.324,
-      "dauer": 9.146,
+      "start": 8.196,
+      "dauer": 9.242,
       "audio": "steakakademie/audio/problem.wav",
       "audioDelay": 0.25,
       "visual": {
@@ -34,8 +34,8 @@
       "id": "zahlen",
       "typ": "temp_cards",
       "untertitel": "Rind 54 · Schwein 63 · Geflügel 74 · Hack 70",
-      "start": 17.47,
-      "dauer": 15.218,
+      "start": 17.438,
+      "dauer": 15.17,
       "audio": "steakakademie/audio/zahlen.wav",
       "audioDelay": 0.25,
       "visual": {
@@ -72,8 +72,8 @@
       "id": "carryover",
       "typ": "carryover",
       "untertitel": "Fleisch zieht 2–5 °C nach. 3 °C vorher runter.",
-      "start": 32.688,
-      "dauer": 11.17,
+      "start": 32.608,
+      "dauer": 11.25,
       "audio": "steakakademie/audio/carryover.wav",
       "audioDelay": 0.25,
       "visual": {
@@ -89,7 +89,7 @@
       "typ": "two_rules",
       "untertitel": "Dickster Punkt, nicht am Knochen. 3–5 Min. ruhen.",
       "start": 43.858,
-      "dauer": 7.264,
+      "dauer": 7.424,
       "audio": "steakakademie/audio/messen.wav",
       "audioDelay": 0.25,
       "visual": {
@@ -114,8 +114,8 @@
       "id": "cta",
       "typ": "cta",
       "untertitel": "Kerntemperatur-Spickzettel — Link in der Bio.",
-      "start": 51.122,
-      "dauer": 6.39,
+      "start": 51.282,
+      "dauer": 5.438,
       "audio": "steakakademie/audio/cta.wav",
       "audioDelay": 0.3,
       "visual": {

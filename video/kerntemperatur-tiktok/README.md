@@ -19,6 +19,7 @@ Voraussetzung: `npm run video:setup` ist gelaufen und eine deutsche Piper-Stimme
 | Datei | `out/kerntemperatur-tiktok.mp4` (gitignored) |
 | Format | 1080×1920, 30 fps, H.264, faststart |
 | Länge | 56,8 s |
+| QA-Gate | `visual_qa` (Review-Frames + Pegel) — ohne Befund |
 | Ton | AAC 192 kbit/s, **-14,0 LUFS** (TikTok-Norm), True Peak -1 dBTP |
 | Größe | 7,5 MB |
 | Untertitel | im Bild eingebrannt + `out/untertitel.srt` |
@@ -28,8 +29,13 @@ Voraussetzung: `npm run video:setup` ist gelaufen und eine deutsche Piper-Stimme
 
 ## Warum Typografie statt Fleisch-Footage
 
-Der Free-Path hat aktuell **keine Bildquelle**: Pexels und Pixabay brauchen kostenlose API-Keys,
-die noch nicht hinterlegt sind (`image_generation 0/12`, siehe `docs/openmontage-integration.md`).
+**Korrektur zur ersten Fassung dieses Dokuments:** Es stimmt *nicht*, dass der Free-Path gar
+keine Bildquelle hat. `direct_clip_search` zieht echtes Bewegtbild aus **archive.org, NASA und
+Wikimedia Commons — ohne jeden API-Key**. Nur in der Cowork-Sandbox sind diese Hosts per
+Netzwerk-Policy gesperrt (403 beim CONNECT, verifiziert), weshalb hier kein Footage verfügbar
+war. Auf Uwes Rechner steht der Weg offen.
+
+Keys brauchen weiterhin Pexels und Pixabay — für Standbilder (`image_generation 0/12`).
 
 Das ist hier kein Notbehelf: Bei Kerntemperatur **ist die Zahl das Motiv**. Die Komposition
 macht sie zum Helden — Glut-Hintergrund, Marken-Gold, ruhige Schnitte. Sobald die Keys da sind,

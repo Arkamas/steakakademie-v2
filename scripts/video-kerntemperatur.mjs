@@ -40,7 +40,10 @@ const PADDING = {
   zahlen:    { lead: 0.25, tail: 1.2 },
   carryover: { lead: 0.25, tail: 1.1 },
   messen:    { lead: 0.25, tail: 1.0 },
-  cta:       { lead: 0.3,  tail: 2.3 },
+  // Kürzerer Nachlauf als die anderen Szenen: das QA-Gate hatte hier 2,3 s
+  // komplette Stille am Videoende gemeldet — auf einer Loop-Plattform ist das
+  // zu lang. 1,3 s reichen, um die Domain zu lesen.
+  cta:       { lead: 0.3,  tail: 1.3 },
 };
 
 const PIPER_ARGS = ['--length-scale', '1.14', '--sentence-silence', '0.35', '--noise-scale', '0.6'];
@@ -209,7 +212,42 @@ execFileSync('ffmpeg', [
 
 rmSync(roh, { force: true });
 
-// --- 6. Gegenprüfen ---------------------------------------------------------
+// --- 6. QA-Gate über OpenMontages eigene Prüf-Tools --------------------------
+// visual_qa zieht Review-Frames und misst die Pegel. Wir werten beides aus:
+// schwarze Frames deuten auf einen kaputten Render, Pegel über -1 dB auf
+// Clipping, und stille Abschnitte auf Lücken in der Vertonung.
+log('QA-Gate (visual_qa: Review-Frames + Pegelprüfung)');
+const qa = spawnSync(path.join(OM, '.venv/bin/python'), ['-c', `
+import json, sys
+sys.path.insert(0, ${JSON.stringify(OM)})
+from tools.analysis.visual_qa import VisualQA
+t = VisualQA()
+out = {}
+for op in ("review", "audio_levels"):
+    r = t.execute({"operation": op, "input_path": ${JSON.stringify(mp4)}})
+    out[op] = {"ok": r.success, "error": r.error, "data": r.data}
+print(json.dumps(out))
+`], { cwd: OM, encoding: 'utf-8', env: { ...process.env, PATH: `${path.join(OM, '.venv/bin')}:${process.env.PATH}` } });
+
+let qaWarnungen = 0;
+if (qa.status === 0) {
+  const out = JSON.parse(qa.stdout.trim().split('\n').pop());
+  const frames = out.review?.data?.frames || [];
+  console.log(`    ${frames.length} Review-Frames geschrieben`);
+
+  for (const lvl of out.audio_levels?.data?.levels || []) {
+    const stumm = lvl.mean_volume_db < -60;
+    const clipping = lvl.max_volume_db > -0.5;
+    const marke = stumm ? 'STUMM' : clipping ? 'CLIPPING' : 'ok';
+    if (stumm || clipping) qaWarnungen++;
+    console.log(`    ${String(lvl.timestamp).padStart(5)}s  mean ${String(lvl.mean_volume_db).padStart(6)} dB  ` +
+                `max ${String(lvl.max_volume_db).padStart(6)} dB  ${marke}`);
+  }
+} else {
+  warn('QA-Gate konnte nicht laufen — Render trotzdem vorhanden.');
+  qaWarnungen++;
+}
+
 const probe = JSON.parse(
   execFileSync('ffprobe', ['-v', 'error', '-show_streams', '-show_format', '-of', 'json', mp4],
     { encoding: 'utf-8' })
@@ -226,6 +264,7 @@ console.log(` Dauer      : ${Number(probe.format.duration).toFixed(2)}s`);
 console.log(` Ton        : ${a ? `${a.codec_name}, ${a.channels} ch, ${a.sample_rate} Hz` : 'FEHLT'}`);
 console.log(` Größe      : ${(Number(probe.format.size) / 1024 / 1024).toFixed(1)} MB`);
 console.log(` Untertitel : ${path.relative(ROOT, path.join(OUT, 'untertitel.srt'))}`);
+console.log(` QA         : ${qaWarnungen === 0 ? 'ohne Befund' : `${qaWarnungen} Auffälligkeit(en) — oben nachsehen`}`);
 console.log('\n Vor Veröffentlichung: Uwe gibt frei.');
 console.log('==============================================================');
 

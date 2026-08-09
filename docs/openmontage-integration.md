@@ -30,14 +30,62 @@ Produktionskette *außer* Bildbeschaffung:
   in `.venv/bin/piper` — ohne aktiviertes venv meldet der Preflight `tts 0/7`. Die
   npm-Scripts setzen den PATH selbst; wer manuell im Ordner arbeitet, muss
   `source .venv/bin/activate` ausführen.
-- **Braucht kostenlose Keys:** Pexels und Pixabay (Stock-Bilder/Footage) — Registrierung
-  gratis, aber ohne Key gibt es **kein** Bildmaterial (`image_generation 0/12`).
+- **Echtes Archiv-Footage — ganz ohne Keys:** `direct_clip_search` zieht Bewegtbild aus
+  **archive.org, NASA und Wikimedia Commons**; das Tool sagt selbst: „archive.org, nasa, and
+  wikimedia work without API keys". Das ist der Weg zu echtem Filmmaterial zum Nulltarif und
+  der Kern der `documentary-montage`-Pipeline.
+  ⚠️ **In der Cowork-Sandbox blockiert** — der Container weist `archive.org` und
+  `commons.wikimedia.org` beim CONNECT mit 403 ab. Getestet: das Tool läuft durch und meldet
+  „0 Treffer", **ohne** einen Fehler zu setzen. Auf Uwes Rechner steht der Weg offen.
+- **Braucht kostenlose Keys:** Pexels und Pixabay — für **Stand**bilder und zusätzliches
+  Stock-Footage (`image_generation 0/12`). Registrierung gratis.
   → Sollte Uwe besorgen, kostet nichts.
 - **Kostenpflichtig, bleibt human-gated:** Video-Generierung (Veo, Kling, Runway …, 0/21),
   ElevenLabs/OpenAI/Google TTS, Suno, HeyGen-Avatare (0/4).
 
-Die README-Aussage „works with zero keys" stimmt also für Schnitt, Komposition und
-Vertonung — **nicht** für Bildmaterial.
+Die README-Aussage „works with zero keys" stimmt also für Schnitt, Komposition, Vertonung
+**und Archiv-Footage** — nicht für generierte oder Stock-Standbilder.
+
+---
+
+## 2b. Kostenrahmen und Budget-Wächter
+
+OpenMontage schätzt Kosten **vor** der Ausführung und stoppt an harten Grenzen. Werte aus
+`config.yaml`, nachgeprüft in unserer Installation:
+
+| Einstellung | Upstream-Standard | **Bei uns** |
+|---|---|---|
+| `budget.total_usd` | 10,00 $ pro Projekt | 10,00 $ |
+| `budget.mode` | `warn` (nur Warnung) | **`cap`** — harte Grenze |
+| `single_action_approval_usd` | 0,50 $ | **0,00 $** — jede kostenpflichtige Aktion |
+| `require_approval_for_new_paid_tool` | `true` | `true` |
+
+Die beiden verschärften Werte setzt `scripts/openmontage-setup.sh` bei jedem Lauf neu.
+Damit erzwingt das Werkzeug **Regel 4 mechanisch**, statt sich darauf zu verlassen, dass ein
+Agent sie im Kopf behält.
+
+Größenordnungen aus den Entwickler-Demos (nur **Medien**kosten, ohne Token-Kosten des
+Agenten): 60-s-Clip mit Kling-Videomodell ≈ 1,33 $ · Werbevideo mit OpenAI-Bildern ≈ 0,69 $ ·
+12 FLUX-Bilder in Remotion animiert ≈ 0,15 $ · Zero-Key-Pfad 0 $.
+*Quelle: Praxis-Guide von Florian Gahn (24.06.2026) — von uns nicht nachgemessen,
+als Richtgröße behandeln.*
+
+---
+
+## 2c. Qualitäts-Gates nach dem Render
+
+Das System prüft seinen eigenen Output, statt ihn nur abzuliefern. Für uns relevant und
+**bereits in `scripts/video-kerntemperatur.mjs` verdrahtet**:
+
+- `visual_qa` mit `operation: review` — zieht Review-Frames aus dem fertigen Video
+  (schwarze Bilder, kaputte Overlays fallen so auf).
+- `visual_qa` mit `operation: audio_levels` — misst mean/max-Pegel an mehreren Stellen.
+  Unser Build wertet das aus: `mean < -60 dB` ⇒ **STUMM**, `max > -0,5 dB` ⇒ **CLIPPING**.
+- Weitere lokale Prüfer ohne Keys: `composition_validator` (Ton-/Bild-Längen, fehlende
+  Assets — **vor** dem Render), `frame_sampler`, `scene_detect`, `audio_probe`, `video_analyzer`.
+
+Das hat sich sofort bezahlt gemacht: Der erste Lauf meldete am Videoende 2,3 s mit -91 dB —
+also komplette Stille auf einer Loop-Plattform. Nachlauf gekürzt, Gate seitdem ohne Befund.
 
 ---
 
@@ -119,9 +167,34 @@ Auftrag in Klartext formulieren, z. B.
 Der Agent recherchiert, schreibt Script und Szenenplan, erzeugt Assets, schneidet und
 rendert — mit Halt an jedem Approval-Gate.
 
-**Verfügbare Pipelines:** `animated-explainer`, `talking-head`, `documentary-montage`,
-`cinematic`, `screen-demo`, `avatar-spokesperson`, `character-animation`, `animation`,
-`clip-factory`, `podcast-repurpose`, `localization-dub`, `hybrid`, `framework-smoke`.
+### Pipelines in unserer Installation (13, nachgezählt)
+
+| Pipeline | Wofür | Für uns |
+|---|---|---|
+| `animated-explainer` | Bildung, Tutorials, recherchierte Themen | **Prio 1** — Kerntemperatur & Methoden |
+| `documentary-montage` | Video-Essays aus echtem Archiv-Footage | **Prio 2** — Cut-Porträts, sobald Archive erreichbar |
+| `talking-head` | footage-geführte Sprechervideos | **Prio 3** — YouTube-Guides |
+| `cinematic` | Trailer, Teaser, Mood-Edits, Brand Films | **Prio 4** — Diplom-/Produkt-Trailer |
+| `animation` | Social, Produkt-Demos, Kinetic Typography | Shorts |
+| `clip-factory` | viele kurze Clips aus einer langen Quelle | YouTube → TikTok-Recycling |
+| `podcast-repurpose` | Podcast-Highlights als Video | später |
+| `hybrid` | Quellmaterial + KI-Support-Visuals | später |
+| `localization-dub` | Untertitel, Synchronisation | später (EN-Markt) |
+| `avatar-spokesperson` | Corporate Comms, Training | nur mit Kostenfreigabe (HeyGen o. ä.) |
+| `character-animation` | animierte Figuren | offen |
+| `screen-demo` | Software-Bildschirmaufnahmen | für uns irrelevant |
+| `framework-smoke` | interner Selbsttest | Diagnose |
+
+> Der Praxis-Guide von Florian Gahn nennt 12 Pipelines inkl. „Product Ad / Promo" sowie
+> 52 Tools und 500+ Skills. Unsere Installation (Commit `4eab34c`) hat **13 Pipelines
+> (ohne Product-Ad, dafür mit `character-animation` und `framework-smoke`), 98 Tools und
+> 723 Skill-Dateien** — der Artikel beschreibt einen älteren Stand. Im Zweifel gilt
+> `npm run video:check`, nicht der Artikel.
+
+**Render-Engines:** Der Agent wählt zwischen **Remotion** (React — datengetriebene Szenen,
+Charts, Stat-Reveals) und **HyperFrames** (HTML/CSS/GSAP — Kinetic Typography, SVG-Animation).
+Unser Kerntemperatur-Video nutzt Remotion über eine **eigene** Komposition
+(`video/remotion/steakakademie/`), nicht die generische Explainer-Komposition.
 
 Priorisierung für die Steakakademie steht in `docs/openmontage/steakakademie-brief.md` §3.
 
@@ -157,6 +230,27 @@ auf Windows. Der Container ist flüchtig — die Installation hier überlebt die
 nicht; reproduziert wird sie über `npm run video:setup`.
 
 ---
+
+## 6b. Grenzen, die wir einkalkulieren müssen
+
+Nüchtern, damit später niemand überrascht ist:
+
+1. **Volle Modell-Abhängigkeit.** Die Orchestrierung macht der KI-Agent. Verliert er den
+   Kontext oder ignoriert Anweisungen, bricht die Produktion — nicht mit einem Fehler,
+   sondern mit einem schlechten Video. Genau deshalb sind unsere Regeln als **Datei** im
+   Repo verankert (`steakakademie-brief.md`) und nicht als Chat-Anweisung.
+2. **Kein GUI.** Alles läuft im Terminal. Für Uwe heißt das: Der Weg zum fertigen Video führt
+   über Claude Code, nicht über eine Timeline mit Buttons. Das Backlot-Board
+   (`npm run video:board`) zeigt den Fortschritt, ist aber nur Anzeige, kein Editor.
+3. **Fremde APIs sind fragil.** Der Premium-Pfad hängt an Anbietern, die Preise ändern oder
+   ausfallen. Der Free-Path (Piper, Archive, Remotion, FFmpeg) ist deshalb nicht nur billiger,
+   sondern auch stabiler — ein Argument, ihn als Standard zu behalten.
+4. **Netz-Policy schlägt durch.** In dieser Sandbox sind huggingface.co, remotion.media,
+   archive.org und Wikimedia gesperrt. Alle Umgehungen stehen im Build; auf einem normalen
+   Rechner entfallen sie.
+5. **AGPL-3.0.** Bestätigt unsere Platzierungs-Entscheidung aus §2: Wer auf OpenMontage einen
+   kommerziellen Dienst baut, muss den eigenen Code offenlegen. **Videos produzieren ist davon
+   nicht betroffen** — die Ergebnisse gehören uns. Das Werkzeug bleibt außerhalb des Repos.
 
 ## 7. Offene Punkte
 

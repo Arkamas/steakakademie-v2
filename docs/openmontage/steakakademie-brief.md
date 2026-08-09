@@ -27,6 +27,27 @@ Temperaturen, Cuts und Reifungszeiten **nie raten**. Kanonische Referenz ist
 im Script-Artefakt die Quelle vermerken. Genauigkeit ist der stärkste Burggraben
 der Marke — ein falscher Wert im Video kostet mehr Vertrauen, als das Video bringt.
 
+> ### ⚠️ Die Research-Stufe darf unsere Referenz NICHT überstimmen
+>
+> OpenMontage startet jede Produktion mit einer Recherche-Stufe, die **15–25 Live-Web-Suchen**
+> durchführt, um das Skript zu erden. Für allgemeine Themen ist das die Stärke des Systems —
+> **für unsere Kernzahlen ist es ein Risiko.**
+>
+> Im Netz stehen für dieselbe Garstufe abweichende Werte (US-Quellen nennen für Rind
+> regelmäßig 57–63 °C, USDA-Empfehlungen liegen nochmals höher). Übernimmt der Agent das,
+> widerspricht das Video der Website und der Burggraben ist weg.
+>
+> **Verbindlich:**
+> 1. Für **Kerntemperaturen, Cuts, Reifung und Sicherheitswerte** ist
+>    `data/kerntemperatur-referenz.yaml` die einzige Quelle. Web-Rechercheergebnisse werden
+>    hier **verworfen**, nicht gemittelt und nicht „plausibilisiert".
+> 2. Web-Recherche ist erlaubt und erwünscht für: Aufhänger, Storywinkel, Trendformate,
+>    Suchintention, kulturellen Kontext, Konkurrenzbeobachtung.
+> 3. Weicht eine gefundene Quelle von unserer Referenz ab, wird das **im Script-Artefakt
+>    vermerkt und Uwe gemeldet** — nicht still aufgelöst. Vielleicht muss die Referenz
+>    aktualisiert werden; das entscheidet Uwe, nicht der Agent.
+> 4. Keine erfundenen Studien oder Zitate (Regel 7).
+
 ### Regel 3 — Marken-DNA
 - Farben: `#C8882A` (Gold), `#E85018` (Ember), `#120C07` (Dunkel).
 - **Kein persönlicher Auftritt von Uwe Yendell.** Kein Gesicht, keine Stimme, kein Name
@@ -102,6 +123,24 @@ Fertige Videos, die live gehen sollen, werden **nicht** ins Hauptrepo committet
 
 ---
 
+## 4b. Bildquellen — Rangfolge
+
+1. **Eigene Assets** (`public/images/`, Marco-Bilder, eigene Fotos) — immer zuerst.
+2. **Freie Archive ohne Keys:** archive.org, NASA, Wikimedia Commons über `direct_clip_search`.
+   Echtes Bewegtbild, 0 €. Lizenz je Clip prüfen und in der Beschreibung nennen, wo verlangt.
+3. **Pexels / Pixabay** — kostenlose Keys nötig, für Standbilder und zusätzliches Footage.
+4. **Generative Modelle** — kostenpflichtig, nur nach Kostenfreigabe.
+
+**Nie:** ein reales Stock-Fotomodel als Avatar Marco ausgeben. Model-Releases decken das
+regelmäßig nicht ab (siehe `docs/avatare/marco.md` §7).
+
+## 4c. Render-Engine wählen
+
+- **Remotion** (React) für datengetriebene Szenen: Zahlen, Charts, Stat-Reveals, Tabellen.
+  Unser Kerntemperatur-Video liegt hier — mit eigener Komposition in
+  `video/remotion/steakakademie/`, nicht der generischen Explainer-Komposition.
+- **HyperFrames** (HTML/CSS/GSAP) für Kinetic Typography und SVG-Animation.
+
 ## 5. Checkliste vor `compose`
 
 - [ ] Alle Temperaturen gegen `data/kerntemperatur-referenz.yaml` geprüft
@@ -110,4 +149,7 @@ Fertige Videos, die live gehen sollen, werden **nicht** ins Hauptrepo committet
 - [ ] KI-Kennzeichnung gesetzt
 - [ ] Keine unbelegte Zahl, keine erfundene Quelle im Script
 - [ ] Kostenschätzung freigegeben, falls Paid-Provider im Spiel
+- [ ] Web-Recherche hat keine Kernzahl überschrieben (§1, Research-Warnung)
+- [ ] Bildquellen-Rangfolge eingehalten, Lizenzen geprüft (§4b)
+- [ ] QA-Gate nach dem Render gelaufen: keine schwarzen Frames, kein Clipping, keine Stille
 - [ ] Uwe hat Script und Scene-Plan gesehen

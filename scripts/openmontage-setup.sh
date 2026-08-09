@@ -54,7 +54,10 @@ printf '    Python %s | Node %s | FFmpeg %s\n' \
 if [ -d "$TARGET/.git" ]; then
   info "Aktualisiere vorhandene Installation ($TARGET)"
   git -C "$TARGET" fetch --depth 1 origin "$REF"
-  git -C "$TARGET" checkout -q FETCH_HEAD
+  # Hart zurücksetzen: Unsere Anpassungen an Upstream-Dateien (config.yaml)
+  # werden weiter unten ohnehin neu eingespielt. Ohne reset scheitert der
+  # Checkout, sobald Upstream dieselbe Datei ändert.
+  git -C "$TARGET" reset --hard FETCH_HEAD
 else
   info "Klone OpenMontage nach $TARGET (~160 MB)"
   mkdir -p "$(dirname "$TARGET")"
@@ -83,6 +86,32 @@ mkdir -p "$TARGET/styles"
 cp "$REPO_ROOT/docs/openmontage/steakakademie.style.yaml" "$TARGET/styles/steakakademie.yaml"
 cp "$REPO_ROOT/docs/openmontage/steakakademie-brief.md"    "$TARGET/STEAKAKADEMIE-BRIEF.md"
 printf '    styles/steakakademie.yaml + STEAKAKADEMIE-BRIEF.md geschrieben\n'
+
+# --- 4b. Kostenpolitik erzwingen ---------------------------------------------
+# OpenMontage lässt Aktionen unter 0,50 $ ohne Rückfrage laufen und warnt beim
+# Budget nur. Unsere Regel ist strenger: JEDES Kostenpflichtige ist human-gated.
+# Das wird hier maschinell erzwungen, statt sich darauf zu verlassen, dass ein
+# Agent die Regel im Kopf behält. config.yaml gehört dem Upstream — deshalb wird
+# der Eingriff bei jedem Setup-Lauf neu angewandt (siehe reset --hard oben).
+info "Setze Kostenpolitik durch (jede kostenpflichtige Aktion braucht Freigabe)"
+( cd "$TARGET" && .venv/bin/python - <<'PY'
+import re, pathlib
+p = pathlib.Path("config.yaml")
+t = p.read_text(encoding="utf-8")
+t = re.sub(r"^(\s*mode:\s*)\w+(\s*#.*)?$",
+           r"\1cap                     # Steakakademie: harte Grenze statt Warnung",
+           t, count=1, flags=re.M)
+t = re.sub(r"^(\s*single_action_approval_usd:\s*)[\d.]+.*$",
+           r"\g<1>0.00   # Steakakademie Regel 4: jede kostenpflichtige Aktion",
+           t, count=1, flags=re.M)
+p.write_text(t, encoding="utf-8")
+import yaml
+c = yaml.safe_load(t)["budget"]
+print(f"    budget.mode={c['mode']}, "
+      f"single_action_approval_usd={c['single_action_approval_usd']:.2f}, "
+      f"total_usd={c['total_usd']:.2f}")
+PY
+)
 
 # Playbook gegen das OpenMontage-Schema validieren — ein kaputtes Playbook
 # soll hier auffallen, nicht erst mitten in einer Produktion.

@@ -95,3 +95,8 @@ Existenzgruendung-Jobcenter/
 # `npm run video:setup` installiert, nicht in dieses Repo vendored.
 # Kanonische Steakakademie-Konfiguration liegt in docs/openmontage/.
 tools/openmontage/
+
+# Video-Artefakte: aus script.json + Komposition jederzeit reproduzierbar
+# (`npm run video:kerntemperatur`). Fertige Videos gehören nach R2, nicht ins Repo.
+video/*/out/
+video/*/audio/

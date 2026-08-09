@@ -64,3 +64,23 @@
 **Verifiziert (Linux-Container):** `make setup` grün · `make test-contracts` **630 passed, 7 skipped** · FFmpeg 7:6.1.1 nachinstalliert (apt brauchte erst `apt-get update`, die ondrej/php-PPA wirft 403 — stört nicht) · Playbook `steakakademie` valide gegen `schemas/styles/playbook.schema.json` **und** ladbar über den eigenen `playbook_loader` · Installer zweimal gelaufen (idempotent). **Nicht verifiziert:** End-to-End-Render mit Ton, Windows-Installer.
 
 **Nächster Schritt:** Zwei kostenlose Keys (Pexels, Pixabay) in `tools/openmontage/.env`, dann ein 60-s-Kerntemperatur-Erklärer als Free-Path-Testlauf.
+
+## 09. August 2026 — Erstes Video produziert: Kerntemperatur-Erklärer (TikTok) (manuell)
+
+**Ergebnis:** 56,8 s, 1080×1920, -14,0 LUFS, 7,5 MB, 0 € Produktionskosten. Entwurf, nicht veröffentlicht. Reproduzierbar per `npm run video:kerntemperatur`.
+
+**Vier Netz-Blocker im Cowork-Container — und wie sie umgangen wurden:**
+1. **huggingface.co ist per Policy gesperrt** (403 beim CONNECT) → Piper-Stimmen nicht über `piper.download_voices` beziehbar. **Workaround:** die Legacy-Stimme liegt auf GitHub-Releases, das ist erlaubt: `github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-thorsten-low.tar.gz` (58 MB). Läuft mit Piper 1.6 über `-m pfad.onnx`.
+2. **remotion.media ist gesperrt** → Remotion kann seine Chrome-Headless-Shell nicht laden. **Workaround:** der Container hat Playwright-Chromium; `--browser-executable /opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell`. Im Build über `REMOTION_BROWSER` steuerbar.
+3. **Google Fonts scheitern im Render-Browser** an `ERR_CERT_AUTHORITY_INVALID` (Chromium traut der Proxy-CA nicht). **Kein** TLS-Aufweichen nötig: Schriften einmal per curl geholt und lokal via `FontFace` eingebettet (`video/remotion/fonts/`). Nebeneffekt: Renders sind jetzt offline-fähig und reproduzierbar — und konsistent mit der DSGVO-Linie der Website.
+4. **`delayRender` auf Modulebene crasht den Bundler** (kein `window` beim Bundling). Muss in eine Komponente mit `useState(() => delayRender(...))` + `useEffect`. Zusätzlich auf `document.fonts.ready` warten, sonst brennt Frame 0 in der Ersatzschrift.
+
+**Handwerkliche Lehren:**
+- **Timing aus dem Ton ableiten, nicht schätzen.** Der Build erzeugt je Szene eine WAV, misst sie mit ffprobe und baut daraus die Timeline. Erste Fassung war mit 40,6 s zu kurz und zu hastig → Piper `--length-scale 1.14` + `--sentence-silence 0.35` ergibt 48,5 s Sprache und trifft Marcos ruhigen Ton.
+- **Rendern heißt nicht fertig: hinschauen.** Frame-Extraktion je Szene zeigte einen echten Layout-Bug — Playfair-Ziffern bei `lineHeight 0.86` laufen aus ihrer Box und die Unterzeile lag in der „54". Fix: `lineHeight: 1` + großzügiger `marginBottom`.
+- **Loudness ist Pflicht.** Piper-Rohausgabe lag bei -16,3 LUFS; TikTok normalisiert auf ~-14. Zweistufiges ffmpeg-`loudnorm` (messen → mit `measured_*` korrigieren) trifft -14,0 exakt. **Der loudnorm-JSON-Report kommt über stderr**, nicht stdout — `execFileSync` liefert ihn nicht, `spawnSync().stderr` schon.
+- **Eigener Remotion-Einstiegspunkt statt Upstream-Patch.** `src/steakakademie/index.tsx` mit eigenem `registerRoot` — so bleibt `npm run video:setup` (git fetch + checkout) konfliktfrei. Die Komposition lebt kanonisch in `video/remotion/`, der Build spiegelt sie in den Composer.
+
+**Inhaltlich:** Alle sieben Werte gegen `data/kerntemperatur-referenz.yaml` geprüft, Zuordnung maschinenlesbar in `script.json` unter `faktencheck`. Werbekennzeichnung hier **nicht** nötig (kein Affiliate, keine Kooperation) — begründet dokumentiert; sobald ein Affiliate-Link dazukommt, greift Regel 1. KI-Kennzeichnung ist im Video und in der Caption.
+
+**Nächster Schritt:** Uwes Freigabe. Offene Qualitätspunkte: Stimme (Piper-low klingt maschinell), keine Musik, kein Bewegtbild — alle drei hängen an Keys bzw. Kostenfreigabe.

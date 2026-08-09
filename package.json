@@ -40,6 +40,7 @@
     "video:check": "cd tools/openmontage && PATH=\"$PWD/.venv/bin:$PATH\" make preflight",
     "video:board": "cd tools/openmontage && PATH=\"$PWD/.venv/bin:$PATH\" .venv/bin/python -m backlot open",
     "video:demo": "cd tools/openmontage && PATH=\"$PWD/.venv/bin:$PATH\" make demo",
+    "video:kerntemperatur": "node scripts/video-kerntemperatur.mjs",
     "cut-images": "node scripts/cut-images.mjs",
     "cut-images:dry": "node scripts/cut-images.mjs --dry-run",
     "cut-images:force": "node scripts/cut-images.mjs --force"

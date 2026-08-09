@@ -1,0 +1,125 @@
+{
+  "szenen": [
+    {
+      "id": "hook",
+      "typ": "hero_number",
+      "untertitel": "54 Grad entscheiden alles.",
+      "start": 0,
+      "dauer": 8.148,
+      "audio": "steakakademie/audio/hook.wav",
+      "audioDelay": 0.5,
+      "visual": {
+        "zahl": "54",
+        "einheit": "°C",
+        "kicker": "RIND · MEDIUM RARE",
+        "unterzeile": "Diese Zahl entscheidet."
+      }
+    },
+    {
+      "id": "problem",
+      "typ": "statement",
+      "untertitel": "Minuten lügen. Temperatur nicht.",
+      "start": 8.148,
+      "dauer": 9.258,
+      "audio": "steakakademie/audio/problem.wav",
+      "audioDelay": 0.25,
+      "visual": {
+        "zeile1": "Minuten",
+        "zeile2": "lügen.",
+        "unterzeile": "Dicke, Starttemperatur, Hitze — alles anders. Nur die Kerntemperatur ist ehrlich."
+      }
+    },
+    {
+      "id": "zahlen",
+      "typ": "temp_cards",
+      "untertitel": "Rind 54 · Schwein 63 · Geflügel 74 · Hack 70",
+      "start": 17.406,
+      "dauer": 14.626,
+      "audio": "steakakademie/audio/zahlen.wav",
+      "audioDelay": 0.25,
+      "visual": {
+        "titel": "Die vier Zahlen",
+        "karten": [
+          {
+            "label": "RIND",
+            "sub": "medium rare",
+            "wert": "54",
+            "ton": "gold"
+          },
+          {
+            "label": "SCHWEIN",
+            "sub": "saftig",
+            "wert": "63",
+            "ton": "gold"
+          },
+          {
+            "label": "GEFLÜGEL",
+            "sub": "immer durch",
+            "wert": "74",
+            "ton": "ember"
+          },
+          {
+            "label": "HACKFLEISCH",
+            "sub": "durchgegart",
+            "wert": "70",
+            "ton": "ember"
+          }
+        ]
+      }
+    },
+    {
+      "id": "carryover",
+      "typ": "carryover",
+      "untertitel": "Fleisch zieht 2–5 °C nach. 3 °C vorher runter.",
+      "start": 32.032,
+      "dauer": 10.962,
+      "audio": "steakakademie/audio/carryover.wav",
+      "audioDelay": 0.25,
+      "visual": {
+        "von": 51,
+        "bis": 54,
+        "titel": "Fleisch zieht nach",
+        "unterzeile": "+2 bis +5 °C nach dem Grill",
+        "merksatz": "Rund 3 °C vor dem Ziel runternehmen."
+      }
+    },
+    {
+      "id": "messen",
+      "typ": "two_rules",
+      "untertitel": "Dickster Punkt, nicht am Knochen. 3–5 Min. ruhen.",
+      "start": 42.994,
+      "dauer": 7.184,
+      "audio": "steakakademie/audio/messen.wav",
+      "audioDelay": 0.25,
+      "visual": {
+        "regeln": [
+          {
+            "nr": "1",
+            "titel": "Dickster Punkt",
+            "text": "Einstich mittig — niemals am Knochen messen."
+          },
+          {
+            "nr": "2",
+            "titel": "3–5 Minuten ruhen",
+            "text": "Erst dann anschneiden, sonst läuft der Saft aus."
+          }
+        ]
+      }
+    },
+    {
+      "id": "cta",
+      "typ": "cta",
+      "untertitel": "Kerntemperatur-Spickzettel — Link in der Bio.",
+      "start": 50.178,
+      "dauer": 6.486,
+      "audio": "steakakademie/audio/cta.wav",
+      "audioDelay": 0.3,
+      "visual": {
+        "titel": "Der Spickzettel",
+        "unterzeile": "Alle Kerntemperaturen auf einer Seite",
+        "domain": "steakakademie.de",
+        "hinweis": "Stimme KI-generiert"
+      }
+    }
+  ]
+}

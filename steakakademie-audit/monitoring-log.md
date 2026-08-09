@@ -3,6 +3,133 @@
 > Wöchentlicher Status-Check gegen die Audit-Baseline vom 07.07.2026.
 > Neuester Eintrag oben. Erhebung via US-basierter WebSearch → DE-SERP kann abweichen (Caveat je Zeile).
 
+## KW32 — 03.08.2026 (Lauf 2, Nachtrag)
+
+> ⚠️ Zweiter Lauf am selben Tag. Nicht überschrieben, weil sich ein Messergebnis **geändert** hat
+> (siehe „Kerntemperatur Steak"). Vergleich hier: gegen **Lauf 1 vom 03.08.** (direkt darunter).
+
+### Rankings (Google Top 10, US-basierte Websuche — DE-SERP kann abweichen)
+
+| Keyword | steakakademie.de Top 10? | Wer stattdessen (Top 3) | Δ Lauf 1 (03.08.) |
+|---|---|---|---|
+| „Kerntemperatur Steak" | ✅ **JA — `/temperatur-guide` auf Pos. 4** | Grillfürst · grillclub.amainfo.at · Block House | 🟢 **NEU sichtbar** (Lauf 1: ❌) |
+| „Ribeye" | ❌ nein | meatnbone · omahasteaks · allenbrothers — ⚠️ SERP rein US/EN, DE-Wert **nicht messbar** | = |
+| „Reverse Sear" | ❌ nein | acabonacfarms · jessicagavin · grillio — ⚠️ SERP rein US/EN, DE-Wert **nicht messbar** | = |
+| „Brisket Anleitung grillen" | ❌ nein | grillkameraden.de · ofen.de · beefbandits.de | = |
+| „Steakakademie" (Brand) | ❌ nicht sichtbar | FB Bochum (Grillakademie Ruhr) · GrillKonzept · Beisser / Oberpfalz Beef | = |
+
+**⚠️ Ehrlichkeits-Caveat zum Positiv-Fund:** Zwei Läufe am selben Tag mit identischer Query liefern
+unterschiedliche Ergebnisse. Ob das eine **echte Ranking-Verbesserung** ist oder **Messrauschen**
+(personalisierte/rotierende Ergebnisse, US-Standort), ist aus der Ferne **nicht entscheidbar**.
+Nicht als gesicherter Erfolg verbuchen — nächste Woche gegenprüfen, idealerweise 1× manuell aus DE
+(Inkognito, Screenshot). Fakt bleibt: `/temperatur-guide` ist indexiert und wird ausgespielt.
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de`: **weiterhin 0 echte externe Erwähnungen/Backlinks.**
+Alle Treffer = fremde Steak-Akademien (Facebook Bochum, GrillKonzept, Beisser, Oberpfalz Beef,
+Metzgerei Lotter, akademie-der-kochenden-kuenste). **Δ Baseline (0) und Δ Lauf 1 (0): unverändert 0.**
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ Lauf 1 |
+|---|---|---|---|
+| www → non-www Redirect | `https://www.steakakademie.de/` → `https://steakakademie.de/` | 🟢 ok | = |
+| `/llms.txt` erreichbar | Body **leer** ausgeliefert (robots.txt liefert im Vergleich sauberen Text) | 🔴 leer | = (**4. Woche offen**) |
+| `/robots.txt` endet mit Sitemap-Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` vorhanden | 🟢 ok | = |
+
+**llms.txt bestätigt:** `public/llms.txt` hat lokal echten Inhalt (Kern-Referenzen: temperatur-guide,
+ribeye, brisket, reverse-sear, glossar). Live leer → **Deploy-/Auslieferungsproblem, kein Inhaltsproblem.**
+
+### Offene Punkte / GEO
+
+- Wikidata **Q140455747** in `src/lib/schema.ts` (`sameAs`, Zeile 27) ✅ — nichts offen.
+- AI-Abfragen-Tabelle in `docs/geo-baseline.md` gefüllt (07.07.) ✅ — **AI-Re-Check (ChatGPT /
+  Perplexity / Google AIO) wird morgen, 04.08., fällig** (4-Wochen-Rhythmus). Nur manuell durch Uwe erhebbar.
+- Backlinks = 0 bleibt der strukturelle Engpass.
+
+### Ampeln
+
+- Rankings: 🟡 (**hochgestuft von 🔴** — erster generischer Top-10-Treffer gemessen, aber unbestätigt)
+- Off-Page: 🔴 (weiter 0 Backlinks — Ursache Nr. 1)
+- Technik: 🟡 (Redirect + robots ok; llms.txt 4. Woche leer)
+- GEO-Setup: 🟡 (Prerequisites erledigt, Re-Check ab morgen fällig)
+
+### Handlungsempfehlung (1)
+
+**llms.txt-Deploy fixen** — unverändert der einzige offene Punkt vollständig in eigener Code-Kontrolle,
+jetzt 4 Wochen alt. Datei hat Inhalt, wird live nicht ausgeliefert → Netlify/Next-Routing prüfen.
+
+**Trend vs. Lauf 1:** Erster möglicher Lichtblick — `/temperatur-guide` in Top 10 auf dem Kern-Keyword,
+aber innerhalb eines Tages widersprüchlich gemessen und deshalb nicht als Erfolg gesichert.
+
+---
+
+## KW32 — 03.08.2026 (Lauf 1)
+
+> ⚠️ Lücke: kein Eintrag für KW30/KW31 vorhanden → „Vorwoche" = KW29 (13.07.), Abstand 3 Wochen.
+
+### Rankings (Google Top 10, US-basierte Websuche — DE-SERP kann abweichen)
+
+| Keyword | steakakademie.de Top 10? | Wer stattdessen (Top 3) | Δ KW29 |
+|---|---|---|---|
+| „Kerntemperatur Steak" | ❌ nein | Grillfürst · Block House · grillclub.amainfo.at | = unverändert |
+| „Ribeye grillen Anleitung" | ❌ nein | spice.alibaba · die-frau-am-grill · grillportal | = unverändert (Top-3-Mix leicht rotiert) |
+| „Reverse Sear" | ❌ nein | grillio · MeatEater · jesspryles — ⚠️ SERP rein US/EN, DE-Wert nicht messbar | = unverändert |
+| „Brisket Anleitung" | ❌ nein | bbqpit.de · grillkameraden.de · bbqlicate.de | = unverändert |
+| „Steakakademie" (Brand) | ❌ nicht sichtbar | FB Bochum (Grillakademie Ruhr) · GrillKonzept · Beisser / Oberpfalz Beef | = unverändert |
+
+**Positiv-Befund (neu gemessen):** Long-Tail „steakakademie.de Kerntemperatur Guide" liefert
+`steakakademie.de/temperatur-guide` in den Top-Treffern — Seite ist indexiert und wird mit
+korrektem Snippet (BfR/EFSA-Bezug, Sous-vide) ausgespielt. Generische Sichtbarkeit bleibt null.
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de`: **weiterhin 0 echte externe Erwähnungen/Backlinks.**
+Alle Treffer betreffen fremde Steak-Akademien (Facebook Bochum, GrillKonzept, Beisser, Oberpfalz Beef,
+Metzgerei Lotter, akademie-der-kochenden-kuenste). **Δ Baseline (0) und Δ KW29 (0): unverändert 0.**
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ KW29 |
+|---|---|---|---|
+| www → non-www Redirect | `https://www.steakakademie.de/` → `https://steakakademie.de/` | 🟢 ok | = |
+| `/llms.txt` erreichbar | Body **leer** ausgeliefert (kein Content-Type im Response, anders als robots.txt) | 🔴 leer | = (3. Woche offen) |
+| `/robots.txt` endet mit Sitemap-Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` vorhanden | 🟢 ok | = |
+
+**Verschärfter Befund zu llms.txt:** Die Datei existiert im Repo (`public/llms.txt`, 1.533 Byte, Stand 07.07.)
+— live kommt trotzdem ein leerer Body zurück. Das ist also **kein Content-Problem, sondern ein Deploy-/
+Auslieferungs-Problem** (Datei nie deployed oder Route liefert nichts). Unsicher, welches von beidem —
+nicht aus der Ferne entscheidbar.
+
+### Offene Punkte / GEO
+
+- Wikidata-Item **Q140455747** steht in `src/lib/schema.ts` (`sameAs`) ✅ — nichts offen.
+- AI-Abfragen-Tabelle in `docs/geo-baseline.md` gefüllt (Stand 07.07.) ✅ — **aber: Re-Check-Rhythmus
+  ist „alle 4 Wochen" → der AI-Re-Check (ChatGPT / Perplexity / Google AIO) ist seit ~04.08. FÄLLIG.**
+  Muss manuell von Uwe erhoben werden (~5 Min je Plattform), Ergebnisse als neue Messung eintragen.
+- Backlinks/Entity-Autorität = 0 bleibt der strukturelle Engpass.
+
+### Ampeln
+
+- Rankings: 🔴 (null generische Sichtbarkeit, 4 Wochen ohne Bewegung)
+- Off-Page: 🔴 (weiter 0 Backlinks — Ursache Nr. 1 für Rankings)
+- Technik: 🟡 (Redirect + robots ok; llms.txt seit 3 Wochen leer)
+- GEO-Setup: 🟡 (Prerequisites erledigt, aber Re-Check überfällig)
+
+### Handlungsempfehlung (1)
+
+**Die llms.txt-Auslieferung prüfen und fixen** — Datei liegt mit Inhalt im Repo, wird live aber leer
+ausgeliefert. Kein Content-Job, sondern Deploy/Routing. Ist der einzige offene Punkt, der vollständig
+in eigener Code-Kontrolle liegt und seit drei Wochen unerledigt ist. Strategischer Haupt-Hebel bleibt
+unverändert: **erste externe Backlinks** (Affiliate-/Partner-Anmeldungen, Erwähnungen) — ohne die
+bewegt sich bei den Rankings nichts.
+
+**Trend vs. Vorwoche (KW29):** Stillstand — keine Ranking-, keine Off-Page-, keine Technik-Bewegung;
+einzige Neuigkeit ist die Präzisierung, dass llms.txt ein Deploy- und kein Inhaltsproblem ist.
+
+---
+
 ## KW29 — 13.07.2026
 
 ### Rankings (Google Top 10)

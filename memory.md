@@ -84,3 +84,17 @@
 **Inhaltlich:** Alle sieben Werte gegen `data/kerntemperatur-referenz.yaml` geprüft, Zuordnung maschinenlesbar in `script.json` unter `faktencheck`. Werbekennzeichnung hier **nicht** nötig (kein Affiliate, keine Kooperation) — begründet dokumentiert; sobald ein Affiliate-Link dazukommt, greift Regel 1. KI-Kennzeichnung ist im Video und in der Caption.
 
 **Nächster Schritt:** Uwes Freigabe. Offene Qualitätspunkte: Stimme (Piper-low klingt maschinell), keine Musik, kein Bewegtbild — alle drei hängen an Keys bzw. Kostenfreigabe.
+
+## 09. August 2026 — Marco: Avatar war schon da (manuell)
+
+**Korrektur einer Annahme:** Auf die Frage „müssen wir zuerst einen Avatar erstellen?" war die Antwort **nein** — Marco existierte bereits vollständig und wurde nur nirgends benutzt. Vorhanden waren: Persona in `marketing_agent.txt`, Eintrag in `src/lib/authors.ts`, Autorenseite `/autoren/marco` mit Label „KI-Redaktionspersona", ausführlicher `/ki-disclaimer` (EU-AI-Act-Bezug), Chat-Widget, 7-Zustands-Automat `useAvatarStateMachine.ts` — **und zwei fertige Bilder**: `public/images/authors/marco-richter.jpg` (Porträt) und `public/images/marco-back.jpg` (Rückenansicht am Grill), beide 512×512 im Markenlook. **Lehre: vor „neu erstellen" immer erst das Repo durchsuchen.**
+
+**Gute Design-Entscheidung, die schon im Code steckte:** `MarcoAvatar.tsx` zeigt Marco per `ROTATIONS` standardmäßig **von hinten am Grill** (180°) und dreht ihn nur zum Antworten nach vorn (0°). Das umgeht das Uncanny Valley und ist jetzt als Leitlinie in `docs/avatare/marco.md` festgeschrieben: Rücken/Hände = Normalzustand, Gesicht = Autoritätsmoment. Im Video genauso umgesetzt.
+
+**Rechts-Fund (Regel 6, autonom gefixt):** Die Bios der drei KI-Personas behaupteten gelebte Erfahrung — Marco: „über 15 Jahren Grillpraxis", „**Er testet alle Produkte selbst, bevor er sie empfiehlt**", „Nachtschicht am Smoker"; Jonas „200+ Grillsessions dokumentiert"; Elena „seit 8 Jahren". Das stand direkt unter dem Label „KI-Redaktionspersona" — und neben Affiliate-Empfehlungen ist ein erfundener Selbsttest einer nicht existierenden Person eine irreführende geschäftliche Handlung (UWG). Alle drei Bios umgeschrieben: Persona und Ton bleiben, die Autorität wird jetzt auf die kanonische Wissensbasis und auf Uwes reale Qualifikation zurückgeführt (`statsLabel: 'KI-Persona · fachlich verantwortet von Uwe Yendell'`). Nebenbei: `avatar`-Pfad zeigte auf `/images/authors/marco.jpg`, die Datei heißt `marco-richter.jpg` — korrigiert (wurde nur im Schema für `realPerson` genutzt, war also nie ein sichtbar kaputtes Bild).
+
+**Higgsfield-MCP:** Guthaben 0,01 Credits, Free-Plan → generative Bilderzeugung ist ohne Kauf faktisch nicht verfügbar. Kein Kauf vorgeschlagen. Konsequenz: neue Marco-Assets (die 6 fehlenden Widget-Videos, höhere Auflösung, Hände-am-Werk-Aufnahmen) brauchen eine Kostenfreigabe. **Stock-Fotomodels als Marco sind keine Option** — Model-Releases decken das regelmäßig nicht ab.
+
+**Technisch:** 512×512-Quellen bei 1080×1920 Ziel — Hintergrund läuft deshalb abgedunkelt/leicht unscharf als Stimmungsfläche (3,75× Upscale wäre sonst sichtbar), Porträt im Kreis mit `transform: scale(1.75)` + `transformOrigin: '52% 24%'` auf das Gesicht gezoomt, weil die Halbfigur im Kreis sonst verloren wirkt.
+
+**KI-Kennzeichnung nachgezogen:** Da jetzt eine KI-generierte Person im Bild ist, reicht „Stimme KI-generiert" nicht — jetzt „KI-Avatar" am Porträt und „KI-Avatar · Stimme KI-generiert" im Abspann, plus ausführlicher Hinweis in der Caption.

@@ -13,6 +13,7 @@ import React from "react";
 import {
   AbsoluteFill,
   Audio,
+  Img,
   Sequence,
   interpolate,
   spring,
@@ -121,6 +122,113 @@ const Glut: React.FC<{ intensitaet?: number }> = ({ intensitaet = 1 }) => {
         }}
       />
     </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Marco — der Avatar. Siehe docs/avatare/marco.md.
+//
+// Leitlinie von dort: Rücken/Hände sind der Normalzustand, das Gesicht ist die
+// Ausnahme und markiert den Autoritätsmoment. Beide Quellbilder sind nur
+// 512×512 — der Hintergrund läuft deshalb bewusst abgedunkelt und leicht
+// unscharf als Stimmungsfläche, nicht als scharfes Motiv.
+// ---------------------------------------------------------------------------
+
+const MarcoHintergrund: React.FC<{ bild: string }> = ({ bild }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  // Langsames Heranfahren — Ruhe, kein Zoom-Effekt.
+  const zoom = interpolate(frame, [0, fps * 9], [1.04, 1.13], {
+    extrapolateRight: "clamp",
+  });
+  const auf = interpolate(frame, [0, 20], [0, 1], { extrapolateRight: "clamp" });
+
+  return (
+    <AbsoluteFill style={{ opacity: auf }}>
+      <Img
+        src={staticFile(bild)}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          transform: `scale(${zoom})`,
+          filter: "brightness(0.42) saturate(1.08) blur(3px)",
+        }}
+      />
+      {/* Nach unten abdunkeln, damit Text und Untertitel sicher tragen */}
+      <AbsoluteFill
+        style={{
+          background: `linear-gradient(180deg, rgba(18,12,7,0.55) 0%, rgba(18,12,7,0.2) 32%, rgba(18,12,7,0.86) 78%, ${BRAND.bg} 100%)`,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
+const MarcoPortrait: React.FC<{
+  bild: string;
+  groesse: number;
+  delay?: number;
+  label?: string;
+  hinweis?: string;
+}> = ({ bild, groesse, delay = 0, label, hinweis }) => {
+  const st = useRise(delay);
+  return (
+    <div style={{ ...st, display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div
+        style={{
+          width: groesse,
+          height: groesse,
+          borderRadius: "50%",
+          overflow: "hidden",
+          border: `4px solid ${BRAND.gold}`,
+          boxShadow: `0 0 42px rgba(232,80,24,0.34), 0 8px 30px rgba(0,0,0,0.6)`,
+        }}
+      >
+        {/* Die Quelle ist eine Halbfigur — ohne Zoom auf den Kopf wirkt Marco
+            im Kreis verloren. transformOrigin zieht den Ausschnitt aufs Gesicht. */}
+        <Img
+          src={staticFile(bild)}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transform: "scale(1.75)",
+            transformOrigin: "52% 24%",
+          }}
+        />
+      </div>
+      {label && (
+        <div
+          style={{
+            marginTop: 18,
+            fontFamily: FONT.sans,
+            fontWeight: 700,
+            fontSize: 32,
+            letterSpacing: "0.22em",
+            color: BRAND.gold,
+            textTransform: "uppercase",
+          }}
+        >
+          {label}
+        </div>
+      )}
+      {hinweis && (
+        <div
+          style={{
+            marginTop: 8,
+            fontFamily: FONT.sans,
+            fontWeight: 700,
+            fontSize: 23,
+            letterSpacing: "0.16em",
+            color: BRAND.muted,
+            textTransform: "uppercase",
+          }}
+        >
+          {hinweis}
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -532,10 +640,22 @@ const Carryover: React.FC<{ visual: Record<string, unknown> }> = ({ visual }) =>
 const TwoRules: React.FC<{ visual: Record<string, unknown> }> = ({ visual }) => {
   const { fps } = useVideoConfig();
   const regeln = visual.regeln as Regel[];
+  const portrait = visual.portrait as string | undefined;
+
   return (
-    <div style={{ ...zentriert, justifyContent: "center", gap: 62 }}>
+    <div style={{ ...zentriert, justifyContent: "center", gap: 56 }}>
+      {/* Der Autoritätsmoment: hier zeigt Marco Gesicht (docs/avatare/marco.md §3) */}
+      {portrait && (
+        <MarcoPortrait
+          bild={portrait}
+          groesse={300}
+          delay={2}
+          label={visual.portraitLabel as string | undefined}
+          hinweis={visual.portraitHinweis as string | undefined}
+        />
+      )}
       {regeln.map((r, i) => (
-        <RegelZeile key={r.nr} regel={r} delay={6 + i * fps * 0.85} />
+        <RegelZeile key={r.nr} regel={r} delay={fps * 0.7 + i * fps * 0.8} />
       ))}
     </div>
   );
@@ -603,8 +723,16 @@ const CTA: React.FC<{ visual: Record<string, unknown> }> = ({ visual }) => {
   const d = useRise(fps * 0.9);
   const h = useRise(fps * 1.6);
 
+  const portrait = visual.portrait as string | undefined;
+
   return (
     <div style={zentriert}>
+      {/* Signatur — der Absender bekommt ein Gesicht */}
+      {portrait && (
+        <div style={{ marginBottom: 40 }}>
+          <MarcoPortrait bild={portrait} groesse={168} delay={0} />
+        </div>
+      )}
       <div
         style={{
           ...t,
@@ -768,8 +896,11 @@ const SzenenInhalt: React.FC<{ szene: Szene; dauerFrames: number }> = ({
       inhalt = null;
   }
 
+  const hintergrund = szene.visual.hintergrund as string | undefined;
+
   return (
     <AbsoluteFill style={{ opacity: fade }}>
+      {hintergrund && <MarcoHintergrund bild={hintergrund} />}
       {inhalt}
       <Untertitel text={szene.untertitel} dauerFrames={dauerFrames} />
     </AbsoluteFill>

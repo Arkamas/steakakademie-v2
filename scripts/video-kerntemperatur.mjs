@@ -139,6 +139,22 @@ for (const f of ['brand.ts', 'Kerntemperatur.tsx', 'useBrandFonts.tsx', 'index.t
 for (const f of ['PlayfairDisplay.woff2', 'DMSans.woff2']) {
   copyFileSync(path.join(FONTS, f), path.join(dstPub, 'fonts', f));
 }
+
+// Marco-Assets. Bestehende Bilder aus public/ — es wird nichts neu generiert.
+// Kanonische Beschreibung der Figur: docs/avatare/marco.md
+mkdirSync(path.join(dstPub, 'bilder'), { recursive: true });
+const MARCO = [
+  ['public/images/marco-back.jpg', 'marco-back.jpg'],
+  ['public/images/authors/marco-richter.jpg', 'marco.jpg'],
+];
+for (const [von, nach] of MARCO) {
+  const q = path.join(ROOT, von);
+  if (!existsSync(q)) {
+    warn(`Marco-Asset fehlt: ${von} — Szene rendert ohne Avatar.`);
+    continue;
+  }
+  copyFileSync(q, path.join(dstPub, 'bilder', nach));
+}
 for (const s of szenen) {
   copyFileSync(path.join(audioDir, `${s.id}.wav`), path.join(dstPub, 'audio', `${s.id}.wav`));
 }

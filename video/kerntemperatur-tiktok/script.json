@@ -9,7 +9,8 @@
     "werbung": false,
     "werbekennzeichnung_noetig": false,
     "werbekennzeichnung_begruendung": "Kein Affiliate-Link, keine Kooperation, kein Produkt beworben — reiner Wissens-Content mit Verweis auf den eigenen kostenlosen Leadmagnet. Regel 1 greift daher nicht. Sobald ein Affiliate-Link oder eine Kooperation dazukommt, MUSS 'Werbung' ins Thumbnail.",
-    "ki_kennzeichnung": "Pflicht — Stimme ist KI-generiert. Eingeblendet in Szene 6 und im Caption-Text.",
+    "avatar": "Marco tritt im Bild auf (Rückenansicht im Hook, Porträt bei den Regeln und als Signatur). Kanonische Definition: docs/avatare/marco.md. Bildquellen sind die bereits vorhandenen Assets, keine Neugenerierung.",
+    "ki_kennzeichnung": "Pflicht — Marco ist eine KI-Persona UND die Stimme ist KI-generiert. Sichtbar als 'KI-Avatar' am Porträt (Szene 5), als 'KI-Avatar · Stimme KI-generiert' in Szene 6 und im Caption-Text.",
     "faktenquelle": "data/kerntemperatur-referenz.yaml (Stand dieses Repos)"
   },
 
@@ -29,7 +30,7 @@
       "typ": "hero_number",
       "narration": "Vierundfünfzig Grad. Diese eine Zahl entscheidet, ob dein Steak perfekt wird. Oder Schuhsohle.",
       "untertitel": "54 Grad entscheiden alles.",
-      "visual": { "zahl": "54", "einheit": "°C", "kicker": "RIND · MEDIUM RARE", "unterzeile": "Diese Zahl entscheidet." }
+      "visual": { "zahl": "54", "einheit": "°C", "kicker": "RIND · MEDIUM RARE", "unterzeile": "Diese Zahl entscheidet.", "hintergrund": "steakakademie/bilder/marco-back.jpg" }
     },
     {
       "id": "problem",
@@ -66,6 +67,9 @@
       "narration": "Miss im dicksten Punkt, niemals am Knochen. Und dann lass das Steak drei bis fünf Minuten ruhen.",
       "untertitel": "Dickster Punkt, nicht am Knochen. 3–5 Min. ruhen.",
       "visual": {
+        "portrait": "steakakademie/bilder/marco.jpg",
+        "portraitLabel": "Marco · Pitmaster",
+        "portraitHinweis": "KI-Avatar",
         "regeln": [
           { "nr": "1", "titel": "Dickster Punkt", "text": "Einstich mittig — niemals am Knochen messen." },
           { "nr": "2", "titel": "3–5 Minuten ruhen", "text": "Erst dann anschneiden, sonst läuft der Saft aus." }
@@ -77,9 +81,9 @@
       "typ": "cta",
       "narration": "Alle Werte als Spickzettel für die Küche. Link in der Bio.",
       "untertitel": "Kerntemperatur-Spickzettel — Link in der Bio.",
-      "visual": { "titel": "Der Spickzettel", "unterzeile": "Alle Kerntemperaturen auf einer Seite", "domain": "steakakademie.de", "hinweis": "Stimme KI-generiert" }
+      "visual": { "titel": "Der Spickzettel", "unterzeile": "Alle Kerntemperaturen auf einer Seite", "domain": "steakakademie.de", "hinweis": "KI-Avatar · Stimme KI-generiert", "portrait": "steakakademie/bilder/marco.jpg" }
     }
   ],
 
-  "caption_tiktok": "54 Grad entscheiden, ob dein Steak perfekt wird. 🥩\n\nDie vier Zahlen, die du wirklich brauchst:\n• Rind medium rare — 54 °C\n• Schwein saftig — 63 °C\n• Geflügel — 74 °C (immer durch)\n• Hackfleisch — 70 °C\n\nUnd der Fehler, den fast alle machen: Fleisch zieht nach dem Grill noch 2–5 °C nach. Nimm es rund 3 °C vor dem Ziel runter.\n\nMessen: dickster Punkt, nie am Knochen. Danach 3–5 Minuten ruhen lassen.\n\nDen kompletten Spickzettel gibt's kostenlos — Link in der Bio.\n\nHinweis: Sprecherstimme KI-generiert.\n\n#steak #kerntemperatur #grillen #bbq #steakakademie #grilltipps #mediumrare #fleisch"
+  "caption_tiktok": "54 Grad entscheiden, ob dein Steak perfekt wird. 🥩\n\nDie vier Zahlen, die du wirklich brauchst:\n• Rind medium rare — 54 °C\n• Schwein saftig — 63 °C\n• Geflügel — 74 °C (immer durch)\n• Hackfleisch — 70 °C\n\nUnd der Fehler, den fast alle machen: Fleisch zieht nach dem Grill noch 2–5 °C nach. Nimm es rund 3 °C vor dem Ziel runter.\n\nMessen: dickster Punkt, nie am Knochen. Danach 3–5 Minuten ruhen lassen.\n\nDen kompletten Spickzettel gibt's kostenlos — Link in der Bio.\n\nHinweis: Marco ist eine KI-Redaktionspersona der Steakakademie, Bild und Stimme sind KI-generiert. Fachlich verantwortet von Uwe Yendell.\n\n#steak #kerntemperatur #grillen #bbq #steakakademie #grilltipps #mediumrare #fleisch"
 }

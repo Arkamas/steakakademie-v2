@@ -5,22 +5,23 @@
       "typ": "hero_number",
       "untertitel": "54 Grad entscheiden alles.",
       "start": 0,
-      "dauer": 8.148,
+      "dauer": 8.324,
       "audio": "steakakademie/audio/hook.wav",
       "audioDelay": 0.5,
       "visual": {
         "zahl": "54",
         "einheit": "°C",
         "kicker": "RIND · MEDIUM RARE",
-        "unterzeile": "Diese Zahl entscheidet."
+        "unterzeile": "Diese Zahl entscheidet.",
+        "hintergrund": "steakakademie/bilder/marco-back.jpg"
       }
     },
     {
       "id": "problem",
       "typ": "statement",
       "untertitel": "Minuten lügen. Temperatur nicht.",
-      "start": 8.148,
-      "dauer": 9.258,
+      "start": 8.324,
+      "dauer": 9.146,
       "audio": "steakakademie/audio/problem.wav",
       "audioDelay": 0.25,
       "visual": {
@@ -33,8 +34,8 @@
       "id": "zahlen",
       "typ": "temp_cards",
       "untertitel": "Rind 54 · Schwein 63 · Geflügel 74 · Hack 70",
-      "start": 17.406,
-      "dauer": 14.626,
+      "start": 17.47,
+      "dauer": 15.218,
       "audio": "steakakademie/audio/zahlen.wav",
       "audioDelay": 0.25,
       "visual": {
@@ -71,8 +72,8 @@
       "id": "carryover",
       "typ": "carryover",
       "untertitel": "Fleisch zieht 2–5 °C nach. 3 °C vorher runter.",
-      "start": 32.032,
-      "dauer": 10.962,
+      "start": 32.688,
+      "dauer": 11.17,
       "audio": "steakakademie/audio/carryover.wav",
       "audioDelay": 0.25,
       "visual": {
@@ -87,11 +88,14 @@
       "id": "messen",
       "typ": "two_rules",
       "untertitel": "Dickster Punkt, nicht am Knochen. 3–5 Min. ruhen.",
-      "start": 42.994,
-      "dauer": 7.184,
+      "start": 43.858,
+      "dauer": 7.264,
       "audio": "steakakademie/audio/messen.wav",
       "audioDelay": 0.25,
       "visual": {
+        "portrait": "steakakademie/bilder/marco.jpg",
+        "portraitLabel": "Marco · Pitmaster",
+        "portraitHinweis": "KI-Avatar",
         "regeln": [
           {
             "nr": "1",
@@ -110,15 +114,16 @@
       "id": "cta",
       "typ": "cta",
       "untertitel": "Kerntemperatur-Spickzettel — Link in der Bio.",
-      "start": 50.178,
-      "dauer": 6.486,
+      "start": 51.122,
+      "dauer": 6.39,
       "audio": "steakakademie/audio/cta.wav",
       "audioDelay": 0.3,
       "visual": {
         "titel": "Der Spickzettel",
         "unterzeile": "Alle Kerntemperaturen auf einer Seite",
         "domain": "steakakademie.de",
-        "hinweis": "Stimme KI-generiert"
+        "hinweis": "KI-Avatar · Stimme KI-generiert",
+        "portrait": "steakakademie/bilder/marco.jpg"
       }
     }
   ]

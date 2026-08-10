@@ -9,7 +9,7 @@ import { breadcrumbSchema } from '@/lib/schema';
 import RecipeSubmitModal from '@/components/recipe/RecipeSubmitModal';
 
 export const metadata: Metadata = {
-  title: 'BBQ-Rezepte — Geprüfte Rezepte vom Grill | Steakakademie',
+  title: 'BBQ-Rezepte — Geprüfte Rezepte vom Grill',
   description:
     'Präzise BBQ-Rezepte mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach. Sous-Vide, Reverse Sear, Low & Slow — jedes Rezept mehrfach getestet.',
   alternates: { canonical: 'https://steakakademie.de/rezepte' },
@@ -51,17 +51,7 @@ export default function RezepteIndexPage() {
     itemListElement: recipes.map((r, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      item: {
-        '@type': 'Recipe',
-        name: r.title,
-        url: `https://steakakademie.de${r.url}`,
-        image: r.image,
-        description: r.description,
-        prepTime: r.prepTime,
-        cookTime: r.cookTime,
-        totalTime: r.totalTime,
-        recipeYield: `${r.servings} Portionen`,
-      },
+      url: `https://steakakademie.de${r.url}`,
     })),
   };
 

@@ -8,7 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Steak-Beichte — KI-Diagnose für dein Grill-Problem | Steakakademie',
+  title: 'Steak-Beichte — KI-Diagnose für dein Grill-Problem',
   description:
     'Beschreibe was schiefgelaufen ist — du bekommst die genaue Ursache und ein Korrektur-Protokoll für das nächste Mal. Kein Forum, kein Raten, keine allgemeinen Tipps.',
   alternates: { canonical: 'https://steakakademie.de/steak-beichte' },
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
       'Zu trocken, Kruste falsch, innen roh? Beschreibe dein Ergebnis — KI-Analyse liefert Ursache + Korrektur-Protokoll. Pro Diagnose oder als 5er-Pack.',
     url: 'https://steakakademie.de/steak-beichte',
     type: 'website',
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
 };
 
@@ -118,7 +119,7 @@ export default function SteakBeichtePage() {
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
                 Du beschreibst dein Grill-Ergebnis — mit oder ohne Foto. Die KI-Diagnose
                 liefert dir die genaue Ursache, eine Fehler-Einordnung und ein konkretes
-                Korrektur-Protokoll für das nächste Mal. Kein Raten. Kein „kommt drauf an".
+                Korrektur-Protokoll für das nächste Mal. Kein Raten. Kein „kommt drauf an&quot;.
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -155,8 +156,8 @@ export default function SteakBeichtePage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 font-body text-text-secondary leading-relaxed">
                 <div className="space-y-4">
                   <p>
-                    Du postest es im Forum. „Zu hohe Temperatur vielleicht?" „Hast du
-                    rested?" „War der Rost sauber?" Zehn Meinungen, null Diagnose.
+                    Du postest es im Forum. „Zu hohe Temperatur vielleicht?&quot; „Hast du
+                    rested?&quot; „War der Rost sauber?&quot; Zehn Meinungen, null Diagnose.
                     Du weißt danach immer noch nicht was wirklich passiert ist.
                   </p>
                   <p>
@@ -352,7 +353,7 @@ export default function SteakBeichtePage() {
               >
                 <p className="text-xs font-sans text-text-secondary leading-relaxed">
                   <strong className="text-text-primary">Hinweis:</strong>{' '}
-                  Credits sind sofort nach Kauf verfügbar. Alle Preise sind Endpreise in Euro.
+                  Credits sind sofort nach Kauf verfügbar. Alle Preise sind Endpreise in Euro. Als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.
                 </p>
               </div>
             </div>

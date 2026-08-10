@@ -1,0 +1,15 @@
+# Aromamoleküle (kuratiert) — id  name  CAS  hub_role
+# hub_role gesetzt = "Schaltzentrale" (Hub-Aromastoff, oberste Ebene). Leer = Nicht-Hub.
+# Eigene Kuration der Steakakademie aus öffentlich-freier Aromachemie + CC-BY-Wissen
+# (foods-oa). KEINE fremde Datenbank. Siehe data/foodpairing/SOURCES.md.
+1	Röst-Pyrazine	—	Röstaroma-Nabe (Grillen ↔ Kaffee/Kakao/Nüsse)
+2	2-Methyl-3-furanthiol	28588-74-1	Fleisch-Nabe (Rind ↔ Thunfisch/Schinken/Kaffee)
+3	1-Octen-3-ol	3391-86-4	Pilz-Nabe (Fleisch ↔ Pilze)
+4	2-Acetyl-1-pyrrolin	85213-22-5	Krusten-Nabe (Kruste ↔ Brot/Reis/Mais)
+5	Strecker-Aldehyde (Methylbutanal)	590-86-3	Malz/Schoko-Nabe (Bräunung ↔ Kakao/Kaffee)
+6	(E,E)-2,4-Decadienal	25152-84-5
+7	Räucherphenole (Guaiacol/Syringol)	90-05-1	Räucher-Nabe (BBQ ↔ Whisky/Speck/Lachs)
+8	Gamma-Lactone	—
+9	Eugenol	97-53-0
+10	12-Methyltridecanal	75853-49-5
+11	4-Methyloctansäure	54947-74-9

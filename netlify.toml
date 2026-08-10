@@ -1,35 +1,38 @@
-# Netlify-Konfiguration für Steakakademie v2 (Next.js 14 App Router)
-# ================================================================
-# Deployment: github.com/Arkamas/steakakademie-v2 → steakakademie.de
+# Netlify-Konfiguration — Domain-Redirects
+# SEO-Fix (Seobility factor_redirects, 03.07.2026):
+# www.steakakademie.de lieferte 200 + identischen Inhalt statt 301 auf die
+# non-www-Hauptdomain → Duplicate Content. Kanonischer Host = steakakademie.de
+# (entspricht metadataBase in src/app/layout.tsx).
 
-[build]
-  command = "next build && npx next-sitemap"
-  publish = ".next"
+[[redirects]]
+  from = "https://www.steakakademie.de/"
+  to = "https://steakakademie.de/"
+  status = 301
+  force = true
 
-[build.environment]
-  NODE_VERSION = "20"
-  NPM_FLAGS = "--legacy-peer-deps"
+[[redirects]]
+  from = "http://www.steakakademie.de/"
+  to = "https://steakakademie.de/"
+  status = 301
+  force = true
 
-# Next.js App Router — serverseitige Funktionen via Netlify Edge
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+[[redirects]]
+  from = "https://www.steakakademie.de/*"
+  to = "https://steakakademie.de/:splat"
+  status = 301
+  force = true
 
-# Security Headers
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+[[redirects]]
+  from = "http://www.steakakademie.de/*"
+  to = "https://steakakademie.de/:splat"
+  s
+# Slug-Fix Diakritika (SEO-Audit 07.07.2026): alte kaputte Glossar-Slugs
+[[redirects]]
+  from = "/glossar/entrec-te"
+  to = "/glossar/entrecote"
+  status = 301
 
-# Cache Static Assets
-[[headers]]
-  for = "/_next/static/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/images/*"
-  [headers.values]
-    Cache-Control = "public, max-age=86400, stale-while-revalidate=3600"
+[[redirects]]
+  from = "/glossar/ib-rico"
+  to = "/glossar/iberico"
+  status = 301

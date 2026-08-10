@@ -10,7 +10,7 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'SEO-Sprint — Deine Website auf Google sichtbar in 72h | Steakakademie',
+  title: 'SEO-Sprint — Deine Website auf Google sichtbar in 72h',
   description:
     'Website live — aber niemand findet sie? In 72 Stunden: Google Search Console, On-Page-SEO, Keyword-Strategie, erste Backlinks, lokale Sichtbarkeit. Kein Agentur-Budget, kein Fachwissen nötig.',
   alternates: { canonical: 'https://steakakademie.de/seo-sprint' },
@@ -261,7 +261,7 @@ export default async function SeoSprintPage() {
               <blockquote className="border-l-4 border-brand-gold pl-6 py-2 mb-12">
                 <p className="font-serif text-xl lg:text-2xl text-text-primary italic leading-relaxed">
                   „SEO-Agenturen verdienen daran, dass du nicht weißt wie einfach
-                  die Grundlagen sind. Nach diesem Sprint weißt du es."
+                  die Grundlagen sind. Nach diesem Sprint weißt du es.&quot;
                 </p>
                 <footer className="mt-4 text-sm font-sans text-text-muted">
                   — Kernprinzip des SEO-Sprints
@@ -312,7 +312,6 @@ export default async function SeoSprintPage() {
                       width={128}
                       height={128}
                       className="w-full h-full object-cover"
-                      unoptimized
                     />
                   </div>
                 </div>

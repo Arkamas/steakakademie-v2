@@ -1,0 +1,9 @@
+# Lizenzbehaftete FREMD-Datasets NICHT einchecken (nicht weiterverbreiten).
+# Unsere EIGENE Kuration (ingr_info/comp_info/ingr_comp + Doku) ist dagegen erlaubt.
+*
+!.gitignore
+!README.md
+!SOURCES.md
+!ingr_info.tsv
+!comp_info.tsv
+!ingr_comp.tsv

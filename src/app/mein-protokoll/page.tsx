@@ -8,7 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Mein Protokoll — Dein persönlicher 8-Wochen-Grillplan | Steakakademie',
+  title: 'Mein Protokoll — Dein persönlicher 8-Wochen-Grillplan',
   description:
     'Kein generischer Kurs. Ein Plan der zu deinem Grill, deiner Zeit und deinen Zielen passt — in 5 Minuten generiert. 8 Wochen, konkrete Sessions, progressive Schwierigkeit.',
   alternates: { canonical: 'https://steakakademie.de/mein-protokoll' },
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
       'Fragebogen ausfüllen, KI generiert deinen Plan. Grilltyp, Erfahrungsstand, verfügbare Zeit, Ziele — dein Protokoll ist auf dich zugeschnitten, nicht auf irgendjemanden.',
     url: 'https://steakakademie.de/mein-protokoll',
     type: 'website',
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
 };
 
@@ -183,8 +184,8 @@ export default function MeinProtokollPage() {
                   </p>
                   <p>
                     Ein Plan der zu dir passt — deinem Grill, deiner Zeit, deinem
-                    Niveau — macht den Unterschied zwischen "ich grill schon seit
-                    Jahren und bin immer noch mittelmäßig" und echtem Fortschritt,
+                    Niveau — macht den Unterschied zwischen &quot;ich grill schon seit
+                    Jahren und bin immer noch mittelmäßig&quot; und echtem Fortschritt,
                     der messbar ist.
                   </p>
                 </div>
@@ -274,7 +275,7 @@ export default function MeinProtokollPage() {
                 Was dein Plan enthält
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-light mb-3">
-                Nicht "lern mehr" — sondern "tu das jetzt".
+                Nicht &quot;lern mehr&quot; — sondern &quot;tu das jetzt&quot;.
               </h2>
             </div>
 
@@ -372,7 +373,7 @@ export default function MeinProtokollPage() {
                   <strong className="text-text-primary">Hinweis zum Widerrufsrecht:</strong>{' '}
                   Nach Kauf und Fragebogen-Ausfüllung wird der Plan sofort generiert — digitaler
                   Inhalt, kein Widerruf nach Bereitstellung. Der Fragebogen kann vor Generierung
-                  beliebig oft angepasst werden.
+                  beliebig oft angepasst werden. Endpreis in Euro. Als Kleinunternehmer gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.
                 </p>
               </div>
             </div>

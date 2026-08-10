@@ -21,7 +21,10 @@ function Box({
           {label}
         </span>
       </div>
-      <div className="font-body text-[0.95rem] leading-relaxed text-text-secondary [&>p]:mb-2 [&>p:last-child]:mb-0 [&_strong]:text-text-primary [&_ul]:mt-1 [&_ul]:ml-4 [&_ul]:list-disc [&_li]:mb-0.5">
+      <div
+        className="callout-body font-body text-[0.95rem] leading-relaxed [&>p]:mb-2 [&>p:last-child]:mb-0 [&_ul]:mt-1 [&_ul]:ml-4 [&_ul]:list-disc [&_li]:mb-0.5"
+        style={{ color: 'var(--callout-text)' }}
+      >
         {children}
       </div>
     </aside>

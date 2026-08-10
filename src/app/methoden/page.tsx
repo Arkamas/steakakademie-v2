@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, Flame } from 'lucide-react';
+import { ChevronRight, Flame, Clock } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allMethodes } from 'contentlayer/generated';
@@ -19,35 +19,11 @@ export const metadata: Metadata = {
   },
 };
 
-const METHODEN_FEATURED = [
-  {
-    slug: 'reverse-sear',
-    name: 'Reverse Sear',
-    kicker: 'Die präziseste Methode',
-    excerpt:
-      'Erst Low & Slow bei 100–120 °C bis 10 °C unter Ziel-Kerntemperatur, dann scharfes Anbraten bei 250–300 °C. Ergebnis: gleichmäßiger Garpunkt, maximale Kruste, minimales Carry-over.',
-    tags: ['Reverse Sear', 'Kerntemperatur', 'Maillard-Reaktion', 'Carry-over'],
-    badge: 'Guide verfügbar',
-  },
-  {
-    slug: 'direktes-grillen',
-    name: 'Direkt & Indirekt Grillen',
-    kicker: 'Die Grundmethoden',
-    excerpt:
-      'Direktes Grillen bei 250–350 °C für Maillard-Reaktion und Kruste. Indirektes Grillen bei 110–160 °C für gleichmäßige Garung ohne Verbrennung — und wie du beide Zonen kombinierst.',
-    tags: ['Direkt', 'Indirekt', 'Temperaturzonen', 'Hitzequelle'],
-    badge: 'Grundlagen',
-  },
-  {
-    slug: 'raeuchern',
-    name: 'Räuchern & Smoken',
-    kicker: 'Low & Slow BBQ',
-    excerpt:
-      'Holzwahl (Hickory vs. Kirschholz vs. Obsthölzer), Rauchentwicklung bei 180–230 °C Holztemperatur, Smoke-Ring-Bildung durch NOx-Reaktion mit Myoglobin — und warum der Smoke-Ring kein Garstufen-Indikator ist.',
-    tags: ['Räuchern', 'Smoke Ring', 'Holzwahl', 'BBQ'],
-    badge: 'BBQ-Wissen',
-  },
-];
+const DIFFICULTY_BADGE: Record<string, string> = {
+  Einfach: 'Grundlagen',
+  Mittel: 'Aufbau',
+  Fortgeschritten: 'Profi',
+};
 
 export default function MethodenIndexPage() {
   const collectionSch = collectionPageSchema(
@@ -57,7 +33,9 @@ export default function MethodenIndexPage() {
   );
   const breadcrumbSch = breadcrumbSchema([{ name: 'Grilltechniken', url: '/methoden' }]);
 
-  const publishedMethoden = allMethodes ?? [];
+  const methoden = [...(allMethodes ?? [])].sort(
+    (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
+  );
 
   return (
     <>
@@ -98,43 +76,52 @@ export default function MethodenIndexPage() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
-            {METHODEN_FEATURED.map((methode) => {
-              const content = publishedMethoden.find((m) => m.slug === methode.slug);
-              const href = content ? `/methoden/${methode.slug}` : '/methoden';
+            {methoden.map((m) => {
+              const titleMain = m.title.split(':')[0];
               return (
                 <Link
-                  key={methode.slug}
-                  href={href}
-                  className="group block bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-all duration-200 p-6"
+                  key={m.slug}
+                  href={m.url}
+                  className="group block bg-surface-card border border-border-subtle hover:border-brand-gold/40 rounded-lg overflow-hidden transition-all duration-200 hover:-translate-y-1"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <span className="text-[10px] font-sans font-bold tracking-[0.14em] uppercase text-brand-fire">
-                      {methode.kicker}
+                  {/* Bild — bringt Leben in die Übersicht */}
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={m.image}
+                      alt={m.imageAlt}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div
+                      className="absolute inset-0"
+                      style={{ background: 'linear-gradient(180deg, rgba(15,10,6,0) 45%, rgba(15,10,6,0.85) 100%)' }}
+                    />
+                    <span className="absolute top-3 left-3 inline-flex items-center gap-1 text-[10px] font-sans font-bold tracking-[0.12em] uppercase rounded-full px-2.5 py-1 text-brand-gold" style={{ background: 'rgba(200,136,42,0.16)', backdropFilter: 'blur(4px)' }}>
+                      {DIFFICULTY_BADGE[m.difficulty] ?? m.difficulty}
                     </span>
-                    <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-brand-gold/70 bg-surface-base px-2 py-0.5">
-                      {methode.badge}
-                    </span>
+                    <h3 className="absolute bottom-3 left-4 right-4 font-serif text-xl font-bold text-text-light leading-snug group-hover:text-brand-gold transition-colors">
+                      {titleMain}
+                    </h3>
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-text-primary group-hover:text-brand-gold transition-colors mb-3">
-                    {methode.name}
-                  </h3>
-                  <p className="text-sm font-body text-text-secondary leading-relaxed mb-4">
-                    {methode.excerpt}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {methode.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] font-sans text-text-muted bg-surface-base px-2 py-0.5 border border-border-subtle">
-                        {tag}
+
+                  <div className="p-5">
+                    <p className="text-sm font-body text-text-secondary leading-relaxed line-clamp-2 mb-4">
+                      {m.excerpt}
+                    </p>
+                    <div className="flex items-center justify-between text-xs font-sans">
+                      <div className="flex items-center gap-3 text-text-muted">
+                        <span className="flex items-center gap-1"><Flame size={12} className="text-brand-fire/70" />{m.difficulty}</span>
+                        {m.timeMinutes && (
+                          <span className="flex items-center gap-1"><Clock size={12} />{m.timeMinutes} Min.</span>
+                        )}
+                      </div>
+                      <span className="flex items-center gap-1 text-brand-fire font-semibold">
+                        Zum Guide
+                        <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
                       </span>
-                    ))}
-                  </div>
-                  {content && (
-                    <div className="flex items-center gap-1.5 text-xs font-sans text-brand-fire font-semibold">
-                      <Flame size={13} />
-                      Zum Guide
-                      <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
                     </div>
-                  )}
+                  </div>
                 </Link>
               );
             })}

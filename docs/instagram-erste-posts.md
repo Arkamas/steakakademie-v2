@@ -4,6 +4,14 @@
 > Kerntemperaturen gegen die kanonische Referenz geprüft (Regel 8c).
 > Reihenfolge-Tipp: **3 Posts gleich** (Feed wirkt lebendig), dann 1 alle 2–3 Tage.
 
+> ⚖️ **Werbekennzeichnung (Pflicht, LG Köln 12.05.2026):** Sobald ein Post
+> **werblich, bezahlt oder Affiliate** ist, muss das Wort **„Werbung"** oder
+> **„Anzeige"** schon im **Grid/Vorschaubild** sichtbar sein — *vor* dem ersten
+> Klick. Ein Hinweis nur in der Caption ist zu spät und abmahnbar; das englische
+> „Ad" zählt nicht. Die 5 Posts unten sind **organisch** (kein bezahlter Inhalt)
+> und brauchen kein Label. Details: Sektion `WERBEKENNZEICHNUNG` in
+> `marketing_agent.txt`.
+
 ---
 
 ## Post 1 — Dry-Aged Ribeye  ·  Bild: `public/images/rezepte/dry-aged-ribeye.jpg`

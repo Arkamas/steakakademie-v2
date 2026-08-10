@@ -3,12 +3,13 @@ import Link from 'next/link';
 import { ChevronRight, Sparkles, Flower2, UtensilsCrossed, Wine, Heart } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { getApprovedDrafts } from '@/lib/content-feed';
 
 export const revalidate = 86400;
 
 export const metadata: Metadata = {
-  title: 'Grillstil — Grillen, Genuss & Lifestyle für Frauen | Steakakademie',
+  title: 'Grillstil — Grillen, Genuss & Lifestyle für Frauen',
   description:
     'Grillen ist kein Männerthema. Grillstil verbindet Feuer und Eleganz: kuratierte Rezepte, schön gedeckte Tische, Tischdekoration und entspannter Genuss — stilvoll und selbstbewusst.',
   alternates: { canonical: 'https://steakakademie.de/grillstil' },
@@ -355,31 +356,16 @@ export default async function GrillstilPage() {
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light mb-3">
               Werde Teil der Grillstil-Community
             </h2>
-            <p className="font-body text-text-secondary leading-relaxed mb-6">
-              Neue Rezepte, Tisch- und Deko-Ideen und entspannte Inspiration rund ums Grillen —
-              zweimal im Monat, ohne Spam.
-            </p>
-            <form className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto" action="/api/newsletter" method="POST">
-              <input
-                type="email"
-                name="email"
-                placeholder="deine@email.de"
-                required
-                className="flex-1 border px-4 py-3 text-sm font-sans bg-surface-card text-text-light placeholder:text-text-muted focus:outline-none transition-colors"
-                style={{ borderColor: ROSE }}
-              />
-              <button
-                type="submit"
-                className="font-sans font-bold text-xs tracking-widest uppercase px-6 py-3 plausible-event-name=Newsletter-Anmeldung plausible-event-source=grillstil"
-                style={{ background: ROSE, color: '#fff' }}
-              >
-                Anmelden
-              </button>
-            </form>
-            <p className="text-[10px] font-sans text-text-muted mt-3">
-              Jederzeit abmeldbar.{' '}
-              <Link href="/datenschutz" className="underline hover:text-text-secondary">Datenschutz</Link>
-            </p>
+            <NewsletterSignup
+              source="grillstil"
+              accentColor={ROSE}
+              accentTextColor="#fff"
+              eyebrow="Grillstil · Community"
+              headline="Neue Rezepte, Tisch- und Deko-Ideen."
+              subline="Entspannte Inspiration rund ums Grillen — zweimal im Monat, ohne Spam."
+              cta="Anmelden"
+              className="max-w-md mx-auto text-left"
+            />
           </div>
         </section>
       </main>

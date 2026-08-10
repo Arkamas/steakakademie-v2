@@ -264,7 +264,7 @@ export default function ArbeitszeitPlaner() {
           style={{ borderLeftColor: '#E85018', background: '#E850180F' }}
         >
           <AlertTriangle size={16} style={{ color: '#E85018' }} className="shrink-0" />
-          Keine Zeit eingetragen — trag oben unter „Zeiten ändern" deine verfügbaren Stunden ein.
+          Keine Zeit eingetragen — trag oben unter „Zeiten ändern&quot; deine verfügbaren Stunden ein.
         </div>
       )}
 

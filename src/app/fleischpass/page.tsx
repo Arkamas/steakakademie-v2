@@ -8,10 +8,11 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Fleischpass — Dein persönliches Grill-Logbuch mit KI-Auswertung | Steakakademie',
+  title: 'Fleischpass — Dein persönliches Grill-Logbuch mit KI-Auswertung',
   description:
     'Tracke jede Grill-Session. Nach 10 Einträgen analysiert die KI deine Muster — Stärken, Schwächen, nächste Herausforderung. Kostenlos starten, KI-Layer ab 39 €/Jahr.',
   alternates: { canonical: 'https://steakakademie.de/fleischpass' },
+  robots: { index: false, follow: false },
   openGraph: {
     title: 'Fleischpass — Grill-Logbuch mit KI-Intelligenz',
     description:
@@ -254,7 +255,7 @@ export default function FleischpassPage() {
                     </div>
                     <div className="flex items-center">
                       <p className="font-body text-sm text-text-secondary leading-relaxed italic">
-                        „{insight}"
+                        „{insight}&quot;
                       </p>
                     </div>
                   </div>

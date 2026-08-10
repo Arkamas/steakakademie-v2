@@ -26,7 +26,7 @@ export default function ChallengeTeilnahmebedingungenPage() {
           </nav>
 
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
-            Teilnahmebedingungen — „Rezept des Monats"
+            Teilnahmebedingungen — „Rezept des Monats&quot;
           </h1>
           <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
 

@@ -26,7 +26,7 @@ export default function DatenschutzPage() {
           </nav>
 
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">Datenschutzerklärung</h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juli 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -110,7 +110,7 @@ export default function DatenschutzPage() {
               <p className="mb-3">
                 Plausible erhebt ausschließlich aggregierte, anonyme Nutzungsstatistiken
                 (Seitenaufrufe, Herkunftsland, Gerätekategorie, Referrer). Es werden keine
-                IP-Adressen gespeichert. Eine Einwilligung nach § 25 TTDSG ist nicht erforderlich.
+                IP-Adressen gespeichert. Eine Einwilligung nach § 25 TDDDG ist nicht erforderlich.
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der
@@ -122,7 +122,52 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>6. Newsletter & E-Mail-Benachrichtigungen (Loops)</h2>
+              <h2 className={h2Class}>6. Heatmaps & Sitzungs-Analyse (Microsoft Clarity)</h2>
+              <p className="mb-3">
+                Zur Verbesserung von Benutzerfreundlichkeit und Inhalten setzen wir – <strong className="text-text-primary">ausschließlich
+                mit deiner Einwilligung</strong> – Microsoft Clarity ein, einen Dienst der Microsoft Ireland
+                Operations Limited (One Microsoft Place, South County Business Park, Leopardstown, Dublin 18,
+                Irland; ggf. Microsoft Corporation, USA).
+              </p>
+              <p className="mb-3">
+                Clarity erstellt anonymisierte <strong className="text-text-primary">Heatmaps</strong> und
+                {' '}<strong className="text-text-primary">Sitzungsaufzeichnungen</strong> (Klick-, Scroll- und
+                Mausbewegungen) und hilft uns zu verstehen, wie die Seite genutzt wird. Sensible Inhalte
+                (Eingabefelder, Texte) werden dabei automatisch maskiert. Clarity setzt hierfür Cookies
+                (u. a. <code>_clck</code>, <code>_clsk</code>, <code>CLID</code>).
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Einwilligung erforderlich:</strong> Clarity wird erst
+                geladen, nachdem du im Cookie-Banner aktiv zugestimmt hast. Ohne Zustimmung findet keine
+                Verarbeitung durch Clarity statt. Du kannst deine Einwilligung jederzeit mit Wirkung für die
+                Zukunft widerrufen – über den Link „Cookie-Einstellungen&quot; im Seitenfuß.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Drittlandübermittlung:</strong> Eine Verarbeitung in den
+                USA ist möglich. Microsoft ist unter dem EU-US Data Privacy Framework zertifiziert; zusätzlich
+                besteht ein Auftragsverarbeitungsvertrag (Art. 28 DSGVO).
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Sitzungsaufzeichnungen speichert
+                Microsoft für <strong className="text-text-primary">30 Tage</strong> (einzelne markierte
+                Aufzeichnungen bis zu 13 Monate), aggregierte Heatmap-Daten für{' '}
+                <strong className="text-text-primary">13 Monate</strong>; danach werden die Daten inklusive
+                Backups unwiederbringlich gelöscht. Die gesetzten Cookies haben Laufzeiten von einem Tag
+                (Sitzungs-Cookie) bis zu ca. einem Jahr.
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) i. V. m. § 25 Abs. 1 TDDDG. Details:{' '}
+                <a href="https://learn.microsoft.com/clarity/setup-and-installation/faq" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  Microsoft Clarity FAQ
+                </a>{' '}·{' '}
+                <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  privacy.microsoft.com
+                </a>
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>7. Newsletter & E-Mail-Benachrichtigungen (Loops)</h2>
               <p className="mb-3">
                 Wenn du dich für unseren Newsletter anmeldest, übermittelst du deine E-Mail-Adresse
                 an Loops Software Inc. (loops.so). Die Anmeldung erfolgt im Double-Opt-In-Verfahren:
@@ -149,7 +194,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>7. Exit-Intent-Overlay (Newsletter-Anmeldung)</h2>
+              <h2 className={h2Class}>8. Exit-Intent-Overlay (Newsletter-Anmeldung)</h2>
               <p className="mb-3">
                 Diese Website zeigt nach einer bestimmten Verweildauer ein Overlay-Fenster an,
                 das zur Newsletter-Anmeldung einlädt. Das Overlay wird durch Mausbewegung in
@@ -158,13 +203,13 @@ export default function DatenschutzPage() {
                 gelöscht, kein dauerhaftes Tracking).
               </p>
               <p>
-                Wenn du deine E-Mail-Adresse eingibst, gilt dasselbe wie unter Abschnitt 6
+                Wenn du deine E-Mail-Adresse eingibst, gilt dasselbe wie unter Abschnitt 7
                 (Newsletter). Kein Pflichtfeld — das Overlay kann jederzeit geschlossen werden.
               </p>
             </section>
 
             <section>
-              <h2 className={h2Class}>8. Nutzerkonten & Kursdaten (Supabase)</h2>
+              <h2 className={h2Class}>9. Nutzerkonten & Kursdaten (Supabase)</h2>
               <p className="mb-3">
                 Für die Nutzung von kostenpflichtigen Inhalten (Kurse, Steuer-Matrix-Rechner,
                 digitale Produkte) ist ein Nutzerkonto erforderlich. Kontodaten werden bei
@@ -240,7 +285,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>9. Zahlungsabwicklung (Digistore24)</h2>
+              <h2 className={h2Class}>10. Zahlungsabwicklung (Digistore24)</h2>
               <p className="mb-3">
                 Zahlungen für digitale Produkte werden über Digistore24 GmbH abgewickelt.
                 Im Rahmen des Bestellvorgangs erhebt Digistore24 die für die Kaufabwicklung
@@ -262,9 +307,9 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>10. KI-Assistenten „Marco" (Anthropic)</h2>
+              <h2 className={h2Class}>11. KI-Assistenten „Marco&quot; (Anthropic)</h2>
               <p className="mb-3">
-                Diese Website bietet den KI-Assistenten „Marco" als Chat-Widget an.
+                Diese Website bietet den KI-Assistenten „Marco&quot; als Chat-Widget an.
               </p>
               <ul className="list-disc pl-5 space-y-2 mb-3">
                 <li>
@@ -349,27 +394,35 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>11. Cookies & lokale Speicherung</h2>
+              <h2 className={h2Class}>12. Cookies & lokale Speicherung</h2>
               <p className="mb-3">
                 <strong className="text-text-primary">Technisch notwendige Speichermechanismen</strong>{' '}
-                (keine Einwilligung erforderlich, § 25 Abs. 2 TTDSG):
+                (keine Einwilligung erforderlich, § 25 Abs. 2 TDDDG):
               </p>
               <ul className="list-disc pl-5 space-y-1 mb-3">
                 <li><strong className="text-text-primary">localStorage:</strong> Theme-Einstellung (hell/dunkel) — dauerhaft, lokal im Browser</li>
                 <li><strong className="text-text-primary">sessionStorage:</strong> Exit-Intent-Status (wurde das Overlay bereits gezeigt?) — wird nach Schließen des Browsers automatisch gelöscht</li>
                 <li><strong className="text-text-primary">Supabase Auth-Token:</strong> Für eingeloggte Nutzer — sicherer JWT-Token zur Sitzungsverwaltung</li>
               </ul>
+              <p className="mb-3">
+                <strong className="text-text-primary">Einwilligungspflichtige Cookies (nur nach Opt-in):</strong>{' '}
+                Microsoft Clarity (Abschnitt 6) setzt Cookies für Heatmaps und Sitzungs-Analyse. Diese
+                werden <strong className="text-text-primary">ausschließlich nach deiner aktiven Einwilligung</strong>{' '}
+                über unseren Cookie-Banner gesetzt. Der Banner bietet auf erster Ebene zwei gleichwertige
+                Optionen („Alles akzeptieren&quot; und „Ablehnen&quot;); ohne Zustimmung werden keine solchen Cookies
+                gesetzt. Deine Wahl kannst du jederzeit über „Cookie-Einstellungen&quot; im Seitenfuß ändern oder
+                widerrufen. Die gespeicherte Einwilligungs-Entscheidung selbst liegt technisch notwendig im
+                localStorage deines Browsers.
+              </p>
               <p>
-                <strong className="text-text-primary">Keine einwilligungspflichtigen Cookies:</strong>{' '}
-                Wir setzen keine Tracking- oder Marketing-Cookies. Die Reichweitenmessung erfolgt
-                ausschließlich über Plausible (Abschnitt 5), das cookieless arbeitet und keine
-                personenbezogenen Daten speichert. Ein Cookie-Einwilligungsbanner ist daher nicht
-                erforderlich.
+                <strong className="text-text-primary">Reichweitenmessung ohne Cookies:</strong>{' '}
+                Die Grund-Statistik erfolgt über Plausible (Abschnitt 5), das cookieless arbeitet, keine
+                personenbezogenen Daten speichert und keiner Einwilligung bedarf.
               </p>
             </section>
 
             <section>
-              <h2 className={h2Class}>12. Externe Links & Affiliate-Links</h2>
+              <h2 className={h2Class}>13. Externe Links & Affiliate-Links</h2>
               <p className="mb-3">
                 Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte
                 wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets
@@ -377,7 +430,7 @@ export default function DatenschutzPage() {
               </p>
               <p className="mb-3">
                 Produktempfehlungen können Affiliate-Links enthalten (gekennzeichnet mit * oder
-                dem Hinweis „Affiliate-Link"). Bei einem Kauf über solche Links erhalten wir
+                dem Hinweis „Affiliate-Link&quot;). Bei einem Kauf über solche Links erhalten wir
                 eine Provision ohne Mehrkosten für dich.
               </p>
               <p className="mb-3">
@@ -456,7 +509,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>13. Deine Rechte</h2>
+              <h2 className={h2Class}>14. Deine Rechte</h2>
               <p className="mb-3">Du hast gemäß DSGVO folgende Rechte:</p>
               <ul className="list-disc list-inside space-y-1.5 mb-3">
                 <li>Auskunft über gespeicherte Daten (Art. 15 DSGVO)</li>
@@ -476,7 +529,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>14. Beschwerderecht bei der Aufsichtsbehörde</h2>
+              <h2 className={h2Class}>15. Beschwerderecht bei der Aufsichtsbehörde</h2>
               <p>
                 Du hast das Recht, dich bei der zuständigen Datenschutz-Aufsichtsbehörde
                 zu beschweren. Zuständig ist die Landesbeauftragte für Datenschutz und

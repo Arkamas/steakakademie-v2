@@ -28,7 +28,7 @@ export default function AgbPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             Allgemeine Geschäftsbedingungen
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juli 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -149,11 +149,21 @@ export default function AgbPage() {
                 Du hast das Recht, diesen Vertrag innerhalb von 14 Tagen ohne Angabe von
                 Gründen zu widerrufen. Die Frist beginnt ab Erhalt der Ware.
               </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Elektronische Widerrufsfunktion (§ 356a BGB):</strong>{' '}
+                Du kannst deinen Widerruf bequem über unsere elektronische Widerrufsfunktion
+                erklären. Den Button „Vertrag widerrufen&quot; findest du jederzeit im Footer jeder
+                Seite sowie direkt unter:{' '}
+                <Link href="/widerruf" className={linkClass}>steakakademie.de/widerruf</Link>.
+                Nach Bestätigung erhältst du unverzüglich eine elektronische Eingangsbestätigung
+                per E-Mail mit Datum und Uhrzeit deines Widerrufs.
+              </p>
               <p>
-                Widerruf per E-Mail an:{' '}
+                Alternativ: Widerruf per E-Mail an{' '}
                 <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>
                   pitmaster@steakakademie.de
-                </a>
+                </a>{' '}
+                oder per Post (Adresse siehe Impressum).
               </p>
             </section>
 
@@ -162,6 +172,13 @@ export default function AgbPage() {
               <p className="mb-3">
                 Bei digitalen Inhalten, die nicht auf einem körperlichen Datenträger geliefert
                 werden, besteht grundsätzlich ein 14-tägiges Widerrufsrecht gemäß § 355 BGB.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Elektronische Widerrufsfunktion (§ 356a BGB):</strong>{' '}
+                Den Widerruf kannst du über die Schaltfläche „Vertrag widerrufen&quot; im Footer oder
+                unter{' '}
+                <Link href="/widerruf" className={linkClass}>steakakademie.de/widerruf</Link>{' '}
+                erklären. Du erhältst eine automatische Eingangsbestätigung per E-Mail.
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Erlöschen des Widerrufsrechts:</strong> Stimmst
@@ -178,9 +195,21 @@ export default function AgbPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 6b Muster-Widerrufsformular</h2>
+              <h2 className={h2Class}>§ 6b Elektronische Widerrufsfunktion & Muster-Widerrufsformular</h2>
               <p className="mb-3">
-                (Wenn du den Vertrag widerrufen willst, fülle dieses Formular aus und sende es zurück.)
+                Gemäß § 356a BGB stellen wir eine elektronische Widerrufsfunktion bereit.
+                Du findest die Schaltfläche{' '}
+                <strong className="text-text-primary">„Vertrag widerrufen&quot;</strong>{' '}
+                im Footer jeder Seite sowie unter{' '}
+                <Link href="/widerruf" className={linkClass}>steakakademie.de/widerruf</Link>.
+                Der Widerruf wird zweistufig bestätigt; du erhältst danach unverzüglich eine
+                elektronische Eingangsbestätigung auf dem von dir angegebenen Kommunikationsweg.
+                Die Eingangsbestätigung dokumentiert Inhalt, Datum und Uhrzeit deines Widerrufs —
+                sie ist kein Anerkenntnis der Wirksamkeit des Widerrufs.
+              </p>
+              <p className="mb-3">
+                Alternativ kannst du auch das folgende Muster-Widerrufsformular nutzen und uns
+                per E-Mail oder Post zusenden:
               </p>
               <div className="border border-border-subtle bg-surface-card p-5 text-sm space-y-2">
                 <p>An: Uwe Yendell, Stahlsberg 73, 42279 Wuppertal,{' '}
@@ -246,7 +275,7 @@ export default function AgbPage() {
             <section>
               <h2 className={h2Class}>§ 9 KI-gestützte Inhalte (Marco-Widget)</h2>
               <p>
-                Auf steakakademie.de ist ein KI-Assistent ("Marco") verfügbar, der auf Basis
+                Auf steakakademie.de ist ein KI-Assistent (&quot;Marco&quot;) verfügbar, der auf Basis
                 von KI-Sprachmodellen Antworten zu Grillthemen generiert. Diese Antworten sind
                 automatisch erstellt und können Fehler enthalten. Sie ersetzen keine
                 professionelle Beratung — insbesondere nicht in Fragen der Lebensmittelsicherheit,
@@ -276,7 +305,7 @@ export default function AgbPage() {
             </section>
 
             <section id="community" className="scroll-mt-24">
-              <h2 className={h2Class}>§ 13 Community-Rezepte &amp; nutzergenerierte Inhalte</h2>
+              <h2 className={h2Class}>§ 12 Community-Rezepte &amp; nutzergenerierte Inhalte</h2>
               <p className="mb-3">
                 Eingeloggte Nutzer können eigene Rezepte einreichen, die nach automatisierter
                 Prüfung auf steakakademie.de veröffentlicht werden können. Für diese Inhalte gilt:
@@ -330,7 +359,7 @@ export default function AgbPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 14 Anwendbares Recht</h2>
+              <h2 className={h2Class}>§ 13 Anwendbares Recht</h2>
               <p>
                 Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand ist
                 Wuppertal, sofern du Kaufmann oder juristische Person des öffentlichen

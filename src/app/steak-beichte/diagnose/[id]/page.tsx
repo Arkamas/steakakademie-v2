@@ -10,7 +10,7 @@ import { ReportSchema, type Report } from '@/lib/steak-beichte/schema';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Deine Diagnose — Steak-Beichte | Steakakademie',
+  title: 'Deine Diagnose — Steak-Beichte',
   description: 'Deine persönliche KI-Grilldiagnose.',
   robots: { index: false, follow: false },
 };

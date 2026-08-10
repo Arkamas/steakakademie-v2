@@ -4,7 +4,7 @@ import { ChevronRight, BookOpen } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allGlossars } from 'contentlayer/generated';
-import { breadcrumbSchema, collectionPageSchema } from '@/lib/schema';
+import { breadcrumbSchema, collectionPageSchema, definedTermSetSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'BBQ-Glossar — Fachbegriffe der Steakakademie erklärt',
@@ -52,11 +52,13 @@ export default function GlossarPage() {
     '/glossar',
     'Das vollständige Fachbegriff-Lexikon für Grillmeister.',
   );
+  const termSetSch = definedTermSetSchema(sorted.map((g) => ({ title: g.title, url: g.url })));
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSch) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSch) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(termSetSch) }} />
       <Header />
       <main className="min-h-screen" style={{ backgroundColor: '#0D0D0D' }}>
 

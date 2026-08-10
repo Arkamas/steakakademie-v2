@@ -5,7 +5,7 @@ name: Rezepte wachsen lassen
 # Build-Lauf erzeugt sie sonst nur ephemer pro Deploy).
 on:
   schedule:
-    - cron: '30 3 * * 0'   # Jeden Sonntag 03:30 UTC (~30 Min nach dem Glossar-Lauf)
+    - cron: '30 3 * * *'   # Täglich 03:30 UTC (~30 Min nach dem Glossar-Lauf) — 1 Rezept/Tag
   workflow_dispatch:        # + manuell auslösbar
 
 jobs:
@@ -29,11 +29,13 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Rezept-Agent ausführen
+        id: agent
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: node scripts/recipe-agent.mjs
+        run: node scripts/recipe-agent.mjs --limit 1
 
       - name: Hero-Bilder generieren (FLUX.1 dev)
+        if: steps.agent.outputs.seeds_exhausted != 'true'
         env:
           FAL_KEY: ${{ secrets.FAL_KEY }}
         run: node scripts/recipe-images.mjs
@@ -54,8 +56,24 @@ jobs:
           echo "## 🍖 Rezept-Bibliothek gewachsen" >> $GITHUB_STEP_SUMMARY
           echo "**${NEW}** neue/aktualisierte Rezepte committet + gepusht → löst Deploy aus." >> $GITHUB_STEP_SUMMARY
 
+      - name: Seed-Liste leer → Jira-Hinweis (KAN, dedup)
+        if: steps.agent.outputs.seeds_exhausted == 'true'
+        continue-on-error: true
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🌱 Rezept-Seed-Liste abgearbeitet — neue Cuts nachlegen'
+          ALERT_DESCRIPTION: 'Der Rezept-Agent hat alle Seeds generiert; ohne neue Cuts in SEED_RECIPES (scripts/recipe-agent.mjs) entstehen keine neuen Rezepte mehr. Neue Premium-Cuts ergänzen, dann läuft die tägliche Generierung weiter.'
+          ALERT_LABELS: 'ops,content,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Task'
+          ALERT_DEDUP_LABEL: 'ops-recipe-seeds-empty'
+        run: node scripts/ops-alert-to-jira.mjs
+
       - name: Bei Fehler → Jira-Ticket (KAN)
         if: failure()
+        continue-on-error: true
         env:
           JIRA_BASE_URL: https://steakakademie.atlassian.net
           JIRA_PROJECT_KEY: KAN

@@ -11,7 +11,7 @@ import WerkzeugHinweis from '@/components/gruendung/WerkzeugHinweis';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Gründer-Schmiede — KI-gesteuert dein Business bauen | Steakakademie',
+  title: 'Gründer-Schmiede — KI-gesteuert dein Business bauen',
   description:
     'Meine echte Methode: wie du mit KI ein digitales Business aufbaust, ohne dich im Chaos zu verlieren. Sechs Module, das Gründer-Nachschlagewerk „Das Komplettikon" und ein Arbeitszeit-Planer — von Tag 1 dokumentiert.',
   alternates: { canonical: 'https://steakakademie.de/gruender-schmiede' },
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
       'Nicht noch ein Kurs übers Gründen — die Methode, mit der ich steakakademie.de wirklich gebaut habe. Mit KI als Mitgründer, ehrlich dokumentiert.',
     url: 'https://steakakademie.de/gruender-schmiede',
     type: 'website',
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
 };
 
@@ -279,7 +280,7 @@ export default async function GruenderSchmiedePage() {
                   </p>
                   <p>
                     Die Gründer-Schmiede löst beides: eine Methode, die KI zu deinem fokussierten
-                    Mitgründer macht — und „Das Komplettikon", das die Bürokratie ehrlich erklärt.
+                    Mitgründer macht — und „Das Komplettikon&quot;, das die Bürokratie ehrlich erklärt.
                     Genau so habe ich steakakademie.de gebaut.
                   </p>
                 </div>
@@ -300,7 +301,7 @@ export default async function GruenderSchmiedePage() {
               </h2>
               <p className="font-body text-text-light/60 max-w-xl">
                 Das ist meine echte Methode — KI-gesteuert ein Business bauen, von Tag 1
-                dokumentiert. Jedes Modul bringt dich weiter, nicht nur „du weißt jetzt mehr".
+                dokumentiert. Jedes Modul bringt dich weiter, nicht nur „du weißt jetzt mehr&quot;.
               </p>
             </div>
 
@@ -364,7 +365,7 @@ export default async function GruenderSchmiedePage() {
               <blockquote className="border-l-4 border-brand-gold pl-6 py-2 mb-12">
                 <p className="font-serif text-xl lg:text-2xl text-text-primary italic leading-relaxed">
                   „Kein Kurs über Kurse. Die echte Methode, mit der dieses Projekt entstanden ist —
-                  von Tag 1 dokumentiert."
+                  von Tag 1 dokumentiert.&quot;
                 </p>
                 <footer className="mt-4 text-sm font-sans text-text-muted">
                   — Kernprinzip der Gründer-Schmiede
@@ -417,7 +418,6 @@ export default async function GruenderSchmiedePage() {
                       height={128}
                       className="w-full h-full object-cover"
                       onError={undefined}
-                      unoptimized
                     />
                   </div>
                 </div>

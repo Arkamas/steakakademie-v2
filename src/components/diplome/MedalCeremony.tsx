@@ -157,7 +157,7 @@ export default function MedalCeremony({
                 style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
                 <p className="font-body text-[13px] leading-relaxed text-text-light/80 italic">
-                  „{MARCO_LINES[data.stufe]}"
+                  „{MARCO_LINES[data.stufe]}&quot;
                 </p>
                 <p className="font-sans text-[10px] uppercase tracking-[0.14em] mt-2" style={{ color: data.color }}>
                   — Marco, dein BBQ-Guide

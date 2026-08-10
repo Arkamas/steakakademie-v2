@@ -9,7 +9,7 @@ import { createClient } from '@/lib/supabase/server';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Community-Rezepte — von Mitgliedern eingereicht | Steakakademie',
+  title: 'Community-Rezepte — von Mitgliedern eingereicht',
   description:
     'Rezepte aus der Steakakademie-Community: von Mitgliedern eingereicht, KI-geprüft, freigegeben. Echte Pitmaster-Kreationen zum Nachgrillen.',
   alternates: { canonical: 'https://steakakademie.de/rezepte/community' },

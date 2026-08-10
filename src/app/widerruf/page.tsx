@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 import WiderrufForm from './WiderrufForm';
 
 export const metadata: Metadata = {
-  title: 'Vertrag widerrufen | Steakakademie',
+  title: 'Vertrag widerrufen',
   description: 'Widerrufe deinen Vertrag bequem online. Identifikation per E-Mail oder Bestellnummer — kein Login nötig. Du erhältst eine Eingangsbestätigung per E-Mail.',
   alternates: { canonical: 'https://steakakademie.de/widerruf' },
 };

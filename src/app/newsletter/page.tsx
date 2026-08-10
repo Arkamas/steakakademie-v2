@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import { Flame, Thermometer, BookOpen, Soup } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import NewsletterCapture from '@/components/persoenlichkeiten/NewsletterCapture';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 
 export const metadata: Metadata = {
-  title: 'Der Wissens-Brief — kostenlose BBQ-Tipps per Mail | Steakakademie',
+  title: 'Der Wissens-Brief — kostenlose BBQ-Tipps per Mail',
   description:
     'Jeden Freitag ein Stück BBQ-Wissen, das bleibt: Kerntemperaturen, Cuts, Technik — präzise und ehrlich. Kostenlos, jederzeit abmeldbar. Die Steakakademie direkt ins Postfach.',
   alternates: { canonical: 'https://steakakademie.de/newsletter' },
@@ -50,7 +50,11 @@ export default function NewsletterPage() {
         {/* Capture + Vorteile */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
           <div className="max-w-content mx-auto">
-            <NewsletterCapture context="BBQ" />
+            <NewsletterSignup
+              source="newsletter-page"
+              headline="Trag dich ein — kostenlos, jederzeit abmeldbar."
+              subline="Kerntemperaturen, Cuts und Meister-Techniken. Jeden Freitag ins Postfach — kein Spam, versprochen."
+            />
 
             {/* Sofort-Wert: der Spickzettel */}
             <p className="mt-4 text-center font-body text-sm text-text-secondary">

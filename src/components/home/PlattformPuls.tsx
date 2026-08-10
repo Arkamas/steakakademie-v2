@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { Sparkles, ArrowUpRight } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import type { PulsData } from '@/lib/plattform-puls';
 
 // Zählt von 0 auf target, sobald sichtbar (IntersectionObserver).
@@ -26,13 +25,6 @@ function useCountUp(target: number, run: boolean, durationMs = 1100) {
   }, [target, run, durationMs]);
   return val;
 }
-
-const KIND_COLOR: Record<string, string> = {
-  Rezept: '#E85018',
-  Lektion: '#C8882A',
-  Methode: '#7CB342',
-  Begriff: '#9aa0a5',
-};
 
 export default function PlattformPuls({ data }: { data: PulsData }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -65,42 +57,13 @@ export default function PlattformPuls({ data }: { data: PulsData }) {
           </h2>
         </div>
 
-        {/* Zahlen */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
+        {/* Zahlen — der Wachstums-Beweis. „Was frisch dazukam" zeigt jetzt das
+            eigene Frisch-&-Saisonal-Modul direkt darunter (keine Doppelung). */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {data.counts.map((c) => (
             <Stat key={c.label} label={c.label} value={c.value} run={seen} />
           ))}
         </div>
-
-        {/* Frisch dazugekommen */}
-        {data.latest.length > 0 && (
-          <div>
-            <p className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-text-light/40 mb-3 text-center">
-              Frisch dazugekommen
-            </p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {data.latest.map((item) => (
-                <Link
-                  key={item.url}
-                  href={item.url}
-                  className="group inline-flex items-center gap-2 rounded-full pl-2 pr-3 py-1.5 transition-all duration-200 hover:-translate-y-0.5"
-                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-                >
-                  <span
-                    className="text-[9px] font-sans font-bold uppercase tracking-wider rounded-full px-2 py-0.5"
-                    style={{ color: KIND_COLOR[item.kind] ?? '#C8882A', background: `${KIND_COLOR[item.kind] ?? '#C8882A'}1A` }}
-                  >
-                    {item.kind}
-                  </span>
-                  <span className="text-[12px] font-sans text-text-light/75 group-hover:text-text-light transition-colors max-w-[220px] truncate">
-                    {item.title}
-                  </span>
-                  <ArrowUpRight size={12} className="text-text-light/30 group-hover:text-brand-gold transition-colors shrink-0" />
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );

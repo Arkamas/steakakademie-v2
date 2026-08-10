@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { trackEvent } from '@/components/analytics/PlausibleScript';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import {
   Flame, ChevronRight, Lock, Check, X,
   BookOpen, Award, ArrowRight, Trophy,
@@ -80,25 +80,9 @@ function StepLabel({ text }: { text: string }) {
 export default function DiplomSimulation() {
   const [step, setStep] = useState(0);
   const [quizAnswer, setQuizAnswer] = useState<number | null>(null);
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
   const TOTAL = 7;
 
   const next = () => setStep(s => Math.min(s + 1, TOTAL - 1));
-
-  async function handleSubscribe(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email) return;
-    try {
-      await fetch('/api/newsletter', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source: 'simulation-final-cta' }),
-      });
-    } catch {}
-    trackEvent('Newsletter-Anmeldung', { source: 'simulation-final-cta' });
-    setSubscribed(true);
-  }
 
   return (
     <>
@@ -319,8 +303,8 @@ export default function DiplomSimulation() {
                 {/* Key insight */}
                 <div className="border-l-2 border-brand-gold pl-4 mb-8">
                   <p className="text-sm font-body text-text-secondary italic">
-                    "Wer Hitze steuert, steuert Ergebnisse. Die Zwei-Zonen-Methode ist
-                    der erste Schritt vom Raten zum Wissen."
+                    &quot;Wer Hitze steuert, steuert Ergebnisse. Die Zwei-Zonen-Methode ist
+                    der erste Schritt vom Raten zum Wissen.&quot;
                   </p>
                 </div>
 
@@ -562,40 +546,14 @@ export default function DiplomSimulation() {
                 </div>
 
                 {/* Email capture */}
-                {!subscribed ? (
-                  <div className="max-w-xs mx-auto">
-                    <p className="text-xs font-body text-text-light/50 mb-3">
-                      Noch nicht sicher? Lass dich erinnern, wenn neue Level freigegeben werden.
-                    </p>
-                    <form onSubmit={handleSubscribe} className="flex gap-2">
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="deine@email.de"
-                        required
-                        className="flex-1 bg-surface-elevated border border-brand-gold/20 px-3 py-2.5 text-sm font-body text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-gold/50 transition-colors"
-                      />
-                      <button
-                        type="submit"
-                        className="shrink-0 bg-surface-elevated border border-brand-gold/30 text-brand-gold font-sans text-xs font-bold px-4 py-2.5 hover:bg-brand-gold/10 transition-colors"
-                      >
-                        Merken
-                      </button>
-                    </form>
-                  </div>
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="max-w-xs mx-auto border border-brand-gold/20 bg-surface-elevated p-4 flex items-center gap-3"
-                  >
-                    <Check size={16} className="text-brand-gold shrink-0" />
-                    <p className="text-xs font-body text-text-secondary">
-                      Notiert. Du erfährst als Erster, wenn neue Level kommen.
-                    </p>
-                  </motion.div>
-                )}
+                <NewsletterSignup
+                  source="simulation-final-cta"
+                  eyebrow="Level-Benachrichtigung"
+                  headline="Noch nicht sicher?"
+                  subline="Lass dich erinnern, wenn neue Level freigegeben werden."
+                  cta="Merken"
+                  className="max-w-md mx-auto text-left"
+                />
 
                 {/* Back to explore */}
                 <div className="mt-10 pt-8 border-t border-white/8">

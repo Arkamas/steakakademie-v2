@@ -8,7 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Steuer-Matrix LIVE — Jährliche Updates für alle 23 Länder | Steakakademie',
+  title: 'Steuer-Matrix LIVE — Jährliche Updates für alle 23 Länder',
   description:
     'Steuerrecht ändert sich jedes Jahr. Deine Steuer-Matrix bleibt aktuell — mit dem Jahres-Update-Abo für alle 23 Länder. Neue Steuersätze, geänderte Regelungen, sofortige Benachrichtigung.',
   alternates: { canonical: 'https://steakakademie.de/steuer-matrix-live' },
@@ -116,16 +116,16 @@ export default function SteuerMatrixLivePage() {
               </p>
 
               <div className="flex flex-wrap items-center gap-4">
-                {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
+                {/* In Vorbereitung — Digistore-Produkt noch nicht angelegt → ehrliche Vormerkung statt totem Kauf-Button */}
                 <a
-                  href="#kaufen"
+                  href="mailto:pitmaster@steakakademie.de?subject=Steuer-Matrix%20LIVE%20%E2%80%94%20Vormerkung&body=Bitte%20benachrichtigt%20mich%2C%20sobald%20Steuer-Matrix%20LIVE%20verf%C3%BCgbar%20ist."
                   className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                   style={{ background: '#C8882A', color: '#0D0A06' }}
                 >
-                  Jetzt abonnieren — 19 € / Jahr <ArrowRight size={15} />
+                  In Vorbereitung — vormerken <ArrowRight size={15} />
                 </a>
                 <span className="text-xs font-sans text-text-light/40">
-                  Kündbar jederzeit · Original-Käufer: 50 % Rabatt
+                  Erscheint zum nächsten Steuerjahr-Update · Vormerkung unverbindlich
                 </span>
               </div>
             </div>
@@ -261,13 +261,13 @@ export default function SteuerMatrixLivePage() {
                       </li>
                     ))}
                   </ul>
-                  {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
+                  {/* In Vorbereitung — ehrliche Vormerkung statt totem #kaufen-Anker */}
                   <a
-                    href="#kaufen"
+                    href="mailto:pitmaster@steakakademie.de?subject=Steuer-Matrix%20LIVE%20%E2%80%94%20Vormerkung&body=Bitte%20benachrichtigt%20mich%2C%20sobald%20Steuer-Matrix%20LIVE%20verf%C3%BCgbar%20ist."
                     className="flex items-center justify-center gap-2 w-full py-3 font-sans font-bold text-sm border transition-colors hover:border-brand-gold/50"
                     style={{ borderColor: 'rgba(200,136,42,0.3)', color: '#C8882A' }}
                   >
-                    Jetzt abonnieren <ArrowRight size={14} />
+                    Vormerken — benachrichtigt werden <ArrowRight size={14} />
                   </a>
                 </div>
 

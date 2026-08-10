@@ -13,7 +13,7 @@ import PlanNewsletter from './PlanNewsletter';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Dein Plan — Mein Protokoll | Steakakademie',
+  title: 'Dein Plan — Mein Protokoll',
   description: 'Dein persönlicher 8-Wochen-Grillplan.',
   robots: { index: false, follow: false },
 };

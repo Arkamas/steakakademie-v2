@@ -13,6 +13,7 @@ build/
 
 # Generierte Social-Banner (lokal, Regel 14)
 public/social/
+public/images/social/Facebook/
 scripts/banner-gen.mjs
 
 # Production
@@ -79,4 +80,13 @@ pw-shots/
 promo-output/
 
 # AGB-Export (one-off-Artefakt)
-Steakakademie-AGB.pdf
+Steakakademie-AGB.pd
+# Build-Artefakte (postbuild next-sitemap überschreibt sie ohnehin)
+public/sitemap.xml
+public/sitemap-0.xml
+
+# Generierter Knowledge-Graph-Output (graphify)
+graphify-out/
+
+# Projektfremder Ordner (liegt nur lokal im Repo-Root)
+Existenzgruendung-Jobcenter/

@@ -41,7 +41,7 @@ async function getRecipe(slug: string): Promise<CommunityRecipe | null> {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const r = await getRecipe(params.slug);
-  if (!r) return { title: 'Rezept nicht gefunden | Steakakademie' };
+  if (!r) return { title: 'Rezept nicht gefunden' };
   return {
     title: `${r.title} — Community-Rezept | Steakakademie`,
     description: r.description,

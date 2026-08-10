@@ -41,7 +41,7 @@ export default function RedeemForm({ initialCode = '' }: { initialCode?: string 
         <CheckCircle2 size={48} className="text-green-500 mx-auto mb-4" />
         <h3 className="font-serif text-2xl font-bold text-text-primary mb-2">Freigeschaltet! 🔥</h3>
         <p className="font-body text-text-secondary mb-4">
-          „{success.title}" gehört jetzt dir. Wir leiten dich weiter …
+          „{success.title}&quot; gehört jetzt dir. Wir leiten dich weiter …
         </p>
         <Link href={success.redirect} className="btn-affiliate justify-center inline-flex">Jetzt starten</Link>
       </div>

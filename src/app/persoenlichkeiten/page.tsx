@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 import { allPersoenlichkeits } from 'contentlayer/generated';
 
 export const metadata: Metadata = {
-  title: 'BBQ-Persönlichkeiten — Die Großen der Grillszene | Steakakademie',
+  title: 'BBQ-Persönlichkeiten — Die Großen der Grillszene',
   description: 'Lucky Maurer, Aaron Franklin, Francis Mallmann und mehr — die bekanntesten und einflussreichsten Köche und Pitmasters der internationalen Grillszene. Alle zwei Wochen neu vorgestellt.',
 };
 

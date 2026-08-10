@@ -1,0 +1,4 @@
+# Diese Bilder sind TRAININGSQUELLE (rechtefrei, aber NICHT oeffentlich):
+# sie liegen ausserhalb public/ -> werden nie auf der Website ausgeliefert,
+# aber versioniert, damit die GitHub-Action sie sieht. Nur Zips ignorieren.
+*.zip

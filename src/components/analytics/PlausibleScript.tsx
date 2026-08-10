@@ -13,6 +13,7 @@ import Script from 'next/script';
  *  plausible('Diplom_Started', { props: { level: 'bronze' } })
  *  plausible('Quiz_Completed', { props: { type: grilltyp } })
  *  plausible('KnowledgeBreak_Clicked', { props: { page: '/...' } })
+ *  plausible('CutAtlas_Zone', { props: { zone, ziel, art: 'cut'|'primal', tier } })
  *
  * Kein Consent-Banner nötig — Plausible speichert keine personenbezogenen Daten,
  * keine Cookies, vollständig DSGVO-konform.

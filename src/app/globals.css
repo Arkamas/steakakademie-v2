@@ -21,7 +21,44 @@
   --page-bg-center:     #2D2218;
   --page-bg-edge:       #120C07;
   --surface-editorial:  #1E1410;
+
+  /* Callout-Textfarben — Dunkel-Defaults (unverändert auf dunklen Seiten).
+     Werden innerhalb von .reading-light auf dunkle Schrift umgeschaltet. */
+  --callout-text:       #C4A882;
+  --callout-strong:     #E6D5C3;
 }
+
+/* ── HELLER LESE-LAYER ───────────────────────────────────────────────────────
+   Warme „Pergament"-Lesefläche für Inhalts-Bodys (Grilltechniken, später
+   Rezepte/Artikel). Hält den dunklen Marken-Rahmen (Hero/Header/Footer), gibt
+   aber dem eigentlichen Text Luft und lässt Food-Bilder leuchten. */
+.reading-light {
+  /* Kraftpapier-Pergament (Ton C #D6BD92) — monochromatischer Tint des
+     Marken-Brauns. Kleiner Helligkeitssprung zum Dunkel = harmonisch. */
+  background: linear-gradient(180deg, #DCC59C 0%, #D1B785 100%);
+  color: #2A211A;
+  /* Callouts in diesem Layer: dunkle, kontraststarke Schrift */
+  --callout-text:   #5B4A3A;
+  --callout-strong: #241A12;
+}
+.reading-light ::selection { background: rgba(232, 80, 24, 0.18); }
+
+/* Callout-Hervorhebungen folgen der Theme-Variable (dunkel/hell adaptiv) */
+.callout-body strong { color: var(--callout-strong); font-weight: 700; }
+
+/* Token-basierte Komponenten (z. B. Affiliate-Boxen) im hellen Lese-Layer
+   aufhellen. Greift NUR innerhalb .reading-light — dunkle Seiten bleiben
+   unveraendert. Der orange CTA-Button (.btn-affiliate / bg-brand-fire) bleibt
+   bewusst kraeftig. */
+.reading-light .bg-surface-card,
+.reading-light .bg-surface-elevated { background-color: #E4D2AC !important; }
+.reading-light .bg-surface-base     { background-color: #CFB98C !important; }
+.reading-light .border-border-subtle { border-color: #C3AB80 !important; }
+.reading-light .text-text-primary   { color: #1C140D !important; }
+.reading-light .text-text-secondary { color: #4A3C2E !important; }
+.reading-light .text-text-muted     { color: #6B5A48 !important; }
+.reading-light .fill-border-subtle  { fill:  #D8C7AE !important; }
+.reading-light .text-border-subtle  { color: #D8C7AE !important; }
 
 /* Fallback-Farbe für Crawler & Old Browsers */
 html {
@@ -33,7 +70,9 @@ html {
 /* Atmosphärischer Radial-Gradient — als fixed pseudo-element statt body-bg
    Vermeidet Scroll-Jank auf Mobile durch background-attachment: fixed */
 html {
-  background: radial-gradient(circle at center, #2D2218 0%, #120C07 100%);
+  /* Wärmerer, breiterer Verlauf mit mehr Helligkeits-Spielraum, damit der
+     Gradient sichtbar „atmet" statt schwarz-in-schwarz zu verschwinden. */
+  background: radial-gradient(circle at 50% 18%, #3E2D1C 0%, #241A11 45%, #120C07 100%);
   min-height: 100vh;
 }
 
@@ -58,8 +97,8 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(58% 48% at 50% 28%, rgba(232, 80, 24, 0.11), transparent 70%),
-    radial-gradient(42% 34% at 50% 20%, rgba(200, 136, 42, 0.09), transparent 66%);
+    radial-gradient(62% 52% at 50% 26%, rgba(232, 80, 24, 0.18), transparent 72%),
+    radial-gradient(46% 38% at 50% 18%, rgba(200, 136, 42, 0.15), transparent 68%);
 }
 
 /* ── TYPOGRAFIE-UTILITIES ──────────────────────────────────────────────── */
@@ -238,18 +277,22 @@ nav a, header button, .nav-sharp {
   overflow: hidden;
 }
 .hero-fullbleed-image {
-  filter: brightness(0.52) contrast(1.07) saturate(0.72);
+  /* Food soll Appetit machen: hell & satt statt gedimmt-grau.
+     Lesbarkeit des Titels kommt aus dem unten-gewichteten Overlay. */
+  filter: brightness(0.92) contrast(1.05) saturate(1.06);
 }
 .hero-fullbleed-overlay {
   position: absolute;
   inset: 0;
+  /* Oben transparent (Food leuchtet), nur das untere Drittel abdunkeln,
+     damit der cremefarbene Titel sicher lesbar bleibt. */
   background:
     linear-gradient(
       to bottom,
-      rgba(23,16,11,0.15) 0%,
-      rgba(23,16,11,0.38) 35%,
-      rgba(23,16,11,0.78) 68%,
-      rgba(23,16,11,0.97) 88%,
+      rgba(23,16,11,0) 0%,
+      rgba(23,16,11,0.04) 42%,
+      rgba(23,16,11,0.42) 70%,
+      rgba(23,16,11,0.82) 90%,
       #17100B 100%
     );
   pointer-events: none;

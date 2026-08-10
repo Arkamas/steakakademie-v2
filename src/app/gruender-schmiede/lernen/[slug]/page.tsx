@@ -101,7 +101,7 @@ export default function SprintModulPage({ params }: Props) {
     learningResourceType: 'Lesson',
     educationalLevel: 'Gründer-Schmiede',
     datePublished: modul.publishedAt,
-    inLanguage: 'de',
+    inLanguage: 'de-DE',
     isPartOf: {
       '@type': 'Course',
       name: 'KI-Projektsteuerung',
@@ -160,13 +160,13 @@ export default function SprintModulPage({ params }: Props) {
                   <p className="font-serif text-xl font-bold text-text-primary mb-2">Geschafft — alle {sorted.length} Module durch.</p>
                   <p className="font-body text-sm text-text-secondary mb-4">
                     Chef-Prinzip, ein mitwachsendes Backbone und der tägliche Arbeits-Loop — das ist das Fundament
-                    von „Das ehrliche System": zeigen, wie du arbeitest, nicht nur was du verkaufst.
+                    von „Das ehrliche System&quot;: zeigen, wie du arbeitest, nicht nur was du verkaufst.
                   </p>
                   <Link
                     href="/ehrliches-system"
                     className="inline-flex items-center gap-2 font-sans font-bold text-sm text-brand-fire hover:gap-3 transition-all"
                   >
-                    Weiter zu „Das ehrliche System" <ArrowRight size={16} />
+                    Weiter zu „Das ehrliche System&quot; <ArrowRight size={16} />
                   </Link>
                 </div>
               )}

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: 'ZZP Netto Inkomen per Beroep — Belastingberekening 2024 | Nederland',
   description:
     'Bereken exact wat jij als ZZP netto overhoudt per beroep. Actuele belastingberekeningen voor 10+ freelance niches in Nederland — inclusief zelfstandigenaftrek, MKB-winstvrijstelling en Zorgverzekering.',
-  alternates: { canonical: 'https://steakakademie.nl/zzp-niche' },
+  robots: { index: false, follow: false },
   openGraph: {
     title: 'ZZP Netto Inkomen per Beroep 2024 | Nederland',
     description: 'Exacte netto-inkomen berekeningen voor ZZP-freelancers in Nederland. Actuele belastingcijfers per beroep — snel inzicht in jouw echte take-home pay.',

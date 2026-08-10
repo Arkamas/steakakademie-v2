@@ -131,6 +131,9 @@ export default function ComparisonTable({ products, className }: ComparisonTable
                   </td>
 
                   <td className="py-4 px-4 text-right">
+                    <span className="block text-[9px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted mb-1">
+                      Anzeige
+                    </span>
                     <Link
                       href={affiliateHref}
                       className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-[11px] font-bold tracking-wide px-4 py-2 hover:bg-[#d4891a] transition-colors whitespace-nowrap plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}

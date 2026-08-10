@@ -211,7 +211,7 @@ export default async function EhrlichesSystemPage() {
               <blockquote className="border-l-4 border-brand-gold pl-6 py-2">
                 <p className="font-serif text-xl lg:text-2xl text-text-primary italic leading-relaxed">
                   „Wer ein funktionierendes KI-gestütztes Web-Business aufgebaut hat, hat gleichzeitig
-                  das Blueprint für alle anderen gebaut."
+                  das Blueprint für alle anderen gebaut.&quot;
                 </p>
                 <footer className="mt-4 text-sm font-sans text-text-muted">
                   — Uwe Yendell, Gründer Steakakademie.de

@@ -5,7 +5,7 @@ name: Glossar wachsen lassen
 # persistent (der Build-Lauf erzeugt sie sonst nur ephemer pro Deploy).
 on:
   schedule:
-    - cron: '0 3 * * 0'   # Jeden Sonntag 03:00 UTC (~04:00/05:00 Berlin)
+    - cron: '0 3 * * *'   # Täglich 03:00 UTC (~04:00/05:00 Berlin)
   workflow_dispatch:        # + manuell auslösbar
 
 jobs:

@@ -24,35 +24,152 @@ function SymbolicBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   );
 }
 
+// Kategorie-Icon für den No-Image-Fallback. Bewusst als handgepflegte Inline-SVGs
+// (kein externes Bild — PA-API nicht angebunden, Amazon-/Hersteller-Bilder = ToS-Tabu).
+function CategoryGlyph({ category, className }: { category: string; className?: string }) {
+  const common = {
+    className,
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.5,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    viewBox: '0 0 24 24',
+    'aria-hidden': true,
+  };
+
+  switch (category) {
+    case 'thermometer':
+    case 'sous-vide':
+      // Thermometer
+      return (
+        <svg {...common}>
+          <path d="M10 13.5V5a2 2 0 1 1 4 0v8.5a4 4 0 1 1-4 0Z" />
+          <path d="M12 9v6.5" />
+          <circle cx="12" cy="17.5" r="1.6" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case 'messer':
+      // Kochmesser
+      return (
+        <svg {...common}>
+          <path d="M3 17 14.5 5.5a3.5 3.5 0 0 1 5 5L8 22" />
+          <path d="M3 17l4 4" />
+          <path d="M14.5 5.5 19.5 10.5" />
+        </svg>
+      );
+    case 'grill':
+    case 'smoker':
+    case 'oberhitzegrill':
+      // Grillrost mit Beinen
+      return (
+        <svg {...common}>
+          <path d="M4 6h16" />
+          <path d="M5 6a7 7 0 0 0 14 0" />
+          <path d="M8.5 13l-2 7" />
+          <path d="M15.5 13l2 7" />
+          <path d="M9 9h6" />
+        </svg>
+      );
+    case 'gewuerze':
+      // Gewürzstreuer
+      return (
+        <svg {...common}>
+          <path d="M8 9h8l-1 11H9L8 9Z" />
+          <path d="M9 9V6a3 3 0 0 1 6 0v3" />
+          <path d="M11 4.5h.01M13 4.5h.01M12 3h.01" />
+        </svg>
+      );
+    case 'fleisch':
+      // Steak
+      return (
+        <svg {...common}>
+          <path d="M14.5 4.5a7.5 7.5 0 1 0 4 13.5c2-1.5 2-4 .5-5.5s-1-4 0-5.5-2.5-3-4.5-2.5Z" />
+          <circle cx="9" cy="13" r="1.8" />
+        </svg>
+      );
+    case 'dry-ager':
+      // Reifeschrank
+      return (
+        <svg {...common}>
+          <rect x="6" y="3" width="12" height="18" rx="1.5" />
+          <path d="M10 3v18" />
+          <path d="M8 8v3M12.5 8v3" />
+        </svg>
+      );
+    case 'kuechenmaschine':
+      // Standmixer / Küchenmaschine
+      return (
+        <svg {...common}>
+          <path d="M6 4h9l-1 7H7L6 4Z" />
+          <path d="M9 11l-1 4a3 3 0 0 0 3 3h2" />
+          <path d="M15 6h3a2 2 0 0 1 2 2v3" />
+          <path d="M9 21h6" />
+        </svg>
+      );
+    default:
+      // Generischer Fallback: Flamme (Marken-Motiv)
+      return (
+        <svg {...common}>
+          <path d="M12 3c.5 3-2 4-2 7a4 4 0 1 0 6.5-3c.3 2-1 3-2 3 .5-2-.5-5-2.5-7Z" />
+        </svg>
+      );
+  }
+}
+
 function ProductImagePlaceholder({
   brand,
+  category,
   size = 'md',
 }: {
   brand: string;
+  category: string;
   size?: 'sm' | 'md' | 'lg';
 }) {
-  const initials = brand
-    .split(' ')
-    .map((w) => w[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
+  const box = {
+    sm: 'h-14 w-14',
+    md: 'h-28 w-28',
+    lg: 'h-36 w-36',
+  }[size];
 
-  const sizeClasses = {
-    sm: 'h-14 w-14 text-sm',
-    md: 'h-28 w-28 text-xl',
-    lg: 'h-36 w-36 text-2xl',
-  };
+  const icon = {
+    sm: 'h-6 w-6',
+    md: 'h-12 w-12',
+    lg: 'h-16 w-16',
+  }[size];
+
+  const caption = {
+    sm: 'text-[6px] tracking-wide',
+    md: 'text-[8px] tracking-wider',
+    lg: 'text-[9px] tracking-[0.14em]',
+  }[size];
 
   return (
     <div
       className={cn(
-        'flex items-center justify-center bg-surface-base border border-border-subtle',
-        sizeClasses[size]
+        'relative flex flex-col items-center justify-center overflow-hidden',
+        'border border-brand-gold/20',
+        box
       )}
-      aria-hidden="true"
+      style={{ background: 'radial-gradient(120% 120% at 50% 25%, #C8882A 0%, #5a3c14 45%, #0D0A06 100%)' }}
+      role="img"
+      aria-label={`${brand} — Symbolbild (kein Originalfoto verfügbar)`}
     >
-      <span className="font-serif font-bold text-brand-gold">{initials}</span>
+      {/* dezenter Glanz oben */}
+      <span
+        className="pointer-events-none absolute inset-x-0 top-0 h-1/2 opacity-30"
+        style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.25), transparent)' }}
+        aria-hidden="true"
+      />
+      <CategoryGlyph category={category} className={cn('text-brand-gold/90 drop-shadow-sm', icon)} />
+      <span
+        className={cn(
+          'mt-1 font-sans font-bold uppercase text-zinc-300/80 leading-none',
+          caption
+        )}
+      >
+        Symbolbild
+      </span>
     </div>
   );
 }
@@ -126,7 +243,7 @@ export default function ProductCard({
               {product.imageType === 'symbolic' && <SymbolicBadge size="md" />}
             </>
           ) : (
-            <ProductImagePlaceholder brand={product.brand} size="md" />
+            <ProductImagePlaceholder brand={product.brand} category={product.category} size="md" />
           )}
         </div>
 
@@ -144,7 +261,7 @@ export default function ProductCard({
           <div className="flex items-center gap-2 mb-2">
             <StarRow rating={product.rating} />
             <span className="text-xs font-sans text-text-muted">
-              {product.rating.toFixed(1)}
+              {product.rating.toFixed(1)} <span title="Durchschnittliche Amazon-Kundenbewertung">(Ø Amazon)</span>
             </span>
           </div>
         )}
@@ -193,7 +310,7 @@ export default function ProductCard({
             {product.imageType === 'symbolic' && <SymbolicBadge size="sm" />}
           </div>
         ) : (
-          <ProductImagePlaceholder brand={product.brand} size="sm" />
+          <ProductImagePlaceholder brand={product.brand} category={product.category} size="sm" />
         )}
         <div className="flex-1 min-w-0">
           <h3 className="font-sans font-bold text-sm text-text-primary line-clamp-1">
@@ -249,7 +366,7 @@ export default function ProductCard({
             {product.imageType === 'symbolic' && <SymbolicBadge size="lg" />}
           </>
         ) : (
-          <ProductImagePlaceholder brand={product.brand} size="lg" />
+          <ProductImagePlaceholder brand={product.brand} category={product.category} size="lg" />
         )}
       </div>
 
@@ -272,7 +389,7 @@ export default function ProductCard({
             <span className="text-sm font-sans text-text-secondary">
               {product.rating.toFixed(1)}
               {product.ratingCount && (
-                <span className="text-text-muted"> ({product.ratingCount.toLocaleString('de-DE')})</span>
+                <span className="text-text-muted"> ({product.ratingCount.toLocaleString('de-DE')} Amazon-Bewertungen)</span>
               )}
             </span>
           </div>

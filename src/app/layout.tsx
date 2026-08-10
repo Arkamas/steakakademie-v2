@@ -3,6 +3,8 @@ import { Playfair_Display, Source_Serif_4, DM_Sans } from 'next/font/google';
 import MarcoWidget from '@/components/ai/MarcoWidget';
 import SmokeEffect from '@/components/ui/SmokeEffect';
 import PlausibleScript from '@/components/analytics/PlausibleScript';
+import ClarityScript from '@/components/analytics/ClarityScript';
+import ConsentBanner from '@/components/analytics/ConsentBanner';
 import ExitIntent from '@/components/ui/ExitIntent';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
 import './globals.css';
@@ -31,6 +33,12 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://steakakademie.de'),
+  // Seitenweiter Canonical-Fallback: './' wird von Next gegen den aktuellen
+  // Routen-Pfad aufgelöst (per-Page-Canonical). Seiten mit eigenem
+  // `alternates` überschreiben dies. SEO-Fix 03.07.2026 (Duplicate-Content-Schutz).
+  alternates: {
+    canonical: './',
+  },
   title: {
     default: 'Steakakademie — Deutschlands BBQ-Wissensplattform',
     template: '%s | Steakakademie',
@@ -91,8 +99,11 @@ export default function RootLayout({
         <SmokeEffect />
         <MarcoWidget />
         <ExitIntent />
-        {/* Nur Plausible — cookieless, ohne Einwilligung (TTDSG §25 Abs.2). Kein GA4/Clarity, kein Consent-Banner nötig. */}
+        {/* Plausible: cookieless, ohne Einwilligung (§ 25 Abs. 2 TDDDG) — läuft immer. */}
         <PlausibleScript />
+        {/* Microsoft Clarity: einwilligungspflichtig — lädt nur nach Opt-in über den Banner. */}
+        <ClarityScript />
+        <ConsentBanner />
       </body>
     </html>
   );

@@ -9,7 +9,7 @@ import { breadcrumbSchema } from '@/lib/schema';
 export const metadata: Metadata = {
   title: 'Unsere Autoren — Die Köpfe hinter der Steakakademie',
   description:
-    'Marco, Jonas und Elena — drei Experten, eine Leidenschaft. Pitmaster, BBQ-Enthusiast und Food-Wissenschaftlerin schreiben über alles rund um Steak, Grillen und BBQ.',
+    'Marco, Jonas und Elena — die redaktionellen KI-Personas der Steakakademie. Fachlich geprüft und verantwortet von Gründer Uwe Yendell.',
   alternates: { canonical: 'https://steakakademie.de/autoren' },
   openGraph: {
     title: 'Unsere Autoren | Steakakademie',
@@ -28,16 +28,21 @@ export default function AutorenIndexPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Autoren der Steakakademie',
+    // Person-Markup NUR für reale Autoren — KI-Personas nur als name+url-ListItem
     itemListElement: authors.map((a, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      item: {
-        '@type': 'Person',
-        name: a.name,
-        url: `https://steakakademie.de/autoren/${a.slug}`,
-        description: a.shortBio,
-        knowsAbout: a.expertise,
-      },
+      name: a.name,
+      url: `https://steakakademie.de/autoren/${a.slug}`,
+      ...(a.realPerson && {
+        item: {
+          '@type': 'Person',
+          name: a.name,
+          url: `https://steakakademie.de/autoren/${a.slug}`,
+          description: a.shortBio,
+          knowsAbout: a.expertise,
+        },
+      }),
     })),
   };
 
@@ -65,7 +70,7 @@ export default function AutorenIndexPage() {
               Die Köpfe hinter<br className="hidden sm:block" /> der Steakakademie
             </h1>
             <p className="font-body text-lg text-text-secondary leading-relaxed max-w-2xl">
-              Kein anonymes Kollektiv — drei Experten mit echter Praxiserfahrung, die jeden Artikel selbst recherchieren, testen und verantworten.
+              Marco, Jonas und Elena sind unsere redaktionellen KI-Personas — jede mit eigenem Blickwinkel. Alle Inhalte werden fachlich geprüft und verantwortet von Gründer Uwe Yendell (Details im KI-Disclaimer).
             </p>
           </div>
         </section>

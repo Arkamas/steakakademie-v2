@@ -3,12 +3,14 @@ import Link from 'next/link';
 import { ChevronRight, Thermometer, AlertTriangle, CheckCircle2, Clock, Flame, BookOpen } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import ProductCard from '@/components/affiliate/ProductCard';
+import { getProductsByCategory } from '@/lib/products';
 import { breadcrumbSchema, faqSchema, howToSchema } from '@/lib/schema';
 
 // ── Metadata ─────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: 'Kerntemperaturen Fleisch — Komplette Tabelle 2026 | Steakakademie',
+  title: 'Kerntemperaturen Fleisch — Komplette Tabelle 2026',
   description:
     'Kerntemperaturen für Rind, Schwein, Lamm, Geflügel und Wild — mit Garzeiten, Ruhephase und Lebensmittelsicherheits-Hinweisen. Die vollständigste Kerntemperatur-Tabelle auf Deutsch.',
   alternates: { canonical: 'https://steakakademie.de/temperatur-guide' },
@@ -96,6 +98,22 @@ export default function TemperaturGuidePage() {
     { name: 'Kerntemperaturen', url: '/temperatur-guide' },
   ]);
   const faqSch = faqSchema(FAQ_ITEMS);
+
+  // Echte Thermometer-Empfehlungen aus der Produkt-Registry (statt statischer Texte).
+  // Bewusst nur Mainstream-Amazon.de-Produkte mit Deep-Link:
+  // MEATER 2 Plus (Funk-Premium) · Inkbird IBT-4XS (Budget) · Inkbird IBBQ-4T (WiFi-Mehrkanal).
+  // US-/Eigenvertrieb-ASINs (Thermapen ONE, ThermoWorks Signals) bleiben Suchlink → hier nicht gefeatured.
+  // Fallback auf die ersten drei Thermometer, falls eine ID fehlt.
+  const thermometers = getProductsByCategory('thermometer');
+  const preferredIds = ['meater-2-plus', 'inkbird-ibt-4xs', 'inkbird-ibbq-4t'];
+  const picked = preferredIds
+    .map((id) => thermometers.find((p) => p.id === id))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const thermometerPicks = (
+    picked.length >= 2
+      ? picked
+      : thermometers.slice(0, 3)
+  ).slice(0, 3);
 
   return (
     <>
@@ -981,7 +999,7 @@ export default function TemperaturGuidePage() {
               <p className="font-body text-sm text-text-secondary leading-relaxed mb-4">
                 Beim Sous-Vide-Garen entspricht die Kerntemperatur am Ende der Garzeit exakt der eingestellten
                 Wassertemperatur — das ist der physikalische Vorteil der Methode. Es gibt kein Übergaren,
-                kein Carryover im klassischen Sinn. Die "Kerntemperatur" ist daher gleichzeitig die Zieltemperatur.
+                kein Carryover im klassischen Sinn. Die &quot;Kerntemperatur&quot; ist daher gleichzeitig die Zieltemperatur.
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse text-xs font-sans" aria-label="Sous Vide Temperaturen">
@@ -1040,56 +1058,8 @@ export default function TemperaturGuidePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {[
-                {
-                  type: 'Sofortlesethermometer',
-                  badge: 'Für Steaks',
-                  pros: ['Reaktionszeit 2–4 Sekunden', 'Kein Kabel', 'Einhändig bedienbar'],
-                  cons: ['Nur momentane Messung', 'Keine Alarmfunktion'],
-                  example: 'Thermapen ONE, MeatStick Mini',
-                  useCase: 'Steaks, Schnitzeln, Grillwürsten — wenn schnelle Entscheidung nötig',
-                },
-                {
-                  type: 'Einsteck-Kabelthermometer',
-                  badge: 'Für Braten',
-                  pros: ['Kontinuierliche Messung', 'Deckel bleibt zu', 'Alarm-Funktion'],
-                  cons: ['Kabel kann eingeklemmt werden', 'Kalibrierung nötig'],
-                  example: 'ThermoWorks Smoke, Weber iGrill',
-                  useCase: 'Braten, Hähnchen, mittlere Garzeiten 1–4 Stunden',
-                },
-                {
-                  type: 'Funk-Thermometer (Wireless)',
-                  badge: 'Für Long Jobs',
-                  pros: ['Bluetooth/WLAN bis 50 m', 'App-Steuerung', 'Mehrkanal'],
-                  cons: ['Batterie', 'App-Abhängigkeit', 'Teurer'],
-                  example: 'ThermoWorks Signals, Meater+, Combustion Inc.',
-                  useCase: 'Brisket, Pulled Pork, Spareribs — 4–16 Stunden unbeaufsichtigt',
-                },
-              ].map((therm) => (
-                <div key={therm.type} className="bg-surface-card border border-border-subtle p-5">
-                  <span className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-brand-fire bg-brand-fire/15 px-2 py-0.5 mb-3 inline-block">
-                    {therm.badge}
-                  </span>
-                  <h3 className="font-serif text-lg font-bold text-text-primary mb-3">{therm.type}</h3>
-                  <div className="space-y-1.5 mb-4">
-                    {therm.pros.map((p) => (
-                      <div key={p} className="flex items-start gap-2 text-xs font-sans text-text-secondary">
-                        <CheckCircle2 size={12} className="text-green-500/70 shrink-0 mt-0.5" />
-                        {p}
-                      </div>
-                    ))}
-                    {therm.cons.map((c) => (
-                      <div key={c} className="flex items-start gap-2 text-xs font-sans text-text-muted">
-                        <span className="text-red-500/60 shrink-0 mt-0.5 text-[10px] font-bold">✕</span>
-                        {c}
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-xs font-sans text-text-muted border-t border-border-subtle pt-3 mb-1">
-                    <strong className="text-text-secondary">Beispiele:</strong> {therm.example}
-                  </p>
-                  <p className="text-xs font-sans text-text-muted">{therm.useCase}</p>
-                </div>
+              {thermometerPicks.map((product) => (
+                <ProductCard key={product.id} product={product} variant="default" />
               ))}
             </div>
 

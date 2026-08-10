@@ -1,0 +1,282 @@
+'use client';
+
+import { useId, useState } from 'react';
+import { Flame, Check, Loader2, AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { trackEvent } from '@/components/analytics/PlausibleScript';
+
+type Status = 'idle' | 'loading' | 'success' | 'error';
+
+interface NewsletterSignupProps {
+  /** Segmentierungs-Quelle für Loops (z.B. "homepage-banner", "footer"). */
+  source?: string;
+  /** Überschrift des Formulars. */
+  headline?: string;
+  /** Kurzer Nutzenversprechen-Text unter der Überschrift. */
+  subline?: string;
+  /** Button-Beschriftung im Ruhezustand. */
+  cta?: string;
+  /** Eyebrow-Zeile über der Überschrift. */
+  eyebrow?: string;
+  /**
+   * Überschreibt beide Marken-Akzente (Gold + Feuer) mit einer Sub-Brand-Farbe,
+   * z.B. Grillstil-Rosé. Ohne Angabe gilt die Marken-DNA gold/fire.
+   */
+  accentColor?: string;
+  /** Textfarbe auf dem Akzent-Button (Kontrast zu `accentColor`). Default: Ink. */
+  accentTextColor?: string;
+  /** Zusätzliche Klassen für den äußeren Container. */
+  className?: string;
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Marken-DNA (CLAUDE.md §2.3) — Default-Akzente.
+const BRAND_GOLD = '#C8882A';
+const BRAND_FIRE = '#E85018';
+const BRAND_INK = '#120C07';
+
+/** "#C8882A" → "200 136 42", damit die Farbe in `rgb(… / <alpha>)` alpha-fähig wird. */
+function hexToRgbTriple(hex: string): string {
+  const h = hex.replace('#', '');
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const n = Number.parseInt(full, 16);
+  return `${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255}`;
+}
+
+/**
+ * Conversion-optimiertes Newsletter-Anmeldeformular (Double-Opt-In via Loops).
+ *
+ * Features:
+ *  - Client-seitige E-Mail-Validierung (sofortiges Feedback, keine Server-Roundtrips)
+ *  - Verpflichtende DSGVO-Einwilligung (Checkbox, ohne Häkchen kein Absenden)
+ *  - Ladezustand mit Spinner, Erfolgs- und Fehlermeldung (inkl. Rate-Limit 429)
+ *  - Honeypot-Feld gegen Bots (für Menschen unsichtbar)
+ *  - Plausible-Event bei erfolgreicher Anmeldung
+ *
+ * Trust-Signale (Conversion): kostenlos, jederzeit abmeldbar, keine Weitergabe.
+ */
+export default function NewsletterSignup({
+  source = 'default',
+  headline = 'Jeden Freitag ein Stück BBQ-Wissen, das bleibt.',
+  subline = 'Kerntemperaturen, Cuts und Meister-Techniken — präzise, ehrlich, kostenlos. Direkt ins Postfach.',
+  cta = 'Wissens-Brief abonnieren',
+  eyebrow = 'Steakakademie · Wissens-Brief',
+  accentColor,
+  accentTextColor,
+  className,
+}: NewsletterSignupProps) {
+  // Eine Sub-Brand-Farbe ersetzt beide Akzente; sonst bleibt es bei gold/fire.
+  const accentVars = {
+    '--nl-gold': hexToRgbTriple(accentColor ?? BRAND_GOLD),
+    '--nl-fire': hexToRgbTriple(accentColor ?? BRAND_FIRE),
+    '--nl-on-accent': accentTextColor ?? BRAND_INK,
+  } as React.CSSProperties;
+
+  const [email, setEmail] = useState('');
+  const [consent, setConsent] = useState(false);
+  const [website, setWebsite] = useState(''); // Honeypot
+  const [status, setStatus] = useState<Status>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const emailId = useId();
+  const consentId = useId();
+
+  const emailValid = EMAIL_RE.test(email.trim());
+  const canSubmit = emailValid && consent && status !== 'loading';
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setErrorMsg('');
+
+    if (!emailValid) {
+      setStatus('error');
+      setErrorMsg('Bitte gib eine gültige E-Mail-Adresse ein.');
+      return;
+    }
+    if (!consent) {
+      setStatus('error');
+      setErrorMsg('Bitte bestätige die Einwilligung, um dich anzumelden.');
+      return;
+    }
+
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), source, website }),
+      });
+
+      if (res.ok) {
+        trackEvent('Newsletter-Anmeldung', { source });
+        setStatus('success');
+        return;
+      }
+
+      if (res.status === 429) {
+        setErrorMsg('Zu viele Anmeldeversuche. Bitte in ein paar Minuten erneut probieren.');
+      } else {
+        setErrorMsg('Etwas ist schiefgelaufen. Bitte versuche es gleich noch einmal.');
+      }
+      setStatus('error');
+    } catch {
+      setErrorMsg('Netzwerkfehler. Bitte prüfe deine Verbindung und versuche es erneut.');
+      setStatus('error');
+    }
+  }
+
+  // ── Erfolgszustand ────────────────────────────────────────────────────────
+  if (status === 'success') {
+    return (
+      <div
+        className={cn(
+          'border border-[rgb(var(--nl-gold)/0.25)] bg-surface-elevated p-6 text-center not-prose',
+          className,
+        )}
+        style={accentVars}
+        role="status"
+        aria-live="polite"
+      >
+        <div className="w-11 h-11 bg-[rgb(var(--nl-gold)/0.15)] flex items-center justify-center mx-auto mb-3">
+          <Check size={20} className="text-[rgb(var(--nl-gold))]" />
+        </div>
+        <p className="font-serif font-bold text-text-primary text-lg mb-1.5">
+          Fast geschafft — bitte E-Mail bestätigen.
+        </p>
+        <p className="text-sm font-body text-text-secondary leading-relaxed">
+          Wir haben dir eine Bestätigungs-Mail geschickt (Double-Opt-in). Klicke den Link
+          darin, dann bist du dabei. Kein Link im Postfach? Schau kurz im Spam-Ordner nach.
+        </p>
+      </div>
+    );
+  }
+
+  // ── Formular ────────────────────────────────────────────────────────────────
+  return (
+    <section
+      className={cn(
+        'border border-[rgb(var(--nl-gold)/0.15)] bg-surface-elevated p-6 sm:p-7 not-prose',
+        className,
+      )}
+      style={accentVars}
+      aria-label="Newsletter-Anmeldung"
+    >
+      <div className="flex items-start gap-4">
+        <div className="w-10 h-10 bg-[rgb(var(--nl-fire)/0.1)] border border-[rgb(var(--nl-fire)/0.25)] flex items-center justify-center shrink-0">
+          <Flame size={16} className="text-[rgb(var(--nl-fire))]" />
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <p className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-[rgb(var(--nl-fire))] mb-1.5">
+            {eyebrow}
+          </p>
+          <h2 className="font-serif font-bold text-text-primary text-lg leading-snug mb-1.5">
+            {headline}
+          </h2>
+          <p className="text-sm font-body text-text-secondary leading-relaxed mb-4">
+            {subline}
+          </p>
+
+          <form onSubmit={handleSubmit} noValidate className="space-y-3">
+            {/* Honeypot — für Menschen unsichtbar, von Bots gerne befüllt */}
+            <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+              <label htmlFor={`${emailId}-website`}>Website (bitte leer lassen)</label>
+              <input
+                id={`${emailId}-website`}
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex-1 min-w-0">
+                <label htmlFor={emailId} className="sr-only">
+                  E-Mail-Adresse
+                </label>
+                <input
+                  id={emailId}
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (status === 'error') setStatus('idle');
+                  }}
+                  placeholder="deine@email.de"
+                  required
+                  aria-invalid={status === 'error' && !emailValid}
+                  className="w-full min-w-0 bg-surface-dark border border-[rgb(var(--nl-gold)/0.2)] px-3.5 py-2.5 text-sm font-body text-text-primary placeholder:text-text-muted focus:outline-none focus:border-[rgb(var(--nl-gold)/0.5)] transition-colors"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={!canSubmit}
+                className="shrink-0 inline-flex items-center justify-center gap-2 bg-[rgb(var(--nl-gold))] text-[var(--nl-on-accent)] font-sans text-xs font-bold tracking-[0.1em] uppercase px-5 py-2.5 hover:bg-[color-mix(in_srgb,rgb(var(--nl-gold))_85%,black)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {status === 'loading' ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    Sendet…
+                  </>
+                ) : (
+                  cta
+                )}
+              </button>
+            </div>
+
+            {/* DSGVO-Einwilligung */}
+            <div className="flex items-start gap-2.5 pt-0.5">
+              <input
+                id={consentId}
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => {
+                  setConsent(e.target.checked);
+                  if (status === 'error') setStatus('idle');
+                }}
+                required
+                className="mt-0.5 h-4 w-4 shrink-0 accent-[rgb(var(--nl-gold))] cursor-pointer"
+              />
+              <label
+                htmlFor={consentId}
+                className="text-xs font-body text-text-muted leading-relaxed cursor-pointer"
+              >
+                Ja, ich möchte den Wissens-Brief per E-Mail erhalten und bin mit der{' '}
+                <a
+                  href="/datenschutz"
+                  className="text-[rgb(var(--nl-fire))] hover:underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Datenschutzerklärung
+                </a>{' '}
+                einverstanden. Abmeldung jederzeit mit einem Klick.
+              </label>
+            </div>
+
+            {/* Fehlermeldung */}
+            {status === 'error' && errorMsg && (
+              <p
+                className="flex items-center gap-1.5 text-xs font-body text-[rgb(var(--nl-fire))]"
+                role="alert"
+              >
+                <AlertCircle size={13} className="shrink-0" />
+                {errorMsg}
+              </p>
+            )}
+          </form>
+
+          <p className="text-[10px] font-sans text-text-muted/60 mt-3">
+            Kostenlos · Double-Opt-in · Jederzeit abmeldbar · Keine Weitergabe deiner Daten
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}

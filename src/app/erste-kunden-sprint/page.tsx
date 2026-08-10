@@ -10,7 +10,7 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Erste-Kunden-Sprint — Von der Gründung zu ersten Aufträgen in 72h | Steakakademie',
+  title: 'Erste-Kunden-Sprint — Von der Gründung zu ersten Aufträgen in 72h',
   description:
     'Gewerbe angemeldet, Website live — und jetzt? In 72 Stunden zum ersten bezahlten Auftrag. Positionierung, Angebot, Direktansprache. Kein Marketing-Kurs, kein Kaltakquise-Script.',
   alternates: { canonical: 'https://steakakademie.de/erste-kunden-sprint' },
@@ -193,8 +193,8 @@ export default async function ErsteKundenSprintPage() {
                     Frage, die du dir nicht laut stellst — war das ein Fehler?
                   </p>
                   <p>
-                    Der Rat den du bekommst: „Sei auf Social Media präsent." „Schreib einen
-                    Blog." „Baue deine Personal Brand auf." Alles richtig. Alles langfristig.
+                    Der Rat den du bekommst: „Sei auf Social Media präsent.&quot; „Schreib einen
+                    Blog.&quot; „Baue deine Personal Brand auf.&quot; Alles richtig. Alles langfristig.
                     Nichts davon bringt diese Woche einen Auftrag.
                   </p>
                 </div>
@@ -261,7 +261,7 @@ export default async function ErsteKundenSprintPage() {
               <blockquote className="border-l-4 border-brand-gold pl-6 py-2 mb-12">
                 <p className="font-serif text-xl lg:text-2xl text-text-primary italic leading-relaxed">
                   „Erste Kunden kommen nicht aus Reichweite — sie kommen aus
-                  einem direkten Gespräch, das du diese Woche noch führen kannst."
+                  einem direkten Gespräch, das du diese Woche noch führen kannst.&quot;
                 </p>
                 <footer className="mt-4 text-sm font-sans text-text-muted">
                   — Kernprinzip des Erste-Kunden-Sprints
@@ -312,7 +312,6 @@ export default async function ErsteKundenSprintPage() {
                       width={128}
                       height={128}
                       className="w-full h-full object-cover"
-                      unoptimized
                     />
                   </div>
                 </div>

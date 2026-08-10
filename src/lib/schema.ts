@@ -4,6 +4,8 @@
  * Verknüpft mit Silo-Architektur: /vergleich/, /wissen/, /cuts/, /methoden/
  */
 
+import { getAuthorBySlug } from '@/lib/authors';
+
 const BASE_URL = 'https://steakakademie.de';
 
 // ── Organisation & Website ───────────────────────────────────────────────────
@@ -22,6 +24,7 @@ export function organizationSchema() {
       height: 512,
     },
     sameAs: [
+      'https://www.wikidata.org/wiki/Q140455747',
       'https://www.instagram.com/steakakademie',
       'https://www.youtube.com/@steakakademie',
       'https://www.tiktok.com/@steakakademie',
@@ -46,11 +49,6 @@ export function websiteSchema() {
     description:
       'Deutschlands methodisch tiefste BBQ-Wissensplattform — Fleischkunde, Grilltechniken, Thermometer-Tests und Grillmeister-Diplome.',
     publisher: { '@id': `${BASE_URL}/#organization` },
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: { '@type': 'EntryPoint', urlTemplate: `${BASE_URL}/suche?q={search_term_string}` },
-      'query-input': 'required name=search_term_string',
-    },
     inLanguage: 'de-DE',
   };
 }
@@ -78,6 +76,17 @@ export function breadcrumbSchema(items: BreadcrumbItem[]) {
   };
 }
 
+// ── Autor-Referenz: Person NUR für reale Autoren (KI-Personas → Organization;
+//    Konsistenz mit /autoren-Fix vom 07.07.2026) ─────────────────────────────
+
+export function authorSchemaRef(authorSlug: string) {
+  const a = getAuthorBySlug(authorSlug);
+  if (a?.realPerson) {
+    return { '@type': 'Person' as const, name: a.name, url: `${BASE_URL}/autoren/${a.slug}` };
+  }
+  return { '@type': 'Organization' as const, name: 'Steakakademie', url: BASE_URL };
+}
+
 // ── Artikel / Fachbeitrag ────────────────────────────────────────────────────
 
 export interface ArticleSchemaInput {
@@ -103,11 +112,7 @@ export function articleSchema(input: ArticleSchemaInput) {
     datePublished: input.datePublished,
     dateModified: input.dateModified ?? input.datePublished,
     keywords: input.keywords?.join(', '),
-    author: {
-      '@type': 'Person',
-      name: input.authorName,
-      url: `${BASE_URL}/autoren/${input.authorSlug}`,
-    },
+    author: authorSchemaRef(input.authorSlug),
     publisher: { '@id': `${BASE_URL}/#organization` },
     mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE_URL}${input.url}` },
     inLanguage: 'de-DE',
@@ -157,20 +162,11 @@ export function productSchema(product: ProductSchemaInput) {
   }
   if (product.sku) schema.sku = product.sku;
 
-  if (product.rating && product.ratingCount) {
-    schema.aggregateRating = {
-      '@type': 'AggregateRating',
-      ratingValue: product.rating.toFixed(1),
-      reviewCount: product.ratingCount,
-      bestRating: '5',
-      worstRating: '1',
-    };
-  }
 
   if (product.pros || product.cons) {
     schema.review = {
       '@type': 'Review',
-      author: { '@id': `${BASE_URL}/#organization` },
+      author: { '@type': 'Organization', name: 'Steakakademie' },
       reviewBody: [
         product.pros?.length ? `Vorteile: ${product.pros.join('; ')}.` : '',
         product.cons?.length ? `Nachteile: ${product.cons.join('; ')}.` : '',
@@ -280,6 +276,88 @@ export function collectionPageSchema(name: string, url: string, description: str
     description,
     url: `${BASE_URL}${url}`,
     publisher: { '@id': `${BASE_URL}/#organization` },
+    inLanguage: 'de-DE',
+  };
+}
+
+// ── Kurs (Google Course-Richtlinien: Course + hasCourseInstance) ─────────────
+
+export interface CourseSchemaInput {
+  name: string;
+  description: string;
+  url: string;
+  image?: string;
+  price?: number;          // NUR setzen wenn wirklich kaufbar
+  courseWorkload?: string; // ISO 8601
+  teaches?: string[];
+}
+
+export function courseSchema(input: CourseSchemaInput) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    '@id': `${BASE_URL}${input.url}#course`,
+    name: input.name,
+    description: input.description,
+    url: `${BASE_URL}${input.url}`,
+    ...(input.image && {
+      image: input.image.startsWith('http') ? input.image : `${BASE_URL}${input.image}`,
+    }),
+    provider: { '@id': `${BASE_URL}/#organization` },
+    inLanguage: 'de-DE',
+    ...(input.teaches && { teaches: input.teaches }),
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'Online',
+      ...(input.courseWorkload && { courseWorkload: input.courseWorkload }),
+    },
+    ...(input.price != null && {
+      offers: {
+        '@type': 'Offer',
+        price: input.price.toFixed(2),
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        url: `${BASE_URL}${input.url}`,
+      },
+    }),
+  };
+}
+
+// ── Glossar: DefinedTermSet + DefinedTerm ────────────────────────────────────
+
+export const GLOSSAR_SET_ID = `${BASE_URL}/glossar#termset`;
+
+export interface DefinedTermInput {
+  title: string;
+  url: string;
+  shortDefinition?: string;
+}
+
+export function definedTermSetSchema(terms: { title: string; url: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    '@id': GLOSSAR_SET_ID,
+    name: 'Steakakademie BBQ-Glossar',
+    url: `${BASE_URL}/glossar`,
+    inLanguage: 'de-DE',
+    hasDefinedTerm: terms.map((t) => ({
+      '@type': 'DefinedTerm',
+      name: t.title,
+      url: `${BASE_URL}${t.url}`,
+    })),
+  };
+}
+
+export function definedTermSchema(term: DefinedTermInput) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTerm',
+    '@id': `${BASE_URL}${term.url}#term`,
+    name: term.title,
+    ...(term.shortDefinition && { description: term.shortDefinition }),
+    url: `${BASE_URL}${term.url}`,
+    inDefinedTermSet: { '@id': GLOSSAR_SET_ID },
     inLanguage: 'de-DE',
   };
 }

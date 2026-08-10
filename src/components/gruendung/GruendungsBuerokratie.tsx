@@ -275,7 +275,7 @@ export default function GruendungsBuerokratie() {
           title="Erkenne unseriöse Modelle"
         />
         <p className="mb-5 font-body text-[0.95rem] leading-relaxed text-text-secondary">
-          Wer in die Selbständigkeit startet, läuft online ständig „schnell reich werden"-Maschen
+          Wer in die Selbständigkeit startet, läuft online ständig „schnell reich werden&quot;-Maschen
           über den Weg. Hier baust du etwas Echtes auf — also lern, den Unterschied auf einen Blick
           zu sehen.
         </p>

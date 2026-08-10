@@ -5,7 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'KI-Disclaimer — Hinweise zu unseren KI-Assistenten | Steakakademie',
+  title: 'KI-Disclaimer — Hinweise zu unseren KI-Assistenten',
   description:
     'Rechtliche Hinweise zu den KI-Assistenten der Steakakademie. Leistungsumfang, Datenschutz, EU AI Act Konformität.',
   alternates: { canonical: 'https://steakakademie.de/ki-disclaimer' },
@@ -37,7 +37,7 @@ export default function KiDisclaimerPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             KI-Systeme &amp; KI-Disclaimer
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juni 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: August 2026</p>
 
           <div className="max-w-content space-y-10 font-body text-text-secondary leading-relaxed">
 
@@ -68,7 +68,7 @@ export default function KiDisclaimerPage() {
                     <tr className="border-b border-white/5">
                       <td className="px-4 py-3">
                         <span className="font-semibold text-text-primary">
-                          Marco „Der Meister"
+                          Marco „Der Meister&quot;
                         </span>
                       </td>
                       <td className="px-4 py-3">Claude Haiku (Anthropic PBC)</td>
@@ -94,7 +94,10 @@ export default function KiDisclaimerPage() {
               <p className="mt-4 text-xs text-text-muted">
                 Marco ist eine KI-gesteuerte Persona — kein menschlicher Berater.
                 Alle Antworten werden in Echtzeit durch das KI-Modell generiert und
-                können inhaltliche Fehler enthalten.
+                können inhaltliche Fehler enthalten. Das gilt auch für unsere redaktionellen
+                Personas Marco, Jonas und Elena: Artikel unter ihren Namen entstehen
+                KI-unterstützt und werden fachlich geprüft und verantwortet von
+                Gründer Uwe Yendell.
               </p>
             </section>
 
@@ -125,12 +128,31 @@ export default function KiDisclaimerPage() {
                   <span className="shrink-0 text-green-400 font-bold">✅</span>
                   <div>
                     <span className="font-semibold text-text-primary">
-                      Art. 50 Abs. 2 &amp; 4 EU AI Act — Kennzeichnung KI-erzeugter Inhalte:
+                      Art. 50 Abs. 4 EU AI Act — Sichtbare Kennzeichnung KI-erzeugter Inhalte (Deployer-Pflicht):
                     </span>{' '}
-                    Bilder zu Community-Rezepten werden durch KI erzeugt. Sie sind auf der
-                    Website sichtbar als „KI-Symbolbild" gekennzeichnet und können vom
-                    tatsächlichen Gericht abweichen. Die Transparenzpflichten nach Art. 50
-                    gelten ab dem 2. August 2026; wir setzen die Kennzeichnung bereits jetzt um.
+                    Bilder zu Community-Rezepten werden durch KI (FLUX via fal.ai) erzeugt. Sie
+                    sind sichtbar als „KI-Symbolbild&quot; gekennzeichnet und können vom tatsächlichen
+                    Gericht abweichen. Die Transparenzpflicht nach Art. 50 Abs. 4 gilt ab dem
+                    2. August 2026; wir setzen die Kennzeichnung bereits jetzt um.
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="shrink-0 text-yellow-400 font-bold">⚠</span>
+                  <div>
+                    <span className="font-semibold text-text-primary">
+                      Art. 50 Abs. 2 EU AI Act — Maschinenlesbare Kennzeichnung (Provider-Pflicht, Frist 02.12.2026):
+                    </span>{' '}
+                    Die Pflicht zur maschinenlesbaren Einbettung von Content Credentials (z.&nbsp;B.
+                    C2PA-Metadaten) in KI-generierte Bilder liegt beim <em>Anbieter</em> des
+                    KI-Systems — hier fal.ai als Betreiber des FLUX-Bildgenerators. Die Frist
+                    wurde durch die Digital-Omnibus-VO (EU) 2026/1744 (in Kraft 27.07.2026)
+                    für vor dem 02.08.2026 in Verkehr gebrachte Systeme auf{' '}
+                    <strong className="text-text-primary">02.12.2026</strong> verlängert. Als{' '}
+                    <em>Deployer</em> haben wir fal.ai zu dieser Anforderung kontaktiert und
+                    fordern vertraglich konforme Umsetzung ein. Bis zur bestätigten Lieferung
+                    von Content Credentials durch fal.ai kompensieren wir durch die sichtbare
+                    Kennzeichnung nach Art. 50 Abs. 4 und dokumentieren den Sachverhalt hier
+                    transparent.
                   </div>
                 </li>
                 <li className="flex gap-3">
@@ -287,7 +309,7 @@ export default function KiDisclaimerPage() {
                 >
                   pitmaster@steakakademie.de
                 </a>{' '}
-                — Betreff: „KI-Feedback"
+                — Betreff: „KI-Feedback&quot;
               </p>
             </section>
 

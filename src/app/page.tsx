@@ -8,9 +8,13 @@ import ArticleCard from '@/components/article/ArticleCard';
 import ProductCard from '@/components/affiliate/ProductCard';
 import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
 import PlattformPuls from '@/components/home/PlattformPuls';
+import FrischSaisonal from '@/components/home/FrischSaisonal';
+import ToolBoxes from '@/components/home/ToolBoxes';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
 import { getRecommendedProducts } from '@/lib/products';
 import { getPlattformPuls } from '@/lib/plattform-puls';
+import { getFrischSaisonal } from '@/lib/frisch-saisonal';
 import { getNewsItems } from '@/lib/bbq-news';
 import type { ArticleMeta } from '@/types';
 
@@ -20,6 +24,7 @@ export const metadata: Metadata = {
   title: 'Steakakademie — BBQ Wissen, Cuts & Grillmeister-Diplome',
   description:
     'Die methodisch tiefste BBQ-Wissensplattform auf Deutsch. Cuts, Grilltechniken, Thermometer-Tests und Grillmeister-Diplome für ernsthafte Hobbygriller.',
+  alternates: { canonical: '/' },
 };
 
 const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
@@ -135,6 +140,7 @@ export default async function HomePage() {
 
   // Plattform-Puls: echte, automatisch wachsende Content-Zahlen + frisch dazugekommene Inhalte
   const puls = getPlattformPuls();
+  const frischSaisonal = getFrischSaisonal();
 
   // BBQ-News-Teaser aus derselben Quelle wie /bbq-news (kein hardcoded Drift)
   const news        = await getNewsItems();
@@ -147,8 +153,14 @@ export default async function HomePage() {
 
       <main>
 
-        {/* ── VALUE-PROP-BAND — Need + Identität (Marketing-Feedback M. Kraemer, 04.06.2026) ── */}
-        <section className="bg-surface-dark border-b border-brand-gold/15">
+        {/* ── VALUE-PROP-BAND — erster Eindruck: warme Glut statt flachem Schwarz ── */}
+        <section
+          className="border-b border-brand-gold/15"
+          style={{
+            background:
+              'radial-gradient(125% 105% at 50% 118%, rgba(232,80,24,0.34) 0%, rgba(232,80,24,0.10) 38%, rgba(200,136,42,0.05) 58%, transparent 72%), linear-gradient(180deg, #20130A 0%, #130C07 100%)',
+          }}
+        >
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-14 text-center">
             <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.22em] uppercase text-brand-fire mb-4">
               <Flame size={12} /> Die methodisch tiefste BBQ-Plattform auf Deutsch
@@ -180,6 +192,9 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ── WERKZEUGE — Head-Boxen (Cut-Atlas · Foodpairing · Rezept-Schmiede) ── */}
+        <ToolBoxes />
 
         {/* ── HERO — Full-Bleed 70vh ────────────────────────────────────── */}
         <section className="hero-fullbleed" style={{ height: '70vh', minHeight: '520px' }}>
@@ -225,6 +240,9 @@ export default async function HomePage() {
 
         {/* ── PLATTFORM-PULS — lebendige, wachsende Wissensbasis ───────────── */}
         <PlattformPuls data={puls} />
+
+        {/* ── FRISCH & SAISONAL — rotierendes Spotlight (Bewegung/Leben) ────── */}
+        <FrischSaisonal data={frischSaisonal} />
 
         {/* ── MANIFESTO — Dunkle Ember-Karte ──────────────────────────────── */}
         <section className="py-8 sm:py-12">
@@ -382,38 +400,13 @@ export default async function HomePage() {
             <aside className="space-y-6">
 
               {/* Newsletter-Box — redaktionelle Karte */}
-              <div className="bg-surface-card border border-border-subtle p-5">
-                <div className="border-t-2 border-brand-gold -mt-5 mb-4 pt-4">
-                  <h3 className="font-serif text-lg font-bold text-text-primary">
-                    BBQ-Insider Newsletter
-                  </h3>
-                </div>
-                <p className="text-sm font-sans text-text-secondary mb-4 leading-relaxed">
-                  Neue Tests, Guides und saisonale Tipps — 2× im Monat. Kein Spam.
-                </p>
-                <form className="space-y-2" action="/api/newsletter" method="POST">
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="deine@email.de"
-                    required
-                    className="w-full border border-border-subtle px-3 py-2.5 text-sm font-sans text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-gold transition-colors bg-surface-base"
-                  />
-                  <button
-                    type="submit"
-                    className="btn-gold w-full justify-center text-xs font-bold tracking-widest uppercase py-2.5 plausible-event-name=Newsletter-Anmeldung plausible-event-source=homepage-footer"
-                  >
-                    Anmelden
-                  </button>
-                </form>
-                <p className="text-[10px] font-sans text-text-muted mt-2 text-center">
-                  Mit der Anmeldung stimmst du der Zusendung des Newsletters zu.
-                  Jederzeit abmeldbar.{' '}
-                  <Link href="/datenschutz" className="underline hover:text-text-secondary transition-colors">
-                    Datenschutz
-                  </Link>
-                </p>
-              </div>
+              <NewsletterSignup
+                source="homepage-banner"
+                eyebrow="BBQ-Insider Newsletter"
+                headline="Neue Tests, Guides und saisonale Tipps."
+                subline="2× im Monat das Wichtigste aus der Akademie — kompakt, ehrlich, kein Spam."
+                cta="Anmelden"
+              />
 
               {/* Beliebte Themen */}
               <div className="bg-surface-card border border-border-subtle p-5">
@@ -458,8 +451,8 @@ export default async function HomePage() {
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
-                { stat: '200+', label: 'Cuts analysiert' },
-                { stat: '8',    label: 'Thermometer selbst getestet' },
+                { stat: '35',   label: 'Diplom-Lektionen — Bronze bis Meister' },
+                { stat: '3',    label: 'Thermometer im 8-Wochen-Test' },
                 { stat: '100%', label: 'Affiliate-transparent' },
                 { stat: '2026', label: 'Inhalte aktuell' },
               ].map(({ stat, label }) => (

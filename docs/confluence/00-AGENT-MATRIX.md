@@ -13,7 +13,7 @@
 | 11 | **Glossar-Agent** | GitHub Actions `glossary-grow.yml` → `scripts/glossary-agent.mjs` (Claude Haiku), committet `content/glossar` | So 03:00 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
 | 12 | **Rezept-Agent** | GitHub Actions `recipe-grow.yml` → `scripts/recipe-agent.mjs` (Claude Sonnet) + `recipe-images.mjs` (FLUX.1/FAL) | So 03:30 UTC | ✅ aktiv (aus Build entfernt 02.06.) |
 | — | **Auto-Fix-Agent** | GitHub Actions `auto-fix.yml` → `claude-code-action@beta`, öffnet PR bei Issue-Label `auto-fix` | event-driven | ⚠️ vorhanden, aber **verwaist** — hängt am nicht existenten „Mingma Post-Agent" |
-| — | **cron-scout** (Engine von Agent 3) | `scripts/cron-scout.mjs` (Supabase Service-Role + Anthropic) | scheduled via Agent 3 + manuell/`cron:scout` | ✅ läuft — KAN-15 (`ADMIN_PASSWORD` rotieren) betrifft nur die `/admin`-Review-UI, **nicht** den Agentenlauf |
+| — | **cron-scout** (Engine von Agent 3) | `scripts/cron-scout.mjs` (Supabase Service-Role + Anthropic) | scheduled via Agent 3 + manuell/`cron:scout` | ✅ freigegeben — KAN-15 (`ADMIN_PASSWORD` rotiert) = **Fertig**; `/admin` abgesichert, `cron:scout` scharf |
 
 ## Geplant, noch nicht gebaut
 
@@ -43,9 +43,10 @@ für Affiliate/Glossar/Rezept stimmen). Korrekturen:
   human-gated über `/admin/review`.
   **KAN-15 geklärt:** `ADMIN_PASSWORD` sichert nur die `/admin`-Auth
   (`src/app/api/admin/*`) — `cron-scout.mjs` nutzt Supabase-Service-Role +
-  Anthropic, **kein `ADMIN_PASSWORD`**. KAN-15 blockiert also die Review-UI-
-  Sicherheit, nicht den Agentenlauf. (Jira-Ticket-Status selbst nicht geprüft —
-  Atlassian-MCP genehmigungspflichtig.)
+  Anthropic, **kein `ADMIN_PASSWORD`**. KAN-15 betraf also die Review-UI-
+  Sicherheit, nicht den Agentenlauf. **Status am 2026-06-13 via Jira-MCP
+  verifiziert: Fertig** — `ADMIN_PASSWORD` rotiert, `/admin` abgesichert,
+  `cron:scout` freigegeben.
 - **Agent 6 (Social-Media)**: Skripte `social-posts.mjs`, `promo-machine.mjs`,
   `postiz-push.mjs` existieren bereits auf `main` (Runner fehlt noch auf main).
   Der offene **PR #3** schaltet ihn aktiv + ergänzt `social-grow.yml` und pflegt

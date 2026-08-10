@@ -35,9 +35,11 @@ Event-/Dispatch-Runner: `auto-fix.yml` (Issue-Label `auto-fix` → PR; aktuell
 verwaist, kein Label-Erzeuger), `regenerate-recipe-images.yml` (manuell),
 `vercel-deploy-alert.yml` (Deploy-Event → Jira), `test-ops-hook.yml` (manuell).
 
-> **KAN-15 (`ADMIN_PASSWORD` rotieren)** betrifft nur die `/admin`-Auth
-> (`src/app/api/admin/*`, Review-UI) — `cron-scout.mjs` (Agent 3) nutzt
-> Supabase-Service-Role + Anthropic und ist davon **nicht** blockiert.
+> **KAN-15 (`ADMIN_PASSWORD` rotieren) = ✅ Fertig** (via Jira-MCP verifiziert,
+> 2026-06-13): schwaches `steakchef2024` durch starkes Passwort ersetzt (Netlify
+> Env). Damit ist `/admin` (`src/app/api/admin/*`, Review-UI) abgesichert und
+> `cron:scout`/Agent 3 laut Ticket freigegeben. `cron-scout.mjs` selbst nutzt
+> ohnehin Supabase-Service-Role + Anthropic, kein `ADMIN_PASSWORD`.
 
 ### Teilweise gebaut
 

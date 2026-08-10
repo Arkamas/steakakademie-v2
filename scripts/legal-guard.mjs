@@ -78,16 +78,21 @@ for (const f of [...srcFiles, ...publicFiles]) {
 }
 
 // ── 3) Einwilligungspflichtige Tracker ohne Consent ──────────────────────────
-// Die Seite ist cookieless (nur Plausible). Wer GA4/Meta-Pixel/Hotjar/Clarity
+// Standard ist cookieless (nur Plausible). Wer GA4/Meta-Pixel/Hotjar/Clarity
 // einbaut, braucht ein Consent-Banner. Quelle: tracking-skripte-ohne-consent.
+// Ausnahme: Tracker, die NACHWEISLICH erst nach aktiver Einwilligung laden
+// (Consent-Framework `@/lib/consent` + ConsentBanner), sind zulässig (§ 25 Abs. 1
+// TDDDG) und werden NICHT geflaggt — erkannt am Consent-Bezug in derselben Datei.
 const TRACKERS = [
   ['Google Analytics / GTM', /googletagmanager\.com|google-analytics\.com|\bgtag\s*\(/],
   ['Meta-Pixel', /connect\.facebook\.net|fbevents\.js|\bfbq\s*\(/],
   ['Hotjar', /static\.hotjar\.com/],
   ['Microsoft Clarity', /clarity\.ms/],
 ];
+const CONSENT_GATED = /@\/lib\/consent|hasStatisticsConsent|hasMarketingConsent|CONSENT_CHANGE_EVENT/;
 for (const f of [...srcFiles, ...publicFiles]) {
   const txt = readFileSync(f, 'utf8');
+  if (CONSENT_GATED.test(txt)) continue; // consent-gated → zulässig, kein Verstoß
   for (const [name, re] of TRACKERS) {
     if (re.test(txt)) {
       add('Tracker ohne Consent', f, `${name} gefunden — ohne gleichwertiges Consent-Banner unzulässig (§ 25 TDDDG)`);

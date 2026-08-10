@@ -50,3 +50,25 @@
 **Git-Korruption gefixt:** `.git/HEAD` war mit Null-Bytes korrumpiert (Repo komplett unbrauchbar, „branch appears to be broken") — behoben. Mehrere Working-Tree-Dateien (u. a. `CLAUDE.md`, `agb/page.tsx`, `datenschutz/page.tsx`, `ki-disclaimer/page.tsx`) waren gegenüber dem letzten Commit abgeschnitten/korrumpiert (kein Datenverlust, da nur lokal unkommittet — auf HEAD-Stand zurückgesetzt). Sandbox-Mount-Eigenheit gemerkt: `unlink`/`rm` schlägt auf diesem Mount mit „Operation not permitted" fehl, `mv` (rename) funktioniert aber — Workaround für „Datei löschen" ist `mv` statt `rm`, auch für hängengebliebene `.git/index.lock`.
 
 **Nächster Schritt:** Hook-Kopie manuell synchronisieren (Uwe); KAN-59 (Affiliate-Link-Checker Fehlalarm bei Amazon-Suchlinks) fixen.
+
+## 10. August 2026 — Video-Produktion → OpenMontage + Session-Übergabe (Cowork)
+
+**Richtungsentscheidung (Uwe):** Video-Produktion läuft künftig **ausschließlich über OpenMontage**. Alte Pipeline `scripts/promo-machine.mjs` + Remotion-`RecipePromo` (Ordner `steakakademie-video`) für Neu-Produktion **eingefroren** (48 fertige MP4s + Post-Kits bleiben Assets; Post-Kit-Teil via `--kit-only` evtl. behalten — offen). OpenMontage macht Video inkl. Sprache/Untertitel, aber NICHT die Social-Captions/Hashtag-Post-Kits.
+
+**OpenMontage-Stand:** Eingerichtet + lauffähig, aber **NICHT in `main` gemerged** — alles auf Branch `claude/openmontage-steakakademie-setup-shvafa` (21 Dateien: Setup-Skripte, `docs/openmontage/steakakademie-brief.md` + `steakakademie.style.yaml`, `docs/avatare/marco.md`, Remotion-Komposition `video/remotion/steakakademie/Kerntemperatur.tsx` (938 Z.), `video/kerntemperatur-tiktok/` script.json+timeline.json). TTS aktuell = **Piper** (Free, offline); Paid-Provider human-gated.
+
+**Erstes Video (Kerntemperatur-TikTok) — Feedback + To-do:**
+- **(A) Pacing zu langsam:** ~1 s Schwarzbild zwischen Sätzen. Ursache = `audioDelay` in `timeline.json` (Hook 0.5, sonst 0.25) + `dauer` länger als Ton. Fix: audioDelay ~0, `dauer` straffen, **J/L-Cuts** (Ton überlappen) — reiner Kompositions-/Daten-Code.
+- **(B) Stimme:** Piper klingt maschinell + Aussprachefehler („Küche"->„Käsche", „Schuhsohle"->„Scho-so-le"). Ziel = **tiefe, rauchige „Whiskey"-Männerstimme** (Avatar **Marco**, nicht Uwe). Optionen: Piper **Thorsten** (frei/kommerziell, aber neutral) als Interim; **Fish Audio „Ruhige tiefe Stimme"** (modelId 05432ab0451b48b2a47d367fcf6fdeb9 — passt, aber **kommerziell = Paid ~5-15 $/Mon**, human-gated, Rechte prüfen); oder **eigenes Voice-Cloning** (offenes Modell, lokal, gratis) aus **rechtssauberer Referenz** (einwilligende Person/Sprecher-Buyout, nie Uwe). SaaS-„Stimme erstellen" bleibt an deren Paywall gebunden; frei-kommerziell nur über offene/lokale Modelle. NC-Modelle (F5-German, MiraTTS) für kommerziell ausgeschlossen.
+- **(C) Visuelle Haptik:** nur Text auf Schwarz ermüdet. Feuer/brutzelndes-Fleisch-**B-Roll @15-20 % Deckkraft** als Loop-Hintergrund — gratis via OpenMontage `direct_clip_search` (Archiv-Footage).
+- **(D) Avatar:** sprechender **Marco** = `avatar-spokesperson`-Pipeline (HeyGen, **Paid**, Phase 2). Aktuell nur statisches `marco-back.jpg`.
+
+**Compliance (OpenMontage-Outputs):** KI-Stimme/Bilder kennzeichnen; jede Kerntemperatur/Cut gegen `data/kerntemperatur-referenz.yaml` (Regel 8c); kommerzielle Lizenz jeder Stimme (Regel 6); kein Uwe-Auftritt (Regel 3).
+
+**Rendern:** Aus dem **OneDrive-Klon** (`...\OneDrive\Dokumente\Claude\Projects\Steakakademie\steakakademie-v2`) läuft OpenMontage/`promo-machine.mjs` out-of-the-box — dort liegt `steakakademie-video` als Geschwister-Ordner. Aus `C:\Dev\steakakademie-v2` bricht `VIDEO_ROOT` (Nachbar fehlt). Optionaler Fix (nicht committet): `VIDEO_ROOT` per Env-Var überschreibbar.
+
+**Repo-Stand:** PR #4 (`claude/github-installation-kj257d` @ ~`3bd3efb`) grün (legal-guard-Fixes + netlify.toml). `main` @ `6ddb8ef` = netlify.toml-Prodfix (Netlify-Deploys scheiterten seit ~07.07. an kaputtem TOML). KAN-15 = Fertig verifiziert.
+
+**Offene Git-Hygiene:** Im OneDrive-Klon wurde lokaler `main` versehentlich per `reset --hard` auf `3bd3efb` verschoben (`;` statt `&&`). Fix: `git reset --hard <Original-SHA aus Reflog>` + `git stash pop` (18 uncommittete Dateien in `stash@{0}`). **Nichts gepusht, `origin/main` heil.** Achtung: die 18 Dateien enthalten 548 Löschungen inkl. `compliance/` — vor Commit prüfen.
+
+**Nächster Schritt (Cowork):** (A) Pacing + (C) B-Roll-Layer in der Komposition; Stimme testen (erst Thorsten gratis, dann Whiskey-Marco via Fish-Paid-Freigabe oder Clone); OpenMontage-Branch reviewen/mergen wenn stabil.

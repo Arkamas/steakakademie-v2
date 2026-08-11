@@ -1,4 +1,4 @@
-# ---------------------------------------------------------------------------
+﻿# ---------------------------------------------------------------------------
 # OpenMontage-Installer für die Steakakademie (Windows PowerShell)
 #
 #   powershell -ExecutionPolicy Bypass -File scripts\openmontage-setup.ps1

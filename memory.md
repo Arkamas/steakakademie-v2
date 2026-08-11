@@ -140,3 +140,31 @@
 **Abbruch statt Warnung — mit Ventil.** Verstoß ⇒ `process.exit(1)`. Ausnahme nur über `--playbook-ausnahme="Grund"`; der Grund ist Pflicht und wird in `timeline.json` unter `playbookAusnahme` protokolliert. Begründung: Reines Warnen wird übersehen — genau daran ist die Regel beim ersten Mal gescheitert. Reines Abbrechen ohne Ventil führt dazu, dass irgendwann jemand die Regel im Playbook aufweicht, statt die eine Ausnahme zu begründen.
 
 **Gegen echte Daten geprüft, nicht nur gedacht:** Die alte `timeline.json` (v1) liefert exakt die zwei bekannten Verstöße (`zahlen` 15,17 s und `carryover` 11,25 s gegen max 10 s), die neue v2-Timeline läuft ohne Befund durch, und ein künstlicher Grenzfall (Zahlen-Szene auf 3,5 s, CTA auf 2,1 s) wird korrekt als Unterschreitung von `stat_card_hold_seconds` bzw. `min_scene_hold_seconds` gemeldet.
+
+## 11. August 2026 — Windows-Installer war kaputt, nicht nur ungeprüft (Cowork)
+
+`openmontage-setup.ps1` lag als UTF-8 **ohne BOM** vor. Windows PowerShell 5.1
+liest BOM-lose Dateien als CP1252 — die fünf Gedankenstriche (`E2 80 94`) wurden
+zu `â€"`, und das letzte Byte `0x94` ist dort ein schließendes typografisches
+Anführungszeichen. Der Parser nimmt es als String-Delimiter, jeder String mit
+Gedankenstrich endet zu früh, und die Datei kaskadiert in "missing }"-Fehler.
+Das Skript konnte also nie funktionieren; der memory.md-Vermerk "Windows-Installer
+nicht verifiziert" vom 09.08. war zu milde.
+
+**Fix:** als UTF-8 **mit** BOM gespeichert, Inhalt byte-identisch. Funktioniert
+in PowerShell 5.1 und pwsh 7.
+
+**Nur die Gedankenstriche zu ersetzen hätte das Skript zwar lauffähig gemacht,
+aber nicht sauber** — die Umlaute ("Installer für die Steakakademie") brechen den
+Parser nicht, werden unter CP1252 aber zu Buchstabensalat (`Ã¼`). Gemessen: eine
+Testdatei nur mit Umlauten läuft unter PowerShell 5.1 bis zum Ende durch, eine nur
+mit Gedankenstrich stirbt an `TerminatorExpectedAtEndOfString`. Gefährlich ist
+allein, wenn das zweite Byte auf ein CP1252-Anführungszeichen fällt — beim
+Gedankenstrich `0x94` = `”`, beim Halbgeviertstrich `–` `0x93` = `“`, ebenso bei
+`’`/`‘`. Der nächste typografische Strich legt den Parser also sofort wieder lahm.
+Regel für alle künftigen .ps1 in diesem Repo: UTF-8 mit BOM.
+
+**Verifiziert:** Setup lief danach unter Windows 11 durch — Clone auf 4eab34c,
+venv mit requirements.txt + piper-tts (Python 3.13, keine Wheel-Probleme),
+Remotion-Composer 199 Pakete, Playbook gegen das Schema validiert.
+Voraussetzungen waren FFmpeg 9.0 und GNU Make 4.4.1 (winget).

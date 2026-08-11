@@ -113,6 +113,7 @@ markenkonform macht:
 |---|---|
 | `scripts/openmontage-setup.sh` | Installer Linux/macOS, idempotent |
 | `scripts/openmontage-setup.ps1` | Installer Windows (für Uwes Rechner) |
+| `scripts/om.mjs` | Launcher: findet das venv (`bin`/`Scripts`), setzt den PATH, startet den Befehl in `tools/openmontage` |
 | `docs/openmontage/steakakademie.style.yaml` | Marken-Playbook (Farben, Typo, Motion, Audio, Qualitätsregeln) |
 | `docs/openmontage/steakakademie-brief.md` | Pflicht-Briefing: Regeln 1/3/4/5/7/8c für jede Produktion |
 | `docs/openmontage-integration.md` | dieses Dokument |
@@ -132,7 +133,7 @@ npm run video:setup
 Windows:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\openmontage-setup.ps1
+npm run video:setup:win
 ```
 
 Der Installer klont/aktualisiert das Upstream-Repo, baut das venv, installiert die
@@ -145,6 +146,11 @@ Python ≥ 3.10 · Node ≥ 18 (Remotion mag 22+) · FFmpeg · Git
 
 FFmpeg ist der einzige, der auf Windows typischerweise fehlt: `winget install Gyan.FFmpeg`.
 
+**FFmpeg muss im PATH liegen — inklusive `ffprobe`.** Nicht erst der Loudnorm-Schritt
+braucht es: `video:kerntemperatur` misst mit `ffprobe` die tatsächliche Länge der
+Narration und leitet daraus die Szenenlängen ab (Schritt 2 von 5). Ohne FFmpeg im PATH
+scheitert der Lauf also schon vor dem ersten Ton, nicht erst beim Normalisieren.
+
 ---
 
 ## 4. Benutzung
@@ -154,6 +160,17 @@ npm run video:check    # Preflight: welche Tools/Provider sind verfügbar
 npm run video:board    # Backlot — das Live-Produktionsboard im Browser
 npm run video:demo     # Demo-Renders ohne API-Keys (Funktionstest)
 ```
+
+Diese drei laufen über `scripts/om.mjs` und funktionieren deshalb unter PowerShell
+genauso wie unter bash. Beliebige Befehle im venv-Kontext:
+
+```bash
+node scripts/om.mjs python -m backlot open
+node scripts/om.mjs make preflight
+```
+
+`video:check` und `video:demo` brauchen zusätzlich **make** — unter Windows nicht
+vorinstalliert: `winget install ezwinports.make`.
 
 Für eine echte Produktion: Claude Code in `tools/openmontage/` arbeiten lassen und den
 Auftrag in Klartext formulieren, z. B.

@@ -16,11 +16,12 @@
 #   rechtsgrundlage
 #   status     : ok | fix-needed | not-applicable | monitor
 #   befund     : aktueller Stand steakakademie.de (Stand 02.06.2026)
-# Letzte Aktualisierung: 2026-06-07 (Tiefen-Check nach Community/Gutschein/Affiliate)
+# Letzte Aktualisierung: 2026-08-10 (Rechts-Update-Scan: UWG/EmpCo-Novelle,
+#   Consent-Banner + Microsoft Clarity live, Widerrufsbutton § 356a umgesetzt)
 
-version: 2
+version: 3
 geprueftesObjekt: "https://www.steakakademie.de/"
-standComponents: "2026-06-07"
+standComponents: "2026-08-10"
 
 komponenten:
   - id: domain-kennzeichenrecht
@@ -70,10 +71,11 @@ komponenten:
     titel: "Widerrufs- & Rückgaberechtsbelehrung"
     herkunft: arag-6
     neu: true
-    pruefung: "Belehrung §§ 312 ff BGB; Widerrufsbutton ab 19.06.2026 bei kostenpflichtigen Online-Verträgen"
-    rechtsgrundlage: "§§ 312 ff BGB; Art. 246a EGBGB"
+    pruefung: "Belehrung §§ 312 ff BGB; elektronische Widerrufsfunktion § 356a BGB (in Kraft seit 19.06.2026): Button 'Vertrag widerrufen' gut sichtbar + leicht zugänglich, zweistufige Bestätigung, unverzügliche Eingangsbestätigung auf dauerhaftem Datenträger"
+    rechtsgrundlage: "§§ 312 ff, 356a BGB; Art. 246a EGBGB; RL (EU) 2023/2673 (umgesetzt durch Gesetz v. 05.02.2026, BGBl.)"
     status: ok
-    befund: "Hinweis zum Erlöschen bei digitalen Inhalten vorhanden. Widerrufsbutton bei Scharfschaltung Verkäufe prüfen."
+    befund: "Verifiziert 10.08.2026: § 356a umgesetzt — /widerruf mit WiderrufForm, Footer-Link 'Vertrag widerrufen', AGB §§ 6/6a/6b beschreiben Funktion + Eingangsbestätigung. Hinweis zum Erlöschen bei digitalen Inhalten (§ 356 Abs. 5 BGB) vorhanden."
+    monitor: "ANWALTSTHEMA: Bei Digistore24-Reseller-Modell ist Digistore24 Vertragspartner des Verbrauchers — Pflichtenträger nach § 356a klären (Doppelung schadet nicht, eigener Button ist die sichere Seite)."
 
   - id: preisangaben-pangv
     titel: "Preisangabenverordnung (PAngV)"
@@ -106,9 +108,21 @@ komponenten:
     neu: false
     pruefung: "Cookie-Doku in DSE; bei einwilligungspflichtigen Cookies Banner mit gleichwertigem Ablehnen-Button + Widerruf-Mechanismus"
     rechtsgrundlage: "§ 25 TDDDG; Art. 7 Abs. 3 DSGVO"
-    status: not-applicable
-    befund: "Seite cookieless (nur Plausible, § 25 Abs. 2 TDDDG). DSE §11 weist Banner explizit als nicht nötig aus."
-    monitor: "WIRD PFLICHT, sobald Meta-Pixel/GA4 scharf → dann Banner (Ablehnen gleichwertig) + Footer-Link 'Privatsphäre-Einstellungen' + Cookie-Doku."
+    status: ok
+    befund: >-
+      Aktualisiert 10.08.2026 (war 'not-applicable / cookieless' — überholt).
+      Seite ist NICHT mehr cookieless: Microsoft Clarity (Heatmaps/Sitzungs-Analyse, setzt Cookies)
+      ist eingebunden und lädt ausschließlich nach aktivem Opt-in (ClarityScript prüft
+      hasStatisticsConsent). ConsentBanner: zwei gleichwertige Buttons 'Ablehnen'/'Alles akzeptieren'
+      (identische Klasse → gleiche Größe UND Farbe, kein Nudging), keine Vorauswahl, kein Schließen
+      ohne Wahl. Widerruf jederzeit via Footer 'Cookie-Einstellungen'; bei Widerruf werden
+      _cl*/CLID/MUID-Cookies bestmöglich gelöscht. Plausible bleibt cookielos/einwilligungsfrei
+      (§ 25 Abs. 2 Nr. 2 TDDDG). DSE § 6 dokumentiert Clarity inkl. Drittlandtransfer.
+    monitor: >-
+      Meta-Pixel und GA4 sind weiterhin NICHT aktiv (Code-Prüfung 10.08.2026: kein fbq/gtag/GTM).
+      Bei Aktivierung: eigene Consent-Kategorie 'Marketing' ergänzen (Statistik-Consent deckt sie nicht).
+      Watchpoint Digital Omnibus (DSGVO-Teil, Art. 88a-E DSGVO) — noch nicht verabschiedet,
+      würde Cookie-Regeln aus § 25 TDDDG in die DSGVO verlagern.
 
   - id: dse-social-media-plugins
     titel: "DSE: Social-Media-Plug-Ins"
@@ -160,10 +174,17 @@ komponenten:
     herkunft: arag-16
     neu: true
     pruefung: "IP nur anonymisiert; Widerspruchsmöglichkeit; Tool benannt"
-    rechtsgrundlage: "§ 25 TDDDG; Art. 6 DSGVO"
+    rechtsgrundlage: "§ 25 TDDDG; Art. 6 Abs. 1 lit. a/f DSGVO; Art. 44 ff. DSGVO"
     status: ok
-    befund: "Plausible (cookielos, anonym) in §5."
-    monitor: "Bei GA4-Aktivierung: Consent + Opt-out ergänzen."
+    befund: >-
+      Aktualisiert 10.08.2026. Zwei Tools: (1) Plausible — cookielos, anonym, einwilligungsfrei,
+      DSE § 5. (2) Microsoft Clarity — Cookies + Sitzungsaufzeichnung, NUR nach Opt-in, DSE § 6
+      inkl. Microsoft Ireland/Corporation, EU-US Data Privacy Framework, 30 Tage Speicherdauer,
+      Widerrufsweg. Eingaben werden maskiert.
+    monitor: >-
+      Clarity-Projekteinstellung 'Masking = strict' und AVV/DPA im Clarity-Backend müssen bestätigt
+      sein (steht als Setup-Schritt im Code-Kommentar) — extern nicht prüfbar, von Uwe zu bestätigen.
+      Bei GA4-Aktivierung: eigene Consent-Kategorie + Opt-out ergänzen.
 
   - id: dse-marketing-affiliate-tools
     titel: "DSE: Marketing- & Affiliate-Tools"
@@ -208,6 +229,64 @@ komponenten:
     pruefung: "Änderungen DSGVO, TDDDG, EU AI Act, DDG, Verbraucherrecht; Steuerrecht (Steuer-Matrix)"
     rechtsgrundlage: "—"
     status: monitor
+    befund: "Letzter Lauf 10.08.2026. Offene Watchpoints: UWG/EmpCo 27.09.2026 (s. green-claims-empco), Digital Omnibus DSGVO-Teil (nicht verabschiedet), AI-Act Art. 50 Abs. 2 ab 02.12.2026 für Altsysteme."
+
+  # ── NEU 10.08.2026: UWG-Novelle (EmpCo-Umsetzung), in Kraft 27.09.2026 ───────
+  - id: green-claims-empco
+    titel: "Umweltbezogene Werbeaussagen & Nachhaltigkeitssiegel (EmpCo/UWG-Novelle)"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: >-
+      Keine allgemeinen Umweltaussagen ohne belastbaren Nachweis ('nachhaltig', 'umweltfreundlich',
+      'klimaneutral', 'öko', 'grün'); keine Kompensations-Claims allein auf Basis von CO2-Zertifikaten;
+      Nachhaltigkeitssiegel nur, wenn auf zertifiziertem System beruhend oder behördlich eingeführt.
+      Gilt auch für Affiliate-Produkttexte und redaktionelle Produktempfehlungen.
+    rechtsgrundlage: >-
+      §§ 2, 5, 5b UWG + Anhang zu § 3 Abs. 3 UWG i.d.F. des Dritten Gesetzes zur Änderung des UWG
+      (BGBl. v. 19.02.2026), in Kraft 27.09.2026; RL (EU) 2024/825 (EmpCo);
+      BGH-Rspr. zu 'klimaneutral' (Aufklärungspflicht Reduktion vs. Kompensation)
+    status: monitor
+    befund: >-
+      Erstbewertung 10.08.2026 (Code-/Content-Scan): Exposition derzeit GERING. Keine eigenen
+      Klima-/Kompensations-Claims gefunden. Zwei zu beobachtende Stellen —
+      (a) src/lib/bbq-news.ts 'nachhaltigkeit-holzkohle' / Kategorie 'Nachhaltigkeit' (FSC-Siegel):
+      redaktionelle Aufklärung, zulässig, solange kein pauschales Eigen-Umweltversprechen und kein
+      Affiliate-Produkt als 'nachhaltig' beworben wird;
+      (b) src/app/seo-sprint/page.tsx 'sauber und nachhaltig' — hier im Sinne von 'dauerhaft',
+      kein Umweltclaim, aber missverständlich → Formulierung entschärfen (z. B. 'dauerhaft tragfähig').
+    monitor: >-
+      Frist 27.09.2026. VOR diesem Datum prüfen, sobald: Fleisch-/Herkunfts-Content mit
+      Nachhaltigkeitsbezug wächst, Affiliate-Sortiment um 'nachhaltige' Produkte erweitert wird,
+      oder Siegel/Logos (FSC, Bio, Tierwohl) auf eigenen Seiten abgebildet werden.
+      Verstoß-Risiko: Abmahnung + Bußgeld bis 4 % Jahresumsatz.
+
+  # ── NEU 10.08.2026: KI-Kennzeichnung am Inhalt (nicht nur zentral) ──────────
+  - id: ki-kennzeichnung-am-inhalt
+    titel: "KI-Kennzeichnung direkt am Inhalt (Bilder/Texte)"
+    herkunft: agent-bestand
+    neu: true
+    pruefung: >-
+      KI-generierte Rezept-/Hero-Bilder werden AM Inhalt als solche erkennbar gemacht
+      (Alt-Text und/oder sichtbarer Hinweis 'KI-generiertes Symbolbild'), nicht nur zentral
+      auf /ki-disclaimer. KI-Redaktionspersonas sind als KI erkennbar und tragen kein
+      schema.org/Person-Markup.
+    rechtsgrundlage: "§ 5 UWG (Irreführung über wesentliche Merkmale); EU AI Act Art. 50 Abs. 4; Art. 50 Abs. 2 (Provider-Pflicht, Altsysteme ab 02.12.2026)"
+    status: fix-needed
+    befund: >-
+      Geprüft 10.08.2026. ERFÜLLT bei Community-Rezepten (/rezepte/community/[slug]: Alt-Text
+      '— KI-generiertes Symbolbild' + sichtbarer Hinweis im Fließtext) und bei den Avatar-Personas
+      (/autoren/[slug]: Label 'KI-Redaktionspersona' + Satz 'ist eine KI-gestützte Redaktionspersona'
+      + Link /ki-disclaimer; schema.org/Person nur für reale Autoren — sauber gelöst).
+      LÜCKE: die redaktionellen Rezeptseiten (/rezepte/[slug], Bilder aus fal.ai/FLUX via
+      scripts/recipe-agent.mjs) tragen KEINEN KI-Hinweis — imageAlt beschreibt das Gericht wie ein
+      echtes Foto (z. B. 'Brisket vom Smoker — zartes Rindfleisch mit Bark und Rauchring').
+    monitor: >-
+      ANWALTSTHEMA (nicht abschließend entschieden): Ob ein KI-Foodbild ein 'Deep Fake' i. S. v.
+      Art. 3 Nr. 60 AI Act ist, ist offen — Art. 50 Abs. 4 greift dann nicht zwingend. Der belastbare
+      Hebel ist § 5 UWG: ein KI-Bild, das als reales Produktfoto wirkt, kann über wesentliche
+      Merkmale irreführen. Empfehlung: Community-Lösung 1:1 auf redaktionelle Rezepte ausdehnen
+      (Alt-Text-Suffix im recipe-agent + sichtbarer Hinweis unter dem Hero) — geringer Aufwand,
+      beseitigt den Grenzfall vollständig.
 
   # ── NEU 03–07.06.2026: Community/UGC, Gutscheine, neue Verarbeiter ──────────
   # Tiefen-Check 07.06.2026. Diese Flächen kamen nach dem ARAG-Check (02.06.) dazu.

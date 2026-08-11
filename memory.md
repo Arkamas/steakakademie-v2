@@ -130,3 +130,13 @@
 **Stolperstein Cowork-Brücke:** `git worktree add` über den Device-Mount läuft in den Timeout — der Checkout schreibt zu viele Dateien durch einen zu langsamen Mount und hinterlässt einen halben Worktree. Außerdem ist `rm` auf dem Mount gesperrt, `.git/worktrees/<name>/locked` lässt sich also nicht löschen; Aufräumen geht nur per `mv` des ganzen Metadaten-Ordners, danach `git worktree prune`. **Besserer Weg für Commits über die Brücke: Git-Plumbing ohne Checkout** — `hash-object -w`, temporärer Index über `GIT_INDEX_FILE`, `write-tree`, `commit-tree`, `update-ref`. Sekunden statt Minuten, und der Working Tree wird nicht berührt.
 
 **Nächster Schritt:** `git push origin claude/openmontage-steakakademie-setup-shvafa` (Uwe — der Cowork-Container hat keine Push-Credentials), dann Freigabe des Videos.
+
+## 10. August 2026 — Playbook-Gate gebaut (Cowork)
+
+**Umgesetzt, was der Eintrag oben als Lehre formuliert hat:** `scripts/video-kerntemperatur.mjs` prüft die gemessenen Szenenlängen jetzt gegen `docs/openmontage/steakakademie.style.yaml` — direkt nach dem Ausmessen der Narration und **vor** dem Render, wo eine Korrektur Sekunden statt vier Minuten kostet. Geprüft werden `min_scene_hold_seconds`, `max_scene_hold_seconds` und `stat_card_hold_seconds` (letzteres für Szenentypen, in denen eine Zahl das Motiv ist: `temp_cards`, `hero_number`, `carryover`).
+
+**Schwellen kommen aus dem Playbook, nicht aus dem Skript.** Duplizierte Grenzwerte driften auseinander; das Playbook bleibt Single Source of Truth. Gelesen wird mit `js-yaml`, das ohnehin in den Dependencies steht.
+
+**Abbruch statt Warnung — mit Ventil.** Verstoß ⇒ `process.exit(1)`. Ausnahme nur über `--playbook-ausnahme="Grund"`; der Grund ist Pflicht und wird in `timeline.json` unter `playbookAusnahme` protokolliert. Begründung: Reines Warnen wird übersehen — genau daran ist die Regel beim ersten Mal gescheitert. Reines Abbrechen ohne Ventil führt dazu, dass irgendwann jemand die Regel im Playbook aufweicht, statt die eine Ausnahme zu begründen.
+
+**Gegen echte Daten geprüft, nicht nur gedacht:** Die alte `timeline.json` (v1) liefert exakt die zwei bekannten Verstöße (`zahlen` 15,17 s und `carryover` 11,25 s gegen max 10 s), die neue v2-Timeline läuft ohne Befund durch, und ein künstlicher Grenzfall (Zahlen-Szene auf 3,5 s, CTA auf 2,1 s) wird korrekt als Unterschreitung von `stat_card_hold_seconds` bzw. `min_scene_hold_seconds` gemeldet.

@@ -18,6 +18,7 @@
 import { execFileSync, execSync, spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, copyFileSync, rmSync } from 'node:fs';
 import { homedir } from 'node:os';
+import yaml from 'js-yaml';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -28,6 +29,7 @@ const PROJ = path.join(ROOT, 'video/kerntemperatur-tiktok');
 const SRC = path.join(ROOT, 'video/remotion/steakakademie');
 const FONTS = path.join(ROOT, 'video/remotion/fonts');
 const OUT = path.join(PROJ, 'out');
+const PLAYBOOK = path.join(ROOT, 'docs/openmontage/steakakademie.style.yaml');
 
 const PIPER = path.join(OM, '.venv/bin/piper');
 // medium statt low: die low-Stimme läuft mit 16 kHz Samplerate — das ist die Ursache
@@ -131,8 +133,70 @@ for (const sc of script.szenen) {
 const gesamt = Number(cursor.toFixed(3));
 log(`Gesamtlänge: ${gesamt.toFixed(2)}s`);
 
+// --- 2b. Playbook-Gate ---------------------------------------------------
+// Das Style-Playbook enthaelt harte, maschinell pruefbare Grenzen — sie wurden
+// nur nie gegen die fertige Timeline gehalten. Ergebnis: Die Erstfassung des
+// Kerntemperatur-Videos lief mit einer 15,17-s-Szene gegen
+// max_scene_hold_seconds: 10 und faellt erst nach dem Render auf.
+//
+// Geprueft wird HIER, direkt nach dem Ausmessen und VOR dem Rendern: eine
+// Korrektur kostet an dieser Stelle Sekunden statt vier Minuten.
+//
+// Schwellen kommen aus dem Playbook, nicht aus diesem Skript — sonst driften
+// die beiden Quellen auseinander.
+log('Playbook-Gate: Szenenlaengen gegen steakakademie.style.yaml pruefen');
+
+const playbook = yaml.load(readFileSync(PLAYBOOK, 'utf-8'));
+const REGEL = playbook?.motion?.pacing_rules || {};
+const MIN = REGEL.min_scene_hold_seconds ?? 2.5;
+const MAX = REGEL.max_scene_hold_seconds ?? 10;
+const ZAHL_MIN = REGEL.stat_card_hold_seconds ?? 4.0;
+
+// Szenen, in denen eine Zahl das Motiv ist — der Zuschauer muss sie mitschreiben koennen.
+const ZAHLEN_TYPEN = new Set(['temp_cards', 'hero_number', 'carryover']);
+
+const verstoesse = [];
+for (const s of szenen) {
+  if (s.dauer > MAX) verstoesse.push({ szene: s.id, dauer: s.dauer, regel: `max_scene_hold_seconds: ${MAX}` });
+  if (s.dauer < MIN) verstoesse.push({ szene: s.id, dauer: s.dauer, regel: `min_scene_hold_seconds: ${MIN}` });
+  if (ZAHLEN_TYPEN.has(s.typ) && s.dauer < ZAHL_MIN)
+    verstoesse.push({ szene: s.id, dauer: s.dauer, regel: `stat_card_hold_seconds: ${ZAHL_MIN} (Typ ${s.typ})` });
+}
+
+// Ausnahme ist moeglich, kostet aber eine bewusste Handlung und hinterlaesst eine
+// Spur: Grund ist Pflicht und wandert in timeline.json. Reines Warnen wird
+// uebersehen — genau daran ist die Regel beim ersten Mal gescheitert.
+const ausnahmeArg = process.argv.find((a) => a.startsWith('--playbook-ausnahme'));
+const ausnahmeGrund = ausnahmeArg?.includes('=') ? ausnahmeArg.split('=').slice(1).join('=').trim() : '';
+
+if (verstoesse.length > 0) {
+  for (const v of verstoesse) warn(`${v.szene.padEnd(11)} ${v.dauer.toFixed(2)}s  verletzt  ${v.regel}`);
+
+  if (!ausnahmeArg) {
+    warn('');
+    warn(`${verstoesse.length} Playbook-Verstoss(e) — nicht gerendert.`);
+    warn('Beheben: Narration kuerzen, Szene teilen oder PADDING anpassen.');
+    warn('Bewusste Ausnahme:  npm run video:kerntemperatur -- --playbook-ausnahme="Grund"');
+    process.exit(1);
+  }
+  if (!ausnahmeGrund) {
+    warn('');
+    warn('--playbook-ausnahme braucht einen Grund:  --playbook-ausnahme="warum das hier vertretbar ist"');
+    process.exit(1);
+  }
+  warn('');
+  warn(`Ausnahme erteilt: ${ausnahmeGrund}`);
+  warn('Wird in timeline.json protokolliert.');
+} else {
+  console.log(`    ${szenen.length} Szenen, alle innerhalb ${MIN}-${MAX}s, Zahlen-Szenen >= ${ZAHL_MIN}s`);
+}
+
 // --- 3. timeline.json + SRT -------------------------------------------------
-writeFileSync(path.join(PROJ, 'timeline.json'), JSON.stringify({ szenen }, null, 2) + '\n');
+const timeline = { szenen };
+if (verstoesse.length > 0) {
+  timeline.playbookAusnahme = { grund: ausnahmeGrund, verstoesse };
+}
+writeFileSync(path.join(PROJ, 'timeline.json'), JSON.stringify(timeline, null, 2) + '\n');
 
 const srtZeit = (s) => {
   const h = String(Math.floor(s / 3600)).padStart(2, '0');

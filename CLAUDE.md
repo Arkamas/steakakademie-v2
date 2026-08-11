@@ -38,14 +38,22 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
 ## 1. Harte Realität (Stand-Anker, zuletzt aus PROJECT_STATUS 04.06.2026)
 
 - **Verkaufsfähigkeit: 52 %** (Ziel 80 %). Das ist die Wahrheit, nicht das Gefühl.
-- **Schwächste Bereiche zuerst:** Auth & Community **0 %**, Agenten & Automation **0 %**,
-  Content-Strategie **17 %**, **Monetarisierung 22 %**. → Hier entsteht (k)ein Umsatz.
+- **Schwächste Bereiche zuerst:** Content-Strategie **17 %**, **Monetarisierung 22 %**.
+  → Hier entsteht (k)ein Umsatz.
 - **Stärken:** Tech-Stack 76 %, Infrastruktur 75 %, KI-System 58 %, Avatar 57 %.
 - **Director-Klartext:** Doku & Rollen sind jetzt gut. Es fehlt **Execution am Geld**:
   Traffic-Asset + Funnel + bezahlbares Produkt. Struktur ≠ Selbstzweck.
 
-> ⚠️ Diese Zahlen sind ein Schnappschuss. Sobald wieder ein Generator/Update läuft,
-> hier aktualisieren. Bis dahin: als Richtgröße behandeln, nicht als tagesaktuell.
+> ⚠️ Diese Zahlen sind ein Schnappschuss vom 04.06.2026. Sobald wieder ein
+> Generator/Update läuft, hier aktualisieren. Bis dahin: als Richtgröße behandeln,
+> nicht als tagesaktuell.
+>
+> **Korrektur 10.08.2026 (Konsistenz-Audit):** Die früher hier geführten Nullwerte
+> „Auth & Community 0 %" und „Agenten & Automation 0 %" waren **nachweislich falsch**
+> und wurden entfernt — Supabase-Auth/Magic-Link ist live verifiziert, und es laufen
+> 16 GitHub-Actions-Workflows (Glossar-, Rezept-, Content-Wachstum, Link-Checker,
+> Build-Guard, GEO-Check, Ops-Alert→Jira). Neue Prozentzahlen bewusst **nicht**
+> geschätzt — erst wieder messen, dann eintragen (Regel 7).
 
 ---
 

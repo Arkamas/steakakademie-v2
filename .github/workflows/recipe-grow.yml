@@ -80,7 +80,7 @@ jobs:
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           ALERT_SUMMARY: '🔴 Rezept-Agent fehlgeschlagen'
-          ALERT_DESCRIPTION: 'Der wöchentliche Rezept-Agent (recipe-grow, inkl. FLUX-Bilder) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_DESCRIPTION: 'Der tägliche Rezept-Agent (recipe-grow, inkl. FLUX-Bilder) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
           ALERT_ISSUETYPE: 'Bug'
           ALERT_DEDUP_LABEL: 'ops-recipe-failed'

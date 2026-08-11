@@ -3,6 +3,75 @@
 > Wöchentlicher Status-Check gegen die Audit-Baseline vom 07.07.2026.
 > Neuester Eintrag oben. Erhebung via US-basierter WebSearch → DE-SERP kann abweichen (Caveat je Zeile).
 
+## KW33 — 10.08.2026
+
+> Vorwoche = **KW32 Lauf 2 (03.08.)**, direkt darunter.
+
+### Rankings (Google Top 10, US-basierte Websuche — DE-SERP kann abweichen)
+
+| Keyword | steakakademie.de Top 10? | Wer stattdessen (Top 3) | Δ KW32 (Lauf 2) | Δ Baseline |
+|---|---|---|---|---|
+| „Kerntemperatur Steak" | ❌ nein | Grillfürst · LECKER · grillclub.amainfo.at / Block House | 🔴 **zurück auf ❌** (Lauf 2 hatte Pos. 4) | = |
+| „Ribeye" | ❌ nein | meatnbone · gamekeepersmeat (AU) · omahasteaks — ⚠️ SERP rein US/EN, DE-Wert **nicht messbar** | = | = |
+| „Reverse Sear" | ❌ nein | acabonacfarms · jessicagavin · grillio — ⚠️ SERP rein US/EN, DE-Wert **nicht messbar** | = | = |
+| „Brisket Anleitung" | ❌ nein | bbqpit.de · grillkameraden.de · bbqlicate.de | = | = |
+| „Steakakademie" (Brand) | ❌ nicht sichtbar | FB Bochum (Grillakademie Ruhr) · Beisser · GrillKonzept / steak-akademie.nrw | = | = |
+
+**Auflösung des KW32-Positiv-Funds:** Der am 03.08. (Lauf 2) gemessene Top-10-Treffer für
+„Kerntemperatur Steak" ist **heute nicht reproduzierbar**. Damit bestätigt sich der damals notierte
+Verdacht: **Messrauschen**, keine gesicherte Ranking-Verbesserung. Richtig, dass er nicht als Erfolg
+verbucht wurde. Belastbar bleibt nur: `/temperatur-guide` ist indexiert und wird ausgespielt.
+Für eine echte Aussage braucht es einen manuellen DE-Inkognito-Check mit Screenshot.
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de`: **weiterhin 0 echte externe Erwähnungen/Backlinks.**
+Alle Treffer = fremde Steak-Akademien (FB Bochum, Beisser, GrillKonzept, Oberpfalz Beef,
+Bergische Grillakademie, dfw24, akademie-der-kochenden-kuenste).
+**Δ KW32 (0) und Δ Baseline (0): unverändert 0.**
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ KW32 |
+|---|---|---|---|
+| www → non-www Redirect | `https://www.steakakademie.de/` → `https://steakakademie.de/` | 🟢 ok | = |
+| `/llms.txt` erreichbar | 1. Fetch: **leerer Body** · 2. Fetch unmittelbar danach: **vollständiger Inhalt** (Kern-Referenzen, Weitere Inhalte, Über) | 🟡 **intermittierend** | ⬆️ von 🔴 (war 4 Wochen durchgehend leer) |
+| `/robots.txt` endet mit Sitemap-Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` vorhanden | 🟢 ok | = |
+
+**llms.txt — Stand ehrlich:** Der Inhalt wird jetzt **grundsätzlich ausgeliefert** (Repo `public/llms.txt`,
+1557 Byte, live identisch). Aber zwei aufeinanderfolgende Abrufe im selben Lauf lieferten
+unterschiedliche Ergebnisse (erst leer, dann voll) → Verdacht auf **Cache-/Kaltstart-Effekt am Edge**,
+nicht auf ein Inhaltsproblem. **Nicht als abgeschlossen verbuchen**, nächste Woche gegenprüfen.
+
+### Offene Punkte / GEO
+
+- **AI-Re-Check jetzt 6 Tage überfällig.** Fällig war 04.08. (4-Wochen-Rhythmus ab 07.07.).
+  Die 3 Abfragen (ChatGPT · Perplexity · Google AI Overview) auf „Was ist die richtige Kerntemperatur
+  für ein Steak medium?" sind **nur manuell durch Uwe** erhebbar → Ergebnisse in `docs/geo-baseline.md`.
+- Wikidata **Q140455747** in `src/lib/schema.ts` (`sameAs`, Zeile 26/27) ✅ — nichts offen.
+- **Backlinks = 0** bleibt der strukturelle Engpass — inzwischen 5 Wochen unverändert.
+
+### Ampeln
+
+- Rankings: 🔴 (**zurückgestuft von 🟡** — KW32-Treffer als Rauschen widerlegt, generische Sichtbarkeit = null)
+- Off-Page: 🔴 (weiter 0 Backlinks — Ursache Nr. 1)
+- Technik: 🟡 (Redirect + robots ok; llms.txt liefert Inhalt, aber intermittierend)
+- GEO-Setup: 🟡 (Prerequisites erledigt, Re-Check überfällig)
+
+### Handlungsempfehlung (1)
+
+**Erste externe Erwähnungen erzeugen — über die seit KW23 offenen Affiliate-Anmeldungen**
+(Santosgrills, Grillfürst, Ankerkraut, Otto Gourmet). Deren Partner-/Publisher-Listen und
+Freigabe-Seiten sind die günstigste Quelle für die ersten echten Domain-Nennungen.
+Technik und Content sind seit Wochen nicht mehr der Engpass — **ohne Backlinks bewegt sich nichts**,
+und fünf Wochen Messung ohne jede Ranking-Bewegung belegen genau das.
+
+**Trend vs. Vorwoche (KW32):** Rückschritt auf dem Papier — der einzige Positiv-Fund der Vorwoche
+war Messrauschen; einziger realer Fortschritt ist die (noch instabile) llms.txt-Auslieferung.
+Substanziell steht das Projekt seit der Baseline unverändert: 0 Backlinks, 0 generische Sichtbarkeit.
+
+---
+
 ## KW32 — 03.08.2026 (Lauf 2, Nachtrag)
 
 > ⚠️ Zweiter Lauf am selben Tag. Nicht überschrieben, weil sich ein Messergebnis **geändert** hat

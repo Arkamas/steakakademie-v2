@@ -30,23 +30,45 @@ const FONTS = path.join(ROOT, 'video/remotion/fonts');
 const OUT = path.join(PROJ, 'out');
 
 const PIPER = path.join(OM, '.venv/bin/piper');
-const VOICE = process.env.PIPER_VOICE || path.join(homedir(), '.piper/models/de-thorsten-low.onnx');
+// medium statt low: die low-Stimme läuft mit 16 kHz Samplerate — das ist die Ursache
+// für den "maschinellen" Klang, nicht der Modellcharakter. medium liefert 22,05 kHz
+// bei gleicher Modellgröße und kostet nichts. Gemessener Spektralzentroid der
+// Hook-Zeile: low 1355 Hz, medium 1944 Hz.
+const VOICE = process.env.PIPER_VOICE || path.join(homedir(), '.piper/models/de_DE-thorsten-medium.onnx');
 
 /** Vor-/Nachlauf je Szene in Sekunden. Gibt den Bildern Zeit zu stehen —
  *  das Playbook verlangt Ruhe (min. 2,5 s Szenenhaltezeit, Zahlen 4 s). */
 const PADDING = {
-  hook:      { lead: 0.5,  tail: 1.3 },
-  problem:   { lead: 0.25, tail: 0.9 },
-  zahlen:    { lead: 0.25, tail: 1.2 },
+  // Vorlauf 0.15 s statt 0.5 s: eine halbe Sekunde Stille vor dem ersten Wort
+  // kostet auf TikTok Retention. Die Marken-Ruhe steckt im Sprechtempo, nicht im Vorlauf.
+  hook:      { lead: 0.15, tail: 1.2 },
+  problem:   { lead: 0.25, tail: 0.8 },
+  // 'zahlen' lief als eine Szene 15,17 s und riss damit zwei eigene Playbook-Regeln:
+  // motion.pacing_rules.max_scene_hold_seconds: 10, und die vierte Temperaturkarte
+  // bekam keine 4,0 s Standzeit. Geteilt in zwei Szenen mit je zwei Karten —
+  // TempCards rendert visual.karten als Liste beliebiger Länge, die Komposition
+  // brauchte dafür keine Änderung.
+  zahlen_a:  { lead: 0.25, tail: 1.0 },
+  zahlen_b:  { lead: 0.25, tail: 1.35 },
   carryover: { lead: 0.25, tail: 1.1 },
   messen:    { lead: 0.25, tail: 1.0 },
   // Kürzerer Nachlauf als die anderen Szenen: das QA-Gate hatte hier 2,3 s
   // komplette Stille am Videoende gemeldet — auf einer Loop-Plattform ist das
-  // zu lang. 1,3 s reichen, um die Domain zu lesen.
-  cta:       { lead: 0.3,  tail: 1.3 },
+  // zu lang. 1,2 s reichen, um die Domain zu lesen.
+  cta:       { lead: 0.3,  tail: 1.2 },
 };
 
 const PIPER_ARGS = ['--length-scale', '1.14', '--sentence-silence', '0.35', '--noise-scale', '0.6'];
+
+/** Wärmerer Klang für Marco, ohne in die dumpfe 16-kHz-Stimme zurückzufallen.
+ *  Hochpass gegen Rumpeln, +2,2 dB Brustwärme, -1,6 dB gegen die Härte im
+ *  Präsenzbereich, Kuhschwanz ab 6 kHz gegen Zischeln und Piper-Artefakte.
+ *  Wirkung gemessen: Spektralzentroid 1913 -> 1692 Hz (low läge bei 1355 Hz). */
+const WARM_EQ =
+  'highpass=f=80,' +
+  'equalizer=f=180:t=q:w=1.0:g=2.2,' +
+  'equalizer=f=3000:t=q:w=1.2:g=-1.6,' +
+  'highshelf=f=6000:g=-3.5';
 
 const log = (m) => console.log(`\x1b[1;33m==>\x1b[0m ${m}`);
 const warn = (m) => console.log(`\x1b[1;31m[!]\x1b[0m ${m}`);
@@ -186,7 +208,8 @@ const ZIEL = { i: -14, tp: -1.0, lra: 11 };
 // ffmpeg schreibt den loudnorm-Report nach stderr, nicht nach stdout.
 const messlauf = spawnSync('ffmpeg', [
   '-nostdin', '-i', roh,
-  '-af', `loudnorm=I=${ZIEL.i}:TP=${ZIEL.tp}:LRA=${ZIEL.lra}:print_format=json`,
+  // EQ vor der Messung, sonst misst loudnorm einen Pegel, den es nachher nicht gibt.
+  '-af', `${WARM_EQ},loudnorm=I=${ZIEL.i}:TP=${ZIEL.tp}:LRA=${ZIEL.lra}:print_format=json`,
   '-f', 'null', '-',
 ], { encoding: 'utf-8' });
 
@@ -202,7 +225,7 @@ console.log(`    gemessen: ${m.input_i} LUFS, True Peak ${m.input_tp} dBTP`);
 
 execFileSync('ffmpeg', [
   '-nostdin', '-y', '-i', roh,
-  '-af', `loudnorm=I=${ZIEL.i}:TP=${ZIEL.tp}:LRA=${ZIEL.lra}:` +
+  '-af', `${WARM_EQ},loudnorm=I=${ZIEL.i}:TP=${ZIEL.tp}:LRA=${ZIEL.lra}:` +
          `measured_I=${m.input_i}:measured_TP=${m.input_tp}:` +
          `measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:` +
          `offset=${m.target_offset}:linear=true`,

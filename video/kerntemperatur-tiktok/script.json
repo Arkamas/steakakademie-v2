@@ -1,78 +1,167 @@
 {
   "meta": {
     "titel": "Kerntemperatur — die vier Zahlen (TikTok 60s)",
+    "version": "v2 — Pacing gestrafft, Zahlen-Szene geteilt (10.08.2026)",
     "format": "vertical 1080x1920, 30 fps",
     "kanal": "TikTok @steakakademie",
     "sprecher": "Marco \"Der Meister\" (Regel 3 — kein persönlicher Auftritt von Uwe)",
     "playbook": "steakakademie",
-    "stimme": "Piper de-thorsten-low (offline, kostenlos) — KI-generiert, kennzeichnungspflichtig",
+    "stimme": "Piper de_DE-thorsten-MEDIUM (22,05 kHz, offline, kostenlos) — KI-generiert, kennzeichnungspflichtig. Ersetzt de-thorsten-low (16 kHz).",
     "werbung": false,
     "werbekennzeichnung_noetig": false,
     "werbekennzeichnung_begruendung": "Kein Affiliate-Link, keine Kooperation, kein Produkt beworben — reiner Wissens-Content mit Verweis auf den eigenen kostenlosen Leadmagnet. Regel 1 greift daher nicht. Sobald ein Affiliate-Link oder eine Kooperation dazukommt, MUSS 'Werbung' ins Thumbnail.",
     "avatar": "Marco tritt im Bild auf (Rückenansicht im Hook, Porträt bei den Regeln und als Signatur). Kanonische Definition: docs/avatare/marco.md. Bildquellen sind die bereits vorhandenen Assets, keine Neugenerierung.",
-    "ki_kennzeichnung": "Pflicht — Marco ist eine KI-Persona UND die Stimme ist KI-generiert. Sichtbar als 'KI-Avatar' am Porträt (Szene 5), als 'KI-Avatar · Stimme KI-generiert' in Szene 6 und im Caption-Text.",
-    "faktenquelle": "data/kerntemperatur-referenz.yaml (Stand dieses Repos)"
+    "ki_kennzeichnung": "Pflicht — Marco ist eine KI-Persona UND die Stimme ist KI-generiert. Sichtbar als 'KI-Avatar' am Porträt (Szene messen), als 'KI-Avatar · Stimme KI-generiert' in der CTA-Szene und im Caption-Text.",
+    "faktenquelle": "data/kerntemperatur-referenz.yaml (Stand dieses Repos)",
+    "aenderungen_v2": [
+      "Szene 'zahlen' (15,17 s) verletzte motion.pacing_rules.max_scene_hold_seconds: 10 des eigenen Playbooks — geteilt in 'zahlen_a' (Rind/Schwein) und 'zahlen_b' (Geflügel/Hack). Keine Komponenten-Änderung nötig: TempCards rendert eine Karten-Liste beliebiger Länge.",
+      "Szene 'carryover' (11,25 s) verletzte dieselbe Regel — Narration gestrafft, jetzt 8,49 s.",
+      "Vorlauf im Hook von 0,50 s auf 0,15 s: eine halbe Sekunde Stille vor dem ersten Wort kostet auf TikTok Retention.",
+      "Füllwörter raus ('Und jetzt', 'wirklich', 'also', 'dir'), Satzanzahl reduziert — jeder Satz kostet 0,35 s sentence-silence.",
+      "Gesamtlänge 56,72 s → 53,34 s bei gleichem Informationsgehalt. Alle sieben Fakten unverändert."
+    ]
   },
-
   "faktencheck": [
-    { "aussage": "Rind medium rare 54 °C", "quelle": "badges.beef_mr.c = 54, label 'Medium Rare'", "status": "geprüft" },
-    { "aussage": "Schwein saftig 63 °C", "quelle": "badges.pork_juicy.c = 63, label 'saftig'; sicherheit.schwein = 63", "status": "geprüft" },
-    { "aussage": "Geflügel 74 °C, immer durch", "quelle": "badges.poultry.c = 74, label 'durchgegart'; sicherheit.gefluegel = 72 (Minimum)", "status": "geprüft" },
-    { "aussage": "Hackfleisch 70 °C", "quelle": "badges.burger.c = 70, label 'durchgegart'; sicherheit.hackfleisch = 70", "status": "geprüft" },
-    { "aussage": "Nachziehen 2–5 °C, ca. 3 °C vor Ziel runternehmen", "quelle": "meta.carryover", "status": "geprüft" },
-    { "aussage": "Im dicksten Punkt messen, nicht am Knochen", "quelle": "meta.messen", "status": "geprüft" },
-    { "aussage": "Steaks 3–5 Minuten ruhen", "quelle": "meta.ruhen", "status": "geprüft" }
+    {
+      "aussage": "Rind medium rare 54 °C",
+      "quelle": "badges.beef_mr.c = 54, label 'Medium Rare'",
+      "status": "geprüft"
+    },
+    {
+      "aussage": "Schwein saftig 63 °C",
+      "quelle": "badges.pork_juicy.c = 63, label 'saftig'; sicherheit.schwein = 63",
+      "status": "geprüft"
+    },
+    {
+      "aussage": "Geflügel 74 °C, immer durch",
+      "quelle": "badges.poultry.c = 74, label 'durchgegart'; sicherheit.gefluegel = 72 (Minimum)",
+      "status": "geprüft"
+    },
+    {
+      "aussage": "Hackfleisch 70 °C",
+      "quelle": "badges.burger.c = 70, label 'durchgegart'; sicherheit.hackfleisch = 70",
+      "status": "geprüft"
+    },
+    {
+      "aussage": "Nachziehen 2–5 °C, ca. 3 °C vor Ziel runternehmen",
+      "quelle": "meta.carryover",
+      "status": "geprüft"
+    },
+    {
+      "aussage": "Im dicksten Punkt messen, nicht am Knochen",
+      "quelle": "meta.messen",
+      "status": "geprüft"
+    },
+    {
+      "aussage": "Steaks 3–5 Minuten ruhen",
+      "quelle": "meta.ruhen",
+      "status": "geprüft"
+    }
   ],
-
   "szenen": [
     {
       "id": "hook",
       "typ": "hero_number",
-      "narration": "Vierundfünfzig Grad. Diese eine Zahl entscheidet, ob dein Steak perfekt wird. Oder Schuhsohle.",
+      "narration": "Vierundfünfzig Grad. Diese Zahl entscheidet, ob dein Steak perfekt wird — oder Schuhsohle.",
       "untertitel": "54 Grad entscheiden alles.",
-      "visual": { "zahl": "54", "einheit": "°C", "kicker": "RIND · MEDIUM RARE", "unterzeile": "Diese Zahl entscheidet.", "hintergrund": "steakakademie/bilder/marco-back.jpg" }
+      "visual": {
+        "zahl": "54",
+        "einheit": "°C",
+        "kicker": "RIND · MEDIUM RARE",
+        "unterzeile": "Diese Zahl entscheidet.",
+        "hintergrund": "steakakademie/bilder/marco-back.jpg"
+      }
     },
     {
       "id": "problem",
       "typ": "statement",
-      "narration": "Minutenangaben lügen. Jedes Stück Fleisch ist anders dick und kommt anders kalt auf den Grill. Nur die Kerntemperatur sagt dir die Wahrheit.",
+      "narration": "Minutenangaben lügen. Jedes Stück ist anders dick und kommt anders kalt auf den Grill. Nur die Kerntemperatur sagt die Wahrheit.",
       "untertitel": "Minuten lügen. Temperatur nicht.",
-      "visual": { "zeile1": "Minuten", "zeile2": "lügen.", "unterzeile": "Dicke, Starttemperatur, Hitze — alles anders. Nur die Kerntemperatur ist ehrlich." }
+      "visual": {
+        "zeile1": "Minuten",
+        "zeile2": "lügen.",
+        "unterzeile": "Dicke, Starttemperatur, Hitze — alles anders. Nur die Kerntemperatur ist ehrlich."
+      }
     },
     {
-      "id": "zahlen",
+      "id": "zahlen_a",
       "typ": "temp_cards",
-      "narration": "Die vier Werte, die du wirklich brauchst. Rind, medium rare: vierundfünfzig Grad. Schwein, saftig: dreiundsechzig. Geflügel: vierundsiebzig — immer durch. Hackfleisch: siebzig.",
-      "untertitel": "Rind 54 · Schwein 63 · Geflügel 74 · Hack 70",
+      "narration": "Die vier Werte, die du brauchst. Rind, medium rare: vierundfünfzig Grad. Schwein, saftig: dreiundsechzig.",
+      "untertitel": "Rind 54 · Schwein 63",
       "visual": {
         "titel": "Die vier Zahlen",
         "karten": [
-          { "label": "RIND", "sub": "medium rare", "wert": "54", "ton": "gold" },
-          { "label": "SCHWEIN", "sub": "saftig", "wert": "63", "ton": "gold" },
-          { "label": "GEFLÜGEL", "sub": "immer durch", "wert": "74", "ton": "ember" },
-          { "label": "HACKFLEISCH", "sub": "durchgegart", "wert": "70", "ton": "ember" }
+          {
+            "label": "RIND",
+            "sub": "medium rare",
+            "wert": "54",
+            "ton": "gold"
+          },
+          {
+            "label": "SCHWEIN",
+            "sub": "saftig",
+            "wert": "63",
+            "ton": "gold"
+          }
+        ]
+      }
+    },
+    {
+      "id": "zahlen_b",
+      "typ": "temp_cards",
+      "narration": "Geflügel: vierundsiebzig — immer durch. Hackfleisch: siebzig.",
+      "untertitel": "Geflügel 74 · Hack 70",
+      "visual": {
+        "titel": "Die vier Zahlen",
+        "karten": [
+          {
+            "label": "GEFLÜGEL",
+            "sub": "immer durch",
+            "wert": "74",
+            "ton": "ember"
+          },
+          {
+            "label": "HACKFLEISCH",
+            "sub": "durchgegart",
+            "wert": "70",
+            "ton": "ember"
+          }
         ]
       }
     },
     {
       "id": "carryover",
       "typ": "carryover",
-      "narration": "Und jetzt der Fehler, den fast alle machen. Fleisch zieht nach: zwei bis fünf Grad, nachdem es vom Grill kommt. Nimm es also rund drei Grad vor deinem Ziel runter.",
+      "narration": "Der Fehler, den fast alle machen: Fleisch zieht nach — zwei bis fünf Grad. Nimm es rund drei Grad vor dem Ziel runter.",
       "untertitel": "Fleisch zieht 2–5 °C nach. 3 °C vorher runter.",
-      "visual": { "von": 51, "bis": 54, "titel": "Fleisch zieht nach", "unterzeile": "+2 bis +5 °C nach dem Grill", "merksatz": "Rund 3 °C vor dem Ziel runternehmen." }
+      "visual": {
+        "von": 51,
+        "bis": 54,
+        "titel": "Fleisch zieht nach",
+        "unterzeile": "+2 bis +5 °C nach dem Grill",
+        "merksatz": "Rund 3 °C vor dem Ziel runternehmen."
+      }
     },
     {
       "id": "messen",
       "typ": "two_rules",
-      "narration": "Miss im dicksten Punkt, niemals am Knochen. Und dann lass das Steak drei bis fünf Minuten ruhen.",
+      "narration": "Miss im dicksten Punkt, niemals am Knochen. Dann lass das Steak drei bis fünf Minuten ruhen.",
       "untertitel": "Dickster Punkt, nicht am Knochen. 3–5 Min. ruhen.",
       "visual": {
         "portrait": "steakakademie/bilder/marco.jpg",
         "portraitLabel": "Marco · Pitmaster",
         "portraitHinweis": "KI-Avatar",
         "regeln": [
-          { "nr": "1", "titel": "Dickster Punkt", "text": "Einstich mittig — niemals am Knochen messen." },
-          { "nr": "2", "titel": "3–5 Minuten ruhen", "text": "Erst dann anschneiden, sonst läuft der Saft aus." }
+          {
+            "nr": "1",
+            "titel": "Dickster Punkt",
+            "text": "Einstich mittig — niemals am Knochen messen."
+          },
+          {
+            "nr": "2",
+            "titel": "3–5 Minuten ruhen",
+            "text": "Erst dann anschneiden, sonst läuft der Saft aus."
+          }
         ]
       }
     },
@@ -81,9 +170,14 @@
       "typ": "cta",
       "narration": "Alle Werte als Spickzettel für die Küche. Link in der Bio.",
       "untertitel": "Kerntemperatur-Spickzettel — Link in der Bio.",
-      "visual": { "titel": "Der Spickzettel", "unterzeile": "Alle Kerntemperaturen auf einer Seite", "domain": "steakakademie.de", "hinweis": "KI-Avatar · Stimme KI-generiert", "portrait": "steakakademie/bilder/marco.jpg" }
+      "visual": {
+        "titel": "Der Spickzettel",
+        "unterzeile": "Alle Kerntemperaturen auf einer Seite",
+        "domain": "steakakademie.de",
+        "hinweis": "KI-Avatar · Stimme KI-generiert",
+        "portrait": "steakakademie/bilder/marco.jpg"
+      }
     }
   ],
-
   "caption_tiktok": "54 Grad entscheiden, ob dein Steak perfekt wird. 🥩\n\nDie vier Zahlen, die du wirklich brauchst:\n• Rind medium rare — 54 °C\n• Schwein saftig — 63 °C\n• Geflügel — 74 °C (immer durch)\n• Hackfleisch — 70 °C\n\nUnd der Fehler, den fast alle machen: Fleisch zieht nach dem Grill noch 2–5 °C nach. Nimm es rund 3 °C vor dem Ziel runter.\n\nMessen: dickster Punkt, nie am Knochen. Danach 3–5 Minuten ruhen lassen.\n\nDen kompletten Spickzettel gibt's kostenlos — Link in der Bio.\n\nHinweis: Marco ist eine KI-Redaktionspersona der Steakakademie, Bild und Stimme sind KI-generiert. Fachlich verantwortet von Uwe Yendell.\n\n#steak #kerntemperatur #grillen #bbq #steakakademie #grilltipps #mediumrare #fleisch"
 }

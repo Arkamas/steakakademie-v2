@@ -31,7 +31,9 @@ const V2_ROOT = resolve(__dirname, '..');
 // Autoritative Kerntemperatur-Referenz (Single Source of Truth)
 const REF = yaml.load(readFileSync(join(V2_ROOT, 'data', 'kerntemperatur-referenz.yaml'), 'utf8'));
 const BADGES = REF.badges;
-const VIDEO_ROOT = resolve(V2_ROOT, '..', 'steakakademie-video');
+const VIDEO_ROOT = process.env.VIDEO_ROOT
+  ? resolve(process.env.VIDEO_ROOT)
+  : resolve(V2_ROOT, '..', 'steakakademie-video');
 const CONTENT_DIR = join(V2_ROOT, 'content', 'rezepte');
 const HERO_SRC_DIR = join(V2_ROOT, 'public', 'images', 'rezepte');
 const HERO_DST_DIR = join(VIDEO_ROOT, 'public', 'heroes');

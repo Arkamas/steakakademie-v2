@@ -243,6 +243,19 @@ async function sendNewsletterEvent(subscribers, content, recipes) {
   let sent = 0;
   let errors = 0;
 
+  // Regel 4 (human-gated): Der Versand an echte Empfänger ist NICHT der Standard.
+  // Ohne explizites --send erzeugt der Lauf nur eine Vorschau zur Freigabe.
+  // Grund: KI-generierter Text ging vorher ungeprüft per Cron an alle Subscriber.
+  const SEND = process.argv.includes('--send');
+  if (!SEND) {
+    console.log('\n📋 VORSCHAU-MODUS (kein Versand) — Freigabe nötig, dann erneut mit --send\n');
+    console.log(`Empfänger, die beim Versand angeschrieben würden: ${subscribers.length}`);
+    console.log('\n--- Newsletter-Inhalt ---');
+    console.log(JSON.stringify(eventProperties, null, 2));
+    console.log('\n--- Ende Vorschau ---');
+    return { sent: 0, errors: 0, preview: true, recipients: subscribers.length };
+  }
+
   for (const contact of subscribers) {
     try {
       const resp = await fetch('https://app.loops.so/api/v1/events/send', {

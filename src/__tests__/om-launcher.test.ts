@@ -11,7 +11,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { delimiter, join } from 'node:path';
 
-// @ts-expect-error — .mjs ohne Typdeklaration, bewusst untypisiert importiert
+// @ts-ignore — .mjs ohne Typdeklaration, bewusst untypisiert importiert
 import { venvBinDir, buildEnv, resolveCommand, needsShell } from '../../scripts/om.mjs';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────

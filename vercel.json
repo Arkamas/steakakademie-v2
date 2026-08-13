@@ -7,6 +7,16 @@
       "has": [{ "type": "host", "value": "www.steakakademie.de" }],
       "destination": "https://steakakademie.de/:path*",
       "permanent": true
+    },
+    {
+      "source": "/glossar/entrec-te",
+      "destination": "/glossar/entrecote",
+      "permanent": true
+    },
+    {
+      "source": "/glossar/ib-rico",
+      "destination": "/glossar/iberico",
+      "permanent": true
     }
   ],
   "functions": {

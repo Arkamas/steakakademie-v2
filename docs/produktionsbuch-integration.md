@@ -54,10 +54,24 @@ Konsequenz (nicht verhandelbar):
 4. **Menü-Modus (später):** Aus Einzelrezepten ganze Kurs-Menüs komponieren
    (Aperitif→Dessert) inkl. Gesamt-Einkaufsliste für n Personen.
 
-## 4. Offene Punkte
+## 4. Status: Serie abgeschlossen (13.08.2026)
 
-- [ ] Uwe: alten Weber-/Forum-Culinaire-Vertrag auf Verwertungsklauseln prüfen.
-- [ ] Nach Freigabe: erste 3 Gerichte neu entwickeln (Vorschlag: Beer Can Chicken,
-      Nackenbraten mit Knoblauch-Kräuter-Rub, Drillinge in Salzkruste — Kurs-Klassiker
-      mit Suchvolumen).
-- [ ] Weitere Produktionsbücher (Aufbaukurse) sichten — nur privat, gleiche Regeln.
+Alle **7 Produktionsbücher** wurden verarbeitet (Basic, Das perfekte Steak, Classic,
+Exklusiv, Genesis 2/Gas, Best of, Räucherkurs). Ergebnis: **27 eigene, vollständig neu
+formulierte Rezepte** (Bestand 85 → 112), je mit generiertem Hero-Bild, Pro-Person-
+Skalierung, RAG-Ingest (`steakakademie-rezepte`) und Verkettung (Foodpairing/Menü-Planer).
+PRs: #24–#28. Kein Original-Text wurde veröffentlicht; Uwes Freigabe des Vorgehens
+(„genau so wie vorgeschlagen") liegt vor (13.08.2026).
+
+### Backlog (bewusst zurückgestellt, Ideen frei nutzbar)
+Flammkuchen · Aprikosenauflauf · Carpaccio · gegrillter Lauch · Chocolate Cake mit
+flambierten Beeren · Sauerrahmeis · American Cooler · Erbsen-Frittata · Grillkartoffel-
+Stampf · Kartoffelgratin · Kalbfleisch-Burger Walliser Art · Flank mit brauner Butter ·
+Whisky-Pecan-Steak · Kartoffel-Tortilla · gefüllte Tomaten · Teriyaki-Hähnchen ·
+Pilze mit spanischer Buttersauce · Curry-Pancakes · Cheddar-Grillkartoffeln ·
+Baumkuchen-Äpfel · Ananas-Whisky-Mop-Ribs (Bromelain!) · Kalbsrücken Vitello tonnato ·
+Wood-Wrap-Cannelloni · Zedern-Saibling — geeignet für Content-Grow / „Wächst täglich".
+
+### Offen
+- [ ] Uwe: alten Weber-/Forum-Culinaire-Vertrag auf Verwertungsklauseln prüfen
+      (bisher Freigabe auf Basis der Urheberrechts-Einschätzung).

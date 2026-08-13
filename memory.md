@@ -190,3 +190,18 @@ Regel für alle künftigen .ps1 in diesem Repo: UTF-8 mit BOM.
 venv mit requirements.txt + piper-tts (Python 3.13, keine Wheel-Probleme),
 Remotion-Composer 199 Pakete, Playbook gegen das Schema validiert.
 Voraussetzungen waren FFmpeg 9.0 und GNU Make 4.4.1 (winget).
+
+## 13. August 2026 — Produktionsbuch-Serie komplett: 7 Bücher → 27 eigene Rezepte (manuell)
+
+**Abgeschlossen:** Alle 7 Weber-Grillakademie-Produktionsbücher (Basic, Perfektes Steak, Classic, Exklusiv, Genesis-2-Gas, Best of, Räucherkurs) verarbeitet — Rezeptwelt 85 → **112 Rezepte** (PRs #24–#28). Rechtsweg: Sperrvermerk (© Gerhard Volk, Forum Culinaire) respektiert — **kein Originaltext veröffentlicht**; Gerichtsideen als Allgemeingut in vollständig eigenen Worten neu entwickelt, von Uwe explizit freigegeben („genau so wie vorgeschlagen"). Kanonisch dokumentiert in `docs/produktionsbuch-integration.md` inkl. Backlog (24 Gerichte für Content-Grow).
+
+**Eingespielte Pipeline pro Buch (je ~1 h):** PDF privat sichten (pdfminer; pypdf brauchte cffi-Reinstall) → Lücken-Analyse gegen Bestand → 3–5 Rezepte als eigene MDX (Wissenschafts-Aufhänger je Rezept, KT gegen `data/kerntemperatur-referenz.yaml`) → `rezepte-to-kochwissen.mjs` (CSV) → Build → Push → `regenerate-recipe-images.yml` mit `only=slugs` (committet Bilder auf den Branch) → PR/Squash-Merge → `ingest-kochwissen.yml` mit `only=steakakademie-rezepte` auf main.
+
+**Stolpersteine mit Fix:**
+- **Voyage-TPM-Mathe:** Rezept-Einträge ~900 Tokens × Batch 16 ≈ 15K > 10K-TPM-Gratis-Limit → Request kann NIE durchgehen (429-Retry sinnlos). Fix: Batch 6 für `steakakademie-rezepte-*` im Workflow verdrahtet + `only`-Input für sparsame Nachläufe.
+- **Bild-Workflow-Race:** Eigener Push auf den Branch, während der Workflow committen will → sein Push wird rejected (KAN-60). Regel: Während ein Bild-Lauf aktiv ist, NICHT auf den Branch pushen; Re-Run genügt.
+- **Branch-Historien-Falle:** Der Feature-Branch basierte einmal auf veralteter/fremder Historie („unrelated histories", main hätte 14k Zeilen verloren). Fix: Vor jedem Merge `git merge --no-commit` testen; Branch auf origin/main neu aufsetzen und nur eigene Feature-Dateien übernehmen (main-seitige Änderungen an geteilten Dateien via Basis-Vergleich `git diff 27c11f8:$f origin/main:$f` erkennen und manuell patchen).
+- **Jira-Such-API:** `/rest/api/3/search` von Atlassian entfernt (410) → `/rest/api/3/search/jql`, Existenz via `issues[]` statt `total` (in `ops-alert-to-jira.mjs` gefixt).
+- Merged-PR-Regel gelebt: nach jedem Squash-Merge Branch frisch von origin/main (`checkout -B`), sonst Force-Push-Salat.
+
+**Nebenprodukte derselben Session:** Pro-Person-Engine (Basis 1 Person, `zutaten-basis`-Block + deterministischer UI-Rechner), AromaPairing auf Rezeptseiten mit `?schmiede=`-Deeplink, Einkaufslisten-Button, Menü-Planer `/menue`, 112-Rezepte-RAG-Flywheel. Notion „🍖 Rezept-Datenbank" ist leer (0 Einträge) — kein verlorener Content.

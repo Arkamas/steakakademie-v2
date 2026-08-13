@@ -50,8 +50,8 @@ export interface ProjectStatus {
 
 export const PROJECT_STATUS: ProjectStatus = {
     "readinessScore": null,
-    "erfuelltGesamt": 34,
-    "pruefbarGesamt": 51,
+    "erfuelltGesamt": 43,
+    "pruefbarGesamt": 61,
     "nichtMessbarGesamt": 0,
     "bereiche": [
       {
@@ -189,6 +189,75 @@ export const PROJECT_STATUS: ProjectStatus = {
             "frage": "package-lock.json ist mit package.json synchron.",
             "status": "erfuellt",
             "beleg": "npm ls meldet keine Abweichung"
+          }
+        ]
+      },
+      {
+        "name": "Kurse & Diplom-System",
+        "erfuellt": 9,
+        "pruefbar": 10,
+        "nichtMessbar": 0,
+        "score": 90,
+        "kriterien": [
+          {
+            "id": "lektionsraster-vollstaendig",
+            "frage": "Jede Diplom-Stufe hat gleich viele Lektionen, das Raster ist lückenlos.",
+            "status": "erfuellt",
+            "beleg": "5 Stufen à 7 Lektionen (35 gesamt), lückenlos"
+          },
+          {
+            "id": "lektions-order-eindeutig",
+            "frage": "Innerhalb einer Stufe vergibt keine Lektion eine doppelte order.",
+            "status": "erfuellt",
+            "beleg": "keine doppelte order in 35 Lektionen"
+          },
+          {
+            "id": "lektionslugs-eindeutig",
+            "frage": "Kein lektionSlug kommt doppelt vor.",
+            "status": "erfuellt",
+            "beleg": "alle 35 lektionSlugs eindeutig"
+          },
+          {
+            "id": "lektions-pflichtfelder",
+            "frage": "Jede Lektion hat alle didaktischen und SEO-Pflichtfelder im Frontmatter.",
+            "status": "erfuellt",
+            "beleg": "alle 9 Pflichtfelder in allen 35 Lektionen gesetzt"
+          },
+          {
+            "id": "medaillenbilder-vorhanden",
+            "frage": "Jede in Medal.tsx referenzierte Medaille hat ihre Bilddatei.",
+            "status": "erfuellt",
+            "beleg": "alle 5 Medaillenbilder vorhanden"
+          },
+          {
+            "id": "stufen-zentral-definiert",
+            "frage": "Die Diplom-Stufen sind zentral definiert, nicht in mehreren Komponenten dupliziert.",
+            "status": "nicht_erfuellt",
+            "beleg": "keine zentrale Datei; 2 Stellen definieren Stufen: src/app/diplome/roadmap/page.tsx, src/app/diplome/lernen/[stufe]/[lektion]/page.tsx"
+          },
+          {
+            "id": "fortschritt-migriert",
+            "frage": "Die Fortschritts-Tabellen liegen als Supabase-Migration vor.",
+            "status": "erfuellt",
+            "beleg": "supabase/migrations/20260603_course_progress_profiles.sql vorhanden"
+          },
+          {
+            "id": "kurszugriff-migriert",
+            "frage": "Die Zugriffsregel für Kursinhalte liegt als Supabase-Migration vor.",
+            "status": "erfuellt",
+            "beleg": "supabase/migrations/010_course_access_policy.sql vorhanden"
+          },
+          {
+            "id": "urkunden-route",
+            "frage": "Die Urkunden-Seite existiert als Route.",
+            "status": "erfuellt",
+            "beleg": "src/app/diplome/urkunde vorhanden"
+          },
+          {
+            "id": "badge-bildroute",
+            "frage": "Die OG-Badge-Route für Diplom-Nachweise existiert.",
+            "status": "erfuellt",
+            "beleg": "src/app/api/og/badge vorhanden"
           }
         ]
       },
@@ -365,7 +434,7 @@ export const PROJECT_STATUS: ProjectStatus = {
             "id": "mail-empfang-konfiguriert",
             "frage": "Die Domain hat MX-Einträge und kann Mail empfangen.",
             "status": "erfuellt",
-            "beleg": "3 MX-Einträge: route3.mx.cloudflare.net, route1.mx.cloudflare.net, route2.mx.cloudflare.net"
+            "beleg": "3 MX-Einträge: route1.mx.cloudflare.net, route2.mx.cloudflare.net, route3.mx.cloudflare.net"
           },
           {
             "id": "spf-vorhanden",
@@ -414,10 +483,6 @@ export const PROJECT_STATUS: ProjectStatus = {
       {
         "name": "Content-Strategie",
         "grund": "Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als Datei — ohne beides ist der Bereich nicht ehrlich zu bepunkten."
-      },
-      {
-        "name": "Kurse & Diplom-System",
-        "grund": "Lektionsraster ist auslesbar (5x7 vollständig); offen ist die Bewertung des Widerspruchs 5 Lektionsstufen gegen 4 Diplom-Stufen im Code."
       }
     ],
     "critical": [
@@ -440,6 +505,15 @@ export const PROJECT_STATUS: ProjectStatus = {
       "TypeScript läuft im strict-Modus.",
       "npm audit meldet keine Schwachstelle der Stufe critical.",
       "package-lock.json ist mit package.json synchron.",
+      "Jede Diplom-Stufe hat gleich viele Lektionen, das Raster ist lückenlos.",
+      "Innerhalb einer Stufe vergibt keine Lektion eine doppelte order.",
+      "Kein lektionSlug kommt doppelt vor.",
+      "Jede Lektion hat alle didaktischen und SEO-Pflichtfelder im Frontmatter.",
+      "Jede in Medal.tsx referenzierte Medaille hat ihre Bilddatei.",
+      "Die Fortschritts-Tabellen liegen als Supabase-Migration vor.",
+      "Die Zugriffsregel für Kursinhalte liegt als Supabase-Migration vor.",
+      "Die Urkunden-Seite existiert als Route.",
+      "Die OG-Badge-Route für Diplom-Nachweise existiert.",
       "Jeder Workflow im Repo hat mindestens einen Trigger.",
       "Jeder Workflow mit schedule ist in der Laufhistorie aufgetaucht.",
       "Nutzereinreichungen durchlaufen ein Moderations-Gate.",
@@ -472,6 +546,7 @@ export const PROJECT_STATUS: ProjectStatus = {
       "Die Deploy-Konfiguration im Repo passt zu dem Hoster, der die Live-Seite ausliefert.",
       "Jede verwendete Claude-Modell-ID ist auf eine konkrete Version gepinnt.",
       "package.json deklariert eine engines.node-Spanne.",
+      "Die Diplom-Stufen sind zentral definiert, nicht in mehreren Komponenten dupliziert.",
       "Die Claude-Modell-IDs stehen an einer zentralen Stelle statt als Literale im Code verstreut.",
       "Jeder inhaltserzeugende Agent liest die kanonische Kerntemperatur-Referenz (Regel 8c).",
       "Kein Workflow pusht generierte Artefakte direkt, ohne Pull Request (Regel 4).",
@@ -482,6 +557,6 @@ export const PROJECT_STATUS: ProjectStatus = {
       "Die DMARC-Politik weist Fälschungen ab (p=quarantine oder p=reject).",
       "Kein GitHub-Workflow steht mit seinem letzten Lauf auf failure."
     ],
-    "generatedAt": "2026-08-13T12:35:30.879Z",
+    "generatedAt": "2026-08-13T12:46:16.575Z",
     "offline": false
   }

@@ -119,6 +119,68 @@ bereiche:
         frage: package-lock.json ist mit package.json synchron.
         pruefung: lockfile-synchron
 
+  - name: Kurse & Diplom-System
+    beschreibung: >-
+      Lektionsbestand, Struktur und die Verdrahtung von Fortschritt und
+      Freischaltung. Bewusst NICHT geprüft: ob Lektionen zugriffsgeschützt
+      sind — jede trägt seoTitle und seoDescription, sie sind also absichtlich
+      öffentlich (Regel 5).
+    kriterien:
+      - id: lektionsraster-vollstaendig
+        frage: Jede Diplom-Stufe hat gleich viele Lektionen, das Raster ist lückenlos.
+        pruefung: lektionsraster-vollstaendig
+
+      - id: lektions-order-eindeutig
+        frage: Innerhalb einer Stufe vergibt keine Lektion eine doppelte order.
+        pruefung: lektions-order-eindeutig
+
+      - id: lektionslugs-eindeutig
+        frage: Kein lektionSlug kommt doppelt vor.
+        pruefung: lektionslugs-eindeutig
+
+      - id: lektions-pflichtfelder
+        frage: Jede Lektion hat alle didaktischen und SEO-Pflichtfelder im Frontmatter.
+        pruefung: lektions-pflichtfelder
+        felder:
+          [title, stufe, order, lektionSlug, excerpt, merksatz, publishedAt,
+           seoTitle, seoDescription]
+
+      - id: medaillenbilder-vorhanden
+        frage: Jede in Medal.tsx referenzierte Medaille hat ihre Bilddatei.
+        pruefung: medaillenbilder-vorhanden
+
+      # Gleiche Krankheit wie bei den Modell-IDs: verstreute Definitionen
+      # driften auseinander. roadmap/page.tsx und die Lernroute (STUFE_META)
+      # beschreiben beide dieselben fuenf Stufen, unabhaengig voneinander.
+      - id: stufen-zentral-definiert
+        frage: Die Diplom-Stufen sind zentral definiert, nicht in mehreren Komponenten dupliziert.
+        pruefung: stufen-zentral-definiert
+        zentraleDatei: src/lib/diplom-stufen.ts
+        muster: "STUFE_META|title: 'Der Funke'"
+        verdaechtige:
+          - src/app/diplome/roadmap/page.tsx
+          - src/app/diplome/lernen/[stufe]/[lektion]/page.tsx
+
+      - id: fortschritt-migriert
+        frage: Die Fortschritts-Tabellen liegen als Supabase-Migration vor.
+        pruefung: datei-vorhanden
+        datei: supabase/migrations/20260603_course_progress_profiles.sql
+
+      - id: kurszugriff-migriert
+        frage: Die Zugriffsregel für Kursinhalte liegt als Supabase-Migration vor.
+        pruefung: datei-vorhanden
+        datei: supabase/migrations/010_course_access_policy.sql
+
+      - id: urkunden-route
+        frage: Die Urkunden-Seite existiert als Route.
+        pruefung: pfad-vorhanden
+        datei: src/app/diplome/urkunde
+
+      - id: badge-bildroute
+        frage: Die OG-Badge-Route für Diplom-Nachweise existiert.
+        pruefung: pfad-vorhanden
+        datei: src/app/api/og/badge
+
   - name: KI-System & Automation
     beschreibung: >-
       Wie die KI-Aufrufe organisiert sind und ob die Automatisierung die
@@ -334,7 +396,3 @@ nicht_gemessen:
     grund: >-
       Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als
       Datei — ohne beides ist der Bereich nicht ehrlich zu bepunkten.
-  - name: Kurse & Diplom-System
-    grund: >-
-      Lektionsraster ist auslesbar (5x7 vollständig); offen ist die Bewertung
-      des Widerspruchs 5 Lektionsstufen gegen 4 Diplom-Stufen im Code.

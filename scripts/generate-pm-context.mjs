@@ -233,6 +233,71 @@ const PRUEFUNGEN = {
       : nein('package.json deklariert kein engines.node');
   },
 
+  // ── Kurse & Diplom-System ─────────────────────────────────────────────
+
+  'lektionsraster-vollstaendig': () => {
+    const st = lektionen();
+    const stufen = [...new Set(st.map((l) => l.stufe))].sort();
+    if (!stufen.length) return unklar('keine Lektionen gefunden');
+    const zahl = stufen.map((s) => st.filter((l) => l.stufe === s).length);
+    const gleich = zahl.every((n) => n === zahl[0]);
+    return gleich
+      ? ok(`${stufen.length} Stufen à ${zahl[0]} Lektionen (${st.length} gesamt), lückenlos`)
+      : nein(`ungleiche Stufen: ${stufen.map((s, i) => `${s}=${zahl[i]}`).join(', ')}`);
+  },
+
+  'lektions-order-eindeutig': () => {
+    const st = lektionen();
+    const kollision = [];
+    for (const s of [...new Set(st.map((l) => l.stufe))]) {
+      const o = st.filter((l) => l.stufe === s).map((l) => l.order);
+      const dup = [...new Set(o.filter((v, i) => o.indexOf(v) !== i))];
+      if (dup.length) kollision.push(`Stufe ${s}: order ${dup.join('/')}`);
+    }
+    return kollision.length
+      ? nein(kollision.join(' · '))
+      : ok(`keine doppelte order in ${st.length} Lektionen`);
+  },
+
+  'lektionslugs-eindeutig': () => {
+    const sl = lektionen().map((l) => l.lektionSlug);
+    const dup = [...new Set(sl.filter((v, i) => sl.indexOf(v) !== i))];
+    return dup.length
+      ? nein(`doppelte lektionSlugs: ${dup.join(', ')}`)
+      : ok(`alle ${sl.length} lektionSlugs eindeutig`);
+  },
+
+  'lektions-pflichtfelder': (k) => {
+    const st = lektionen();
+    const luecken = [];
+    for (const feld of k.felder) {
+      const ohne = st.filter((l) => !l[feld]);
+      if (ohne.length) luecken.push(`${feld}: ${ohne.length}`);
+    }
+    return luecken.length
+      ? nein(`fehlende Felder — ${luecken.join(', ')}`)
+      : ok(`alle ${k.felder.length} Pflichtfelder in allen ${st.length} Lektionen gesetzt`);
+  },
+
+  'medaillenbilder-vorhanden': () => {
+    const src = lies('src/components/diplome/Medal.tsx');
+    const pfade = [...src.matchAll(/'(\/images\/diplome\/[^']+)'/g)].map((m) => m[1]);
+    if (!pfade.length) return unklar('keine Medaillenpfade in Medal.tsx gefunden');
+    const fehlend = [...new Set(pfade)].filter((f) => !existsSync(p('public' + f)));
+    return fehlend.length
+      ? nein(`${fehlend.length} fehlen: ${fehlend.join(', ')}`)
+      : ok(`alle ${new Set(pfade).size} Medaillenbilder vorhanden`);
+  },
+
+  // Gleiche Logik wie bei den Modell-IDs: verstreute Definitionen driften.
+  'stufen-zentral-definiert': (k) => {
+    if (existsSync(p(k.zentraleDatei))) return ok(`zentrale Definition in ${k.zentraleDatei}`);
+    const doppelt = k.verdaechtige.filter((f) => existsSync(p(f)) && new RegExp(k.muster).test(lies(f)));
+    return doppelt.length > 1
+      ? nein(`keine zentrale Datei; ${doppelt.length} Stellen definieren Stufen: ${doppelt.join(', ')}`)
+      : ok(`nur eine Definitionsstelle`);
+  },
+
   // ── KI-System & Automation ────────────────────────────────────────────
 
   // Nicht dasselbe wie "Modell-IDs gepinnt" (Tech-Stack): dort geht es um die
@@ -569,6 +634,31 @@ const PRUEFUNGEN = {
 };
 
 // ───────────────────────── Fakten-Helfer (Ebene 1) ─────────────────────────
+
+/** Alle Diplom-Lektionen mit ihrem Frontmatter. */
+let _lektionen;
+function lektionen() {
+  if (_lektionen) return _lektionen;
+  const root = p('content/diplom-lektionen');
+  if (!existsSync(root)) abbruch('content/diplom-lektionen fehlt.');
+  _lektionen = [];
+  for (const stufeDir of readdirSync(root)) {
+    const voll = join(root, stufeDir);
+    for (const datei of readdirSync(voll).filter((f) => f.endsWith('.mdx'))) {
+      const txt = readFileSync(join(voll, datei), 'utf8');
+      const m = txt.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+      if (!m) continue;
+      const fm = {};
+      for (const zeile of m[1].split(/\r?\n/)) {
+        const kv = zeile.match(/^([a-zA-Z]+):\s*(.*)$/);
+        if (kv) fm[kv[1]] = kv[2].replace(/^"|"$/g, '').trim();
+      }
+      _lektionen.push({ ...fm, stufe: Number(fm.stufe), order: Number(fm.order), datei });
+    }
+  }
+  if (!_lektionen.length) abbruch('keine Diplom-Lektionen gefunden.');
+  return _lektionen;
+}
 
 /**
  * Alle Workflows mit ihrem echten Namen und ihren Triggern.

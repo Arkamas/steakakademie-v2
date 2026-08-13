@@ -1,8 +1,8 @@
 # PM-Status-Generator — Entwurf und Betriebsregeln
 
-> Status: Ebene 1–3 gebaut, fuenf von acht Bereichen migriert (Avatar-System,
+> Status: Ebene 1–3 gebaut, sechs von acht Bereichen migriert (Avatar-System,
 > Tech-Stack & Tools, Technische Infrastruktur, Monetarisierung,
-> KI-System & Automation). Stand 13.08.2026.
+> KI-System & Automation, Kurse & Diplom). Stand 13.08.2026.
 
 Dieses Dokument legt fest, **was** der Generator misst und **warum** er es so
 misst. Die Kriterien selbst stehen in `data/pm-status-kriterien.yaml`, der Code
@@ -211,7 +211,13 @@ sondern die Einhaltung der nicht-verhandelbaren Regeln — und hat dabei einen
 echten Widerspruch zwischen Doktrin und Implementierung freigelegt (siehe
 unten).
 
-Offen: SEO & Traffic · Content-Strategie · Kurse & Diplom.
+Dann **Kurse & Diplom** — der erste Bereich, in dem die Messung den Bestand
+besser aussehen liess als die Schaetzung: 90 %. Die 35 Lektionen sind
+lueckenlos, ohne doppelte Slugs oder Ordnungszahlen und mit allen neun
+Pflichtfeldern. Der frueher vermutete Widerspruch "5 Lektionsstufen gegen 4
+Diplom-Stufen" existierte nie (siehe unten).
+
+Offen: SEO & Traffic · Content-Strategie.
 
 Für „Content-Strategie" ist vorher zu klären, woraus der Nenner kommt — es gibt
 weder Keyword-Map noch Redaktionsplan als Datei. Ohne beides ist der Bereich
@@ -235,6 +241,27 @@ Entweder die Workflows oder die Regel muessen sich aendern. Diese Entscheidung
 gehoert Uwe, nicht dem Generator. Das Kriterium
 `generatoren-pushen-nicht-direkt` haelt den Widerspruch so lange sichtbar,
 bis er entschieden ist — und faellt weg oder wird gruen, je nachdem wie.
+
+## Warnung: grep taugt nicht zur Befundaufnahme
+
+Waehrend dieser Migration haben oberflaechliche Textsuchen **vier** Befunde
+erzeugt, die sich bei genauem Hinsehen aufloesten:
+
+| Behauptung | Wirklichkeit |
+|---|---|
+| „Der Avatar-Automat hat 8 Zustaende“ | 7 — ein `'react'` aus fremdem Kontext wurde mitgezaehlt |
+| „2 Workflows haben keinen Trigger“ | Alle 16 haben einen; gesucht wurde nur nach `schedule` und `workflow_dispatch`, nicht nach `issues` oder `deployment_status` |
+| „5 Lektionsstufen gegen 4 Diplom-Stufen“ | Es gibt 5 Tiers; das Suchmuster enthielt `meister`, der Code schreibt `master` |
+| „Platin und Meister sind unerreichbar“ | `tierForLevel` wird von einer 10er-Level-Liste gefuettert, nicht von der 5er-Roadmap |
+
+Alle vier waeren als Kriterium in den Katalog gewandert und haetten dort
+dauerhaft Falsches behauptet — mit dem Anschein von Messgenauigkeit, weil sie
+aus einem Generator kommen.
+
+Konsequenz fuer neue Kriterien: **Die Pruefung parst, sie grept nicht.** Wo ein
+Muster unvermeidlich ist, wird der Befund vor dem Einbau an der Quelle
+gegengelesen. Ein falsches Kriterium ist schaedlicher als ein fehlendes: das
+fehlende weiss man nicht, das falsche glaubt man.
 
 ## Betrieb
 

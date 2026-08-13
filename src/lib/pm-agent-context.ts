@@ -7,10 +7,17 @@ import { PROJECT_STATUS } from './pm-agent-context.generated'
 
 export { PROJECT_STATUS }
 
-/** Gemessene Bereiche, schwächste zuerst. */
+/**
+ * Gemessene Bereiche, schwächste zuerst. Ein Bereich mit score === null hatte
+ * kein einziges prüfbares Kriterium — dann darf hier keine Prozentzahl stehen.
+ * Solche Bereiche wandern ans Ende, nicht an die Spitze der "schwächsten".
+ */
 const bereicheZeilen = [...PROJECT_STATUS.bereiche]
-  .sort((a, b) => (a.score ?? 101) - (b.score ?? 101))
+  .sort((a, b) => (a.score ?? 999) - (b.score ?? 999))
   .map((b) => {
+    if (b.score === null) {
+      return `- ${b.name}: diesmal nicht messbar (${b.nichtMessbar} Kriterien nicht prüfbar) — keine Aussage möglich`
+    }
     const rest = b.nichtMessbar ? `, ${b.nichtMessbar} nicht messbar` : ''
     return `- ${b.name}: ${b.score}% (${b.erfuellt} von ${b.pruefbar} Kriterien erfüllt${rest})`
   })

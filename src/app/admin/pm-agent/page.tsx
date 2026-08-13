@@ -224,14 +224,31 @@ export default function PmAgentPage() {
               </>
             )}
             <div className="space-y-2">
-              {PROJECT_STATUS.bereiche.map((b) => (
-                <ScoreBar
-                  key={b.name}
-                  label={b.name}
-                  value={b.score ?? 0}
-                  detail={`${b.erfuellt}/${b.pruefbar}`}
-                />
-              ))}
+              {PROJECT_STATUS.bereiche.map((b) =>
+                // score === null heißt "kein Kriterium war prüfbar". Als 0%-Balken
+                // wäre das die alte Verwechslung von "nicht gemessen" mit "nichts fertig".
+                b.score === null ? (
+                  <div
+                    key={b.name}
+                    className="flex justify-between text-xs font-mono text-[#8a7e6a] mb-2 gap-3"
+                  >
+                    <span>{b.name}</span>
+                    <span className="shrink-0">nicht messbar</span>
+                  </div>
+                ) : (
+                  <ScoreBar
+                    key={b.name}
+                    label={b.name}
+                    value={b.score}
+                    // nichtMessbar mit anzeigen: sonst sähe "100% (2/2)" bei
+                    // zehn übersprungenen Prüfungen nach Vollständigkeit aus.
+                    detail={
+                      `${b.erfuellt}/${b.pruefbar}` +
+                      (b.nichtMessbar ? ` · ${b.nichtMessbar} n. m.` : '')
+                    }
+                  />
+                ),
+              )}
             </div>
             {PROJECT_STATUS.nichtGemessen.length > 0 && (
               <div className="mt-5 pt-4 border-t border-[#2a2416]">

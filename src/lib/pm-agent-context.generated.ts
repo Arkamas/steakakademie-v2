@@ -50,8 +50,8 @@ export interface ProjectStatus {
 
 export const PROJECT_STATUS: ProjectStatus = {
     "readinessScore": null,
-    "erfuelltGesamt": 12,
-    "pruefbarGesamt": 20,
+    "erfuelltGesamt": 21,
+    "pruefbarGesamt": 32,
     "nichtMessbarGesamt": 0,
     "bereiche": [
       {
@@ -191,6 +191,87 @@ export const PROJECT_STATUS: ProjectStatus = {
             "beleg": "npm ls meldet keine Abweichung"
           }
         ]
+      },
+      {
+        "name": "Technische Infrastruktur",
+        "erfuellt": 9,
+        "pruefbar": 12,
+        "nichtMessbar": 0,
+        "score": 75,
+        "kriterien": [
+          {
+            "id": "live-erreichbar",
+            "frage": "Die Live-Seite antwortet über HTTPS mit Status 200.",
+            "status": "erfuellt",
+            "beleg": "HTTP 200"
+          },
+          {
+            "id": "hsts-aktiv",
+            "frage": "Die Live-Seite sendet einen Strict-Transport-Security-Header.",
+            "status": "erfuellt",
+            "beleg": "strict-transport-security: max-age=63072000; includeSubDomains; preload"
+          },
+          {
+            "id": "basis-security-header",
+            "frage": "Die Live-Seite sendet die vier Basis-Security-Header.",
+            "status": "erfuellt",
+            "beleg": "x-content-type-options: nosniff · x-frame-options: DENY · referrer-policy: strict-origin-when-cross-origin · permissions-policy: camera=(), microphone=(), geolocation=()"
+          },
+          {
+            "id": "csp-gesetzt",
+            "frage": "Die Live-Seite sendet eine Content-Security-Policy.",
+            "status": "nicht_erfuellt",
+            "beleg": "nicht gesetzt: content-security-policy"
+          },
+          {
+            "id": "dns-ueber-cloudflare",
+            "frage": "Die Nameserver der Domain liegen bei Cloudflare.",
+            "status": "erfuellt",
+            "beleg": "2 Cloudflare-Nameserver: rohin.ns.cloudflare.com, zita.ns.cloudflare.com"
+          },
+          {
+            "id": "mail-empfang-konfiguriert",
+            "frage": "Die Domain hat MX-Einträge und kann Mail empfangen.",
+            "status": "erfuellt",
+            "beleg": "3 MX-Einträge: route3.mx.cloudflare.net, route1.mx.cloudflare.net, route2.mx.cloudflare.net"
+          },
+          {
+            "id": "spf-vorhanden",
+            "frage": "Die Domain veröffentlicht einen SPF-Record.",
+            "status": "erfuellt",
+            "beleg": "v=spf1 include:_spf.mx.cloudflare.net ~all"
+          },
+          {
+            "id": "dmarc-erzwingend",
+            "frage": "Die DMARC-Politik weist Fälschungen ab (p=quarantine oder p=reject).",
+            "status": "nicht_erfuellt",
+            "beleg": "p=none — protokolliert nur, weist nichts ab"
+          },
+          {
+            "id": "robots-und-sitemap-live",
+            "frage": "robots.txt und sitemap.xml sind auf der Live-Seite abrufbar.",
+            "status": "erfuellt",
+            "beleg": "/robots.txt → 200, /sitemap.xml → 200"
+          },
+          {
+            "id": "workflows-ohne-fehlschlag",
+            "frage": "Kein GitHub-Workflow steht mit seinem letzten Lauf auf failure.",
+            "status": "nicht_erfuellt",
+            "beleg": "2 von 12 zuletzt fehlgeschlagen: Content-Pipeline (Scout → Draft), Weekly Newsletter"
+          },
+          {
+            "id": "middleware-vorhanden",
+            "frage": "Eine Next.js-Middleware ist im Repo angelegt.",
+            "status": "erfuellt",
+            "beleg": "src/middleware.ts vorhanden"
+          },
+          {
+            "id": "rls-haertung-migriert",
+            "frage": "Die Supabase-RLS-Härtung liegt als Migration im Repo.",
+            "status": "erfuellt",
+            "beleg": "supabase/migrations/008_tighten_rls.sql vorhanden"
+          }
+        ]
       }
     ],
     "nichtGemessen": [
@@ -205,10 +286,6 @@ export const PROJECT_STATUS: ProjectStatus = {
       {
         "name": "Content-Strategie",
         "grund": "Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als Datei — ohne beides ist der Bereich nicht ehrlich zu bepunkten."
-      },
-      {
-        "name": "Technische Infrastruktur",
-        "grund": "Kriterien noch nicht formuliert."
       },
       {
         "name": "Kurse & Diplom-System",
@@ -238,7 +315,16 @@ export const PROJECT_STATUS: ProjectStatus = {
       "tsc --noEmit läuft fehlerfrei durch.",
       "TypeScript läuft im strict-Modus.",
       "npm audit meldet keine Schwachstelle der Stufe critical.",
-      "package-lock.json ist mit package.json synchron."
+      "package-lock.json ist mit package.json synchron.",
+      "Die Live-Seite antwortet über HTTPS mit Status 200.",
+      "Die Live-Seite sendet einen Strict-Transport-Security-Header.",
+      "Die Live-Seite sendet die vier Basis-Security-Header.",
+      "Die Nameserver der Domain liegen bei Cloudflare.",
+      "Die Domain hat MX-Einträge und kann Mail empfangen.",
+      "Die Domain veröffentlicht einen SPF-Record.",
+      "robots.txt und sitemap.xml sind auf der Live-Seite abrufbar.",
+      "Eine Next.js-Middleware ist im Repo angelegt.",
+      "Die Supabase-RLS-Härtung liegt als Migration im Repo."
     ],
     "open": [
       "Jeder in authors.ts referenzierte avatar-Pfad zeigt auf eine existierende Datei.",
@@ -248,8 +334,11 @@ export const PROJECT_STATUS: ProjectStatus = {
       "Es liegt genau eine Deploy-Konfiguration im Repo (netlify.toml oder vercel.json, nicht beide).",
       "Die Deploy-Konfiguration im Repo passt zu dem Hoster, der die Live-Seite ausliefert.",
       "Jede verwendete Claude-Modell-ID ist auf eine konkrete Version gepinnt.",
-      "package.json deklariert eine engines.node-Spanne."
+      "package.json deklariert eine engines.node-Spanne.",
+      "Die Live-Seite sendet eine Content-Security-Policy.",
+      "Die DMARC-Politik weist Fälschungen ab (p=quarantine oder p=reject).",
+      "Kein GitHub-Workflow steht mit seinem letzten Lauf auf failure."
     ],
-    "generatedAt": "2026-08-13T12:03:15.127Z",
+    "generatedAt": "2026-08-13T12:16:00.295Z",
     "offline": false
   }

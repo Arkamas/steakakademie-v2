@@ -119,6 +119,86 @@ bereiche:
         frage: package-lock.json ist mit package.json synchron.
         pruefung: lockfile-synchron
 
+  - name: Technische Infrastruktur
+    beschreibung: >-
+      Betriebszustand: Erreichbarkeit, Transportsicherheit, DNS, Mailzustellung
+      und Automatisierung. Fast alles davon ist NUR von außen prüfbar — ein
+      grüner Repo-Stand sagt nichts über den laufenden Betrieb. Ohne Netz
+      bleibt der Bereich deshalb überwiegend nicht_messbar.
+    kriterien:
+      - id: live-erreichbar
+        frage: Die Live-Seite antwortet über HTTPS mit Status 200.
+        pruefung: live-erreichbar
+        netz: true
+
+      - id: hsts-aktiv
+        frage: Die Live-Seite sendet einen Strict-Transport-Security-Header.
+        pruefung: header-gesetzt
+        header: [strict-transport-security]
+        netz: true
+
+      - id: basis-security-header
+        frage: Die Live-Seite sendet die vier Basis-Security-Header.
+        pruefung: header-gesetzt
+        header:
+          - x-content-type-options
+          - x-frame-options
+          - referrer-policy
+          - permissions-policy
+        netz: true
+
+      # Bewusst eigenes Kriterium statt Teil der Basis-Header: CSP ist der
+      # einzige fehlende und braucht echte Arbeit (Quellen inventarisieren),
+      # nicht nur eine Header-Zeile.
+      - id: csp-gesetzt
+        frage: Die Live-Seite sendet eine Content-Security-Policy.
+        pruefung: header-gesetzt
+        header: [content-security-policy]
+        netz: true
+
+      - id: dns-ueber-cloudflare
+        frage: Die Nameserver der Domain liegen bei Cloudflare.
+        pruefung: dns-cloudflare
+        netz: true
+
+      - id: mail-empfang-konfiguriert
+        frage: Die Domain hat MX-Einträge und kann Mail empfangen.
+        pruefung: mail-empfang
+        netz: true
+
+      - id: spf-vorhanden
+        frage: Die Domain veröffentlicht einen SPF-Record.
+        pruefung: spf-vorhanden
+        netz: true
+
+      - id: dmarc-erzwingend
+        frage: Die DMARC-Politik weist Fälschungen ab (p=quarantine oder p=reject).
+        pruefung: dmarc-erzwingend
+        netz: true
+
+      - id: robots-und-sitemap-live
+        frage: robots.txt und sitemap.xml sind auf der Live-Seite abrufbar.
+        pruefung: pfad-live-erreichbar
+        pfade: ['/robots.txt', '/sitemap.xml']
+        netz: true
+
+      - id: workflows-ohne-fehlschlag
+        frage: Kein GitHub-Workflow steht mit seinem letzten Lauf auf failure.
+        pruefung: workflows-ohne-fehlschlag
+        netz: true
+
+      # Zwei Repo-Kriterien, damit der Bereich offline nicht komplett
+      # unmessbar wird.
+      - id: middleware-vorhanden
+        frage: Eine Next.js-Middleware ist im Repo angelegt.
+        pruefung: datei-vorhanden
+        datei: src/middleware.ts
+
+      - id: rls-haertung-migriert
+        frage: Die Supabase-RLS-Härtung liegt als Migration im Repo.
+        pruefung: datei-vorhanden
+        datei: supabase/migrations/008_tighten_rls.sql
+
 # Bereiche ohne Kriterienkatalog. Werden im Dashboard ausdrücklich als
 # "nicht gemessen" ausgewiesen — nicht weggelassen, sonst wirkt der Status
 # vollständig, obwohl drei Viertel fehlen.
@@ -135,8 +215,6 @@ nicht_gemessen:
     grund: >-
       Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als
       Datei — ohne beides ist der Bereich nicht ehrlich zu bepunkten.
-  - name: Technische Infrastruktur
-    grund: Kriterien noch nicht formuliert.
   - name: Kurse & Diplom-System
     grund: >-
       Lektionsraster ist auslesbar (5x7 vollständig); offen ist die Bewertung

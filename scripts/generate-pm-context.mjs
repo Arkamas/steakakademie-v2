@@ -24,6 +24,7 @@ import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
+import dns from 'node:dns/promises';
 // js-yaml v4: `load` nutzt das Default-Schema und kann keine beliebigen Typen
 // instanziieren — `safeLoad` wurde in v4 entfernt, weil `load` es ersetzt.
 // (Die PyYAML-Warnung vor `yaml.load` trifft hier nicht zu.)
@@ -232,6 +233,103 @@ const PRUEFUNGEN = {
       : nein('package.json deklariert kein engines.node');
   },
 
+  // ── Technische Infrastruktur ──────────────────────────────────────────
+  // Fast alles hier ist nur von außen prüfbar. Ohne Netz bleibt der Bereich
+  // bewusst weitgehend nicht_messbar, statt einen Repo-Zustand als
+  // Betriebszustand auszugeben.
+
+  'live-erreichbar': async () => {
+    if (OFFLINE) return unklar('--offline: Netz-Prüfung übersprungen');
+    const a = await liveAntwort();
+    if (!a) return unklar(`https://${DOMAIN} nicht erreichbar (Netzfehler oder Timeout)`);
+    return a.status === 200
+      ? ok(`HTTP ${a.status}`)
+      : nein(`HTTP ${a.status}`);
+  },
+
+  'header-gesetzt': async (k) => {
+    if (OFFLINE) return unklar('--offline: Netz-Prüfung übersprungen');
+    const a = await liveAntwort();
+    if (!a) return unklar('Live-Antwort nicht verfügbar');
+    const fehlend = k.header.filter((h) => !a.header(h));
+    return fehlend.length
+      ? nein(`nicht gesetzt: ${fehlend.join(', ')}`)
+      : ok(k.header.map((h) => `${h}: ${a.header(h)}`).join(' · '));
+  },
+
+  'dns-cloudflare': async () => {
+    if (OFFLINE) return unklar('--offline: Netz-Prüfung übersprungen');
+    const ns = await dnsRecords('NS');
+    if (ns === null) return unklar('NS-Auflösung fehlgeschlagen');
+    const cf = ns.filter((n) => /\.ns\.cloudflare\.com$/i.test(n));
+    return cf.length
+      ? ok(`${cf.length} Cloudflare-Nameserver: ${cf.join(', ')}`)
+      : nein(`Nameserver nicht bei Cloudflare: ${ns.join(', ') || 'keine'}`);
+  },
+
+  'mail-empfang': async () => {
+    if (OFFLINE) return unklar('--offline: Netz-Prüfung übersprungen');
+    const mx = await dnsRecords('MX');
+    if (mx === null) return unklar('MX-Auflösung fehlgeschlagen');
+    return mx.length
+      ? ok(`${mx.length} MX-Einträge: ${mx.map((m) => m.exchange).join(', ')}`)
+      : nein('keine MX-Einträge — die Domain empfängt keine Mail');
+  },
+
+  'spf-vorhanden': async () => {
+    if (OFFLINE) return unklar('--offline: Netz-Prüfung übersprungen');
+    const txt = await dnsRecords('TXT');
+    if (txt === null) return unklar('TXT-Auflösung fehlgeschlagen');
+    const spf = txtFlach(txt).find((t) => t.startsWith('v=spf1'));
+    return spf ? ok(spf) : nein('kein SPF-Record');
+  },
+
+  // p=none protokolliert nur. Erst quarantine/reject weisen Fälschungen ab.
+  'dmarc-erzwingend': async () => {
+    if (OFFLINE) return unklar('--offline: Netz-Prüfung übersprungen');
+    const txt = await dnsRecords('TXT', `_dmarc.${DOMAIN}`);
+    if (txt === null) return unklar('DMARC-Auflösung fehlgeschlagen');
+    const rec = txtFlach(txt).find((t) => t.toLowerCase().startsWith('v=dmarc1'));
+    if (!rec) return nein('kein DMARC-Record');
+    const politik = (rec.match(/\bp\s*=\s*(none|quarantine|reject)\b/i) || [])[1]?.toLowerCase();
+    return politik && politik !== 'none'
+      ? ok(`p=${politik}`)
+      : nein(`p=${politik ?? 'unbekannt'} — protokolliert nur, weist nichts ab`);
+  },
+
+  'pfad-live-erreichbar': async (k) => {
+    if (OFFLINE) return unklar('--offline: Netz-Prüfung übersprungen');
+    const ergebnisse = [];
+    for (const pfad of k.pfade) {
+      const ctl = new AbortController();
+      const t = setTimeout(() => ctl.abort(), 15000);
+      try {
+        const r = await fetch(`https://${DOMAIN}${pfad}`, { method: 'HEAD', signal: ctl.signal });
+        ergebnisse.push({ pfad, status: r.status });
+      } catch {
+        ergebnisse.push({ pfad, status: null });
+      } finally {
+        clearTimeout(t);
+      }
+    }
+    if (ergebnisse.some((e) => e.status === null)) return unklar('mindestens ein Abruf schlug fehl');
+    const schlecht = ergebnisse.filter((e) => e.status !== 200);
+    return schlecht.length
+      ? nein(schlecht.map((e) => `${e.pfad} → ${e.status}`).join(', '))
+      : ok(ergebnisse.map((e) => `${e.pfad} → 200`).join(', '));
+  },
+
+  'workflows-ohne-fehlschlag': () => {
+    if (OFFLINE) return unklar('--offline: GitHub-API nicht abgefragt');
+    const l = workflowLaeufe();
+    if (!l) return unklar('GitHub-API nicht erreichbar (gh nicht angemeldet?)');
+    if (!l.size) return unklar('keine Workflow-Läufe gefunden');
+    const rot = [...l.entries()].filter(([, c]) => c === 'failure').map(([n]) => n);
+    return rot.length
+      ? nein(`${rot.length} von ${l.size} zuletzt fehlgeschlagen: ${rot.join(', ')}`)
+      : ok(`alle ${l.size} Workflows zuletzt ohne Fehlschlag`);
+  },
+
   'lockfile-synchron': () => {
     if (!existsSync(p('package-lock.json'))) return nein('package-lock.json fehlt');
     try {
@@ -252,6 +350,63 @@ const PRUEFUNGEN = {
 };
 
 // ───────────────────────── Fakten-Helfer (Ebene 1) ─────────────────────────
+
+/** Domain, gegen die alle Netz-Prüfungen laufen. */
+const DOMAIN = 'steakakademie.de';
+
+/**
+ * Antwort der Live-Seite, einmal geholt und geteilt. `null` bedeutet
+ * "nicht erreichbar" — jede darauf gestützte Prüfung wird nicht_messbar.
+ */
+let _live;
+async function liveAntwort() {
+  if (_live !== undefined) return _live;
+  if (OFFLINE) return (_live = null);
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), 15000);
+  try {
+    const r = await fetch(`https://${DOMAIN}`, { method: 'HEAD', signal: ctl.signal });
+    _live = { status: r.status, header: (n) => r.headers.get(n) };
+  } catch {
+    _live = null;
+  } finally {
+    clearTimeout(t);
+  }
+  return _live;
+}
+
+/** DNS-Records eines Typs. `null` = Auflösung fehlgeschlagen (≠ leer). */
+async function dnsRecords(typ, name = DOMAIN) {
+  if (OFFLINE) return null;
+  try {
+    return await dns.resolve(name, typ);
+  } catch (e) {
+    // NODATA/NOTFOUND heißt "es gibt keinen solchen Record" — das ist ein
+    // Ergebnis. Alles andere (Timeout, kein Netz) ist ein Fehlschlag.
+    if (e.code === 'ENODATA' || e.code === 'ENOTFOUND') return [];
+    return null;
+  }
+}
+
+/** Flacht TXT-Records ab (jeder Record ist ein Array von Chunks). */
+const txtFlach = (recs) => (recs || []).map((r) => (Array.isArray(r) ? r.join('') : String(r)));
+
+/** Letzter Lauf je Workflow über die GitHub-CLI. */
+let _laeufe;
+function workflowLaeufe() {
+  if (_laeufe !== undefined) return _laeufe;
+  if (OFFLINE) return (_laeufe = null);
+  try {
+    const aus = shell('gh run list --limit 100 --json name,conclusion,createdAt');
+    const alle = JSON.parse(aus);
+    const letzter = new Map();
+    for (const l of alle) if (!letzter.has(l.name)) letzter.set(l.name, l.conclusion);
+    _laeufe = letzter;
+  } catch {
+    _laeufe = null;
+  }
+  return _laeufe;
+}
 
 let _zustaende = null;
 function avatarZustaende() {

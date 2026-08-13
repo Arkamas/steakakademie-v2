@@ -1,7 +1,7 @@
 # PM-Status-Generator — Entwurf und Betriebsregeln
 
-> Status: Ebene 1–3 gebaut, zwei von acht Bereichen migriert (Avatar-System,
-> Tech-Stack & Tools). Stand 13.08.2026.
+> Status: Ebene 1–3 gebaut, drei von acht Bereichen migriert (Avatar-System,
+> Tech-Stack & Tools, Technische Infrastruktur). Stand 13.08.2026.
 
 Dieses Dokument legt fest, **was** der Generator misst und **warum** er es so
 misst. Die Kriterien selbst stehen in `data/pm-status-kriterien.yaml`, der Code
@@ -165,12 +165,19 @@ Zwei Konsequenzen:
 ## Migrationsreihenfolge
 
 Begonnen wurde mit **Avatar-System** und **Tech-Stack & Tools**, weil beide
-ihren Nenner bereits mitbringen: der Zustandsautomat definiert acht Zustände,
+ihren Nenner bereits mitbringen: der Zustandsautomat definiert sieben Zustände,
 `npm audit` liefert JSON. Dort ließ sich das Format an echten Daten prüfen,
-bevor die strittigen Bereiche drankommen.
+bevor die strittigen Bereiche drankamen.
 
-Offen: SEO & Traffic · Monetarisierung · Content-Strategie · Technische
-Infrastruktur · Kurse & Diplom · KI-System & Automation.
+Danach **Technische Infrastruktur** — der erste Bereich, der ganz überwiegend
+von außen gemessen wird (HTTP-Header, DNS, GitHub-API). Er hat zwei Regeln
+auf die Probe gestellt: ohne Netz sind zehn seiner zwölf Kriterien
+`nicht_messbar`, und ein Bereich kann dadurch `score: null` bekommen. Beides
+darf nicht als Balken bei 0 % erscheinen — Dashboard und Prompt weisen es
+seither ausdrücklich als "nicht messbar" aus.
+
+Offen: SEO & Traffic · Monetarisierung · Content-Strategie · Kurse & Diplom ·
+KI-System & Automation.
 
 Für „Content-Strategie" ist vorher zu klären, woraus der Nenner kommt — es gibt
 weder Keyword-Map noch Redaktionsplan als Datei. Ohne beides ist der Bereich

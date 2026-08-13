@@ -119,6 +119,72 @@ bereiche:
         frage: package-lock.json ist mit package.json synchron.
         pruefung: lockfile-synchron
 
+  - name: Content-Strategie
+    beschreibung: >-
+      Gemessen wird ausschließlich die BESCHAFFENHEIT des Bestands, nie sein
+      Umfang. „Wie viele Rezepte sind genug" steht nirgends im Repo — jede Zahl
+      dafür wäre geraten und würde den alten Fehler wiederholen.
+      Vollständigkeit, Konsistenz und Auflösbarkeit dagegen sind ohne
+      Zielvorgabe prüfbar. Wenn später eine Keyword-Map oder ein
+      Redaktionsplan als Datei existiert, kann Umfang dazukommen.
+    kriterien:
+      - id: frontmatter-parsebar
+        frage: Jede Inhaltsdatei hat lesbares Frontmatter.
+        pruefung: frontmatter-parsebar
+
+      # Vorgeschichte: memory.md 11.08.2026 dokumentiert den umgekehrten Fall —
+      # eine .ps1 OHNE BOM zerlegte den PowerShell-Parser. Kodierung ist in
+      # diesem Repo eine bekannte Fehlerquelle, nicht Kosmetik.
+      - id: kein-bom-in-content
+        frage: Keine Inhaltsdatei beginnt mit einem UTF-8-BOM.
+        pruefung: kein-bom-in-content
+
+      - id: bildpfade-aufloesbar
+        frage: Jeder im Frontmatter angegebene Bildpfad zeigt auf eine existierende Datei.
+        pruefung: bildpfade-aufloesbar
+        bildfelder: [image, bild, heroImage, heroBild, cover, thumbnail]
+
+      # Bewusst nur bebilderte Kollektionen. Glossar und Diplom-Lektionen sind
+      # Textformate — dort ein Bild zu verlangen waere eine erfundene
+      # Anforderung (Regel 5).
+      - id: bildabdeckung-visuelle-kollektionen
+        frage: Jeder Eintrag in einer bebilderten Kollektion hat ein Bild.
+        pruefung: bildabdeckung-visuelle-kollektionen
+        kollektionen: [rezepte, methoden, cuts, usa, vergleich]
+        bildfelder: [image, bild, heroImage, heroBild, cover, thumbnail]
+
+      - id: bildbeschreibung-wo-bild
+        frage: Jedes Bild im Frontmatter hat einen Alternativtext.
+        pruefung: bildbeschreibung-wo-bild
+        bildfelder: [image, bild, heroImage, heroBild, cover, thumbnail]
+        altfelder: [imageAlt, bildAlt, alt, heroImageAlt]
+
+      - id: beschreibungsfeld-einheitlich
+        frage: Jeder Inhalt nutzt dasselbe Feld für die Suchmaschinen-Beschreibung.
+        pruefung: beschreibungsfeld-einheitlich
+        feld: seoDescription
+        alternativen: [description, excerpt]
+
+      # 160 Zeichen ist eine gesetzte Grenze (Google kuerzt dort ab), keine
+      # gemessene Wahrheit — sie steht hier sichtbar und ist diskutierbar.
+      - id: beschreibung-nicht-zu-lang
+        frage: Keine Suchmaschinen-Beschreibung ist länger als 160 Zeichen.
+        pruefung: beschreibung-nicht-zu-lang
+        felder: [seoDescription, description]
+        maxZeichen: 160
+
+      - id: autorslug-aufloesbar
+        frage: Jeder authorSlug im Inhalt verweist auf eine existierende Persona.
+        pruefung: autorslug-aufloesbar
+
+      - id: keine-slug-kollisionen
+        frage: Innerhalb einer Kollektion kommt kein Slug doppelt vor.
+        pruefung: keine-slug-kollisionen
+
+      - id: publishedat-nicht-in-zukunft
+        frage: Kein Inhalt trägt ein Veröffentlichungsdatum in der Zukunft.
+        pruefung: publishedat-nicht-in-zukunft
+
   - name: SEO & Traffic
     beschreibung: >-
       Auffindbarkeit und ihre technische Grundlage. Der Bereich misst die
@@ -462,11 +528,7 @@ bereiche:
         pruefung: datei-vorhanden
         datei: supabase/migrations/008_tighten_rls.sql
 
-# Bereiche ohne Kriterienkatalog. Werden im Dashboard ausdrücklich als
-# "nicht gemessen" ausgewiesen — nicht weggelassen, sonst wirkt der Status
-# vollständig, obwohl drei Viertel fehlen.
-nicht_gemessen:
-  - name: Content-Strategie
-    grund: >-
-      Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als
-      Datei — ohne beides ist der Bereich nicht ehrlich zu bepunkten.
+# Alle acht Bereiche haben einen Kriterienkatalog. Die Liste bleibt als leeres
+# Feld erhalten: kommt ein neuer Bereich dazu, gehoert er hierher, bevor er
+# Kriterien bekommt - sonst wirkt der Status vollstaendig, obwohl er es nicht ist.
+nicht_gemessen: []

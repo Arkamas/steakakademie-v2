@@ -1,7 +1,8 @@
 # PM-Status-Generator — Entwurf und Betriebsregeln
 
-> Status: Ebene 1–3 gebaut, sieben von acht Bereichen migriert. Offen ist nur
-> noch Content-Strategie. Stand 13.08.2026.
+> Status: **Alle acht Bereiche migriert.** `readinessScore` liefert seit dem
+> 13.08.2026 erstmals eine belegte Zahl: 72 % (58 von 81 pruefbaren Kriterien).
+> Stand 13.08.2026.
 
 Dieses Dokument legt fest, **was** der Generator misst und **warum** er es so
 misst. Die Kriterien selbst stehen in `data/pm-status-kriterien.yaml`, der Code
@@ -148,9 +149,11 @@ Ausgeliefert wird nie die nackte Zahl, sondern immer mit Nenner:
 „52 % (37 von 71 prüfbaren Kriterien, 6 nicht messbar)". Damit bekommt auch das
 „Ziel 80 %" im Agenten-Prompt zum ersten Mal eine überprüfbare Bedeutung.
 
-Bis dahin bleibt das Feld `null`. Eine fehlende Kennzahl ist ehrlicher als eine
-erfundene — und `null` zwingt Dashboard und Prompt, den Zustand zu benennen,
-statt eine Zahl zu zeigen.
+Seit dem 13.08.2026 sind alle acht Bereiche migriert, das Feld traegt also eine
+Zahl: **72 % (58 von 81 pruefbaren Kriterien)**. Faellt spaeter ein Bereich
+zurueck in `nichtGemessen`, wird das Feld wieder `null` — eine fehlende Kennzahl
+ist ehrlicher als eine erfundene, und `null` zwingt Dashboard und Prompt, den
+Zustand zu benennen statt eine Zahl zu zeigen.
 
 ## Was bewusst nicht gemessen wird
 
@@ -224,7 +227,15 @@ ist nicht Lesen. Das ist als eigenes Kriterium erfasst und steht auf
 `nicht_erfuellt`, nicht auf `nicht_messbar`: dass nichts angebunden ist, laesst
 sich einwandfrei feststellen — es ist ein Befund, kein Messfehler.
 
-Offen: Content-Strategie.
+Zuletzt **Content-Strategie** — der Bereich, der am laengsten offen blieb, weil
+ihm der Nenner fehlt. Geloest durch Verzicht: gemessen wird ausschliesslich die
+*Beschaffenheit* des Bestands, nie sein Umfang. "Wie viele Rezepte sind genug"
+steht nirgends im Repo; Aufloesbarkeit, Konsistenz und Vollstaendigkeit dagegen
+sind ohne Zielvorgabe pruefbar. Kommt spaeter eine Keyword-Map als Datei dazu,
+kann Umfang ergaenzt werden.
+
+Damit sind alle acht Bereiche migriert und `readinessScore` ist nicht mehr
+`null`.
 
 Für „Content-Strategie" ist vorher zu klären, woraus der Nenner kommt — es gibt
 weder Keyword-Map noch Redaktionsplan als Datei. Ohne beides ist der Bereich

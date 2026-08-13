@@ -49,9 +49,9 @@ export interface ProjectStatus {
 }
 
 export const PROJECT_STATUS: ProjectStatus = {
-    "readinessScore": null,
-    "erfuelltGesamt": 52,
-    "pruefbarGesamt": 71,
+    "readinessScore": 72,
+    "erfuelltGesamt": 58,
+    "pruefbarGesamt": 81,
     "nichtMessbarGesamt": 0,
     "bereiche": [
       {
@@ -189,6 +189,75 @@ export const PROJECT_STATUS: ProjectStatus = {
             "frage": "package-lock.json ist mit package.json synchron.",
             "status": "erfuellt",
             "beleg": "npm ls meldet keine Abweichung"
+          }
+        ]
+      },
+      {
+        "name": "Content-Strategie",
+        "erfuellt": 6,
+        "pruefbar": 10,
+        "nichtMessbar": 0,
+        "score": 60,
+        "kriterien": [
+          {
+            "id": "frontmatter-parsebar",
+            "frage": "Jede Inhaltsdatei hat lesbares Frontmatter.",
+            "status": "erfuellt",
+            "beleg": "Frontmatter in allen 342 Dateien lesbar"
+          },
+          {
+            "id": "kein-bom-in-content",
+            "frage": "Keine Inhaltsdatei beginnt mit einem UTF-8-BOM.",
+            "status": "nicht_erfuellt",
+            "beleg": "14 von 342 Dateien beginnen mit einem UTF-8-BOM: persoenlichkeiten"
+          },
+          {
+            "id": "bildpfade-aufloesbar",
+            "frage": "Jeder im Frontmatter angegebene Bildpfad zeigt auf eine existierende Datei.",
+            "status": "nicht_erfuellt",
+            "beleg": "14 Bildpfade zeigen ins Leere: content/persoenlichkeiten/aaron-franklin.mdx → /images/persoenlichkeiten/aaron-franklin.jpg · content/persoenlichkeiten/chris-lilly.mdx → /images/persoenlichkeiten/chris-lilly.jpg · content/persoenlichkeiten/francis-mallmann.mdx → /images/persoenlichkeiten/francis-mallmann.jpg"
+          },
+          {
+            "id": "bildabdeckung-visuelle-kollektionen",
+            "frage": "Jeder Eintrag in einer bebilderten Kollektion hat ein Bild.",
+            "status": "erfuellt",
+            "beleg": "alle Einträge in 5 bebilderten Kollektionen haben ein Bild"
+          },
+          {
+            "id": "bildbeschreibung-wo-bild",
+            "frage": "Jedes Bild im Frontmatter hat einen Alternativtext.",
+            "status": "erfuellt",
+            "beleg": "alle 128 Bilder haben einen Alternativtext"
+          },
+          {
+            "id": "beschreibungsfeld-einheitlich",
+            "frage": "Jeder Inhalt nutzt dasselbe Feld für die Suchmaschinen-Beschreibung.",
+            "status": "nicht_erfuellt",
+            "beleg": "8 von 342 ohne seoDescription (rezepte: 8) — nutzen stattdessen description"
+          },
+          {
+            "id": "beschreibung-nicht-zu-lang",
+            "frage": "Keine Suchmaschinen-Beschreibung ist länger als 160 Zeichen.",
+            "status": "nicht_erfuellt",
+            "beleg": "24 Beschreibungen über 160 Zeichen: brisket.mdx, 03-temperaturzonen.mdx, 00-das-chef-prinzip.mdx"
+          },
+          {
+            "id": "autorslug-aufloesbar",
+            "frage": "Jeder authorSlug im Inhalt verweist auf eine existierende Persona.",
+            "status": "erfuellt",
+            "beleg": "alle 128 authorSlug-Verweise lösen auf"
+          },
+          {
+            "id": "keine-slug-kollisionen",
+            "frage": "Innerhalb einer Kollektion kommt kein Slug doppelt vor.",
+            "status": "erfuellt",
+            "beleg": "keine doppelten Slugs in 9 Kollektionen"
+          },
+          {
+            "id": "publishedat-nicht-in-zukunft",
+            "frage": "Kein Inhalt trägt ein Veröffentlichungsdatum in der Zukunft.",
+            "status": "erfuellt",
+            "beleg": "kein publishedAt liegt in der Zukunft (342 geprüft)"
           }
         ]
       },
@@ -503,7 +572,7 @@ export const PROJECT_STATUS: ProjectStatus = {
             "id": "mail-empfang-konfiguriert",
             "frage": "Die Domain hat MX-Einträge und kann Mail empfangen.",
             "status": "erfuellt",
-            "beleg": "3 MX-Einträge: route2.mx.cloudflare.net, route1.mx.cloudflare.net, route3.mx.cloudflare.net"
+            "beleg": "3 MX-Einträge: route3.mx.cloudflare.net, route1.mx.cloudflare.net, route2.mx.cloudflare.net"
           },
           {
             "id": "spf-vorhanden",
@@ -544,12 +613,7 @@ export const PROJECT_STATUS: ProjectStatus = {
         ]
       }
     ],
-    "nichtGemessen": [
-      {
-        "name": "Content-Strategie",
-        "grund": "Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als Datei — ohne beides ist der Bereich nicht ehrlich zu bepunkten."
-      }
-    ],
+    "nichtGemessen": [],
     "critical": [
       "Ribeye Pillar Page `/cuts/ribeye` (18k Suchen/Monat) — höchster Traffic-Hebel, erster End-to-End-Lauf der neuen Pipeline (SEO→GEO→Content→Compliance).",
       "Monetarisierung verdrahten: Digistore24 Danke-/Webhook→Supabase, Diplom Bronze live.",
@@ -570,6 +634,12 @@ export const PROJECT_STATUS: ProjectStatus = {
       "TypeScript läuft im strict-Modus.",
       "npm audit meldet keine Schwachstelle der Stufe critical.",
       "package-lock.json ist mit package.json synchron.",
+      "Jede Inhaltsdatei hat lesbares Frontmatter.",
+      "Jeder Eintrag in einer bebilderten Kollektion hat ein Bild.",
+      "Jedes Bild im Frontmatter hat einen Alternativtext.",
+      "Jeder authorSlug im Inhalt verweist auf eine existierende Persona.",
+      "Innerhalb einer Kollektion kommt kein Slug doppelt vor.",
+      "Kein Inhalt trägt ein Veröffentlichungsdatum in der Zukunft.",
       "Jede indexierbare Seite hat Metadata.",
       "Jedes Rezept im Repo hat einen Eintrag in der Live-Sitemap.",
       "robots.txt nennt die Sitemap.",
@@ -620,6 +690,10 @@ export const PROJECT_STATUS: ProjectStatus = {
       "Die Deploy-Konfiguration im Repo passt zu dem Hoster, der die Live-Seite ausliefert.",
       "Jede verwendete Claude-Modell-ID ist auf eine konkrete Version gepinnt.",
       "package.json deklariert eine engines.node-Spanne.",
+      "Keine Inhaltsdatei beginnt mit einem UTF-8-BOM.",
+      "Jeder im Frontmatter angegebene Bildpfad zeigt auf eine existierende Datei.",
+      "Jeder Inhalt nutzt dasselbe Feld für die Suchmaschinen-Beschreibung.",
+      "Keine Suchmaschinen-Beschreibung ist länger als 160 Zeichen.",
       "Eine serverseitige Traffic-Datenquelle ist angebunden (Search Console, GA4 oder Plausible-API).",
       "Die Diplom-Stufen sind zentral definiert, nicht in mehreren Komponenten dupliziert.",
       "Die Claude-Modell-IDs stehen an einer zentralen Stelle statt als Literale im Code verstreut.",
@@ -632,6 +706,6 @@ export const PROJECT_STATUS: ProjectStatus = {
       "Die DMARC-Politik weist Fälschungen ab (p=quarantine oder p=reject).",
       "Kein GitHub-Workflow steht mit seinem letzten Lauf auf failure."
     ],
-    "generatedAt": "2026-08-13T12:59:33.069Z",
+    "generatedAt": "2026-08-13T13:20:45.819Z",
     "offline": false
   }

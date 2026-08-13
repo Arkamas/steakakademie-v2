@@ -234,6 +234,131 @@ const PRUEFUNGEN = {
       : nein('package.json deklariert kein engines.node');
   },
 
+  // ── Content-Strategie ─────────────────────────────────────────────────
+  // Gemessen wird ausschliesslich die BESCHAFFENHEIT des Bestands, nie sein
+  // Umfang. "Wie viele Rezepte sind genug" steht nirgends im Repo — jede Zahl
+  // dafuer waere geraten. Vollstaendigkeit, Konsistenz und Aufloesbarkeit
+  // dagegen sind ohne Zielvorgabe pruefbar.
+
+  'kein-bom-in-content': () => {
+    const d = inhalte();
+    const bom = d.filter((x) => x.bom);
+    return bom.length
+      ? nein(`${bom.length} von ${d.length} Dateien beginnen mit einem UTF-8-BOM: ${[...new Set(bom.map((x) => x.kollektion))].join(', ')}`)
+      : ok(`keine der ${d.length} Dateien hat ein BOM`);
+  },
+
+  'frontmatter-parsebar': () => {
+    const d = inhalte();
+    const kaputt = d.filter((x) => !x.fm);
+    return kaputt.length
+      ? nein(`${kaputt.length} ohne lesbares Frontmatter: ${kaputt.slice(0, 4).map((x) => x.pfad).join(', ')}`)
+      : ok(`Frontmatter in allen ${d.length} Dateien lesbar`);
+  },
+
+  'bildpfade-aufloesbar': (k) => {
+    const d = inhalte().filter((x) => x.fm);
+    const tot = [];
+    for (const x of d) {
+      for (const feld of k.bildfelder) {
+        const wert = x.fm[feld];
+        if (wert && wert.startsWith('/') && !existsSync(p('public' + wert))) tot.push(`${x.pfad} → ${wert}`);
+      }
+    }
+    return tot.length
+      ? nein(`${tot.length} Bildpfade zeigen ins Leere: ${tot.slice(0, 3).join(' · ')}`)
+      : ok(`alle Bildpfade in ${d.length} Dateien auflösbar`);
+  },
+
+  // Nur Kollektionen, die ueberhaupt bebildert sind. Glossar und
+  // Diplom-Lektionen sind Textformate — dort ein Bild zu verlangen waere
+  // eine erfundene Anforderung (Regel 5).
+  'bildabdeckung-visuelle-kollektionen': (k) => {
+    const d = inhalte().filter((x) => x.fm);
+    const luecken = [];
+    for (const kol of k.kollektionen) {
+      const eintraege = d.filter((x) => x.kollektion === kol);
+      if (!eintraege.length) continue;
+      const ohne = eintraege.filter((x) => !k.bildfelder.some((f) => x.fm[f]));
+      if (ohne.length) luecken.push(`${kol}: ${ohne.length}/${eintraege.length}`);
+    }
+    return luecken.length
+      ? nein(`ohne Bild — ${luecken.join(', ')}`)
+      : ok(`alle Einträge in ${k.kollektionen.length} bebilderten Kollektionen haben ein Bild`);
+  },
+
+  'beschreibungsfeld-einheitlich': (k) => {
+    const d = inhalte().filter((x) => x.fm);
+    const ohne = d.filter((x) => !x.fm[k.feld]);
+    if (!ohne.length) return ok(`alle ${d.length} Einträge nutzen ${k.feld}`);
+    const grp = {};
+    for (const x of ohne) grp[x.kollektion] = (grp[x.kollektion] || 0) + 1;
+    const ersatz = [...new Set(ohne.map((x) => k.alternativen.find((a) => x.fm[a])).filter(Boolean))];
+    return nein(
+      `${ohne.length} von ${d.length} ohne ${k.feld} (${Object.entries(grp).map(([a, b]) => `${a}: ${b}`).join(', ')})` +
+      (ersatz.length ? ` — nutzen stattdessen ${ersatz.join('/')}` : ''),
+    );
+  },
+
+  'beschreibung-nicht-zu-lang': (k) => {
+    const d = inhalte().filter((x) => x.fm);
+    const lang = d.filter((x) => {
+      const t = k.felder.map((f) => x.fm[f]).find(Boolean);
+      return t && t.length > k.maxZeichen;
+    });
+    return lang.length
+      ? nein(`${lang.length} Beschreibungen über ${k.maxZeichen} Zeichen: ${lang.slice(0, 3).map((x) => x.pfad.split('/').pop()).join(', ')}`)
+      : ok(`alle Beschreibungen ≤ ${k.maxZeichen} Zeichen`);
+  },
+
+  'autorslug-aufloesbar': () => {
+    const authors = lies('src/lib/authors.ts');
+    const slugs = new Set([...authors.matchAll(/slug:\s*'([^']+)'/g)].map((m) => m[1]));
+    if (!slugs.size) return unklar('keine Autoren-Slugs in authors.ts gefunden');
+    const mit = inhalte().filter((x) => x.fm?.authorSlug);
+    if (!mit.length) return unklar('kein Inhalt trägt authorSlug');
+    const unbekannt = mit.filter((x) => !slugs.has(x.fm.authorSlug));
+    return unbekannt.length
+      ? nein(`${unbekannt.length} verweisen auf unbekannte Persona: ${[...new Set(unbekannt.map((x) => x.fm.authorSlug))].join(', ')}`)
+      : ok(`alle ${mit.length} authorSlug-Verweise lösen auf`);
+  },
+
+  'keine-slug-kollisionen': () => {
+    const d = inhalte();
+    const proKol = {};
+    for (const x of d) {
+      const slug = x.pfad.split('/').pop().replace(/\.mdx$/, '');
+      (proKol[x.kollektion] ??= []).push(slug);
+    }
+    const treffer = [];
+    for (const [kol, s] of Object.entries(proKol)) {
+      const dup = [...new Set(s.filter((v, i) => s.indexOf(v) !== i))];
+      if (dup.length) treffer.push(`${kol}: ${dup.join('/')}`);
+    }
+    return treffer.length
+      ? nein(`Slug-Kollisionen — ${treffer.join(' · ')}`)
+      : ok(`keine doppelten Slugs in ${Object.keys(proKol).length} Kollektionen`);
+  },
+
+  'publishedat-nicht-in-zukunft': () => {
+    const d = inhalte().filter((x) => x.fm?.publishedAt);
+    if (!d.length) return unklar('kein Inhalt trägt publishedAt');
+    const jetzt = Date.now();
+    const zukunft = d.filter((x) => new Date(x.fm.publishedAt).getTime() > jetzt);
+    return zukunft.length
+      ? nein(`${zukunft.length} mit Datum in der Zukunft: ${zukunft.slice(0, 3).map((x) => `${x.pfad.split('/').pop()} (${x.fm.publishedAt})`).join(', ')}`)
+      : ok(`kein publishedAt liegt in der Zukunft (${d.length} geprüft)`);
+  },
+
+  'bildbeschreibung-wo-bild': (k) => {
+    const d = inhalte().filter((x) => x.fm && k.bildfelder.some((f) => x.fm[f]));
+    if (!d.length) return unklar('kein Inhalt mit Bildfeld');
+    const ohne = d.filter((x) => !k.altfelder.some((f) => x.fm[f]));
+    return ohne.length
+      ? nein(`${ohne.length} von ${d.length} Bildern ohne Alternativtext: ${ohne.slice(0, 3).map((x) => x.pfad.split('/').pop()).join(', ')}`)
+      : ok(`alle ${d.length} Bilder haben einen Alternativtext`);
+  },
+
   // ── SEO & Traffic ─────────────────────────────────────────────────────
 
   // Nur INDEXIERBARE Seiten. Admin-, Auth- und Profilseiten sind in robots.txt
@@ -727,6 +852,52 @@ const PRUEFUNGEN = {
 };
 
 // ───────────────────────── Fakten-Helfer (Ebene 1) ─────────────────────────
+
+/**
+ * Frontmatter einer MDX-Datei. Toleriert ein fuehrendes BOM — 14 Dateien in
+ * content/persoenlichkeiten haben eines, und ein Parser, der daran scheitert,
+ * meldet sie faelschlich als "kein Frontmatter".
+ */
+function mdxFrontmatter(text) {
+  const t = text.replace(/^﻿/, '');
+  const m = t.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!m) return null;
+  const o = {};
+  for (const zeile of m[1].split(/\r?\n/)) {
+    const kv = zeile.match(/^([a-zA-Z0-9_]+):\s*(.*)$/);
+    if (kv) o[kv[1]] = kv[2].replace(/^["']|["']$/g, '').trim();
+  }
+  return o;
+}
+
+/** Alle MDX-Inhalte mit Kollektion, Frontmatter und BOM-Kennzeichen. */
+let _inhalte;
+function inhalte() {
+  if (_inhalte) return _inhalte;
+  const base = p('content');
+  if (!existsSync(base)) abbruch('content/ fehlt.');
+  const treffer = [];
+  const gehe = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const voll = join(dir, e.name);
+      if (e.isDirectory()) gehe(voll);
+      else if (e.name.endsWith('.mdx')) {
+        const roh = readFileSync(voll, 'utf8');
+        const rel = voll.slice(base.length + 1).replace(/\\/g, '/');
+        treffer.push({
+          pfad: 'content/' + rel,
+          kollektion: rel.split('/')[0],
+          bom: roh.charCodeAt(0) === 0xfeff,
+          fm: mdxFrontmatter(roh),
+        });
+      }
+    }
+  };
+  gehe(base);
+  if (!treffer.length) abbruch('keine MDX-Dateien unter content/ gefunden.');
+  _inhalte = treffer;
+  return _inhalte;
+}
 
 /** Alle Seiten-Routen aus src/app, mit ihrem URL-Pfad. */
 let _seiten;

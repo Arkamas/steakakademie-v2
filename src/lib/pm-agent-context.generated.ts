@@ -50,8 +50,8 @@ export interface ProjectStatus {
 
 export const PROJECT_STATUS: ProjectStatus = {
     "readinessScore": null,
-    "erfuelltGesamt": 43,
-    "pruefbarGesamt": 61,
+    "erfuelltGesamt": 52,
+    "pruefbarGesamt": 71,
     "nichtMessbarGesamt": 0,
     "bereiche": [
       {
@@ -189,6 +189,75 @@ export const PROJECT_STATUS: ProjectStatus = {
             "frage": "package-lock.json ist mit package.json synchron.",
             "status": "erfuellt",
             "beleg": "npm ls meldet keine Abweichung"
+          }
+        ]
+      },
+      {
+        "name": "SEO & Traffic",
+        "erfuellt": 9,
+        "pruefbar": 10,
+        "nichtMessbar": 0,
+        "score": 90,
+        "kriterien": [
+          {
+            "id": "indexierbare-seiten-mit-metadata",
+            "frage": "Jede indexierbare Seite hat Metadata.",
+            "status": "erfuellt",
+            "beleg": "alle 61 indexierbaren Seiten haben Metadata (32 bewusst ausgeschlossen)"
+          },
+          {
+            "id": "jedes-rezept-in-sitemap",
+            "frage": "Jedes Rezept im Repo hat einen Eintrag in der Live-Sitemap.",
+            "status": "erfuellt",
+            "beleg": "alle 93 Rezepte in der Sitemap"
+          },
+          {
+            "id": "robots-verweist-auf-sitemap",
+            "frage": "robots.txt nennt die Sitemap.",
+            "status": "erfuellt",
+            "beleg": "https://steakakademie.de/sitemap.xml"
+          },
+          {
+            "id": "gsc-verifiziert",
+            "frage": "Die Search-Console-Verifikation liegt als DNS-TXT-Record vor.",
+            "status": "erfuellt",
+            "beleg": "Search-Console-Verifikation als DNS-TXT vorhanden"
+          },
+          {
+            "id": "ki-crawler-ausdruecklich-erlaubt",
+            "frage": "robots.txt adressiert die Answer-Engine-Crawler ausdrücklich.",
+            "status": "erfuellt",
+            "beleg": "alle 6 Answer-Engine-Crawler ausdrücklich adressiert"
+          },
+          {
+            "id": "strukturierte-daten-in-rezeptvorlage",
+            "frage": "Die Rezeptvorlage gibt strukturierte Daten als JSON-LD aus.",
+            "status": "erfuellt",
+            "beleg": "src/components/RecipeTemplate.tsx enthält application/ld+json"
+          },
+          {
+            "id": "canonical-basis-gesetzt",
+            "frage": "Das Root-Layout setzt metadataBase und einen Standard-Canonical.",
+            "status": "erfuellt",
+            "beleg": "src/app/layout.tsx enthält metadataBase, canonical"
+          },
+          {
+            "id": "og-bildroute-vorhanden",
+            "frage": "Die OG-Bildroute für Social-Vorschauen existiert.",
+            "status": "erfuellt",
+            "beleg": "src/app/api/og vorhanden"
+          },
+          {
+            "id": "geo-check-gruen",
+            "frage": "Der Workflow \"GEO-Check\" ist zuletzt erfolgreich gelaufen.",
+            "status": "erfuellt",
+            "beleg": "\"GEO-Check\" zuletzt success"
+          },
+          {
+            "id": "traffic-datenquelle-angebunden",
+            "frage": "Eine serverseitige Traffic-Datenquelle ist angebunden (Search Console, GA4 oder Plausible-API).",
+            "status": "nicht_erfuellt",
+            "beleg": "keine serverseitige Traffic-Quelle: weder Search-Console- noch GA4- oder Plausible-API. Traffic ist damit für den Generator unmessbar."
           }
         ]
       },
@@ -434,7 +503,7 @@ export const PROJECT_STATUS: ProjectStatus = {
             "id": "mail-empfang-konfiguriert",
             "frage": "Die Domain hat MX-Einträge und kann Mail empfangen.",
             "status": "erfuellt",
-            "beleg": "3 MX-Einträge: route1.mx.cloudflare.net, route2.mx.cloudflare.net, route3.mx.cloudflare.net"
+            "beleg": "3 MX-Einträge: route2.mx.cloudflare.net, route1.mx.cloudflare.net, route3.mx.cloudflare.net"
           },
           {
             "id": "spf-vorhanden",
@@ -477,10 +546,6 @@ export const PROJECT_STATUS: ProjectStatus = {
     ],
     "nichtGemessen": [
       {
-        "name": "SEO & Traffic",
-        "grund": "Struktur-Checks wären sofort möglich. Für echte Messwerte sind Search Console (DNS-verifiziert) und GA4 anzubinden — noch nicht getan."
-      },
-      {
         "name": "Content-Strategie",
         "grund": "Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als Datei — ohne beides ist der Bereich nicht ehrlich zu bepunkten."
       }
@@ -505,6 +570,15 @@ export const PROJECT_STATUS: ProjectStatus = {
       "TypeScript läuft im strict-Modus.",
       "npm audit meldet keine Schwachstelle der Stufe critical.",
       "package-lock.json ist mit package.json synchron.",
+      "Jede indexierbare Seite hat Metadata.",
+      "Jedes Rezept im Repo hat einen Eintrag in der Live-Sitemap.",
+      "robots.txt nennt die Sitemap.",
+      "Die Search-Console-Verifikation liegt als DNS-TXT-Record vor.",
+      "robots.txt adressiert die Answer-Engine-Crawler ausdrücklich.",
+      "Die Rezeptvorlage gibt strukturierte Daten als JSON-LD aus.",
+      "Das Root-Layout setzt metadataBase und einen Standard-Canonical.",
+      "Die OG-Bildroute für Social-Vorschauen existiert.",
+      "Der Workflow \"GEO-Check\" ist zuletzt erfolgreich gelaufen.",
       "Jede Diplom-Stufe hat gleich viele Lektionen, das Raster ist lückenlos.",
       "Innerhalb einer Stufe vergibt keine Lektion eine doppelte order.",
       "Kein lektionSlug kommt doppelt vor.",
@@ -546,6 +620,7 @@ export const PROJECT_STATUS: ProjectStatus = {
       "Die Deploy-Konfiguration im Repo passt zu dem Hoster, der die Live-Seite ausliefert.",
       "Jede verwendete Claude-Modell-ID ist auf eine konkrete Version gepinnt.",
       "package.json deklariert eine engines.node-Spanne.",
+      "Eine serverseitige Traffic-Datenquelle ist angebunden (Search Console, GA4 oder Plausible-API).",
       "Die Diplom-Stufen sind zentral definiert, nicht in mehreren Komponenten dupliziert.",
       "Die Claude-Modell-IDs stehen an einer zentralen Stelle statt als Literale im Code verstreut.",
       "Jeder inhaltserzeugende Agent liest die kanonische Kerntemperatur-Referenz (Regel 8c).",
@@ -557,6 +632,6 @@ export const PROJECT_STATUS: ProjectStatus = {
       "Die DMARC-Politik weist Fälschungen ab (p=quarantine oder p=reject).",
       "Kein GitHub-Workflow steht mit seinem letzten Lauf auf failure."
     ],
-    "generatedAt": "2026-08-13T12:46:16.575Z",
+    "generatedAt": "2026-08-13T12:59:33.069Z",
     "offline": false
   }

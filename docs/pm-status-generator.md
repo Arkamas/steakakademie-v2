@@ -1,8 +1,7 @@
 # PM-Status-Generator — Entwurf und Betriebsregeln
 
-> Status: Ebene 1–3 gebaut, sechs von acht Bereichen migriert (Avatar-System,
-> Tech-Stack & Tools, Technische Infrastruktur, Monetarisierung,
-> KI-System & Automation, Kurse & Diplom). Stand 13.08.2026.
+> Status: Ebene 1–3 gebaut, sieben von acht Bereichen migriert. Offen ist nur
+> noch Content-Strategie. Stand 13.08.2026.
 
 Dieses Dokument legt fest, **was** der Generator misst und **warum** er es so
 misst. Die Kriterien selbst stehen in `data/pm-status-kriterien.yaml`, der Code
@@ -217,7 +216,15 @@ lueckenlos, ohne doppelte Slugs oder Ordnungszahlen und mit allen neun
 Pflichtfeldern. Der frueher vermutete Widerspruch "5 Lektionsstufen gegen 4
 Diplom-Stufen" existierte nie (siehe unten).
 
-Offen: SEO & Traffic · Content-Strategie.
+Dann **SEO & Traffic** — 90 %, aber mit einer wichtigen Einschraenkung: der
+Bereich misst die *Struktur*, nicht den *Traffic*. Es gibt keine serverseitig
+angebundene Datenquelle. Plausible und Clarity laufen im Browser; die
+/go-Redirects senden zwar Ereignisse an `plausible.io/api/event`, aber Senden
+ist nicht Lesen. Das ist als eigenes Kriterium erfasst und steht auf
+`nicht_erfuellt`, nicht auf `nicht_messbar`: dass nichts angebunden ist, laesst
+sich einwandfrei feststellen — es ist ein Befund, kein Messfehler.
+
+Offen: Content-Strategie.
 
 Für „Content-Strategie" ist vorher zu klären, woraus der Nenner kommt — es gibt
 weder Keyword-Map noch Redaktionsplan als Datei. Ohne beides ist der Bereich
@@ -254,7 +261,13 @@ erzeugt, die sich bei genauem Hinsehen aufloesten:
 | „5 Lektionsstufen gegen 4 Diplom-Stufen“ | Es gibt 5 Tiers; das Suchmuster enthielt `meister`, der Code schreibt `master` |
 | „Platin und Meister sind unerreichbar“ | `tierForLevel` wird von einer 10er-Level-Liste gefuettert, nicht von der 5er-Roadmap |
 
-Alle vier waeren als Kriterium in den Katalog gewandert und haetten dort
+| „11 Seiten ohne Metadata“ | Alle 11 sind in robots.txt gesperrt oder in `next-sitemap.config.js` ausgeschlossen — die 91-von-93-Zaehlung zuvor hatte ausserdem alle `.tsx` statt nur `page.tsx` gezaehlt |
+| „Traffic-Quelle ist angebunden“ | Gefunden wurde `plausible.io/api/event` in den /go-Redirects: Ereignis-Versand, kein Statistik-Abruf |
+
+Die letzten beiden entstanden erst *im gebauten Kriterium* und wurden nur
+entdeckt, weil das Ergebnis unplausibel aussah („93 von 93 Rezepten fehlen“).
+
+Alle sechs waeren als Kriterium in den Katalog gewandert und haetten dort
 dauerhaft Falsches behauptet — mit dem Anschein von Messgenauigkeit, weil sie
 aus einem Generator kommen.
 

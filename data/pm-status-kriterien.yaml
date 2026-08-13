@@ -119,6 +119,84 @@ bereiche:
         frage: package-lock.json ist mit package.json synchron.
         pruefung: lockfile-synchron
 
+  - name: SEO & Traffic
+    beschreibung: >-
+      Auffindbarkeit und ihre technische Grundlage. Der Bereich misst die
+      Struktur, NICHT den Traffic — dafür fehlt eine serverseitig angebundene
+      Datenquelle. Genau das ist als eigenes Kriterium erfasst, statt den
+      Bereich stillschweigend kleiner zu machen als er ist.
+    kriterien:
+      # Bewusst nur indexierbare Seiten: /admin/, /auth/, /profil und weitere
+      # sind in robots.txt gesperrt bzw. in next-sitemap.config.js
+      # ausgeschlossen. Beide Listen werden zur Laufzeit gelesen, nicht
+      # hartkodiert — sonst driftet das Kriterium von der Wirklichkeit weg.
+      - id: indexierbare-seiten-mit-metadata
+        frage: Jede indexierbare Seite hat Metadata.
+        pruefung: indexierbare-seiten-mit-metadata
+
+      - id: jedes-rezept-in-sitemap
+        frage: Jedes Rezept im Repo hat einen Eintrag in der Live-Sitemap.
+        pruefung: jedes-rezept-in-sitemap
+        netz: true
+
+      - id: robots-verweist-auf-sitemap
+        frage: robots.txt nennt die Sitemap.
+        pruefung: robots-verweist-auf-sitemap
+
+      - id: gsc-verifiziert
+        frage: Die Search-Console-Verifikation liegt als DNS-TXT-Record vor.
+        pruefung: gsc-verifiziert
+        netz: true
+
+      # GEO-Strategie: Answer-Engine-Crawler sind ausdruecklich erwuenscht,
+      # nicht nur geduldet (CLAUDE.md, docs/geo-llm-ranking-factors.md).
+      - id: ki-crawler-ausdruecklich-erlaubt
+        frage: robots.txt adressiert die Answer-Engine-Crawler ausdrücklich.
+        pruefung: ki-crawler-ausdruecklich-erlaubt
+        crawler: [GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended, CCBot]
+
+      - id: strukturierte-daten-in-rezeptvorlage
+        frage: Die Rezeptvorlage gibt strukturierte Daten als JSON-LD aus.
+        pruefung: datei-enthaelt
+        datei: src/components/RecipeTemplate.tsx
+        enthaelt: ['application/ld+json']
+
+      # canonical wird global im Root-Layout gesetzt; Seiten ueberschreiben es
+      # bei Bedarf. Ein Pro-Seite-Kriterium waere deshalb falsch.
+      - id: canonical-basis-gesetzt
+        frage: Das Root-Layout setzt metadataBase und einen Standard-Canonical.
+        pruefung: datei-enthaelt
+        datei: src/app/layout.tsx
+        enthaelt: [metadataBase, 'canonical']
+
+      - id: og-bildroute-vorhanden
+        frage: Die OG-Bildroute für Social-Vorschauen existiert.
+        pruefung: pfad-vorhanden
+        datei: src/app/api/og
+
+      - id: geo-check-gruen
+        frage: Der Workflow "GEO-Check" ist zuletzt erfolgreich gelaufen.
+        pruefung: workflow-zuletzt-gruen
+        workflow: GEO-Check
+        netz: true
+
+      # Plausible und Clarity laufen im Browser — der Generator kommt an ihre
+      # Zahlen nicht heran. Solange keine serverseitige Quelle angebunden ist,
+      # ist jede Traffic-Aussage im Dashboard eine Behauptung.
+      - id: traffic-datenquelle-angebunden
+        frage: Eine serverseitige Traffic-Datenquelle ist angebunden (Search Console, GA4 oder Plausible-API).
+        pruefung: traffic-datenquelle-angebunden
+        # Marker fuer das LESEN von Statistik. Nicht aufnehmen:
+        # plausible.io/api/event — das senden die /go-Redirects, es ist
+        # Ereignis-Versand und liefert dem Generator keine einzige Zahl.
+        marker:
+          - searchconsole
+          - webmasters.googleapis.com
+          - BetaAnalyticsDataClient
+          - analyticsdata.googleapis.com
+          - plausible.io/api/v1/stats
+          - plausible.io/api/v2/query
+
   - name: Kurse & Diplom-System
     beschreibung: >-
       Lektionsbestand, Struktur und die Verdrahtung von Fortschritt und
@@ -388,10 +466,6 @@ bereiche:
 # "nicht gemessen" ausgewiesen — nicht weggelassen, sonst wirkt der Status
 # vollständig, obwohl drei Viertel fehlen.
 nicht_gemessen:
-  - name: SEO & Traffic
-    grund: >-
-      Struktur-Checks wären sofort möglich. Für echte Messwerte sind
-      Search Console (DNS-verifiziert) und GA4 anzubinden — noch nicht getan.
   - name: Content-Strategie
     grund: >-
       Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als

@@ -25,6 +25,7 @@ import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import dns from 'node:dns/promises';
+import { createRequire } from 'node:module';
 // js-yaml v4: `load` nutzt das Default-Schema und kann keine beliebigen Typen
 // instanziieren — `safeLoad` wurde in v4 entfernt, weil `load` es ersetzt.
 // (Die PyYAML-Warnung vor `yaml.load` trifft hier nicht zu.)
@@ -231,6 +232,98 @@ const PRUEFUNGEN = {
     return pkg.engines?.node
       ? ok(`engines.node = ${pkg.engines.node}`)
       : nein('package.json deklariert kein engines.node');
+  },
+
+  // ── SEO & Traffic ─────────────────────────────────────────────────────
+
+  // Nur INDEXIERBARE Seiten. Admin-, Auth- und Profilseiten sind in robots.txt
+  // gesperrt bzw. in next-sitemap.config.js ausgeschlossen — dass sie keine
+  // Metadata haben, ist konsequent und kein Mangel (Regel 5).
+  'indexierbare-seiten-mit-metadata': () => {
+    const seiten = seitenRouten();
+    const aus = ausgeschlossenePfade();
+    const indexierbar = seiten.filter((s) => !aus.some((pre) => s.route === pre || s.route.startsWith(pre + '/')));
+    if (!indexierbar.length) return unklar('keine indexierbaren Seiten ermittelt');
+    const ohne = indexierbar.filter((s) => !/export const metadata|generateMetadata/.test(readFileSync(s.datei, 'utf8')));
+    return ohne.length
+      ? nein(`${ohne.length} von ${indexierbar.length} ohne Metadata: ${ohne.slice(0, 6).map((s) => s.route).join(', ')}`)
+      : ok(`alle ${indexierbar.length} indexierbaren Seiten haben Metadata (${seiten.length - indexierbar.length} bewusst ausgeschlossen)`);
+  },
+
+  'jedes-rezept-in-sitemap': async () => {
+    if (OFFLINE) return unklar('--offline: Sitemap nicht abgerufen');
+    const slugs = readdirSync(p('content/rezepte'))
+      .filter((f) => f.endsWith('.mdx'))
+      .map((f) => f.replace(/\.mdx$/, ''));
+    if (!slugs.length) return unklar('keine Rezept-MDX gefunden');
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), 20000);
+    let xml;
+    try {
+      const r = await fetch(`https://${DOMAIN}/sitemap-0.xml`, { signal: ctl.signal });
+      xml = await r.text();
+    } catch {
+      return unklar('Sitemap nicht abrufbar');
+    } finally {
+      clearTimeout(t);
+    }
+    // Rezept-URLs sind nach Kategorie verschachtelt (/rezepte/beilagen/<slug>),
+    // der Slug ist also das LETZTE Pfadsegment — nicht direkt nach /rezepte/.
+    const fehlend = slugs.filter((s) => !xml.includes(`/${s}</loc>`));
+    return fehlend.length
+      ? nein(`${fehlend.length} von ${slugs.length} Rezepten fehlen: ${fehlend.slice(0, 5).join(', ')}`)
+      : ok(`alle ${slugs.length} Rezepte in der Sitemap`);
+  },
+
+  'robots-verweist-auf-sitemap': () => {
+    if (!existsSync(p('public/robots.txt'))) return nein('public/robots.txt fehlt');
+    const txt = lies('public/robots.txt');
+    const m = txt.match(/^Sitemap:\s*(\S+)/mi);
+    return m ? ok(m[1]) : nein('robots.txt nennt keine Sitemap');
+  },
+
+  'gsc-verifiziert': async () => {
+    if (OFFLINE) return unklar('--offline: Netz-Prüfung übersprungen');
+    const txt = await dnsRecords('TXT');
+    if (txt === null) return unklar('TXT-Auflösung fehlgeschlagen');
+    const rec = txtFlach(txt).find((t) => t.startsWith('google-site-verification='));
+    return rec
+      ? ok('Search-Console-Verifikation als DNS-TXT vorhanden')
+      : nein('keine google-site-verification im DNS');
+  },
+
+  // GEO-Strategie (CLAUDE.md): Answer-Engine-Crawler sind ausdrücklich erwünscht.
+  'ki-crawler-ausdruecklich-erlaubt': (k) => {
+    if (!existsSync(p('public/robots.txt'))) return nein('public/robots.txt fehlt');
+    const txt = lies('public/robots.txt');
+    const fehlend = k.crawler.filter((c) => !new RegExp(`User-agent:\\s*${c}\\b`, 'i').test(txt));
+    return fehlend.length
+      ? nein(`${fehlend.length} von ${k.crawler.length} nicht genannt: ${fehlend.join(', ')}`)
+      : ok(`alle ${k.crawler.length} Answer-Engine-Crawler ausdrücklich adressiert`);
+  },
+
+  'datei-enthaelt': (k) => {
+    if (!existsSync(p(k.datei))) return nein(`${k.datei} fehlt`);
+    const txt = lies(k.datei);
+    const fehlend = k.enthaelt.filter((m) => !txt.includes(m));
+    return fehlend.length
+      ? nein(`${k.datei} enthält nicht: ${fehlend.join(', ')}`)
+      : ok(`${k.datei} enthält ${k.enthaelt.join(', ')}`);
+  },
+
+  // Ehrlich negativ statt nicht_messbar: dass keine Quelle angebunden ist,
+  // lässt sich einwandfrei feststellen — es ist ein Befund, kein Messfehler.
+  'traffic-datenquelle-angebunden': (k) => {
+    const treffer = quelldateien().filter((f) => {
+      const txt = readFileSync(f, 'utf8');
+      return k.marker.some((m) => txt.includes(m));
+    });
+    return treffer.length
+      ? ok(`serverseitige Traffic-Quelle angebunden (${treffer.length} Stelle(n))`)
+      : nein(
+          'keine serverseitige Traffic-Quelle: weder Search-Console- noch GA4- oder ' +
+          'Plausible-API. Traffic ist damit für den Generator unmessbar.',
+        );
   },
 
   // ── Kurse & Diplom-System ─────────────────────────────────────────────
@@ -634,6 +727,54 @@ const PRUEFUNGEN = {
 };
 
 // ───────────────────────── Fakten-Helfer (Ebene 1) ─────────────────────────
+
+/** Alle Seiten-Routen aus src/app, mit ihrem URL-Pfad. */
+let _seiten;
+function seitenRouten() {
+  if (_seiten) return _seiten;
+  const base = p('src/app');
+  const treffer = [];
+  const gehe = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const voll = join(dir, e.name);
+      if (e.isDirectory()) gehe(voll);
+      else if (e.name === 'page.tsx') {
+        const rel = voll.slice(base.length).replace(/\\/g, '/').replace(/\/page\.tsx$/, '');
+        // Routengruppen (gruppe) zählen nicht zum URL-Pfad
+        treffer.push({ datei: voll, route: rel.replace(/\/\([^/]+\)/g, '') || '/' });
+      }
+    }
+  };
+  gehe(base);
+  _seiten = treffer;
+  return _seiten;
+}
+
+/**
+ * Pfade, die bewusst nicht indexiert werden — aus robots.txt (Disallow) und
+ * next-sitemap.config.js (exclude). Beide Listen sind erklaerte Absicht, also
+ * darf ihr Fehlen von Metadata kein Mangel sein.
+ */
+let _aus;
+function ausgeschlossenePfade() {
+  if (_aus) return _aus;
+  const raus = new Set();
+  if (existsSync(p('public/robots.txt'))) {
+    for (const m of lies('public/robots.txt').matchAll(/^Disallow:\s*(\S+)/gim)) {
+      raus.add(m[1].replace(/\/$/, ''));
+    }
+  }
+  try {
+    const req = createRequire(import.meta.url);
+    const cfg = req(p('next-sitemap.config.js'));
+    for (const e of cfg.exclude || []) raus.add(e.replace(/\/\*$/, '').replace(/\/$/, ''));
+  } catch {
+    // Kein Abbruch: die robots.txt-Liste allein ist bereits eine gueltige Basis.
+  }
+  raus.delete('');
+  _aus = [...raus];
+  return _aus;
+}
 
 /** Alle Diplom-Lektionen mit ihrem Frontmatter. */
 let _lektionen;

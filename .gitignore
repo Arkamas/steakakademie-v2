@@ -66,6 +66,12 @@ content/rezepte/.recipe-cache.json
 .netlify
 STATUS.md
 
+# Deno-Lockfile: kein Deno im Projekt, sondern ein Build-Artefakt des
+# Netlify-Next.js-Plugins (Edge-Functions-Bootstrap). War versehentlich
+# getrackt (Commit dba4958) und am 13.08.2026 entfernt. Falls das Projekt
+# jemals bewusst Deno einsetzt, gehoert diese Zeile wieder raus.
+deno.lock
+
 # Playwright E2E artifacts
 test-results/
 playwright-report/

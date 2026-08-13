@@ -42,6 +42,9 @@
     "video:board": "node scripts/om.mjs python -m backlot open",
     "video:demo": "node scripts/om.mjs make demo",
     "video:kerntemperatur": "node scripts/video-kerntemperatur.mjs",
+    "pm:context": "node scripts/generate-pm-context.mjs",
+    "pm:context:offline": "node scripts/generate-pm-context.mjs --offline",
+    "pm:context:check": "node scripts/generate-pm-context.mjs --check",
     "cut-images": "node scripts/cut-images.mjs",
     "cut-images:dry": "node scripts/cut-images.mjs --dry-run",
     "cut-images:force": "node scripts/cut-images.mjs --force"

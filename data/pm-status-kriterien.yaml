@@ -1,0 +1,147 @@
+# Kriterienkatalog für den PM-Status-Generator
+#
+# Doku und Begründung: docs/pm-status-generator.md
+# Generator:           scripts/generate-pm-context.mjs
+#
+# REGELN (kurz — die lange Fassung steht in der Doku):
+#  1. Jedes Kriterium ist ein SATZ, der falsch sein kann. Keine Substantive.
+#     Falsch: "Supabase".  Richtig: "Jeder Avatar-Zustand hat ein Video-Asset."
+#  2. Jedes Kriterium stützt sich auf GENAU EINEN interpretationsfreien Fakt.
+#  3. Drei Zustände: erfuellt / nicht_erfuellt / nicht_messbar.
+#     Nicht messbar heißt: fällt aus dem Nenner. NICHT: zählt als nicht erfüllt.
+#  4. `pruefung` verweist auf eine Prüf-ID im Generator. Fehlt sie dort,
+#     bricht der Lauf ab — ein Kriterium darf nicht still verschwinden.
+#  5. `netz: true` markiert Prüfungen, die ohne Netz `nicht_messbar` ergeben.
+
+version: 1
+
+bereiche:
+  - name: Avatar-System
+    beschreibung: >-
+      KI-Redaktionspersonas, ihre Assets und die rechtliche Kennzeichnung.
+      Der Nenner steht im Code: der Zustandsautomat definiert die Zustände,
+      authors.ts die Personas.
+    kriterien:
+      - id: personas-angelegt
+        frage: Alle drei KI-Personas (Marco, Jonas, Elena) sind in authors.ts angelegt.
+        pruefung: personas-angelegt
+
+      - id: avatar-pfade-aufloesbar
+        frage: Jeder in authors.ts referenzierte avatar-Pfad zeigt auf eine existierende Datei.
+        pruefung: avatar-pfade-aufloesbar
+
+      - id: marco-portraet
+        frage: Marcos Porträtbild liegt unter public/images/authors/marco-richter.jpg.
+        pruefung: datei-vorhanden
+        datei: public/images/authors/marco-richter.jpg
+
+      - id: marco-rueckenansicht
+        frage: Marcos Rückenansicht (Normalzustand am Grill) liegt unter public/images/marco-back.jpg.
+        pruefung: datei-vorhanden
+        datei: public/images/marco-back.jpg
+
+      - id: zustand-videos-vollstaendig
+        frage: Jeder sichtbare Zustand des Avatar-Automaten hat ein Video-Asset.
+        pruefung: zustand-videos-vollstaendig
+
+      - id: rotations-vollstaendig
+        frage: ROTATIONS in MarcoAvatar.tsx deckt jeden Zustand des Automaten ab.
+        pruefung: rotations-vollstaendig
+
+      - id: autorenseiten-route
+        frage: Die Autorenseite /autoren/[slug] existiert als Route.
+        pruefung: pfad-vorhanden
+        datei: src/app/autoren/[slug]
+
+      - id: ki-disclaimer-route
+        frage: Die Seite /ki-disclaimer existiert als Route.
+        pruefung: pfad-vorhanden
+        datei: src/app/ki-disclaimer
+
+      - id: avatar-leitlinie-dokumentiert
+        frage: Die Avatar-Leitlinie ist in docs/avatare/marco.md festgehalten.
+        pruefung: datei-vorhanden
+        datei: docs/avatare/marco.md
+
+      # Hintergrund: Am 09.08.2026 behaupteten die Personas-Bios gelebte
+      # Erfahrung ("testet alle Produkte selbst", "über 15 Jahren Grillpraxis")
+      # direkt neben Affiliate-Empfehlungen — als irreführende geschäftliche
+      # Handlung nach UWG korrigiert. Dieses Kriterium hält den Zustand.
+      - id: bios-ohne-erfahrungsbehauptung
+        frage: Keine KI-Persona-Bio behauptet selbst gelebte Erfahrung oder eigene Produkttests.
+        pruefung: bios-ohne-erfahrungsbehauptung
+
+  - name: Tech-Stack & Tools
+    beschreibung: >-
+      Zustand von Abhängigkeiten, Typprüfung und Build-Konfiguration.
+      Nahezu vollständig aus npm- und tsc-Ausgaben ableitbar.
+    kriterien:
+      - id: typecheck-fehlerfrei
+        frage: tsc --noEmit läuft fehlerfrei durch.
+        pruefung: typecheck-fehlerfrei
+
+      - id: tsconfig-strict
+        frage: TypeScript läuft im strict-Modus.
+        pruefung: tsconfig-strict
+
+      - id: audit-keine-critical
+        frage: npm audit meldet keine Schwachstelle der Stufe critical.
+        pruefung: audit-schwelle
+        stufe: critical
+
+      - id: audit-keine-high
+        frage: npm audit meldet keine Schwachstelle der Stufe high.
+        pruefung: audit-schwelle
+        stufe: high
+
+      - id: env-example-vollstaendig
+        frage: .env.example dokumentiert jede im Code referenzierte Umgebungsvariable.
+        pruefung: env-example-vollstaendig
+
+      - id: deploy-konfig-eindeutig
+        frage: Es liegt genau eine Deploy-Konfiguration im Repo (netlify.toml oder vercel.json, nicht beide).
+        pruefung: deploy-konfig-eindeutig
+
+      - id: deploy-konfig-passt-zum-hoster
+        frage: Die Deploy-Konfiguration im Repo passt zu dem Hoster, der die Live-Seite ausliefert.
+        pruefung: deploy-konfig-passt-zum-hoster
+        netz: true
+
+      - id: modell-ids-gepinnt
+        frage: Jede verwendete Claude-Modell-ID ist auf eine konkrete Version gepinnt.
+        pruefung: modell-ids-gepinnt
+
+      - id: node-engine-deklariert
+        frage: package.json deklariert eine engines.node-Spanne.
+        pruefung: node-engine-deklariert
+
+      - id: lockfile-synchron
+        frage: package-lock.json ist mit package.json synchron.
+        pruefung: lockfile-synchron
+
+# Bereiche ohne Kriterienkatalog. Werden im Dashboard ausdrücklich als
+# "nicht gemessen" ausgewiesen — nicht weggelassen, sonst wirkt der Status
+# vollständig, obwohl drei Viertel fehlen.
+nicht_gemessen:
+  - name: SEO & Traffic
+    grund: >-
+      Struktur-Checks wären sofort möglich. Für echte Messwerte sind
+      Search Console (DNS-verifiziert) und GA4 anzubinden — noch nicht getan.
+  - name: Monetarisierung
+    grund: >-
+      Affiliate-Status und Deeplink-Quote sind auslesbar; Umsatz erst mit
+      Digistore24-API-Zugang.
+  - name: Content-Strategie
+    grund: >-
+      Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als
+      Datei — ohne beides ist der Bereich nicht ehrlich zu bepunkten.
+  - name: Technische Infrastruktur
+    grund: Kriterien noch nicht formuliert.
+  - name: Kurse & Diplom-System
+    grund: >-
+      Lektionsraster ist auslesbar (5x7 vollständig); offen ist die Bewertung
+      des Widerspruchs 5 Lektionsstufen gegen 4 Diplom-Stufen im Code.
+  - name: KI-System & Automation
+    grund: >-
+      Workflow-Gesundheit ist über die GitHub-API messbar; Kriterien noch
+      nicht formuliert.

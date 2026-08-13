@@ -4,14 +4,24 @@ import { PROJECT_STATUS } from '@/lib/pm-agent-context'
 
 type Message = { role: 'user' | 'assistant'; content: string }
 
-function ScoreBar({ label, value }: { label: string; value: number }) {
+function ScoreBar({
+  label,
+  value,
+  detail,
+}: {
+  label: string
+  value: number
+  detail?: string
+}) {
   const color =
     value >= 60 ? '#4ade80' : value >= 35 ? '#d4a53a' : '#c8621a'
   return (
     <div className="mb-2">
-      <div className="flex justify-between text-xs font-mono text-[#8a7e6a] mb-1">
+      <div className="flex justify-between text-xs font-mono text-[#8a7e6a] mb-1 gap-3">
         <span>{label}</span>
-        <span style={{ color }}>{value}%</span>
+        <span className="shrink-0" style={{ color }}>
+          {value}%{detail ? <span className="text-[#8a7e6a]"> · {detail}</span> : null}
+        </span>
       </div>
       <div className="h-1 bg-[#2a2416] rounded-full overflow-hidden">
         <div
@@ -115,9 +125,19 @@ export default function PmAgentPage() {
     setChatLoading(false)
   }
 
+  // null, solange nicht alle Bereiche gemessen werden. Dann zeigt die Kachel
+  // ausdrücklich "nicht ermittelbar" statt einer erfundenen Zahl.
   const score = PROJECT_STATUS.readinessScore
   const scoreColor =
-    score >= 60 ? '#4ade80' : score >= 35 ? '#d4a53a' : '#c8621a'
+    score === null
+      ? '#8a7e6a'
+      : score >= 60
+        ? '#4ade80'
+        : score >= 35
+          ? '#d4a53a'
+          : '#c8621a'
+  const bereicheGesamt =
+    PROJECT_STATUS.bereiche.length + PROJECT_STATUS.nichtGemessen.length
 
   return (
     <div className="min-h-screen bg-[#0a0805] text-[#e8dcc8] font-mono p-4 md:p-6">
@@ -165,30 +185,68 @@ export default function PmAgentPage() {
             <div className="text-[#d4a53a] text-xs tracking-widest mb-4">
               ▸ VERKAUFSFÄHIGKEIT
             </div>
-            <div className="flex items-end gap-3 mb-4">
-              <div
-                className="text-5xl font-bold"
-                style={{ color: scoreColor }}
-              >
-                {score}%
+            {score === null ? (
+              <div className="mb-5">
+                <div className="text-2xl font-bold text-[#8a7e6a] mb-2">
+                  nicht ermittelbar
+                </div>
+                <div className="text-[#8a7e6a] text-xs leading-relaxed">
+                  Erst {PROJECT_STATUS.bereiche.length} von {bereicheGesamt} Bereichen
+                  werden gemessen. Eine Gesamtzahl wäre geraten — siehe{' '}
+                  <span className="text-[#d4a53a]">docs/pm-status-generator.md</span>.
+                </div>
               </div>
-              <div className="text-[#8a7e6a] text-xs pb-2">
-                Ziel: 80%
-                <br />
-                Delta: {80 - score}%
-              </div>
-            </div>
-            <div className="h-2 bg-[#2a2416] rounded-full overflow-hidden mb-5">
-              <div
-                className="h-full rounded-full"
-                style={{ width: `${score}%`, backgroundColor: scoreColor }}
-              />
-            </div>
+            ) : (
+              <>
+                <div className="flex items-end gap-3 mb-4">
+                  <div className="text-5xl font-bold" style={{ color: scoreColor }}>
+                    {score}%
+                  </div>
+                  <div className="text-[#8a7e6a] text-xs pb-2">
+                    Ziel: 80%
+                    <br />
+                    Delta: {80 - score}%
+                  </div>
+                </div>
+                <div className="h-2 bg-[#2a2416] rounded-full overflow-hidden mb-2">
+                  <div
+                    className="h-full rounded-full"
+                    style={{ width: `${score}%`, backgroundColor: scoreColor }}
+                  />
+                </div>
+                <div className="text-[#8a7e6a] text-xs mb-5">
+                  {PROJECT_STATUS.erfuelltGesamt} von {PROJECT_STATUS.pruefbarGesamt}{' '}
+                  prüfbaren Kriterien erfüllt
+                  {PROJECT_STATUS.nichtMessbarGesamt
+                    ? ` · ${PROJECT_STATUS.nichtMessbarGesamt} nicht messbar`
+                    : ''}
+                </div>
+              </>
+            )}
             <div className="space-y-2">
-              {Object.entries(PROJECT_STATUS.branches).map(([label, val]) => (
-                <ScoreBar key={label} label={label} value={val} />
+              {PROJECT_STATUS.bereiche.map((b) => (
+                <ScoreBar
+                  key={b.name}
+                  label={b.name}
+                  value={b.score ?? 0}
+                  detail={`${b.erfuellt}/${b.pruefbar}`}
+                />
               ))}
             </div>
+            {PROJECT_STATUS.nichtGemessen.length > 0 && (
+              <div className="mt-5 pt-4 border-t border-[#2a2416]">
+                <div className="text-[#8a7e6a] text-xs tracking-widest mb-2">
+                  NICHT GEMESSEN ({PROJECT_STATUS.nichtGemessen.length})
+                </div>
+                <ul className="space-y-1.5">
+                  {PROJECT_STATUS.nichtGemessen.map((n) => (
+                    <li key={n.name} className="text-xs text-[#8a7e6a] leading-snug">
+                      <span className="text-[#e8dcc8]">{n.name}</span> — {n.grund}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Critical Blockers */}
@@ -206,19 +264,27 @@ export default function PmAgentPage() {
             </ul>
           </div>
 
-          {/* Next Steps */}
+          {/* Offene Kriterien — geprüft, nicht erfüllt. Ersetzt die frühere,
+              handgepflegte "Nächste Schritte"-Liste: die Reihenfolge steckt
+              jetzt in den Blockern oben, die Substanz in geprüften Fakten. */}
           <div className="bg-[#16130a] border border-[#2a2416] p-5">
             <div className="text-[#d4a53a] text-xs tracking-widest mb-3">
-              ▸ NÄCHSTE SCHRITTE
+              ▸ OFFEN ({PROJECT_STATUS.open.length}) · geprüft
             </div>
             <ul className="space-y-2">
-              {PROJECT_STATUS.next.map((item, i) => (
+              {PROJECT_STATUS.open.map((item, i) => (
                 <li key={i} className="flex gap-2 text-xs text-[#e8dcc8]">
                   <span className="text-[#d4a53a] shrink-0">→</span>
                   <span>{item}</span>
                 </li>
               ))}
             </ul>
+            <div className="mt-4 pt-3 border-t border-[#2a2416] text-[#8a7e6a] text-xs">
+              Gemessen am{' '}
+              {new Date(PROJECT_STATUS.generatedAt).toLocaleString('de-DE')}
+              {PROJECT_STATUS.offline ? ' · ohne Netzprüfungen' : ''} ·{' '}
+              <span className="text-[#d4a53a]">npm run pm:context</span>
+            </div>
           </div>
         </div>
 

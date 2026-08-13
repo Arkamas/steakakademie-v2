@@ -1,17 +1,39 @@
-// Status-Daten kommen aus *.generated.ts. Der frühere Zusatz "via
-// generate-pm-context.js" war unwahr — dieses Skript liegt nicht im Repo und
-// wurde nie committet; die Datei wird von Hand gepflegt (Details in ihrem
-// Header). Werte sind ein Stand vom 25.06.2026, nicht tagesaktuell.
-// Hier wird NICHTS hardcoded — nur der Prompt, der diese Werte konsumiert.
+// Baut den System-Prompt des PM-Agenten aus den gemessenen Statusdaten.
+// Hier wird NICHTS hardcoded — die Daten kommen aus *.generated.ts, erzeugt
+// von scripts/generate-pm-context.mjs (`npm run pm:context`).
+// Entwurf und Regeln: docs/pm-status-generator.md
 
 import { PROJECT_STATUS } from './pm-agent-context.generated'
 
 export { PROJECT_STATUS }
 
-const topBranches = Object.entries(PROJECT_STATUS.branches)
-  .sort(([, a], [, b]) => a - b)
-  .map(([name, pct]) => `- ${name}: ${pct}%`)
+/** Gemessene Bereiche, schwächste zuerst. */
+const bereicheZeilen = [...PROJECT_STATUS.bereiche]
+  .sort((a, b) => (a.score ?? 101) - (b.score ?? 101))
+  .map((b) => {
+    const rest = b.nichtMessbar ? `, ${b.nichtMessbar} nicht messbar` : ''
+    return `- ${b.name}: ${b.score}% (${b.erfuellt} von ${b.pruefbar} Kriterien erfüllt${rest})`
+  })
   .join('\n')
+
+const nichtGemessenZeilen = PROJECT_STATUS.nichtGemessen
+  .map((n) => `- ${n.name} — ${n.grund}`)
+  .join('\n')
+
+/**
+ * Verkaufsfähigkeit. Bleibt null, solange nicht alle Bereiche gemessen werden —
+ * dann darf der Prompt auch keine Zahl behaupten.
+ */
+const verkaufsfaehigkeit =
+  PROJECT_STATUS.readinessScore === null
+    ? `- Verkaufsfähigkeit: NOCH NICHT ERMITTELBAR. Erst ${PROJECT_STATUS.bereiche.length} von ` +
+      `${PROJECT_STATUS.bereiche.length + PROJECT_STATUS.nichtGemessen.length} Bereichen werden gemessen. ` +
+      `Nenne keine Gesamtprozentzahl — sie existiert nicht.`
+    : `- Verkaufsfähigkeit: ${PROJECT_STATUS.readinessScore}% (Ziel: 80%) — ` +
+      `${PROJECT_STATUS.erfuelltGesamt} von ${PROJECT_STATUS.pruefbarGesamt} prüfbaren Kriterien erfüllt`
+
+const offenZeilen = PROJECT_STATUS.open.map((o) => `✕ ${o}`).join('\n')
+const fertigZeilen = PROJECT_STATUS.completed.map((c) => `✅ ${c}`).join('\n')
 
 export const AGENT_SYSTEM_PROMPT = `
 Du bist der strategische PM-Agent der Steakakademie (steakakademie.de).
@@ -22,25 +44,27 @@ Sport- & Gymnastiklehrer. Krisenüberlebender (Corona-Insolvenz). Solopreneur. K
 Deine Rolle: Du bist kein Assistent. Du bist der Chef. Du priorisierst, du drängst,
 du machst unbequem wenn nötig. Du kennst jeden offenen Punkt des Projekts.
 
-PROJEKTSTATUS — Momentaufnahme vom ${PROJECT_STATUS.generatedAt}, NICHT tagesaktuell.
-Diese Daten werden von Hand gepflegt, nicht automatisch aus CLAUDE.md erzeugt.
-Bei Widersprüchen gilt CLAUDE.md, nicht diese Zahlen.
-- Verkaufsfähigkeit: ${PROJECT_STATUS.readinessScore}% (Ziel: 80%)
-- ${PROJECT_STATUS.critical.length} kritische Blocker blockieren JEDEN nachhaltigen Umsatz
+PROJEKTSTATUS — gemessen am ${PROJECT_STATUS.generatedAt}${PROJECT_STATUS.offline ? ' (ohne Netzprüfungen)' : ''}.
+Jede Zahl unten stammt aus einer automatischen Prüfung gegen das Repo, nicht aus
+einer Schätzung. Was nicht geprüft werden konnte, steht als "nicht messbar" da und
+zählt nirgends mit.
+${verkaufsfaehigkeit}
+- ${PROJECT_STATUS.critical.length} kritische Blocker (Quelle: CLAUDE.md §5)
 
-KRITISCHE BLOCKER (diese zuerst):
-${PROJECT_STATUS.critical.map((c) => `- ${c}`).join('\n')}
+KRITISCHE BLOCKER (diese zuerst, in dieser Reihenfolge):
+${PROJECT_STATUS.critical.map((c, i) => `${i + 1}. ${c}`).join('\n')}
 
-FERTIG (Stärken):
-${PROJECT_STATUS.completed.map((c) => `✅ ${c}`).join('\n')}
+GEMESSENE BEREICHE (schwächste zuerst):
+${bereicheZeilen}
 
-NÄCHSTE SCHRITTE (nach Blockern):
-${PROJECT_STATUS.next.map((n) => `→ ${n}`).join('\n')}
+NOCH NICHT GEMESSEN — hierzu darfst du KEINE Fortschrittsaussage machen:
+${nichtGemessenZeilen}
 
-FORTSCHRITT PRO BEREICH (schwächste zuerst) — UNGEPRÜFT: Zahlen aus demselben
-einmaligen Lauf; ein Konsistenz-Audit hat zwei Werte daraus als nachweislich
-falsch belegt und entfernt. Als grobe Richtung lesen, nie als Messwert zitieren:
-${topBranches}
+OFFEN (geprüft, nicht erfüllt):
+${offenZeilen}
+
+ERFÜLLT (geprüft):
+${fertigZeilen}
 
 REGELN FÜR DEINE ANTWORTEN:
 - Deutsch immer
@@ -49,5 +73,7 @@ REGELN FÜR DEINE ANTWORTEN:
 - Nenne immer den nächsten konkreten Handlungsschritt
 - Wenn jemand über unwichtige Details redet, bring sie zurück zur Verkaufsfähigkeit
 - Du erinnerst an offene Blocker, auch wenn nicht gefragt wird
+- Erfinde keine Prozentzahl für einen nicht gemessenen Bereich. Sag stattdessen,
+  dass er nicht gemessen wird, und was dafür fehlt.
 - Nutze Uwes Geschichte (Insolvenz, Rückschläge) als Motivations-Anker — nicht als Mitleid
 `

@@ -1,7 +1,8 @@
 # PM-Status-Generator — Entwurf und Betriebsregeln
 
-> Status: Ebene 1–3 gebaut, drei von acht Bereichen migriert (Avatar-System,
-> Tech-Stack & Tools, Technische Infrastruktur). Stand 13.08.2026.
+> Status: Ebene 1–3 gebaut, vier von acht Bereichen migriert (Avatar-System,
+> Tech-Stack & Tools, Technische Infrastruktur, Monetarisierung).
+> Stand 13.08.2026.
 
 Dieses Dokument legt fest, **was** der Generator misst und **warum** er es so
 misst. Die Kriterien selbst stehen in `data/pm-status-kriterien.yaml`, der Code
@@ -88,6 +89,31 @@ Der Generator hält nur die Prüf-Implementierungen unter ihrer `pruefung`-ID.
 
 Ein Kriterium ohne zugeordnete Prüfung ist ein harter Fehler — sonst
 verschwindet es still aus dem Nenner.
+
+## Regel 5: Nicht jede naheliegende Prüfung ist richtig
+
+Ein Kriterium kann technisch sauber messen und trotzdem das Falsche verlangen.
+Dann bestraft der Score eine bewusste, gut begründete Entscheidung — und der
+Druck entsteht, sie rückgängig zu machen, statt das Kriterium zu korrigieren.
+
+Zwei Beispiele aus „Monetarisierung", beide bewusst **nicht** geprüft:
+
+- **„Alle Amazon-Links sind `/dp/`-Deeplinks."** Klingt richtig, wäre falsch.
+  Bei Produkten mit US-Eigenvertrieb (Thermapen ONE, ThermoWorks Signals) ist
+  die Such-URL die bessere Wahl, weil der Deeplink auf amazon.de ins Leere
+  führt. Festgehalten in memory.md, 25.06.2026.
+- **„Der Digistore-Webhook prüft eine `sha_sign`-Signatur."** Der eingesetzte
+  IPN-Typ unterstützt das gar nicht; Token-in-URL ist die dokumentierte Wahl.
+  Geprüft wird deshalb, was tatsächlich schützt: dass ohne gültiges Token
+  ein 401 zurückkommt.
+
+Beide Auslassungen stehen als Kommentar im Kriterienkatalog, direkt neben der
+Stelle, an der jemand sie „nachrüsten" würde. Eine stillschweigende Auslassung
+wäre wertlos — sie würde beim nächsten Durchgang wieder eingebaut.
+
+Praktische Konsequenz: Wer ein Kriterium hinzufügt, prüft zuerst, ob der
+gemessene Sollzustand wirklich der gewollte ist. Im Zweifel ist die
+Projekthistorie (`memory.md`, CLAUDE.md) die Quelle, nicht die Intuition.
 
 ## Die Felder
 
@@ -176,7 +202,11 @@ auf die Probe gestellt: ohne Netz sind zehn seiner zwölf Kriterien
 darf nicht als Balken bei 0 % erscheinen — Dashboard und Prompt weisen es
 seither ausdrücklich als "nicht messbar" aus.
 
-Offen: SEO & Traffic · Monetarisierung · Content-Strategie · Kurse & Diplom ·
+Dann **Monetarisierung** — der Bereich, der Regel 5 erzwungen hat: zwei
+naheliegende Kriterien haetten bewusste Entscheidungen als Maengel gewertet.
+Umsatzzahlen bleiben aussen vor, gemessen wird die Verdrahtung.
+
+Offen: SEO & Traffic · Content-Strategie · Kurse & Diplom ·
 KI-System & Automation.
 
 Für „Content-Strategie" ist vorher zu klären, woraus der Nenner kommt — es gibt

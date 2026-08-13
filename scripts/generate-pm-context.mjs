@@ -233,6 +233,119 @@ const PRUEFUNGEN = {
       : nein('package.json deklariert kein engines.node');
   },
 
+  // ── Monetarisierung ───────────────────────────────────────────────────
+  // Vorsicht bei den Kriterien hier: zwei naheliegende Prüfungen wären falsch.
+  // (1) "Alle Amazon-Links sind /dp/-Deeplinks" — Such-URLs sind bei
+  //     US-Eigenvertrieb eine bewusste Entscheidung gegen tote Deeplinks
+  //     (memory.md, 25.06.2026).
+  // (2) "Der Digistore-Webhook prüft eine sha_sign-Signatur" — der genutzte
+  //     IPN-Typ unterstützt das nicht; Token-in-URL ist dokumentiert gewollt.
+
+  'amazon-links-mit-partner-tag': (k) => {
+    const ps = produkte();
+    const amazon = ps.filter((x) => /amazon\./i.test(x.affiliateUrl || ''));
+    if (!amazon.length) return unklar('keine Amazon-Links in der Registry');
+    const ohne = amazon.filter((x) => !new RegExp(`[?&]tag=${k.tag}(&|$)`).test(x.affiliateUrl));
+    return ohne.length
+      ? nein(`${ohne.length} von ${amazon.length} ohne tag=${k.tag}: ${ohne.map((x) => x.id).join(', ')}`)
+      : ok(`alle ${amazon.length} Amazon-Links tragen tag=${k.tag}`);
+  },
+
+  'keine-platzhalter-links': () => {
+    const ps = produkte();
+    const platz = ps.filter((x) =>
+      /PLATZHALTER|EXAMPLE\.|TODO|DEIN[-_ ]|xxxx/i.test(x.affiliateUrl || ''),
+    );
+    return platz.length
+      ? nein(`${platz.length} Platzhalter: ${platz.map((x) => x.id).join(', ')}`)
+      : ok(`kein Platzhalter unter ${ps.length} Produkten`);
+  },
+
+  // Ein Link ohne Tracking-Parameter verdient bei Klick nichts.
+  'jeder-produktlink-mit-tracking': () => {
+    const ps = produkte().filter((x) => x.affiliateUrl);
+    if (!ps.length) return unklar('keine Produkte mit affiliateUrl');
+    const ohne = ps.filter((x) => !/[?&](tag|ref|aff|partner|utm_source|a_aid|campaign)=/i.test(x.affiliateUrl));
+    return ohne.length
+      ? nein(`${ohne.length} von ${ps.length} Links ohne Tracking-Parameter: ${ohne.map((x) => x.id).join(', ')}`)
+      : ok(`alle ${ps.length} Produktlinks tragen einen Tracking-Parameter`);
+  },
+
+  // affiliate-programs.yaml erklärt selbst: "Produkte verweisen über ihr
+  // provider-Feld auf das passende Programm". Das wird hier durchgesetzt.
+  'provider-in-programmregistry': () => {
+    const bekannt = new Set();
+    for (const prog of programme()) for (const pr of prog.providers || []) bekannt.add(pr);
+    const ps = produkte();
+    const unbekannt = [...new Set(ps.map((x) => x.provider).filter((v) => v && !bekannt.has(v)))];
+    return unbekannt.length
+      ? nein(`${unbekannt.length} provider ohne Programmeintrag: ${unbekannt.join(', ')}`)
+      : ok(`alle provider-Werte sind Programmen zugeordnet`);
+  },
+
+  'mindestens-ein-programm-aktiv': () => {
+    const ps = programme();
+    const aktiv = ps.filter((x) => x.status === 'active');
+    return aktiv.length
+      ? ok(`${aktiv.length} von ${ps.length} aktiv: ${aktiv.map((x) => x.id).join(', ')}`)
+      : nein(`kein Programm auf status: active (${ps.length} gelistet)`);
+  },
+
+  'produktdaten-aktuell': (k) => {
+    const ps = produkte().filter((x) => x.lastChecked);
+    if (!ps.length) return unklar('kein Produkt hat ein lastChecked-Datum');
+    const jetzt = Date.now();
+    const alter = (d) => Math.round((jetzt - new Date(d).getTime()) / 86400000);
+    const alt = ps.filter((x) => alter(x.lastChecked) > k.maxTage);
+    const aeltester = Math.max(...ps.map((x) => alter(x.lastChecked)));
+    return alt.length
+      ? nein(`${alt.length} von ${ps.length} älter als ${k.maxTage} Tage (ältester: ${aeltester} Tage)`)
+      : ok(`ältester Eintrag ${aeltester} Tage alt, Grenze ${k.maxTage}`);
+  },
+
+  'alle-produkte-mit-pruefdatum': () => {
+    const ps = produkte();
+    const ohne = ps.filter((x) => !x.lastChecked);
+    return ohne.length
+      ? nein(`${ohne.length} von ${ps.length} ohne lastChecked: ${ohne.map((x) => x.id).join(', ')}`)
+      : ok(`alle ${ps.length} Produkte haben ein lastChecked-Datum`);
+  },
+
+  // Regel 1 (Werbekennzeichnung) ist im Projekt nicht verhandelbar.
+  'werbekennzeichnung-in-komponenten': () => {
+    const dir = p('src/components/affiliate');
+    if (!existsSync(dir)) return unklar('src/components/affiliate fehlt');
+    const dateien = readdirSync(dir).filter((f) => f.endsWith('.tsx'));
+    if (!dateien.length) return unklar('keine Komponenten gefunden');
+    const muster = /werbung|anzeige|affiliate-link|provision|partnerlink/i;
+    const ohne = dateien.filter((f) => !muster.test(readFileSync(join(dir, f), 'utf8')));
+    return ohne.length
+      ? nein(`${ohne.length} von ${dateien.length} ohne Kennzeichnung: ${ohne.join(', ')}`)
+      : ok(`alle ${dateien.length} Affiliate-Komponenten kennzeichnen Werbung`);
+  },
+
+  'webhook-weist-ohne-token-ab': () => {
+    const f = 'src/app/api/webhooks/digistore24/route.ts';
+    if (!existsSync(p(f))) return nein(`${f} fehlt`);
+    const src = lies(f);
+    const prueft = /DIGISTORE_WEBHOOK_TOKEN/.test(src);
+    const lehntAb = /\b401\b/.test(src);
+    return prueft && lehntAb
+      ? ok('Token wird geprüft, sonst 401')
+      : nein(`Token-Prüfung ${prueft ? 'vorhanden' : 'fehlt'}, 401-Antwort ${lehntAb ? 'vorhanden' : 'fehlt'}`);
+  },
+
+  'workflow-zuletzt-gruen': (k) => {
+    if (OFFLINE) return unklar('--offline: GitHub-API nicht abgefragt');
+    const l = workflowLaeufe();
+    if (!l) return unklar('GitHub-API nicht erreichbar');
+    const treffer = [...l.entries()].find(([n]) => n.toLowerCase().includes(k.workflow.toLowerCase()));
+    if (!treffer) return unklar(`kein Lauf für Workflow "${k.workflow}" gefunden`);
+    return treffer[1] === 'success'
+      ? ok(`"${treffer[0]}" zuletzt success`)
+      : nein(`"${treffer[0]}" zuletzt ${treffer[1]}`);
+  },
+
   // ── Technische Infrastruktur ──────────────────────────────────────────
   // Fast alles hier ist nur von außen prüfbar. Ohne Netz bleibt der Bereich
   // bewusst weitgehend nicht_messbar, statt einen Repo-Zustand als
@@ -350,6 +463,21 @@ const PRUEFUNGEN = {
 };
 
 // ───────────────────────── Fakten-Helfer (Ebene 1) ─────────────────────────
+
+/** Produkt- und Programmregistry, je einmal geladen. */
+let _produkte, _programme;
+function produkte() {
+  if (_produkte) return _produkte;
+  _produkte = yaml.load(lies('products/registry.yaml'));
+  if (!Array.isArray(_produkte)) abbruch('products/registry.yaml ist keine Liste.');
+  return _produkte;
+}
+function programme() {
+  if (_programme) return _programme;
+  _programme = yaml.load(lies('products/affiliate-programs.yaml'));
+  if (!Array.isArray(_programme)) abbruch('products/affiliate-programs.yaml ist keine Liste.');
+  return _programme;
+}
 
 /** Domain, gegen die alle Netz-Prüfungen laufen. */
 const DOMAIN = 'steakakademie.de';

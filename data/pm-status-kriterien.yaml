@@ -119,6 +119,64 @@ bereiche:
         frage: package-lock.json ist mit package.json synchron.
         pruefung: lockfile-synchron
 
+  - name: Monetarisierung
+    beschreibung: >-
+      Verdienen die Links, was sie sollen — und ist das rechtlich sauber
+      gekennzeichnet? Umsatzzahlen selbst sind hier NICHT enthalten: dafür
+      wäre ein Digistore24-API-Zugang nötig, den es im Repo nicht gibt.
+      Gemessen wird die Verdrahtung, nicht der Ertrag.
+    kriterien:
+      - id: amazon-links-mit-partner-tag
+        frage: Jeder Amazon-Link trägt den Partner-Tag.
+        pruefung: amazon-links-mit-partner-tag
+        tag: steakakademie-21
+
+      # Bewusst NICHT geprüft: ob Amazon-Links /dp/-Deeplinks sind. Bei
+      # US-Eigenvertrieb (Thermapen, ThermoWorks) ist die Such-URL die
+      # richtige Wahl gegen tote Deeplinks — memory.md, 25.06.2026.
+      - id: keine-platzhalter-links
+        frage: Kein Produkt verweist noch auf einen Platzhalter-Link.
+        pruefung: keine-platzhalter-links
+
+      - id: jeder-produktlink-mit-tracking
+        frage: Jeder Produktlink trägt einen Tracking-Parameter, verdient also bei Klick.
+        pruefung: jeder-produktlink-mit-tracking
+
+      - id: provider-in-programmregistry
+        frage: Jeder provider-Wert in registry.yaml ist in affiliate-programs.yaml hinterlegt.
+        pruefung: provider-in-programmregistry
+
+      - id: mindestens-ein-programm-aktiv
+        frage: Mindestens ein Affiliate-Programm steht auf status active.
+        pruefung: mindestens-ein-programm-aktiv
+
+      # 90 Tage ist eine gesetzte Grenze, keine gemessene Wahrheit — sie steht
+      # hier sichtbar und ist diskutierbar, statt im Code zu verschwinden.
+      - id: produktdaten-aktuell
+        frage: Kein Produkt wurde länger als 90 Tage nicht geprüft.
+        pruefung: produktdaten-aktuell
+        maxTage: 90
+
+      - id: alle-produkte-mit-pruefdatum
+        frage: Jedes Produkt trägt ein lastChecked-Datum.
+        pruefung: alle-produkte-mit-pruefdatum
+
+      - id: werbekennzeichnung-in-komponenten
+        frage: Jede Affiliate-Komponente kennzeichnet Werbung (Regel 1).
+        pruefung: werbekennzeichnung-in-komponenten
+
+      # Bewusst NICHT geprüft: sha_sign-Signatur. Der eingesetzte Digistore-
+      # IPN-Typ unterstützt sie nicht; Token-in-URL ist die dokumentierte Wahl.
+      - id: webhook-weist-ohne-token-ab
+        frage: Der Digistore-Webhook weist Anfragen ohne gültiges Token mit 401 ab.
+        pruefung: webhook-weist-ohne-token-ab
+
+      - id: affiliate-link-check-gruen
+        frage: Der Workflow "Affiliate Link Check" ist zuletzt erfolgreich gelaufen.
+        pruefung: workflow-zuletzt-gruen
+        workflow: Affiliate Link Check
+        netz: true
+
   - name: Technische Infrastruktur
     beschreibung: >-
       Betriebszustand: Erreichbarkeit, Transportsicherheit, DNS, Mailzustellung
@@ -207,10 +265,6 @@ nicht_gemessen:
     grund: >-
       Struktur-Checks wären sofort möglich. Für echte Messwerte sind
       Search Console (DNS-verifiziert) und GA4 anzubinden — noch nicht getan.
-  - name: Monetarisierung
-    grund: >-
-      Affiliate-Status und Deeplink-Quote sind auslesbar; Umsatz erst mit
-      Digistore24-API-Zugang.
   - name: Content-Strategie
     grund: >-
       Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als

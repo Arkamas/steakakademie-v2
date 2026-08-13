@@ -50,8 +50,8 @@ export interface ProjectStatus {
 
 export const PROJECT_STATUS: ProjectStatus = {
     "readinessScore": null,
-    "erfuelltGesamt": 21,
-    "pruefbarGesamt": 32,
+    "erfuelltGesamt": 29,
+    "pruefbarGesamt": 42,
     "nichtMessbarGesamt": 0,
     "bereiche": [
       {
@@ -193,6 +193,75 @@ export const PROJECT_STATUS: ProjectStatus = {
         ]
       },
       {
+        "name": "Monetarisierung",
+        "erfuellt": 8,
+        "pruefbar": 10,
+        "nichtMessbar": 0,
+        "score": 80,
+        "kriterien": [
+          {
+            "id": "amazon-links-mit-partner-tag",
+            "frage": "Jeder Amazon-Link trägt den Partner-Tag.",
+            "status": "erfuellt",
+            "beleg": "alle 26 Amazon-Links tragen tag=steakakademie-21"
+          },
+          {
+            "id": "keine-platzhalter-links",
+            "frage": "Kein Produkt verweist noch auf einen Platzhalter-Link.",
+            "status": "erfuellt",
+            "beleg": "kein Platzhalter unter 32 Produkten"
+          },
+          {
+            "id": "jeder-produktlink-mit-tracking",
+            "frage": "Jeder Produktlink trägt einen Tracking-Parameter, verdient also bei Klick.",
+            "status": "nicht_erfuellt",
+            "beleg": "6 von 32 Links ohne Tracking-Parameter: ankarsrum-assistent-original, otto-gourmet-wagyu-box, beefer-pro-ii, beefer-xl-ii, dry-ager-dx500, dry-ager-dx1000"
+          },
+          {
+            "id": "provider-in-programmregistry",
+            "frage": "Jeder provider-Wert in registry.yaml ist in affiliate-programs.yaml hinterlegt.",
+            "status": "nicht_erfuellt",
+            "beleg": "2 provider ohne Programmeintrag: other, otto-gourmet"
+          },
+          {
+            "id": "mindestens-ein-programm-aktiv",
+            "frage": "Mindestens ein Affiliate-Programm steht auf status active.",
+            "status": "erfuellt",
+            "beleg": "1 von 5 aktiv: amazon"
+          },
+          {
+            "id": "produktdaten-aktuell",
+            "frage": "Kein Produkt wurde länger als 90 Tage nicht geprüft.",
+            "status": "erfuellt",
+            "beleg": "ältester Eintrag 84 Tage alt, Grenze 90"
+          },
+          {
+            "id": "alle-produkte-mit-pruefdatum",
+            "frage": "Jedes Produkt trägt ein lastChecked-Datum.",
+            "status": "erfuellt",
+            "beleg": "alle 32 Produkte haben ein lastChecked-Datum"
+          },
+          {
+            "id": "werbekennzeichnung-in-komponenten",
+            "frage": "Jede Affiliate-Komponente kennzeichnet Werbung (Regel 1).",
+            "status": "erfuellt",
+            "beleg": "alle 6 Affiliate-Komponenten kennzeichnen Werbung"
+          },
+          {
+            "id": "webhook-weist-ohne-token-ab",
+            "frage": "Der Digistore-Webhook weist Anfragen ohne gültiges Token mit 401 ab.",
+            "status": "erfuellt",
+            "beleg": "Token wird geprüft, sonst 401"
+          },
+          {
+            "id": "affiliate-link-check-gruen",
+            "frage": "Der Workflow \"Affiliate Link Check\" ist zuletzt erfolgreich gelaufen.",
+            "status": "erfuellt",
+            "beleg": "\"Affiliate Link Check\" zuletzt success"
+          }
+        ]
+      },
+      {
         "name": "Technische Infrastruktur",
         "erfuellt": 9,
         "pruefbar": 12,
@@ -233,7 +302,7 @@ export const PROJECT_STATUS: ProjectStatus = {
             "id": "mail-empfang-konfiguriert",
             "frage": "Die Domain hat MX-Einträge und kann Mail empfangen.",
             "status": "erfuellt",
-            "beleg": "3 MX-Einträge: route3.mx.cloudflare.net, route1.mx.cloudflare.net, route2.mx.cloudflare.net"
+            "beleg": "3 MX-Einträge: route1.mx.cloudflare.net, route3.mx.cloudflare.net, route2.mx.cloudflare.net"
           },
           {
             "id": "spf-vorhanden",
@@ -280,10 +349,6 @@ export const PROJECT_STATUS: ProjectStatus = {
         "grund": "Struktur-Checks wären sofort möglich. Für echte Messwerte sind Search Console (DNS-verifiziert) und GA4 anzubinden — noch nicht getan."
       },
       {
-        "name": "Monetarisierung",
-        "grund": "Affiliate-Status und Deeplink-Quote sind auslesbar; Umsatz erst mit Digistore24-API-Zugang."
-      },
-      {
         "name": "Content-Strategie",
         "grund": "Nenner ungeklärt. Es gibt weder Keyword-Map noch Redaktionsplan als Datei — ohne beides ist der Bereich nicht ehrlich zu bepunkten."
       },
@@ -316,6 +381,14 @@ export const PROJECT_STATUS: ProjectStatus = {
       "TypeScript läuft im strict-Modus.",
       "npm audit meldet keine Schwachstelle der Stufe critical.",
       "package-lock.json ist mit package.json synchron.",
+      "Jeder Amazon-Link trägt den Partner-Tag.",
+      "Kein Produkt verweist noch auf einen Platzhalter-Link.",
+      "Mindestens ein Affiliate-Programm steht auf status active.",
+      "Kein Produkt wurde länger als 90 Tage nicht geprüft.",
+      "Jedes Produkt trägt ein lastChecked-Datum.",
+      "Jede Affiliate-Komponente kennzeichnet Werbung (Regel 1).",
+      "Der Digistore-Webhook weist Anfragen ohne gültiges Token mit 401 ab.",
+      "Der Workflow \"Affiliate Link Check\" ist zuletzt erfolgreich gelaufen.",
       "Die Live-Seite antwortet über HTTPS mit Status 200.",
       "Die Live-Seite sendet einen Strict-Transport-Security-Header.",
       "Die Live-Seite sendet die vier Basis-Security-Header.",
@@ -335,10 +408,12 @@ export const PROJECT_STATUS: ProjectStatus = {
       "Die Deploy-Konfiguration im Repo passt zu dem Hoster, der die Live-Seite ausliefert.",
       "Jede verwendete Claude-Modell-ID ist auf eine konkrete Version gepinnt.",
       "package.json deklariert eine engines.node-Spanne.",
+      "Jeder Produktlink trägt einen Tracking-Parameter, verdient also bei Klick.",
+      "Jeder provider-Wert in registry.yaml ist in affiliate-programs.yaml hinterlegt.",
       "Die Live-Seite sendet eine Content-Security-Policy.",
       "Die DMARC-Politik weist Fälschungen ab (p=quarantine oder p=reject).",
       "Kein GitHub-Workflow steht mit seinem letzten Lauf auf failure."
     ],
-    "generatedAt": "2026-08-13T12:16:00.295Z",
+    "generatedAt": "2026-08-13T12:25:47.255Z",
     "offline": false
   }

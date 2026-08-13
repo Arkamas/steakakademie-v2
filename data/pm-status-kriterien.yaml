@@ -119,6 +119,71 @@ bereiche:
         frage: package-lock.json ist mit package.json synchron.
         pruefung: lockfile-synchron
 
+  - name: KI-System & Automation
+    beschreibung: >-
+      Wie die KI-Aufrufe organisiert sind und ob die Automatisierung die
+      nicht-verhandelbaren Regeln einhält — insbesondere Regel 4 (human-gated)
+      und Regel 8c (Fakten gegen die kanonische Referenz).
+    kriterien:
+      # Abgrenzung zu "modell-ids-gepinnt" im Bereich Tech-Stack: dort geht es
+      # um die Version, hier um den Ort. Verstreute Literale sind der Grund,
+      # warum die Schreibweisen ueberhaupt auseinanderdriften konnten.
+      - id: zentrale-modell-definition
+        frage: Die Claude-Modell-IDs stehen an einer zentralen Stelle statt als Literale im Code verstreut.
+        pruefung: zentrale-modell-definition
+        zentraleDatei: src/lib/ai-modelle.ts
+
+      - id: jeder-workflow-hat-trigger
+        frage: Jeder Workflow im Repo hat mindestens einen Trigger.
+        pruefung: jeder-workflow-hat-trigger
+
+      # Bewusst nur `schedule`: dispatch-only-Werkzeuge wie LoRA-Training oder
+      # Bildgenerierung sollen selten laufen. Ihre Stille als Mangel zu werten
+      # waere ein Regel-5-Fehler.
+      - id: geplante-workflows-laufen
+        frage: Jeder Workflow mit schedule ist in der Laufhistorie aufgetaucht.
+        pruefung: geplante-workflows-laufen
+        netz: true
+
+      - id: generatoren-lesen-faktenreferenz
+        frage: Jeder inhaltserzeugende Agent liest die kanonische Kerntemperatur-Referenz (Regel 8c).
+        pruefung: generatoren-lesen-faktenreferenz
+        referenz: kerntemperatur-referenz
+        # Bewusst eng gefasst: Rezepte enthalten zwangslaeufig Kerntemperaturen.
+        # Bei glossary-agent und social-posts ist der Bezug schwaecher — wer sie
+        # aufnehmen will, soll das hier sichtbar entscheiden, nicht im Code.
+        generatoren:
+          - scripts/recipe-agent.mjs
+
+      # ACHTUNG, offene Grundsatzfrage: Regel 4 verlangt "Agenten produzieren
+      # Entwuerfe, Uwe gibt frei". recipe-grow.yml und glossary-grow.yml
+      # committen und pushen aber direkt auf main - laut eigener Ausgabe
+      # "loest Deploy aus". Es gibt kein draft-Flag im Frontmatter und kein
+      # solches Feld im Contentlayer-Schema. Entweder die Workflows oder die
+      # Regel muessen sich aendern; dieses Kriterium haelt den Widerspruch
+      # sichtbar, bis das entschieden ist.
+      - id: generatoren-pushen-nicht-direkt
+        frage: Kein Workflow pusht generierte Artefakte direkt, ohne Pull Request (Regel 4).
+        pruefung: generatoren-pushen-nicht-direkt
+
+      - id: moderation-fuer-einreichungen
+        frage: Nutzereinreichungen durchlaufen ein Moderations-Gate.
+        pruefung: moderation-fuer-einreichungen
+
+      - id: embedding-modell-konfigurierbar
+        frage: Das Embedding-Modell ist über eine Umgebungsvariable konfigurierbar.
+        pruefung: embedding-modell-konfigurierbar
+
+      - id: ki-routen-mit-fehlerbehandlung
+        frage: Jede API-Route mit KI-Aufruf fängt Fehler ab.
+        pruefung: ki-routen-mit-fehlerbehandlung
+
+      - id: kochwissen-ingest-gruen
+        frage: Der Workflow "Kochwissen ingestieren" ist zuletzt erfolgreich gelaufen.
+        pruefung: workflow-zuletzt-gruen
+        workflow: Kochwissen ingestieren
+        netz: true
+
   - name: Monetarisierung
     beschreibung: >-
       Verdienen die Links, was sie sollen — und ist das rechtlich sauber
@@ -273,7 +338,3 @@ nicht_gemessen:
     grund: >-
       Lektionsraster ist auslesbar (5x7 vollständig); offen ist die Bewertung
       des Widerspruchs 5 Lektionsstufen gegen 4 Diplom-Stufen im Code.
-  - name: KI-System & Automation
-    grund: >-
-      Workflow-Gesundheit ist über die GitHub-API messbar; Kriterien noch
-      nicht formuliert.

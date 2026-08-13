@@ -50,8 +50,8 @@ export interface ProjectStatus {
 
 export const PROJECT_STATUS: ProjectStatus = {
     "readinessScore": null,
-    "erfuelltGesamt": 29,
-    "pruefbarGesamt": 42,
+    "erfuelltGesamt": 34,
+    "pruefbarGesamt": 51,
     "nichtMessbarGesamt": 0,
     "bereiche": [
       {
@@ -193,6 +193,69 @@ export const PROJECT_STATUS: ProjectStatus = {
         ]
       },
       {
+        "name": "KI-System & Automation",
+        "erfuellt": 5,
+        "pruefbar": 9,
+        "nichtMessbar": 0,
+        "score": 56,
+        "kriterien": [
+          {
+            "id": "zentrale-modell-definition",
+            "frage": "Die Claude-Modell-IDs stehen an einer zentralen Stelle statt als Literale im Code verstreut.",
+            "status": "nicht_erfuellt",
+            "beleg": "18 Dateien mit Modell-Literal, keine zentrale Definition (src/app/api/chat/route.ts, src/app/api/kochwissen/generieren/route.ts, src/app/api/kochwissen/route.ts, src/app/api/mein-protokoll/generate/route.ts … +14)"
+          },
+          {
+            "id": "jeder-workflow-hat-trigger",
+            "frage": "Jeder Workflow im Repo hat mindestens einen Trigger.",
+            "status": "erfuellt",
+            "beleg": "alle 16 Workflows haben mindestens einen Trigger"
+          },
+          {
+            "id": "geplante-workflows-laufen",
+            "frage": "Jeder Workflow mit schedule ist in der Laufhistorie aufgetaucht.",
+            "status": "erfuellt",
+            "beleg": "alle 5 geplanten Workflows sind gelaufen"
+          },
+          {
+            "id": "generatoren-lesen-faktenreferenz",
+            "frage": "Jeder inhaltserzeugende Agent liest die kanonische Kerntemperatur-Referenz (Regel 8c).",
+            "status": "nicht_erfuellt",
+            "beleg": "1 von 1 lesen kerntemperatur-referenz nicht: scripts/recipe-agent.mjs"
+          },
+          {
+            "id": "generatoren-pushen-nicht-direkt",
+            "frage": "Kein Workflow pusht generierte Artefakte direkt, ohne Pull Request (Regel 4).",
+            "status": "nicht_erfuellt",
+            "beleg": "4 Workflows pushen direkt statt per PR: glossary-grow.yml, recipe-grow.yml, regenerate-recipe-images.yml, train-pork-lora.yml"
+          },
+          {
+            "id": "moderation-fuer-einreichungen",
+            "frage": "Nutzereinreichungen durchlaufen ein Moderations-Gate.",
+            "status": "erfuellt",
+            "beleg": "Einreichungen durchlaufen ein Moderations-Gate (approved/needs_review/rejected)"
+          },
+          {
+            "id": "embedding-modell-konfigurierbar",
+            "frage": "Das Embedding-Modell ist über eine Umgebungsvariable konfigurierbar.",
+            "status": "erfuellt",
+            "beleg": "über VOYAGE_MODEL konfigurierbar (1 Stelle(n))"
+          },
+          {
+            "id": "ki-routen-mit-fehlerbehandlung",
+            "frage": "Jede API-Route mit KI-Aufruf fängt Fehler ab.",
+            "status": "nicht_erfuellt",
+            "beleg": "1 von 8 ohne catch: pm-agent/route.ts"
+          },
+          {
+            "id": "kochwissen-ingest-gruen",
+            "frage": "Der Workflow \"Kochwissen ingestieren\" ist zuletzt erfolgreich gelaufen.",
+            "status": "erfuellt",
+            "beleg": "\"Kochwissen ingestieren (Supabase + Voyage)\" zuletzt success"
+          }
+        ]
+      },
+      {
         "name": "Monetarisierung",
         "erfuellt": 8,
         "pruefbar": 10,
@@ -302,7 +365,7 @@ export const PROJECT_STATUS: ProjectStatus = {
             "id": "mail-empfang-konfiguriert",
             "frage": "Die Domain hat MX-Einträge und kann Mail empfangen.",
             "status": "erfuellt",
-            "beleg": "3 MX-Einträge: route1.mx.cloudflare.net, route3.mx.cloudflare.net, route2.mx.cloudflare.net"
+            "beleg": "3 MX-Einträge: route3.mx.cloudflare.net, route1.mx.cloudflare.net, route2.mx.cloudflare.net"
           },
           {
             "id": "spf-vorhanden",
@@ -355,10 +418,6 @@ export const PROJECT_STATUS: ProjectStatus = {
       {
         "name": "Kurse & Diplom-System",
         "grund": "Lektionsraster ist auslesbar (5x7 vollständig); offen ist die Bewertung des Widerspruchs 5 Lektionsstufen gegen 4 Diplom-Stufen im Code."
-      },
-      {
-        "name": "KI-System & Automation",
-        "grund": "Workflow-Gesundheit ist über die GitHub-API messbar; Kriterien noch nicht formuliert."
       }
     ],
     "critical": [
@@ -381,6 +440,11 @@ export const PROJECT_STATUS: ProjectStatus = {
       "TypeScript läuft im strict-Modus.",
       "npm audit meldet keine Schwachstelle der Stufe critical.",
       "package-lock.json ist mit package.json synchron.",
+      "Jeder Workflow im Repo hat mindestens einen Trigger.",
+      "Jeder Workflow mit schedule ist in der Laufhistorie aufgetaucht.",
+      "Nutzereinreichungen durchlaufen ein Moderations-Gate.",
+      "Das Embedding-Modell ist über eine Umgebungsvariable konfigurierbar.",
+      "Der Workflow \"Kochwissen ingestieren\" ist zuletzt erfolgreich gelaufen.",
       "Jeder Amazon-Link trägt den Partner-Tag.",
       "Kein Produkt verweist noch auf einen Platzhalter-Link.",
       "Mindestens ein Affiliate-Programm steht auf status active.",
@@ -408,12 +472,16 @@ export const PROJECT_STATUS: ProjectStatus = {
       "Die Deploy-Konfiguration im Repo passt zu dem Hoster, der die Live-Seite ausliefert.",
       "Jede verwendete Claude-Modell-ID ist auf eine konkrete Version gepinnt.",
       "package.json deklariert eine engines.node-Spanne.",
+      "Die Claude-Modell-IDs stehen an einer zentralen Stelle statt als Literale im Code verstreut.",
+      "Jeder inhaltserzeugende Agent liest die kanonische Kerntemperatur-Referenz (Regel 8c).",
+      "Kein Workflow pusht generierte Artefakte direkt, ohne Pull Request (Regel 4).",
+      "Jede API-Route mit KI-Aufruf fängt Fehler ab.",
       "Jeder Produktlink trägt einen Tracking-Parameter, verdient also bei Klick.",
       "Jeder provider-Wert in registry.yaml ist in affiliate-programs.yaml hinterlegt.",
       "Die Live-Seite sendet eine Content-Security-Policy.",
       "Die DMARC-Politik weist Fälschungen ab (p=quarantine oder p=reject).",
       "Kein GitHub-Workflow steht mit seinem letzten Lauf auf failure."
     ],
-    "generatedAt": "2026-08-13T12:25:47.255Z",
+    "generatedAt": "2026-08-13T12:35:30.879Z",
     "offline": false
   }

@@ -233,6 +233,112 @@ const PRUEFUNGEN = {
       : nein('package.json deklariert kein engines.node');
   },
 
+  // ── KI-System & Automation ────────────────────────────────────────────
+
+  // Nicht dasselbe wie "Modell-IDs gepinnt" (Tech-Stack): dort geht es um die
+  // Version, hier um den Ort. 18 Literale an 18 Stellen sind der Grund, warum
+  // sechs Schreibweisen auseinanderdriften konnten.
+  'zentrale-modell-definition': (k) => {
+    const literale = quelldateien().filter((f) =>
+      /['"]claude-[a-z0-9.-]+['"]/.test(readFileSync(f, 'utf8')),
+    );
+    const zentral = existsSync(p(k.zentraleDatei));
+    if (zentral && literale.length <= 1) {
+      return ok(`Modell-IDs zentral in ${k.zentraleDatei}`);
+    }
+    const rel = literale.map((f) => f.replace(ROOT + '\\', '').replace(ROOT + '/', '').replace(/\\/g, '/'));
+    return nein(
+      `${literale.length} Dateien mit Modell-Literal, keine zentrale Definition` +
+      ` (${rel.slice(0, 4).join(', ')}${rel.length > 4 ? ` … +${rel.length - 4}` : ''})`,
+    );
+  },
+
+  'jeder-workflow-hat-trigger': () => {
+    const ws = workflows();
+    const ohne = ws.filter((w) => !w.trigger.length);
+    return ohne.length
+      ? nein(`${ohne.length} ohne Trigger: ${ohne.map((w) => w.datei).join(', ')}`)
+      : ok(`alle ${ws.length} Workflows haben mindestens einen Trigger`);
+  },
+
+  // Nur geplante Workflows: dispatch-only-Werkzeuge (LoRA-Training,
+  // Bildgenerierung) sollen selten laufen — deren Stille ist kein Mangel.
+  'geplante-workflows-laufen': () => {
+    if (OFFLINE) return unklar('--offline: GitHub-API nicht abgefragt');
+    const l = workflowLaeufe();
+    if (!l) return unklar('GitHub-API nicht erreichbar');
+    const geplant = workflows().filter((w) => w.trigger.includes('schedule'));
+    if (!geplant.length) return unklar('kein Workflow mit schedule');
+    const still = geplant.filter((w) => !l.has(w.name));
+    return still.length
+      ? nein(`${still.length} von ${geplant.length} geplanten ohne Lauf: ${still.map((w) => w.name).join(', ')}`)
+      : ok(`alle ${geplant.length} geplanten Workflows sind gelaufen`);
+  },
+
+  // Regel 8c: Temperaturen/Cuts/Reifung NIE raten — kanonische Referenz
+  // data/kerntemperatur-referenz.yaml.
+  'generatoren-lesen-faktenreferenz': (k) => {
+    const fehlend = k.generatoren.filter((g) => {
+      if (!existsSync(p(g))) return true;
+      return !readFileSync(p(g), 'utf8').includes(k.referenz);
+    });
+    return fehlend.length
+      ? nein(`${fehlend.length} von ${k.generatoren.length} lesen ${k.referenz} nicht: ${fehlend.join(', ')}`)
+      : ok(`alle ${k.generatoren.length} Generatoren lesen die kanonische Referenz`);
+  },
+
+  // Regel 4: Agenten produzieren Entwürfe, Uwe gibt frei.
+  'generatoren-pushen-nicht-direkt': () => {
+    const dir = p('.github/workflows');
+    const dateien = readdirSync(dir).filter((f) => /\.ya?ml$/.test(f));
+    const direkt = dateien.filter((f) => {
+      const src = readFileSync(join(dir, f), 'utf8');
+      const pusht = /^\s*git push\s*$/m.test(src) || /\bgit push\b/.test(src);
+      const perPr = /create-pull-request|gh pr create/.test(src);
+      return pusht && !perPr;
+    });
+    return direkt.length
+      ? nein(`${direkt.length} Workflows pushen direkt statt per PR: ${direkt.join(', ')}`)
+      : ok(`kein Workflow pusht ohne Pull Request`);
+  },
+
+  'moderation-fuer-einreichungen': () => {
+    const f = 'src/app/api/rezept-einreichen/route.ts';
+    if (!existsSync(p(f))) return unklar(`${f} fehlt`);
+    const src = lies(f);
+    const hatGate = /needs_review|rejected/.test(src) && /moderation/i.test(src);
+    return hatGate
+      ? ok('Einreichungen durchlaufen ein Moderations-Gate (approved/needs_review/rejected)')
+      : nein('kein Moderations-Gate erkennbar');
+  },
+
+  'embedding-modell-konfigurierbar': () => {
+    const treffer = quelldateien().filter((f) => /process\.env\.VOYAGE_MODEL/.test(readFileSync(f, 'utf8')));
+    return treffer.length
+      ? ok(`über VOYAGE_MODEL konfigurierbar (${treffer.length} Stelle(n))`)
+      : nein('Embedding-Modell ist fest verdrahtet');
+  },
+
+  'ki-routen-mit-fehlerbehandlung': () => {
+    const dir = p('src/app/api');
+    const routen = [];
+    const gehe = (d) => {
+      for (const e of readdirSync(d, { withFileTypes: true })) {
+        const voll = join(d, e.name);
+        if (e.isDirectory()) gehe(voll);
+        else if (e.name === 'route.ts') routen.push(voll);
+      }
+    };
+    gehe(dir);
+    const kiRouten = routen.filter((f) => /['"]claude-/.test(readFileSync(f, 'utf8')));
+    if (!kiRouten.length) return unklar('keine KI-Routen gefunden');
+    const ohne = kiRouten.filter((f) => !/\bcatch\b/.test(readFileSync(f, 'utf8')));
+    const kurz = (f) => f.split(/[\\/]api[\\/]/)[1]?.replace(/\\/g, '/');
+    return ohne.length
+      ? nein(`${ohne.length} von ${kiRouten.length} ohne catch: ${ohne.map(kurz).join(', ')}`)
+      : ok(`alle ${kiRouten.length} KI-Routen fangen Fehler ab`);
+  },
+
   // ── Monetarisierung ───────────────────────────────────────────────────
   // Vorsicht bei den Kriterien hier: zwei naheliegende Prüfungen wären falsch.
   // (1) "Alle Amazon-Links sind /dp/-Deeplinks" — Such-URLs sind bei
@@ -463,6 +569,27 @@ const PRUEFUNGEN = {
 };
 
 // ───────────────────────── Fakten-Helfer (Ebene 1) ─────────────────────────
+
+/**
+ * Alle Workflows mit ihrem echten Namen und ihren Triggern.
+ * `on` wird von YAML 1.1 als Boolean true geparst — daher der Fallback.
+ */
+let _workflows;
+function workflows() {
+  if (_workflows) return _workflows;
+  const dir = p('.github/workflows');
+  if (!existsSync(dir)) abbruch('.github/workflows fehlt.');
+  _workflows = readdirSync(dir)
+    .filter((f) => /\.ya?ml$/.test(f))
+    .map((f) => {
+      const d = yaml.load(readFileSync(join(dir, f), 'utf8')) || {};
+      const on = d.on ?? d[true];
+      const trigger =
+        on == null ? [] : typeof on === 'string' ? [on] : Array.isArray(on) ? on : Object.keys(on);
+      return { datei: f, name: d.name || f, trigger };
+    });
+  return _workflows;
+}
 
 /** Produkt- und Programmregistry, je einmal geladen. */
 let _produkte, _programme;

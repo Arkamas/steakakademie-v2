@@ -1,8 +1,8 @@
 # PM-Status-Generator — Entwurf und Betriebsregeln
 
-> Status: Ebene 1–3 gebaut, vier von acht Bereichen migriert (Avatar-System,
-> Tech-Stack & Tools, Technische Infrastruktur, Monetarisierung).
-> Stand 13.08.2026.
+> Status: Ebene 1–3 gebaut, fuenf von acht Bereichen migriert (Avatar-System,
+> Tech-Stack & Tools, Technische Infrastruktur, Monetarisierung,
+> KI-System & Automation). Stand 13.08.2026.
 
 Dieses Dokument legt fest, **was** der Generator misst und **warum** er es so
 misst. Die Kriterien selbst stehen in `data/pm-status-kriterien.yaml`, der Code
@@ -206,12 +206,35 @@ Dann **Monetarisierung** — der Bereich, der Regel 5 erzwungen hat: zwei
 naheliegende Kriterien haetten bewusste Entscheidungen als Maengel gewertet.
 Umsatzzahlen bleiben aussen vor, gemessen wird die Verdrahtung.
 
-Offen: SEO & Traffic · Content-Strategie · Kurse & Diplom ·
-KI-System & Automation.
+Zuletzt **KI-System & Automation**. Der Bereich misst nicht nur Technik,
+sondern die Einhaltung der nicht-verhandelbaren Regeln — und hat dabei einen
+echten Widerspruch zwischen Doktrin und Implementierung freigelegt (siehe
+unten).
+
+Offen: SEO & Traffic · Content-Strategie · Kurse & Diplom.
 
 Für „Content-Strategie" ist vorher zu klären, woraus der Nenner kommt — es gibt
 weder Keyword-Map noch Redaktionsplan als Datei. Ohne beides ist der Bereich
 nicht ehrlich zu bepunkten und bleibt besser `nichtGemessen`.
+
+## Offener Widerspruch: Regel 4 gegen die Wachstums-Workflows
+
+Regel 4 in CLAUDE.md steht unter den **nicht-verhandelbaren** Regeln:
+„Agenten produzieren Entwuerfe, **Uwe gibt frei**. Kein Auto-Posting.“
+
+Gemessen am 13.08.2026 pushen vier Workflows generierte Artefakte direkt auf
+`main`, ohne Pull Request: `recipe-grow.yml`, `glossary-grow.yml`,
+`regenerate-recipe-images.yml`, `train-pork-lora.yml`. `recipe-grow` schreibt
+in seine eigene Zusammenfassung: „committet + gepusht → loest Deploy aus“.
+
+Ein Freigabe-Schritt existiert nirgends: das Rezept-Frontmatter kennt kein
+`draft`-Feld, und der Contentlayer-Typ definiert auch keines. KI-erzeugte
+Rezepte und Glossareintraege gehen also ungeprueft live.
+
+Entweder die Workflows oder die Regel muessen sich aendern. Diese Entscheidung
+gehoert Uwe, nicht dem Generator. Das Kriterium
+`generatoren-pushen-nicht-direkt` haelt den Widerspruch so lange sichtbar,
+bis er entschieden ist — und faellt weg oder wird gruen, je nachdem wie.
 
 ## Betrieb
 

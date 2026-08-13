@@ -1,0 +1,361 @@
+#!/usr/bin/env node
+/**
+ * Baut den Kerntemperatur-Erklärer (TikTok, vertical) end-to-end.
+ *
+ *   npm run video:kerntemperatur
+ *
+ * Ablauf:
+ *   1. Narration je Szene mit Piper (offline, kostenlos) erzeugen
+ *   2. Szenenlängen aus der REAL gemessenen Audiodauer ableiten (nicht schätzen)
+ *   3. timeline.json + Untertitel-SRT schreiben
+ *   4. Komposition, Schriften und Audio in den Remotion-Composer spiegeln
+ *   5. Rendern und das Ergebnis mit ffprobe gegenprüfen
+ *
+ * Voraussetzung: `npm run video:setup` ist gelaufen und eine deutsche
+ * Piper-Stimme liegt unter ~/.piper/models/ (siehe docs/openmontage-integration.md).
+ */
+
+import { execFileSync, execSync, spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, copyFileSync, rmSync } from 'node:fs';
+import { homedir } from 'node:os';
+import yaml from 'js-yaml';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const OM = path.join(ROOT, 'tools/openmontage');
+const COMPOSER = path.join(OM, 'remotion-composer');
+const PROJ = path.join(ROOT, 'video/kerntemperatur-tiktok');
+const SRC = path.join(ROOT, 'video/remotion/steakakademie');
+const FONTS = path.join(ROOT, 'video/remotion/fonts');
+const OUT = path.join(PROJ, 'out');
+const PLAYBOOK = path.join(ROOT, 'docs/openmontage/steakakademie.style.yaml');
+
+const PIPER = path.join(OM, '.venv/bin/piper');
+// medium statt low: die low-Stimme läuft mit 16 kHz Samplerate — das ist die Ursache
+// für den "maschinellen" Klang, nicht der Modellcharakter. medium liefert 22,05 kHz
+// bei gleicher Modellgröße und kostet nichts. Gemessener Spektralzentroid der
+// Hook-Zeile: low 1355 Hz, medium 1944 Hz.
+const VOICE = process.env.PIPER_VOICE || path.join(homedir(), '.piper/models/de_DE-thorsten-medium.onnx');
+
+/** Vor-/Nachlauf je Szene in Sekunden. Gibt den Bildern Zeit zu stehen —
+ *  das Playbook verlangt Ruhe (min. 2,5 s Szenenhaltezeit, Zahlen 4 s). */
+const PADDING = {
+  // Vorlauf 0.15 s statt 0.5 s: eine halbe Sekunde Stille vor dem ersten Wort
+  // kostet auf TikTok Retention. Die Marken-Ruhe steckt im Sprechtempo, nicht im Vorlauf.
+  hook:      { lead: 0.15, tail: 1.2 },
+  problem:   { lead: 0.25, tail: 0.8 },
+  // 'zahlen' lief als eine Szene 15,17 s und riss damit zwei eigene Playbook-Regeln:
+  // motion.pacing_rules.max_scene_hold_seconds: 10, und die vierte Temperaturkarte
+  // bekam keine 4,0 s Standzeit. Geteilt in zwei Szenen mit je zwei Karten —
+  // TempCards rendert visual.karten als Liste beliebiger Länge, die Komposition
+  // brauchte dafür keine Änderung.
+  zahlen_a:  { lead: 0.25, tail: 1.0 },
+  zahlen_b:  { lead: 0.25, tail: 1.35 },
+  carryover: { lead: 0.25, tail: 1.1 },
+  messen:    { lead: 0.25, tail: 1.0 },
+  // Kürzerer Nachlauf als die anderen Szenen: das QA-Gate hatte hier 2,3 s
+  // komplette Stille am Videoende gemeldet — auf einer Loop-Plattform ist das
+  // zu lang. 1,2 s reichen, um die Domain zu lesen.
+  cta:       { lead: 0.3,  tail: 1.2 },
+};
+
+const PIPER_ARGS = ['--length-scale', '1.14', '--sentence-silence', '0.35', '--noise-scale', '0.6'];
+
+/** Wärmerer Klang für Marco, ohne in die dumpfe 16-kHz-Stimme zurückzufallen.
+ *  Hochpass gegen Rumpeln, +2,2 dB Brustwärme, -1,6 dB gegen die Härte im
+ *  Präsenzbereich, Kuhschwanz ab 6 kHz gegen Zischeln und Piper-Artefakte.
+ *  Wirkung gemessen: Spektralzentroid 1913 -> 1692 Hz (low läge bei 1355 Hz). */
+const WARM_EQ =
+  'highpass=f=80,' +
+  'equalizer=f=180:t=q:w=1.0:g=2.2,' +
+  'equalizer=f=3000:t=q:w=1.2:g=-1.6,' +
+  'highshelf=f=6000:g=-3.5';
+
+const log = (m) => console.log(`\x1b[1;33m==>\x1b[0m ${m}`);
+const warn = (m) => console.log(`\x1b[1;31m[!]\x1b[0m ${m}`);
+
+// --- Vorbedingungen ---------------------------------------------------------
+if (!existsSync(PIPER)) {
+  warn('OpenMontage ist nicht installiert. Erst ausführen:  npm run video:setup');
+  process.exit(1);
+}
+if (!existsSync(VOICE)) {
+  warn(`Piper-Stimme nicht gefunden: ${VOICE}`);
+  warn('Deutsche Stimme holen (58 MB):');
+  warn('  curl -sSL -o /tmp/v.tar.gz https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-de-thorsten-low.tar.gz');
+  warn('  mkdir -p ~/.piper/models && tar -xzf /tmp/v.tar.gz -C ~/.piper/models');
+  process.exit(1);
+}
+
+const script = JSON.parse(readFileSync(path.join(PROJ, 'script.json'), 'utf-8'));
+
+// --- 1 + 2. Narration erzeugen und ausmessen --------------------------------
+const audioDir = path.join(PROJ, 'audio');
+mkdirSync(audioDir, { recursive: true });
+mkdirSync(OUT, { recursive: true });
+
+log('Erzeuge Narration mit Piper (Avatar Marco) und messe die Längen');
+let cursor = 0;
+const szenen = [];
+
+for (const sc of script.szenen) {
+  const wav = path.join(audioDir, `${sc.id}.wav`);
+  execFileSync(PIPER, ['-m', VOICE, '-f', wav, ...PIPER_ARGS], {
+    input: sc.narration,
+    encoding: 'utf-8',
+    stdio: ['pipe', 'pipe', 'pipe'],
+  });
+
+  const dauerAudio = Number(
+    execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', wav],
+      { encoding: 'utf-8' }).trim()
+  );
+
+  const pad = PADDING[sc.id] || { lead: 0.25, tail: 1.0 };
+  const dauer = Number((pad.lead + dauerAudio + pad.tail).toFixed(3));
+
+  szenen.push({
+    id: sc.id,
+    typ: sc.typ,
+    untertitel: sc.untertitel,
+    start: Number(cursor.toFixed(3)),
+    dauer,
+    audio: `steakakademie/audio/${sc.id}.wav`,
+    audioDelay: pad.lead,
+    visual: sc.visual,
+  });
+
+  console.log(`    ${sc.id.padEnd(11)} Sprache ${dauerAudio.toFixed(2)}s  →  Szene ${dauer.toFixed(2)}s`);
+  cursor += dauer;
+}
+
+const gesamt = Number(cursor.toFixed(3));
+log(`Gesamtlänge: ${gesamt.toFixed(2)}s`);
+
+// --- 2b. Playbook-Gate ---------------------------------------------------
+// Das Style-Playbook enthaelt harte, maschinell pruefbare Grenzen — sie wurden
+// nur nie gegen die fertige Timeline gehalten. Ergebnis: Die Erstfassung des
+// Kerntemperatur-Videos lief mit einer 15,17-s-Szene gegen
+// max_scene_hold_seconds: 10 und faellt erst nach dem Render auf.
+//
+// Geprueft wird HIER, direkt nach dem Ausmessen und VOR dem Rendern: eine
+// Korrektur kostet an dieser Stelle Sekunden statt vier Minuten.
+//
+// Schwellen kommen aus dem Playbook, nicht aus diesem Skript — sonst driften
+// die beiden Quellen auseinander.
+log('Playbook-Gate: Szenenlaengen gegen steakakademie.style.yaml pruefen');
+
+const playbook = yaml.load(readFileSync(PLAYBOOK, 'utf-8'));
+const REGEL = playbook?.motion?.pacing_rules || {};
+const MIN = REGEL.min_scene_hold_seconds ?? 2.5;
+const MAX = REGEL.max_scene_hold_seconds ?? 10;
+const ZAHL_MIN = REGEL.stat_card_hold_seconds ?? 4.0;
+
+// Szenen, in denen eine Zahl das Motiv ist — der Zuschauer muss sie mitschreiben koennen.
+const ZAHLEN_TYPEN = new Set(['temp_cards', 'hero_number', 'carryover']);
+
+const verstoesse = [];
+for (const s of szenen) {
+  if (s.dauer > MAX) verstoesse.push({ szene: s.id, dauer: s.dauer, regel: `max_scene_hold_seconds: ${MAX}` });
+  if (s.dauer < MIN) verstoesse.push({ szene: s.id, dauer: s.dauer, regel: `min_scene_hold_seconds: ${MIN}` });
+  if (ZAHLEN_TYPEN.has(s.typ) && s.dauer < ZAHL_MIN)
+    verstoesse.push({ szene: s.id, dauer: s.dauer, regel: `stat_card_hold_seconds: ${ZAHL_MIN} (Typ ${s.typ})` });
+}
+
+// Ausnahme ist moeglich, kostet aber eine bewusste Handlung und hinterlaesst eine
+// Spur: Grund ist Pflicht und wandert in timeline.json. Reines Warnen wird
+// uebersehen — genau daran ist die Regel beim ersten Mal gescheitert.
+const ausnahmeArg = process.argv.find((a) => a.startsWith('--playbook-ausnahme'));
+const ausnahmeGrund = ausnahmeArg?.includes('=') ? ausnahmeArg.split('=').slice(1).join('=').trim() : '';
+
+if (verstoesse.length > 0) {
+  for (const v of verstoesse) warn(`${v.szene.padEnd(11)} ${v.dauer.toFixed(2)}s  verletzt  ${v.regel}`);
+
+  if (!ausnahmeArg) {
+    warn('');
+    warn(`${verstoesse.length} Playbook-Verstoss(e) — nicht gerendert.`);
+    warn('Beheben: Narration kuerzen, Szene teilen oder PADDING anpassen.');
+    warn('Bewusste Ausnahme:  npm run video:kerntemperatur -- --playbook-ausnahme="Grund"');
+    process.exit(1);
+  }
+  if (!ausnahmeGrund) {
+    warn('');
+    warn('--playbook-ausnahme braucht einen Grund:  --playbook-ausnahme="warum das hier vertretbar ist"');
+    process.exit(1);
+  }
+  warn('');
+  warn(`Ausnahme erteilt: ${ausnahmeGrund}`);
+  warn('Wird in timeline.json protokolliert.');
+} else {
+  console.log(`    ${szenen.length} Szenen, alle innerhalb ${MIN}-${MAX}s, Zahlen-Szenen >= ${ZAHL_MIN}s`);
+}
+
+// --- 3. timeline.json + SRT -------------------------------------------------
+const timeline = { szenen };
+if (verstoesse.length > 0) {
+  timeline.playbookAusnahme = { grund: ausnahmeGrund, verstoesse };
+}
+writeFileSync(path.join(PROJ, 'timeline.json'), JSON.stringify(timeline, null, 2) + '\n');
+
+const srtZeit = (s) => {
+  const h = String(Math.floor(s / 3600)).padStart(2, '0');
+  const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+  const sec = String(Math.floor(s % 60)).padStart(2, '0');
+  const ms = String(Math.round((s % 1) * 1000)).padStart(3, '0');
+  return `${h}:${m}:${sec},${ms}`;
+};
+const srt = szenen
+  .map((s, i) => `${i + 1}\n${srtZeit(s.start)} --> ${srtZeit(s.start + s.dauer)}\n${s.untertitel}\n`)
+  .join('\n');
+writeFileSync(path.join(OUT, 'untertitel.srt'), srt);
+log('timeline.json und untertitel.srt geschrieben');
+
+// --- 4. In den Composer spiegeln --------------------------------------------
+// Eigener Unterordner — keine Upstream-Datei wird angefasst, damit
+// `npm run video:setup` (git checkout) konfliktfrei bleibt.
+log('Spiegele Komposition, Schriften und Audio in den Remotion-Composer');
+const dstSrc = path.join(COMPOSER, 'src/steakakademie');
+const dstPub = path.join(COMPOSER, 'public/steakakademie');
+rmSync(dstSrc, { recursive: true, force: true });
+mkdirSync(dstSrc, { recursive: true });
+mkdirSync(path.join(dstPub, 'fonts'), { recursive: true });
+mkdirSync(path.join(dstPub, 'audio'), { recursive: true });
+
+for (const f of ['brand.ts', 'Kerntemperatur.tsx', 'useBrandFonts.tsx', 'index.tsx']) {
+  copyFileSync(path.join(SRC, f), path.join(dstSrc, f));
+}
+for (const f of ['PlayfairDisplay.woff2', 'DMSans.woff2']) {
+  copyFileSync(path.join(FONTS, f), path.join(dstPub, 'fonts', f));
+}
+
+// Marco-Assets. Bestehende Bilder aus public/ — es wird nichts neu generiert.
+// Kanonische Beschreibung der Figur: docs/avatare/marco.md
+mkdirSync(path.join(dstPub, 'bilder'), { recursive: true });
+const MARCO = [
+  ['public/images/marco-back.jpg', 'marco-back.jpg'],
+  ['public/images/authors/marco-richter.jpg', 'marco.jpg'],
+];
+for (const [von, nach] of MARCO) {
+  const q = path.join(ROOT, von);
+  if (!existsSync(q)) {
+    warn(`Marco-Asset fehlt: ${von} — Szene rendert ohne Avatar.`);
+    continue;
+  }
+  copyFileSync(q, path.join(dstPub, 'bilder', nach));
+}
+for (const s of szenen) {
+  copyFileSync(path.join(audioDir, `${s.id}.wav`), path.join(dstPub, 'audio', `${s.id}.wav`));
+}
+
+// --- 5. Rendern -------------------------------------------------------------
+const mp4 = path.join(OUT, 'kerntemperatur-tiktok.mp4');
+const roh = path.join(OUT, '.roh.mp4');
+const browser = process.env.REMOTION_BROWSER || '';
+const browserFlag = browser ? ` --browser-executable ${browser}` : '';
+
+log('Rendere (1080x1920, 30 fps, H.264)');
+execSync(
+  `npx remotion render src/steakakademie/index.tsx Kerntemperatur ${JSON.stringify(roh)} ` +
+  `--props ${JSON.stringify(path.join(PROJ, 'timeline.json'))} --codec h264 --crf 18` +
+  browserFlag,
+  { cwd: COMPOSER, stdio: 'inherit' }
+);
+
+// --- 5b. Lautheit auf Social-Norm ziehen ------------------------------------
+// TikTok normalisiert Uploads auf rund -14 LUFS. Piper liefert deutlich leiser;
+// ohne diesen Schritt klingt das Video neben anderen Clips dünn.
+// Zweistufig: erst messen, dann mit den gemessenen Werten korrigieren.
+log('Normalisiere Lautheit auf -14 LUFS (zweistufige Messung)');
+const ZIEL = { i: -14, tp: -1.0, lra: 11 };
+
+// ffmpeg schreibt den loudnorm-Report nach stderr, nicht nach stdout.
+const messlauf = spawnSync('ffmpeg', [
+  '-nostdin', '-i', roh,
+  // EQ vor der Messung, sonst misst loudnorm einen Pegel, den es nachher nicht gibt.
+  '-af', `${WARM_EQ},loudnorm=I=${ZIEL.i}:TP=${ZIEL.tp}:LRA=${ZIEL.lra}:print_format=json`,
+  '-f', 'null', '-',
+], { encoding: 'utf-8' });
+
+const messung = messlauf.stderr || '';
+const json = messung.slice(messung.lastIndexOf('{'), messung.lastIndexOf('}') + 1);
+if (!json) {
+  warn('loudnorm-Messung nicht auswertbar — ffmpeg-Ausgabe:');
+  console.error(messung.slice(-800));
+  process.exit(1);
+}
+const m = JSON.parse(json);
+console.log(`    gemessen: ${m.input_i} LUFS, True Peak ${m.input_tp} dBTP`);
+
+execFileSync('ffmpeg', [
+  '-nostdin', '-y', '-i', roh,
+  '-af', `${WARM_EQ},loudnorm=I=${ZIEL.i}:TP=${ZIEL.tp}:LRA=${ZIEL.lra}:` +
+         `measured_I=${m.input_i}:measured_TP=${m.input_tp}:` +
+         `measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:` +
+         `offset=${m.target_offset}:linear=true`,
+  '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000',
+  '-movflags', '+faststart', mp4,
+], { stdio: ['pipe', 'pipe', 'pipe'] });
+
+rmSync(roh, { force: true });
+
+// --- 6. QA-Gate über OpenMontages eigene Prüf-Tools --------------------------
+// visual_qa zieht Review-Frames und misst die Pegel. Wir werten beides aus:
+// schwarze Frames deuten auf einen kaputten Render, Pegel über -1 dB auf
+// Clipping, und stille Abschnitte auf Lücken in der Vertonung.
+log('QA-Gate (visual_qa: Review-Frames + Pegelprüfung)');
+const qa = spawnSync(path.join(OM, '.venv/bin/python'), ['-c', `
+import json, sys
+sys.path.insert(0, ${JSON.stringify(OM)})
+from tools.analysis.visual_qa import VisualQA
+t = VisualQA()
+out = {}
+for op in ("review", "audio_levels"):
+    r = t.execute({"operation": op, "input_path": ${JSON.stringify(mp4)}})
+    out[op] = {"ok": r.success, "error": r.error, "data": r.data}
+print(json.dumps(out))
+`], { cwd: OM, encoding: 'utf-8', env: { ...process.env, PATH: `${path.join(OM, '.venv/bin')}:${process.env.PATH}` } });
+
+let qaWarnungen = 0;
+if (qa.status === 0) {
+  const out = JSON.parse(qa.stdout.trim().split('\n').pop());
+  const frames = out.review?.data?.frames || [];
+  console.log(`    ${frames.length} Review-Frames geschrieben`);
+
+  for (const lvl of out.audio_levels?.data?.levels || []) {
+    const stumm = lvl.mean_volume_db < -60;
+    const clipping = lvl.max_volume_db > -0.5;
+    const marke = stumm ? 'STUMM' : clipping ? 'CLIPPING' : 'ok';
+    if (stumm || clipping) qaWarnungen++;
+    console.log(`    ${String(lvl.timestamp).padStart(5)}s  mean ${String(lvl.mean_volume_db).padStart(6)} dB  ` +
+                `max ${String(lvl.max_volume_db).padStart(6)} dB  ${marke}`);
+  }
+} else {
+  warn('QA-Gate konnte nicht laufen — Render trotzdem vorhanden.');
+  qaWarnungen++;
+}
+
+const probe = JSON.parse(
+  execFileSync('ffprobe', ['-v', 'error', '-show_streams', '-show_format', '-of', 'json', mp4],
+    { encoding: 'utf-8' })
+);
+const v = probe.streams.find((s) => s.codec_type === 'video');
+const a = probe.streams.find((s) => s.codec_type === 'audio');
+
+console.log('\n==============================================================');
+console.log(' Fertig — Entwurf, NICHT veröffentlicht (Regel 4)');
+console.log('==============================================================');
+console.log(` Datei      : ${path.relative(ROOT, mp4)}`);
+console.log(` Auflösung  : ${v.width}x${v.height} @ ${eval(v.r_frame_rate)} fps`);
+console.log(` Dauer      : ${Number(probe.format.duration).toFixed(2)}s`);
+console.log(` Ton        : ${a ? `${a.codec_name}, ${a.channels} ch, ${a.sample_rate} Hz` : 'FEHLT'}`);
+console.log(` Größe      : ${(Number(probe.format.size) / 1024 / 1024).toFixed(1)} MB`);
+console.log(` Untertitel : ${path.relative(ROOT, path.join(OUT, 'untertitel.srt'))}`);
+console.log(` QA         : ${qaWarnungen === 0 ? 'ohne Befund' : `${qaWarnungen} Auffälligkeit(en) — oben nachsehen`}`);
+console.log('\n Vor Veröffentlichung: Uwe gibt frei.');
+console.log('==============================================================');
+
+if (!a) {
+  warn('Kein Audiostream im Ergebnis — Render prüfen.');
+  process.exit(1);
+}

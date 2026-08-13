@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, Flame, Users, Calendar, ChevronRight, Zap, Timer } from 'lucide-react';
 import PortionCalculator from './recipe/PortionCalculator';
+import AromaPairing from './recipe/AromaPairing';
 import CookCoach from './recipe/CookCoach';
 import CutBestellen from './recipe/CutBestellen';
 import BBQPairing from './article/BBQPairing';
@@ -247,6 +248,9 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
 
             {/* Interaktiver Koch-Coach */}
             <CookCoach steps={steps} />
+
+            {/* Aroma-Foodpairing (geteilte Moleküle) → Deeplink in die Rezept-Schmiede */}
+            <AromaPairing meatType={recipe.meatType} />
 
             {/* BBQ-Pairing */}
             {hasPairing && (

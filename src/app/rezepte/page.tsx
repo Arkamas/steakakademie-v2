@@ -82,6 +82,12 @@ export default function RezepteIndexPage() {
               Kein Rezept ohne Feldtest — jede Angabe basiert auf mehrfach reproduzierten Versuchen.
               Mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach direkt am Grill.
             </p>
+            <Link
+              href="/menue"
+              className="mt-5 inline-flex items-center gap-1.5 text-xs font-sans font-bold tracking-widest uppercase text-brand-gold hover:text-brand-fire transition-colors"
+            >
+              Menü-Planer: Ganzes Grill-Menü mit Einkaufsliste zusammenstellen <ChevronRight size={14} />
+            </Link>
           </div>
         </section>
 

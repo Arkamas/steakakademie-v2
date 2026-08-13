@@ -60,8 +60,10 @@ async function main() {
     const jql = encodeURIComponent(
       `project = ${JIRA_PROJECT_KEY} AND labels = "${ALERT_DEDUP_LABEL}" AND statusCategory != Done`,
     );
-    const found = await jira(`/rest/api/3/search?jql=${jql}&maxResults=1&fields=key`);
-    if (found.total > 0) {
+    // Neues Such-API (das alte /search wurde von Atlassian entfernt, CHANGE-2046);
+    // liefert kein "total" mehr — Existenz über issues[] prüfen.
+    const found = await jira(`/rest/api/3/search/jql?jql=${jql}&maxResults=1&fields=key`);
+    if (found.issues?.length > 0) {
       console.log(`ℹ️  Offenes Ticket existiert bereits (${found.issues[0].key}) — kein Duplikat erstellt.`);
       return;
     }

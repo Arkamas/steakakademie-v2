@@ -5,8 +5,14 @@
  * streng geerdet an den gefundenen Einträgen (kein freies Halluzinieren).
  *
  * Body: { auftrag: string, art?: 'rezept' | 'artikel', niveau?: 1 | 2 | 3,
- *         kategorie?: string, cut?: string, limit?: number }
- * Antwort: { ergebnis: string, niveau, verwendete_quellen: Array<{ titel, quelle, similarity }> }
+ *         personen?: number, kategorie?: string, cut?: string, limit?: number }
+ * Antwort: { ergebnis: string, niveau, personen, verwendete_quellen: Array<{ titel, quelle, similarity }> }
+ *
+ * Pro-Person-Prinzip: Alle Rezept-Mengen werden intern auf 1 Person normiert
+ * (Basis-Einheit) und für die gewünschte Personenzahl ausgegeben. Zusätzlich
+ * hängt jedes Rezept einen maschinenlesbaren ```zutaten-basis```-Block an
+ * (Mengen pro 1 Person), damit das UI die Personenzahl NACHTRÄGLICH
+ * deterministisch umrechnen kann — ohne neuen API-Call, ohne LLM-Mathe.
  *
  * Siehe docs/wissensdatenbank-architektur.md („neu kreieren" mit Grounding).
  */
@@ -34,8 +40,18 @@ Regeln:
 - Verankere das Gericht an den Leit-/Hub-Aromastoffen (Röst-Pyrazine, 2-Methyl-3-furanthiol, 1-Octen-3-ol, 2-Acetyl-1-pyrrolin, Strecker-Aldehyde, Räucherphenole): nenne kurz, auf welchen es aufbaut und warum die Kombination harmoniert — sofern die Einträge das belegen.
 - Nenne am Ende einen Abschnitt "Quellen" mit den genutzten "Quelle-Fundstelle"-Angaben.
 
-Bei art="rezept": Struktur = Titel, kurze Einleitung, Zutaten (Liste), Zubereitung (nummerierte Schritte), Profi-Tipps.
-Bei art="artikel": Struktur = Überschrift, Einleitung, Fließtext mit Zwischenüberschriften, Fazit.`;
+Bei art="rezept": Struktur = Titel, kurze Einleitung, Zutaten (Liste, mit Personenzahl in der Überschrift, z. B. "## Zutaten (für 4 Personen)"), Zubereitung (nummerierte Schritte), Profi-Tipps.
+Bei art="artikel": Struktur = Überschrift, Einleitung, Fließtext mit Zwischenüberschriften, Fazit.
+
+MENGEN & PERSONEN (nur bei art="rezept"):
+- Kalkuliere alle Zutatenmengen intern auf Basis 1 Person und gib sie in der Zutatenliste exakt für die angegebene Personenzahl aus.
+- Kerntemperaturen und Gartemperaturen ändern sich NIE mit der Personenzahl. Garzeiten hängen von Dicke/Stückgröße ab, nicht von der Menge — weise darauf hin, wenn relevant.
+- Hänge GANZ AM ENDE der Antwort einen maschinenlesbaren Block an, exakt in diesem Format (Mengen = pro 1 Person, Dezimalpunkt, keine Kommentare):
+\`\`\`zutaten-basis
+{"basis_personen":1,"zutaten":[{"menge":200,"einheit":"g","name":"Ribeye","skalierung":"linear"},{"menge":1,"einheit":"Prise","name":"Meersalz","skalierung":"fix"}]}
+\`\`\`
+- "skalierung":"linear" = Menge wächst proportional zur Personenzahl (Normalfall). "skalierung":"fix" = bleibt konstant (Prisen, "nach Geschmack", Öl zum Einpinseln, Räucherchips).
+- Erlaubte Einheiten: g, kg, ml, l, EL, TL, Prise, Stk., Zweig, Blatt, Zehe, Dose, n.B.`;
 
 // Schwierigkeitsstufen (⭐/⭐⭐/⭐⭐⭐): identische Wissensbasis, andere Flughöhe.
 // Jede Stufe schränkt Technik & Equipment ein — gegroundet bleibt die Generierung.
@@ -66,6 +82,7 @@ export async function POST(req: Request) {
   let auftrag: string;
   let art: 'rezept' | 'artikel';
   let niveau: 1 | 2 | 3;
+  let personen: number;
   let kategorie: string | null;
   let cut: string | null;
   let limit: number;
@@ -75,6 +92,7 @@ export async function POST(req: Request) {
     art = body.art === 'artikel' ? 'artikel' : 'rezept';
     const n = parseInt(body.niveau, 10);
     niveau = n === 1 || n === 3 ? n : 2; // Default: ⭐⭐ Fortgeschritten
+    personen = Math.min(Math.max(parseInt(body.personen, 10) || 2, 1), 20);
     kategorie = body.kategorie ? String(body.kategorie) : null;
     cut = body.cut ? String(body.cut) : null;
     limit = Math.min(Math.max(parseInt(body.limit, 10) || 12, 1), 20);
@@ -112,7 +130,7 @@ export async function POST(req: Request) {
     const { text } = await generateText({
       model: anthropic(MODEL),
       system: `${SYSTEM_PROMPT}\n\n${NIVEAU_REGELN[niveau]}`,
-      prompt: `art=${art}\nniveau=${niveau}\n\nAuftrag: ${auftrag}\n\nWissenseinträge (einzige erlaubte Faktenbasis):\n${kontext}`,
+      prompt: `art=${art}\nniveau=${niveau}\npersonen=${personen}\n\nAuftrag: ${auftrag}\n\nWissenseinträge (einzige erlaubte Faktenbasis):\n${kontext}`,
     });
     ergebnis = text;
   } catch (e: unknown) {
@@ -123,6 +141,7 @@ export async function POST(req: Request) {
   return NextResponse.json({
     ergebnis,
     niveau,
+    personen,
     verwendete_quellen: treffer.map((t) => ({
       titel: t.titel,
       quelle: t.quelle,

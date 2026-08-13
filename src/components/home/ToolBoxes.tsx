@@ -12,7 +12,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2 } from 'lucide-react';
+import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2, Users, Plus, Minus } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -130,11 +130,61 @@ const NIVEAUS = [
   { n: 3, label: '⭐⭐⭐ Profi' },
 ] as const;
 
+// ── Pro-Person-Engine ────────────────────────────────────────────────
+// Der Generator liefert am Rezept-Ende einen ```zutaten-basis```-Block mit
+// Mengen pro 1 Person. Wir parsen ihn, blenden ihn aus dem Markdown aus und
+// rechnen die Personenzahl DETERMINISTISCH um (kein LLM, kein API-Call).
+type ZutatBasis = { menge: number; einheit: string; name: string; skalierung?: 'linear' | 'fix' };
+
+function parseZutatenBasis(md: string): { text: string; zutaten: ZutatBasis[] | null } {
+  const m = md.match(/```zutaten-basis\s*([\s\S]*?)```/);
+  if (!m) return { text: md, zutaten: null };
+  const text = md.replace(m[0], '').trimEnd();
+  try {
+    const data = JSON.parse(m[1]);
+    const roh = Array.isArray(data?.zutaten) ? data.zutaten : null;
+    if (!roh?.length) return { text, zutaten: null };
+    const zutaten: ZutatBasis[] = roh
+      .filter((z: ZutatBasis) => z && typeof z.name === 'string' && Number.isFinite(Number(z.menge)))
+      .map((z: ZutatBasis) => ({
+        menge: Number(z.menge),
+        einheit: String(z.einheit ?? ''),
+        name: z.name,
+        skalierung: z.skalierung === 'fix' ? 'fix' : 'linear',
+      }));
+    return { text, zutaten: zutaten.length ? zutaten : null };
+  } catch {
+    return { text, zutaten: null };
+  }
+}
+
+// Skaliert 1-Personen-Menge auf n Personen; Kerntemperaturen/Zeiten skalieren nie.
+function skaliere(z: ZutatBasis, personen: number): string {
+  if (z.skalierung === 'fix') return z.menge > 0 && z.einheit ? `${fmtMenge(z.menge)} ${z.einheit}` : 'n. B.';
+  let menge = z.menge * personen;
+  let einheit = z.einheit;
+  if (einheit === 'g' && menge >= 1000) { menge /= 1000; einheit = 'kg'; }
+  if (einheit === 'ml' && menge >= 1000) { menge /= 1000; einheit = 'l'; }
+  if (einheit === 'TL' && menge >= 3) { menge /= 3; einheit = 'EL'; }
+  return `${fmtMenge(menge)} ${einheit}`.trim();
+}
+
+function fmtMenge(x: number): string {
+  if (x >= 500) return String(Math.round(x / 5) * 5);
+  if (x >= 100) return String(Math.round(x));
+  if (x >= 10) return String(Math.round(x * 2) / 2).replace('.', ',');
+  const r = Math.round(x * 100) / 100;
+  return String(r).replace('.', ',');
+}
+
 function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } | null }) {
   const boxRef = useRef<HTMLDivElement>(null);
   const [auftrag, setAuftrag] = useState('');
   const [niveau, setNiveau] = useState<1 | 2 | 3>(2);
+  const [personen, setPersonen] = useState(2);
   const [ergebnis, setErgebnis] = useState<string | null>(null);
+  const [zutatenBasis, setZutatenBasis] = useState<ZutatBasis[] | null>(null);
+  const [rezeptLinks, setRezeptLinks] = useState<{ titel: string; href: string }[]>([]);
   const [hinweis, setHinweis] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [elapsed, setElapsed] = useState(0);
@@ -153,16 +203,33 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
     if (!q) return;
     setLoading(true);
     setErgebnis(null);
+    setZutatenBasis(null);
+    setRezeptLinks([]);
     setHinweis(null);
     try {
       const res = await fetch('/api/kochwissen/generieren', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ auftrag: q, niveau, art: 'rezept' }),
+        body: JSON.stringify({ auftrag: q, niveau, personen, art: 'rezept' }),
       });
       const data = await res.json();
       if (res.ok && data.ergebnis) {
-        setErgebnis(data.ergebnis);
+        const { text, zutaten } = parseZutatenBasis(String(data.ergebnis));
+        setErgebnis(text);
+        setZutatenBasis(zutaten);
+        // Verkettung: Quellen aus unserer eigenen Rezeptwelt als Links anbieten
+        // (Quelle-Format "Steakakademie-Rezept: /rezepte/<slug>" aus dem Ingest).
+        const PREFIX = 'Steakakademie-Rezept: ';
+        const links = new Map<string, { titel: string; href: string }>();
+        for (const q of Array.isArray(data.verwendete_quellen) ? data.verwendete_quellen : []) {
+          const quelle = String(q?.quelle ?? '');
+          if (!quelle.startsWith(PREFIX)) continue;
+          const href = quelle.slice(PREFIX.length).trim();
+          if (href.startsWith('/rezepte/') && !links.has(href)) {
+            links.set(href, { titel: String(q.titel ?? href), href });
+          }
+        }
+        setRezeptLinks(Array.from(links.values()).slice(0, 3));
       } else {
         setHinweis('Die Rezept-Schmiede wird gerade scharfgeschaltet — gleich kannst du hier aus geprüftem Wissen Rezepte erzeugen.');
       }
@@ -212,6 +279,36 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
         ))}
       </div>
 
+      {/* Personenzahl — Basis der Kalkulation ist immer 1 Person */}
+      <div className="flex items-center justify-between gap-2 mb-2 rounded-md bg-surface-base px-2.5 py-1.5">
+        <span className="inline-flex items-center gap-1.5 text-[11px] text-text-secondary">
+          <Users size={12} className="text-brand-gold" /> Personen
+        </span>
+        <div className="flex items-center gap-2" role="group" aria-label="Personenzahl">
+          <button
+            type="button"
+            onClick={() => setPersonen((p) => Math.max(1, p - 1))}
+            disabled={personen <= 1}
+            aria-label="Weniger Personen"
+            className="w-6 h-6 flex items-center justify-center rounded border border-brand-gold/40 text-brand-gold hover:bg-brand-gold hover:text-ink disabled:opacity-30 transition-colors"
+          >
+            <Minus size={11} />
+          </button>
+          <span className="w-6 text-center text-sm font-bold text-text-light tabular-nums" aria-live="polite">
+            {personen}
+          </span>
+          <button
+            type="button"
+            onClick={() => setPersonen((p) => Math.min(20, p + 1))}
+            disabled={personen >= 20}
+            aria-label="Mehr Personen"
+            className="w-6 h-6 flex items-center justify-center rounded border border-brand-gold/40 text-brand-gold hover:bg-brand-gold hover:text-ink disabled:opacity-30 transition-colors"
+          >
+            <Plus size={11} />
+          </button>
+        </div>
+      </div>
+
       <form onSubmit={erstellen} className="flex gap-2">
         <input
           value={auftrag}
@@ -240,9 +337,53 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
       {hinweis && <p className="mt-3 text-[11px] text-text-muted italic">{hinweis}</p>}
       {ergebnis && (
         <div className="mt-3 max-h-72 overflow-y-auto rounded-lg border border-border-subtle bg-surface-base p-3">
+          {/* Live-Mengenrechner: Basis 1 Person, deterministisch skaliert */}
+          {zutatenBasis && (
+            <div className="mb-3 rounded-md border border-brand-gold/25 bg-surface-card p-2.5">
+              <div className="flex items-center justify-between gap-2 mb-1.5">
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-brand-gold">
+                  <Users size={11} /> Mengen für {personen} {personen === 1 ? 'Person' : 'Personen'}
+                </span>
+                <span className="text-[10px] text-text-muted">Personen oben ändern — rechnet live um</span>
+              </div>
+              <ul className="grid grid-cols-1 gap-y-0.5 text-[12px] text-text-primary">
+                {zutatenBasis.map((z) => (
+                  <li key={z.name} className="flex justify-between gap-2">
+                    <span className="truncate">{z.name}</span>
+                    <span className="shrink-0 tabular-nums text-text-light font-medium">
+                      {skaliere(z, personen)}
+                      {z.skalierung === 'fix' && <span className="text-text-muted font-normal"> (n. B.)</span>}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-1.5 text-[10px] text-text-muted">
+                Kern- & Gartemperaturen bleiben gleich — nur Mengen skalieren.
+              </p>
+            </div>
+          )}
           <div className="prose prose-sm max-w-none prose-headings:text-text-light prose-headings:font-serif">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{ergebnis}</ReactMarkdown>
           </div>
+          {rezeptLinks.length > 0 && (
+            <div className="mt-3 border-t border-border-subtle pt-2.5">
+              <p className="text-[10px] font-bold uppercase tracking-wide text-brand-gold mb-1.5">
+                Erprobte Rezepte aus unserer Rezeptwelt
+              </p>
+              <ul className="space-y-1">
+                {rezeptLinks.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="inline-flex items-center gap-1 text-[12px] text-text-light hover:text-brand-fire"
+                    >
+                      <ChevronRight size={12} className="text-brand-gold shrink-0" /> {l.titel}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -252,8 +393,17 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
 export default function ToolBoxes() {
   // Verkettung: Foodpairing → Rezept-Schmiede (nonce, damit auch gleiche Vorgabe erneut auslöst).
   const [seed, setSeed] = useState<{ auftrag: string; nonce: number } | null>(null);
+
+  // Deeplink von Rezeptseiten (AromaPairing): /?schmiede=<Auftrag>#werkzeuge
+  // startet die Rezept-Schmiede direkt mit dem Aroma-Auftrag.
+  // window.location statt useSearchParams: kein Suspense-/SSG-Umbau nötig.
+  useEffect(() => {
+    const auftrag = new URLSearchParams(window.location.search).get('schmiede');
+    if (auftrag?.trim()) setSeed({ auftrag: auftrag.trim(), nonce: Date.now() });
+  }, []);
+
   return (
-    <section className="bg-surface-dark border-b border-brand-gold/15">
+    <section id="werkzeuge" className="bg-surface-dark border-b border-brand-gold/15">
       <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
         <div className="text-center mb-6">
           <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.22em] uppercase text-brand-fire">

@@ -40,6 +40,10 @@ on:
         type: boolean
         required: false
         default: false
+      only:
+        description: 'Nur Dateien ingestieren, deren Name diesen Text enthält (leer = alle). Spart Voyage-Quota bei Nachläufen.'
+        required: false
+        default: ''
 
 concurrency:
   group: kochwissen-ingest
@@ -74,19 +78,32 @@ jobs:
           if [ "${{ inputs.dry_run }}" = "true" ]; then DRY="--dry-run"; fi
           echo "## 📚 Kochwissen-Ingestion" >> $GITHUB_STEP_SUMMARY
           if [ -n "$DRY" ]; then echo "_Trockenlauf – keine Schreibvorgänge._" >> $GITHUB_STEP_SUMMARY; fi
-          for f in data/kochwissen/wissensdatenbank-*.csv data/kochwissen/foods-oa-*.csv; do
+          for f in data/kochwissen/wissensdatenbank-*.csv data/kochwissen/foods-oa-*.csv data/kochwissen/steakakademie-rezepte-*.csv; do
             [ -e "$f" ] || continue
             base=$(basename "$f")
+            # Optionaler Filter für Nachläufe (nur eine Lieferung neu einlesen)
+            if [ -n "${{ inputs.only }}" ] && [ "${base#*${{ inputs.only }}}" = "$base" ]; then
+              echo "↷ $base übersprungen (only=${{ inputs.only }})"
+              continue
+            fi
             # Source-Namespace pro Lieferung (siehe data/kochwissen/README.md):
             # Datei 1 = McGee-Index (Platzhalter), foods-oa-* = Open-Access-Aromawissenschaft,
+            # steakakademie-rezepte-* = eigene redaktionelle Rezepte (Flywheel),
             # alle übrigen wissensdatenbank-* = Modernist Cuisine.
             case "$base" in
-              wissensdatenbank-1.csv) SRC=mcgee ;;
-              foods-oa-*.csv)         SRC=foods-oa ;;
-              *)                      SRC=modernist ;;
+              wissensdatenbank-1.csv)      SRC=mcgee ;;
+              foods-oa-*.csv)              SRC=foods-oa ;;
+              steakakademie-rezepte-*.csv) SRC=steakakademie-rezepte ;;
+              *)                           SRC=modernist ;;
             esac
-            echo "→ $base  (source=$SRC)"
-            node scripts/kochwissen-ingest.mjs --file "$f" --source "$SRC" $DRY
+            # Rezept-Einträge sind lang (~2800 Zeichen ≈ 900 Tokens): Batch 16 würde
+            # das Gratis-TPM-Limit (10K/min) in EINEM Request sprengen → Batch 6.
+            EXTRA=""
+            case "$base" in
+              steakakademie-rezepte-*.csv) EXTRA="--batch 6" ;;
+            esac
+            echo "→ $base  (source=$SRC) $EXTRA"
+            node scripts/kochwissen-ingest.mjs --file "$f" --source "$SRC" $EXTRA $DRY
             echo "- \`$base\` → source \`$SRC\`" >> $GITHUB_STEP_SUMMARY
           done
 

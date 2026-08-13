@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Minus, Users } from 'lucide-react';
+import { Plus, Minus, Users, ClipboardList, Check } from 'lucide-react';
 
 export interface RecipeIngredient {
   amount: number;
@@ -74,7 +74,26 @@ const NO_CONVERT = new Set(['Prise', 'n.B.', 'etwas']);
 
 export default function PortionCalculator({ basePortions, ingredients }: Props) {
   const [portions, setPortions] = useState(basePortions);
+  const [kopiert, setKopiert] = useState(false);
   const scale = portions / basePortions;
+
+  // Einkaufsliste: dieselbe deterministische Skalierung wie die Anzeige,
+  // als Klartext in die Zwischenablage (für Notizen/Messenger/Einkaufs-App).
+  async function einkaufslisteKopieren() {
+    const zeilen = ingredients.map((ing) => {
+      if (NO_CONVERT.has(ing.unit)) return `• ${ing.name} (${ing.unit})`;
+      const { amount, unit } = smartConvert(ing.amount * scale, ing.unit);
+      return `• ${fmt(amount)} ${unit} ${ing.name}${ing.note ? ` (${ing.note})` : ''}`;
+    });
+    const text = `Einkaufsliste (${portions} ${portions === 1 ? 'Portion' : 'Portionen'}) — steakakademie.de\n${zeilen.join('\n')}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setKopiert(true);
+      setTimeout(() => setKopiert(false), 2500);
+    } catch {
+      // Clipboard verweigert (z. B. unsicherer Kontext) — still bleiben, kein kaputtes UI
+    }
+  }
 
   return (
     <div
@@ -173,6 +192,25 @@ export default function PortionCalculator({ basePortions, ingredients }: Props) 
           </p>
         </div>
       )}
+
+      {/* Einkaufsliste für die gewählte Personenzahl */}
+      <div className="px-6 py-3 border-t border-border-subtle">
+        <button
+          onClick={einkaufslisteKopieren}
+          className="w-full inline-flex items-center justify-center gap-2 py-2 text-[11px] font-sans font-bold tracking-[0.12em] uppercase border border-brand-gold/40 text-brand-gold hover:bg-brand-gold hover:text-ink transition-colors"
+          aria-live="polite"
+        >
+          {kopiert ? (
+            <>
+              <Check size={13} className="shrink-0" /> Kopiert — ab in die Einkaufs-App
+            </>
+          ) : (
+            <>
+              <ClipboardList size={13} className="shrink-0" /> Einkaufsliste für {portions} {portions === 1 ? 'Portion' : 'Portionen'} kopieren
+            </>
+          )}
+        </button>
+      </div>
     </div>
   );
 }

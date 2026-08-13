@@ -5,7 +5,9 @@
 ## Stack
 
 - **Frontend:** Next.js 14 App Router, TailwindCSS, Framer Motion, Contentlayer2, TypeScript.
-- **Hosting/Deploy:** Netlify (Auto-Deploy via GitHub main) + Vercel (verknüpft). Domain `steakakademie.de` (GoDaddy), DNS via Cloudflare.
+- **Hosting/Deploy:** **Vercel** (Auto-Deploy via GitHub `main`) — kanonisch. Domain `steakakademie.de` (GoDaddy), DNS via Cloudflare (NS `rohin`/`zita.ns.cloudflare.com`), A-Records zeigen auf Vercel; `www` läuft über Cloudflare proxied auf Vercel und wird per `vercel.json` 308 auf die Apex-Domain umgeleitet.
+  - Korrigiert 13.08.2026: Hier stand bis dahin „Netlify (Auto-Deploy) + Vercel (verknüpft)". Das war seit der Umstellung falsch herum — belegt durch `server: Vercel` + `x-vercel-id` in der Live-Antwort. Vgl. `compliance/website-rechtscheck.yaml` §3, das Vercel bereits am 07.06.2026 als Host korrigiert hatte.
+  - **Netlify:** Site `steakakademie-de` baute bis 13.08.2026 parallel aus demselben Repo mit (letzter Deploy `6a7dc50c`, Commit `e04bcc5`). Builds gestoppt, Site bleibt als Vergleichsobjekt unter `steakakademie-de.netlify.app` online. `netlify.toml` liegt weiterhin im Repo und wirkt nur noch dort. Achtung: Die Kopie ist crawlbar (kein `X-Robots-Tag: noindex`); gegen Duplicate Content schützt allein das Canonical-Tag auf die Hauptdomain.
 - **Auth/DB:** Supabase (Auth Magic Link/OTP + OAuth PKCE, PostgreSQL, RLS, Storage). Dual-path callback `src/app/auth/callback/route.ts`.
 - **E-Mail:** Loops.so (transaktional + Newsletter); 8 Aliases @steakakademie.de via Cloudflare Email Routing.
 - **KI-Bild:** **fal.ai (FLUX.1 dev) = EINZIGER Bildgenerator.** Higgsfield verbannt (03.06.2026).
@@ -43,7 +45,7 @@
 
 ## Aktive Ops-Blocker (auf Uwe) → Jira
 
-KAN-9 (Prod-Migrations) · KAN-10 (Danke-URLs) · KAN-11 (Webhook-URLs) · KAN-12 (Netlify Env) · KAN-13 (Testkauf-Verifikation) · KAN-15 (ADMIN_PASSWORD rotieren).
+KAN-9 (Prod-Migrations) · KAN-10 (Danke-URLs) · KAN-11 (Webhook-URLs) · KAN-12 (Env-Vars — **in Vercel**, nicht Netlify; der Jira-Titel nennt ggf. noch Netlify) · KAN-13 (Testkauf-Verifikation) · KAN-15 (ADMIN_PASSWORD rotieren).
 
 ## GitHub Actions (Repo `vecmahr/steakakademie-v2`)
 

@@ -1,12 +1,16 @@
 # Steakakademie — Roadmap & Offene Punkte
 
 > Letzte Aktualisierung: 2026-05-28
+>
+> Teilkorrektur 13.08.2026: Deploy-Ziel und Env-Var-Ablage von Netlify auf
+> **Vercel** umgestellt (Vercel ist kanonisch — DNS und `server`-Header belegt).
+> Der übrige Inhalt ist unverändert vom 28.05. und nicht nachgeprüft.
 
 ---
 
 ## 🔥 Heute erledigen
 
-### Digistore24 Danke-URLs (manuell — nach Netlify-Deploy)
+### Digistore24 Danke-URLs (manuell — nach Vercel-Deploy)
 - [ ] Produkt **696394** (Steak-Beichte) → Eigenschaften → Dankeseite:
   `https://steakakademie.de/danke/steak-beichte`
 - [ ] Produkt **696396** (Mein Protokoll) → Eigenschaften → Dankeseite:
@@ -16,7 +20,7 @@
 
 ### Amazon PA-API Credentials
 - [ ] `AMAZON_ACCESS_KEY` + `AMAZON_SECRET_KEY` in `.env.local` eintragen (NICHT in Git!)
-- [ ] Dieselben Keys in **Netlify** → Environment Variables eintragen
+- [ ] Dieselben Keys in **Vercel** → Project Settings → Environment Variables eintragen
 - [ ] `npm run fetch-images` ausführen → prüfen ob Bilder geladen werden
 
 ### Affiliate-Programme anmelden
@@ -45,7 +49,7 @@
 
 ## 🎯 Mittelfristig (KW 24–26)
 
-- [ ] **GA4 Measurement Protocol** — `GA4_MEASUREMENT_ID` + `GA4_API_SECRET` in Netlify
+- [ ] **GA4 Measurement Protocol** — `GA4_MEASUREMENT_ID` + `GA4_API_SECRET` in Vercel
 - [ ] **Güde Solingen** — Kontakt wegen Affiliate/Partnerschaft (`info@guede.com`)
   - Kein öffentliches Affiliate-Programm bekannt → direkte Anfrage nötig
 - [ ] **Google Search Console** — Indexierungsstatus prüfen nach Sitemap-Fix

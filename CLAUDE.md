@@ -130,7 +130,7 @@ Analytics & Data · CRM & Monetization.
 1. **Ribeye Pillar Page `/cuts/ribeye`** (18k Suchen/Monat) — höchster Traffic-Hebel,
    erster End-to-End-Lauf der neuen Pipeline (SEO→GEO→Content→Compliance).
 2. **Monetarisierung verdrahten:** Digistore24 Danke-/Webhook→Supabase, Diplom Bronze live.
-3. **Auth & Community (0 %):** Supabase Auth (OAuth + Magic Link) abschließen.
+3. **Auth & Community:** Supabase Auth (OAuth + Magic Link) abschließen.
 4. **Affiliate-Programme anmelden** (Santos, Grillfürst, Ankerkraut, Otto Gourmet) + PA-API.
 5. **Marken-Frist:** Wortmarke „Steakakademie" — Gebühr offen, Frist ~27.08.2026 (KAN-17).
 

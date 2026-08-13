@@ -1,6 +1,17 @@
-// ⚠️ AUTO-GENERIERT aus CLAUDE.md — NICHT MANUELL BEARBEITEN.
-// Wird von generate-pm-context.js bei jeder CLAUDE.md-Änderung neu geschrieben.
-// Einzige Quelle der Wahrheit: ../../../CLAUDE.md
+// ⚠️ NICHT MEHR AUTO-GENERIERT — diese Datei wird von Hand gepflegt.
+//
+// Der Dateiname und der frühere Header behaupteten, `generate-pm-context.js`
+// schreibe die Datei bei jeder CLAUDE.md-Änderung neu. Das ist unwahr:
+// Ein solches Skript liegt nicht im Repo und wurde auch **nie** committet
+// (`git log --all --diff-filter=A -- '*generate-pm-context*'` ist leer) — es
+// lief nur lokal außerhalb des Repos. Letzter erzeugter Stand: `generatedAt`
+// unten, 25.06.2026; seither keine Regeneration mehr möglich.
+//
+// Konsequenz: Änderungen an CLAUDE.md landen hier NICHT automatisch. Wer
+// CLAUDE.md §1 anfasst, muss diese Datei von Hand nachziehen — oder den
+// Generator neu bauen und diesen Hinweis wieder entfernen.
+//
+// Inhaltliche Quelle bleibt: ../../../CLAUDE.md
 
 export interface ProjectStatus {
   readinessScore: number
@@ -98,17 +109,24 @@ export const PROJECT_STATUS: ProjectStatus = {
     "Präzise Rezepte",
     "Vegetarisch/Vegan BBQ"
   ],
+  // ⚠️ UNGEPRÜFT. Alle acht Werte stammen aus demselben Lauf vom 25.06.2026 wie
+  // die beiden hier entfernten Einträge "Auth & Community": 0 und
+  // "Agenten & Automation": 0. Die zwei Nullen hat das Konsistenz-Audit vom
+  // 10.08.2026 als nachweislich falsch belegt (CLAUDE.md §1) — damit ist die
+  // Methodik des gesamten Laufs fraglich, nicht nur diese zwei Zahlen.
+  // Entfernt statt geschätzt (Regel 7: erst messen, dann eintragen); die
+  // verbleibenden acht sind aus demselben Grund nicht als Fakten zu behandeln.
+  // Sie werden im Admin-Dashboard (/admin/pm-agent) als Balken gerendert und
+  // fließen in den System-Prompt des PM-Agenten (pm-agent-context.ts).
   "branches": {
     "SEO & Traffic": 54,
     "Monetarisierung": 22,
-    "Auth & Community": 0,
     "Content-Strategie": 17,
     "Avatar-System": 57,
     "Technische Infrastruktur": 75,
     "Kurse & Diplom-System": 50,
     "Tech-Stack & Tools": 76,
-    "KI-System & Automation": 58,
-    "Agenten & Automation": 0
+    "KI-System & Automation": 58
   },
   "generatedAt": "2026-06-25T18:51:00.989Z"
 }

@@ -1,5 +1,8 @@
-// Status-Daten kommen aus CLAUDE.md (via generate-pm-context.js → *.generated.ts).
-// Hier wird NICHTS hardcoded — nur der Prompt, der die echten Werte konsumiert.
+// Status-Daten kommen aus *.generated.ts. Der frühere Zusatz "via
+// generate-pm-context.js" war unwahr — dieses Skript liegt nicht im Repo und
+// wurde nie committet; die Datei wird von Hand gepflegt (Details in ihrem
+// Header). Werte sind ein Stand vom 25.06.2026, nicht tagesaktuell.
+// Hier wird NICHTS hardcoded — nur der Prompt, der diese Werte konsumiert.
 
 import { PROJECT_STATUS } from './pm-agent-context.generated'
 

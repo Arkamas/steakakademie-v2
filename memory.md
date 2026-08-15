@@ -205,3 +205,55 @@ Voraussetzungen waren FFmpeg 9.0 und GNU Make 4.4.1 (winget).
 - Merged-PR-Regel gelebt: nach jedem Squash-Merge Branch frisch von origin/main (`checkout -B`), sonst Force-Push-Salat.
 
 **Nebenprodukte derselben Session:** Pro-Person-Engine (Basis 1 Person, `zutaten-basis`-Block + deterministischer UI-Rechner), AromaPairing auf Rezeptseiten mit `?schmiede=`-Deeplink, Einkaufslisten-Button, Menü-Planer `/menue`, 112-Rezepte-RAG-Flywheel. Notion „🍖 Rezept-Datenbank" ist leer (0 Einträge) — kein verlorener Content.
+
+## 15. August 2026 — Loops-Start-Bug gelöst (API-Neubau) + Produkt-Entscheidungen
+
+**Der Bug — Ursache gefunden (wichtigste Lektion des Tages):**
+Der Workflow „Willkommenssequenz Wissens-Brief" ließ sich in der Loops-UI **nicht starten** —
+Fehler: „Something went wrong, please contact support." Auch **Duplizieren** schlug fehl.
+Guardian-Checks 2/2 grün, Sending-Domain verifiziert, Free-Plan enthält Workflows
+(„all features included") — also kein Bedien- oder Tariffehler.
+**Root Cause:** Die Mails 1/2/4 enthielten ein `<Image src="https://steakakademie.de/images/logo-barrel.jpg" width="auto">`.
+Loops akzeptiert nur **CDN-eigene Bilder**; extern gehostete Bilder + `width="auto"` sind ungültig.
+Die **UI** verschluckte das und warf generisch „Something went wrong"; erst die **API** nannte
+den echten Grund (HTTP 422 mit Klartext). Lehre: **Bei stummen UI-Fehlern dieselbe Operation
+über die API fahren — dort steht die Wahrheit.**
+
+**Lösung — Workflow per API neu gebaut (~2 Min statt UI-Gefrickel):**
+`POST /v1/workflows` → Trigger via `POST /v1/workflows/{id}/nodes/{nodeId}` auf `SignupTrigger`
+→ Knoten via `POST /v1/workflows/{id}/nodes` (`insertMode: between`, `fromNodeId`/`toNodeId`)
+→ Inhalte via `POST /v1/email-messages/{id}` (Format **LMX**, nicht HTML).
+Stolpersteine: (a) `amount`/`unit` beim **Anlegen** eines TimerAction werden abgelehnt →
+erst Knoten anlegen, **dann** per Node-Update setzen. (b) `languageCode` mitsenden → 400
+„Translations are not enabled for this team" → Feld weglassen. (c) Jeder Schreibzugriff
+braucht `expectedRevisionId` (Workflow: `workflowRevisionId`, Mail: `contentRevisionId`).
+Skripte liegen im Scratchpad (`loops-read.mjs`, `loops-build2.mjs`).
+**Ergebnis:** Workflow `cmsu6aces18t90j0aansmuc9e` („…Wissens-Brief v2") ist **Active**.
+Externe Logo-Bilder wurden dabei entfernt — für Wiedereinbau erst in Loops-Mediathek hochladen.
+
+**Loops-Fallstricke (allgemein):**
+- Trigger „Contact added" = API-`SignupTrigger`; feuert **nur bei NEU angelegten Kontakten**.
+- **Zwei getrennte Mail-Wege:** `/auth/login` = Magic-Link-Login (Resend, login@) ≠
+  `/newsletter` = Wissens-Brief-Anmeldung (Loops, Double-Opt-In). Beim Testen leicht zu verwechseln.
+- `GET /v1/contacts/find?email=…` liefert `[]`, wenn die Adresse unbekannt ist — gut zum Prüfen
+  einer Testadresse vor dem Selbsttest.
+- Der Workflow-Canvas (ReactFlow) reagiert kaum auf Fernsteuerung: Doppelklick zoomt, Tab zoomt,
+  der „+"-Einfügepunkt erscheint nur bei kleinem Zoom. **Struktur immer per API bauen.**
+
+**Fakten-Korrektur (Regel 8c):** In Mail 3 stand „10 Stufen" — real sind es
+**5 Stufen mit 35 Lektionen** (im Code verifiziert). Korrigiert vor dem Start.
+
+**Produkt-Entscheidungen (Uwe, 15.08.2026) — Details im Ideen-Memo der CLAUDE.md:**
+- **BBQ-Grundkurs = Option B:** echter **Video-Kurs**; Abgrenzung zum kostenlosen Diplom-Lernweg
+  (Text, 5 Stufen/35 Lektionen) über das **Format**, nicht über den Inhalt.
+- **Verlosung:** „Jeden Monat 2× SteakChamp 3-Color Black unter allen Neuanmeldungen"
+  (Bestand 32 Stück originalverpackt, UVP je 49,95 € → ~1.600 € Gesamtwert, 16 Monate Laufzeit).
+- **Weihnachts-Gutscheine:** Zeitfenster startet ~Mitte/Ende August → Kampagne mit **bestehenden**
+  Produkten starten (Steak-Beichte, physisches Diplom, Gründer-Schmiede); Video-Kurs stößt dazu,
+  sobald er ehrlich fertig ist — keine Gutscheine für Unfertiges.
+- **Gründer-Schmiede-Begleitung:** 3/5/7/10 Std à 105/100/95/89 €; Digitaler Ratgeber (2 PDFs,
+  müssen aktualisiert werden) mit/ohne Begleitung, dort nur 3 und 5 Std. Gutscheine für alles.
+
+**Nächster Schritt:** Uwe: auf `/newsletter` mit neuer Adresse anmelden + DOI-Link klicken →
+Mail 1 muss ankommen → dann ist der **Markt-Lauf abgeschlossen** (Hebel 1+2+3 ✅).
+Danach: alten Workflow (ohne „v2") löschen, sonst doppelte Sequenzen bei einer späteren Reparatur.

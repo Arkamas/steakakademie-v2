@@ -121,37 +121,51 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, doi: true, dev: true });
     }
 
-    // DOI-Token und Bestätigungs-URL generieren
-    const token = createDOIToken(normalizedEmail);
-    const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${encodeURIComponent(token)}`;
+    // DOI-Token und Bestätigungs-URL generieren.
+    // A2-Fix: source + userGroup wandern in den Token, damit /confirm sie kennt.
     const config = SOURCE_CONFIG[source] ?? SOURCE_CONFIG.default;
+    const token = createDOIToken(normalizedEmail, source, config.userGroup);
+    const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${encodeURIComponent(token)}`;
 
-    // Bestätigungs-E-Mail via Loops transactional senden (BEVOR Kontakt angelegt wird)
-    if (DOI_TEMPLATE_ID) {
-      const txRes = await fetch(`${LOOPS_API_BASE}/transactional`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${LOOPS_API_KEY}`,
+    // ── A2-Fix „ehrlicher Fehler" (16.08.2026) ──────────────────────────────
+    // Vorher meldete diese Route IMMER success:true — auch wenn keine Mail
+    // rausging. Folge: Wochen unsichtbar toter Trichter (fehlende Template-ID
+    // auf Vercel), Nutzer sahen „Fast geschafft", es kam nie etwas an.
+    // Jetzt gilt: keine Bestätigungs-Mail nachweislich versendet -> Fehler an
+    // den Nutzer, laut ins Log. Ein Trichter, der kaputt AUSSIEHT, wird
+    // repariert; einer, der kaputt SCHWEIGT, kostet wochenlang Anmeldungen.
+    if (!DOI_TEMPLATE_ID) {
+      console.error(
+        '[Newsletter] LOOPS_DOI_TEMPLATE_ID fehlt — Bestätigungs-E-Mail kann NICHT gesendet werden. ' +
+        'Transaktionale Vorlage in Loops anlegen/publishen und ID in Vercel eintragen.',
+      );
+      return NextResponse.json(
+        { error: 'Anmeldung derzeit nicht möglich — die Bestätigungs-E-Mail kann nicht versendet werden. Bitte versuche es später erneut.' },
+        { status: 503 },
+      );
+    }
+
+    const txRes = await fetch(`${LOOPS_API_BASE}/transactional`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${LOOPS_API_KEY}`,
+      },
+      body: JSON.stringify({
+        transactionalId: DOI_TEMPLATE_ID,
+        email: normalizedEmail,
+        dataVariables: {
+          confirmUrl,
+          source,
+          userGroup: config.userGroup,
         },
-        body: JSON.stringify({
-          transactionalId: DOI_TEMPLATE_ID,
-          email: normalizedEmail,
-          dataVariables: {
-            confirmUrl,
-            source,
-            userGroup: config.userGroup,
-          },
-        }),
-      });
-      if (!txRes.ok) {
-        console.error('[Newsletter] Loops transactional error:', txRes.status, await txRes.text().catch(() => ''));
-        // Nicht als Fehler für den User melden — DOI-E-Mail-Fehler sind intern
-      }
-    } else {
-      console.warn(
-        '[Newsletter] LOOPS_DOI_TEMPLATE_ID fehlt — Bestätigungs-E-Mail wird NICHT gesendet. ' +
-        'Transaktionale E-Mail-Vorlage in Loops anlegen und ID in Vercel eintragen.',
+      }),
+    });
+    if (!txRes.ok) {
+      console.error('[Newsletter] Loops transactional error:', txRes.status, await txRes.text().catch(() => ''));
+      return NextResponse.json(
+        { error: 'Die Bestätigungs-E-Mail konnte nicht versendet werden. Bitte versuche es in ein paar Minuten erneut.' },
+        { status: 502 },
       );
     }
 

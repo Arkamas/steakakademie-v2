@@ -19,12 +19,22 @@ export interface TokenPayload {
 
 /**
  * Erstellt einen signierten, zeitgestempelten DOI-Token.
- * Format: base64url(JSON{email,iat}) + "." + HMAC-SHA256-Signatur
+ * Format: base64url(JSON{email,iat,source?,userGroup?}) + "." + HMAC-SHA256-Signatur
  * Gültig für 48 Stunden.
+ *
+ * A2-Fix (16.08.2026): source/userGroup wandern MIT in den Token. Vorher gingen
+ * sie beim Confirm verloren — jeder Kontakt landete als "default" in Gruppe
+ * "newsletter", die Quellen-Segmentierung (Plausible-Vergleich der 8 Block-A-
+ * Sammelpunkte) war damit blind.
  */
-export function createDOIToken(email: string): string {
+export function createDOIToken(email: string, source?: string, userGroup?: string): string {
   const payload = Buffer.from(
-    JSON.stringify({ email: email.toLowerCase().trim(), iat: Date.now() }),
+    JSON.stringify({
+      email: email.toLowerCase().trim(),
+      iat: Date.now(),
+      ...(source ? { source } : {}),
+      ...(userGroup ? { userGroup } : {}),
+    }),
   ).toString('base64url');
   const sig = createHmac('sha256', DOI_SECRET).update(payload).digest('base64url');
   return `${payload}.${sig}`;

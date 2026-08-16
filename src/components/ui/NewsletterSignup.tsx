@@ -117,10 +117,17 @@ export default function NewsletterSignup({
         return;
       }
 
+      // A2-Fix: Server-Fehlermeldung anzeigen, wenn vorhanden (ehrlicher Fehler
+      // statt Schein-Erfolg — die API meldet jetzt 502/503, wenn keine
+      // Bestätigungs-Mail rausging).
+      const serverError = await res
+        .json()
+        .then((d: { error?: string }) => d?.error)
+        .catch(() => undefined);
       if (res.status === 429) {
         setErrorMsg('Zu viele Anmeldeversuche. Bitte in ein paar Minuten erneut probieren.');
       } else {
-        setErrorMsg('Etwas ist schiefgelaufen. Bitte versuche es gleich noch einmal.');
+        setErrorMsg(serverError ?? 'Etwas ist schiefgelaufen. Bitte versuche es gleich noch einmal.');
       }
       setStatus('error');
     } catch {

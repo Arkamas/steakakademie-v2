@@ -203,8 +203,14 @@ export default function NewsletterSignup({
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2">
-              <div className="flex-1 min-w-0">
+            {/* Lesbarkeits-/Layout-Fix (Design-Audit 16.08.2026): flex-wrap statt
+                Viewport-Breakpoint. Der sm:-Breakpoint schaltete ab 640px
+                VIEWPORT auf nebeneinander — in der 300px-Artikel-Sidebar wurde
+                das E-Mail-Feld dadurch auf ~0px zerquetscht (Anmeldung dort
+                unmöglich). Mit wrap + Mindestbreite bricht der Button um,
+                sobald der CONTAINER zu schmal ist. */}
+            <div className="flex flex-wrap gap-2">
+              <div className="flex-1 min-w-[200px]">
                 <label htmlFor={emailId} className="sr-only">
                   E-Mail-Adresse
                 </label>
@@ -227,7 +233,7 @@ export default function NewsletterSignup({
               <button
                 type="submit"
                 disabled={!canSubmit}
-                className="shrink-0 inline-flex items-center justify-center gap-2 bg-[rgb(var(--nl-gold))] text-[var(--nl-on-accent)] font-sans text-xs font-bold tracking-[0.1em] uppercase px-5 py-2.5 hover:bg-[color-mix(in_srgb,rgb(var(--nl-gold))_85%,black)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="shrink-0 inline-flex items-center justify-center gap-2 bg-[rgb(var(--nl-gold))] text-[var(--nl-on-accent)] font-sans text-xs font-bold tracking-[0.1em] uppercase px-5 py-2.5 hover:bg-[color-mix(in_srgb,rgb(var(--nl-gold))_85%,black)] transition-colors disabled:bg-transparent disabled:border disabled:border-[rgb(var(--nl-gold)/0.45)] disabled:text-[rgb(var(--nl-gold)/0.9)] disabled:cursor-not-allowed"
               >
                 {status === 'loading' ? (
                   <>
@@ -255,7 +261,7 @@ export default function NewsletterSignup({
               />
               <label
                 htmlFor={consentId}
-                className="text-xs font-body text-text-muted leading-relaxed cursor-pointer"
+                className="text-xs font-body text-text-secondary leading-relaxed cursor-pointer"
               >
                 Ja, ich möchte den Wissens-Brief per E-Mail erhalten und bin mit der{' '}
                 <a
@@ -282,7 +288,8 @@ export default function NewsletterSignup({
             )}
           </form>
 
-          <p className="text-[10px] font-sans text-text-muted/60 mt-3">
+          {/* Lesbarkeits-Fix: 10px/60%-Deckkraft war unter jeder Kontrastgrenze. */}
+          <p className="text-[11px] font-sans text-text-muted mt-3">
             Kostenlos · Double-Opt-in · Jederzeit abmeldbar · Keine Weitergabe deiner Daten
           </p>
         </div>

@@ -85,7 +85,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" className={`${playfair.variable} ${sourceSerif.variable} ${dmSans.variable}`}>
+    // backgroundColor auf <html>: Design-Audit 16.08.2026 — ohne dunklen
+    // html-Hintergrund blitzt bei Scroll-Spruengen/Overscroll Browserweiss
+    // durch (body allein reicht nicht). Wert = surface-base.
+    <html
+      lang="de"
+      className={`${playfair.variable} ${sourceSerif.variable} ${dmSans.variable}`}
+      style={{ backgroundColor: '#17100B' }}
+    >
       <head>
         {/* Global Schema.org — Organization + WebSite + SearchAction */}
         <script

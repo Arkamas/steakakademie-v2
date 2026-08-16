@@ -59,7 +59,9 @@ export default function PlattformPuls({ data }: { data: PulsData }) {
 
         {/* Zahlen — der Wachstums-Beweis. „Was frisch dazukam" zeigt jetzt das
             eigene Frisch-&-Saisonal-Modul direkt darunter (keine Doppelung). */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        {/* flex statt festem 5er-Grid: Anzahl der Zähler ist dynamisch
+            (Kategorien unter 10 werden serverseitig ausgefiltert). */}
+        <div className="flex flex-wrap justify-center gap-x-14 gap-y-8">
           {data.counts.map((c) => (
             <Stat key={c.label} label={c.label} value={c.value} run={seen} />
           ))}

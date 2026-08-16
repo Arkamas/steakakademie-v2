@@ -1,6 +1,7 @@
 import {
-  allRecipes, allGlossars, allDiplomLektions, allMethodes, allCuts,
+  allRecipes, allGlossars, allDiplomLektions, allMethodes,
 } from 'contentlayer/generated';
+import { getCutsBySpecies } from './cuts-catalog';
 
 // Server-berechneter „Plattform-Puls": echte, automatisch wachsende Content-Zahlen
 // + die zuletzt dazugekommenen Inhalte. Kein Cold-Start-0-Problem (Content existiert),
@@ -29,13 +30,21 @@ export function getPlattformPuls(): PulsData {
     .slice(0, 6);
 
   return {
+    // Conversion-Regel: Zähler unter 10 wirken wie „Beta" und untergraben die
+    // großen Zahlen daneben. Kategorien erscheinen automatisch wieder, sobald
+    // sie zweistellig sind — kein manueller Eingriff nötig.
     counts: [
       { label: 'Rezepte', value: allRecipes.length },
       { label: 'Glossar-Begriffe', value: allGlossars.length },
       { label: 'Diplom-Lektionen', value: allDiplomLektions.length },
       { label: 'Grilltechniken', value: allMethodes.length },
-      { label: 'Cuts', value: allCuts.length },
-    ],
+      // Cuts aus dem ATLAS-Katalog zaehlen, nicht die MDX-Artikel (das waren 3
+      // und lieferte den absurden "3 Cuts"-Zaehler, Design-Audit 16.08.2026).
+      // Nur Rind: Schwein ist im Atlas ausgeblendet (Bildrechte, SHOW_PORK) —
+      // die Zahl muss zeigen, was der Nutzer wirklich klicken kann. Sobald
+      // Schwein live geht: + getCutsBySpecies('schwein').length.
+      { label: 'Cuts im Atlas', value: getCutsBySpecies('rind').length },
+    ].filter((c) => c.value >= 10),
     latest,
   };
 }

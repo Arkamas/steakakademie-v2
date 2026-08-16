@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Flame } from 'lucide-react';
 import ConsentSettingsLink from '@/components/analytics/ConsentSettingsLink';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 
 const FOOTER_LINKS = {
   Wissen: [
@@ -29,6 +30,14 @@ const FOOTER_LINKS = {
     { label: 'Elena', href: '/autoren' },
     { label: 'Über uns', href: '/ueber-uns' },
   ],
+  // Audit 15.08.2026: Der Footer lag auf allen 517 Seiten und sammelte nichts.
+  // Spickzettel + Wissens-Brief + Gutscheine waren site-weit unverlinkt.
+  'Wissens-Brief': [
+    { label: 'Kerntemperatur-Spickzettel', href: '/kerntemperatur-spickzettel' },
+    { label: 'Wissens-Brief abonnieren', href: '/newsletter' },
+    { label: 'Geschenkgutscheine', href: '/gutschein' },
+    { label: 'Steak-Beichte', href: '/steak-beichte' },
+  ],
 };
 
 export default function Footer() {
@@ -36,12 +45,23 @@ export default function Footer() {
 
   return (
     <footer className="bg-surface-dark text-text-light mt-16">
+      {/* Sammel-Band — site-weiter Anmeldepunkt auf jeder Seite (Audit 15.08.2026).
+          Vorher gab es genau zwei aktive Sammelstellen: eine Sidebar-Box auf der
+          Startseite und ein Exit-Intent, der auf Touch-Geräten nie feuert. */}
+      <div className="border-b border-brand-gold/10">
+        <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="max-w-content mx-auto">
+            <NewsletterSignup source="footer" />
+          </div>
+        </div>
+      </div>
+
       {/* Main footer */}
       <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
 
           {/* Brand column */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-1">
+          <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <Link href="/" className="inline-block">
               <span className="font-serif font-black text-2xl tracking-tight text-white hover:text-brand-gold transition-colors">
                 Steakakademie

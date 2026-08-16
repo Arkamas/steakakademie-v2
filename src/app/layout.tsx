@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { Playfair_Display, Source_Serif_4, DM_Sans } from 'next/font/google';
 import MarcoWidget from '@/components/ai/MarcoWidget';
-import SmokeEffect from '@/components/ui/SmokeEffect';
+// SmokeEffect ersetzt durch EmberGlow (Uwe, 15.08.2026): keine Dauerschleife
+// mehr — reaktiver Gargrad-Glut-Schein, Details im Komponenten-Kommentar.
+// Revert = diese zwei Zeilen zurücktauschen; SmokeEffect.tsx bleibt im Repo.
+import EmberGlow from '@/components/ui/EmberGlow';
 import PlausibleScript from '@/components/analytics/PlausibleScript';
 import ClarityScript from '@/components/analytics/ClarityScript';
 import ConsentBanner from '@/components/analytics/ConsentBanner';
@@ -96,7 +99,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col bg-surface-base antialiased">
         {children}
-        <SmokeEffect />
+        <EmberGlow />
         <MarcoWidget />
         <ExitIntent />
         {/* Plausible: cookieless, ohne Einwilligung (§ 25 Abs. 2 TDDDG) — läuft immer. */}

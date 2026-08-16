@@ -4,6 +4,7 @@ import { ChevronRight, Thermometer, AlertTriangle, CheckCircle2, Clock, Flame, B
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ProductCard from '@/components/affiliate/ProductCard';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { getProductsByCategory } from '@/lib/products';
 import { breadcrumbSchema, faqSchema, howToSchema } from '@/lib/schema';
 
@@ -339,6 +340,27 @@ export default function TemperaturGuidePage() {
               </p>
             </div>
           </section>
+
+          {/* ── LEADMAGNET, Erstkontakt ────────────────────────────────────
+              Audit 15.08.2026: Diese Seite hatte auf 1.189 Zeilen keinen
+              einzigen Anmeldepunkt und keinen Link auf den Spickzettel —
+              obwohl sie thematisch deckungsgleich mit dem Leadmagneten ist.
+              Der Link löst zugleich die Kannibalisierung zwischen
+              /temperatur-guide (nachschlagen) und /kerntemperatur-spickzettel
+              (ausdrucken/mitnehmen) über den Anker-Text auf. */}
+          <div className="mb-16">
+            <NewsletterSignup source="temperatur-guide-inline" />
+            <p className="mt-3 text-center font-body text-sm text-text-secondary">
+              Lieber sofort loslegen?{' '}
+              <Link
+                href="/kerntemperatur-spickzettel"
+                className="font-semibold text-brand-fire hover:underline"
+              >
+                Alle Werte auf einer Seite — zum Ausdrucken
+              </Link>
+              .
+            </p>
+          </div>
 
           {/* ═══════════════════════════════════════════════════════════════
               SECTION 2: SCHWEIN
@@ -1071,6 +1093,17 @@ export default function TemperaturGuidePage() {
               Zum vollständigen Fleischthermometer-Vergleich →
             </Link>
           </section>
+
+          {/* ── LEADMAGNET, Zweitkontakt vor der FAQ ─────────────────────── */}
+          <div className="mb-16">
+            <NewsletterSignup
+              source="temperatur-guide-vor-faq"
+              eyebrow="Kostenloses Geschenk"
+              headline="Die ganze Tabelle passt auf eine Seite."
+              subline="Wir schicken dir den druckfertigen Kerntemperatur-Spickzettel — plus jeden Freitag ein Stück BBQ-Wissen, das bleibt. Jederzeit abbestellbar."
+              cta="Spickzettel sichern"
+            />
+          </div>
 
           {/* ═══════════════════════════════════════════════════════════════
               SECTION 9: FAQ

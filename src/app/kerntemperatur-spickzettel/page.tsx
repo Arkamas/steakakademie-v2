@@ -7,6 +7,7 @@ import { ChevronRight, Thermometer, Flame, ShieldAlert, Clock } from 'lucide-rea
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import PrintButton from '@/components/gutschein/PrintButton';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 
 export const metadata: Metadata = {
   title: 'Kerntemperatur-Spickzettel — alle Werte zum Ausdrucken',
@@ -210,22 +211,19 @@ export default function SpickzettelPage() {
             </div>
           </div>
 
-          {/* CTA (nicht im Druck) */}
+          {/* CTA (nicht im Druck) — Audit 15.08.2026: war ein Link auf /newsletter,
+              also ein Klick zwischen Interesse und Eintrag. Header und Top-Bar zeigen
+              jetzt hierher, deshalb steht das Formular direkt hier.
+              Hinweis: Solange es die PDF-Fassung nicht gibt (Block B1), ist diese Seite
+              frei zugänglich — das Formular sammelt, der Inhalt bleibt indexierbar. */}
           <div className="mt-10 print:hidden">
-            <div className="rounded-sm border border-brand-gold/25 bg-surface-elevated p-5 text-center">
-              <p className="font-serif text-lg font-bold text-text-primary">
-                Mehr davon — jeden Freitag kostenlos ins Postfach.
-              </p>
-              <p className="mx-auto mt-1 max-w-xl font-body text-sm text-text-secondary">
-                Der Wissens-Brief: ein Stück präzises BBQ-Wissen pro Woche — Technik, Cuts, Kerntemperaturen.
-              </p>
-              <Link
-                href="/newsletter"
-                className="mt-4 inline-flex items-center gap-2 bg-brand-gold px-6 py-2.5 font-sans text-sm font-bold uppercase tracking-[0.08em] text-surface-dark transition-colors hover:bg-brand-gold/90"
-              >
-                Gratis Wissens-Brief <ChevronRight size={15} />
-              </Link>
-            </div>
+            <NewsletterSignup
+              source="spickzettel-seite"
+              eyebrow="Kostenloses Geschenk"
+              headline="Diese Seite als Spickzettel ins Postfach."
+              subline="Wir schicken dir die druckfertige Fassung — plus jeden Freitag ein Stück BBQ-Wissen, das bleibt. Kostenlos, jederzeit abbestellbar."
+              cta="Spickzettel sichern"
+            />
           </div>
         </div>
       </main>

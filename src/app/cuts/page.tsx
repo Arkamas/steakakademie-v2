@@ -4,6 +4,7 @@ import { ChevronRight, Sparkles } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CutAtlasClient from '@/components/cuts/CutAtlasClient';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { getCutsBySpecies, getPrimalsBySpecies, ALL_CUTS } from '@/lib/cuts-catalog';
 import { buildCutRecipeMap } from '@/lib/cut-recipes';
 
@@ -88,6 +89,22 @@ export default function CutsPage() {
         {/* Atlas */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <CutAtlasClient bySpecies={bySpecies} recipeMap={recipeMap} />
+        </section>
+
+        {/* ── LEADMAGNET (Audit 15.08.2026) ───────────────────────────────
+            Der Atlas endete bisher ausschließlich im Diplom-CTA, also ohne
+            jeden Anmeldepunkt. Zu jedem Cut gehört eine Kerntemperatur — der
+            Spickzettel ist hier die naheliegende Mitnahme. */}
+        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pb-4">
+          <div className="max-w-content mx-auto">
+            <NewsletterSignup
+              source="cuts-atlas"
+              eyebrow="Kostenloses Geschenk"
+              headline="Zu jedem Cut gehört eine Kerntemperatur."
+              subline="Wir schicken dir den druckfertigen Spickzettel mit allen Garstufen — plus jeden Freitag ein Stück BBQ-Wissen, das bleibt. Jederzeit abbestellbar."
+              cta="Spickzettel sichern"
+            />
+          </div>
         </section>
 
         {/* CTA */}

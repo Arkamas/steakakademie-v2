@@ -58,10 +58,13 @@ function hexToRgbTriple(hex: string): string {
  */
 export default function NewsletterSignup({
   source = 'default',
-  headline = 'Jeden Freitag ein Stück BBQ-Wissen, das bleibt.',
-  subline = 'Kerntemperaturen, Cuts und Meister-Techniken — präzise, ehrlich, kostenlos. Direkt ins Postfach.',
-  cta = 'Wissens-Brief abonnieren',
-  eyebrow = 'Steakakademie · Wissens-Brief',
+  // Einheitliches Versprechen (Audit 15.08.2026): Geschenk zuerst, Frequenz konsistent
+  // „jeden Freitag". Diese Defaults sind die Single Source der Anmelde-Copy — Aufrufer
+  // überschreiben sie nur noch, wenn der Kontext es wirklich verlangt.
+  headline = 'Der Kerntemperatur-Spickzettel — alle Garstufen auf einer Seite.',
+  subline = 'Druckfertig für die Grillstation. Dazu jeden Freitag ein Stück BBQ-Wissen, das bleibt — präzise, ehrlich, jederzeit abbestellbar.',
+  cta = 'Spickzettel sichern',
+  eyebrow = 'Kostenloses Geschenk',
   accentColor,
   accentTextColor,
   className,

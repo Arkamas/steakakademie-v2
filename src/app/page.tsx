@@ -173,6 +173,31 @@ export default async function HomePage() {
               In 5 Rubriken vom Anfänger zum Pitmaster — Fleischkunde, Grilltechniken, Wissen,
               Rezepte, Ausrüstung. Methodisch, geprüft, ohne Bullshit.
             </p>
+
+            {/* Primäre Conversion-Aktion: kostenloser Mitglieder-Zugang.
+                EINE Haupt-Aktion pro Seite — alles andere ist sekundär. */}
+            <div className="flex flex-col items-center gap-3 mb-9">
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/auth/login"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 font-sans font-bold text-sm uppercase tracking-wide hover:opacity-90 transition-opacity"
+                  style={{ background: '#C8882A', color: '#0D0A06' }}
+                >
+                  Werde SteakAdemiker — kostenlos <ChevronRight size={16} />
+                </Link>
+                <Link
+                  href="/diplome"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 font-sans font-bold text-xs uppercase tracking-wide border hover:bg-brand-gold/10 transition-colors"
+                  style={{ borderColor: 'rgba(200,136,42,0.4)', color: '#C8882A' }}
+                >
+                  Diplom-Pfad ansehen
+                </Link>
+              </div>
+              <p className="text-xs font-sans text-text-light/60">
+                Kostenloser Mitglieder-Zugang — dein Diplom-Fortschritt wird gespeichert. Kein Abo, keine Kreditkarte.
+              </p>
+            </div>
+
             <div className="flex flex-wrap items-center justify-center gap-2.5">
               {[
                 { label: 'Cuts & Fleischkunde', href: '/cuts' },
@@ -217,7 +242,7 @@ export default async function HomePage() {
                 <p className="font-body text-lg text-text-light/65 leading-relaxed mb-7 max-w-2xl">
                   {heroArticle.excerpt}
                 </p>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-sans text-text-light/45">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-sans text-text-light/60">
                   <span>{heroArticle.author}</span>
                   <span className="text-brand-gold/40">·</span>
                   <span>{heroArticle.readingTime} min Lesezeit</span>
@@ -235,6 +260,46 @@ export default async function HomePage() {
             {sideArticles.map((article) => (
               <ArticleCard key={article.slug} article={article} variant="medium" />
             ))}
+          </div>
+        </section>
+
+        {/* ── LEADMAGNET — nach dem redaktionellen Einstieg (Uwe, 16.08.2026) ──
+            Entscheidung: erst Inhalt beweisen, dann Geschenk anbieten (Reziprozitaet,
+            Texas-Monthly-DNA). Stand vorher in Sektion 9 im Sidebar-<aside> (mobil
+            ~80 % Seitentiefe), kurz an Position 3 vor dem Hero — beides verworfen.
+            Jetzt: direkt hinter Hero + Artikel-Reihe, vor dem Plattform-Puls. */}
+        <section
+          className="border-y border-brand-gold/15 bg-surface-card"
+          aria-labelledby="leadmagnet-heading"
+        >
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-14">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-10 items-center">
+              <div>
+                <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">
+                  Kostenloses Geschenk
+                </span>
+                <h2
+                  id="leadmagnet-heading"
+                  className="font-serif text-2xl sm:text-3xl font-bold text-text-primary leading-snug mb-3"
+                >
+                  Alle Kerntemperaturen auf einer Seite — druckfertig für die Grillstation.
+                </h2>
+                <p className="font-body text-base text-text-secondary leading-relaxed mb-5">
+                  Rind, Schwein, Lamm, Geflügel, Fisch. Keine Faustregeln aus dem Internet,
+                  sondern die Werte der Pitmaster-Doktrin — dieselbe Referenz, aus der auch
+                  unsere Rezepte und der Temperatur-Guide rechnen.
+                </p>
+                <Link
+                  href="/kerntemperatur-spickzettel"
+                  className="inline-flex items-center gap-2 text-sm font-sans font-bold text-brand-fire hover:text-brand-gold transition-colors"
+                >
+                  Spickzettel ansehen
+                  <ChevronRight size={14} />
+                </Link>
+              </div>
+
+              <NewsletterSignup source="homepage-leadmagnet" />
+            </div>
           </div>
         </section>
 
@@ -399,14 +464,12 @@ export default async function HomePage() {
 
             <aside className="space-y-6">
 
-              {/* Newsletter-Box — redaktionelle Karte */}
-              <NewsletterSignup
-                source="homepage-banner"
-                eyebrow="BBQ-Insider Newsletter"
-                headline="Neue Tests, Guides und saisonale Tipps."
-                subline="2× im Monat das Wichtigste aus der Akademie — kompakt, ehrlich, kein Spam."
-                cta="Anmelden"
-              />
+              {/* Newsletter-Box — redaktionelle Karte, Zweitkontakt.
+                  Audit 15.08.2026: Die eigene Copy hier versprach „2× im Monat"
+                  gegen „jeden Freitag" auf /newsletter und im Exit-Intent, und
+                  erwähnte als einzige das Geschenk nicht. Sie nutzt jetzt die
+                  einheitlichen Defaults der Komponente. */}
+              <NewsletterSignup source="homepage-sidebar" />
 
               {/* Beliebte Themen */}
               <div className="bg-surface-card border border-border-subtle p-5">
@@ -452,7 +515,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
                 { stat: '35',   label: 'Diplom-Lektionen — Bronze bis Meister' },
-                { stat: '3',    label: 'Thermometer im 8-Wochen-Test' },
+                { stat: '30',   label: 'Jahre Lehrerfahrung hinter der Methodik' },
                 { stat: '100%', label: 'Affiliate-transparent' },
                 { stat: '2026', label: 'Inhalte aktuell' },
               ].map(({ stat, label }) => (
@@ -462,6 +525,39 @@ export default async function HomePage() {
                 </div>
               ))}
             </div>
+            <p className="text-center mt-8">
+              <Link
+                href="/ueber-uns"
+                className="text-xs font-sans font-bold tracking-widest uppercase text-brand-fire hover:text-brand-gold transition-colors"
+              >
+                Wer hinter der Akademie steht →
+              </Link>
+            </p>
+          </div>
+        </section>
+
+        {/* ── FINAL CTA — Wiederholung der einen Haupt-Aktion ─────────────── */}
+        <section
+          className="border-t border-brand-gold/15"
+          style={{
+            background:
+              'radial-gradient(120% 120% at 50% 120%, rgba(232,80,24,0.25) 0%, rgba(232,80,24,0.06) 45%, transparent 70%), linear-gradient(180deg, #130C07 0%, #1B110A 100%)',
+          }}
+        >
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-light mb-3">
+              Bereit für dein erstes Diplom?
+            </h2>
+            <p className="font-body text-base text-text-light/60 max-w-xl mx-auto mb-7">
+              Kostenlos registrieren, Fortschritt speichern — von Bronze bis Meister.
+            </p>
+            <Link
+              href="/auth/login"
+              className="inline-flex items-center gap-2 px-7 py-3.5 font-sans font-bold text-sm uppercase tracking-wide hover:opacity-90 transition-opacity"
+              style={{ background: '#C8882A', color: '#0D0A06' }}
+            >
+              Werde SteakAdemiker — kostenlos <ChevronRight size={16} />
+            </Link>
           </div>
         </section>
 

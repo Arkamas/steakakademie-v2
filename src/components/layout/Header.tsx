@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Search, Menu, X, ChevronDown, Flame } from 'lucide-react';
+import { Search, Menu, X, ChevronDown, Flame, Gift } from 'lucide-react';
 // Flame kept for Diplome CTA button
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -36,6 +36,7 @@ const NAV_CATEGORIES = [
     href: '/wissen',
     sub: [
       { label: 'Kerntemperaturen', href: '/temperatur-guide' },
+      { label: '★ Kerntemperatur-Spickzettel (gratis)', href: '/kerntemperatur-spickzettel' },
       { label: 'Maillard-Reaktion', href: '/wissen' },
       { label: 'Dry-Aging & Reifung', href: '/aging' },
       { label: 'Persönlichkeiten', href: '/persoenlichkeiten' },
@@ -132,11 +133,16 @@ export default function Header() {
 
   return (
     <>
-      {/* Top-Bar */}
+      {/* Top-Bar — Leadmagnet statt Produkt (Audit 15.08.2026: der Trichter braucht
+          die stärkste Fläche über der Navigation, die Diplome sind site-weit sonst
+          bereits 4× verlinkt). */}
       <div className="bg-surface-dark border-b border-brand-gold/20 text-[10px] font-sans font-semibold tracking-[0.15em] uppercase text-center py-2 px-4 text-text-light/60">
-        Grillmeister-Diplome — 5 Stufen · Bronze bis Meister
-        <Link href="/diplome" className="ml-3 text-brand-gold/80 underline underline-offset-2 hover:text-brand-gold transition-colors">
-          Jetzt starten →
+        Gratis: der Kerntemperatur-Spickzettel — alle Garstufen auf einer Seite
+        <Link
+          href="/kerntemperatur-spickzettel"
+          className="ml-3 text-brand-gold/80 underline underline-offset-2 hover:text-brand-gold transition-colors"
+        >
+          Jetzt sichern →
         </Link>
       </div>
 
@@ -182,6 +188,13 @@ export default function Header() {
               >
                 <Search size={18} />
               </button>
+              <Link
+                href="/kerntemperatur-spickzettel"
+                className="hidden sm:flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.12em] uppercase text-brand-gold hover:text-white transition-colors px-2 nav-sharp"
+              >
+                <Gift size={12} />
+                Spickzettel gratis
+              </Link>
               <Link
                 href="/vergleich/fleischthermometer"
                 className="hidden sm:block text-[11px] font-sans font-bold tracking-[0.12em] uppercase text-white hover:text-brand-gold transition-colors px-2 nav-sharp"
@@ -310,6 +323,15 @@ export default function Header() {
               ))}
             </ul>
             <div className="mt-8 space-y-4">
+              {/* Leadmagnet zuerst — mobil war der Trichter bis zum Audit 15.08.2026
+                  komplett geschlossen (Exit-Intent feuert auf Touch-Geräten nie). */}
+              <Link
+                href="/kerntemperatur-spickzettel"
+                className="flex items-center gap-2 border border-brand-gold/40 bg-brand-gold/5 px-4 py-3 text-sm font-sans font-bold text-brand-gold hover:bg-brand-gold/10 transition-colors"
+              >
+                <Gift size={15} />
+                Kerntemperatur-Spickzettel — gratis
+              </Link>
               <Link
                 href="/vergleich/fleischthermometer"
                 className="block text-sm font-sans font-semibold text-text-light/60 hover:text-brand-gold transition-colors"

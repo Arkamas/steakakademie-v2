@@ -50,11 +50,9 @@ export default function NewsletterPage() {
         {/* Capture + Vorteile */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
           <div className="max-w-content mx-auto">
-            <NewsletterSignup
-              source="newsletter-page"
-              headline="Trag dich ein — kostenlos, jederzeit abmeldbar."
-              subline="Kerntemperaturen, Cuts und Meister-Techniken. Jeden Freitag ins Postfach — kein Spam, versprochen."
-            />
+            {/* Nutzt die einheitlichen Defaults der Komponente (Audit 15.08.2026):
+                Geschenk zuerst, Frequenz „jeden Freitag" überall identisch. */}
+            <NewsletterSignup source="newsletter-page" />
 
             {/* Sofort-Wert: der Spickzettel */}
             <p className="mt-4 text-center font-body text-sm text-text-secondary">

@@ -118,12 +118,15 @@ export default function ExitIntent() {
               <div className="px-2 pt-2 sm:px-3">
                 {/* Zentrale Anmelde-Komponente (DSGVO-Consent, Honeypot, DOI-Erfolgszustand) —
                     Rahmen/Hintergrund neutralisiert, damit sie im Modal nicht doppelt rahmt. */}
+                {/* Audit 15.08.2026: Das Overlay versprach als einziges „Porträts
+                    der 50 besten Grillmeister" — ein viertes, nirgends eingelöstes
+                    Versprechen. Jetzt dasselbe Angebot wie überall sonst. */}
                 <NewsletterSignup
                   source="exit-intent"
                   eyebrow="Warte kurz — bevor du gehst"
-                  headline="Jeden Freitag: ein BBQ-Wissen, das wirklich bleibt."
-                  subline="Porträts der 50 besten Grillmeister der Welt und Techniken, die dein nächstes Grillen verändern. Kein Spam · Double-Opt-In."
-                  cta="Ja, eintragen"
+                  headline="Nimm den Kerntemperatur-Spickzettel mit."
+                  subline="Alle Garstufen auf einer Seite, druckfertig für die Grillstation. Dazu jeden Freitag ein Stück BBQ-Wissen, das bleibt. Kein Spam · Double-Opt-In."
+                  cta="Ja, Spickzettel sichern"
                   className="border-0 bg-transparent"
                 />
               </div>

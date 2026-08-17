@@ -7,15 +7,14 @@ const FOOTER_LINKS = {
   Wissen: [
     { label: 'Kerntemperaturen', href: '/temperatur-guide' },
     { label: 'Grilltechniken', href: '/methoden' },
-    { label: 'Cuts & Fleischkunde', href: '/cuts' },
     { label: 'BBQ-Lexikon', href: '/glossar' },
     { label: 'Streitfälle am Grill', href: '/streitfaelle' },
     { label: 'Reverse Sear', href: '/methoden/reverse-sear' },
   ],
   Tests: [
     { label: 'Fleischthermometer', href: '/vergleich/fleischthermometer' },
-    { label: 'Grills & Smoker', href: '/vergleich' },
-    { label: 'Messer', href: '/vergleich' },
+    { label: 'Grills & Smoker', href: '/vergleich/grills' },
+    { label: 'Messer', href: '/vergleich/messer' },
     { label: 'Alle Tests', href: '/vergleich' },
   ],
   Cuts: [
@@ -26,10 +25,17 @@ const FOOTER_LINKS = {
   ],
   Akademie: [
     { label: 'Grillmeister-Diplome', href: '/diplome' },
-    { label: 'Marco, der Pitmaster', href: '/autoren' },
-    { label: 'Jonas', href: '/autoren' },
-    { label: 'Elena', href: '/autoren' },
+    // Vorher standen hier Marco, Jonas und Elena als drei Eintraege — alle drei
+    // zeigten auf dieselbe Seite /autoren. Drei Zeilen fuer ein Ziel sind
+    // verschenkter Platz und fuer den Nutzer eine Enttaeuschung beim zweiten Klick.
+    { label: 'Autoren & Redaktion', href: '/autoren' },
     { label: 'Über uns', href: '/ueber-uns' },
+  ],
+  'Ehrliches System': [
+    { label: 'Das Ehrliche System', href: '/ehrliches-system' },
+    { label: 'SEO-Sprint', href: '/seo-sprint' },
+    { label: 'Steuer-Matrix LIVE', href: '/steuer-matrix-live' },
+    { label: 'Niche Validator', href: '/tools/niche-validator' },
   ],
   // Audit 15.08.2026: Der Footer lag auf allen 517 Seiten und sammelte nichts.
   // Spickzettel + Wissens-Brief + Gutscheine waren site-weit unverlinkt.
@@ -59,7 +65,7 @@ export default function Footer() {
 
       {/* Main footer */}
       <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-8">
 
           {/* Brand column */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1">

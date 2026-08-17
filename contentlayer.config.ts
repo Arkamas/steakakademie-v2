@@ -283,7 +283,20 @@ export const Recipe = defineDocumentType(() => ({
     image:          { type: 'string',  required: true },
     imageAlt:       { type: 'string',  required: true },
     heroImage:      { type: 'string' },   // optional: dramatischer Hero-Look (Eyecatcher); Galerie/Karten nutzen image
-    imagePrompt:    { type: 'string' },   // optional: KI-Selbst-Briefing fürs Bild (scripts/recipe-image-briefs.mjs)
+    imagePrompt:    { type: 'string' },   // DEPRECATED: Relikt der rein generativen Bild-Pipeline.
+                                          // Nicht mehr befuellen — Bildherkunft gehoert in imageSource.
+    // Bildherkunft und KI-Kennzeichnung. Ersetzt imagePrompt: Nicht mehr "wie das
+    // Bild erzeugt werden soll", sondern "woher es stammt und was daran erzeugt ist".
+    // Grundlage fuer die pruefbare Aussage: Cut-Fotos ausnahmslos echt.
+    imageSource:    { type: 'string' },
+    imageAI:        { type: 'boolean', default: false },
+    // Verweis auf den Cut-Slug aus src/lib/cuts-catalog.ts — verbindet Rezept
+    // und Cut-Atlas und ist die Grundlage fuer den geplanten Cut-Berater.
+    cut:            { type: 'string' },
+    // Freitext-Anzeige der Garmethode ("Parrilla, direkt"). Gefiltert und sortiert
+    // wird ueber cookingMethod, gelesen wird cookingDetail. Siehe
+    // docs/cookingmethod-normalisierung.md
+    cookingDetail:  { type: 'string' },
     prepTime:       { type: 'string',  required: true },
     cookTime:       { type: 'string',  required: true },
     totalTime:      { type: 'string',  required: true },

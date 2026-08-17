@@ -15,9 +15,12 @@ const NAV_CATEGORIES = [
     href: '/methoden',
     sub: [
       { label: 'Reverse Sear', href: '/methoden/reverse-sear' },
-      { label: 'Direkt & Indirekt', href: '/methoden' },
-      { label: 'Räuchern', href: '/methoden' },
-      { label: 'Sous-vide', href: '/methoden' },
+      { label: 'Direktes Grillen', href: '/methoden/direktes-grillen' },
+      { label: 'Indirektes Grillen', href: '/methoden/indirektes-grillen' },
+      { label: 'Smoken Low & Slow', href: '/methoden/smoken-low-and-slow' },
+      { label: 'Searing — perfekte Kruste', href: '/methoden/searing-perfekte-kruste' },
+      { label: 'Sous-vide', href: '/methoden/sous-vide' },
+      { label: 'Alle Grilltechniken', href: '/methoden' },
     ],
   },
   {
@@ -40,7 +43,6 @@ const NAV_CATEGORIES = [
       { label: 'Streitfälle am Grill', href: '/streitfaelle' },
       { label: 'Maillard-Reaktion', href: '/wissen' },
       { label: 'Dry-Aging & Reifung', href: '/aging' },
-      { label: 'Persönlichkeiten', href: '/persoenlichkeiten' },
     ],
   },
   {

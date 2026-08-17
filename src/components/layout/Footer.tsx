@@ -9,6 +9,7 @@ const FOOTER_LINKS = {
     { label: 'Grilltechniken', href: '/methoden' },
     { label: 'Cuts & Fleischkunde', href: '/cuts' },
     { label: 'BBQ-Lexikon', href: '/glossar' },
+    { label: 'Streitfälle am Grill', href: '/streitfaelle' },
     { label: 'Reverse Sear', href: '/methoden/reverse-sear' },
   ],
   Tests: [

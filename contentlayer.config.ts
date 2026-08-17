@@ -401,13 +401,64 @@ export const SprintModul = defineDocumentType(() => ({
   },
 }));
 
+
+// ── STREITFAELLE ──────────────────────────────────────────────────────────────
+// Wiederkehrendes Format fuer strittige Grillfragen. Kern des Typs sind die drei
+// Felder `streitfrage`, `entscheidung` und `merksatz`: Sie stehen bewusst im
+// Frontmatter und nicht im Fliesstext, damit die Entscheidung auf der
+// Uebersichtsseite, im Schema-Markup und in Verweisen aus Rezepten wiederverwendet
+// werden kann. Ein Streitfall ohne `entscheidung` ist ein Entwurf — die Detailseite
+// zeigt an der Stelle einen sichtbaren Platzhalter statt stillschweigend nichts.
+export const Streitfall = defineDocumentType(() => ({
+  name: 'Streitfall',
+  filePathPattern: 'streitfaelle/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title: { type: 'string', required: true },
+    excerpt: { type: 'string', required: true },
+    publishedAt: { type: 'date', required: true },
+    updatedAt: { type: 'date' },
+    author: { type: 'string', required: true },
+    authorSlug: { type: 'string', required: true },
+    image: { type: 'string', required: true },
+    imageAlt: { type: 'string', required: true },
+    imageSource: { type: 'string' },
+    imageAI: { type: 'boolean', default: false },
+    streitfrage: { type: 'string', required: true },
+    entscheidung: { type: 'string' },
+    merksatz: { type: 'string', required: true },
+    istMythos: { type: 'boolean', default: false },
+    // Optionale Umfrage unter dem Beitrag: { frage, optionen: [{ key, label }] }.
+    // Fehlt das Feld, erscheint kein Block — nicht jeder Streitfall braucht einen.
+    umfrage: { type: 'json' },
+    seoTitle: { type: 'string' },
+    seoDescription: { type: 'string' },
+    faq: { type: 'json' },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => doc._raw.flattenedPath.replace('streitfaelle/', ''),
+    },
+    url: {
+      type: 'string',
+      resolve: (doc) => `/streitfaelle/${doc._raw.flattenedPath.replace('streitfaelle/', '')}`,
+    },
+    formattedDate: {
+      type: 'string',
+      resolve: (doc) =>
+        format(parseISO(doc.publishedAt), 'd. MMMM yyyy', { locale: de }),
+    },
+  },
+}));
+
 export default makeSource({
   contentDirPath: 'content',
   // Datendateien (kein Document-Typ) von der Doc-Klassifizierung ausnehmen,
   // sonst meldet Contentlayer sie als "problem" → Warn-Rauschen, das echte
   // Build-Fehler verdeckt (siehe KAN-26: 33 stille Rezept-404s).
   contentDirExclude: ['glossar/terms.json'],
-  documentTypes: [Artikel, Cut, Methode, Vergleich, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe, DiplomLektion, SprintModul],
+  documentTypes: [Artikel, Cut, Methode, Vergleich, Streitfall, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe, DiplomLektion, SprintModul],
   mdx: {
     // GitHub Flavored Markdown — sonst rendern Markdown-Tabellen als roher
     // Pipe-Text statt als <table> (KAN-28). Aktiviert auch Task-Lists/Autolinks.

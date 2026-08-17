@@ -2,11 +2,13 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight, Clock, Flame, Users } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allRecipes } from 'contentlayer/generated';
 import { breadcrumbSchema } from '@/lib/schema';
+import RecipeExplorer from '@/components/recipe/RecipeExplorer';
+import { toCardData } from '@/lib/rezept/card-data';
 
 // ─── Kategorie-Definitionen ──────────────────────────────────────────────────
 
@@ -123,24 +125,6 @@ const SERVICE_REGELN = [
   { titel: 'Dekantieren: wann lohnt es',text: 'Junger Rotwein (< 5 Jahre): 45–60 Min. dekantieren. Alter Wein: maximal 20 Min. Spirituosen brauchen kein Dekantieren — aber Geduld beim Einschenken.' },
 ] as const;
 
-// ─── Hilfsfunktionen ─────────────────────────────────────────────────────────
-
-const DIFFICULTY_STYLE: Record<string, string> = {
-  Einfach:         'text-emerald-400',
-  Mittel:          'text-brand-gold',
-  Fortgeschritten: 'text-brand-fire',
-  Profi:           'text-red-400',
-};
-
-function parseDuration(iso: string): string {
-  const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
-  if (!m) return iso;
-  const h = parseInt(m[1] || '0'), min = parseInt(m[2] || '0');
-  if (h && min) return `${h} Std. ${min} Min.`;
-  if (h) return `${h} Std.`;
-  return `${min} Min.`;
-}
-
 // ─── Typen & generateStaticParams ────────────────────────────────────────────
 
 interface Props { params: { slug: string } }
@@ -191,7 +175,8 @@ export default function RezeptKategoriePage({ params }: Props) {
 
   const recipes = allRecipes
     .filter((r) => r.kategorie === params.slug)
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .map(toCardData);
 
   const breadcrumbSch = breadcrumbSchema([
     { name: 'Rezepte', url: '/rezepte' },
@@ -455,10 +440,10 @@ export default function RezeptKategoriePage({ params }: Props) {
           </>
         )}
 
-        {/* ── Rezept-Grid (alle Kategorien) ──────────────────────── */}
-        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
-          {recipes.length === 0 ? (
-            isWine ? (
+        {/* ── Rezept-Grid — helle Editorial-Zone (Texas-Monthly) ─── */}
+        {recipes.length === 0 ? (
+          <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
+            {isWine ? (
               /* wine-spirits: kleinerer Hinweis, da die Seite bereits Content hat */
               <div
                 className="border px-6 py-8 flex items-start gap-4"
@@ -486,61 +471,20 @@ export default function RezeptKategoriePage({ params }: Props) {
                   Alle Rezepte ansehen <ChevronRight size={13} />
                 </Link>
               </div>
-            )
-          ) : (
-            <>
-              {isWine && (
-                <h2 className="font-serif text-xl font-bold text-text-light mb-6">
+            )}
+          </section>
+        ) : (
+          <div className="reading-light">
+            {isWine && (
+              <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-12 -mb-4">
+                <h2 className="font-serif text-xl font-bold" style={{ color: '#241A12' }}>
                   Rezepte & Pairing-Protokolle
                 </h2>
-              )}
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {recipes.map((recipe) => (
-                  <Link
-                    key={recipe.slug}
-                    href={recipe.url}
-                    className="group bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-all duration-200 flex flex-col overflow-hidden"
-                  >
-                    <div className="relative aspect-[16/9] overflow-hidden bg-surface-base">
-                      <Image
-                        src={recipe.image}
-                        alt={recipe.imageAlt}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <span className={`absolute top-3 right-3 text-[10px] font-sans font-bold tracking-[0.12em] uppercase px-2 py-1 bg-surface-dark/90 backdrop-blur-sm border border-border-subtle ${DIFFICULTY_STYLE[recipe.difficulty] ?? 'text-brand-gold'}`}>
-                        {recipe.difficulty}
-                      </span>
-                    </div>
-                    <div className="border-t-2 border-brand-gold" />
-                    <div className="p-5 flex flex-col flex-1">
-                      <div className="flex items-center gap-4 text-[10px] font-sans text-text-muted mb-3">
-                        <span className="flex items-center gap-1"><Clock size={10} />{parseDuration(recipe.totalTime)}</span>
-                        <span className="flex items-center gap-1"><Users size={10} />{recipe.servings} Portionen</span>
-                        {recipe.calories && (
-                          <span className="flex items-center gap-1"><Flame size={10} className="text-brand-fire" />{recipe.calories} kcal</span>
-                        )}
-                      </div>
-                      <span className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-brand-fire mb-1 block">
-                        {recipe.meatType} · {recipe.cookingMethod}
-                      </span>
-                      <h2 className="font-serif text-xl font-bold text-text-primary mb-2 leading-snug group-hover:text-brand-gold transition-colors">
-                        {recipe.title}
-                      </h2>
-                      <p className="font-body text-sm text-text-secondary leading-relaxed flex-1 mb-4 line-clamp-3">
-                        {recipe.description}
-                      </p>
-                      <div className="flex items-center gap-1 text-xs font-sans font-bold tracking-[0.12em] uppercase text-brand-gold group-hover:text-brand-fire transition-colors mt-auto">
-                        Zum Rezept <ChevronRight size={13} />
-                      </div>
-                    </div>
-                  </Link>
-                ))}
               </div>
-            </>
-          )}
-        </section>
+            )}
+            <RecipeExplorer recipes={recipes} activeKategorie={params.slug} />
+          </div>
+        )}
 
       </main>
 

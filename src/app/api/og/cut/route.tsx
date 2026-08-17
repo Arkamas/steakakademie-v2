@@ -12,9 +12,12 @@ export function GET(request: Request) {
   return new ImageResponse(
     (
       <div style={{ display: 'flex', width: '100%', height: '100%', background: '#0D0A06', position: 'relative' }}>
-        {/* Stier-Maskottchen rechts */}
+        {/* Stier-Maskottchen rechts. next/image gibt es in ImageResponse nicht —
+            Satori rendert nur rohes <img>, daher die Regel hier bewusst aus. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`${origin}/images/cut-atlas-stier.jpg`}
+          alt=""
           width={560}
           height={373}
           style={{ position: 'absolute', right: 12, top: 132, width: 560, height: 373, objectFit: 'contain' }}

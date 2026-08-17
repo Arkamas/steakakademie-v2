@@ -35,7 +35,7 @@ const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
     excerpt:
       'Vom Longissimus dorsi bis zum Spinalis — wir erklären, was ein Ribeye ausmacht, wie Marmorierung bewertet wird und wie du ihn perfekt auf den Punkt bringst.',
     image: '/images/articles/ribeye-premium-cut.webp',
-    imageAlt: 'Perfekt gebratenes Ribeye Steak mit sichtbarer Marmorierung auf Holzbrett',
+    imageAlt: 'Perfekt gebratenes Ribeye Steak auf schwarzem Schieferbrett, aufgeschnitten mit rosa Kern und sichtbarem Fettdeckel',
     category: 'Cuts & Fleischkunde',
     categorySlug: 'cuts',
     author: 'Marco, der Pitmaster',

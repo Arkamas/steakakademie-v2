@@ -16,7 +16,7 @@
     "start": "next start",
     "lint": "next lint",
     "build-guard": "node scripts/build-guard.mjs",
-    "postbuild": "next-sitemap",
+    "postbuild": "next-sitemap && node scripts/check-links.mjs",
     "r2:migrate": "node scripts/migrate-to-r2.mjs",
     "r2:dry-run": "node scripts/migrate-to-r2.mjs --dry-run",
     "qa-scan": "node scripts/qa-manager.js",
@@ -47,7 +47,8 @@
     "pm:context:check": "node scripts/generate-pm-context.mjs --check",
     "cut-images": "node scripts/cut-images.mjs",
     "cut-images:dry": "node scripts/cut-images.mjs --dry-run",
-    "cut-images:force": "node scripts/cut-images.mjs --force"
+    "cut-images:force": "node scripts/cut-images.mjs --force",
+    "check:links": "node scripts/check-links.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",

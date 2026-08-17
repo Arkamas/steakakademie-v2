@@ -106,3 +106,13 @@ tools/openmontage/
 # (`npm run video:kerntemperatur`). Fertige Videos gehören nach R2, nicht ins Repo.
 video/*/out/
 video/*/audio/
+
+# Lose Patch-Dateien im Repo-Root (blockA…blockE): Zwischenstände einer
+# Umbau-Session, kein Quellcode. Die Änderungen gehören als Commit ins Repo,
+# nicht als .patch daneben.
+/*.patch
+
+# Bildstil-Referenz (Moodboard für docs/bildprogramm.md). Lag bis 17.08.2026
+# unter public/ und wurde damit öffentlich ausgeliefert — verschoben nach
+# docs/bildstil/. Bleibt lokal: Arbeitsmaterial, kein Seiteninhalt.
+docs/bildstil/

@@ -1,7 +1,7 @@
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Clock, Flame, Users, Calendar, ChevronRight, Zap, Timer } from 'lucide-react';
+import { Clock, Flame, Users, Calendar, ChevronRight, Zap, Timer, Sparkles } from 'lucide-react';
 import PortionCalculator from './recipe/PortionCalculator';
 import AromaPairing from './recipe/AromaPairing';
 import CookCoach from './recipe/CookCoach';
@@ -136,13 +136,37 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
       <div className="hero-fullbleed" style={{ height: '65vh', minHeight: '480px' }}>
         <Image
           src={recipe.heroImage || recipe.image}
-          alt={recipe.imageAlt}
+          alt={`${recipe.imageAlt} — Symbolbild`}
           fill
           priority
           sizes="100vw"
           className="object-cover hero-fullbleed-image"
         />
         <div className="hero-fullbleed-overlay" />
+
+        {/* Bildhinweis nach § 5 UWG: Das Bild darf nicht suggerieren, so sehe das
+            nachgekochte Gericht aus. „Symbolbild" ist die etablierte deutsche Formel
+            dafuer und trifft den rechtlichen Kern ohne Warnhinweis-Ton.
+
+            Bewusst unbedingt gerendert und bewusst ohne das Wort „KI": „Symbolbild"
+            stimmt fuer Echtfotos wie fuer generierte Bilder, deshalb braucht der
+            Hinweis keine Fallunterscheidung. Die KI-Herkunft steht zentral unter
+            /ki-disclaimer statt wiederholt auf ~115 Seiten.
+
+            EU AI Act Art. 50 verlangt hier nichts: Abs. 2 adressiert den Anbieter
+            des KI-Systems, Abs. 4 den Betreiber nur bei Deepfakes — ein generisches
+            Gericht ist keiner. Analyse: docs/bildprogramm.md.
+
+            Sollte die anwaltliche Pruefung (ARAG Frage A1) eine ausdrueckliche
+            KI-Nennung verlangen, haengt der Text an dieser Stelle kuenftig von
+            recipe.imageAI ab. Deshalb wird das Feld im Frontmatter gepflegt,
+            auch solange es hier noch nicht ausgewertet wird. */}
+        <Link
+          href="/ki-disclaimer"
+          className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.1em] uppercase px-2 py-1 bg-black/65 backdrop-blur-sm border border-white/15 text-zinc-200 hover:text-white hover:border-white/30 transition-colors"
+        >
+          <Sparkles size={10} /> Symbolbild
+        </Link>
 
         <div className="hero-fullbleed-content">
           {/* Breadcrumb */}

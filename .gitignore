@@ -116,3 +116,7 @@ video/*/audio/
 # unter public/ und wurde damit öffentlich ausgeliefert — verschoben nach
 # docs/bildstil/. Bleibt lokal: Arbeitsmaterial, kein Seiteninhalt.
 docs/bildstil/
+
+# Lokaler Starter mit hartcodiertem Pfad C:\Dev\steakakademie-v2 und .cmd-Syntax.
+# Arbeitsplatz-Komfort, kein Projektbestandteil — `npm run dev` tut dasselbe.
+dev-start.cmd

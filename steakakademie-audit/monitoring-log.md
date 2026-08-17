@@ -3,6 +3,84 @@
 > Wöchentlicher Status-Check gegen die Audit-Baseline vom 07.07.2026.
 > Neuester Eintrag oben. Erhebung via US-basierter WebSearch → DE-SERP kann abweichen (Caveat je Zeile).
 
+## KW34 — 17.08.2026
+
+> Vorwoche = **KW33 (10.08.)**, direkt darunter.
+
+### Rankings (Google Top 10, US-basierte Websuche — DE-SERP kann abweichen)
+
+| Keyword | steakakademie.de Top 10? | Wer stattdessen (Top 3) | Δ KW33 | Δ Baseline |
+|---|---|---|---|---|
+| „Kerntemperatur Steak" | ❌ nein | Grillfürst · grillclub.amainfo.at · Block House | = | = |
+| „Ribeye" | ❌ nein | meatnbone · 44steaks · Wikipedia — ⚠️ SERP rein US/EN, DE-Wert **nicht messbar** | = | = |
+| „Reverse Sear" (Query: „Reverse Sear Steak Methode Anleitung") | ❌ nein | MeatEater (US) · **bbqpit.de** · Snake River Farms — DE-Treffer diesmal im Feld, Steakakademie trotzdem nicht | = | = |
+| „Brisket Anleitung" | ❌ nein | bbqpit.de · grillkameraden.de · bbqlicate.de | = | = |
+| „Steakakademie" (Brand) | ❌ nicht sichtbar | FB Bochum (Grillakademie Ruhr) · Beisser · GrillKonzept | = | = |
+
+**Befund:** Sechste Messung in Folge ohne generische Sichtbarkeit. Der KW32-Ausreißer bleibt
+widerlegt (KW33 bestätigt). Konkurrenzfeld unverändert: Händler/Magazine mit Domain-Autorität.
+Neu: bei „Reverse Sear" liefert die Suche erstmals einen echten DE-Wettbewerber (bbqpit.de) mit
+aus — der Vergleich wird damit belastbarer, das Ergebnis bleibt gleich.
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de`: **weiterhin 0 echte externe Erwähnungen/Backlinks.**
+Alle Treffer = fremde Steak-Akademien (FB Bochum, Oberpfalz Beef, Beisser, GrillKonzept,
+Metzgerei Lotter, akademie-der-kochenden-kuenste). **Δ KW33 (0) und Δ Baseline (0): unverändert 0 —
+jetzt 6 Wochen.**
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ KW33 |
+|---|---|---|---|
+| www → non-www Redirect | `https://www.steakakademie.de/` → `https://steakakademie.de` | 🟢 ok | = |
+| `/llms.txt` erreichbar | **vollständiger Inhalt beim ersten Abruf** (Kern-Referenzen, Weitere Inhalte, Über; `Content-Type: text/plain`) | 🟢 **ok** | ⬆️ von 🟡 |
+| `/robots.txt` endet mit Sitemap-Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` vorhanden | 🟢 ok | = |
+
+**llms.txt geschlossen (mit Vorbehalt):** Anders als in KW33 kein leerer Erstabruf — Inhalt kam
+sofort und vollständig, inkl. korrektem Content-Type. Der Cache-/Kaltstart-Verdacht der Vorwoche
+hat sich **nicht wiederholt**. Ehrlich: ein einzelner sauberer Abruf beweist keine dauerhafte
+Stabilität, aber nach 4 Wochen 🔴 und 1 Woche 🟡 ist das der erste voll saubere Lauf → 🟢.
+
+### Offene Punkte / GEO
+
+- **AI-Re-Check ist erledigt** — er wurde am **09.08.2026** durchgeführt und als „Messung 3" in
+  `docs/geo-baseline.md` dokumentiert (KW33-Eintrag wusste davon noch nichts, dort noch als
+  „6 Tage überfällig" geführt). **Korrektur zur Vorwoche.**
+- **🟢 Erster GEO-Erfolg des Projekts:** **Perplexity zitiert `/temperatur-guide` erstmals** in
+  den 10 Quellen (Baseline 07.07.: nicht dabei). Einordnung aus geo-baseline.md, hier übernommen:
+  Zitierung im Quellen-Panel, **nicht** inline als Antwort-Grundlage; Ursache (Wikidata vs.
+  Index-Reifung) **nicht kausal belegbar**; Stabilität noch ungeprüft.
+- ChatGPT: weiterhin kein Web-Retrieval bei der Standardfrage → Kanal strukturell nicht adressierbar.
+  Google AI Overview: weiterhin nicht zitiert (folgt organischen Gewinnern → Autoritätsproblem).
+- DE-Gegencheck (Uwe, 09.08., Inkognito): `/temperatur-guide` organisch auf **Seite 4 (~Platz 33)** —
+  indexiert, aber ohne Klick-Relevanz.
+- Wikidata **Q140455747** in `src/lib/schema.ts` (`sameAs`, Zeile 27) ✅ — nichts offen.
+- **Nächster AI-Re-Check fällig: ~06.09.2026** (4-Wochen-Rhythmus ab Messung 3). Nur manuell durch Uwe.
+- **Backlinks = 0** bleibt der strukturelle Engpass — 6 Wochen unverändert.
+
+### Ampeln
+
+- Rankings: 🔴 (null generische Sichtbarkeit, 6 Wochen ohne Bewegung)
+- Off-Page: 🔴 (weiter 0 Backlinks — Ursache Nr. 1)
+- Technik: 🟢 (**hochgestuft von 🟡** — llms.txt erstmals sauber, Redirect + robots unverändert ok)
+- GEO-Setup: 🟢 (**hochgestuft von 🟡** — Re-Check nachgeholt, erstes AI-Zitat gemessen)
+
+### Handlungsempfehlung (1)
+
+**Affiliate-/Partner-Anmeldungen jetzt abarbeiten** (Santosgrills, Grillfürst, Ankerkraut,
+Otto Gourmet) — seit KW23 offen, günstigste Quelle für die ersten echten Domain-Nennungen.
+Der Perplexity-Erfolg schärft die Begründung statt sie zu entkräften: Content-Tiefe zahlt bereits
+auf retrieval-basierte Kanäle ein, aber **Google organisch und Google AI Overview folgen der
+Domain-Autorität** — dort bewegt sich ohne Backlinks weiterhin nichts. Technik ist ab dieser
+Woche kein Engpass mehr.
+
+**Trend vs. Vorwoche (KW33):** Erste Woche mit echtem Fortschritt seit der Baseline — llms.txt
+sauber ausgeliefert und der nachgeholte AI-Re-Check zeigt das erste Perplexity-Zitat; Rankings und
+Backlinks bleiben davon unberührt bei null.
+
+---
+
 ## KW33 — 10.08.2026
 
 > Vorwoche = **KW32 Lauf 2 (03.08.)**, direkt darunter.

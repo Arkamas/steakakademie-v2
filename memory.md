@@ -257,3 +257,74 @@ Externe Logo-Bilder wurden dabei entfernt — für Wiedereinbau erst in Loops-Me
 **Nächster Schritt:** Uwe: auf `/newsletter` mit neuer Adresse anmelden + DOI-Link klicken →
 Mail 1 muss ankommen → dann ist der **Markt-Lauf abgeschlossen** (Hebel 1+2+3 ✅).
 Danach: alten Workflow (ohne „v2") löschen, sonst doppelte Sequenzen bei einer späteren Reparatur.
+
+## 2026-08-15 (Abend) — Markt-Lauf ABGESCHLOSSEN: DOI-Kette erstmals End-to-End verifiziert
+
+**Ergebnis:** Anmeldung → DOI-Mail → Bestätigung → Loops-Kontakt → „Willkommenssequenz v2" 1 Send (Active). Beide Zähler in Loops verifiziert.
+
+**Root Cause (zweiteilig, beide auf dem ECHTEN Host Vercel):**
+1. `LOOPS_DOI_TEMPLATE_ID` existierte auf Vercel NICHT → Route lief in den warn-Zweig, sendete nie, meldete dem Nutzer trotzdem Erfolg (`success:true` wird IMMER zurückgegeben — Fehlerpfad verschluckt).
+2. Es gab in Loops gar keine DOI-Transactional-Vorlage. Neu gebaut + published: **„DOI Bestätigung Wissens-Brief", ID `cmsufizv80g7a0jyvr6gwgtzq`**, werbefrei (BGH: DOI-Mail darf keine Werbung enthalten), Button-Link = Data-Variable `confirmUrl` (im Editor: Button markieren → Sidebar-Sektion „Link +" → {}-Option; NICHT das Guardian-Popup).
+
+**Lern-Anker #30 — Deploy-Host-Verwechslung:** steakakademie.de läuft auf **VERCEL** (Header `server: Vercel` gemessen; Projekt `steakakademie-v2`, Team `uwe-yendell-s-projects`, Auto-Deploy von main). Die Netlify-Site `steakakademie-de` ist ein ALTLAST-Zwilling: Builds bewusst gestoppt (Kaper-Schutz, richtig so), Env-Variablen dort sind Geister (u. a. stand die Supabase-URL in `NEXT_PUBLIC_APP_URL`). Host-Fragen nie aus Konsolen-Zugehörigkeit schließen — Response-Header messen.
+
+**Vercel-Env heute gesetzt (Production+Preview, Sensitive):** `LOOPS_DOI_TEMPLATE_ID`, `NEWSLETTER_DOI_SECRET` (64-hex, neu generiert). `NEXT_PUBLIC_APP_URL` bewusst NICHT angelegt — Code-Fallback ist korrekt `https://steakakademie.de`.
+
+**Offen:**
+- ERLEDIGT-NICHTS ZU TUN (Uwe-Check 15.08. abends): Ein alter Workflow ohne "v2" existiert nicht mehr in Loops. Bestand: v2 (Active) + 3 Drafts (Untitled, Steak-Diplom, Woechentlicher Newsletter) - Drafts senden nicht, kein Doppel-Risiko.
+- A2-Patch: ehrliche Fehlermeldung statt Schein-Erfolg in `/api/newsletter` + `source`/`userGroup` in DOI-Token (geht heute bei Confirm verloren → alle Kontakte landen als `default` in Gruppe `newsletter`).
+- `NEXT_PUBLIC_APP_URL` + `LOOPS_DOI_TEMPLATE_ID` + `NEWSLETTER_DOI_SECRET` in `.env.example` dokumentieren (Fehlbelegungs-Ursache: fehlte dort).
+- Block-A-Patch (Trichter öffnen, 9 Dateien) liegt geliefert vor, wartet auf `npm run build` + Freigabe.
+
+## 2026-08-16 — Block A + EmberGlow LIVE (Commit a8a6f1f)
+
+Trichter-Umbau deployed und von aussen verifiziert (Top-Bar + einheitliche Geschenk-Copy live): 11 Dateien, +354/-46. Sammelpunkte 2 -> 8+ (Top-Bar, Header-Link, Mobile-Menue, Homepage-Sektion NACH Hero+Artikelreihe [Uwe-Entscheidung: erst Inhalt, dann Geschenk — Reziprozitaet], 2x temperatur-guide, cuts, Spickzettel-Seite, Footer-Band auf allen Seiten). Copy ueberall: Geschenk zuerst, Frequenz "jeden Freitag" (Uwe-Entscheidung; erfordert woechentlichen Versand via newsletter-weekly Dispatch!). EmberGlow ersetzt SmokeEffect (reaktiver Gargrad-Verlauf statt Dauerschleife; SmokeEffect.tsx bleibt fuer Revert). Gemini-Gradient-Idee: verworfen (Uwe ueberzeugt).
+
+**Offen danach:** Plausible-Baseline/Quellen-Vergleich erst ab jetzt aussagekraeftig (neue sources: footer, homepage-leadmagnet, homepage-sidebar, temperatur-guide-inline/-vor-faq, cuts-atlas, spickzettel-seite — ABER: source geht im DOI-Token verloren bis A2-Patch!). Ribeye-Hero-Bild tauschen (zeigt Schinken-artiges Fleisch; fal.ai-Prompt liegt im Chat vom 16.08.; Kandidat aus Stock verworfen: kein Ribeye-Auge + Lizenz unklar; Bestand sichten: public/Bildstil Steakakademie/ + cuts/skirt.jpg untracked). Lokale WIP-Dateien (globals.css, icon.svg, auth/login, CutAtlas/CutGenerator inkl. meiner 2 TS-Fixes, PlattformPuls) weiter uncommitted.
+
+## 2026-08-16 (Mittag) — A2 LIVE (Commit c0d9ed9): ehrlicher DOI-Fehler + source-Segmentierung
+
+/api/newsletter meldet jetzt 503 (Template-ID fehlt) bzw. 502 (Loops lehnt ab) statt success:true; Formular zeigt die Server-Meldung an. createDOIToken traegt source+userGroup im Token -> /confirm legt Kontakte korrekt segmentiert an; ab jetzt ist der Quellen-Vergleich der 8 Sammelpunkte in Loops/Plausible aussagekraeftig. .env.example dokumentiert LOOPS_DOI_TEMPLATE_ID, NEWSLETTER_DOI_SECRET, NEXT_PUBLIC_APP_URL (inkl. Supabase-Verwechslungs-Warnung). Live-Check nach Deploy: Seite rendert normal. Naechste Marketing-Bausteine: Spickzettel-PDF (B1), Ribeye-Bild (fal.ai), Gutschein-Kette (C1-C5, Uwe-Entscheidungen).
+
+## 2026-08-16 (Nachmittag) — Design-Audit Säule 1 (Homepage) + Signup-Fix LIVE
+
+Gemeinsamer Screenshot-Durchgang (Uwe + Claude via Browser). ERLEDIGT (Commit #33): Sidebar-Kollaps des E-Mail-Felds (sm:flex-row quetschte Input in 300px-Spalte auf 0px -> flex-wrap + min-w-[200px]; Lehre: KEINE Viewport-Breakpoints fuer Komponenten, die in schmalen Containern landen), Disabled-Button lesbar (Kontur-Stil statt opacity-40), Checkbox-Label + Kleingedrucktes eine Kontraststufe hoch.
+
+OFFENE Design-Befunde Homepage (priorisiert):
+1. Plattform-Puls zeigt "3 Cuts"/"7 Grilltechniken" — faktisch falsch (Atlas hat Dutzende), untergraebt "waechst jede Woche"; Fix steckt vermutlich im lokalen WIP (plattform-puls.ts/PlattformPuls.tsx) — fertigstellen oder Sektion solange ausblenden.
+2. Weiss-Blitz bei Scroll-Spruengen: html-Element ohne dunklen Hintergrund -> 1-Zeilen-Fix globals.css (html{background:#17100B}) — ACHTUNG globals.css ist WIP-modifiziert.
+3. Rubrik "Cuts & Fleischkunde": nur 2 Karten + leerer dritter Slot; Karten lazy-loaden als dunkle Flaechen.
+4. Doppelte Floating-UI unten rechts (Frag-Marco-Pille + separates Avatar-Bild), Pille ueberlappt Sidebar-Kleingedrucktes.
+5. Stats-Reihe: "2026 Inhalte aktuell" = Jahreszahl als Kennzahl verkleidet (Regel-7-Geruch), schwaecht echte Zahlen.
+6. Manifest-Anfuehrungszeichen ueberlappt erste Textzeile (minor).
+Unterseiten-Durchgang steht aus (Uwe war noch auf keiner); Mobil-Check offen (Browser-Resize griff nicht — am Geraet pruefen).
+
+**2026-08-16:** Briefing fuer 3 neue Methoden-Seiten angelegt (docs/briefing-methoden-erweiterung-2026-08.md): Oberhitze-Grillen (Prio 1, Ueberbau zum bestehenden Oberhitzegrill-Vergleich), Plancha/Feuerplatte, Rotisserie. Ziel: Methoden 7 -> 10, Puls-Zaehler "Grilltechniken" kehrt automatisch zurueck (Unter-10-Regel). Produktion via Content-Pipeline + Qualitaets-Gate, Werte aus kerntemperatur-referenz.yaml, Bilder fal.ai.
+
+**2026-08-16 (Abend):** Methode Oberhitze-Grillen LIVE (/methoden/oberhitze-grillen, Hybrid-Weg: Hand-Entwurf nach Briefing, Uwe-Review, Push). 54 GradC/54-58-Korridor aus Referenz-YAML verifiziert, 11 interne Links, Vergleichs-Verweis nur redaktionell in FAQ. Bild = Platzhalter hero-ribeye (TODO-Kommentar im MDX; fal.ai-Generierung zusammen mit Ribeye-Bildtausch, wartet auf Uwes Kosten-Go). Methoden jetzt 8/10 — Plancha + Rotisserie ausstehend (Briefings fertig), dann kehrt Puls-Zaehler "Grilltechniken" automatisch zurueck. Puls-Fix (Atlas-Cuts) und Signup-Fix ebenfalls heute live.
+
+**2026-08-16 (spät):** Dauerauftrag Uwe ("eins nach dem anderen, nicht fragen"). Umgesetzt, wartet auf Commit: (1) Methode Plancha/Feuerplatte (content/methoden/plancha-feuerplatte.mdx, 9 Links, Fakten Grillfuerst-Ratgeber: Zonen, 20-40min Vorheizen, Einbrennen), (2) Methode Rotisserie (content/methoden/rotisserie-drehspiess.mdx, Gefluegel 74C/72-80 aus Referenz-YAML verifiziert, Sicherheits-Callout), (3) Weiss-Blitz-Fix: html-Element in layout.tsx bekommt backgroundColor #17100B (bewusst NICHT via globals.css — die ist Uwes WIP). Beide MDX mit Bild-Platzhalter + TODO (fal.ai-Runde ausstehend). Nach Merge: Methoden 10/10 -> Puls-Zaehler "Grilltechniken: 10" erscheint automatisch.
+
+**2026-08-16 (Abschluss):** Alles vom Tages-Stapel LIVE + von aussen verifiziert. Puls final: 112 Rezepte / 173 Glossar / 35 Lektionen / 10 Grilltechniken / **40 Cuts im Atlas**. KORREKTUR eigener Fehler: Ich hatte 52 angesagt — grep zaehlte auch die 12 Rinder-PRIMALS mit (species-Feld); getCutsBySpecies('rind') liefert korrekt 40 echte Cuts. Live-Zahl stimmt, Ansage war falsch. Verbleibender Stapel: fal.ai-Bildrunde (3 Heroes, wartet auf Kosten-Go), Spickzettel-PDF (B1), Gutschein-Kette (C1-C5, Uwe-Entscheidungen, Deadline ~Ende August!), Design-Kleinteile (Floating-Doppel, leere 3. Rubrik-Karte, "2026"-Kennzahl, Manifest-Anfuehrungszeichen).
+
+## 2026-08-16 — Lernvideo-Produktion: Entscheidungen + Plan (docs/lernvideo-produktion-plan.md)
+
+**ENTSCHIEDEN (Uwe, 16.08.):** (1) Protagonist = **Avatar-System synthetisch** (nicht Uwe vor der Kamera) -> Vollautomatik moeglich, Doktrin gewahrt. Damit ist lernvideo-machart.md (12.06., "Protagonist: Uwe") als Produktionsgrundlage UEBERHOLT — Mikasa-Stil bleibt nur als Erzaehl-Vorbild. (2) Inhalt = **die 35 Diplom-Lektionen** werden vertont -> hebt die Format-Abgrenzung des BBQ-Grundkurses (10.07.) auf.
+
+**⚠️ OFFEN, blockiert Vorverkauf:** Diplom ist kostenlos — was wird zu Weihnachten VERKAUFT? Optionen im Plan: (a) Videopfad = Bezahlprodukt [Empfehlung], (b) Urkunde/Pruefung verkaufen, (c) BBQ-Grundkurs neu abgrenzen. Uwe muss entscheiden.
+
+**Maschine steht bereits, nichts Neues noetig:** OpenMontage (installiert 09.08., Zustandsautomat mit Approval-Gate je Stufe = Regel 4), **Piper TTS offline 0 EUR**, fal.ai fuer Bilder, Remotion-Komposition, FFmpeg/Untertitel/Audio komplett kostenlos.
+
+**Nacht-Automatik = GitHub Actions**, NICHT geplanter Claude-Lauf (frische Sitzung hat nachts keinen Ordner-Zugriff auf C:\Dev; device_bash ohne Netz + 45s-Limit). Muster wie glossary-grow/recipe-grow. Workflow `lernvideo-render.yml`, cron 01:00 UTC, stoppt VOR `publish`, MP4 als Artefakt -> Uwe gibt morgens frei.
+
+**Zeitplan realistisch:** Stufe 1 (7 Lektionen) bis Vorverkauf, NICHT alle 35. W1 Pipeline+Pilot, W2 Pilot-Review/Stil-Sperre, W3-4 Rest Stufe 1 (1/Nacht), W5 Korrektur+Verkaufsseite, W6 Puffer. Vorverkauf ehrlich: "Stufe 1 sofort, Stufe 2-5 monatlich".
+
+**Uwe-Zuarbeit:** Bezahlprodukt-Entscheidung · Pexels/Pixabay-Keys (gratis) · fal.ai-Kosten-Go · Pilot-Review W2 (danach Stil gesperrt).
+
+**BEFUND 16.08.2026 — Herkunft des "kostenlosen Diploms" (Uwe wusste es selbst nicht):** Keine Entscheidung, sondern Begriffs-Drift. Ursprung Parent-CLAUDE.md Z.282: "Physisches Diplom — **Digital kostenlos, gedruckt 9,99 EUR + 4,99 Porto**" — das betraf die URKUNDE (Fulfillment-Detail), nicht den Lernweg. Daraus wurde bis 10.07. (Z.617) "Abgrenzung zum **kostenlosen Diplom-Lernweg**" und schliesslich die primaere Homepage-CTA "Werde SteakAdemiker — kostenlos". WIDERSPRUCH: Parent-CLAUDE.md Z.865 fuehrt weiterhin **"🔴 P0 | Diplom Bronze ueber Digistore24 monetarisieren"** und Z.388 "Digistore24 — Diplom-Verkauf" als OFFEN. Monetarisierung war also immer geplant; das "kostenlos" hat sie ueberwuchert.
+
+**ENTSCHIEDEN (Uwe, 16.08.2026): Physisches Diplom entfaellt komplett** — Grund: Verpackungsverordnung DE (Registrierungs-/Lizenzpflichten stehen in keinem Verhaeltnis zu 9,99 EUR + Porto bei manuellem Fulfillment). Konsequenzen: (a) Urkunden-Bestellformular /diplome/urkunde + Fulfillment raus bzw. auf rein digitale Urkunde reduzieren, (b) Gutschein-Lineup verliert einen der drei geplanten Posten (Steak-Beichte / physisches Diplom / Gruender-Schmiede) — ersetzt durch das kostenpflichtige Diplom, (c) kein Versand = kein Widerrufs-/Versandrecht-Overhead mehr. Digitale Urkunde bleibt Teil des Produkts.
+
+**ENTSCHIEDEN (Uwe, 16.08.2026) — PREIS Grillmeister-Diplom:** regulaer **149 EUR**, Vorverkauf **99 EUR Gruendungs-Preis fuer die ersten 100** ("danach 149"). Uwe folgt der Argumentation: Kategorie ohne Vergleich wird positioniert statt verteidigt; Praesenz-Grillkurs kostet 100-200 EUR fuer EINEN Tag ohne Wiederholbarkeit/Zertifikat; bei Geschenken ist billig ein Makel; Gruendungs-Preis loest zugleich das fehlende Social Proof (F4) und schafft Dringlichkeit im Weihnachtsfenster. Stufe 1 (Bronze) bleibt kostenlos = Trichter; Stufe 2-5 = Bezahlprodukt (Text + Video). BBQ-Grundkurs geht darin auf, entfaellt als eigenes Produkt.
+
+**Avatar-Video-Konzept (Briefing: docs/briefing-avatar-marco-video.md, 16.08.):** EMPFEHLUNG = **kein sprechender Kopf**. Marco = Stimme (Piper, fest gesperrt) + wiedererkennbare Figur (am Grill, von hinten/halbseitlich, arbeitend — `marco-back.jpg` ist bereits diese Bildidee) + Haende-Nahaufnahmen. Gruende: Handwerk lehrt statt Gesicht (Mikasa-Prinzip), lippensynchrone KI-Avatare sind 2026 Billig-Signal + kostenpflichtig, rechtlich schlanker. Zu produzieren: **Charakter-LoRA `FAL_LORA_MARCO`** aus bestehender Referenz authors/marco-richter.jpg (Aussehen ist seit Monaten oeffentlich, darf sich NICHT aendern) — Verfahren analog train-pork-lora.yml, ca. 1 Tag, gehoert in Woche 1. NUR Marco; Jonas/Elena erst nach Stufe 1. Uwe-Gates: fal.ai-Kosten-Go (Trainingsset+LoRA), Stimm-Abnahme, Charakter-Abnahme (5-Szenen-Test).

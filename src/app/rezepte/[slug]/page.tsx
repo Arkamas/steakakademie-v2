@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import { allRecipes } from 'contentlayer/generated';
 import { breadcrumbSchema } from '@/lib/schema';
 import RecipeExplorer from '@/components/recipe/RecipeExplorer';
+import RecipeIndex from '@/components/recipe/RecipeIndex';
 import { toCardData } from '@/lib/rezept/card-data';
 
 // ─── Kategorie-Definitionen ──────────────────────────────────────────────────
@@ -485,6 +486,9 @@ export default function RezeptKategoriePage({ params }: Props) {
             <RecipeExplorer recipes={recipes} activeKategorie={params.slug} />
           </div>
         )}
+
+        {/* ── Vollstaendiges Linkverzeichnis (serverseitig, crawlbar) ────── */}
+        <RecipeIndex kategorie={params.slug} />
 
       </main>
 

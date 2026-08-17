@@ -7,6 +7,7 @@ import { allRecipes } from 'contentlayer/generated';
 import { breadcrumbSchema } from '@/lib/schema';
 import RecipeSubmitModal from '@/components/recipe/RecipeSubmitModal';
 import RecipeExplorer from '@/components/recipe/RecipeExplorer';
+import RecipeIndex from '@/components/recipe/RecipeIndex';
 import { toCardData } from '@/lib/rezept/card-data';
 
 export const metadata: Metadata = {
@@ -80,6 +81,9 @@ export default function RezepteIndexPage() {
         <div className="reading-light">
           <RecipeExplorer recipes={recipes} />
         </div>
+
+        {/* ── Vollstaendiges Linkverzeichnis (serverseitig, crawlbar) ────── */}
+        <RecipeIndex />
 
         {/* ── Community-Band — Austausch + eigenes Rezept einreichen ─────── */}
         <section className="border-t border-b border-border-subtle bg-surface-dark">

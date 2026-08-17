@@ -137,6 +137,16 @@ Nur CC0 / Unsplash-, Pexels-, Pixabay-frei / Foodiesfeed / bezahlte Stock-Lizenz
 Nachweis / Eigenfotos. **Keine** Händler- oder Shop-Produktbilder. Jede Echtfoto-Quelle
 bekommt einen Eintrag in der CREDITS-Datei des jeweiligen Verzeichnisses.
 
+**Foodiesfeed: zulässig nur nach Einzelbild-Prüfung.** Die Plattform hostet
+mittlerweile echte *und* KI-Bilder und kennzeichnet letztere auf der Bildseite als
+„AI-generated". Eine Foodiesfeed-URL allein belegt also keine Echtfoto-Herkunft —
+vor der Übernahme ist die Quellseite zu prüfen. Ist das Bild dort als
+„AI-generated" markiert, braucht es im Frontmatter `imageAI: true`, auch wenn
+`imageSource` auf Foodiesfeed zeigt. Beides zusammen ist kein Widerspruch, sondern
+die vollständige Angabe: `imageSource` nennt die Bezugsquelle, `imageAI` die
+Entstehungsart. Erster Fall: `content/rezepte/rinder-tacos-guenstiger-cut.mdx`
+(Bildseite `delicious-beef-tacos-with-fresh-toppings`).
+
 **Offene Flanke:** Für KI-generierte Bilder existiert bislang weder ein CREDITS-Eintrag
 noch eine Kennzeichnung. Angesichts der AI-Act-Regel für Personas und Inhalte ist das
 separat zu klären.

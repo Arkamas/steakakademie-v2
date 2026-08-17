@@ -1,5 +1,27 @@
 # Bildprogramm Steakakademie
 
+> **Einordnung:** Dieses Dokument ist das AUSFÜHRUNGSDOKUMENT zu den Bild-Regeln
+> in der übergeordneten `CLAUDE.md` (OneDrive-Projektordner):
+> **8c** (Fakten vor Fach-Content, Bild-gegen-Behauptung-Prüfung, kanonische
+> Kerntemperaturen) und **8d** (Bild-Prompt-Doktrin fal.ai/FLUX: keine
+> Qualitätswörter, Texturs- und Kamerasprache, Perspektiven-Rotation,
+> sliced-Trick, Klassifizierung nach Protein).
+> Bei Widerspruch gilt: CLAUDE.md nennt das PRINZIP, dieses Dokument die
+> AUSFÜHRUNG — und die jüngste datierte Entscheidung gewinnt.
+
+> **Änderbarkeit (Entscheidung Uwe, 17.08.2026):** Doktrin ist ein Protokoll
+> von Entscheidungen mit Datum — kein Gesetz. Kreativität und das Erkennen
+> vorteilhafter Veränderungen stehen VOR einer festgeschriebenen Regel.
+> Eine Änderung ist erlaubt und erwünscht; sie muss nur als neue datierte
+> Entscheidung notiert werden, damit die nächste Sitzung weiß, was gilt.
+> Konkreter Anlass: Die Look-Entscheidung „Warm & Rustikal — KEIN
+> dunkel-moody-Schiefer" (CLAUDE.md 8d(g), 04.06.2026) entstand für
+> REZEPTBILDER und ist dort implementiert (recipe-images.mjs,
+> api/rezept-bild). Das am 17.08.2026 abgenommene Ribeye-Artikelbild
+> (dunkler Schiefer) bleibt — Artikel-/Cut-Heroes (Spur A) folgen der
+> dunklen Marken-Optik, Rezeptbilder (Spur B) bleiben Warm & Rustikal.
+> 8d(g) ist damit als Rezeptbild-Regel präzisiert, nicht aufgehoben.
+
 **Stand:** 16.08.2026 · **Auslöser:** Ribeye-/Methoden-Bildrunde, Referenzfotos Feuerplatte (Uwe)
 
 ---
@@ -32,6 +54,10 @@ Bild hat einen Job, und der Leser erkennt nach zwei Scrolls, welcher.
 - Deko nur als deterministisch rotierender Kräuterzweig (Entscheidung Uwe 06.07.2026)
 
 Werkzeug: `scripts/cut-images.mjs` (LoRA `sa_rawcut`).
+
+Der dunkle Grund in Spur A steht bewusst NICHT im Widerspruch zu 8d(g)
+(„Warm & Rustikal") — siehe Änderbarkeits-Block oben: 8d(g) regelt
+Rezeptbilder, Spur A folgt der dunklen Marken-Optik (Entscheidung 17.08.2026).
 
 ### Spur B — Reportage (Praxis)
 
@@ -78,7 +104,12 @@ Faustregel: *Erklärt die Seite ein Gerät → Echtfoto. Erklärt sie ein Gargut
 
 ---
 
-## Prompt-Handwerk (fal.ai / FLUX) — gelernte Regeln
+## Prompt-Handwerk (fal.ai / FLUX) — Ergänzungen zu CLAUDE.md 8d
+
+Grundregeln stehen in CLAUDE.md 8d (keine Qualitätswörter, Textur- und
+Kamerasprache, Perspektiven-Rotation, sliced-Trick, Protein-Klassifizierung)
+und werden hier NICHT wiederholt. Die folgenden Punkte sind die am 16.08.2026
+NEU gelernten Regeln, die 8d noch nicht enthält:
 
 1. **Verneinungen im Positiv-Prompt wirken nicht wie ein Negativ-Prompt.**
    „no bone, not a tomahawk" schrieb die Tokens *bone* und *tomahawk* in die
@@ -118,7 +149,35 @@ separat zu klären.
 - [ ] Unsplash-Hotlinks lokal spiegeln: `direktes-grillen`, `searing-perfekte-kruste`,
       `smoken-low-and-slow`, `sous-vide`
 - [ ] `public/images/methoden/CREDITS.md` und `public/images/articles/CREDITS.md` anlegen
-- [ ] Kennzeichnungskonzept für KI-Bilder (AI Act Art. 50)
+- [ ] Kennzeichnungskonzept für KI-Bilder — Analyse 17.08.2026, Entscheidung offen
+
+      In `src/components/RecipeTemplate.tsx` liegt uncommittet eine Änderung, die
+      allen ~115 Rezept-Heroes ein sichtbares Badge „KI-Symbolbild" gibt und
+      „— KI-generiertes Symbolbild" an den Alt-Text hängt. Bewusst nicht mit dem
+      Bildprogramm-Commit ausgeliefert.
+
+      Rechtliche Prüfung (nachgelesen, nicht geschätzt): EU AI Act Art. 50 gilt seit
+      02.08.2026. Art. 50(2) verpflichtet den ANBIETER des KI-Systems zur
+      maschinenlesbaren Markierung — das ist fal.ai bzw. Google, nicht die
+      Steakakademie. Art. 50(4) verpflichtet den BETREIBER zur Offenlegung, aber für
+      DEEPFAKES, also Inhalte, die existierende Personen, Gegenstände, Orte oder
+      Ereignisse erkennbar nachbilden. Ein generisches Steak auf Schiefer ist das
+      nicht. Ein sichtbares Badge pro Bild ist nach Art. 50 daher sehr wahrscheinlich
+      nicht gefordert.
+
+      Der greifende Hebel ist § 5 UWG: Das Bild darf nicht suggerieren, so sehe das
+      nachgekochte Gericht aus. Dafür ist die etablierte deutsche Formel
+      „Symbolbild" bzw. „Serviervorschlag" — sie trifft den rechtlichen Kern
+      ohne Warnhinweis-Ton.
+
+      Empfehlung: Badge behalten, Text auf „Symbolbild" ändern, verlinkt auf das
+      bereits vorhandene `/ki-disclaimer`. Dort steht die KI-Herkunft ausführlich —
+      zentrale Offenlegung statt Wiederholung auf 115 Seiten. „KI" als Badge vier
+      Wochen vor dem Weihnachts-Vorverkauf arbeitet gegen die Positionierung: Wer es
+      liest, fragt nicht nach Art. 50, sondern ob auch die Rezepte generiert sind.
+
+      Endentscheidung beim Anwalt — gemeinsam mit Widerrufsbelehrung Coaching und
+      `challenge-teilnahmebedingungen`.
 - [x] Ribeye-Artikelbild: nach drei gescheiterten Pipeline-Runden extern generiert und
       abgenommen (16.08.2026). Im Skript als `manual: true` gegen --force geschuetzt.
 - [ ] `usa-expedition/page.tsx:150` nutzt das Ribeye-Bild fuer die Whole-Hog-Reise

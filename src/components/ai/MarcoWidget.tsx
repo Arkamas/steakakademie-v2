@@ -270,7 +270,11 @@ export default function MarcoWidget() {
               </button>
             </form>
 
-            <p className="px-4 pb-3 text-center text-[10px] font-sans" style={{ color: 'rgba(255,255,255,0.2)' }}>
+            {/* KI-Offenlegung (EU AI Act Art. 50 Abs. 1). Kontrast-Fix 17.08.2026:
+                stand vorher auf rgba(255,255,255,0.2) bei 10px — rechnerisch rund
+                1,5:1 gegen den dunklen Panel-Grund und damit praktisch unlesbar.
+                Ein Hinweis, den niemand lesen kann, ist kein Hinweis. */}
+            <p className="px-4 pb-3 text-center text-[11px] font-sans" style={{ color: 'rgba(255,255,255,0.6)' }}>
               🤖 Marco ist ein KI-Assistent — keine Rechts-, Gesundheits- oder Steuerberatung.{' '}
               <Link href="/ki-disclaimer" className="underline hover:opacity-60 transition-opacity">
                 KI-Hinweise

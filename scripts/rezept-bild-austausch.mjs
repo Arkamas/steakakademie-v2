@@ -201,6 +201,23 @@ const PROFILE = {
  */
 const PROFIL_GESPERRT = ['flau']
 
+/**
+ * Nachkorrektur je Motiv, angewendet NACH dem eingefrorenen Profil.
+ *
+ * Das Profil ist bewusst fuer alle Motive gleich — eine Marke sieht ueberall
+ * gleich aus. Wenn eine Quelle danach trotzdem daneben liegt, gehoert die
+ * Abweichung sichtbar hierher und nicht in eine Aenderung des Profils, sonst
+ * verschiebt sich der Look aller 22 Bilder wegen eines einzigen.
+ *
+ * cedar-plank-lachs: Der rohe Lachs kam nach dem Edit teilweise grau heraus
+ * (Abnahme 18.08.2026). Werte an einer Vierer-Leiter gegen das Rohbild gewaehlt;
+ * mehr kippt das Zedernholz ins Orange, ohne die blassen Filets zu retten —
+ * die sind bereits in der Quelle blass, Grading erfindet dort keine Farbe.
+ */
+const NACHFARBE = {
+  'cedar-plank-lachs': { saturation: 1.22, hue: 5 },
+}
+
 function linearAB(B, C) {
   return { a: 1 + C / 100, b: (B / 100) * 255 - (C / 100) * 128 }
 }
@@ -632,7 +649,8 @@ async function main() {
         continue
       }
 
-      const gegradet = await grade(editiert, PROFIL)
+      let gegradet = await grade(editiert, PROFIL)
+      if (NACHFARBE[job.slug]) gegradet = await sharp(gegradet).modulate(NACHFARBE[job.slug]).toBuffer()
       // Das gegradete Bild VOR der Rahmung sichern. Ohne das kostet jedes
       // spaetere Umrahmen einen neuen kostenpflichtigen Edit — beim Wechsel der
       // Beschnitt-Regel am 18.08.2026 genau so passiert.

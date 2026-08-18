@@ -13,11 +13,15 @@
  * bild-austausch/ und gehen erst nach fachlicher Abnahme ins Repo — dieselbe
  * Regel wie beim Cut-Atlas.
  *
- * Quellfotos kommen aus der Kandidatensuche ueber Unsplash, Pexels und Pixabay.
+ * Quellfotos kommen aus der Kandidatensuche ueber Pexels, Unsplash und Pixabay
+ * — in dieser Reihenfolge, nach der Einstufung in docs/bildquellen-whitelist.md.
  * Drei Quellen, weil eine nicht reicht: "porterhouse steak" ergab bei Unsplash
- * 3 Treffer, bei Pexels 4805 und bei Pixabay 940 (geprueft 18.08.2026). Alle
- * drei Lizenzen erlauben kommerzielle Nutzung und Bearbeitung ohne
- * Attributionspflicht.
+ * 3 Treffer, bei Pexels 4805 und bei Pixabay 940 (geprueft 18.08.2026); bei vier
+ * der 22 Motive liefert Unsplash gar nichts.
+ *
+ * Pexels und Unsplash stehen dort auf GRUEN, Pixabay auf GELB: Die Plattform
+ * hostet KI-Bilder. Deren Treffer werden ueber das API-Feld `isAiGenerated`
+ * aussortiert, damit kein KI-Bild als "Echtfoto-Basis" durchrutscht.
  *
  * Ablauf: suchen → sichten → waehlen → bearbeiten.
  *
@@ -275,27 +279,53 @@ async function suchePexels(q, n) {
   }))
 }
 
+let pixabayGefiltert = 0
+
+/**
+ * Pixabay steht in docs/bildquellen-whitelist.md auf GELB: Die Plattform hostet
+ * KI-Bilder, kennzeichnet sie aber. Die API liefert dafuer ein explizites Feld
+ * `isAiGenerated` — verlaesslicher als Tags zu durchsuchen. Der Query-Parameter
+ * `&ai=false` bewirkt nichts (gleiche Trefferzahl, geprueft 18.08.2026), also
+ * wird clientseitig gefiltert und dafuer ueberzogen abgefragt.
+ *
+ * Ein KI-Bild als "Echtfoto-Basis" durchzulassen waere genau der Fehler, den die
+ * Doktrin bei Foodiesfeed schon einmal gefangen hat.
+ */
 async function suchePixabay(q, n) {
   const k = key('PIXABAY_API_KEY')
   if (!k) return []
-  // Pixabay verlangt per_page >= 3.
-  const r = await fetch(`https://pixabay.com/api/?key=${k}&image_type=photo&per_page=${Math.max(3, n)}&q=${encodeURIComponent(q)}`)
+  // Ueberziehen, weil nach dem Filter genug uebrig bleiben muss. per_page >= 3.
+  const r = await fetch(`https://pixabay.com/api/?key=${k}&image_type=photo&per_page=${Math.max(3, n * 4)}&q=${encodeURIComponent(q)}`)
   if (!r.ok) return []
   const j = await r.json()
-  return (j.hits || []).slice(0, n).map(p => ({
+  const alle = j.hits || []
+  const echt = alle.filter(p => p.isAiGenerated !== true)
+  pixabayGefiltert += alle.length - echt.length
+  return echt.slice(0, n).map(p => ({
     quelle: 'Pixabay', id: String(p.id), fotograf: p.user || '—',
     beschreibung: (p.tags || ''),
     vorschau: p.webformatURL, original: p.largeImageURL,
   }))
 }
 
+/**
+ * Reihenfolge nach docs/bildquellen-whitelist.md: Pexels zuerst (KI-Uploads sind
+ * dort per ToS verboten, damit die sauberste Quelle), dann Unsplash, dann
+ * Pixabay als GELB-Quelle zuletzt. Die Sortierung steuert nur, was im
+ * Auswahlbogen oben steht — gesucht wird weiterhin parallel.
+ *
+ * Noch nicht angebunden, aber in der Whitelist gruen: StockSnap, Kaboompics,
+ * Burst, Gratisography. Dafuer fehlen Keys bzw. APIs.
+ */
+const QUELLEN_RANG = { Pexels: 1, Unsplash: 2, Pixabay: 3 }
+
 async function sucheKandidaten(job, proQuelle) {
   const listen = await Promise.all([
-    sucheUnsplash(job.suche, proQuelle).catch(() => []),
     suchePexels(job.suche, proQuelle).catch(() => []),
+    sucheUnsplash(job.suche, proQuelle).catch(() => []),
     suchePixabay(job.suche, proQuelle).catch(() => []),
   ])
-  return listen.flat()
+  return listen.flat().sort((a, b) => (QUELLEN_RANG[a.quelle] ?? 9) - (QUELLEN_RANG[b.quelle] ?? 9))
 }
 
 /** Kandidaten sichten: Vorschauen laden und einen Auswahlbogen schreiben. */
@@ -329,6 +359,8 @@ async function modusSuche(jobs, proQuelle) {
     console.log(`  ${c.r('✗')} ${job.slug.padEnd(28)} ${e.message}`)
    }
   }
+  if (pixabayGefiltert)
+    console.log(c.y(`\n  ${pixabayGefiltert} Pixabay-Treffer als KI-generiert aussortiert (isAiGenerated).`))
   console.log(c.d(`\n  Auswahlboegen: bild-austausch/kandidaten/<slug>/auswahl.html`))
   console.log(c.d(`  Uebernehmen mit: --waehle <slug>=<quelle>-<id>\n`))
 }

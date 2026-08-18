@@ -98,9 +98,13 @@ const HAUSSTIL =
 // der Edit unter keinen Umstaenden veraendern darf. Genau hier sind die bisherigen
 // Bilder gescheitert (Porterhouse ohne T-Knochen, Coleslaw als Nudeln).
 export const JOBS = [
-  { slug: 'bourbon-brisket-pairing', suche: 'brisket bourbon glass bbq',
+  // Geschaerft 18.08.2026: Die erste Runde fand Brisket ODER Glas, nie beides.
+  { slug: 'bourbon-brisket-pairing',
+    suche: ['brisket bourbon glass bbq', 'barbecue plate whiskey glass', 'smoked meat whiskey tasting board'],
     muss: 'sliced smoked beef brisket with a dark bark and visible smoke ring, beside a glass of bourbon' },
-  { slug: 'braaibroodjies', suche: 'grilled cheese sandwich braai toastie',
+  // Geschaerft: Grillmarken gab es, den Klapprost nie — der ist das Kennzeichen.
+  { slug: 'braaibroodjies',
+    suche: ['grilled cheese sandwich braai toastie', 'hinged grid braai sandwich', 'sandwich grill basket charcoal'],
     muss: 'grilled stuffed sandwiches with clear grill marks, folded in a grill basket' },
   { slug: 'bun-cha-hanoi', suche: 'bun cha vietnamese noodle bowl',
     muss: 'a bowl of broth with small grilled pork patties, a separate portion of white rice noodles and fresh herbs' },
@@ -108,7 +112,9 @@ export const JOBS = [
     muss: 'a whole fish lying on a clearly visible green banana leaf' },
   { slug: 'cedar-plank-lachs', suche: 'cedar plank salmon grill',
     muss: 'a salmon fillet on a clearly visible charred cedar wood plank' },
-  { slug: 'chateaubriand-filet', suche: 'chateaubriand beef tenderloin sliced',
+  // Geschaerft: Die erste Runde lieferte ueberwiegend Roastbeef und Ribeye.
+  { slug: 'chateaubriand-filet',
+    suche: ['chateaubriand beef tenderloin sliced', 'beef tenderloin center cut medium rare', 'filet mignon roast sliced pink'],
     muss: 'a thick centre-cut beef tenderloin, sliced, pink even core, uniform fine-grained muscle without any spiral or layered structure' },
   { slug: 'iberico-carrillera', suche: 'braised pork cheeks',
     muss: 'braised boneless pork cheeks, small round pieces of meat in a dark glossy sauce, absolutely no bone' },
@@ -124,11 +130,16 @@ export const JOBS = [
     muss: 'a whole fish fully encased in a thick white salt crust, thai street grill setting' },
   { slug: 'sis-kebab-tuerkisch', suche: 'shish kebab skewers turkish',
     muss: 'cubes of meat threaded on flat metal skewers over a mangal grill' },
-  { slug: 'sosaties-braai', suche: 'sosatie skewers braai apricot',
+  // Geschaerft: Acht Kandidaten, kein einziger mit Aprikosen — dem Kennzeichen
+  // des Gerichts. Deshalb die Aprikose in mehreren Formulierungen nach vorne.
+  { slug: 'sosaties-braai',
+    suche: ['sosatie skewers braai apricot', 'apricot lamb skewer marinated', 'kebab with dried apricots grilled', 'south african braai skewers'],
     muss: 'marinated skewers alternating meat with dried apricots and onion pieces' },
   { slug: 'tavuk-sis-kebab', suche: 'chicken shish kebab skewers',
     muss: 'cubes of chicken threaded on skewers, not a whole roast chicken' },
-  { slug: 'texas-coleslaw', suche: 'coleslaw bowl bbq side',
+  // Geschaerft: Die erste Runde lieferte Rotkohl oder Teller mit Markenflaschen.
+  { slug: 'texas-coleslaw',
+    suche: ['creamy coleslaw white cabbage bowl', 'shredded white cabbage carrot salad', 'coleslaw bowl bbq side'],
     muss: 'a bowl of coleslaw made of finely shredded white cabbage and carrot, creamy dressing, absolutely no noodles and no minced meat' },
   { slug: 'thit-nuong-vietnam', suche: 'vietnamese grilled pork thit nuong',
     muss: 'grilled marinated pork slices served with rice or noodles and fresh herbs' },
@@ -348,13 +359,29 @@ async function suchePixabay(q, n) {
  */
 const QUELLEN_RANG = { Pexels: 1, Unsplash: 2, Pixabay: 3 }
 
+/**
+ * `suche` darf ein String oder eine Liste sein. Mehrere Begriffe, weil bei
+ * schwierigen Motiven selten eine einzige Formulierung trifft: "sosatie skewers
+ * braai apricot" fand acht Kandidaten, aber keinen einzigen mit Aprikosen —
+ * und die sind bei dem Gericht das Kennzeichen (Befund 18.08.2026).
+ * Treffer werden ueber Quelle+ID entdoppelt.
+ */
 async function sucheKandidaten(job, proQuelle) {
-  const listen = await Promise.all([
-    suchePexels(job.suche, proQuelle).catch(() => []),
-    sucheUnsplash(job.suche, proQuelle).catch(() => []),
-    suchePixabay(job.suche, proQuelle).catch(() => []),
-  ])
-  return listen.flat().sort((a, b) => (QUELLEN_RANG[a.quelle] ?? 9) - (QUELLEN_RANG[b.quelle] ?? 9))
+  const begriffe = Array.isArray(job.suche) ? job.suche : [job.suche]
+  const gefunden = new Map()
+  for (const begriff of begriffe) {
+    const listen = await Promise.all([
+      suchePexels(begriff, proQuelle).catch(() => []),
+      sucheUnsplash(begriff, proQuelle).catch(() => []),
+      suchePixabay(begriff, proQuelle).catch(() => []),
+    ])
+    for (const t of listen.flat()) {
+      const schluessel = `${t.quelle}-${t.id}`
+      if (!gefunden.has(schluessel)) gefunden.set(schluessel, t)
+    }
+  }
+  return Array.from(gefunden.values())
+    .sort((a, b) => (QUELLEN_RANG[a.quelle] ?? 9) - (QUELLEN_RANG[b.quelle] ?? 9))
 }
 
 /** Kandidaten sichten: Vorschauen laden und einen Auswahlbogen schreiben. */

@@ -38,14 +38,30 @@
 Frontmatter mit `imageSource`/`imageAI`/neuem `imageAlt`, Provenienz in
 `public/images/rezepte/CREDITS.md`.
 
-**Offen: `cedar-plank-lachs`.** Bleibt auf Entscheidung von Uwe beim bisherigen
-Bild. Zwei Kandidatenrunden lieferten entweder rohen Lachs auf unverkohlter
-Planke oder eine von der Glut rotgetränkte Aufnahme; eine Farbkorrektur half
-nicht, weil die blassen Filets bereits in der Quelle blass sind. Der Audit-Befund
-„Keine Zedernplanke" bleibt damit bestehen. Nächster Ansatz, falls wieder
-aufgenommen: gezielt nach `cooked salmon fillet charred cedar plank` suchen —
-eine gegarte Lachsseite ist unverwechselbar orange und erfüllt die verkohlte
-Planke aus dem MUSS gleich mit.
+**Offen: `cedar-plank-lachs` — drei Anläufe, kein brauchbares Bild.**
+
+1. `pixabay-4051565` — gegarter Lachs auf verkohlter Planke, aber von der Glut
+   rotgetränkt. Abgelehnt: unschön.
+2. `pixabay-2326481` — rohe Filets auf unverkohlter Planke, teils blass. Die
+   Farbkorrektur half nicht, weil die blassen Filets bereits in der Quelle
+   blass sind. Abgelehnt.
+3. Suche geschärft auf `cooked salmon charred cedar plank` — 21 Kandidaten,
+   davon nennen nur vier überhaupt eine Planke: die beiden bereits abgelehnten,
+   eine reine Holzstruktur ohne Fisch und Flammlachs (an Bretter genagelt, ums
+   offene Feuer gestellt — anderes Garverfahren). Der beste Rest zeigt gegarten
+   Lachs auf dem Grillrost, ganz ohne Planke.
+
+**Farbkorrektur an Kandidat 1 gescheitert, Befund verallgemeinerbar:** Grading
+korrigiert Farbe, nicht Licht. Die Kohle unter der Planke ist dort die
+Lichtquelle, die ganze Szene ist rot beleuchtet. Farbton-Drehung macht daraus
+Magenta, Kanalkorrektur macht den Lachs pink und die Planke violett. Es gibt
+keine neutrale Information zurückzuholen.
+
+**Fazit:** In Pexels, Unsplash und Pixabay existiert kein verwendbares Foto von
+gegartem Lachs auf verkohlter Zedernplanke. Das Rezept bleibt beim bisherigen
+Bild; der Audit-Befund „Keine Zedernplanke" bleibt bestehen. Weiter geht es nur
+über eine bezahlte Stock-Lizenz oder ein eigenes Foto — beides eine
+Geschäftsentscheidung, keine Suchfrage.
 
 **Zwei Motive mit entschärftem MUSS** (Begründung am jeweiligen JOBS-Eintrag in
 `scripts/rezept-bild-austausch.mjs`): `bourbon-brisket-pairing` ohne Bourbonglas,

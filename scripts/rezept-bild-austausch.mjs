@@ -121,8 +121,14 @@ export const JOBS = [
     muss: 'a bowl of broth with small grilled pork patties, a separate portion of white rice noodles and fresh herbs' },
   { slug: 'ca-nuong-bananenblatt', suche: 'grilled fish banana leaf',
     muss: 'a whole fish lying on a clearly visible green banana leaf' },
-  { slug: 'cedar-plank-lachs', suche: 'cedar plank salmon grill',
-    muss: 'a salmon fillet on a clearly visible charred cedar wood plank' },
+  // Geschaerft 18.08.2026, dritter Anlauf: Runde eins lieferte eine von der Glut
+  // rotgetraenkte Aufnahme (abgelehnt: unschoen), Runde zwei rohen Lachs auf
+  // unverkohlter Planke mit teils blassen Filets. Jetzt ausdruecklich auf
+  // GEGARTEN Lachs und VERKOHLTE Planke gesucht — eine gegarte Lachsseite ist
+  // unverwechselbar orange und erfuellt die verkohlte Planke gleich mit.
+  { slug: 'cedar-plank-lachs',
+    suche: ['cooked salmon charred cedar plank', 'grilled salmon fillet cedar plank smoke', 'cedar plank salmon grill'],
+    muss: 'a cooked salmon fillet with an orange flaky surface on a clearly visible charred cedar wood plank' },
   // Geschaerft: Die erste Runde lieferte ueberwiegend Roastbeef und Ribeye.
   { slug: 'chateaubriand-filet',
     suche: ['chateaubriand beef tenderloin sliced', 'beef tenderloin center cut medium rare', 'filet mignon roast sliced pink'],
@@ -215,7 +221,16 @@ const PROFIL_GESPERRT = ['flau']
  * die sind bereits in der Quelle blass, Grading erfindet dort keine Farbe.
  */
 const NACHFARBE = {
-  'cedar-plank-lachs': { saturation: 1.22, hue: 5 },
+  // Derzeit leer.
+  //
+  // Versuch 18.08.2026 an cedar-plank-lachs (pixabay-4051565) gescheitert, der
+  // Befund ist verallgemeinerbar: Grading korrigiert Farbe, nicht Licht.
+  // Die Kohle unter der Planke IST dort die Lichtquelle, die ganze Szene ist rot
+  // beleuchtet. Zwei Leitern gegen das Rohbild:
+  //   Farbton drehen (hue -8/-14/-20)  -> Rot wird magenta, nicht neutral
+  //   Kanaele (R -15/-25/-35, B +20/+35/+50) -> Lachs pink, Planke violett
+  // Es gibt keine neutrale Information zurueckzuholen. Wenn das Licht falsch
+  // ist, hilft nur eine andere Quelle.
 }
 
 function linearAB(B, C) {

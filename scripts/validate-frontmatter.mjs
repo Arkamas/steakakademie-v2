@@ -19,6 +19,9 @@
  * Stichtag veroeffentlicht wurden, erzeugen deshalb eine gezaehlte Warnung
  * statt eines Fehlers. Alles ab dem Stichtag ist hart.
  *
+ * Zusaetzlich sind drei Technik-Rezepte namentlich von der land-Pflicht
+ * ausgenommen (LAND_ENTBEHRLICH) — sie haben keine Herkunft.
+ *
  * `land` faellt bewusst ebenfalls unter die Stichtagsregel: 14 Altrezepte haben
  * kein `land` (Stand 18.08.2026, ueberwiegend die US-Klassiker vom 24.05.), ein
  * hartes Gate haette den Build ab der ersten Minute rot gesetzt. Fuer neue
@@ -50,6 +53,28 @@ const STICHTAG = '2026-08-18'
 const STICHTAG_FELDER = ['land', 'imageAI', 'imageSource']
 
 const KATEGORIEN = ['fleisch', 'fisch', 'beilagen', 'saucen-rubs', 'desserts', 'wine-spirits']
+
+/**
+ * Rezepte, die kein `land` tragen koennen, weil sie keine Herkunft haben.
+ *
+ * Das sind reine Technik-Rezepte: Es geht um ein Garverfahren, nicht um ein
+ * Gericht aus einer Kueche. Geprueft am 18.08.2026 durch Textsuche — die
+ * einzigen Landesbezuege waren Nebenbemerkungen ("japanischen", "Kentucky"),
+ * die keine Zuordnung tragen.
+ *
+ * Ein erfundener Wert waere hier schlimmer als ein fehlender: `land` steuert die
+ * Laender-Filterleiste auf /rezepte, ein falscher Wert sortiert das Rezept unter
+ * eine Flagge, zu der es nicht gehoert.
+ *
+ * Bewusst eine namentliche Liste und keine Regel: Jede Ausnahme soll einzeln
+ * begruendet sein und auffallen, wenn sie waechst. Fuer neue Rezepte bleibt
+ * `land` Pflicht.
+ */
+const LAND_ENTBEHRLICH = new Set([
+  'ribeye-sous-vide',      // Sous-vide-Verfahren, kein Landesgericht
+  't-bone-direktgrill',    // Drei-Zonen-Grillen, kein Landesgericht
+  'tomahawk-reverse-sear', // Reverse Sear, kein Landesgericht
+])
 
 const c = {
   g: s => `\x1b[32m${s}\x1b[0m`, y: s => `\x1b[33m${s}\x1b[0m`,
@@ -98,8 +123,9 @@ async function main() {
     else if (!KATEGORIEN.includes(kategorie))
       fehler.push({ slug, text: `kategorie "${kategorie}" ist keine der sechs erlaubten` })
 
-    // 2 — Land
-    if (!feld(raw, 'land')) melde('land', 'land fehlt oder ist leer')
+    // 2 — Land. Technik-Rezepte ohne Herkunft sind namentlich ausgenommen.
+    if (!feld(raw, 'land') && !LAND_ENTBEHRLICH.has(slug))
+      melde('land', 'land fehlt oder ist leer')
 
     // 3 — KI-Kennzeichnung
     const imageAI = feld(raw, 'imageAI')

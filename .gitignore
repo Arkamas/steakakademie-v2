@@ -120,3 +120,8 @@ docs/bildstil/
 # Lokaler Starter mit hartcodiertem Pfad C:\Dev\steakakademie-v2 und .cmd-Syntax.
 # Arbeitsplatz-Komfort, kein Projektbestandteil — `npm run dev` tut dasselbe.
 dev-start.cmd
+
+# Staging fuer den Rezeptbild-Austausch: Quellfotos, Zwischenergebnisse und
+# Kontaktbogen. Bleibt lokal — ins Repo geht nur das abgenommene Endbild unter
+# public/images/rezepte/.
+bild-austausch/

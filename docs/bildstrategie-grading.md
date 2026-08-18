@@ -9,7 +9,26 @@ hiermit ins Repo überführt). Referenz-Spec: `pyrographic-canon-foto.md`.
 2. **Inszenierung/Requisiten:** `fal-ai/nano-banana/edit`, Detailkorrekturen: `fal-ai/nano-banana-pro/edit` (Standardversion reicht dafür nicht). Prompt-Regel: erst BEWAHREN (Form, Knochen, Fettkappe, Textur ausdrücklich benennen), dann ÄNDERN (Hausstil, Licht, Set).
 3. **Upload vorab** in fal-Storage: `https://rest.alpha.fal.ai/storage/upload/initiate` → PUT auf `upload_url`.
 4. **Farbe/Kontrast:** IMMER deterministisch graden, nie generativ.
-5. **Format:** hoch-/quadratformatige Quellen einpassen statt beschneiden. Ziel: 16:10 Hauptbild + 16:9 Hero.
+5. **Format:** Ziel ist 16:10 Hauptbild + 16:9 Hero.
+
+## Beschnitt-Regel (Entscheidung 18.08.2026)
+
+**Beschneiden ist erlaubt, solange das Gericht VOLLSTÄNDIG im Bild bleibt** — kein
+angeschnittenes Spieß-Ende, kein abgeschnittener Fischschwanz, kein Anschnitt des
+Motivs am Tellerrand.
+
+**Verboten bleibt Beschnitt bei Cut-Motiven, wo die Anatomie die Aussage ist:**
+Knochen, Fettkappe, Anschnittfläche. Dort wird eingepasst, auch um den Preis von
+Randflächen — ein halbierter T-Knochen oder eine angeschnittene Fettkappe macht
+genau den Fehler, den das Bildprogramm beheben soll.
+
+Vorher galt „einpassen statt beschneiden" pauschal. Das kostete bei 10 von 22
+Motiven des Austauschpakets sichtbare Randflächen (sosaties-braai 0.56, braai-
+broodjies und die Iberico-Motive je 0.67), ohne dass dort Anatomie auf dem Spiel
+stand. Bei einer Schüssel Krautsalat schützt die Regel nichts und schadet der Optik.
+
+Praktisch: Der Beschnitt gehört VOR den Edit, nicht danach — dann arbeitet
+Nano-Banana bereits im Zielausschnitt und es entsteht kein zweiter Qualitätsverlust.
 
 ## ⚠️ Zwei Pipeline-Kontexte — Werte NICHT verwechseln (Entscheidung 18.08.2026)
 

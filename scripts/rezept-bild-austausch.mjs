@@ -98,10 +98,15 @@ const HAUSSTIL =
 // der Edit unter keinen Umstaenden veraendern darf. Genau hier sind die bisherigen
 // Bilder gescheitert (Porterhouse ohne T-Knochen, Coleslaw als Nudeln).
 export const JOBS = [
-  // Geschaerft 18.08.2026: Die erste Runde fand Brisket ODER Glas, nie beides.
+  // MUSS entschaerft 18.08.2026 (Uwe-Entscheidung): Das Bourbon-Glas ist
+  // gestrichen. Zwei Suchrunden ueber drei Bibliotheken (35 Kandidaten) fanden
+  // Brisket ODER Glas, nie beides; der einzige mit beidem zeigt eine
+  // Jim-Beam-Flasche und ist als Markenbild gesperrt. Ein Glas per Edit
+  // hinzuzufuegen waere eine Inhaltsaenderung und verletzt BEWAHREN.
+  // Das Pairing traegt jetzt der Text, nicht das Bild.
   { slug: 'bourbon-brisket-pairing',
     suche: ['brisket bourbon glass bbq', 'barbecue plate whiskey glass', 'smoked meat whiskey tasting board'],
-    muss: 'sliced smoked beef brisket with a dark bark and visible smoke ring, beside a glass of bourbon' },
+    muss: 'sliced smoked beef brisket with a dark bark and a clearly visible pink smoke ring' },
   // Geschaerft: Grillmarken gab es, den Klapprost nie — der ist das Kennzeichen.
   { slug: 'braaibroodjies',
     suche: ['grilled cheese sandwich braai toastie', 'hinged grid braai sandwich', 'sandwich grill basket charcoal'],
@@ -130,11 +135,14 @@ export const JOBS = [
     muss: 'a whole fish fully encased in a thick white salt crust, thai street grill setting' },
   { slug: 'sis-kebab-tuerkisch', suche: 'shish kebab skewers turkish',
     muss: 'cubes of meat threaded on flat metal skewers over a mangal grill' },
-  // Geschaerft: Acht Kandidaten, kein einziger mit Aprikosen — dem Kennzeichen
-  // des Gerichts. Deshalb die Aprikose in mehreren Formulierungen nach vorne.
+  // MUSS entschaerft 18.08.2026 (Uwe-Entscheidung): Die Aprikosen sind
+  // gestrichen. Vier Suchbegriffe ueber drei Bibliotheken (40 Kandidaten)
+  // fanden Aprikosen nur als Zutat allein — getrocknete Fruechte, Marillen-
+  // knoedel, Bluetenzweige —, nie am Spiess. Bleibt: marinierter Fleischspiess
+  // ueber Glut. Der Alt-Text darf dann keine Aprikosen behaupten.
   { slug: 'sosaties-braai',
     suche: ['sosatie skewers braai apricot', 'apricot lamb skewer marinated', 'kebab with dried apricots grilled', 'south african braai skewers'],
-    muss: 'marinated skewers alternating meat with dried apricots and onion pieces' },
+    muss: 'marinated cubes of meat threaded on skewers over glowing coals, no vegetables dominating the skewer' },
   { slug: 'tavuk-sis-kebab', suche: 'chicken shish kebab skewers',
     muss: 'cubes of chicken threaded on skewers, not a whole roast chicken' },
   // Geschaerft: Die erste Runde lieferte Rotkohl oder Teller mit Markenflaschen.
@@ -223,17 +231,19 @@ async function grade(buf, profilName, imKalibrierlauf = false) {
 }
 
 /**
- * Zielformat. Doktrin: einpassen statt beschneiden, damit nichts vom Motiv
- * verlorengeht — bei Querformat-Quellen deckt `cover` ohnehin, bei hoch- oder
- * quadratformatigen entstehen Randflaechen im Set-Ton statt eines Anschnitts.
+ * Zielformat nach der Beschnitt-Regel in docs/bildstrategie-grading.md
+ * (Entscheidung 18.08.2026): Beschneiden ist erlaubt, solange das Gericht
+ * vollstaendig im Bild bleibt. Verboten bei Cut-Motiven, wo die Anatomie die
+ * Aussage ist — Knochen, Fettkappe, Anschnittflaeche. Dort wird eingepasst,
+ * auch um den Preis von Randflaechen: Ein halbierter T-Knochen macht genau den
+ * Fehler, den dieses Paket beheben soll.
+ *
+ * `beschnittVerboten` steht am Auftrag, weil es eine fachliche Aussage ueber das
+ * Motiv ist und keine technische ueber die Datei.
  */
-async function rahmen(buf, w, h) {
-  const meta = await sharp(buf).metadata()
-  const quellVerhaeltnis = meta.width / meta.height
-  const zielVerhaeltnis = w / h
-  const passtQuer = quellVerhaeltnis >= zielVerhaeltnis * 0.92
+async function rahmen(buf, w, h, beschnittVerboten = false) {
   const bild = sharp(buf).resize(w, h, {
-    fit: passtQuer ? 'cover' : 'contain',
+    fit: beschnittVerboten ? 'contain' : 'cover',
     position: 'centre',
     background: { r: 26, g: 17, b: 9 },
   })
@@ -290,6 +300,27 @@ function baueprompt(job) {
 // Attributionspflicht — siehe Rechts-Doktrin in public/images/cuts/CREDITS.md.
 
 const KANDIDATEN = join(STAGING, 'kandidaten')
+
+/**
+ * Motive, bei denen Beschnitt verboten ist — Cut-Motive, deren Anatomie die
+ * Aussage traegt (Knochen, Fettkappe, Anschnittflaeche), und ganze Tiere, bei
+ * denen ein Anschnitt Schwanz oder Kopf kostet. Alles andere darf beschnitten
+ * werden, solange das Gericht vollstaendig im Bild bleibt.
+ * Regel: docs/bildstrategie-grading.md, Abschnitt "Beschnitt-Regel".
+ */
+const BESCHNITT_VERBOTEN = new Set([
+  'bourbon-brisket-pairing',   // Rauchring und Anschnittflaeche
+  'chateaubriand-filet',       // Anschnittflaeche, feine Faser
+  'iberico-secreto',           // Marmorierung des flachen Cuts
+  'onglet-hanger-steak',       // grobe Laengsfaser, Anschnitt quer
+  'porterhouse-grill',         // T-Knochen — der ganze Punkt des Motivs
+  'roastbeef-reverse-sear',    // Anschnittflaeche, rosa Kern
+  'thunfisch-steak-grill',     // Anschnitt mit rohem Kern
+  'ca-nuong-bananenblatt',     // ganzer Fisch auf dem Blatt
+  'ganze-makrele-grill',       // ganzer Fisch, Streifenmuster ueber die Laenge
+  'ikan-bakar-singapur',       // ganzer Fisch
+  'pla-pao-salzkruste',        // ganzer Fisch in der Kruste
+])
 
 async function sucheUnsplash(q, n) {
   const k = key('UNSPLASH_ACCESS_KEY')
@@ -463,7 +494,15 @@ async function modusWaehle(ausdruck) {
   const pfad = join(KANDIDATEN, slug, 'kandidaten.json')
   if (!existsSync(pfad)) throw new Error(`Erst suchen: --suche ${slug}`)
   const liste = JSON.parse(await readFile(pfad, 'utf8'))
-  const treffer = liste.find(t => `${t.quelle.toLowerCase()}-${t.id}` === wahl.toLowerCase())
+  // Quelle unabhaengig von Gross-/Kleinschreibung vergleichen, die ID aber
+  // exakt: Unsplash-IDs sind gemischt geschrieben (uKVaDWj7n-A) und enthalten
+  // selbst Bindestriche, deshalb nur am ERSTEN Bindestrich trennen. Ein
+  // pauschales toLowerCase() ueber die ganze Eingabe liess zuvor jede
+  // Unsplash-Auswahl ins Leere laufen.
+  const trenn = wahl.indexOf('-')
+  const wahlQuelle = wahl.slice(0, trenn).toLowerCase()
+  const wahlId = wahl.slice(trenn + 1)
+  const treffer = liste.find(t => t.quelle.toLowerCase() === wahlQuelle && t.id === wahlId)
   if (!treffer) throw new Error(`Kandidat "${wahl}" nicht in der Liste von ${slug}`)
 
   const res = await fetch(treffer.original)
@@ -565,8 +604,12 @@ async function main() {
       }
 
       const gegradet = await grade(editiert, PROFIL)
-      await writeFile(join(ERGEBNIS, `${job.slug}.jpg`), await rahmen(gegradet, 1600, 1000))
-      await writeFile(join(ERGEBNIS, `${job.slug}-hero.jpg`), await rahmen(gegradet, 1920, 1080))
+      // Das gegradete Bild VOR der Rahmung sichern. Ohne das kostet jedes
+      // spaetere Umrahmen einen neuen kostenpflichtigen Edit — beim Wechsel der
+      // Beschnitt-Regel am 18.08.2026 genau so passiert.
+      await writeFile(join(ERGEBNIS, `${job.slug}--roh.jpg`), gegradet)
+      await writeFile(join(ERGEBNIS, `${job.slug}.jpg`), await rahmen(gegradet, 1600, 1000, BESCHNITT_VERBOTEN.has(job.slug)))
+      await writeFile(join(ERGEBNIS, `${job.slug}-hero.jpg`), await rahmen(gegradet, 1920, 1080, BESCHNITT_VERBOTEN.has(job.slug)))
       console.log(c.g('fertig'))
     } catch (e) {
       console.log(c.r(`Fehler: ${e.message}`))

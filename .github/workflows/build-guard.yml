@@ -34,6 +34,12 @@ jobs:
       - name: Build-Guard ausführen
         run: node scripts/build-guard.mjs
 
+      # Frontmatter-Gate (KAN-67). Bewusst als eigener Schritt und NACH dem
+      # Build-Guard: Beide melden auf dasselbe Ticket, aber im Run-Log soll
+      # ablesbar sein, welcher der beiden rot war.
+      - name: Frontmatter validieren
+        run: node scripts/validate-frontmatter.mjs
+
       - name: Bei Defekt → Jira-Ticket (KAN)
         if: failure()
         env:
@@ -42,7 +48,7 @@ jobs:
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           ALERT_SUMMARY: '🔴 Build-Guard: stille Content-Defekte erkannt'
-          ALERT_DESCRIPTION: 'Der Build-Guard hat stille Defekte gefunden (Contentlayer-Probleme oder Tabellen ohne remark-gfm). Run-Log mit Details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_DESCRIPTION: 'Der Build-Guard hat stille Defekte gefunden — entweder Contentlayer-Probleme bzw. Tabellen ohne remark-gfm (scripts/build-guard.mjs) oder ungueltiges Rezept-Frontmatter (scripts/validate-frontmatter.mjs, KAN-67). Welcher der beiden Schritte rot war, steht im Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           ALERT_LABELS: 'ops,ci,content,agent-tech-automation-engineer'
           ALERT_ISSUETYPE: 'Bug'
           ALERT_DEDUP_LABEL: 'ops-buildguard-failed'

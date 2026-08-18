@@ -38,8 +38,12 @@
  *   node scripts/rezept-bild-austausch.mjs --only a,b,c --profil kraeftig
  *   node scripts/rezept-bild-austausch.mjs --dry-run --only x      # Prompt zeigen, nichts senden
  *   node scripts/rezept-bild-austausch.mjs --kalibrier porterhouse-grill
+ *   node scripts/rezept-bild-austausch.mjs --neurahmen a,b   # nur neu rahmen
  *
- * Nur --only und --kalibrier kosten fal.ai-Guthaben; Suche und Auswahl sind frei.
+ * Nur --only und --kalibrier kosten fal.ai-Guthaben; Suche, Auswahl und
+ * --neurahmen sind frei. --neurahmen arbeitet auf dem gesicherten <slug>--roh.jpg
+ * und ist der Weg, eine geaenderte Beschnitt-Entscheidung umzusetzen, ohne den
+ * Edit noch einmal zu bezahlen.
  *
  * ACHTUNG: Jeder Lauf ohne --dry-run kostet fal.ai-Guthaben.
  *
@@ -69,6 +73,8 @@ const KALIBRIER = arg('--kalibrier')
 const SUCHE = process.argv.includes('--suche') ? (arg('--suche') || '').replace(/^--.*/, '') : null
 const WAEHLE = arg('--waehle')
 const PRO_QUELLE = parseInt(arg('--pro-quelle') || '4', 10)
+// --neurahmen: Rahmung aus dem gesicherten Rohbild neu erzeugen, ohne fal-Aufruf.
+const NEURAHMEN = process.argv.includes('--neurahmen') ? (arg('--neurahmen') || '').replace(/^--.*/, '') : null
 
 // Keys aus der Umgebung, sonst aus .env.local (dotenv-Quirk umgehen).
 const envRoh = existsSync(join(ROOT, '.env.local'))
@@ -320,6 +326,12 @@ const BESCHNITT_VERBOTEN = new Set([
   'ganze-makrele-grill',       // ganzer Fisch, Streifenmuster ueber die Laenge
   'ikan-bakar-singapur',       // ganzer Fisch
   'pla-pao-salzkruste',        // ganzer Fisch in der Kruste
+  // Nachgetragen 18.08.2026 nach Sichtung des ersten Beschnitt-Laufs: Hier war
+  // Beschnitt erlaubt, das Ergebnis verletzte aber die Regel "Gericht
+  // vollstaendig im Bild".
+  'sosaties-braai',            // Spiess-Enden liefen links und rechts aus dem Bild
+  'wagyu-burger',              // Bun unten angeschnitten
+  'thit-nuong-vietnam',        // Fleisch lief unten aus dem Bild
 ])
 
 async function sucheUnsplash(q, n) {
@@ -538,6 +550,23 @@ async function main() {
   console.log(c.b('\n  Rezeptbild-Austausch — 22 Falsch-Motive\n'))
 
   if (WAEHLE) { await modusWaehle(WAEHLE); return }
+
+  if (NEURAHMEN !== null) {
+    // Rahmung aus dem gesicherten Rohbild neu erzeugen — ohne fal, ohne Kosten.
+    // Dafuer liegt <slug>--roh.jpg im Ergebnisordner.
+    const slugs = NEURAHMEN ? NEURAHMEN.split(',').map(s => s.trim()) : JOBS.map(j => j.slug)
+    for (const slug of slugs) {
+      const roh = join(ERGEBNIS, `${slug}--roh.jpg`)
+      if (!existsSync(roh)) { console.log(`  ${c.y('·')} ${slug} — kein Rohbild, Neurahmen nicht moeglich`); continue }
+      const buf = await readFile(roh)
+      const verboten = BESCHNITT_VERBOTEN.has(slug)
+      await writeFile(join(ERGEBNIS, `${slug}.jpg`), await rahmen(buf, 1600, 1000, verboten))
+      await writeFile(join(ERGEBNIS, `${slug}-hero.jpg`), await rahmen(buf, 1920, 1080, verboten))
+      console.log(`  ${c.g('✓')} ${slug.padEnd(28)} ${verboten ? 'eingepasst' : 'beschnitten'}`)
+    }
+    console.log(c.d('\n  Ohne fal-Aufruf, ohne Kosten.\n'))
+    return
+  }
 
   if (SUCHE !== null) {
     const zuSuchen = SUCHE ? JOBS.filter(j => SUCHE.split(',').map(s => s.trim()).includes(j.slug)) : JOBS

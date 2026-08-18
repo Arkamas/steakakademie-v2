@@ -6,8 +6,12 @@
  *   echtes Referenzfoto (Unsplash)
  *     → fal-Storage-Upload
  *     → fal-ai/nano-banana-pro/edit (Prompt: erst BEWAHREN, dann AENDERN)
- *     → deterministisches Grading mit sharp (NICHT generativ)
+ *     → deterministisches Grading mit sharp NACH dem Edit (NICHT generativ,
+ *       nie vor dem Edit — das verfaelscht die Quelle, die BEWAHREN schuetzt)
  *     → 16:10 Hauptbild + 16:9 Hero
+ *
+ * Grading-Profil: immer "kraeftig", eingefroren am 18.08.2026. Das flau-Profil
+ * gehoert zur Cut-Pipeline und ist hier gesperrt.
  *
  * Nichts wird nach public/ geschrieben. Ergebnisse landen im Staging-Ordner
  * bild-austausch/ und gehen erst nach fachlicher Abnahme ins Repo — dieselbe
@@ -59,7 +63,7 @@ const CHECK = process.argv.includes('--check')
 const arg = (name) => process.argv.includes(name)
   ? (process.argv[process.argv.indexOf(name) + 1] || '').trim() : null
 const ONLY = arg('--only') ? arg('--only').split(',').map(s => s.trim()).filter(Boolean) : null
-const PROFIL = arg('--profil') || 'flau'
+const PROFIL = arg('--profil') || 'kraeftig'
 const KALIBRIER = arg('--kalibrier')
 // --suche ohne Wert = alle 22; mit Wert = nur diese Slugs.
 const SUCHE = process.argv.includes('--suche') ? (arg('--suche') || '').replace(/^--.*/, '') : null
@@ -148,10 +152,29 @@ export const JOBS = [
 //   -brightness-contrast BxC  -> linear(1 + C/100, (B/100)*255 - (C/100)*128)
 //   -level 2%,99%,1.03        -> gamma(1.03)
 //   -unsharp 0x1+m1+0.02      -> sharpen({ sigma: 1, m1, m2 })
+// Eingefroren am 18.08.2026 nach dem Kalibrierlauf an texas-coleslaw.
+// Die Bandbreiten aus der Doku sind hier bewusst auf feste Werte festgelegt —
+// "deterministisch graden" heisst, dass zwei Laeufe dasselbe Bild ergeben.
 const PROFILE = {
-  flau:      { S: 119, B: -3, C: 14, gamma: 1.03, m1: 0.5 },
+  // Rezept-Pipeline: das einzige hier zulaessige Profil (siehe PROFIL_GESPERRT).
   kraeftig:  { S: 105, B: -2, C: 7,  gamma: 1.0,  m1: 0.5 },
+  // Cut-Pipeline (Rohfoto ohne Edit). Steht nur fuer den Kalibriervergleich hier
+  // und ist fuer den Regellauf gesperrt.
+  flau:      { S: 119, B: -3, C: 14, gamma: 1.03, m1: 0.5 },
 }
+
+/**
+ * docs/bildstrategie-grading.md, "Zwei Pipeline-Kontexte" (Entscheidung
+ * 18.08.2026): In der Rezept-Pipeline gilt IMMER das milde kraeftig-Profil nach
+ * dem Edit. Das flau-Profil ist fuer Rohfotos der Cut-Pipeline kalibriert und
+ * zieht nach einem Nano-Banana-Edit rund 19 % Helligkeit ab — der Hintergrund
+ * saeuft ab. Deshalb hier gesperrt statt nur abgeraten.
+ *
+ * Graden VOR dem Edit ist ebenfalls verboten: Es verfaelscht die Quelle, die der
+ * BEWAHREN-Teil des Prompts gerade schuetzen soll. Das Skript gradet daher
+ * ausschliesslich das Edit-Ergebnis.
+ */
+const PROFIL_GESPERRT = ['flau']
 
 function linearAB(B, C) {
   return { a: 1 + C / 100, b: (B / 100) * 255 - (C / 100) * 128 }
@@ -170,9 +193,15 @@ function vignetteSvg(w, h) {
   )
 }
 
-async function grade(buf, profilName) {
+async function grade(buf, profilName, imKalibrierlauf = false) {
   const p = PROFILE[profilName]
   if (!p) throw new Error(`Unbekanntes Grading-Profil: ${profilName}`)
+  if (PROFIL_GESPERRT.includes(profilName) && !imKalibrierlauf) {
+    throw new Error(
+      `Profil "${profilName}" ist in der Rezept-Pipeline gesperrt. ` +
+      `Nach dem Nano-Banana-Edit gilt immer "kraeftig" — siehe ` +
+      `docs/bildstrategie-grading.md, Abschnitt "Zwei Pipeline-Kontexte".`)
+  }
   const { a, b } = linearAB(p.B, p.C)
   return sharp(buf)
     .modulate({ saturation: p.S / 100, hue: -3 })
@@ -464,6 +493,17 @@ async function main() {
 
   if (!DRY && !FAL_KEY) { console.error(c.r('  FAL_KEY fehlt.')); process.exit(1) }
 
+  // Profilpruefung VOR dem ersten Edit: Die Sperre in grade() greift sonst erst
+  // nach dem kostenpflichtigen fal-Aufruf — der Lauf haette dann Guthaben
+  // verbraucht, nur um am Grading zu scheitern.
+  if (!KALIBRIER && PROFIL_GESPERRT.includes(PROFIL)) {
+    console.error(c.r(`  Profil "${PROFIL}" ist in der Rezept-Pipeline gesperrt.`))
+    console.error(c.d(`  Nach dem Nano-Banana-Edit gilt immer "kraeftig" — siehe`))
+    console.error(c.d(`  docs/bildstrategie-grading.md, Abschnitt "Zwei Pipeline-Kontexte".\n`))
+    process.exit(1)
+  }
+  if (!PROFILE[PROFIL]) { console.error(c.r(`  Unbekanntes Profil: ${PROFIL}`)); process.exit(1) }
+
   for (const job of jobs) {
     const quelle = join(QUELLEN, `${job.slug}.jpg`)
     const prompt = baueprompt(job)
@@ -489,7 +529,9 @@ async function main() {
         // damit die sharp-Werte gegen den Soll-Look eingefroren werden koennen.
         await writeFile(join(ERGEBNIS, `${job.slug}--0-ungegradet.jpg`), await rahmen(editiert, 1600, 1000))
         for (const p of Object.keys(PROFILE)) {
-          await writeFile(join(ERGEBNIS, `${job.slug}--${p}.jpg`), await rahmen(await grade(editiert, p), 1600, 1000))
+          // imKalibrierlauf: Hier darf auch das gesperrte Profil gerendert werden,
+          // sonst laesst sich die Sperre nicht mehr gegen den Soll-Look belegen.
+          await writeFile(join(ERGEBNIS, `${job.slug}--${p}.jpg`), await rahmen(await grade(editiert, p, true), 1600, 1000))
         }
         console.log(c.g('Kalibrierleiter geschrieben'))
         continue

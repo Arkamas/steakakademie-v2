@@ -32,4 +32,23 @@
 
 **Review-Schritt:** Vor Commit alle 22 als Galerie an Uwe zur fachlichen Abnahme (wie beim Cut-Atlas-Verfahren).
 
+## Ergebnis der Abnahme (18.08.2026)
+
+**21 von 22 abgenommen** und übernommen — Bilder in `public/images/rezepte/`,
+Frontmatter mit `imageSource`/`imageAI`/neuem `imageAlt`, Provenienz in
+`public/images/rezepte/CREDITS.md`.
+
+**Offen: `cedar-plank-lachs`.** Bleibt auf Entscheidung von Uwe beim bisherigen
+Bild. Zwei Kandidatenrunden lieferten entweder rohen Lachs auf unverkohlter
+Planke oder eine von der Glut rotgetränkte Aufnahme; eine Farbkorrektur half
+nicht, weil die blassen Filets bereits in der Quelle blass sind. Der Audit-Befund
+„Keine Zedernplanke" bleibt damit bestehen. Nächster Ansatz, falls wieder
+aufgenommen: gezielt nach `cooked salmon fillet charred cedar plank` suchen —
+eine gegarte Lachsseite ist unverwechselbar orange und erfüllt die verkohlte
+Planke aus dem MUSS gleich mit.
+
+**Zwei Motive mit entschärftem MUSS** (Begründung am jeweiligen JOBS-Eintrag in
+`scripts/rezept-bild-austausch.mjs`): `bourbon-brisket-pairing` ohne Bourbonglas,
+`sosaties-braai` ohne Aprikosen. Die Alt-Texte behaupten beides entsprechend nicht.
+
 **Achtung Altlast (abgeglichen 18.08.2026):** Im images-Ordner lagen 14 geänderte Rezept-JPGs. Davon sind **13 die verworfenen KI-Ersatzbilder** (Bildstrategie 14.08.) — sie bleiben uncommittet. Das 14. war **kein** Ausschuss: `picanha-churrasco` war ein echtes Foto, das das bis dahin ausgelieferte KI-Bild ersetzt, welches gar keine Picanha zeigte (keine Fettkappe, falsche Form). Es ist als `2d1a48f` committet und erledigt damit Abschnitt D des Audits. Nebenbefund: Das Audit hat den Plattenstand gescannt, nicht HEAD — daher stand `picanha-churrasco` dort unter „vermutlich echtes Foto".

@@ -18,10 +18,22 @@ interface CutAtlasClientProps {
   recipeMap: Record<string, CutRecipeRef[]>;
 }
 
-const SPECIES_TABS: { id: Species; label: string }[] = [
+/**
+ * Schwein ist vorübergehend ausgeblendet — analog zum Cut-Generator. Grund: die
+ * Schwein-Cut-Fotos stammen aus Händler-Produktbildern und sind nach der
+ * Rechts-Doktrin (public/images/cuts/CREDITS.md) nicht verwendbar. Sobald
+ * lizenzsaubere Fotos vorliegen, hier und in CutGenerator.tsx auf `true` setzen.
+ */
+const SHOW_PORK = false;
+
+const ALL_SPECIES_TABS: { id: Species; label: string }[] = [
   { id: 'rind', label: '🐄 Rind' },
   { id: 'schwein', label: '🐖 Schwein' },
 ];
+
+// Erst typisieren, dann filtern: .filter() direkt auf dem Array-Literal laesst
+// TypeScript 'id' zu string verbreitern statt zu Species -> TS2322 im Build.
+const SPECIES_TABS = ALL_SPECIES_TABS.filter((t) => SHOW_PORK || t.id !== 'schwein');
 
 // Zerlegekarte (BullButcherMap) → Katalog. Zonen mit exakt passendem Cut öffnen
 // dessen Detail (Raster filtert auf sein Teilstück); Regions-Zonen filtern nur.
@@ -162,8 +174,8 @@ export default function CutAtlasClient({ bySpecies, recipeMap }: CutAtlasClientP
 
   return (
     <div>
-      {/* ── Spezies-Umschalter ─────────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 mb-6">
+      {/* ── Spezies-Umschalter — entfällt bei nur einer Tierart ────────────── */}
+      <div className={`flex items-center gap-2 mb-6 ${SPECIES_TABS.length < 2 ? 'hidden' : ''}`}>
         {SPECIES_TABS.map((t) => (
           <button
             key={t.id}

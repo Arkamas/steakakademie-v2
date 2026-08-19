@@ -22,10 +22,22 @@ interface CutGeneratorProps {
   recipeMap: Record<string, CutRecipeRef[]>;
 }
 
-const SPECIES_TABS: { id: Species; label: string }[] = [
+/**
+ * Schwein ist vorübergehend ausgeblendet: Die Cut-Fotos für Schwein stammen aus
+ * Händler-Produktbildern und sind nach der Rechts-Doktrin (siehe
+ * public/images/cuts/CREDITS.md) nicht verwendbar. Sobald lizenzsaubere Fotos
+ * vorliegen, genügt hier `true` — Katalog, Bewertung und Deep-Links bleiben intakt.
+ */
+const SHOW_PORK = false;
+
+const ALL_SPECIES_TABS: { id: Species; label: string }[] = [
   { id: 'rind', label: '🐄 Rind' },
   { id: 'schwein', label: '🐖 Schwein' },
 ];
+
+// Erst typisieren, dann filtern: .filter() direkt auf dem Array-Literal laesst
+// TypeScript 'id' zu string verbreitern statt zu Species -> TS2322 im Build.
+const SPECIES_TABS = ALL_SPECIES_TABS.filter((t) => SHOW_PORK || t.id !== 'schwein');
 
 type Budget = 'spar' | 'mittel' | 'premium';
 type Profile = 'zart' | 'marmoriert' | 'aromatisch' | 'mager';
@@ -81,10 +93,12 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
     const params = new URLSearchParams(window.location.search);
     const id = params.get('cut');
     if (!id) return;
-    const inPork = bySpecies.schwein.some((c) => c.id === id);
+    const inPork = SHOW_PORK && bySpecies.schwein.some((c) => c.id === id);
     const inBeef = bySpecies.rind.some((c) => c.id === id);
     if (inPork) setSpecies('schwein');
     if (inPork || inBeef) setResultId(id);
+    // Alte geteilte Links auf Schwein-Cuts landen still auf dem Rind-Quiz,
+    // statt auf eine leere Ansicht zu laufen.
   }, [bySpecies]);
 
   const switchSpecies = (s: Species) => {
@@ -242,8 +256,8 @@ export default function CutGenerator({ bySpecies, recipeMap }: CutGeneratorProps
   const current = STEPS[step];
   return (
     <div className="border border-brand-gold/20 bg-surface-dark p-6 sm:p-10">
-      {/* Spezies-Umschalter */}
-      <div className="flex items-center gap-2 mb-7">
+      {/* Spezies-Umschalter — entfällt, solange nur eine Tierart verfügbar ist */}
+      <div className={`flex items-center gap-2 mb-7 ${SPECIES_TABS.length < 2 ? 'hidden' : ''}`}>
         {SPECIES_TABS.map((t) => (
           <button
             key={t.id}

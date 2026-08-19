@@ -333,7 +333,7 @@ export default async function ErsteKundenSprintPage() {
                       inspiriert, das du hier kaufst.
                     </p>
                     <p>
-                      Ich bin zertifizierter Marketing-Manager. Ich habe 20 Jahre als Personal Trainer
+                      Ich bin zertifizierter Marketing-Manager. Ich habe 22 Jahre als Sport- und Gymnastiklehrer
                       gearbeitet. Und ich baue steakakademie.de komplett alleine — ohne Agentur,
                       ohne Investoren. Ich weiß wie sich die Stille nach der Gründung anfühlt.
                       Ich weiß auch wie man sie beendet.

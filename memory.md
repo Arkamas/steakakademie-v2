@@ -328,3 +328,19 @@ Unterseiten-Durchgang steht aus (Uwe war noch auf keiner); Mobil-Check offen (Br
 **ENTSCHIEDEN (Uwe, 16.08.2026) — PREIS Grillmeister-Diplom:** regulaer **149 EUR**, Vorverkauf **99 EUR Gruendungs-Preis fuer die ersten 100** ("danach 149"). Uwe folgt der Argumentation: Kategorie ohne Vergleich wird positioniert statt verteidigt; Praesenz-Grillkurs kostet 100-200 EUR fuer EINEN Tag ohne Wiederholbarkeit/Zertifikat; bei Geschenken ist billig ein Makel; Gruendungs-Preis loest zugleich das fehlende Social Proof (F4) und schafft Dringlichkeit im Weihnachtsfenster. Stufe 1 (Bronze) bleibt kostenlos = Trichter; Stufe 2-5 = Bezahlprodukt (Text + Video). BBQ-Grundkurs geht darin auf, entfaellt als eigenes Produkt.
 
 **Avatar-Video-Konzept (Briefing: docs/briefing-avatar-marco-video.md, 16.08.):** EMPFEHLUNG = **kein sprechender Kopf**. Marco = Stimme (Piper, fest gesperrt) + wiedererkennbare Figur (am Grill, von hinten/halbseitlich, arbeitend — `marco-back.jpg` ist bereits diese Bildidee) + Haende-Nahaufnahmen. Gruende: Handwerk lehrt statt Gesicht (Mikasa-Prinzip), lippensynchrone KI-Avatare sind 2026 Billig-Signal + kostenpflichtig, rechtlich schlanker. Zu produzieren: **Charakter-LoRA `FAL_LORA_MARCO`** aus bestehender Referenz authors/marco-richter.jpg (Aussehen ist seit Monaten oeffentlich, darf sich NICHT aendern) — Verfahren analog train-pork-lora.yml, ca. 1 Tag, gehoert in Woche 1. NUR Marco; Jonas/Elena erst nach Stufe 1. Uwe-Gates: fal.ai-Kosten-Go (Trainingsset+LoRA), Stimm-Abnahme, Charakter-Abnahme (5-Szenen-Test).
+
+## 19. August 2026 — E-Mail-Chaos: vier Adressen im Code, eine existiert (manuell)
+
+**Was passiert ist:**
+- Im Code standen vier Absender-/Kontaktadressen (`info@`, `masterclass@`, `inspiration@`, `pitmaster@`) — eine Gmail-Beweissuche zeigte: **nur `pitmaster@` empfängt nachweislich** (~200 Threads). Für die anderen drei gab es keinen einzigen Zustellnachweis und keine Cloudflare-Routing-Verifizierung. Sie waren nie angelegt worden, standen aber 22-mal im Code.
+- Parallel dazu: Das Kontaktformular **simulierte** den Versand nur (`setTimeout` + Erfolgsmeldung, kein fetch). Jede Anfrage seit dem 7. Juli lief ins Leere — und der Nutzer bekam trotzdem „Wir melden uns innerhalb von 24–48 Stunden".
+- Beinahe-Folgefehler: Der Fix hätte fast einen **neuen** Zustelldienst (Resend/SMTP) eingeführt — dabei lief Loops längst als Transaktions-Versender (`/api/widerruf`). Ein neuer Dienst hätte einen neuen Auftragsverarbeiter, AVV und Datenschutz-Absatz bedeutet. Für nichts.
+
+**Lektion für Gründer — E-Mail-Infrastruktur richtig aufsetzen:**
+1. **Eine Adresse, bis es weh tut.** Starte mit genau einem Postfach, das nachweislich funktioniert und im Impressum steht. Sortierung macht ein Betreff-Präfix (`[Presse]`, `[Kooperation]`) + Mail-Filter — nicht drei weitere Postfächer, die niemand angelegt hat.
+2. **Eine Adresse existiert erst, wenn eine Testmail von außen ankommt.** Nicht wenn sie im Code steht, nicht wenn sie „eingerichtet sein müsste". Beweis vor Behauptung — dieselbe Doktrin wie bei Bildquellen.
+3. **Keine Erfolgsmeldung ohne Zustellnachweis.** Ein Formular darf „gesendet" erst anzeigen, wenn die API `ok` zurückgibt. Zusätzlich jede Nachricht **vor** dem Mailversand in die Datenbank schreiben — dann verliert selbst ein Mail-Ausfall keine Anfrage.
+4. **Erst Inventur, dann neuer Dienst.** Vor jedem „wir brauchen Tool X" prüfen, was schon da ist (`grep` nach API-Endpunkten, ENV-Keys zählen). Jeder zusätzliche Dienst ist ein Auftragsverarbeiter mehr: AVV, Datenschutzerklärung, ein weiterer Login, ein weiterer Ausfallpunkt.
+5. **Adressen gehören in EINE Konstante, nicht 22-mal verstreut.** Wäre `KONTAKT_EMAIL` zentral definiert gewesen, hätte der Fehler eine Zeile betroffen statt drei Dateien und zehn Wochen.
+
+**Verbleibende Altlast:** `info@`/`masterclass@`/`inspiration@` stehen noch im Code und müssen auf `pitmaster@` vereinheitlicht oder in Cloudflare wirklich angelegt werden.

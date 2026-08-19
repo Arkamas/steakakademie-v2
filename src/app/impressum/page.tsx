@@ -105,13 +105,11 @@ export default function ImpressumPage() {
 
             <section>
               <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3">
-                Online-Streitbeilegung (OS-Plattform)
+                Verbraucherstreitbeilegung
               </h2>
               <p className="mb-3">
-                Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:{' '}
-                <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="text-brand-fire hover:underline">
-                  ec.europa.eu/consumers/odr
-                </a>
+                Die frühere EU-Plattform zur Online-Streitbeilegung (OS-Plattform) wurde von der
+                Europäischen Kommission zum 20. Juli 2025 eingestellt.
               </p>
               <p>
                 Unsere E-Mail-Adresse lautet: pitmaster@steakakademie.de

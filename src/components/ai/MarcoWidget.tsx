@@ -107,14 +107,14 @@ export default function MarcoWidget() {
             exit={{ opacity: 0 }}
             className="rounded-2xl border border-brand-gold/40 bg-text-primary px-4 py-2 text-xs text-brand-gold shadow-xl font-sans cursor-pointer hover:border-brand-gold/70 transition-colors"
           >
-            Frag Marco — deinen BBQ-Guide 🥩
+            Frag Marco — deinen KI-BBQ-Guide 🥩
           </motion.button>
         )}
 
         <button
           onClick={handleToggle}
           className="relative focus:outline-none"
-          aria-label="BBQ-Guide Marco öffnen"
+          aria-label="KI-Assistent Marco öffnen — Chatbot, keine echte Person"
           aria-expanded={open}
         >
           {/* X-Icon-Overlay beim Öffnen */}
@@ -133,6 +133,12 @@ export default function MarcoWidget() {
             )}
           </AnimatePresence>
 
+          <span
+            aria-hidden
+            className="absolute -top-1 -right-1 z-20 rounded border border-brand-gold/50 bg-[#0D0D0D]/85 px-1 py-px text-[9px] font-sans font-bold tracking-wide text-brand-gold"
+          >
+            KI
+          </span>
           <MarcoAvatar
             state={avatarState}
             onGreeted={handleAvatarGreeted}

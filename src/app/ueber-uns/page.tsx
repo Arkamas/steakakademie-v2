@@ -6,14 +6,27 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Über mich — Uwe Yendell | steakakademie.de',
+  // Der erste Eindruck in der Suchergebnisliste ist die Herkunft, nicht der
+  // Abschluss. Titel und Beschreibung folgen der Reihenfolge der Seite selbst:
+  // erst die Praxis, dann der Nachweis.
+  title: 'Uwe Yendell — 50 Jahre am Feuer | steakakademie.de',
   description:
-    'Profi-Koch, Marketing-Manager, KI-Pionier. Wer hinter steakakademie.de und Das Ehrliche System steckt — und warum das relevant ist.',
+    'Mit sieben bei der Oma angefangen, später Profi-Koch und Weber-zertifizierter Grillmeister. Wer hinter steakakademie.de steckt — und warum hier Technik vor Budget steht.',
+  alternates: { canonical: 'https://steakakademie.de/ueber-uns' },
   openGraph: {
-    title: 'Über mich — Uwe Yendell',
+    title: 'Uwe Yendell — 50 Jahre am Feuer',
     description:
-      'Profi-Koch, Marketing-Manager, KI-Pionier. Wer hinter steakakademie.de steckt.',
+      'Vom Kochen für die Gruppe zum Weber-zertifizierten Grillmeister. Warum auf steakakademie.de Technik vor Budget steht.',
+    url: 'https://steakakademie.de/ueber-uns',
+    type: 'profile',
     images: [{ url: '/images/uwe-yendell.png', width: 800, height: 800 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Uwe Yendell — 50 Jahre am Feuer',
+    description:
+      'Vom Kochen für die Gruppe zum Weber-zertifizierten Grillmeister. Warum hier Technik vor Budget steht.',
+    images: ['/images/uwe-yendell.png'],
   },
 };
 
@@ -22,9 +35,20 @@ const jsonLd = {
   '@type': 'Person',
   name: 'Uwe Yendell',
   jobTitle: 'Weber-zertifizierter Grillmeister, Koch, Marketing-Manager',
+  hasOccupation: {
+    '@type': 'Occupation',
+    name: 'Geschäftsführer und Grillmeister, Genusskunst GmbH',
+    occupationalCategory: 'Gastronomie / Kulinarische Weiterbildung',
+  },
   url: 'https://steakakademie.de/ueber-uns',
   image: 'https://steakakademie.de/images/uwe-yendell.png',
   email: 'info@steakakademie.de',
+  description:
+    'Gründer der Steakakademie. Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister, von 2013 bis 2021 Kursleiter an der Weber Grillakademie seiner eigenen Eventküche Genusskunst GmbH. Kocht seit dem siebten Lebensjahr, seit dem Alter von vierzehn für Gruppen.',
+  knowsAbout: [
+    'Grillen', 'Barbecue', 'Fleischkunde', 'Cuts', 'Kerntemperaturen',
+    'Reverse Sear', 'Low and Slow', 'Dry Aging',
+  ],
   address: { '@type': 'PostalAddress', addressLocality: 'Wuppertal', addressCountry: 'DE' },
   sameAs: [
     'https://www.instagram.com/steakakademie',
@@ -40,7 +64,7 @@ const KOMPETENZEN = [
     kicker: 'Der Koch',
     titel: 'Weber-zertifizierter Grillmeister',
     text:
-      'Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister. 8 Jahre Kursleiter an einer offiziellen Weber Grillakademie — mit allen Klassen, die das Programm umfasst. Handwerk, das ich selbst abgenommen bekommen habe, bevor ich es weitergegeben habe.',
+      'Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister. Von 2013 bis 2021 Kursleiter an der Weber Grillakademie meiner eigenen Eventküche — mit allen Klassen, die das Programm umfasst. Handwerk, das ich selbst abgenommen bekommen habe, bevor ich es weitergegeben habe.',
   },
   {
     kicker: 'Der Marketing-Manager',
@@ -142,7 +166,7 @@ export default function UeberUnsPage() {
                       border:     '1px solid rgba(200,136,42,0.18)',
                     }}
                   >
-                    8 Jahre Weber Grillakademie
+                    Weber Grillakademie 2013–2021
                   </span>
                 </div>
                 <p className="font-body text-base text-text-secondary leading-relaxed max-w-2xl">
@@ -171,6 +195,65 @@ export default function UeberUnsPage() {
             </p>
             <p className="font-body text-base text-text-secondary leading-relaxed">
               Beides ist wichtig.
+            </p>
+          </section>
+
+          {/* Herkunft — steht bewusst VOR den Kompetenz-Kacheln.
+              Die Kacheln nennen Abschluesse. Dieser Abschnitt erklaert, was vor den
+              Abschluessen da war. Umgekehrt liest es sich wie ein Lebenslauf,
+              so herum wie eine Herleitung. */}
+          <section className="max-w-2xl">
+            <h2 className="font-serif text-2xl font-bold text-text-light mb-5">
+              Angefangen habe ich nicht in einer Küche.
+            </h2>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              Angefangen habe ich mit sieben, bei meiner Oma. Das ist kein Kindheitsbild
+              fürs Album, sondern der Ort, an dem die Hand gelernt hat, was das Auge später
+              beurteilt: wann Fett klar wird, wann Fleisch aufhört nachzugeben, wann es zu
+              spät ist.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              Mit vierzehn habe ich angefangen, für eine Gruppe zu kochen. Ich lebte damals
+              in einem Jugendwohnhaus, von dreizehn bis achtzehn. Kochen war dort keine
+              Freizeitbeschäftigung, sondern eine Aufgabe im Haushalt vieler Menschen — mit
+              dem, was da war, für die, die Hunger hatten, zu einer festen Zeit. Wer so
+              anfängt, lernt zuerst Planung und Verlässlichkeit und erst danach Geschmack.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              Gegrillt habe ich immer. Und ich war der, der etwas anderes mitbrachte.
+              Während die anderen Würstchen und Schweinenacken auflegten, kamen bei mir
+              Fische auf den Rost, Kaninchen, Wildfleisch. Nicht um aufzufallen, sondern
+              weil mich interessierte, was diese Stücke brauchen — und weil sie oft das
+              waren, was verfügbar und bezahlbar war. Genau daher stammt das, was auf
+              dieser Seite{' '}
+              <Link href="/cuts" className="underline" style={{ color: '#C8882A' }}>
+                Cut-Kunde
+              </Link>{' '}
+              heißt: nicht aus einem Katalog, sondern aus dem Umgang mit Fleisch, das
+              keiner sonst anfassen wollte.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              Danach kam das Kochen für Gruppen unter wechselnden Bedingungen. Als
+              Jugendbetreuer in AWO-Feriencamps. Auf Plattbodenschiffen in den Niederlanden,
+              auf Reisen, die ich selbst veranstaltet habe — Kombüse statt Küche, Wetter
+              statt Wandthermometer, dreißig Leute, die pünktlich essen wollen. Wer so
+              kocht, kann eine Methode nicht auswendig lernen. Er muss verstehen, warum sie
+              funktioniert, damit er sie umbauen kann, wenn die Umstände sich ändern.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+              Die Ausbildung zum Koch kam danach. Dann die Jahre als Mietkoch, dann die
+              Weber-Grillmeister-Ausbildung und die Kursleitung an der Weber Grillakademie
+              meiner eigenen Eventküche. Die Zeugnisse liegen in der richtigen Reihenfolge — nur nicht
+              in der, die man erwartet. Erst die Praxis, dann der Nachweis.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed">
+              <strong className="text-text-light">
+                Deshalb steht auf dieser Plattform Technik vor Budget.
+              </strong>{' '}
+              Nicht als Verkaufsargument, sondern weil ich es nie anders kennengelernt habe.
+              Ein Nacken, richtig behandelt, schlägt ein schlecht gegrilltes Filet. Das ist
+              keine Meinung, das ist die Erfahrung von fünfzig Jahren am Feuer — und es ist
+              der Grund, warum es diese Seite gibt.
             </p>
           </section>
 
@@ -222,8 +305,9 @@ export default function UeberUnsPage() {
               zurückbekommen.
             </p>
             <p className="font-body text-base text-text-secondary leading-relaxed mb-6">
-              <strong className="text-text-light">Genusskunst</strong> — meine Eventküche,
-              in der ich 8 Jahre lang eine offizielle Weber Grillakademie betrieben habe.
+              <strong className="text-text-light">Genusskunst</strong> — meine Eventküche.
+              Von 2013 bis 2021 Geschäftsführer der Genusskunst GmbH — meiner Eventküche
+              mit angeschlossener Weber Grillakademie.
               Ich habe dort alle Grill-Kurs-Klassen unterrichtet — vom Einsteigerkurs bis zu
               den fortgeschrittenen Programmen. Dafür habe ich die Weber-Grillmeister-Ausbildung
               selbst absolviert und abgeschlossen. Das war echtes Handwerk, echte Verantwortung,

@@ -15,6 +15,7 @@ keine Pflichtangabe. Einstufung je Quelle: docs/bildquellen-whitelist.md.
 
 | Slug | Quelle | Fotograf | Foto-ID | Abnahme |
 |------|--------|----------|---------|---------|
+| cedar-plank-lachs | Pexels | A D R I A N A | 37245150 | 19.08.2026 |
 | bourbon-brisket-pairing | Pexels | Hayden Walker | 9397270 | 18.08.2026 |
 | braaibroodjies | Unsplash | Erik Mclean | uKVaDWj7n-A | 18.08.2026 |
 | bun-cha-hanoi | Pexels | Markus Winkler | 3858270 | 18.08.2026 |
@@ -37,12 +38,14 @@ keine Pflichtangabe. Einstufung je Quelle: docs/bildquellen-whitelist.md.
 | roastbeef-reverse-sear | Pexels | Regina Tommasi | 30221650 | 18.08.2026 |
 | wagyu-burger | Pexels | Philippe Alamazani | 27469753 | 18.08.2026 |
 
-## Nicht ausgetauscht
+## Offener Befund
 
-- `cedar-plank-lachs` — Entscheidung vom 18.08.2026: bleibt beim bisherigen
-  Bild. Die gefundenen Kandidaten zeigten entweder rohen Lachs auf unverkohlter
-  Planke oder waren von der Glut rotgetränkt. Der Befund aus dem Audit
-  ("keine Zedernplanke") bleibt damit offen.
+- `cedar-plank-lachs` — Bild am 19.08.2026 ersetzt, der Audit-Befund
+  ("keine Zedernplanke") bleibt aber **offen**. Vier Suchläufe über drei
+  Bibliotheken fanden kein Foto von Lachs auf sichtbarer Zedernplanke. Das
+  gewählte Bild zeigt rohen Lachs auf einem Holzbrett; der Alt-Text behauptet
+  entsprechend keine Zedernplanke. Beschaffung eines passenden Motivs per
+  Stock-Einzelkauf oder Eigenfoto: KAN-78.
 
 ## Übriger Bestand
 

@@ -36,11 +36,21 @@ const DRY = process.argv.includes('--dry-run')
 const c = { g: s => `\x1b[32m${s}\x1b[0m`, y: s => `\x1b[33m${s}\x1b[0m`, r: s => `\x1b[31m${s}\x1b[0m`, d: s => `\x1b[2m${s}\x1b[0m` }
 
 /**
- * Abgenommen am 18.08.2026. cedar-plank-lachs fehlt bewusst: Uwe hat entschieden,
- * dort beim bisherigen Bild zu bleiben — der Austausch bleibt fuer dieses eine
- * Rezept offen (siehe docs/bildbrief-22-austausch.md).
+ * Abgenommen am 18.08.2026, cedar-plank-lachs nachtraeglich am 19.08.2026.
+ *
+ * Zum Alt-Text von cedar-plank-lachs: Er nennt bewusst ein "Holzbrett" und
+ * keine Zedernplanke. Die Quelle zeigt ein Bambus-Schneidebrett; welche Holzart
+ * nach dem Edit zu sehen ist, laesst sich nicht belegen. Ein Alt-Text, der eine
+ * Zedernplanke behauptet, waere genau der Fehler, den dieses Paket beheben soll
+ * — das Bild muss den Text belegen, nicht umgekehrt. Der Audit-Befund
+ * "Keine Zedernplanke" bleibt deshalb offen (KAN-78).
  */
+/** Abnahmedatum fuer die CREDITS-Tabelle; Abweichungen vom Sammeltermin. */
+const ABNAHME_STANDARD = '18.08.2026'
+const ABNAHME = { 'cedar-plank-lachs': '19.08.2026' }
+
 const ABGENOMMEN = {
+  'cedar-plank-lachs':       'Rohes Lachsfilet mit grobem Salz auf einem hellen Holzbrett',
   'bourbon-brisket-pairing': 'Aufgeschnittenes Brisket mit dunkler Bark und rosa Rauchring auf einem Holzbrett',
   'braaibroodjies':          'Zwei gegrillte, gefüllte Sandwiches mit Grillmarken im Klapprost über der Glut',
   'bun-cha-hanoi':           'Schälchen mit Brühe und gegrillten Schweinefleischstücken, daneben weiße Reisnudeln und frische Kräuter',
@@ -102,7 +112,7 @@ async function main() {
     if (!DRY) await writeFile(mdx, raw)
     patches++
 
-    credits.push(`| ${slug} | ${quelle.quelle} | ${quelle.fotograf} | ${quelle.id} | 18.08.2026 |`)
+    credits.push(`| ${slug} | ${quelle.quelle} | ${quelle.fotograf} | ${quelle.id} | ${ABNAHME[slug] ?? ABNAHME_STANDARD} |`)
     console.log(`  ${c.g('✓')} ${slug.padEnd(26)} ${quelle.quelle}/${quelle.fotograf}${hatHero ? c.d(' +hero') : ''}`)
   }
 
@@ -125,12 +135,14 @@ keine Pflichtangabe. Einstufung je Quelle: docs/bildquellen-whitelist.md.
 |------|--------|----------|---------|---------|
 ${credits.join('\n')}
 
-## Nicht ausgetauscht
+## Offener Befund
 
-- \`cedar-plank-lachs\` — Entscheidung vom 18.08.2026: bleibt beim bisherigen
-  Bild. Die gefundenen Kandidaten zeigten entweder rohen Lachs auf unverkohlter
-  Planke oder waren von der Glut rotgetränkt. Der Befund aus dem Audit
-  ("keine Zedernplanke") bleibt damit offen.
+- \`cedar-plank-lachs\` — Bild am 19.08.2026 ersetzt, der Audit-Befund
+  ("keine Zedernplanke") bleibt aber **offen**. Vier Suchläufe über drei
+  Bibliotheken fanden kein Foto von Lachs auf sichtbarer Zedernplanke. Das
+  gewählte Bild zeigt rohen Lachs auf einem Holzbrett; der Alt-Text behauptet
+  entsprechend keine Zedernplanke. Beschaffung eines passenden Motivs per
+  Stock-Einzelkauf oder Eigenfoto: KAN-78.
 
 ## Übriger Bestand
 

@@ -121,14 +121,16 @@ export const JOBS = [
     muss: 'a bowl of broth with small grilled pork patties, a separate portion of white rice noodles and fresh herbs' },
   { slug: 'ca-nuong-bananenblatt', suche: 'grilled fish banana leaf',
     muss: 'a whole fish lying on a clearly visible green banana leaf' },
-  // Geschaerft 18.08.2026, dritter Anlauf: Runde eins lieferte eine von der Glut
-  // rotgetraenkte Aufnahme (abgelehnt: unschoen), Runde zwei rohen Lachs auf
-  // unverkohlter Planke mit teils blassen Filets. Jetzt ausdruecklich auf
-  // GEGARTEN Lachs und VERKOHLTE Planke gesucht — eine gegarte Lachsseite ist
-  // unverwechselbar orange und erfuellt die verkohlte Planke gleich mit.
+  // Vierter Anlauf 19.08.2026 (Uwe-Entscheidung): Roh-Motiv ist zugelassen und
+  // die Planke muss nicht mehr verkohlt sein. Damit faellt die Bedingung weg,
+  // an der die ersten drei Runden gescheitert sind — gegarter Lachs auf
+  // verkohlter Planke existiert in den drei Bibliotheken nicht (nur die von der
+  // Glut rotgetraenkte pixabay-4051565, deren Rot Licht ist und nicht Farbstich).
+  // Was bleibt: Der Lachs muss als Lachs lesbar sein. Runde zwei scheiterte an
+  // blassgrauen Filets, deshalb steht die Farbe jetzt ausdruecklich im MUSS.
   { slug: 'cedar-plank-lachs',
-    suche: ['cooked salmon charred cedar plank', 'grilled salmon fillet cedar plank smoke', 'cedar plank salmon grill'],
-    muss: 'a cooked salmon fillet with an orange flaky surface on a clearly visible charred cedar wood plank' },
+    suche: ['raw salmon fillet cedar plank', 'fresh salmon side wooden plank', 'cedar plank salmon grill'],
+    muss: 'a salmon fillet or whole side, raw or cooked, lying on a clearly visible cedar wood plank; the salmon must read as salmon — orange to deep pink, not pale grey' },
   // Geschaerft: Die erste Runde lieferte ueberwiegend Roastbeef und Ribeye.
   { slug: 'chateaubriand-filet',
     suche: ['chateaubriand beef tenderloin sliced', 'beef tenderloin center cut medium rare', 'filet mignon roast sliced pink'],

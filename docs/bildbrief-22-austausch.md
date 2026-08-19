@@ -57,11 +57,19 @@ Lichtquelle, die ganze Szene ist rot beleuchtet. Farbton-Drehung macht daraus
 Magenta, Kanalkorrektur macht den Lachs pink und die Planke violett. Es gibt
 keine neutrale Information zurückzuholen.
 
-**Fazit:** In Pexels, Unsplash und Pixabay existiert kein verwendbares Foto von
-gegartem Lachs auf verkohlter Zedernplanke. Das Rezept bleibt beim bisherigen
-Bild; der Audit-Befund „Keine Zedernplanke" bleibt bestehen. Weiter geht es nur
-über eine bezahlte Stock-Lizenz oder ein eigenes Foto — beides eine
-Geschäftsentscheidung, keine Suchfrage.
+4. Roh-Motiv zugelassen (19.08.2026), Suche auf `raw salmon fillet cedar plank`
+   und `fresh salmon side wooden plank` — 25 Kandidaten. Bester Treffer
+   `pexels-37245150`: schöner roher Lachs, kräftig orange, aber auf einem
+   **Bambus-Schneidebrett mit Griff**, nicht auf einer Planke. Die Planke per
+   Edit zu ergänzen ist ausgeschlossen, das wäre eine Inhaltsänderung und
+   verletzt BEWAHREN.
+
+**Fazit nach vier Läufen:** In Pexels, Unsplash und Pixabay existiert kein
+verwendbares Foto von Lachs auf einer sichtbaren Zedernplanke — weder roh noch
+gegart. Das Rezept bleibt beim bisherigen Bild; der Audit-Befund „Keine
+Zedernplanke" bleibt bestehen. Weiter geht es über eine bezahlte Stock-Lizenz
+oder ein Eigenfoto: **KAN-78**. Dort stehen alle vier Runden mit
+Kandidaten-IDs, die drei Optionen und der Weg zurück in die Pipeline.
 
 **Zwei Motive mit entschärftem MUSS** (Begründung am jeweiligen JOBS-Eintrag in
 `scripts/rezept-bild-austausch.mjs`): `bourbon-brisket-pairing` ohne Bourbonglas,

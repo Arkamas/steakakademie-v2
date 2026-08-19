@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { CONSENT_OPEN_EVENT, getConsent, setConsent } from '@/lib/consent';
 
@@ -21,6 +21,7 @@ const CONSENT_BTN =
 
 export default function ConsentBanner() {
   const [open, setOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (getConsent() === null) setOpen(true);
@@ -28,6 +29,25 @@ export default function ConsentBanner() {
     window.addEventListener(CONSENT_OPEN_EVENT, reopen);
     return () => window.removeEventListener(CONSENT_OPEN_EVENT, reopen);
   }, []);
+
+  // KAN-72: Solange der Banner offen ist, bekommt <body> ein padding-bottom in
+  // Bannerhöhe. So bleibt der Footer (Impressum/Datenschutz/AGB) über dem Banner
+  // erreichbar, statt von ihm verdeckt zu werden (§ 5 Abs. 1 DDG).
+  useEffect(() => {
+    if (!open) return;
+    const el = panelRef.current;
+    if (!el) return;
+    const apply = () => { document.body.style.paddingBottom = `${el.offsetHeight}px`; };
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(el);
+    window.addEventListener('resize', apply);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', apply);
+      document.body.style.paddingBottom = '';
+    };
+  }, [open]);
 
   if (!open) return null;
 
@@ -38,6 +58,7 @@ export default function ConsentBanner() {
 
   return (
     <div
+      ref={panelRef}
       role="dialog"
       aria-modal="false"
       aria-label="Datenschutz-Einstellungen"

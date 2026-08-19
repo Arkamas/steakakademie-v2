@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronRight, Mail, MessageSquare, Award } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { CONSENT_TEXT, KONTAKT_EMPFAENGER } from '@/lib/kontakt';
 
 type FormState = 'idle' | 'sending' | 'sent' | 'error';
 
@@ -33,20 +34,45 @@ const CONTACT_OPTIONS = [
 ];
 
 export default function KontaktPage() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
-  const [state, setState] = useState<FormState>('idle');
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '', consent: false, website: '' });
+  // Der Zustand startet aus der URL: Ohne JavaScript landet der Nutzer nach dem
+  // nativen POST auf /kontakt?gesendet=1 bzw. ?fehler=… zurueck.
+  const [state, setState] = useState<FormState>(() => {
+    if (typeof window === 'undefined') return 'idle';
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('gesendet') === '1') return 'sent';
+    return p.get('fehler') ? 'error' : 'idle';
+  });
+  const [fehler, setFehler] = useState<string>(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('fehler') ?? '';
+  });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+    const t = e.target as HTMLInputElement;
+    setForm(f => ({ ...f, [t.name]: t.type === 'checkbox' ? t.checked : t.value }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) return;
+    if (!form.name || !form.email || !form.message || !form.consent) return;
     setState('sending');
-    // Formspree / Loops / mailto fallback — für jetzt: simuliert
-    await new Promise(r => setTimeout(r, 1000));
-    setState('sent');
+    setFehler('');
+    try {
+      const res = await fetch('/api/kontakt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const daten = await res.json().catch(() => ({}));
+      // Erfolg wird gemeldet, wenn die Route ihn bestaetigt — nicht vorher.
+      if (res.ok && daten.ok) { setState('sent'); return; }
+      setFehler(daten.error || 'Die Nachricht konnte nicht zugestellt werden.');
+      setState('error');
+    } catch {
+      setFehler('Keine Verbindung zum Server. Bitte später erneut versuchen.');
+      setState('error');
+    }
   }
 
   const inputClass = 'w-full bg-surface-dark border border-brand-gold/20 px-4 py-3 text-text-primary text-sm font-body focus:outline-none focus:border-brand-gold/50 transition-colors placeholder:text-text-muted';
@@ -112,7 +138,16 @@ export default function KontaktPage() {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="border border-brand-gold/15 bg-surface-elevated p-8 space-y-4">
+              /* method und action sind kein Beiwerk: Schlägt die Hydration fehl
+                 oder klickt jemand vorher, führt der Browser sonst seinen
+                 Standard aus — GET auf dieselbe URL, mit Name, E-Mail und
+                 Nachricht in Adresszeile, Server-Log, Referrer und History. */
+              <form
+                onSubmit={handleSubmit}
+                method="post"
+                action="/api/kontakt"
+                className="border border-brand-gold/15 bg-surface-elevated p-8 space-y-4"
+              >
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className={labelClass}>Name</label>
@@ -146,15 +181,40 @@ export default function KontaktPage() {
                     className={`${inputClass} resize-none`} />
                 </div>
 
-                <p className="text-text-muted text-xs font-body leading-relaxed">
-                  Deine Daten werden ausschließlich zur Beantwortung deiner Anfrage verwendet.
-                  Weitere Infos in der{' '}
-                  <Link href="/datenschutz" className="text-brand-gold hover:underline">Datenschutzerklärung</Link>.
-                </p>
+                {/* Honeypot — für Menschen unsichtbar, für Bots verlockend.
+                    Kein `type="hidden"`: Das füllen Bots seltener aus. */}
+                <div aria-hidden="true" className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden">
+                  <label htmlFor="website">Website (bitte frei lassen)</label>
+                  <input id="website" name="website" type="text" tabIndex={-1}
+                    autoComplete="off" value={form.website} onChange={handleChange} />
+                </div>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    name="consent" type="checkbox" required
+                    checked={form.consent} onChange={handleChange}
+                    className="mt-0.5 h-4 w-4 shrink-0 accent-brand-gold"
+                  />
+                  <span className="text-text-secondary text-xs font-body leading-relaxed">
+                    {CONSENT_TEXT}{' '}
+                    Weitere Infos in der{' '}
+                    <Link href="/datenschutz" className="text-brand-gold hover:underline">Datenschutzerklärung</Link>.
+                  </span>
+                </label>
+
+                {state === 'error' && (
+                  <p role="alert" className="border border-brand-fire/40 bg-brand-fire/10 px-4 py-3 text-sm font-body text-text-primary">
+                    {fehler || 'Die Nachricht konnte nicht zugestellt werden.'}{' '}
+                    Du erreichst uns auch direkt unter{' '}
+                    <a href={`mailto:${KONTAKT_EMPFAENGER}`} className="text-brand-gold hover:underline">
+                      {KONTAKT_EMPFAENGER}
+                    </a>.
+                  </p>
+                )}
 
                 <button
                   type="submit"
-                  disabled={state === 'sending'}
+                  disabled={state === 'sending' || !form.consent}
                   className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {state === 'sending' ? 'Wird gesendet…' : 'Nachricht senden →'}

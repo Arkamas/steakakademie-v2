@@ -49,37 +49,35 @@ export default function RezepteIndexPage() {
       <Header />
 
       <main>
-        {/* ── Hero — dunkler Marken-Rahmen, TM-artige große Serif ─────────── */}
+        {/* ── Schmale Leiste: Breadcrumb + Menü-Planer ────────────────────── */}
         <section className="border-b border-border-subtle">
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
-            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted mb-8" aria-label="Breadcrumb">
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+            <nav className="flex items-center gap-1.5 text-xs font-sans text-text-muted" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-brand-gold transition-colors">Start</Link>
               <ChevronRight size={12} />
               <span className="text-text-secondary">Rezepte</span>
             </nav>
-
-            <span className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire block mb-3">
-              Steakakademie · Rezepte
-            </span>
-            <h1 className="font-serif text-4xl sm:text-5xl font-bold text-text-light leading-tight mb-4">
-              Grill wie ein Akademiker — die ganze Rezept-Sammlung
-            </h1>
-            <p className="font-body text-lg text-text-secondary leading-relaxed max-w-2xl">
-              Kein Rezept ohne Feldtest — jede Angabe basiert auf mehrfach reproduzierten Versuchen.
-              Mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach direkt am Grill.
-            </p>
             <Link
               href="/menue"
-              className="mt-5 inline-flex items-center gap-1.5 text-xs font-sans font-bold tracking-widest uppercase text-brand-gold hover:text-brand-fire transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-widest uppercase text-brand-gold hover:text-brand-fire transition-colors"
             >
-              Menü-Planer: Ganzes Grill-Menü mit Einkaufsliste zusammenstellen <ChevronRight size={14} />
+              Menü-Planer mit Einkaufsliste <ChevronRight size={13} />
             </Link>
           </div>
         </section>
 
-        {/* ── Helle Editorial-Zone: Filterleiste + Grid (Texas-Monthly) ──── */}
+        {/* ── TM-Hero (Foto + zentrierte Suche) + helle Editorial-Zone ───── */}
         <div className="reading-light">
-          <RecipeExplorer recipes={recipes} />
+          <RecipeExplorer
+            recipes={recipes}
+            hero={{
+              image: '/images/rezepte/dry-aged-ribeye-hero.jpg',
+              imageAlt: 'Dry-Aged Ribeye auf dem Grill — Titelbild der Rezept-Sammlung',
+              title: 'Rezepte',
+              subtitle:
+                'Grill wie ein Akademiker — jedes Rezept mehrfach am Grill getestet, mit Portionsrechner und Schritt-für-Schritt Koch-Coach.',
+            }}
+          />
         </div>
 
         {/* ── Vollstaendiges Linkverzeichnis (serverseitig, crawlbar) ────── */}

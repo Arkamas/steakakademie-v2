@@ -4,9 +4,13 @@
  * RecipeExplorer — Rezept-Übersicht nach Texas-Monthly-Muster.
  *
  * Aufbau (Referenz: texasmonthly.com/recipes):
- *  1. Horizontale Kategorie-Leiste (echte Links auf /rezepte/[kategorie] → SEO)
+ *  0. Optionaler TM-Hero (prop `hero`): Vollbild-Foto, zentrierter Serif-Titel,
+ *     Suchfeld mittig ÜBER dem Bild — wie texasmonthly.com/recipes.
+ *  1. Horizontale Register-Leiste, mittig zentriert, Kanten weich ausgeblendet
+ *     (Kategorien = echte Links → SEO; Zubereitungs-Register = Client-Filter
+ *     über das Freitext-Feld `cookingMethod`)
  *  2. Zweite, kleinere Länder-Reihe (Client-Filter über das Frontmatter-Feld `land`)
- *  3. Suchfeld
+ *  3. Suchfeld (nur ohne Hero — mit Hero sitzt die Suche im Hero)
  *  4. 3-Spalten-Grid im hellen Editorial-Look (keine Karten-Boxen, wie TM)
  *  5. Newsletter-Lead-Magnet MITTEN im Feed (nach 6 Karten, Seite 1)
  *  6. Nummerierte Pagination
@@ -47,6 +51,8 @@ interface Props {
   activeKategorie?: string;
   /** Kategorie-Leiste ausblenden (z. B. Community-Seite) */
   hideKategorieRow?: boolean;
+  /** TM-Hero: Foto hinter zentriertem Titel + Suchfeld (nur /rezepte-Übersicht) */
+  hero?: { image: string; imageAlt?: string; title: string; subtitle?: string };
 }
 
 // ── Kategorie-Leiste (Navigation, wie das TM-Menü) ──────────────────────────
@@ -61,7 +67,22 @@ const KATEGORIE_TABS: { slug: string | null; label: string }[] = [
   { slug: 'wine-spirits', label: 'Wine & Spirits' },
 ];
 
+// Zubereitungs-Register (Client-Filter): matchen gegen das Freitext-Feld
+// `cookingMethod` der Rezepte (Schreibweisen dort variieren, daher Muster).
+const METHODEN_TABS: { key: string; label: string; pattern: RegExp }[] = [
+  { key: 'wok-dutch-oven', label: 'Wok/Dutch Oven',      pattern: /dutch\s*oven|wok|topf|geschmort|einkochen/i },
+  { key: 'spiess',         label: 'Am Spieß',            pattern: /spie(ss|ß)|rotisserie/i },
+  { key: 'plancha',        label: 'Grillplatte/Plancha', pattern: /plancha|grillplatte|platte/i },
+  { key: 'pizzastein',     label: 'Pizzastein',          pattern: /pizzastein/i },
+  { key: 'raeuchern',      label: 'Räuchern',            pattern: /smoker|rauch|r(ä|ae)ucher|3-2-1|low\s*(and|&)\s*slow/i },
+  { key: 'grillkorb',      label: 'Grillkorb',           pattern: /grillkorb|fischzange|grillpfanne/i },
+  { key: 'elektrogrill',   label: 'Elektrogrill',        pattern: /elektro|tischgrill|kontaktgrill/i },
+];
+
 const PAGE_SIZE = 12;
+
+// Weiches Ausblenden der Register-/Länder-Reihen zu den Rändern hin (TM-Look).
+const EDGE_FADE = 'linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%)';
 
 /** "USA · Texas" → "USA" — Primärland fürs Filter-Pill. */
 function primaryLand(land?: string): string | null {
@@ -84,12 +105,16 @@ const BODY     = '#4A3C2E'; // Fließtext
 const MUTED    = '#5A4936'; // Meta
 const LINE     = '#C3AB80'; // Linien/Borders
 
-export default function RecipeExplorer({ recipes, activeKategorie, hideKategorieRow }: Props) {
+export default function RecipeExplorer({ recipes, activeKategorie, hideKategorieRow, hero }: Props) {
   const [land, setLand] = useState<string>('alle');
+  const [methode, setMethode] = useState<string>('alle');
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const gridTopRef = useRef<HTMLDivElement>(null);
   const landRowRef = useRef<HTMLDivElement>(null);
+  const registerRowRef = useRef<HTMLDivElement>(null);
+
+  const activeMethode = METHODEN_TABS.find((m) => m.key === methode);
 
   // Länder mit Häufigkeit, absteigend — nur zeigen, wenn es mind. 2 gibt.
   const laender = useMemo(() => {
@@ -107,13 +132,14 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
     const q = query.trim().toLowerCase();
     return recipes.filter((r) => {
       if (land !== 'alle' && primaryLand(r.land) !== land) return false;
+      if (activeMethode && !activeMethode.pattern.test(`${r.cookingMethod} ${r.title}`)) return false;
       if (q) {
         const hay = `${r.title} ${r.description} ${r.meatType} ${r.cookingMethod} ${r.land ?? ''}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
     });
-  }, [recipes, land, query]);
+  }, [recipes, land, query, activeMethode]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, pageCount);
@@ -130,34 +156,144 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
     landRowRef.current?.scrollBy({ left: dir * 240, behavior: 'smooth' });
   }
 
+  function scrollRegisterRow(dir: -1 | 1) {
+    registerRowRef.current?.scrollBy({ left: dir * 280, behavior: 'smooth' });
+  }
+
   // Newsletter nach der 6. Karte — nur Seite 1 und nur wenn genug Inhalt da ist.
   const newsletterAfter = safePage === 1 && visible.length > 6 ? 6 : -1;
 
   return (
     <div>
+      {/* ══ TM-HERO — Foto, zentrierter Titel, Suche über dem Bild ════════ */}
+      {hero && (
+        <section className="relative">
+          <div className="relative h-[400px] sm:h-[480px]">
+            <Image
+              src={hero.image}
+              alt={hero.imageAlt ?? ''}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+            {/* Abdunkelung für Lesbarkeit von Titel + Suchfeld */}
+            <div
+              className="absolute inset-0"
+              style={{ background: 'linear-gradient(to bottom, rgba(14,9,4,0.55) 0%, rgba(14,9,4,0.32) 45%, rgba(14,9,4,0.55) 100%)' }}
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
+              <span className="font-sans text-[11px] font-bold tracking-[0.22em] uppercase text-white/85 mb-3">
+                Steakakademie
+              </span>
+              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-none mb-4">
+                {hero.title}
+              </h1>
+              {hero.subtitle && (
+                <p className="font-body text-base sm:text-lg text-white/90 max-w-2xl mb-8">
+                  {hero.subtitle}
+                </p>
+              )}
+              {/* Suche — mittig über dem Bild, wie bei Texas Monthly */}
+              <form role="search" onSubmit={(e) => e.preventDefault()} className="w-full max-w-2xl flex shadow-lg">
+                <div className="relative flex-1">
+                  <Search size={17} className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: MUTED }} />
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={(e) => { setQuery(e.target.value); resetPage(); }}
+                    placeholder="Rezepte der Steakakademie durchsuchen …"
+                    aria-label="Rezepte durchsuchen"
+                    className="w-full font-body text-[15px] pl-11 pr-4 py-3.5 bg-white/95 focus:outline-none"
+                    style={{ color: INK }}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-6 sm:px-9 font-sans text-xs font-bold tracking-[0.16em] uppercase text-white transition-opacity hover:opacity-90"
+                  style={{ background: RUST }}
+                >
+                  Suchen
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ══ FILTER-LEISTE (Texas-Monthly-Muster) ══════════════════════════ */}
       <div className="border-b" style={{ borderColor: LINE }}>
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-5">
 
-          {/* Reihe 1 — Kategorien als echte Links */}
+          {/* Reihe 1 — Register: Kategorien (Links) + Zubereitung (Filter),
+              mittig zentriert, Kanten weich ausblendend (TM-Muster) */}
           {!hideKategorieRow && (
-            <nav aria-label="Rezept-Kategorien" className="flex flex-wrap gap-2 mb-4">
-              {KATEGORIE_TABS.map((tab) => {
-                const active = (tab.slug ?? undefined) === activeKategorie;
-                return (
-                  <Link
-                    key={tab.label}
-                    href={tab.slug ? `/rezepte/${tab.slug}` : '/rezepte'}
-                    aria-current={active ? 'page' : undefined}
-                    className="font-sans text-[11px] font-bold tracking-[0.14em] uppercase px-4 py-2 border transition-colors"
-                    style={active
-                      ? { background: INK, color: '#F0E8D8', borderColor: INK }
-                      : { color: BODY, borderColor: LINE }}
-                  >
-                    {tab.label}
-                  </Link>
-                );
-              })}
+            <nav aria-label="Rezept-Register" className="flex items-center gap-2 mb-4">
+              <button
+                type="button"
+                onClick={() => scrollRegisterRow(-1)}
+                aria-label="Register nach links scrollen"
+                className="hidden sm:flex shrink-0 w-7 h-7 items-center justify-center border transition-colors hover:bg-black/5"
+                style={{ borderColor: LINE, color: MUTED }}
+              >
+                <ChevronLeft size={14} />
+              </button>
+
+              <div
+                ref={registerRowRef}
+                className="flex-1 overflow-x-auto scrollbar-none"
+                style={{ scrollbarWidth: 'none', WebkitMaskImage: EDGE_FADE, maskImage: EDGE_FADE }}
+              >
+                <div className="flex w-max mx-auto gap-2 px-6">
+                  {KATEGORIE_TABS.map((tab) => {
+                    const active = (tab.slug ?? undefined) === activeKategorie;
+                    return (
+                      <Link
+                        key={tab.label}
+                        href={tab.slug ? `/rezepte/${tab.slug}` : '/rezepte'}
+                        aria-current={active ? 'page' : undefined}
+                        className="shrink-0 whitespace-nowrap font-sans text-[11px] font-bold tracking-[0.14em] uppercase px-4 py-2 border transition-colors"
+                        style={active
+                          ? { background: INK, color: '#F0E8D8', borderColor: INK }
+                          : { color: BODY, borderColor: LINE }}
+                      >
+                        {tab.label}
+                      </Link>
+                    );
+                  })}
+
+                  {/* Trenner zwischen Kategorien und Zubereitungs-Registern */}
+                  <span aria-hidden className="self-stretch w-px shrink-0 mx-1" style={{ background: LINE }} />
+
+                  {METHODEN_TABS.map((m) => {
+                    const active = methode === m.key;
+                    return (
+                      <button
+                        key={m.key}
+                        type="button"
+                        onClick={() => { setMethode(active ? 'alle' : m.key); resetPage(); }}
+                        aria-pressed={active}
+                        className="shrink-0 whitespace-nowrap font-sans text-[11px] font-bold tracking-[0.14em] uppercase px-4 py-2 border transition-colors"
+                        style={active
+                          ? { background: RUST, color: '#F7EEDD', borderColor: RUST }
+                          : { color: BODY, borderColor: LINE }}
+                      >
+                        {m.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => scrollRegisterRow(1)}
+                aria-label="Register nach rechts scrollen"
+                className="hidden sm:flex shrink-0 w-7 h-7 items-center justify-center border transition-colors hover:bg-black/5"
+                style={{ borderColor: LINE, color: MUTED }}
+              >
+                <ChevronRight size={14} />
+              </button>
             </nav>
           )}
 
@@ -177,8 +313,9 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
               <div
                 ref={landRowRef}
                 className="flex gap-2 overflow-x-auto scrollbar-none flex-1"
-                style={{ scrollbarWidth: 'none' }}
+                style={{ scrollbarWidth: 'none', WebkitMaskImage: EDGE_FADE, maskImage: EDGE_FADE }}
               >
+                <span aria-hidden className="shrink-0 mr-auto" />
                 <button
                   type="button"
                   onClick={() => { setLand('alle'); resetPage(); }}
@@ -202,6 +339,7 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
                     {l}
                   </button>
                 ))}
+                <span aria-hidden className="shrink-0 ml-auto" />
               </div>
 
               <button
@@ -216,7 +354,8 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
             </div>
           )}
 
-          {/* Reihe 3 — Suche */}
+          {/* Reihe 3 — Suche (nur ohne Hero — mit Hero sitzt die Suche dort) */}
+          {!hero && (
           <div className="relative max-w-md">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: MUTED }} />
             <input
@@ -240,13 +379,16 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
               </button>
             )}
           </div>
+          )}
 
           {/* Ergebnis-Zeile */}
-          <p className="font-sans text-xs mt-3" style={{ color: MUTED }} aria-live="polite">
+          <p className="font-sans text-xs mt-3 text-center" style={{ color: MUTED }} aria-live="polite">
             {filtered.length === recipes.length
               ? `${recipes.length} geprüfte Rezepte`
               : `${filtered.length} von ${recipes.length} Rezepten`}
             {land !== 'alle' && ` · ${land}`}
+            {activeMethode && ` · ${activeMethode.label}`}
+            {hero && query.trim() && ` · Suche: „${query.trim()}"`}
           </p>
         </div>
       </div>
@@ -261,7 +403,7 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
             </p>
             <button
               type="button"
-              onClick={() => { setLand('alle'); setQuery(''); resetPage(); }}
+              onClick={() => { setLand('alle'); setMethode('alle'); setQuery(''); resetPage(); }}
               className="font-sans text-xs font-bold tracking-[0.12em] uppercase px-5 py-2.5 border transition-colors"
               style={{ borderColor: RUST, color: RUST }}
             >

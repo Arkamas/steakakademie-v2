@@ -134,9 +134,13 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
 
       {/* ── Hero ── */}
       <div className="hero-fullbleed" style={{ height: '65vh', minHeight: '480px' }}>
+        {/* Der Alt-Text folgt derselben Bedingung wie das Badge unten rechts:
+            Wer die Seite sieht, liest die Kennzeichnung — wer sie sich vorlesen
+            lässt, muss dasselbe hören. Sonst ist die Kennzeichnung für
+            Screenreader-Nutzer schwächer als für Sehende. */}
         <Image
           src={recipe.heroImage || recipe.image}
-          alt={`${recipe.imageAlt} — Symbolbild`}
+          alt={`${recipe.imageAlt} — ${recipe.imageAI ? 'KI-generiertes Symbolbild' : 'Symbolbild'}`}
           fill
           priority
           sizes="100vw"
@@ -157,15 +161,17 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
             des KI-Systems, Abs. 4 den Betreiber nur bei Deepfakes — ein generisches
             Gericht ist keiner. Analyse: docs/bildprogramm.md.
 
-            Sollte die anwaltliche Pruefung (ARAG Frage A1) eine ausdrueckliche
-            KI-Nennung verlangen, haengt der Text an dieser Stelle kuenftig von
-            recipe.imageAI ab. Deshalb wird das Feld im Frontmatter gepflegt,
-            auch solange es hier noch nicht ausgewertet wird. */}
+            Update 19.08.2026 (KAN-66): Fachliche Auswertung (e-recht24 zu Art. 50
+            KI-VO) — "Ein pauschaler Disclaimer reicht nicht", die Kennzeichnung
+            muss am Inhalt selbst eindeutig sein. Fotorealistische KI-Food-Bilder
+            liegen in der Grauzone der Deepfake-Definition; sichere Linie:
+            bei imageAI wird "KI-Symbolbild" gerendert, bei Echtfotos "Symbolbild".
+            Der Link auf /ki-disclaimer bleibt fuer die Erklaertiefe. */}
         <Link
           href="/ki-disclaimer"
           className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.1em] uppercase px-2 py-1 bg-black/65 backdrop-blur-sm border border-white/15 text-zinc-200 hover:text-white hover:border-white/30 transition-colors"
         >
-          <Sparkles size={10} /> Symbolbild
+          <Sparkles size={10} /> {recipe.imageAI ? 'KI-Symbolbild' : 'Symbolbild'}
         </Link>
 
         <div className="hero-fullbleed-content">

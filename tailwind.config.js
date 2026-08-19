@@ -23,7 +23,7 @@ module.exports = {
         // Text — warm on dark
         'text-primary':     '#E6D5C3',   // main body text
         'text-secondary':   '#C4A882',   // secondary text
-        'text-muted':       '#7A6558',   // captions/meta
+        'text-muted':       '#947D6C',   // captions/meta — WCAG AA: 4.85:1 auf surface-base (war #7A6558 = 3.43:1, FAIL)
         'text-light':       '#F0E8D8',   // headings/emphasis on dark
 
         // Borders — subtle on dark
@@ -46,12 +46,12 @@ module.exports = {
             '--tw-prose-headings':      '#E6D5C3',
             '--tw-prose-links':         '#E85018',
             '--tw-prose-bold':          '#F0E8D8',
-            '--tw-prose-counters':      '#7A6558',
+            '--tw-prose-counters':      '#947D6C',
             '--tw-prose-bullets':       '#C8882A',
             '--tw-prose-hr':            '#3A2A1E',
             '--tw-prose-quotes':        '#E6D5C3',
             '--tw-prose-quote-borders': '#C8882A',
-            '--tw-prose-captions':      '#7A6558',
+            '--tw-prose-captions':      '#947D6C',
             '--tw-prose-code':          '#E85018',
             '--tw-prose-pre-bg':        '#1E1410',
             fontFamily:  'Source Serif 4, Georgia, serif',
@@ -77,25 +77,26 @@ module.exports = {
               borderLeftWidth: '3px',
               borderLeftColor: '#C8882A',
               fontStyle: 'italic',
-              color: '#4A3728',
+              color: '#E6D5C3',   // WCAG-Fix: war #4A3728 (Light-Theme-Relikt) = 1.58:1 auf dunklem Grund
               paddingLeft: '1.5rem',
               paddingTop: '0.5rem',
               paddingBottom: '0.5rem',
               backgroundColor: 'rgba(200, 136, 42, 0.05)',
             },
+            // Tabellen: Light-Theme-Relikte auf Dark-Theme umgestellt (WCAG-Fix)
             'thead tr': {
-              backgroundColor: '#F0E8D8',
+              backgroundColor: '#2D2218',
             },
             'thead th': {
               color: '#C8882A',
               fontWeight: '700',
             },
             'tbody td': {
-              borderBottomColor: '#DDD0BC',
-              color: '#4A3728',
+              borderBottomColor: '#3A2A1E',
+              color: '#C4A882',
             },
             'tbody tr:nth-child(even)': {
-              backgroundColor: 'rgba(240, 232, 216, 0.5)',
+              backgroundColor: 'rgba(240, 232, 216, 0.06)',
             },
           },
         },

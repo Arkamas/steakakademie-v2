@@ -56,7 +56,7 @@
 .reading-light .border-border-subtle { border-color: #C3AB80 !important; }
 .reading-light .text-text-primary   { color: #1C140D !important; }
 .reading-light .text-text-secondary { color: #4A3C2E !important; }
-.reading-light .text-text-muted     { color: #6B5A48 !important; }
+.reading-light .text-text-muted     { color: #544433 !important; } /* WCAG-Fix: war #6B5A48 = 3.40:1 auf Pergament, jetzt 4.81:1 (AA) */
 .reading-light .fill-border-subtle  { fill:  #D8C7AE !important; }
 .reading-light .text-border-subtle  { color: #D8C7AE !important; }
 
@@ -128,7 +128,9 @@ body::before {
 .btn-affiliate {
   @apply inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-5 py-3 transition-all duration-200;
   background-color: var(--color-ember);
-  color: #fff;
+  /* WCAG-Fix: Weiß auf Glut-Orange = 3.76:1 (FAIL bei 14px) → Ink = 4.96:1 (AA PASS).
+     Wichtig für Lesbarkeit im Freien/Sonnenlicht. */
+  color: #1C1008;
   -webkit-font-smoothing: antialiased;
 }
 .btn-affiliate:hover {

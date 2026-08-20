@@ -69,6 +69,29 @@ const mdxComponents = {
     <strong className="font-bold text-text-primary" {...p}>{children}</strong>
   ),
   hr: () => <hr className="border-border-subtle my-10" />,
+  // Bilder im Fliesstext (Schrittbilder). Der `title` des Markdown-Bildes wird
+  // zur Bildunterschrift: ![Alt](/pfad.jpg "Unterschrift").
+  //
+  // ACHTUNG Kennzeichnung: Das Hero-Badge leitet "KI-Symbolbild" aus
+  // recipe.imageAI ab — fuer Bilder HIER greift das nicht. Wer ein KI-Bild in
+  // den Fliesstext setzt, muss die Kennzeichnung selbst in die Unterschrift
+  // schreiben (Art. 50 KI-VO, siehe compliance/ai-act-einstufung.md).
+  img: ({ src, alt, title }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    <figure className="my-8">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt ?? ''}
+        loading="lazy"
+        className="w-full border border-border-subtle"
+      />
+      {title && (
+        <figcaption className="mt-2 font-sans text-xs leading-relaxed text-text-muted">
+          {title}
+        </figcaption>
+      )}
+    </figure>
+  ),
 };
 
 // ── Typen ─────────────────────────────────────────────────────────────────────
@@ -137,7 +160,11 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
         {/* Der Alt-Text folgt derselben Bedingung wie das Badge unten rechts:
             Wer die Seite sieht, liest die Kennzeichnung — wer sie sich vorlesen
             lässt, muss dasselbe hören. Sonst ist die Kennzeichnung für
-            Screenreader-Nutzer schwächer als für Sehende. */}
+            Screenreader-Nutzer schwächer als für Sehende.
+
+            Bitte beim Bearbeiten mitnehmen: Diese Bedingung ging am 19.08.2026
+            beim Überschreiben der Datei schon einmal verloren, während das
+            Badge darunter bedingt blieb. */}
         <Image
           src={recipe.heroImage || recipe.image}
           alt={`${recipe.imageAlt} — ${recipe.imageAI ? 'KI-generiertes Symbolbild' : 'Symbolbild'}`}

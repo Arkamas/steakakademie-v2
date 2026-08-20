@@ -132,7 +132,7 @@ export default function ComparisonTable({ products, className }: ComparisonTable
                     <Link
                       href={affiliateHref}
                       className={`inline-flex items-center gap-1.5 bg-brand-gold text-white font-sans text-[11px] font-bold tracking-wide px-4 py-2 hover:bg-[#d4891a] transition-colors whitespace-nowrap plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-                      rel="nofollow noopener"
+                      rel="sponsored nofollow noopener"
                       target="_blank"
                     >
                       Zum Shop →

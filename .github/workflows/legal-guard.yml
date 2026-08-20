@@ -1,0 +1,56 @@
+name: Legal-Guard
+
+# Statischer Regressions-Check gegen typische Abmahn-Gründe (Abmahn-Check 13.06.2026):
+#   • toter EU-OS-Plattform-Link (Plattform zum 20.07.2025 eingestellt)
+#   • extern nachladende Google Fonts (müssen self-hosted via next/font sein)
+#   • einwilligungspflichtige Tracker ohne Consent (Seite ist cookieless)
+#   • Affiliate-Links ohne sichtbare „Anzeige"-Kennzeichnung / ohne rel="sponsored"
+# Regeln + Begründung je Punkt: compliance/website-rechtscheck.yaml
+# Läuft schnell, ohne npm install (reines Node-Skript). Bei Verstoß: rot.
+# Blockiert NICHT den Deploy (läuft parallel) — Frühwarn-Signal.
+#
+# Trigger: Push auf main + jeder PR. Ursprünglich lief der Guard auf allen
+# Branches (d3ac137); das kostet bei täglicher Arbeit einen CI-Lauf pro Push,
+# ohne mehr abzufangen — was per PR kommt, wird ohnehin geprüft, und was direkt
+# auf main landet, ebenfalls. Ein zeitgesteuerter Cron wäre redundant, weil der
+# Check rein statisch ist (gleicher Code = gleiches Ergebnis).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Doppelläufe (Push + PR auf demselben Branch) sauber zusammenfassen.
+concurrency:
+  group: legal-guard-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  guard:
+    name: Abmahn-Regressionen prüfen
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Legal-Guard ausführen
+        run: |
+          set +e
+          OUT=$(node scripts/legal-guard.mjs 2>&1)
+          CODE=$?
+          echo "$OUT"
+          {
+            echo "## ⚖️ Legal-Guard"
+            echo ""
+            echo '```'
+            echo "$OUT"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit $CODE

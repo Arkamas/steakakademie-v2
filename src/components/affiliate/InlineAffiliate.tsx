@@ -19,7 +19,7 @@ export default function InlineAffiliate({ id, children }: { id: string; children
       // Scrollen an Amazon. Aufgefallen 20.08.2026 durch die neue CSP.
       prefetch={false}
       className={`text-brand-fire underline decoration-brand-fire/40 underline-offset-2 hover:decoration-brand-fire transition-colors plausible-event-name=Affiliate-Klick plausible-event-zone=inline plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-      rel="nofollow noopener"
+      rel="sponsored nofollow noopener"
       target="_blank"
     >
       {children}

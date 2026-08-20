@@ -281,7 +281,7 @@ export default function ProductCard({
           href={affiliateHref}
           prefetch={false}
           className={`btn-affiliate w-full justify-center text-sm mb-2 plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-          rel="nofollow noopener"
+          rel="sponsored nofollow noopener"
           target="_blank"
         >
           <ExternalLink size={14} />
@@ -341,7 +341,7 @@ export default function ProductCard({
             href={affiliateHref}
           prefetch={false}
             className={`inline-flex items-center gap-1 bg-brand-fire text-white font-sans text-[11px] font-bold tracking-wide px-3 py-1.5 hover:bg-[#cc4412] transition-colors plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-            rel="nofollow noopener"
+            rel="sponsored nofollow noopener"
             target="_blank"
           >
             Ansehen
@@ -430,7 +430,7 @@ export default function ProductCard({
           href={affiliateHref}
           prefetch={false}
           className={`btn-affiliate w-full justify-center plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-          rel="nofollow noopener"
+          rel="sponsored nofollow noopener"
           target="_blank"
         >
           <ExternalLink size={15} />

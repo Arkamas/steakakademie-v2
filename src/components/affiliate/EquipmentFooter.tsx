@@ -58,7 +58,7 @@ export default function EquipmentFooter({ title, productIds }: { title?: string;
       // Scrollen an Amazon. Aufgefallen 20.08.2026 durch die neue CSP.
       prefetch={false}
                 className={`inline-flex items-center gap-1.5 bg-brand-fire text-white font-sans text-[11px] font-bold tracking-wide px-3 py-2 hover:bg-[#cc4412] transition-colors shrink-0 plausible-event-name=Affiliate-Klick plausible-event-zone=footer plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
-                rel="nofollow noopener"
+                rel="sponsored nofollow noopener"
                 target="_blank"
               >
                 <ExternalLink size={13} />

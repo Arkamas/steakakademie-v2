@@ -16,12 +16,12 @@
 #   rechtsgrundlage
 #   status     : ok | fix-needed | not-applicable | monitor
 #   befund     : aktueller Stand steakakademie.de (Stand 02.06.2026)
-# Letzte Aktualisierung: 2026-08-10 (Rechts-Update-Scan: UWG/EmpCo-Novelle,
-#   Consent-Banner + Microsoft Clarity live, Widerrufsbutton § 356a umgesetzt)
+# Letzte Aktualisierung: 2026-08-17 (Rechts-Update-Scan: PAngV-Novelle geprüft/nicht
+#   einschlägig, KI-Kennzeichnung redaktionelle Rezepte geschlossen)
 
-version: 3
+version: 4
 geprueftesObjekt: "https://www.steakakademie.de/"
-standComponents: "2026-08-10"
+standComponents: "2026-08-17"
 
 komponenten:
   - id: domain-kennzeichenrecht
@@ -81,9 +81,22 @@ komponenten:
     titel: "Preisangabenverordnung (PAngV)"
     herkunft: arag-7
     neu: true
-    pruefung: "Gesamtpreis inkl. USt, ggf. Grundpreis, Versandkosten korrekt ausgewiesen"
-    rechtsgrundlage: "PAngV §§ 3, 4"
+    pruefung: "Gesamtpreis inkl. USt, ggf. Grundpreis, Versandkosten korrekt ausgewiesen; § 19-UStG-Hinweis auf aktiven Produktseiten"
+    rechtsgrundlage: >-
+      PAngV §§ 3, 4 (PAngV 2022, zuletzt geändert durch Art. 8 des Gesetzes vom 12.05.2026,
+      BGBl. 2026 I Nr. 139 — Umsetzung RL (EU) 2023/2225 über Verbraucherkreditverträge);
+      § 19 UStG (Kleinunternehmer, Grenzen 25.000 €/100.000 € seit 01.01.2025, in 2026 unverändert)
     status: ok
+    befund: >-
+      Geprüft 17.08.2026. Die PAngV-Novelle vom 12.05.2026 stammt aus dem
+      Verbraucherkredit-Umsetzungsgesetz und betrifft die Kreditvorschriften der PAngV
+      (effektiver Jahreszins u. Ä.). Steakakademie bietet keine Verbraucherkredite/Finanzierung
+      an → NICHT einschlägig. §§ 3, 4 PAngV (Gesamtpreisangabe) inhaltlich unverändert.
+      Den konkreten Wortlaut von Art. 8 habe ich nicht im Volltext verifiziert — die Einordnung
+      stützt sich auf den Regelungskontext des Gesetzes.
+    monitor: >-
+      Neu prüfen, falls je Ratenzahlung/Finanzierung (z. B. Digistore24-Ratenkauf) angeboten wird —
+      dann greifen die geänderten Kredit-Vorschriften der PAngV unmittelbar.
 
   - id: dse-ssl-tls
     titel: "DSE: SSL/TLS-Verschlüsselung dokumentiert"
@@ -229,7 +242,20 @@ komponenten:
     pruefung: "Änderungen DSGVO, TDDDG, EU AI Act, DDG, Verbraucherrecht; Steuerrecht (Steuer-Matrix)"
     rechtsgrundlage: "—"
     status: monitor
-    befund: "Letzter Lauf 10.08.2026. Offene Watchpoints: UWG/EmpCo 27.09.2026 (s. green-claims-empco), Digital Omnibus DSGVO-Teil (nicht verabschiedet), AI-Act Art. 50 Abs. 2 ab 02.12.2026 für Altsysteme."
+    befund: >-
+      Letzter Lauf 17.08.2026 (nichts akut Neues). Geprüft und NICHT einschlägig: PAngV-Novelle
+      12.05.2026 (Verbraucherkredit, s. preisangaben-pangv); TDDDG/DDG inhaltlich unverändert
+      (§ 25 TDDDG gilt fort); Widerrufsbutton § 356a BGB seit 19.06.2026 in Kraft und umgesetzt.
+    monitor: >-
+      Offene Watchpoints mit Restlaufzeit ab 17.08.2026:
+      (a) UWG/EmpCo-Novelle in Kraft 27.09.2026 — 41 Tage (s. green-claims-empco);
+      (b) AI-Act Art. 50 Abs. 2 (maschinenlesbare Kennzeichnung, Provider-Pflicht) für vor dem
+          02.08.2026 in Verkehr gebrachte Systeme ab 02.12.2026 — 107 Tage;
+      (c) Digital Omnibus DSGVO-/ePrivacy-Teil: NICHT verabschiedet (nur der KI-Teil,
+          VO (EU) 2026/1744, ist seit 27.07.2026 in Kraft) — kein Handlungsbedarf, weiter beobachten;
+      (d) DPMA-Statuscheck Wortmarke AZ 3020262290701 (Eintragung/Beanstandung) — monatlicher
+          Rhythmus, zuletzt 10.08.2026, nächste Fälligkeit ~10.09.2026. Nach Eintragung beginnt
+          die 3-monatige Widerspruchsfrist Dritter → dann als eigener Watchpoint führen.
 
   # ── NEU 10.08.2026: UWG-Novelle (EmpCo-Umsetzung), in Kraft 27.09.2026 ───────
   - id: green-claims-empco
@@ -271,22 +297,30 @@ komponenten:
       auf /ki-disclaimer. KI-Redaktionspersonas sind als KI erkennbar und tragen kein
       schema.org/Person-Markup.
     rechtsgrundlage: "§ 5 UWG (Irreführung über wesentliche Merkmale); EU AI Act Art. 50 Abs. 4; Art. 50 Abs. 2 (Provider-Pflicht, Altsysteme ab 02.12.2026)"
-    status: fix-needed
+    status: ok
     befund: >-
-      Geprüft 10.08.2026. ERFÜLLT bei Community-Rezepten (/rezepte/community/[slug]: Alt-Text
-      '— KI-generiertes Symbolbild' + sichtbarer Hinweis im Fließtext) und bei den Avatar-Personas
-      (/autoren/[slug]: Label 'KI-Redaktionspersona' + Satz 'ist eine KI-gestützte Redaktionspersona'
-      + Link /ki-disclaimer; schema.org/Person nur für reale Autoren — sauber gelöst).
-      LÜCKE: die redaktionellen Rezeptseiten (/rezepte/[slug], Bilder aus fal.ai/FLUX via
-      scripts/recipe-agent.mjs) tragen KEINEN KI-Hinweis — imageAlt beschreibt das Gericht wie ein
-      echtes Foto (z. B. 'Brisket vom Smoker — zartes Rindfleisch mit Bark und Rauchring').
+      Aktualisiert 17.08.2026 (war fix-needed). ERFÜLLT bei Community-Rezepten
+      (/rezepte/community/[slug]: Alt-Text '— KI-generiertes Symbolbild' + sichtbarer Hinweis im
+      Fließtext) und bei den Avatar-Personas (/autoren/[slug]: Label 'KI-Redaktionspersona' + Satz
+      'ist eine KI-gestützte Redaktionspersona' + Link /ki-disclaimer; schema.org/Person nur für
+      reale Autoren — sauber gelöst).
+      LÜCKE GESCHLOSSEN 17.08.2026: src/components/RecipeTemplate.tsx (Hero aller redaktionellen
+      Rezeptseiten /rezepte/[kategorie]/[recipe]) trägt jetzt Alt-Text-Suffix
+      '— KI-generiertes Symbolbild' + sichtbaren Badge 'KI-Symbolbild' (Sparkles, unten rechts),
+      identische Lösung wie bei Community-Rezepten. Typecheck grün (tsc --noEmit, Exit 0).
+      NICHT committet — Uwe committet via Claude Code.
     monitor: >-
-      ANWALTSTHEMA (nicht abschließend entschieden): Ob ein KI-Foodbild ein 'Deep Fake' i. S. v.
-      Art. 3 Nr. 60 AI Act ist, ist offen — Art. 50 Abs. 4 greift dann nicht zwingend. Der belastbare
-      Hebel ist § 5 UWG: ein KI-Bild, das als reales Produktfoto wirkt, kann über wesentliche
-      Merkmale irreführen. Empfehlung: Community-Lösung 1:1 auf redaktionelle Rezepte ausdehnen
-      (Alt-Text-Suffix im recipe-agent + sichtbarer Hinweis unter dem Hero) — geringer Aufwand,
-      beseitigt den Grenzfall vollständig.
+      RESTLÜCKE (geringeres Risiko, offen): Listen-/Karten-Thumbnails tragen den Hinweis noch nicht —
+      src/app/rezepte/page.tsx:140, src/app/rezepte/[slug]/page.tsx:507, src/app/kategorie/[slug]/page.tsx:150,
+      src/app/page.tsx (Homepage-Karten), sowie /cuts/[slug]:194 und /methoden/[slug]:135.
+      Auf Detailseiten ist der Hinweis gesetzt; Thumbnails sind der schwächere Irreführungsfall,
+      sollten aber bei Gelegenheit nachgezogen werden (Alt-Suffix genügt).
+      ANWALTSTHEMA (unverändert offen): Ob ein KI-Foodbild ein 'Deep Fake' i. S. v. Art. 3 Nr. 60
+      AI Act ist, ist nicht entschieden — Art. 50 Abs. 4 greift dann nicht zwingend. Belastbarer
+      Hebel bleibt § 5 UWG (Irreführung über wesentliche Merkmale). Ebenfalls Anwaltsthema:
+      Avatar-Personas Marco/Jonas/Elena als Autoren — derzeit sauber als KI gelabelt, aber die
+      Frage, ob eine erfundene Persona mit Fachautorität per se irreführend ist (§ 5 UWG,
+      E-E-A-T-Kontext), ist nicht abschließend geklärt.
 
   # ── NEU 03–07.06.2026: Community/UGC, Gutscheine, neue Verarbeiter ──────────
   # Tiefen-Check 07.06.2026. Diese Flächen kamen nach dem ARAG-Check (02.06.) dazu.

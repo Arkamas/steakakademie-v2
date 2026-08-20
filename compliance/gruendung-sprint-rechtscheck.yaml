@@ -15,7 +15,7 @@
 # Letzte Aktualisierung: 2026-08-10 (Rechts-Update-Scan: § 356a BGB in Kraft,
 #   UWG/EmpCo-Novelle ab 27.09.2026 als eigene Komponente ergänzt)
 
-version: 3
+version: 4
 zweck: "Rechts-Check-Modul des Gründung-Sprint (Produkt F)"
 hinweis: "Keine Rechtsberatung — strukturierte Vorprüfung. Bei Unsicherheit Anwalt (Kunde hat ggf. Rechtsschutz)."
 standComponents: "2026-06-05"
@@ -74,9 +74,15 @@ komponenten:
 
   - id: preisangaben-pangv
     titel: "Preisangabenverordnung"
-    pruefung: "Gesamtpreis inkl. USt, Grundpreis, Versand"
-    rechtsgrundlage: "PAngV §§ 3, 4"
-    sprint-aktion: "Nur bei Shop/Preisen relevant."
+    pruefung: "Gesamtpreis inkl. USt, Grundpreis, Versand; bei Ratenzahlung/Finanzierung zusätzlich Kreditangaben (effektiver Jahreszins)"
+    rechtsgrundlage: >-
+      PAngV §§ 3, 4; PAngV zuletzt geändert durch Art. 8 des Gesetzes vom 12.05.2026
+      (BGBl. 2026 I Nr. 139, Umsetzung RL (EU) 2023/2225 Verbraucherkreditverträge) —
+      betrifft die Kredit-/Finanzierungsvorschriften der PAngV
+    sprint-aktion: >-
+      Nur bei Shop/Preisen relevant. NEU 17.08.2026: Bietet der Gründer Ratenzahlung oder
+      Finanzierung an, greifen die zum 12.05.2026 geänderten Kredit-Vorschriften der PAngV —
+      dann Kreditangaben (effektiver Jahreszins u. a.) prüfen lassen. Anwaltsthema.
     status: open
 
   - id: dse-ssl-tls

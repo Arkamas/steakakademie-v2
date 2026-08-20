@@ -9,17 +9,31 @@ import { sichtbareArtikel, nurVeroeffentlicht, istEntwurf } from '@/lib/redaktio
 /** JSON-LD sicher einbetten: verhindert das Ausbrechen aus dem script-Tag. */
 const ldJson = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
 
-export const metadata: Metadata = {
-  title: 'Artikel — Grundlagen und Werkstattwissen',
-  description:
-    'Artikel der Steakakademie: Grundlagen, Technik und Werkstattwissen rund um Grill, Smoker und Fleisch — erklärt fürs Nachmachen, nicht fürs Nachschlagen.',
-  alternates: { canonical: 'https://steakakademie.de/artikel' },
-  openGraph: {
+/**
+ * Solange kein Artikel freigegeben ist, rendert diese Seite nur den Leerzustand.
+ * Eine leere Uebersicht gehoert nicht in den Index — das waere Thin Content und
+ * wuerde die Route verbrennen, bevor sie Inhalt hat.
+ *
+ * Konditional und nicht als Schalter: Sobald der erste Artikel auf
+ * reviewed: true steht, faellt das noindex beim naechsten Build von allein weg.
+ * Dieselbe Bedingung steuert den Sitemap-Ausschluss in next-sitemap.config.js.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const leer = nurVeroeffentlicht(allArtikels).length === 0;
+
+  return {
     title: 'Artikel — Grundlagen und Werkstattwissen',
-    description: 'Grundlagen, Technik und Werkstattwissen rund um Grill, Smoker und Fleisch.',
-    url: 'https://steakakademie.de/artikel',
-  },
-};
+    description:
+      'Artikel der Steakakademie: Grundlagen, Technik und Werkstattwissen rund um Grill, Smoker und Fleisch — erklärt fürs Nachmachen, nicht fürs Nachschlagen.',
+    alternates: { canonical: 'https://steakakademie.de/artikel' },
+    ...(leer && { robots: { index: false, follow: false } }),
+    openGraph: {
+      title: 'Artikel — Grundlagen und Werkstattwissen',
+      description: 'Grundlagen, Technik und Werkstattwissen rund um Grill, Smoker und Fleisch.',
+      url: 'https://steakakademie.de/artikel',
+    },
+  };
+}
 
 export default function ArtikelIndexPage() {
   // sichtbareArtikel: in der Entwicklung inklusive Entwuerfe, im Produktions-Build

@@ -1,3 +1,45 @@
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Gibt es mindestens einen freigegebenen Artikel?
+ *
+ * Solange keiner auf reviewed: true steht, rendert /artikel nur den
+ * Leerzustand. Eine leere Seite gehoert weder in die Sitemap noch in den Index —
+ * sie waere Thin Content und wuerde die Route verbrennen, bevor sie Inhalt hat.
+ *
+ * Bewusst konditional aus dem Dateibestand gelesen statt als manueller Schalter:
+ * Sobald Uwe den ersten Artikel freigibt, faellt der Ausschluss beim naechsten
+ * Build von allein weg. Ein Flag muesste jemand zurueckdrehen und wuerde
+ * garantiert vergessen.
+ *
+ * Die Bedingung spiegelt nurVeroeffentlicht() aus src/lib/redaktion.ts.
+ * Gelesen wird die Frontmatter direkt, weil diese Datei CommonJS ist und die
+ * contentlayer-Ausgabe ESM — der Dateibestand ist ohnehin die Quelle.
+ */
+function hatFreigegebeneArtikel() {
+  const dir = path.join(__dirname, 'content', 'artikel');
+  let dateien;
+  try {
+    dateien = fs.readdirSync(dir).filter((f) => f.endsWith('.mdx'));
+  } catch {
+    return false; // Verzeichnis fehlt = nichts freigegeben
+  }
+  return dateien.some((f) => {
+    const raw = fs.readFileSync(path.join(dir, f), 'utf8');
+    // \r im Zeichensatz wegen CRLF-Dateien im Repo (KAN-26)
+    const feld = (k) => {
+      const m = raw.match(new RegExp(`^${k}:[ \\t]*(.*?)[ \\t\\r]*$`, 'm'));
+      return m ? m[1].replace(/^["']|["']$/g, '').trim() : null;
+    };
+    const status = feld('status');
+    const reviewed = feld('reviewed');
+    return status !== 'draft' && status !== 'review' && reviewed !== 'false';
+  });
+}
+
+const ARTIKEL_FREIGEGEBEN = hatFreigegebeneArtikel();
+
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: 'https://steakakademie.de',
@@ -59,6 +101,12 @@ module.exports = {
   },
   // Prioritäten nach Content-Typ
   transform: async (config, path) => {
+    // /artikel bleibt draussen, solange kein Artikel freigegeben ist (null = ausschliessen).
+    // Die Detailseiten brauchen keine Regel: generateStaticParams erzeugt sie in
+    // Produktion gar nicht erst, sie stehen also ohnehin nicht im Manifest.
+    if (!ARTIKEL_FREIGEGEBEN && path.startsWith('/artikel')) {
+      return null;
+    }
     // Pillar Pages: höchste Priorität
     if (path === '/ehrliches-system' || path.startsWith('/cuts/') || path.startsWith('/vergleich/') || path.startsWith('/methoden/')) {
       return { loc: path, changefreq: 'monthly', priority: 0.9 };

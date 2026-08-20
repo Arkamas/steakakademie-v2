@@ -14,7 +14,7 @@
  */
 
 import { readFileSync, readdirSync, statSync } from 'fs';
-import { join, extname, dirname, relative } from 'path';
+import { join, extname, dirname, relative, sep } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -119,10 +119,62 @@ for (const f of affiliateFiles) {
   }
 }
 
+// ── 5) Externe Bild-URLs in MDX-Frontmatter ─────────────────────────────────
+// Ein image:/heroImage: auf fremdem Host laedt beim Seitenaufruf ungefragt von
+// dort — derselbe Mechanismus, der bei den Amazon-Bildpfaden geschlossen wurde
+// (KAN-71): Drittanbieter-Request ohne Einwilligung, dazu IP-Uebermittlung.
+// Bilder gehoeren nach public/ und werden ueber einen lokalen Pfad referenziert.
+//
+// Diese Regel fehlte bisher: der Guard hat src/ und public/ gelesen, aber nie
+// die Frontmatter der Inhalte. Aufgefallen ist es, weil vier neue Artikel das
+// Muster aus dem Altbestand uebernommen haben.
+//
+// ALTBESTAND: 13 Dateien tragen den Fehler seit Mai/Juni und wuerden den Build
+// ab der ersten Minute rot setzen. Sie stehen namentlich in BILD_ALTBESTAND —
+// bewusst als Liste und nicht als Muster, damit sie sichtbar bleibt, sich beim
+// Abarbeiten verkleinert und nicht versehentlich waechst. Fuer alles Neue ist
+// die Regel hart.
+const BILD_ALTBESTAND = new Set([
+  'content/cuts/brisket.mdx',
+  'content/cuts/pulled-pork.mdx',
+  'content/methoden/direktes-grillen.mdx',
+  'content/methoden/searing-perfekte-kruste.mdx',
+  'content/methoden/smoken-low-and-slow.mdx',
+  'content/methoden/sous-vide.mdx',
+  'content/usa/carolinas.mdx',
+  'content/usa/kansas-city.mdx',
+  'content/usa/memphis.mdx',
+  'content/usa/texas-style.mdx',
+  'content/vergleich/fleischthermometer.mdx',
+  'content/vergleich/grills.mdx',
+  'content/vergleich/messer.mdx',
+]);
+
+const BILD_FELDER = /^(image|heroImage|ogImage|thumbnail):\s*["']?(https?:\/\/[^"'\s]+)/gm;
+
+let altbestandTreffer = 0;
+for (const f of contentFiles) {
+  const relPfad = rel(f).split(sep).join('/');
+  const txt = readFileSync(f, 'utf8');
+  // Nur die Frontmatter betrachten, nicht den Fliesstext: ein Link im Text ist
+  // etwas anderes als eine Bildquelle, die der Browser automatisch laedt.
+  const fmEnde = txt.indexOf('\n---', 3);
+  const fm = txt.startsWith('---') && fmEnde > 0 ? txt.slice(0, fmEnde + 1) : '';
+  if (!fm) continue;
+  for (const m of fm.matchAll(BILD_FELDER)) {
+    if (BILD_ALTBESTAND.has(relPfad)) { altbestandTreffer++; continue; }
+    const host = m[2].replace(/^https?:\/\//, '').split('/')[0];
+    add('Externes Bild in Frontmatter', f, `${m[1]}: laedt von ${host} — Bild nach public/ legen und lokal referenzieren`);
+  }
+}
+
 // ── Report ───────────────────────────────────────────────────────────────────
 const scanned = srcFiles.length + publicFiles.length + contentFiles.length;
 if (violations.length === 0) {
   console.log(`✅ Legal-Guard: keine Abmahn-Regressionen (${scanned} Dateien geprüft).`);
+  if (altbestandTreffer) {
+    console.log(`   Hinweis: ${altbestandTreffer} externe Bild-URL(n) im Altbestand (BILD_ALTBESTAND, ${BILD_ALTBESTAND.size} Dateien) — geduldet, nicht geloest.`);
+  }
   process.exit(0);
 }
 

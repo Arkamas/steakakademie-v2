@@ -214,7 +214,7 @@ export default function VergleichIndexPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {[
                     { label: 'Kerntemperaturen: Der komplette Guide', href: '/temperatur-guide' },
-                    { label: 'Maillard-Reaktion verstehen', href: '/temperatur-guide' },
+                    { label: 'Maillard-Reaktion verstehen', href: '/wissen' },
                     { label: 'Reverse Sear — Methodik', href: '/methoden/reverse-sear' },
                     { label: 'Dry-Aging: Reifung & Enzyme', href: '/aging' },
                     { label: 'Ribeye: intramuskuläres Fett', href: '/cuts/ribeye' },

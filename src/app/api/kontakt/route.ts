@@ -113,7 +113,9 @@ export async function POST(req: Request) {
 
   // 2) Zustellen per Loops.
   const apiKey     = process.env.LOOPS_API_KEY;
-  const templateId = process.env.LOOPS_KONTAKT_TEMPLATE_ID;
+  // Fallback-Name: der Store-Datensatz LOOPS_KONTAKT_TEMPLATE_ID erreicht die
+  // Lambda nachweislich nicht (Stand 20.08.2026), ein frischer Name umgeht das.
+  const templateId = process.env.LOOPS_KONTAKT_TEMPLATE_ID || process.env.LOOPS_KONTAKT_TID;
   let mailSent = false;
   // Diagnose: bei Fehlversand Ursache in der Antwort mitliefern (kein Secret,
   // nur Loops-Status + Fehlertext). Netlify-Function-Logs sind unzuverlaessig.
@@ -156,7 +158,7 @@ export async function POST(req: Request) {
       console.error('[kontakt] loops error', e);
     }
   } else {
-    mailError = `env fehlt: ${apiKey ? '' : 'LOOPS_API_KEY '}${templateId ? '' : 'LOOPS_KONTAKT_TEMPLATE_ID'}`.trim();
+    mailError = `env fehlt: ${apiKey ? '' : 'LOOPS_API_KEY '}${templateId ? '' : 'LOOPS_KONTAKT_TEMPLATE_ID'} | LOOPS_* in env: ${Object.keys(process.env).filter((k) => k.startsWith('LOOPS_')).sort().join(',') || 'keine'}`.trim();
     console.warn('[kontakt] LOOPS_API_KEY oder LOOPS_KONTAKT_TEMPLATE_ID fehlt — nur gespeichert.');
   }
 

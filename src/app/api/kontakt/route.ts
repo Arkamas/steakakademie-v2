@@ -115,6 +115,9 @@ export async function POST(req: Request) {
   const apiKey     = process.env.LOOPS_API_KEY;
   const templateId = process.env.LOOPS_KONTAKT_TEMPLATE_ID;
   let mailSent = false;
+  // Diagnose: bei Fehlversand Ursache in der Antwort mitliefern (kein Secret,
+  // nur Loops-Status + Fehlertext). Netlify-Function-Logs sind unzuverlaessig.
+  let mailError: string | null = null;
   if (apiKey && templateId) {
     try {
       const d = new Date(receivedAt);
@@ -144,11 +147,16 @@ export async function POST(req: Request) {
         }),
       });
       mailSent = resp.ok;
-      if (!resp.ok) console.error('[kontakt] loops failed', resp.status, await resp.text());
+      if (!resp.ok) {
+        mailError = `loops ${resp.status}: ${(await resp.text()).slice(0, 300)}`;
+        console.error('[kontakt]', mailError);
+      }
     } catch (e) {
+      mailError = `fetch: ${String(e).slice(0, 300)}`;
       console.error('[kontakt] loops error', e);
     }
   } else {
+    mailError = `env fehlt: ${apiKey ? '' : 'LOOPS_API_KEY '}${templateId ? '' : 'LOOPS_KONTAKT_TEMPLATE_ID'}`.trim();
     console.warn('[kontakt] LOOPS_API_KEY oder LOOPS_KONTAKT_TEMPLATE_ID fehlt — nur gespeichert.');
   }
 
@@ -167,7 +175,7 @@ export async function POST(req: Request) {
   if (!angekommen) {
     return antwort(req, alsFormular, { error: 'Die Nachricht konnte nicht entgegengenommen werden. Bitte schreib direkt an pitmaster@steakakademie.de.' }, 502);
   }
-  return antwort(req, alsFormular, { ok: true, receivedAt, mailSent }, 200);
+  return antwort(req, alsFormular, { ok: true, receivedAt, mailSent, ...(mailError ? { mailError } : {}) }, 200);
 }
 
 /** JSON fuer fetch, Redirect fuer das Formular ohne JavaScript. */

@@ -26,6 +26,15 @@ export const Artikel = defineDocumentType(() => ({
     seoTitle: { type: 'string' },
     seoDescription: { type: 'string' },
     noindex: { type: 'boolean', default: false },
+    // ── Redaktionsvorbehalt (AI Act Art. 50 Abs. 4) ──────────────────────────
+    // Die Befreiung von der KI-Kennzeichnungspflicht haengt daran, dass jeder
+    // Entwurf geprueft und verantwortet wird. Damit das im Code pruefbar ist
+    // und nicht nur in compliance/ai-act-einstufung.md steht, tragen Artikel
+    // den Zustand selbst. Defaults sind bewusst „veroeffentlicht/geprueft":
+    // der Altbestand kennt die Felder nicht und darf sich nicht veraendern.
+    // Durchgesetzt von scripts/check-redaktionsvorbehalt.mjs (prebuild).
+    status:   { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
+    reviewed: { type: 'boolean', default: true },
   },
   computedFields: {
     slug: {

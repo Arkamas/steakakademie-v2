@@ -1,4 +1,5 @@
 import { allRecipes, allArtikels, allMethodes } from 'contentlayer/generated';
+import { nurVeroeffentlicht } from '@/lib/redaktion';
 
 // ════════════════════════════════════════════════════════════════════════════
 // „Frisch & Saisonal" — Server-Daten fürs bewegte Spotlight-Modul.
@@ -94,7 +95,7 @@ export function getFrischSaisonal(now: Date = new Date()): FrischSaisonalData {
   const seasonTerms = SEASON_TERMS[season];
 
   const recipes = (allRecipes as any[]).filter((r) => r.publishedAt);
-  const artikels = (allArtikels as any[]).filter((a) => a.publishedAt && !a.noindex);
+  const artikels = (nurVeroeffentlicht(allArtikels) as any[]).filter((a) => a.publishedAt && !a.noindex);
   const methoden = (allMethodes as any[]).filter((m) => m.publishedAt);
 
   const byDateDesc = (a: any, b: any) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt);

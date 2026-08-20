@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { getAuthorBySlug, getAllAuthors } from '@/lib/authors';
 import { allCuts, allArtikels } from 'contentlayer/generated';
+import { nurVeroeffentlicht } from '@/lib/redaktion';
 import { breadcrumbSchema } from '@/lib/schema';
 
 interface Props {
@@ -32,7 +33,7 @@ export default function AutorPage({ params }: Props) {
 
   // Alle Artikel dieses Autors
   const authorCuts = allCuts.filter((c) => c.authorSlug === author.slug);
-  const authorArtikel = allArtikels.filter((a) => a.authorSlug === author.slug);
+  const authorArtikel = nurVeroeffentlicht(allArtikels).filter((a) => a.authorSlug === author.slug);
   const totalArticles = authorCuts.length + authorArtikel.length;
 
   // Schema.org Person — NUR für reale Autoren (KI-Personas bekommen kein

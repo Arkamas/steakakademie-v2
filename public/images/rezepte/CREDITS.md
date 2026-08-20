@@ -38,6 +38,19 @@ keine Pflichtangabe. Einstufung je Quelle: docs/bildquellen-whitelist.md.
 | roastbeef-reverse-sear | Pexels | Regina Tommasi | 30221650 | 18.08.2026 |
 | wagyu-burger | Pexels | Philippe Alamazani | 27469753 | 18.08.2026 |
 
+## Eigenfotos (imageAI: false)
+
+Bilder ohne jede generative Bearbeitung. Sie sind der Gegenpol zum Austauschpaket:
+Motiv, Licht und Umgebung stammen unverändert aus der Kamera, verändert wurden nur
+Ausschnitt, Drehung und Farbe — deterministisch mit sharp, nicht generativ. Die
+EXIF-Daten bleiben erhalten und sind der Herkunftsnachweis.
+
+| Rezept | Datei | Aufnahme | Bearbeitung |
+|---|---|---|---|
+| spareribs-3-2-1 | `spareribs-3-2-1.jpg`, `-hero.jpg` | Uwe Yendell, 19.08.2026, Samsung SM-G985F | 90° gedreht (Querformat), links beschnitten (Kamera-Wasserzeichen entfernt), Sättigung 0,72 (Rücknahme des Samsung-„Essen"-Modus), Kontrast 1,06, Schärfung sigma 1 |
+| spareribs-3-2-1 | `spareribs-3-2-1-bark.jpg` (Schrittbild) | Uwe Yendell, 19.08.2026, Samsung SM-G985F | links/rechts beschnitten (Gehäusekante, Kamera-Wasserzeichen), Sättigung 0,88, Kontrast 1,08, Schärfung sigma 1,2. Ohne „Essen"-Modus aufgenommen |
+
+
 ## Offener Befund
 
 - `cedar-plank-lachs` — Bild am 19.08.2026 ersetzt, der Audit-Befund

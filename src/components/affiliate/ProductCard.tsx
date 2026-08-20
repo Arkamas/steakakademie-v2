@@ -213,6 +213,11 @@ export default function ProductCard({
   className,
 }: ProductCardProps) {
   const providerLabel = PROVIDER_LABELS[product.provider] ?? 'Händler';
+  // KAN-75 (20.08.2026): Die Links tragen prefetch={false}. Ohne das laedt Next
+  // /go/<id> im Voraus, sobald die Karte in den Viewport kommt; die Route
+  // antwortet mit 302 auf den Haendler, und der Browser folgt der Weiterleitung
+  // — die Besucher-IP ginge beim blossen Scrollen an Amazon, ohne Klick und
+  // ohne Einwilligung. Aufgefallen erst durch die neue CSP, vorher unsichtbar.
   const affiliateHref = `/go/${product.id}`;
   // imageUrl (PA-API) hat Vorrang vor image (manuell in YAML)
   const imageSrc = product.imageUrl ?? product.image;
@@ -274,6 +279,7 @@ export default function ProductCard({
 
         <Link
           href={affiliateHref}
+          prefetch={false}
           className={`btn-affiliate w-full justify-center text-sm mb-2 plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
           rel="nofollow noopener"
           target="_blank"
@@ -333,6 +339,7 @@ export default function ProductCard({
           </p>
           <Link
             href={affiliateHref}
+          prefetch={false}
             className={`inline-flex items-center gap-1 bg-brand-fire text-white font-sans text-[11px] font-bold tracking-wide px-3 py-1.5 hover:bg-[#cc4412] transition-colors plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
             rel="nofollow noopener"
             target="_blank"
@@ -421,6 +428,7 @@ export default function ProductCard({
 
         <Link
           href={affiliateHref}
+          prefetch={false}
           className={`btn-affiliate w-full justify-center plausible-event-name=Affiliate-Klick plausible-event-provider=${product.provider} plausible-event-produkt=${product.id}`}
           rel="nofollow noopener"
           target="_blank"

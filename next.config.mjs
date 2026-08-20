@@ -1,5 +1,46 @@
 import { withContentlayer } from 'next-contentlayer2';
 
+/**
+ * Content-Security-Policy (KAN-75, Art. 32 DSGVO — 20.08.2026)
+ * ============================================================
+ * Erlaubt ist genau das, was die Seite nachweislich laedt. Alles andere wird
+ * vom Browser blockiert — insbesondere nachtraeglich eingeschleuste Skripte,
+ * die Daten an fremde Hosts schicken wuerden.
+ *
+ * Woher die Eintraege stammen (Inventur 20.08.2026):
+ *   plausible.io   Reichweitenmessung, laedt ohne Einwilligung (cookielos)
+ *   *.clarity.ms   Microsoft Clarity, laedt NUR nach Einwilligung
+ *   *.supabase.co  Datenbank-Abfragen aus dem Browser (NEXT_PUBLIC_SUPABASE_URL)
+ * Schriften sind ueber next/font self-hosted, es gibt keine iframes und keine
+ * Formulare mit externem action — deshalb font-src 'self' und form-action 'self'.
+ *
+ * WARUM 'unsafe-inline' bei script-src, obwohl das die Schutzwirkung mindert:
+ * Der saubere Weg waeren Nonces. Next vergibt sie aber nur ueber die Middleware,
+ * und ein Nonce pro Anfrage macht jede Seite dynamisch — das wuerde die
+ * statische Generierung aller 497 Seiten aushebeln. Der Preis waere hier hoeher
+ * als der Gewinn. Was die Richtlinie trotzdem leistet: Ein eingeschleustes
+ * <script src="fremder-host"> laedt nicht, und exfiltrieren kann ein Angreifer
+ * nur zu den drei oben genannten Zielen.
+ *
+ * Aendern heisst pruefen: Nach jeder Aenderung die Seiten mit externen Skripten
+ * im Browser oeffnen und die Konsole auf CSP-Verstoesse ansehen. Eine zu strenge
+ * Richtlinie bricht still — es gibt keine Fehlermeldung auf der Seite.
+ */
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://plausible.io https://*.clarity.ms",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://*.clarity.ms",
+  "font-src 'self' data:",
+  "connect-src 'self' https://plausible.io https://*.clarity.ms https://*.supabase.co",
+  "frame-src 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  'upgrade-insecure-requests',
+].join('; ');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -32,6 +73,7 @@ const nextConfig = {
       {
         source: '/(.*)',
         headers: [
+          { key: 'Content-Security-Policy', value: CSP },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },

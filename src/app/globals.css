@@ -271,6 +271,14 @@ nav a, header button, .nav-sharp {
   outline-offset: 3px;
 }
 
+/* Heller Lese-Layer: Gold (#C8882A) erreicht auf Pergament nur 1.54-1.78:1 und
+   verfehlt damit WCAG 1.4.11 (3:1). Auf dem dunklen Rahmen bleibt Gold richtig
+   (5.18:1) - die Korrektur wird deshalb bewusst nur hier gescoped, nicht global.
+   #241A12 (INK) liefert 8.79:1 am unteren Verlaufsende. */
+.reading-light :focus-visible {
+  outline-color: #241A12;
+}
+
 /* ── HERO FULL-BLEED — atmosphärischer 60-80vh Page-Hero ────────────── */
 
 .hero-fullbleed {

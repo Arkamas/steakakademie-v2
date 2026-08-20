@@ -101,6 +101,8 @@ const DIFFICULTY_STYLE: Record<string, string> = {
 // ── Farb-Töne der hellen Zone ───────────────────────────────────────────────
 const INK      = '#241A12'; // Titel
 const RUST     = '#9C3A0E'; // Kicker/Akzent (TM-Rot, markenwarm)
+const RUST_TEXT = '#7E2B08'; // RUST als Fliesstext/Label: 4.84:1 auf #D1B785 (AA)
+                            // RUST bleibt fuer Flaechen/Borders/Icons (6.03:1 bzw. >3:1)
 const BODY     = '#4A3C2E'; // Fließtext
 const MUTED    = '#5A4936'; // Meta
 const LINE     = '#C3AB80'; // Linien/Borders
@@ -204,7 +206,7 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
                     onChange={(e) => { setQuery(e.target.value); resetPage(); }}
                     placeholder="Rezepte der Steakakademie durchsuchen …"
                     aria-label="Rezepte durchsuchen"
-                    className="w-full font-body text-[15px] pl-11 pr-4 py-3.5 bg-white/95 focus:outline-none"
+                    className="w-full font-body text-[15px] pl-11 pr-4 py-3.5 bg-white/95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#241A12]"
                     style={{ color: INK }}
                   />
                 </div>
@@ -364,7 +366,7 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
               onChange={(e) => { setQuery(e.target.value); resetPage(); }}
               placeholder="Rezept, Cut oder Methode suchen …"
               aria-label="Rezepte durchsuchen"
-              className="w-full font-body text-sm pl-9 pr-9 py-2.5 border bg-transparent focus:outline-none transition-colors"
+              className="w-full font-body text-sm pl-9 pr-9 py-2.5 border bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#241A12] transition-colors"
               style={{ borderColor: LINE, color: INK }}
             />
             {query && (
@@ -405,7 +407,7 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
               type="button"
               onClick={() => { setLand('alle'); setMethode('alle'); setQuery(''); resetPage(); }}
               className="font-sans text-xs font-bold tracking-[0.12em] uppercase px-5 py-2.5 border transition-colors"
-              style={{ borderColor: RUST, color: RUST }}
+              style={{ borderColor: RUST_TEXT, color: RUST_TEXT }}
             >
               Filter zurücksetzen
             </button>
@@ -431,7 +433,7 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
                     </div>
 
                     {/* Kicker — Land · Kategorie-Detail (TM: roter Tag) */}
-                    <span className="font-sans text-[10px] font-bold tracking-[0.16em] uppercase mb-2" style={{ color: RUST }}>
+                    <span className="font-sans text-[10px] font-bold tracking-[0.16em] uppercase mb-2" style={{ color: RUST_TEXT }}>
                       {primaryLand(recipe.land) ?? recipe.meatType} · {recipe.cookingMethod}
                     </span>
 

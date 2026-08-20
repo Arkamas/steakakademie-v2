@@ -151,16 +151,18 @@ async function main() {
   // Ein Entwurf im Repo ist harmlos, solange keine Seite ihn rendert. Gefaehrlich
   // wird er, sobald eine Collection roh abgefragt wird — dann haengt die
   // Rechtsposition an einer Zeile, die niemand mehr liest. Deshalb statisch:
-  // jede Verwendung von allArtikels muss durch nurVeroeffentlicht() laufen.
+  // jede Verwendung von allArtikels muss durch nurVeroeffentlicht() oder
+  // sichtbareArtikel() laufen. Beide liegen in src/lib/redaktion.ts; die zweite
+  // faellt in Produktion auf die erste zurueck und ist deshalb gleichwertig.
   const quellen = await walk(SRC, '.tsx')
   await walk(SRC, '.ts', quellen)
   for (const q of quellen) {
     const raw = await readFile(q, 'utf8')
     if (!/\ballArtikels\b/.test(raw)) continue
-    if (/\bnurVeroeffentlicht\b/.test(raw)) continue
+    if (/\b(nurVeroeffentlicht|sichtbareArtikel)\b/.test(raw)) continue
     err(
       relative(ROOT, q).split(sep).join('/'),
-      'greift allArtikels roh ab — Entwuerfe wuerden mitrendern. nurVeroeffentlicht() verwenden.'
+      'greift allArtikels roh ab — Entwuerfe wuerden mitrendern. nurVeroeffentlicht()/sichtbareArtikel() verwenden.'
     )
   }
 

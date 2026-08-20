@@ -33,3 +33,23 @@ export function nurVeroeffentlicht<T extends Redaktionsstatus>(docs: readonly T[
 export function nurEntwuerfe<T extends Redaktionsstatus>(docs: readonly T[]): T[] {
   return docs.filter((d) => d.status === 'draft' || d.status === 'review' || d.reviewed === false);
 }
+
+/**
+ * Entwuerfe in der Entwicklung sichtbar machen, in Produktion nicht.
+ *
+ * Bewusst so herum formuliert, dass PRODUKTION der strikte Pfad ist: Wenn die
+ * Umgebungserkennung je fehlschlaegt oder jemand die Bedingung umbaut, faellt das
+ * Ergebnis auf nurVeroeffentlicht() zurueck — also auf „zu wenig anzeigen"
+ * statt auf „ungeprueften KI-Text ausliefern". Der teurere Fehler ist hier der
+ * zweite (siehe compliance/ai-act-einstufung.md Punkt 3).
+ *
+ * next build setzt NODE_ENV auf 'production', next dev auf 'development'.
+ */
+export function sichtbareArtikel<T extends Redaktionsstatus>(docs: readonly T[]): T[] {
+  return process.env.NODE_ENV === 'production' ? nurVeroeffentlicht(docs) : [...docs];
+}
+
+/** True, wenn dieses Dokument nur wegen der Entwicklungsumgebung sichtbar ist. */
+export function istEntwurf<T extends Redaktionsstatus>(doc: T): boolean {
+  return doc.status === 'draft' || doc.status === 'review' || doc.reviewed === false;
+}

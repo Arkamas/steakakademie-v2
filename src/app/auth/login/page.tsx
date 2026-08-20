@@ -97,7 +97,7 @@ function LoginForm() {
           </span>
         </Link>
         <p className="font-sans text-xs text-text-muted mt-2 uppercase tracking-widest">
-          Mitglieder-Login
+          Mitglieder-Zugang — kostenlos
         </p>
       </div>
 
@@ -140,7 +140,7 @@ function LoginForm() {
           /* ── Formular ── */
           <>
             <h1 className="font-serif text-xl font-bold text-text-light mb-1">
-              Willkommen zurück
+              Willkommen in der Akademie
             </h1>
             <p className="font-body text-sm text-text-secondary mb-6">
               {mode === 'magic'
@@ -201,8 +201,8 @@ function LoginForm() {
               <button
                 type="submit"
                 disabled={status === 'loading' || !email.trim() || (mode === 'password' && !password)}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 font-sans font-bold text-sm text-white rounded-sm transition-opacity disabled:opacity-50"
-                style={{ background: '#E85018' }}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 font-sans font-bold text-sm rounded-sm transition-opacity disabled:opacity-50"
+                style={{ background: '#E85018', color: '#17100B' }}
               >
                 {status === 'loading'
                   ? (mode === 'magic' ? 'Wird gesendet …' : 'Bitte warten …')

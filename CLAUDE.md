@@ -76,6 +76,17 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    Human-gated bleibt für Marketing/Publishing/Außenauftritt; **defensive Compliance-Fixes
    (AGB, Datenschutz, Impressum, Widerruf, KI-Disclaimer, Kennzeichnung) laufen autonom**.
    Danach Uwe kurz informieren, was gefixt wurde.
+8. **Startseiten-Hierarchie: INHALT ZUERST (Uwe, 20.08.2026).** Der erste Bildschirm
+   gehört dem Thema, nicht dem Angebot: H1 → Rubriken-Einstieg (Cuts, Grilltechniken,
+   Wissen, Rezepte, Ausrüstung) → erst danach der Mitglieder-CTA. Das Ausbildungs-
+   angebot (Diplome) erscheint als Teaser **weiter unten**, nie above the fold.
+   **Auflösung des Widerspruchs zu Abschnitt 5:** „Umsatz zuerst" ist eine
+   *Arbeits*priorität (woran gebaut wird), **keine Layout-Priorität** (was oben steht).
+   Wer beides verwechselt, schiebt das Diplom nach oben — genau das ist mehrfach
+   passiert. Abgesichert durch `scripts/check-startseiten-hierarchie.mjs` (Build-Gate,
+   läuft im prebuild). Reihenfolge ändern = Soll-Liste im Skript bewusst anpassen UND
+   hier vermerken. Nicht durch stilles Umsortieren in `page.tsx`.
+
 7. **Epistemische Ehrlichkeit (Uwe, 03.07.2026) — gilt für JEDE Antwort/JEDEN Output:**
    - Wenn Informationen unsicher, unvollständig oder spekulativ sind, das klar sagen.
      Keine Fakten, Quellen oder Zahlen erfinden.

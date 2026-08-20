@@ -174,30 +174,6 @@ export default async function HomePage() {
               Rezepte, Ausrüstung. Methodisch, geprüft, ohne Bullshit.
             </p>
 
-            {/* Primäre Conversion-Aktion: kostenloser Mitglieder-Zugang.
-                EINE Haupt-Aktion pro Seite — alles andere ist sekundär. */}
-            <div className="flex flex-col items-center gap-3 mb-9">
-              <div className="flex flex-wrap items-center justify-center gap-3">
-                <Link
-                  href="/auth/login"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 font-sans font-bold text-sm uppercase tracking-wide hover:opacity-90 transition-opacity"
-                  style={{ background: '#C8882A', color: '#0D0A06' }}
-                >
-                  Werde SteakAdemiker — kostenlos <ChevronRight size={16} />
-                </Link>
-                <Link
-                  href="/diplome"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 font-sans font-bold text-xs uppercase tracking-wide border hover:bg-brand-gold/10 transition-colors"
-                  style={{ borderColor: 'rgba(200,136,42,0.4)', color: '#C8882A' }}
-                >
-                  Diplom-Pfad ansehen
-                </Link>
-              </div>
-              <p className="text-xs font-sans text-text-light/60">
-                Kostenloser Mitglieder-Zugang — dein Diplom-Fortschritt wird gespeichert. Kein Abo, keine Kreditkarte.
-              </p>
-            </div>
-
             <div className="flex flex-wrap items-center justify-center gap-2.5">
               {[
                 { label: 'Cuts & Fleischkunde', href: '/cuts' },
@@ -214,6 +190,29 @@ export default async function HomePage() {
                   {label} <ChevronRight size={12} />
                 </Link>
               ))}
+            </div>
+
+            {/* Mitglieder-Zugang — EINE Haupt-Aktion pro Seite.
+
+                REIHENFOLGE IST DOKTRIN (Uwe, 20.08.2026): Die Rubriken stehen VOR
+                dieser Aktion — Inhalt zuerst, Angebot danach. Das Ausbildungsangebot
+                ist mehrfach von selbst nach oben gewandert, weil CLAUDE.md Abschnitt 5
+                „Umsatz zuerst" sagt und keine Gegenregel existierte. Jetzt geregelt:
+                CLAUDE.md Abschnitt 2 Regel 8 + scripts/check-startseiten-hierarchie.mjs
+                (Build-Gate). Wer hier umsortiert, bekommt einen roten Build. */}
+            <div className="flex flex-col items-center gap-3 mb-9">
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/auth/login"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 font-sans font-bold text-sm uppercase tracking-wide hover:opacity-90 transition-opacity"
+                  style={{ background: '#C8882A', color: '#0D0A06' }}
+                >
+                  Werde SteakAdemiker — kostenlos <ChevronRight size={16} />
+                </Link>
+              </div>
+              <p className="text-xs font-sans text-text-light/60">
+                Kostenloser Mitglieder-Zugang — dein Diplom-Fortschritt wird gespeichert. Kein Abo, keine Kreditkarte.
+              </p>
             </div>
           </div>
         </section>

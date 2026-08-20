@@ -10,10 +10,21 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: '**.steakakademie.de' },
-      // Amazon PA-API Produktbilder
-      { protocol: 'https', hostname: 'm.media-amazon.com' },
-      { protocol: 'https', hostname: 'images-na.ssl-images-amazon.com' },
-      { protocol: 'https', hostname: 'images-eu.ssl-images-amazon.com' },
+      // KAN-71 (20.08.2026): Die drei Amazon-Hosts sind hier BEWUSST entfernt.
+      //
+      // Datenschutz: Ein von Amazon geladenes Produktbild schickt die IP jedes
+      // Besuchers beim Scrollen an Amazon — ohne Einwilligung ein Verstoss
+      // (Art. 6 DSGVO / TDDDG). Genau das hat das Anwalts-Testat beanstandet.
+      //
+      // Lizenz: Ein lokaler Spiegel waere kein Ausweg. Das PartnerNet erlaubt
+      // Produktbilder grundsaetzlich nur ueber die API-Auslieferung mit kurzen
+      // Cache-Fristen; dauerhaft gespeicherte Kopien sind davon nicht gedeckt.
+      // Deshalb bleiben die handgepflegten Platzhalter (ProductImagePlaceholder).
+      //
+      // Diese Zeilen sind der eigentliche Riegel: Ohne passenden remotePattern
+      // scheitert ein versehentlicher Rueckfall sichtbar beim Rendern, statt
+      // still eine Verletzung zu produzieren. Wieder aufnehmen nur mit
+      // geklaerter Lizenz UND einer Einwilligungsschranke davor.
     ],
   },
   async headers() {

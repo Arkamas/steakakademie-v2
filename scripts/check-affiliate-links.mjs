@@ -10,7 +10,7 @@
  * Exit code: 0 = alle OK, 1 = mindestens ein Fehler
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -116,7 +116,58 @@ async function checkUrl(url) {
 }
 
 // ── Main ───────────────────────────────────────────────────────────────────
+/**
+ * KAN-71: Wachhund gegen den Rueckfall zu Amazon-gehosteten Bildern.
+ *
+ * Am 20.08.2026 wurden die drei Amazon-Hosts aus next.config.mjs gestrichen und
+ * scripts/fetch-pa-api-images.mjs entfernt. Grund war doppelt: Von Amazon
+ * geladene Bilder schicken die Besucher-IP ohne Einwilligung dorthin
+ * (Art. 6 DSGVO / TDDDG), und ein lokaler Spiegel waere lizenzrechtlich nicht
+ * gedeckt — das PartnerNet liefert Produktbilder ueber die API mit kurzen
+ * Cache-Fristen aus.
+ *
+ * Beides laesst sich unbemerkt rueckgaengig machen: ein remotePattern
+ * hinzufuegen, ein Skript wieder einspielen, images.json befuellen. Deshalb
+ * sieht der woechentliche Lauf an beiden Stellen nach und meldet einen Fund.
+ * Er bricht NICHT ab — ein Fund kann legitim sein, wenn Lizenz und
+ * Einwilligung geklaert sind. Auffallen soll er trotzdem.
+ */
+function pruefeAmazonBildpfade() {
+  const funde = [];
+
+  const config = join(ROOT, 'next.config.mjs');
+  if (existsSync(config)) {
+    for (const [nr, zeile] of readFileSync(config, 'utf8').split(/\r?\n/).entries()) {
+      // Kommentare zaehlen nicht — die erklaeren ja gerade, warum es fehlt.
+      const ohneKommentar = zeile.replace(/\/\/.*$/, '').replace(/\/\*.*?\*\//g, '');
+      if (/amazon/i.test(ohneKommentar)) funde.push(`next.config.mjs:${nr + 1} → ${zeile.trim()}`);
+    }
+  }
+
+  const cache = join(ROOT, 'products', 'images.json');
+  if (existsSync(cache)) {
+    const roh = readFileSync(cache, 'utf8');
+    if (/amazon/i.test(roh)) {
+      let anzahl = '?';
+      try {
+        anzahl = String(Object.keys(JSON.parse(roh)).filter(k => !k.startsWith('_')).length);
+      } catch { /* kaputtes JSON ist selbst ein Fund */ }
+      funde.push(`products/images.json enthaelt Amazon-URLs (${anzahl} Eintraege)`);
+    }
+  }
+
+  if (funde.length && !AS_JSON) {
+    console.log('\n⚠️  KAN-71 — Amazon-Bildpfade wieder aktiv:\n');
+    for (const f of funde) console.log(`  • ${f}`);
+    console.log('\n  Vor der Nutzung klaeren: PartnerNet-Lizenz fuer die Auslieferung UND');
+    console.log('  Einwilligungsschranke, sonst geht die Besucher-IP ohne Einwilligung an Amazon.\n');
+  }
+  return funde;
+}
+
 async function main() {
+  const amazonFunde = pruefeAmazonBildpfade();
+
   const products = loadRegistry();
   const results  = [];
 
@@ -147,7 +198,7 @@ async function main() {
   const ok     = results.filter(r => r.ok);
 
   if (AS_JSON) {
-    console.log(JSON.stringify({ total: results.length, ok: ok.length, errors: errors.length, results }, null, 2));
+    console.log(JSON.stringify({ total: results.length, ok: ok.length, errors: errors.length, amazonFunde, results }, null, 2));
     process.exit(errors.length > 0 ? 1 : 0);
   }
 

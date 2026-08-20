@@ -35,6 +35,10 @@ export const Artikel = defineDocumentType(() => ({
     // Durchgesetzt von scripts/check-redaktionsvorbehalt.mjs (prebuild).
     status:   { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
     reviewed: { type: 'boolean', default: true },
+    // Wird beim Review gesetzt (docs/redaktionsplan-startseite.md, Prozess Schritt 2)
+    // und dokumentiert, WANN geprueft wurde — fuer den Redaktionsvorbehalt der
+    // relevante Nachweis neben dem WER (author).
+    reviewedAt: { type: 'date' },
   },
   computedFields: {
     slug: {

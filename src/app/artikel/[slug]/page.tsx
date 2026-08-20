@@ -97,6 +97,29 @@ const mdxComponents = {
       {children}
     </strong>
   ),
+  // Ohne diesen Override rendern die Serien-Querverlinkungen als
+  // Browser-Standardlinks — blau, unterstrichen, ausserhalb des Farbschemas.
+  a: ({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+    const extern = !!href && /^https?:\/\//.test(href);
+    return (
+      <a
+        href={href}
+        className="text-brand-fire underline underline-offset-4 decoration-1 hover:decoration-2 transition-all"
+        {...(extern ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  },
+  blockquote: ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
+    <blockquote
+      className="border-l-[3px] border-brand-gold pl-4 my-6 font-body text-[1.0625rem] leading-[1.8] text-text-primary/90 italic"
+      {...props}
+    >
+      {children}
+    </blockquote>
+  ),
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
     // Breite Tabellen scrollen in ihrem eigenen Container, damit die Seite
     // auf schmalen Viewports nicht horizontal laeuft.

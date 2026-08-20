@@ -115,7 +115,10 @@ export async function POST(req: Request) {
   const apiKey     = process.env.LOOPS_API_KEY;
   // Fallback-Name: der Store-Datensatz LOOPS_KONTAKT_TEMPLATE_ID erreicht die
   // Lambda nachweislich nicht (Stand 20.08.2026), ein frischer Name umgeht das.
-  const templateId = process.env.LOOPS_KONTAKT_TEMPLATE_ID || process.env.LOOPS_KONTAKT_TID;
+  // Letzter Fallback ist die ID selbst: kein Secret (ohne API-Key wertlos),
+  // und Netlifys Env-Store liefert neu angelegte Variablen derzeit nicht
+  // zuverlaessig an die Lambda aus (Support-Fall, Stand 21.08.2026).
+  const templateId = process.env.LOOPS_KONTAKT_TEMPLATE_ID || process.env.LOOPS_KONTAKT_TID || 'cmt1yg44p0cln0k090q9kifkn';
   let mailSent = false;
   // Diagnose: bei Fehlversand Ursache in der Antwort mitliefern (kein Secret,
   // nur Loops-Status + Fehlertext). Netlify-Function-Logs sind unzuverlaessig.

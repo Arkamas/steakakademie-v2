@@ -5,7 +5,11 @@ import type { RecipeCardData } from '@/components/recipe/RecipeExplorer';
 export function parseDuration(iso: string): string {
   const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
   if (!m) return iso;
-  const h = parseInt(m[1] || '0'), min = parseInt(m[2] || '0');
+  let h = parseInt(m[1] || '0'), min = parseInt(m[2] || '0');
+  // Minuten-only-Dauern normalisieren: PT390M ist gueltiges ISO-8601 und kam
+  // bisher als "390 Min." auf die Karte. 27 Rezepte im Bestand sind betroffen,
+  // das laengste mit PT1440M ("1440 Min." statt "24 Std.").
+  if (min >= 60) { h += Math.floor(min / 60); min = min % 60; }
   if (h && min) return `${h} Std. ${min} Min.`;
   if (h) return `${h} Std.`;
   return `${min} Min.`;

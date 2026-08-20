@@ -26,8 +26,11 @@ const RECIPE_CATEGORY: Record<string, string> = {
 function parseDuration(iso: string): string {
   const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
   if (!m) return iso;
-  const h   = parseInt(m[1] || '0');
-  const min = parseInt(m[2] || '0');
+  let h   = parseInt(m[1] || '0');
+  let min = parseInt(m[2] || '0');
+  // Minuten-only-Dauern normalisieren (identisch zu src/lib/rezept/card-data.ts —
+  // die Funktion liegt doppelt vor; beide Stellen muessen gleich bleiben).
+  if (min >= 60) { h += Math.floor(min / 60); min = min % 60; }
   if (h && min) return `${h} Std. ${min} Min.`;
   if (h) return `${h} Std.`;
   return `${min} Min.`;

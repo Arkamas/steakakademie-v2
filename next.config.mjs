@@ -44,6 +44,10 @@ const CSP = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Ohne diesen Schalter laedt Next 14 src/instrumentation.ts nicht, und ohne
+  // die Datei bleibt die Telemetrie im Marco-Chat wirkungslos (No-op-Tracer).
+  // Ab Next 15 ist der Hook stabil und die Zeile entfaellt.
+  experimental: { instrumentationHook: true },
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],

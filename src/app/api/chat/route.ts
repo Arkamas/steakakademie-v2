@@ -79,6 +79,16 @@ export async function POST(req: Request) {
       messages,
       temperature: 0.7,
       maxTokens: 512,
+      experimental_telemetry: {
+        isEnabled: true,
+        functionId: 'marco_chat',
+        // DSGVO: Nutzereingaben bleiben draussen. Ohne diese beiden Schalter
+        // schreibt das SDK Prompt und Antwort im Klartext in die Spans - bei
+        // einem Chat sind das personenbezogene Daten, die dort nichts zu suchen
+        // haben. Was bleibt, ist unkritisch: Modell, Dauer, Token-Zahlen.
+        recordInputs: false,
+        recordOutputs: false,
+      },
     });
 
     return result.toDataStreamResponse({

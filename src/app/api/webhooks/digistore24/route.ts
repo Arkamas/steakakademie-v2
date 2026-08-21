@@ -406,9 +406,7 @@ async function handleVoucherProduct(
 
 async function sendVoucherEmail(email: string, code: string, courseTitle: string | null) {
   const apiKey     = process.env.LOOPS_API_KEY;
-  // Fallback-ID wie in /api/kontakt: Netlifys Env-Store liefert neu angelegte
-  // Variablen derzeit nicht zuverlaessig aus (Support-Fall, Stand 21.08.2026).
-  const templateId = process.env.LOOPS_VOUCHER_TEMPLATE_ID || 'cmpfkyigy0bw401dneu24vuo2';
+  const templateId = process.env.LOOPS_VOUCHER_TEMPLATE_ID;
   if (!apiKey || !templateId) {
     throw new Error('LOOPS_API_KEY or LOOPS_VOUCHER_TEMPLATE_ID not set');
   }

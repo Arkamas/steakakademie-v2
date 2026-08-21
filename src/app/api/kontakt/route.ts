@@ -113,16 +113,8 @@ export async function POST(req: Request) {
 
   // 2) Zustellen per Loops.
   const apiKey     = process.env.LOOPS_API_KEY;
-  // Fallback-Name: der Store-Datensatz LOOPS_KONTAKT_TEMPLATE_ID erreicht die
-  // Lambda nachweislich nicht (Stand 20.08.2026), ein frischer Name umgeht das.
-  // Letzter Fallback ist die ID selbst: kein Secret (ohne API-Key wertlos),
-  // und Netlifys Env-Store liefert neu angelegte Variablen derzeit nicht
-  // zuverlaessig an die Lambda aus (Support-Fall, Stand 21.08.2026).
-  const templateId = process.env.LOOPS_KONTAKT_TEMPLATE_ID || process.env.LOOPS_KONTAKT_TID || 'cmt1yg44p0cln0k090q9kifkn';
+  const templateId = process.env.LOOPS_KONTAKT_TEMPLATE_ID;
   let mailSent = false;
-  // Diagnose: bei Fehlversand Ursache in der Antwort mitliefern (kein Secret,
-  // nur Loops-Status + Fehlertext). Netlify-Function-Logs sind unzuverlaessig.
-  let mailError: string | null = null;
   if (apiKey && templateId) {
     try {
       const d = new Date(receivedAt);
@@ -153,15 +145,12 @@ export async function POST(req: Request) {
       });
       mailSent = resp.ok;
       if (!resp.ok) {
-        mailError = `loops ${resp.status}: ${(await resp.text()).slice(0, 300)}`;
-        console.error('[kontakt]', mailError);
+        console.error('[kontakt] loops', resp.status, (await resp.text()).slice(0, 300));
       }
     } catch (e) {
-      mailError = `fetch: ${String(e).slice(0, 300)}`;
       console.error('[kontakt] loops error', e);
     }
   } else {
-    mailError = `env fehlt: ${apiKey ? '' : 'LOOPS_API_KEY '}${templateId ? '' : 'LOOPS_KONTAKT_TEMPLATE_ID'} | LOOPS_* in env: ${Object.keys(process.env).filter((k) => k.startsWith('LOOPS_')).sort().join(',') || 'keine'}`.trim();
     console.warn('[kontakt] LOOPS_API_KEY oder LOOPS_KONTAKT_TEMPLATE_ID fehlt — nur gespeichert.');
   }
 
@@ -180,7 +169,7 @@ export async function POST(req: Request) {
   if (!angekommen) {
     return antwort(req, alsFormular, { error: 'Die Nachricht konnte nicht entgegengenommen werden. Bitte schreib direkt an pitmaster@steakakademie.de.' }, 502);
   }
-  return antwort(req, alsFormular, { ok: true, receivedAt, mailSent, ...(mailError ? { mailError } : {}) }, 200);
+  return antwort(req, alsFormular, { ok: true, receivedAt, mailSent }, 200);
 }
 
 /** JSON fuer fetch, Redirect fuer das Formular ohne JavaScript. */

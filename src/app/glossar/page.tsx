@@ -4,6 +4,7 @@ import { ChevronRight, BookOpen } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allGlossars } from 'contentlayer/generated';
+import { sichtbareArtikel } from '@/lib/redaktion';
 import { breadcrumbSchema, collectionPageSchema, definedTermSetSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
@@ -31,7 +32,10 @@ const CATEGORY_ORDER = [
 ];
 
 export default function GlossarPage() {
-  const sorted = [...allGlossars].sort((a, b) => a.title.localeCompare(b.title, 'de'));
+  // sichtbareArtikel: in der Entwicklung inklusive Entwuerfe, im Produktions-
+  // Build faellt es auf nurVeroeffentlicht() zurueck. Der Glossar-Agent legt
+  // neue Begriffe als draft/false an — sie erscheinen erst nach Freigabe.
+  const sorted = [...sichtbareArtikel(allGlossars)].sort((a, b) => a.title.localeCompare(b.title, 'de'));
 
   const byCategory = CATEGORY_ORDER.reduce<Record<string, typeof sorted>>((acc, cat) => {
     const entries = sorted.filter(g => g.category === cat);

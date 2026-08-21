@@ -229,6 +229,11 @@ export const Glossar = defineDocumentType(() => ({
     publishedAt:     { type: 'date',   required: true },
     seoTitle:        { type: 'string' },
     seoDescription:  { type: 'string' },
+    // Wie beim Artikel-Typ: Defaults halten die 182 Altbestands-Begriffe
+    // sichtbar, die die Felder nicht tragen. Neu erzeugte Eintraege schreibt
+    // scripts/glossary-agent.mjs ausdruecklich als draft/false.
+    status:          { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
+    reviewed:        { type: 'boolean', default: true },
   },
   computedFields: {
     url: {

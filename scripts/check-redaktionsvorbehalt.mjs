@@ -25,9 +25,9 @@
  *      vergessener Schritt.
  *
  *   3. HART, strukturell: Entwuerfe duerfen im Repo liegen, aber nicht in den
- *      Build geraten. Sobald eine Seite eine Collection roh abfragt, ohne durch
- *      nurVeroeffentlicht() zu gehen, wuerden Entwuerfe mitrendern. Check C
- *      faengt das statisch ab.
+ *      Build geraten. Sobald eine Seite eine der Collections aus
+ *      GESCHUETZTE_COLLECTIONS roh abfragt, ohne durch nurVeroeffentlicht() zu
+ *      gehen, wuerden Entwuerfe mitrendern. Check C faengt das statisch ab.
  *
  *   4. WARNUNG, Altbestand: Dokumente ohne beide Felder, die vor dem STICHTAG
  *      veroeffentlicht wurden, brechen den Build nicht. Der Bestand ist vor
@@ -62,6 +62,14 @@ const STICHTAG = '2026-08-20'
  * unabhaengig vom Datum. Hier entsteht Neues, hier gibt es keinen Altbestand.
  */
 const STRENGE_PFADE = ['artikel']
+
+/**
+ * Collections, deren Dokumente einen Redaktionsstatus tragen und die deshalb nie
+ * roh gerendert werden duerfen. allGlossars steht seit dem 21.08.2026 dabei: Der
+ * Glossar-Agent committet taeglich ungepruefte Eintraege direkt auf main - ohne
+ * Filter waeren sie mit demselben Push live.
+ */
+const GESCHUETZTE_COLLECTIONS = ['allArtikels', 'allGlossars']
 
 const STATUS_WERTE = ['draft', 'review', 'published']
 
@@ -158,12 +166,15 @@ async function main() {
   await walk(SRC, '.ts', quellen)
   for (const q of quellen) {
     const raw = await readFile(q, 'utf8')
-    if (!/\ballArtikels\b/.test(raw)) continue
-    if (/\b(nurVeroeffentlicht|sichtbareArtikel)\b/.test(raw)) continue
-    err(
-      relative(ROOT, q).split(sep).join('/'),
-      'greift allArtikels roh ab — Entwuerfe wuerden mitrendern. nurVeroeffentlicht()/sichtbareArtikel() verwenden.'
-    )
+    const gefiltert = /\b(nurVeroeffentlicht|sichtbareArtikel)\b/.test(raw)
+    for (const coll of GESCHUETZTE_COLLECTIONS) {
+      if (!new RegExp(`\\b${coll}\\b`).test(raw)) continue
+      if (gefiltert) continue
+      err(
+        relative(ROOT, q).split(sep).join('/'),
+        `greift ${coll} roh ab — Entwuerfe wuerden mitrendern. nurVeroeffentlicht()/sichtbareArtikel() verwenden.`
+      )
+    }
   }
 
   // ── Bericht ────────────────────────────────────────────────────────────────

@@ -2,6 +2,7 @@ import {
   allRecipes, allGlossars, allDiplomLektions, allMethodes,
 } from 'contentlayer/generated';
 import { getCutsBySpecies } from './cuts-catalog';
+import { nurVeroeffentlicht } from './redaktion';
 
 // Server-berechneter „Plattform-Puls": echte, automatisch wachsende Content-Zahlen
 // + die zuletzt dazugekommenen Inhalte. Kein Cold-Start-0-Problem (Content existiert),
@@ -14,6 +15,11 @@ export type PulsData = {
 };
 
 export function getPlattformPuls(): PulsData {
+  // Zaehler UND "zuletzt dazugekommen" laufen ueber dieselbe gefilterte Liste:
+  // Ein noch nicht freigegebener Glossar-Entwurf darf weder mitzaehlen noch als
+  // Neuzugang auf der Startseite auftauchen.
+  const glossar = nurVeroeffentlicht(allGlossars);
+
   const map = (arr: { title: string; url: string; publishedAt?: string }[], kind: string): PulsItem[] =>
     arr.map((d) => ({ title: d.title, url: d.url, kind, date: d.publishedAt ?? '' }));
 
@@ -21,7 +27,7 @@ export function getPlattformPuls(): PulsData {
     ...map(allRecipes as never[], 'Rezept'),
     ...map(allDiplomLektions as never[], 'Lektion'),
     ...map(allMethodes as never[], 'Methode'),
-    ...map(allGlossars as never[], 'Begriff'),
+    ...map(glossar as never[], 'Begriff'),
   ];
 
   const latest = pool
@@ -35,7 +41,7 @@ export function getPlattformPuls(): PulsData {
     // sie zweistellig sind — kein manueller Eingriff nötig.
     counts: [
       { label: 'Rezepte', value: allRecipes.length },
-      { label: 'Glossar-Begriffe', value: allGlossars.length },
+      { label: 'Glossar-Begriffe', value: glossar.length },
       { label: 'Diplom-Lektionen', value: allDiplomLektions.length },
       { label: 'Grilltechniken', value: allMethodes.length },
       // Cuts aus dem ATLAS-Katalog zaehlen, nicht die MDX-Artikel (das waren 3

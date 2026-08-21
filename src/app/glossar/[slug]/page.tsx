@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronRight, BookOpen, ArrowLeft } from 'lucide-react';
 import { allGlossars } from 'contentlayer/generated';
+import { sichtbareArtikel } from '@/lib/redaktion';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -12,12 +13,17 @@ interface Props {
   params: { slug: string };
 }
 
+// Eine Liste fuer alles auf dieser Seite — statische Pfade, Metadaten, Inhalt
+// und "Verwandte Begriffe". Ein Entwurf bekommt in Produktion damit weder eine
+// Route noch einen Link von einem anderen Begriff aus.
+const sichtbareBegriffe = sichtbareArtikel(allGlossars);
+
 export async function generateStaticParams() {
-  return allGlossars.map(g => ({ slug: g.slug }));
+  return sichtbareBegriffe.map(g => ({ slug: g.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const entry = allGlossars.find(g => g.slug === params.slug);
+  const entry = sichtbareBegriffe.find(g => g.slug === params.slug);
   if (!entry) return {};
   const title = entry.seoTitle ?? `${entry.title} — BBQ-Glossar | Steakakademie`;
   const description = entry.seoDescription ?? entry.shortDefinition;
@@ -68,12 +74,12 @@ const mdxComponents = {
 };
 
 export default function GlossarEntryPage({ params }: Props) {
-  const entry = allGlossars.find(g => g.slug === params.slug);
+  const entry = sichtbareBegriffe.find(g => g.slug === params.slug);
   if (!entry) notFound();
 
   const MDXContent = useMDXComponent(entry.body.code);
 
-  const related = allGlossars
+  const related = sichtbareBegriffe
     .filter(g => g.slug !== entry.slug && g.category === entry.category)
     .slice(0, 4);
 

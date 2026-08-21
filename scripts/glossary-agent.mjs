@@ -246,6 +246,14 @@ function buildMdxContent(entry, slug) {
     publishedAt: today,
     seoTitle: `${entry.title} — BBQ-Glossar | Steakakademie`,
     seoDescription: entry.seoDescription || entry.shortDefinition.slice(0, 155),
+    // Der Agent laeuft ohne Menschen: Claude erzeugt, der Workflow committet und
+    // pusht. Ein `reviewed: true` waere hier eine Behauptung ueber eine Pruefung,
+    // die nicht stattgefunden hat — und genau daran haengt laut
+    // compliance/ai-act-einstufung.md Punkt 3 die Befreiung von der
+    // KI-Kennzeichnung. Deshalb Entwurf: die Datei liegt im Repo, /glossar
+    // zeigt sie erst, wenn jemand sie freigibt (status: published, reviewed: true).
+    status: 'draft',
+    reviewed: false,
   }, { lineWidth: 0 }).trimEnd()
   return `---
 ${fm}

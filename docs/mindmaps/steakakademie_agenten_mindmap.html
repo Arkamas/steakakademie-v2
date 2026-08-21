@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steakakademie — Agentensystem</title>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader@0.17"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #F7F5F0;
+      color: #1a1a1a;
+      overflow: hidden;
+    }
+    header {
+      height: 52px;
+      padding: 0 20px;
+      background: #ffffff;
+      border-bottom: 2px solid #6c3483;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .logo { font-size: 16px; font-weight: 700; color: #4a235a; white-space: nowrap; }
+    .stats { display: flex; gap: 10px; flex: 1; }
+    .chip {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .chip-done     { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+    .chip-progress { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+    .chip-open     { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+    .meta          { font-size: 11px; color: #999; white-space: nowrap; }
+    #map { width: 100vw; height: calc(100vh - 52px); }
+    .markmap { width: 100%; height: 100%; }
+    .markmap-node circle { stroke-width: 1.5px !important; }
+    .markmap-node text   { fill: #1a1a1a !important; font-size: 13px !important; }
+    .markmap-link        { stroke: #ccc !important; }
+    .hint {
+      position: fixed; bottom: 14px; right: 16px;
+      font-size: 11px; color: #999; background: #fff;
+      padding: 6px 12px; border-radius: 6px; border: 1px solid #ddd;
+      pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🤖 Steakakademie · Agentensystem</div>
+    <div class="stats">
+      <span class="chip chip-done">✅ 2 aktiv</span>
+      <span class="chip chip-progress">🔄 0 laufend</span>
+      <span class="chip chip-open">○ 8 offen</span>
+    </div>
+    <span class="meta">Stand: 29.05.2026, 14:00 · 10 Agenten</span>
+  </header>
+
+  <div id="map">
+    <div class="markmap">
+      <script type="text/template">
+---
+markmap:
+  colorFreezeLevel: 2
+  initialExpandLevel: 1
+  maxWidth: 340
+  zoom: true
+  pan: true
+---
+# 🤖 Agentensystem
+
+## ✅ Agent 1 „Argus" — AGB-Compliance-Scanner
+### 📋 Tätigkeit: Prüfe steakakademie.de auf DSGVO/TTDSG-Verstöße. Prüfe: robots.txt, cookie consent, Impressum, Datenschutz, Schema.org Korrektheit. Erstelle Report.
+### ⏰ Trigger: Täglich 06:00 UTC
+### 🗓️ Schedule: 0 6 * * * (täglich)
+### 🔧 Tools: WebFetch, Bash
+### 📊 Status: ✅ Aktiv (CronCreate)
+### 📦 Repo: https://github.com/vecmahr/steakakademie-v2
+
+## ○ Agent 2 „Falke" — SEO-Monitor
+### 📋 Tätigkeit: Hole wöchentliche Google Search Console Daten für steakakademie.de. Top-10 Rankings, CTR-Entwicklung, neue indexierte Seiten, Fehler-Report. Vergleich mit Vorwoche.
+### ⏰ Trigger: Wöchentlich Mo 07:00 UTC
+### 🗓️ Schedule: 0 7 * * 1 (Montag 07:00 UTC)
+### 🔧 Tools: Google Search Console API, Searchfit SEO
+### 📊 Status: open
+### 📦 GSC API-Zugang (MCP oder Service Account JSON in Netlify)
+
+## ○ Agent 3 „Octopus" — Content-Pipeline
+### 📋 Tätigkeit: Starte Rezept-Scraper für TOP-10 BBQ-Rezepte diese Woche. Übersetze DE. Passe an Steakakademie-Stil an. Erstelle Notion-Entwurf zur Freigabe.
+### ⏰ Trigger: On-demand / wöchentlich
+### 🗓️ Schedule: On-demand oder 0 10 * * 3 (Mi 10:00 UTC)
+### 🔧 Tools: Bash (recipe-scraper.py), DeepL API, Notion MCP
+### 📊 Status: open
+### 📦 DeepL API Key, Notion MCP, scripts/recipe-scraper/
+
+## ○ Agent 4 „Hermes" — Newsletter-Automation
+### 📋 Tätigkeit: Prüfe Loops.so auf neue Subscriber (letzten 24h). Fehlgeschlagene DOI-Tokens (Bounce-Rate &gt; 15%?). Ausstehende Sequenz-Versendungen. Status-Report.
+### ⏰ Trigger: Täglich 08:00 UTC
+### 🗓️ Schedule: 0 8 * * * (täglich)
+### 🔧 Tools: Loops.so API, Supabase
+### 📊 Status: open
+### 📦 LOOPS_API_KEY (in Netlify gesetzt)
+
+## ✅ Agent 5 „Spürhund" — Affiliate-Link-Checker
+### 📋 Tätigkeit: Prüfe alle Amazon-Affiliate-Links in steakakademie-v2/. Teste jeden Link auf HTTP-Status. Markiere 404 oder redirected Links. Erstelle Fix-Liste für manuellen Review.
+### ⏰ Trigger: Wöchentlich Mo 08:00 UTC
+### 🗓️ Schedule: 0 3 * * 0 (Sonntag 03:00 UTC)
+### 🔧 Tools: npm run check-links:json, GitHub Issues
+### 📊 Status: ✅ done (GitHub Actions)
+### 📦 Amazon PA-API ASIN-Liste (noch aufzubauen)
+
+## ○ Agent 6 „Ruflo" — Social-Media-Content-Generator
+### 📋 Tätigkeit: Generiere 3 Instagram-Posts und 2 TikTok-Ideen aus dem neuesten Content von steakakademie.de. Format: Bild-Prompt für fal.ai + Caption + Hashtags. Schreibe in Notion-DB.
+### ⏰ Trigger: Wöchentlich Fr 10:00 UTC
+### 🗓️ Schedule: 0 10 * * 5 (Freitag 10:00 UTC)
+### 🔧 Tools: Notion MCP, fal.ai (Bilder), Bash
+### 📊 Status: open
+### 📦 Notion MCP, fal.ai API
+
+## ○ Agent 7 „Späher" — Konkurrenz-Monitor
+### 📋 Tätigkeit: Analysiere Top-5 DE-BBQ-Konkurrenten (Grillsportverein, BBQ-Pit Boys DE, etc.) auf neue Inhalte, Keyword-Gewinne, neue Produkte. Vergleiche mit steakakademie.de Ranking.
+### ⏰ Trigger: Monatlich 1. Mo 07:00 UTC
+### 🗓️ Schedule: 0 7 1 * * (monatlich, 1. des Monats)
+### 🔧 Tools: Nimble/Brightdata, WebFetch, Searchfit SEO
+### 📊 Status: open
+### 📦 Searchfit SEO, Nimble/Brightdata
+
+## ○ Agent 8 „Kodex" — Rechts-Update-Scanner
+### 📋 Tätigkeit: Prüfe auf Änderungen bei: DSGVO, TTDSG, EU AI Act, TDG (Telemediengesetz), Verbraucherrecht DE. Prüfe Steuerrecht-Änderungen relevant für Steuer-Matrix-Produkt. Erstelle Change-Report.
+### ⏰ Trigger: Monatlich 1. Mo 06:00 UTC
+### 🗓️ Schedule: 0 6 1 * * (monatlich)
+### 🔧 Tools: WebFetch (DSGVO, TTDSG, EU AI Act), Bash
+### 📊 Status: open
+### 📦 WebFetch (bmj.de, eur-lex.europa.eu, datenschutz.org)
+
+## ○ Agent 9 „Kasswart" — Digistore24-Performance-Report
+### 📋 Tätigkeit: Hole wöchentliche Verkaufsdaten von Digistore24 für alle aktiven Produkte. Berechne Conversion-Rate, AOV, Refund-Rate. Vergleiche mit Vorwoche. Erstelle Management-Summary.
+### ⏰ Trigger: Wöchentlich Mo 08:00 UTC
+### 🗓️ Schedule: 0 8 * * 1 (Montag)
+### 🔧 Tools: Digistore24 API / WebFetch, Bash
+### 📊 Status: open
+### 📦 Digistore24 API (API-Key in Netlify einzutragen)
+
+## ○ Agent 10 „Kartograph" — GSC-Indexierungs-Report
+### 📋 Tätigkeit: Prüfe welche Seiten von steakakademie.de neu indexiert wurden (letzte 7 Tage). Welche Seiten haben Coverage-Fehler? Welche Keywords haben Impressionen gewonnen? Report erstellen.
+### ⏰ Trigger: Wöchentlich Di 07:00 UTC
+### 🗓️ Schedule: 0 7 * * 2 (Dienstag)
+### 🔧 Tools: Google Search Console API
+### 📊 Status: open
+### 📦 Google Search Console API (Service Account)
+
+      </script>
+    </div>
+  </div>
+
+  <div class="hint">Klick: aufklappen/zuklappen &nbsp;·&nbsp; Scroll: zoomen &nbsp;·&nbsp; Drag: verschieben</div>
+</body>
+</html>

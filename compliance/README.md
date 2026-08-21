@@ -11,6 +11,7 @@ Agent-Prüfpunkte.
 |-------|---------------|-------|
 | `website-rechtscheck.yaml` | **Agent 1** (AGB-Compliance-Scanner) + **Agent 8** (Rechts-Update-Scanner) | Self-Audit von steakakademie.de gegen alle 18 + Bestandskomponenten |
 | `gruendung-sprint-rechtscheck.yaml` | **Gründung-Sprint** (Produkt F) Rechts-Check-Modul | Kunden-Audit der NEUEN Gründer-Website — gleiche 18 Komponenten |
+| `MASTER-PROMPT-Rechtssicherheit.md` | **Agent „Argus“** / manueller Einsatz | Wiederverwendbarer Master-Prompt für Voll-Audits (Abmahnschutz) — Top-10-Schnellcheck + alle 18 ARAG-Punkte + UGC/KI |
 
 ## Automatischer Regressions-Guard (CI)
 

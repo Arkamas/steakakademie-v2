@@ -15,6 +15,7 @@
  *   NEXT_PUBLIC_SUPABASE_URL
  *   LOOPS_API_KEY                  — Transactional E-Mail
  *   LOOPS_MAGIC_LINK_TEMPLATE_ID   — Template-ID des Magic-Link-Templates
+ *   LOOPS_VOUCHER_TEMPLATE_ID      — Template-ID der Gutschein-Mail
  */
 
 export const runtime  = 'nodejs';

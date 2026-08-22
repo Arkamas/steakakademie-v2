@@ -46,6 +46,7 @@ const MAX_BATCH_ITEMS = 128; // Voyage-Hardlimit pro Request
 const RATE_LIMIT_WAIT_MS = 25_000; // Wartezeit bei 429 (Free Tier: 3 Requests/Minute)
 const MAX_RATE_LIMIT_RETRIES = 30;
 
+const runStartedAt = new Date().toISOString(); // Zeitstempel des Indexlaufs
 const estimateTokens = (text) => Math.ceil(text.length / 3.3);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -222,6 +223,7 @@ async function main() {
           file_hash: fileHash,
         },
         embedding: embeddings[index],
+        indexed_at: runStartedAt,
       }));
 
       // Overwrite-Semantik: Alt-Chunks der Datei entfernen, dann neu einfügen

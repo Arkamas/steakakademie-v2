@@ -7,7 +7,37 @@
 *.tsx   text eol=lf
 *.js    text eol=lf
 *.mjs   text eol=lf
+*.cjs   text eol=lf
 *.json  text eol=lf
 *.css   text eol=lf
 *.yml   text eol=lf
 *.yaml  text eol=lf
+
+# Erweitert 22.08.2026: restliche Textformate ebenfalls LF — beendet die
+# CRLF-Churn (Dutzende scheinbar geaenderte Dateien nach Windows-Zugriff).
+*.csv   text eol=lf
+*.sql   text eol=lf
+*.svg   text eol=lf
+*.txt   text eol=lf
+*.html  text eol=lf
+*.toml  text eol=lf
+*.xml   text eol=lf
+*.sh    text eol=lf
+
+# Windows-Skripte brauchen CRLF
+*.ps1   text eol=crlf
+*.cmd   text eol=crlf
+*.bat   text eol=crlf
+
+# Binaerformate nie anfassen
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.avif  binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.tsv   text eol=lf
+.gitignore text eol=lf

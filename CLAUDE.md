@@ -134,9 +134,11 @@ Analytics & Data · CRM & Monetization.
   `kochwissen` (voyage-3.5) + Nacht-Index `knowledge_embeddings`; der Reranker sortiert
   beide gemeinsam. Nacht-Index läuft auf `voyage-4` (200M Free-Tier; voyage-3 war Legacy
   ohne Free-Tier) — Modellwechsel re-embeddet automatisch (isAlreadyIndexed prüft Modell),
-  Query-Seite erkennt das Korpus-Modell selbst (voyage-retrieval.ts). Kochwissen-Umstieg
-  auf voyage-4 NUR mit Re-Ingest: `kochwissen-ingest.mjs --force --model voyage-4` +
-  VOYAGE_MODEL=voyage-4. Reranker ist modell-agnostisch.
+  Query-Seite erkennt das Korpus-Modell selbst (voyage-retrieval.ts). Kochwissen wurde am 22.08.2026 per
+  `scripts/kochwissen-reembed.mjs` auf voyage-4 re-embedded (VOYAGE_MODEL=voyage-4 lokal
+  und auf Netlify gesetzt) — beide Korpora sprechen voyage-4. Reranker ist modell-agnostisch.
+  Indexierung läuft MANUELL in Uwes Terminal (lokale Cowork-VM hat keinen Netz-Egress);
+  der 23:45-Task ist nur noch Wächter (prüft Frische via Supabase, indexiert nicht).
 
 - **Prompt-Caching (20.08.2026):** Alle Anthropic-Calls laufen über `scripts/lib/anthropic.mjs`
   (`callClaude` / `Conversation`). Automatisches Caching = ein Feld `cache_control` auf

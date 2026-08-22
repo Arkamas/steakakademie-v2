@@ -25,7 +25,7 @@ export const VOYAGE_MODELS = {
   contextual: { balanced: 'voyage-context-4' },
   multimodal: { balanced: 'voyage-multimodal-3.5' },
   rerank: { best: 'rerank-2.5', fast: 'rerank-2.5-lite' },
-  /** Legacy-Modelle (kein Free-Tier mehr) — nur solange Korpora damit eingebettet sind. */
+  /** Historisch (22.08.2026 vollständig auf voyage-4 migriert; nur noch Doku-Referenz). */
   legacy: { knowledge: 'voyage-3', kochwissen: 'voyage-3.5' },
 } as const;
 

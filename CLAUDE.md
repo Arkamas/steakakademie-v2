@@ -127,6 +127,24 @@ Analytics & Data · CRM & Monetization.
   NICHT Keyword-Stuffing. `docs/geo-llm-ranking-factors.md`. Auto-Check: `geo-check.yml`.
 - **TikTok:** Story-Highlights aktiv nutzen (Reichweiten-Bonus), immer benennen.
 - **Werbekennzeichnung:** siehe §2.1.
+- **Voyage-Vollausbau (22.08.2026):** Zentraler Client `src/lib/voyage/client.ts`
+  (Embeddings, Reranker, Kontext-Embeddings, Multimodal; Retry bei 429). Wissenssuche ist
+  zweistufig: pgvector-Recall → `rerank-2.5-lite` (abschaltbar: VOYAGE_RERANK=off, Ausfall
+  = Fallback auf Vektor-Reihenfolge). /api/kochwissen zieht ZWEI Korpora: kuratiertes
+  `kochwissen` (voyage-3.5) + Nacht-Index `knowledge_embeddings`; der Reranker sortiert
+  beide gemeinsam. Nacht-Index läuft auf `voyage-4` (200M Free-Tier; voyage-3 war Legacy
+  ohne Free-Tier) — Modellwechsel re-embeddet automatisch (isAlreadyIndexed prüft Modell),
+  Query-Seite erkennt das Korpus-Modell selbst (voyage-retrieval.ts). Kochwissen-Umstieg
+  auf voyage-4 NUR mit Re-Ingest: `kochwissen-ingest.mjs --force --model voyage-4` +
+  VOYAGE_MODEL=voyage-4. Reranker ist modell-agnostisch.
+
+- **Prompt-Caching (20.08.2026):** Alle Anthropic-Calls laufen über `scripts/lib/anthropic.mjs`
+  (`callClaude` / `Conversation`). Automatisches Caching = ein Feld `cache_control` auf
+  Top-Level des Requests; die API setzt und verschiebt den Breakpoint selbst — **keine**
+  cache_control-Marker in einzelne Content-Blöcke setzen. Greift erst ab Modell-Mindestlänge
+  (Haiku 4.5: 4096 Tok, Opus 4.7: 2048, Opus 5: 512 — Tabelle `CACHE_MIN_TOKENS` im Modul);
+  darunter passiert still nichts. Prüfen: `npm run cache:selftest`. TTL via `ANTHROPIC_CACHE_TTL=1h`.
+
 - **Videoproduktion (OpenMontage, 09.08.2026):** agenten-getriebener Video-Stack,
   installiert per `npm run video:setup` nach `tools/openmontage/` (**gitignored, AGPLv3** —
   nicht ins Repo vendoren). Marken-Playbook + Pflicht-Briefing liegen kanonisch in

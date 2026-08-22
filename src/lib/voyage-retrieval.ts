@@ -7,12 +7,14 @@
  * Voraussetzung: Migration 20260819_enable_pgvector_voyage.sql ist eingespielt
  * und `npm run index:knowledge` wurde mindestens einmal ausgeführt.
  *
- * Hinweis: Die Query wird standardmäßig mit `voyage-3` eingebettet und matcht
- * damit die Text-Chunks (docs/content). Mit --code indexierte Chunks nutzen
- * `voyage-code-3` — für Code-Suchen das Modell per Option angleichen.
+ * Modell-Erkennung (22.08.2026): Das Query-Embedding-Modell wird NICHT mehr
+ * hartkodiert, sondern aus dem Korpus gelesen (metadata->>'model' der Chunks,
+ * Mehrheitsentscheid, 10 min gecacht). Damit folgt die Suche automatisch, wenn
+ * der Nacht-Index den Korpus auf ein neues Modell umbettet (voyage-3 → voyage-4),
+ * ohne dass hier etwas angefasst werden muss. Override: options.model.
  */
-import { VoyageAIClient } from 'voyageai'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { embedQuery } from '@/lib/voyage/client'
 
 export interface KnowledgeMatch {
   id: string
@@ -30,21 +32,12 @@ export interface KnowledgeMatch {
 export interface SearchContextOptions {
   /** Mindest-Kosinus-Ähnlichkeit (0-1), Default 0.7 */
   matchThreshold?: number
-  /** Embedding-Modell für die Query — muss zum Indexierungs-Modell passen */
-  model?: 'voyage-3' | 'voyage-code-3'
+  /** Embedding-Modell für die Query — muss zum Indexierungs-Modell passen.
+   *  Ohne Angabe wird das Korpus-Modell automatisch erkannt. */
+  model?: string
 }
 
-let voyageClient: VoyageAIClient | null = null
 let supabaseAdmin: SupabaseClient | null = null
-
-function getVoyage(): VoyageAIClient {
-  if (!voyageClient) {
-    const apiKey = process.env.VOYAGE_API_KEY
-    if (!apiKey) throw new Error('VOYAGE_API_KEY fehlt in der Umgebung (.env.local)')
-    voyageClient = new VoyageAIClient({ apiKey })
-  }
-  return voyageClient
-}
 
 function getSupabase(): SupabaseClient {
   if (!supabaseAdmin) {
@@ -58,6 +51,32 @@ function getSupabase(): SupabaseClient {
   return supabaseAdmin
 }
 
+/* Korpus-Modell-Erkennung: Mehrheitsentscheid über eine Stichprobe der Chunks. */
+const MODEL_CACHE_MS = 10 * 60 * 1000
+let cachedModel: { value: string; at: number } | null = null
+
+async function detectCorpusModel(): Promise<string> {
+  if (cachedModel && Date.now() - cachedModel.at < MODEL_CACHE_MS) return cachedModel.value
+  const fallback = process.env.VOYAGE_KNOWLEDGE_MODEL ?? 'voyage-3'
+  try {
+    const { data, error } = await getSupabase()
+      .from('knowledge_embeddings')
+      .select('metadata->>model')
+      .limit(200)
+    if (error || !data?.length) return fallback
+    const counts = new Map<string, number>()
+    for (const row of data as Record<string, string>[]) {
+      const m = row.model
+      if (m) counts.set(m, (counts.get(m) ?? 0) + 1)
+    }
+    const winner = Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] ?? fallback
+    cachedModel = { value: winner, at: Date.now() }
+    return winner
+  } catch {
+    return fallback
+  }
+}
+
 /**
  * Sucht die semantisch passendsten Wissens-Chunks zur Query.
  *
@@ -69,15 +88,10 @@ export async function searchContext(
   limit: number = 5,
   options: SearchContextOptions = {},
 ): Promise<KnowledgeMatch[]> {
-  const { matchThreshold = 0.7, model = 'voyage-3' } = options
+  const { matchThreshold = 0.7 } = options
+  const model = options.model ?? (await detectCorpusModel())
 
-  const embedResponse = await getVoyage().embed({
-    input: [query],
-    model,
-    inputType: 'query',
-  })
-  const queryEmbedding = embedResponse.data?.[0]?.embedding
-  if (!queryEmbedding) throw new Error('Voyage AI hat kein Embedding für die Query geliefert')
+  const queryEmbedding = await embedQuery(query, model)
 
   const { data, error } = await getSupabase().rpc('match_knowledge', {
     query_embedding: queryEmbedding,

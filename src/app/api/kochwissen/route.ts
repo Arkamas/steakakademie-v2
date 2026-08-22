@@ -17,7 +17,8 @@ import { anthropic } from '@ai-sdk/anthropic';
 import { generateText } from 'ai';
 import { NextResponse } from 'next/server';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
-import { searchKochwissen, buildKontext, type Treffer } from '@/lib/kochwissen/retrieval';
+import { searchKochwissen, buildKontext, rerankTreffer, type Treffer } from '@/lib/kochwissen/retrieval';
+import { searchContext, type KnowledgeMatch } from '@/lib/voyage-retrieval';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -65,10 +66,39 @@ export async function POST(req: Request) {
     { auth: { autoRefreshToken: false, persistSession: false } },
   );
 
-  // 2) Query-Embedding + Vektor-Retrieval
+  // 2) Query-Embedding + Vektor-Retrieval — zwei Korpora parallel:
+  //    a) kochwissen (kuratierte Einträge, match_kochwissen)
+  //    b) knowledge_embeddings (docs/ + content/, Nacht-Index, match_knowledge)
+  //    Der Reranker sortiert beide gemeinsam — er arbeitet auf Rohtext und ist
+  //    daher unabhängig davon, mit welchem Modell die Korpora eingebettet sind.
   let treffer: Treffer[];
   try {
-    treffer = await searchKochwissen(admin, frage, { kategorie, cut, limit });
+    const [kuratiert, dokuChunks] = await Promise.all([
+      searchKochwissen(admin, frage, { kategorie, cut, limit }),
+      // Doku-Suche ist Zusatzkontext: Ausfall darf die Kernantwort nicht blocken.
+      kategorie || cut
+        ? Promise.resolve<KnowledgeMatch[]>([]) // Filter existieren nur im kuratierten Korpus
+        : searchContext(frage, Math.min(limit, 8)).catch((e) => {
+            console.warn('[kochwissen] Doku-Index nicht erreichbar:', e instanceof Error ? e.message : e);
+            return [] as KnowledgeMatch[];
+          }),
+    ]);
+
+    const ausDoku: Treffer[] = dokuChunks.map((m) => ({
+      id: m.id,
+      titel: m.metadata.title,
+      kategorie: m.metadata.category,
+      cut_zutat: null,
+      schwierigkeit: null,
+      keywords: null,
+      quelle: m.metadata.file_path,
+      inhalt: m.content,
+      similarity: m.similarity,
+    }));
+
+    treffer = ausDoku.length
+      ? await rerankTreffer(frage, [...kuratiert, ...ausDoku], limit)
+      : kuratiert;
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
     return NextResponse.json({ error: `Retrieval fehlgeschlagen: ${msg}` }, { status: 502 });

@@ -50,9 +50,15 @@ const runStartedAt = new Date().toISOString(); // Zeitstempel des Indexlaufs
 const estimateTokens = (text) => Math.ceil(text.length / 3.3);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// voyage-4 statt voyage-3: gleicher Preis ($0.06/M), aber 200M Free-Tier-Tokens
+// und bessere Qualität. 1024 Dimensionen — kompatibel mit vector(1024).
+// Der Modellwechsel triggert automatisch das Neu-Embedden aller Dateien, weil
+// isAlreadyIndexed() das Modell mitprüft. Query-Seite (voyage-retrieval.ts)
+// erkennt das Korpus-Modell selbstständig — kein manueller Umschalt-Schritt.
+const TEXT_MODEL = process.env.VOYAGE_INDEX_MODEL ?? 'voyage-4';
 const SOURCES = [
-  { dir: 'docs', extensions: ['.md', '.mdx'], category: 'docs', model: 'voyage-3' },
-  { dir: 'content', extensions: ['.md', '.mdx'], category: 'content', model: 'voyage-3' },
+  { dir: 'docs', extensions: ['.md', '.mdx'], category: 'docs', model: TEXT_MODEL },
+  { dir: 'content', extensions: ['.md', '.mdx'], category: 'content', model: TEXT_MODEL },
 ];
 if (INCLUDE_CODE) {
   SOURCES.push({ dir: 'src/lib', extensions: ['.ts', '.tsx'], category: 'code', model: 'voyage-code-3' });
@@ -155,12 +161,12 @@ async function embedBatch(voyage, texts, model) {
   throw new Error('embedBatch: Retry-Limit erreicht');
 }
 
-/** Prüft, ob die Datei mit identischem Inhalt bereits indexiert ist (Resume/Skip). */
-async function isAlreadyIndexed(supabase, relPath, fileHash) {
+/** Prüft, ob die Datei mit identischem Inhalt UND Modell bereits indexiert ist (Resume/Skip). */
+async function isAlreadyIndexed(supabase, relPath, fileHash, model) {
   const { count, error } = await supabase
     .from('knowledge_embeddings')
     .select('id', { count: 'exact', head: true })
-    .contains('metadata', { file_path: relPath, file_hash: fileHash });
+    .contains('metadata', { file_path: relPath, file_hash: fileHash, model });
   if (error) throw new Error(`Existenz-Check für ${relPath} fehlgeschlagen: ${error.message}`);
   return (count ?? 0) > 0;
 }
@@ -198,7 +204,7 @@ async function main() {
 
       // Resume-Logik: unveränderte, bereits indexierte Dateien überspringen
       const fileHash = crypto.createHash('sha256').update(text).digest('hex').slice(0, 16);
-      if (!FORCE && (await isAlreadyIndexed(supabase, relPath, fileHash))) {
+      if (!FORCE && (await isAlreadyIndexed(supabase, relPath, fileHash, source.model))) {
         console.log(`  ⏭️  ${relPath} — unverändert, übersprungen`);
         continue;
       }

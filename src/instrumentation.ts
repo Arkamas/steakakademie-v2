@@ -1,26 +1,25 @@
 /**
- * OpenTelemetry-Registrierung fuer Next.js.
+ * Next.js Instrumentation-Hook — laedt die passende Sentry-Konfiguration.
  *
- * Next ruft register() genau einmal beim Start jeder Runtime auf (Node und Edge
- * getrennt) — vor dem ersten Request. Das ist der einzige Zeitpunkt, zu dem sich
- * ein TracerProvider global setzen laesst.
+ * Next ruft register() genau einmal beim Start jeder Runtime auf (Node und
+ * Edge getrennt) — vor dem ersten Request. In Next 14 nur aktiv, weil
+ * experimental.instrumentationHook in next.config.mjs gesetzt ist.
  *
- * Warum es diese Datei braucht: Das AI SDK holt seinen Tracer ueber
- * trace.getTracer('ai') aus @opentelemetry/api (siehe ai/dist/index.mjs). Ist
- * kein Provider registriert, liefert das einen No-op-Tracer — die Spans aus
- * experimental_telemetry in src/app/api/chat/route.ts entstehen dann zwar, aber
- * niemand sammelt sie ein. Ohne diese Registrierung ist die Telemetrie dort
- * eingeschaltet und trotzdem wirkungslos.
- *
- * registerOTel exportiert auf Vercel automatisch in die Vercel-Observability;
- * lokal (ohne OTEL_EXPORTER_OTLP_ENDPOINT) faellt es auf einen No-op zurueck und
- * kostet nichts.
- *
- * Aufgezeichnet wird bewusst wenig: Der Chat setzt recordInputs/recordOutputs
- * auf false, es gehen also Modell, Dauer und Token-Zahlen raus — keine Prompts,
- * keine Antworten, nichts Personenbezogenes (DSGVO).
+ * UMSTELLUNG 21.08.2026: vorher @vercel/otel (registerOTel) → jetzt Sentry.
+ * Sentry registriert dabei selbst einen OpenTelemetry-TracerProvider, d. h.
+ * das AI SDK (trace.getTracer('ai')) findet weiterhin einen echten Tracer —
+ * die experimental_telemetry-Spans aus src/app/api/chat/route.ts landen nun
+ * in Sentry statt in der Vercel-Observability. Grund der Umstellung:
+ * Sentry ALARMIERT bei neuen Fehlern (E-Mail beim ersten Auftreten) und
+ * sieht auch Browser-Fehler; die Vercel-Ansicht musste man aktiv besuchen
+ * und sah nur den Server. @vercel/otel ist entfernt — zwei parallele
+ * Telemetrie-Systeme hiessen doppelte Spans und zwei DSE-Eintraege.
  */
 export async function register() {
-  const { registerOTel } = await import('@vercel/otel');
-  registerOTel({ serviceName: 'steakakademie' });
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    await import('../sentry.server.config');
+  }
+  if (process.env.NEXT_RUNTIME === 'edge') {
+    await import('../sentry.edge.config');
+  }
 }

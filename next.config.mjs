@@ -1,4 +1,5 @@
 import { withContentlayer } from 'next-contentlayer2';
+import { withSentryConfig } from '@sentry/nextjs';
 
 /**
  * Content-Security-Policy (KAN-75, Art. 32 DSGVO — 20.08.2026)
@@ -32,7 +33,10 @@ const CSP = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://*.clarity.ms",
   "font-src 'self' data:",
-  "connect-src 'self' https://plausible.io https://*.clarity.ms https://*.supabase.co",
+  // *.ingest.de.sentry.io: Fehler- und Performance-Meldungen (EU-Region).
+  // Fehlt der Host hier, blockiert der Browser jeden Event-Versand STILL —
+  // Sentry bleibt leer und niemand merkt es.
+  "connect-src 'self' https://plausible.io https://*.clarity.ms https://*.supabase.co https://*.ingest.de.sentry.io",
   "frame-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self'",
@@ -98,4 +102,26 @@ const nextConfig = {
   },
 };
 
-export default withContentlayer(nextConfig);
+/**
+ * Sentry-Build-Plugin
+ * ===================
+ * Laedt Source-Maps hoch (lesbare Stacktraces statt Minifikat) und entfernt
+ * sie danach aus dem Deploy (hideSourceMaps) — der Quelltext liegt nicht
+ * oeffentlich im Browser.
+ *
+ * Braucht SENTRY_AUTH_TOKEN (Vercel-Env, Secret). Fehlt der Token, bricht
+ * der Build NICHT ab — es fehlen nur die Source-Maps.
+ */
+export default withSentryConfig(withContentlayer(nextConfig), {
+  org: 'steakakademie-4t',
+  project: 'javascript-nextjs',
+  silent: !process.env.CI,
+
+  widenClientFileUpload: true,
+  hideSourceMaps: true,
+  // Entfernt Sentry-Debug-Logs aus dem Produktions-Bundle.
+  webpack: { treeshake: { removeDebugLogging: true } },
+
+  // Kein tunnelRoute: der Ingest-Host steht offen in der CSP. Ehrlicher
+  // gegenueber Adblockern und spart Function-Aufrufe.
+});

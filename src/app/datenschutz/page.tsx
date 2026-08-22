@@ -509,6 +509,48 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
+              <h2 className={h2Class}>13a. Fehler- und Stabilitätsüberwachung (Sentry)</h2>
+              <p className="mb-3">
+                Damit technische Fehler dieser Website erkannt und behoben werden können,
+                setzen wir <strong className="text-text-primary">Sentry</strong> ein, einen
+                Dienst der Functional Software, Inc. (dba Sentry), 45 Fremont Street,
+                San Francisco, CA 94105, USA. Die Verarbeitung findet ausschließlich auf
+                Servern in der <strong className="text-text-primary">Europäischen Union
+                (Region &bdquo;de&ldquo;)</strong> statt; ein Datentransfer in die USA
+                erfolgt im Regelbetrieb nicht.
+              </p>
+              <p className="mb-3">
+                Tritt ein Fehler auf, wird ein technischer Bericht übermittelt: Fehlermeldung,
+                Programmzeile, aufgerufene Seite, Browser- und Gerätetyp sowie Zeitpunkt.
+                Sentry setzt hierfür <strong className="text-text-primary">keine Cookies</strong>.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Was wir bewusst nicht übertragen:</strong>{' '}
+                IP-Adressen, Cookies und nutzerbezogene Kopfzeilen werden nicht an Sentry
+                gesendet (Option <code>sendDefaultPii</code> deaktiviert). Ebenfalls
+                deaktiviert ist die Übertragung von Ein- und Ausgaben unserer KI-Funktionen:
+                Deine Eingaben an den KI-Assistenten &bdquo;Marco&ldquo; (Abschnitt 11)
+                erreichen Sentry <strong className="text-text-primary">nicht</strong> —
+                übertragen werden nur technische Kennzahlen wie Modellname, Dauer und
+                Token-Anzahl. Eine Sitzungsaufzeichnung (&bdquo;Session Replay&ldquo;)
+                findet nicht statt.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Speicherdauer:</strong> Fehlerberichte
+                werden nach 90 Tagen automatisch gelöscht.
+              </p>
+              <p>
+                <strong className="text-text-primary">Rechtsgrundlage:</strong> Art. 6 Abs. 1
+                lit. f DSGVO — berechtigtes Interesse am fehlerfreien, sicheren Betrieb der
+                Website. Mit Sentry besteht ein Auftragsverarbeitungsvertrag nach Art. 28 DSGVO.
+                Weitere Informationen:{' '}
+                <a href="https://sentry.io/privacy/" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  sentry.io/privacy
+                </a>.
+              </p>
+            </section>
+
+            <section>
               <h2 className={h2Class}>14. Deine Rechte</h2>
               <p className="mb-3">Du hast gemäß DSGVO folgende Rechte:</p>
               <ul className="list-disc list-inside space-y-1.5 mb-3">

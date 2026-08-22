@@ -16,6 +16,8 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
 import { join, dirname, extname, basename } from 'path';
 import { fileURLToPath } from 'url';
+import { callClaude, printCacheStats } from './lib/anthropic.mjs';
+process.on('exit', () => printCacheStats('  '))
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -136,26 +138,13 @@ PS: [Optional: 1 kurzer PS-Satz mit Tipp oder Fakt]
 
 Ton: Kampferprobt. Direkt. Keine Floskeln. Qualität über Masse.`;
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 600,
-      messages: [{ role: 'user', content: prompt }],
-    }),
+  const r = await callClaude({
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 600,
+    messages: [{ role: 'user', content: prompt }],
+    label: 'newsletter',
   });
-
-  if (!response.ok) {
-    throw new Error(`Claude API Error: ${response.status} ${await response.text()}`);
-  }
-
-  const data = await response.json();
-  const text = data.content[0].text;
+  const text = r.text;
 
   // Felder parsen
   const get = (key) => {

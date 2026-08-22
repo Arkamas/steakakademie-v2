@@ -16,6 +16,8 @@ import { readdir, readFile, writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { callClaude, printCacheStats } from './lib/anthropic.mjs'
+process.on('exit', () => printCacheStats('  '))
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT    = join(__dirname, '..')
@@ -49,15 +51,11 @@ Format exakt:
 
 async function gen(title, desc, meat, kat) {
   const user = `Rezept: ${title}\nKategorie: ${kat}\nHauptzutat: ${meat}\nBeschreibung: ${desc}`
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 700, temperature: 0.7, system: SYSTEM, messages: [{ role: 'user', content: user }] }),
+  const r = await callClaude({
+    model: 'claude-haiku-4-5-20251001', max_tokens: 700, temperature: 0.7,
+    system: SYSTEM, messages: [{ role: 'user', content: user }], label: 'social-posts',
   })
-  if (!res.ok) throw new Error(`anthropic ${res.status}: ${(await res.text()).slice(0, 160)}`)
-  const j = await res.json()
-  let t = (j.content?.[0]?.text || '').trim().replace(/^```json\s*/i, '').replace(/```$/, '').trim()
-  return JSON.parse(t)
+  return r.json()
 }
 
 async function main() {

@@ -221,6 +221,8 @@ async function generateContent(briefing) {
   const msg = await anthropic.messages.create({
     model:      'claude-opus-4-7',
     max_tokens: 3072,
+    // Automatisches Prompt-Caching (Breakpoint setzt/verschiebt die API selbst)
+    cache_control: { type: 'ephemeral' },
     thinking:   { type: 'adaptive' },
     system:     systemPrompt(cat),
     messages: [{

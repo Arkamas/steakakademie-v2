@@ -149,6 +149,7 @@ Ton: direkt, ehrlich, keine Marketingsprache. Schreibe für jemanden, der das Sy
 
   const body = JSON.stringify({
     model: 'claude-haiku-4-5',
+    cache_control: { type: 'ephemeral' },
     max_tokens: 450,
     messages: [{ role: 'user', content: prompt }]
   });

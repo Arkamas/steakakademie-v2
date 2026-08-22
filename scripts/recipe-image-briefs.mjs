@@ -21,6 +21,8 @@ import { existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import yaml from 'js-yaml'
+import { callClaude, printCacheStats } from './lib/anthropic.mjs'
+process.on('exit', () => printCacheStats('  '))
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT    = join(__dirname, '..')
@@ -76,20 +78,11 @@ Rules:
 async function brief(title, desc, meat, kat, cut) {
   let user = `Dish title: ${title}\nCategory: ${kat || '—'}\nMain ingredient: ${meat || '—'}\nRecipe description: ${desc || '—'}`
   if (cut?.visual) user += `\n\nVerified cut appearance (authoritative — the rendered cut MUST match this anatomy): ${String(cut.visual).replace(/\s+/g, ' ').trim()}${cut.doneness ? ` Doneness: ${String(cut.doneness).replace(/\s+/g, ' ').trim()}` : ''}`
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 220,
-      temperature: 0.4,
-      system: SYSTEM,
-      messages: [{ role: 'user', content: user }],
-    }),
+  const r = await callClaude({
+    model: 'claude-haiku-4-5-20251001', max_tokens: 220, temperature: 0.4,
+    system: SYSTEM, messages: [{ role: 'user', content: user }], label: 'image-briefs',
   })
-  if (!res.ok) throw new Error(`anthropic ${res.status}: ${(await res.text()).slice(0, 160)}`)
-  const j = await res.json()
-  let t = (j.content?.[0]?.text || '').trim()
+  let t = r.text
   // einzeilig + frontmatter-safe (keine inneren Double-Quotes)
   t = t.replace(/\s+/g, ' ').replace(/"/g, "'").trim()
   return t

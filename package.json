@@ -51,7 +51,9 @@
     "check:frontmatter": "node scripts/validate-frontmatter.mjs",
     "index:knowledge": "node scripts/generate-embeddings.js",
     "check:startseite": "node scripts/check-startseiten-hierarchie.mjs",
-    "prebuild": "node scripts/check-startseiten-hierarchie.mjs"
+    "prebuild": "node scripts/check-startseiten-hierarchie.mjs",
+    "cache:selftest": "node scripts/cache-selftest.mjs",
+    "cache:selftest:opus": "node scripts/cache-selftest.mjs --model claude-opus-5"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",

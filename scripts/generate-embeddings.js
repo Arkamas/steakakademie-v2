@@ -61,7 +61,10 @@ const SOURCES = [
   { dir: 'content', extensions: ['.md', '.mdx'], category: 'content', model: TEXT_MODEL },
 ];
 if (INCLUDE_CODE) {
-  SOURCES.push({ dir: 'src/lib', extensions: ['.ts', '.tsx'], category: 'code', model: 'voyage-code-3' });
+  // Code im SELBEN Vektorraum wie Text: Marco-Fragen sind deutsche Prosa —
+  // ein einheitliches Modell haelt alle Chunks in einem durchsuchbaren Raum.
+  // (voyage-code-3 waere ein zweiter, inkompatibler Raum in derselben Tabelle.)
+  SOURCES.push({ dir: 'src/lib', extensions: ['.ts', '.tsx'], category: 'code', model: TEXT_MODEL });
 }
 
 function requireEnv(name) {

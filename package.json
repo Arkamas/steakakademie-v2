@@ -49,7 +49,7 @@
     "cut-images:force": "node scripts/cut-images.mjs --force",
     "check:links": "node scripts/check-links.mjs",
     "check:frontmatter": "node scripts/validate-frontmatter.mjs",
-    "index:knowledge": "node scripts/generate-embeddings.js",
+    "index:knowledge": "node scripts/generate-embeddings.js --code",
     "check:startseite": "node scripts/check-startseiten-hierarchie.mjs",
     "prebuild": "node scripts/check-startseiten-hierarchie.mjs",
     "cache:selftest": "node scripts/cache-selftest.mjs",

@@ -344,3 +344,42 @@ Unterseiten-Durchgang steht aus (Uwe war noch auf keiner); Mobil-Check offen (Br
 5. **Adressen gehören in EINE Konstante, nicht 22-mal verstreut.** Wäre `KONTAKT_EMAIL` zentral definiert gewesen, hätte der Fehler eine Zeile betroffen statt drei Dateien und zehn Wochen.
 
 **Verbleibende Altlast:** `info@`/`masterclass@`/`inspiration@` stehen noch im Code und müssen auf `pitmaster@` vereinheitlicht oder in Cloudflare wirklich angelegt werden.
+
+## 23. August 2026 — Hebel 3 abgeschlossen: Willkommenssequenz live & verifiziert
+
+**MARKT-LAUF ABGESCHLOSSEN (Hebel 1 ✅ 2 ✅ 3 ✅).** Die Loops-Willkommenssequenz
+läuft und ist end-to-end bewiesen — nicht nur „aktiv geschaltet", sondern mit
+echtem Durchlauf belegt.
+
+**Verifizierte Kette (23.08., je mit Beleg):**
+`POST /api/newsletter` 200 (Vercel-Log) → DOI-Mail angekommen → `GET /api/newsletter/confirm`
+307 ohne Fehler-Log → Kontakt in Loops angelegt: `subscribed: true`,
+`source: steakakademie-website-footer-doi-confirmed`, `userGroup: newsletter` →
+Workflow-Status `Sending`.
+
+**Aktueller Workflow: `cmt1wxrmn07uo0j0aofqglkmv` („Willkommenssequenz Wissens-Brief").**
+Kette: SignupTrigger → **AudienceFilter** → Mail 1 → 2d → Mail 2 → 3d → Mail 3 → 3d → Mail 4 → Exit.
+Der Filter lässt nur `source` **enthält „doi-confirmed"** durch — verhindert, dass
+unbestätigte Kontakte die Strecke bekommen. Wichtig: Die Route setzt
+`steakakademie-website-{source}-doi-confirmed`, beides muss zusammenpassen.
+Meine Zwischenversion („…v2", `cmsu6aces…`) wurde ersetzt und ist gelöscht.
+
+**Loops-Lehren (teuer erkauft, gelten dauerhaft):**
+- **Der Start-Bug lag an einem extern gehosteten `<Image>`** (`steakakademie.de/images/logo-barrel.jpg`,
+  `width="auto"`) in den Mails. Loops akzeptiert nur CDN-eigene Bilder. Die **UI** meldete
+  nur „Something went wrong, please contact support." — die **API** nannte den echten Grund
+  (HTTP 422 im Klartext). **Regel: Bei stummen UI-Fehlern dieselbe Operation über die API fahren.**
+- Auch **Duplizieren** schlug deshalb fehl — was fälschlich nach Konto-/Plandefekt aussah.
+  Free-Plan enthält Workflows („all features included"), war nie das Problem.
+- Workflow-Struktur immer **per API** bauen; der ReactFlow-Canvas ist fernsteuerungsfeindlich
+  (Doppelklick/Tab zoomen, „+" nur bei kleinem Zoom).
+- API-Fallstricke: `amount`/`unit` beim Anlegen eines TimerAction werden abgelehnt (erst Knoten,
+  dann Node-Update) · `languageCode` → 400 „Translations not enabled" · jeder Schreibzugriff
+  braucht `expectedRevisionId`.
+- **Zwei getrennte Mail-Wege nicht verwechseln:** `/auth/login` = Magic-Link (Resend, login@)
+  ≠ `/newsletter` = Wissens-Brief (Loops, Double-Opt-In).
+- Vercel-Laufzeitprotokolle sind **kurzlebig** (Hobby 1 h / Pro 1 Tag) — Tests sofort danach prüfen.
+  Die Vercel-MCP kann Projekt/Deployments/Logs/Domains, aber **keine Env-Variablen**.
+
+**Nächster Schritt:** Weihnachts-Gutschein-Kampagne (Zeitfenster ~Ende August) und die
+Magazin-Linie der Startseite (Texas-Monthly-Referenz) weiterführen.

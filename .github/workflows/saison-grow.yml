@@ -1,0 +1,71 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Saison-Generator — alle 5 Tage EIN saisonaler Bericht-Draft (human-gated).
+#
+# Läuft an Monatstagen 1/6/11/16/21/26/31 um 04:30 UTC (nach Glossar 03:00,
+# Rezept 03:30 und den Sonntags-Läufen 04:00). GitHub-Cron kann keinen echten
+# gleitenden 5-Tage-Takt — */5 auf den Monatstag ist die übliche Näherung
+# (am Monatsende einmal 1–3 Tage Abstand, bewusst akzeptiert).
+#
+# Erzeugt NIE veröffentlichten Content: Drafts landen in content_drafts und
+# warten in /admin/review auf Uwes Freigabe (Regel 4: human-gated).
+#
+# Benötigte Repo-Secrets (bereits für content-grow.yml gesetzt):
+#   ANTHROPIC_API_KEY, NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+# ═══════════════════════════════════════════════════════════════════════════
+name: saison-grow
+
+on:
+  schedule:
+    - cron: '30 4 */5 * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Secrets prüfen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          missing=""
+          [ -z "$ANTHROPIC_API_KEY" ] && missing="$missing ANTHROPIC_API_KEY"
+          [ -z "$SUPABASE_URL" ]      && missing="$missing NEXT_PUBLIC_SUPABASE_URL"
+          [ -z "$SERVICE_ROLE" ]      && missing="$missing SUPABASE_SERVICE_ROLE_KEY"
+          if [ -n "$missing" ]; then echo "Fehlende Secrets:$missing"; exit 1; fi
+
+      - name: Abhängigkeiten
+        run: npm ci --no-audit --no-fund
+
+      - name: Saison-Draft generieren
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/saison-grow.mjs
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Saison-Generator fehlgeschlagen'
+          ALERT_DESCRIPTION: 'saison-grow (5-Tage-Saison-Berichte) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-saison-failed'
+        run: node scripts/ops-alert-to-jira.mjs

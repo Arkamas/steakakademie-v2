@@ -1,0 +1,123 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Saison-Redaktionskalender — steuert scripts/saison-grow.mjs
+#
+# Jedes Fenster: aktiv von `von` bis `bis` (MM-TT, deutscher Jahreslauf).
+# `von` enthält bereits den redaktionellen VORLAUF (Content muss VOR dem
+# Anlass live sein — Gutschein-/Geschenk-Content z. B. ab Ende August).
+# Fenster dürfen sich überlappen; das Skript wählt das Fenster mit dem
+# nächstliegenden `anlass` (Dringlichkeit) und daraus das erste Thema,
+# das noch nicht als Draft/Artikel existiert.
+#
+# `themen`: konkrete Berichts-Ideen (werden 1:1 als Auftrag an die
+# Generierung gegeben — je Lauf EIN Thema, human-gated via /admin/review).
+# `kontext`: Zusatzanweisung an den Autor-Prompt (Ton, Pflicht-Verweise).
+#
+# Regel 8c gilt: keine erfundenen Temperaturen — der Generator verweist auf
+# /temperatur-guide statt Werte zu raten, sofern nicht im Thema vorgegeben.
+# ═══════════════════════════════════════════════════════════════════════════
+
+fenster:
+  - id: weihnachten
+    label: "Weihnachten & Advent"
+    von: "08-25"          # Vorlauf: Gutschein-/Geschenkgeschäft beginnt Ende August
+    bis: "12-24"
+    anlass: "12-24"
+    kontext: >
+      Weihnachts- und Geschenk-Saison. Wo passend, auf die verschenkbaren
+      Geschenkgutscheine der Steakakademie (/gutschein) verweisen — ehrlich,
+      ohne Kaufdruck. Festliche, warme Tonalität; deutsche Weihnachtsküche
+      trifft BBQ-Handwerk.
+    themen:
+      - "Gänsebraten vom Grill: Warum Rotisserie die Weihnachtsgans besser macht als jeder Ofen"
+      - "Das BBQ-Weihnachtsmenü: Drei Gänge komplett vom Grill geplant"
+      - "Geschenke für Griller: Was wirklich am Grill benutzt wird — und was in der Schublade endet"
+      - "Rinderfilet Wellington vom Grill: Das Festtags-Projekt für Fortgeschrittene"
+      - "Wintergrillen-Grundkurs: Glutführung, Garzeiten und Ausrüstung bei Frost"
+      - "Raclette war gestern: Warum der Tischgrill das bessere Weihnachts-Ritual ist"
+      - "Entenbrust rosa gegrillt: Der Weihnachts-Klassiker präzise erklärt"
+      - "Glühwein-Alternativen vom Feuer: Heiße Begleiter für die Wintergrillrunde"
+
+  - id: silvester
+    label: "Silvester & Jahreswechsel"
+    von: "12-01"
+    bis: "12-31"
+    anlass: "12-31"
+    kontext: >
+      Silvester-Abend: Fingerfood, Mitternachtssnacks, Grillen bei Kälte
+      und Dunkelheit (Beleuchtung, Sicherheit).
+    themen:
+      - "Silvester am Grill: Fingerfood-Platten, die um Mitternacht noch stehen"
+      - "Pulled Pork zum Jahreswechsel: Der 12-Stunden-Plan, der zur Party fertig ist"
+
+  - id: fruehjahr-anfang
+    label: "Saisonstart Frühjahr"
+    von: "02-15"
+    bis: "04-30"
+    anlass: "04-01"
+    kontext: >
+      Anschluss an den Grill-Saisonstart: Grill-Frühjahrsputz, erste
+      Grillabende, Spargel-Vorfreude. Motivierend, praktisch.
+    themen:
+      - "Der Grill-Frühjahrsputz: Rost, Brenner, Fettwanne — die ehrliche Reihenfolge"
+      - "Saisonstart-Check: Diese 7 Dinge prüfst du, bevor die erste Glut brennt"
+      - "Spargel vom Grill: Grün, weiß, gebündelt — die Methoden im Vergleich"
+
+  - id: ostern
+    label: "Ostern"
+    von: "03-01"
+    bis: "04-20"
+    anlass: "04-05"          # ~Ostern (variiert; bewusst früh angesetzt)
+    kontext: >
+      Osterbrunch und Osteressen vom Grill. Lamm ist der Anker —
+      Kerntemperaturen NICHT raten, auf /temperatur-guide verweisen.
+    themen:
+      - "Lammkeule vom Grill: Das Oster-Hauptgericht Schritt für Schritt"
+      - "Osterbrunch vom Rost: Süßes und Herzhaftes, das parallel läuft"
+
+  - id: vatertag-pfingsten
+    label: "Vatertag & Pfingsten"
+    von: "04-20"
+    bis: "06-10"
+    anlass: "05-14"
+    kontext: >
+      Männertag/Herrentag und Pfingst-Grillen: Gruppen-Grillen, Planung
+      für viele Esser, transportables Grillen.
+    themen:
+      - "Grillen für 12 Leute: Mengenplanung, Timing und Warmhalten ohne Stress"
+      - "Der mobile Grilltag: Ausrüstung, die in eine Kiste passt"
+
+  - id: hochsommer
+    label: "Hochsommer"
+    von: "06-15"
+    bis: "08-20"
+    anlass: "07-15"
+    kontext: >
+      Hauptsaison: lange Abende, Urlaubsgrillen, Hitze-Themen
+      (Lebensmittelsicherheit bei Sommerhitze gehört dazu).
+    themen:
+      - "Grillen bei 30 Grad: Warum die Kühlkette am Rost über den Abend entscheidet"
+      - "Fisch statt Fleisch: Die Sommer-Alternativen, die nicht am Rost kleben"
+
+  - id: oktoberfest-herbst
+    label: "Oktoberfest & Herbst"
+    von: "09-01"
+    bis: "10-31"
+    anlass: "10-03"
+    kontext: >
+      Herbstküche am Grill: Wild, Kürbis, deftige Klassiker,
+      Oktoberfest-Anleihen (Haxe, Brezn-Begleitung).
+    themen:
+      - "Schweinshaxe vom Drehspieß: Kruste wie im Biergarten"
+      - "Wild vom Grill: Reh und Hirsch für Einsteiger — Bezug, Vorbereitung, Garführung"
+      - "Kürbis ernst genommen: Drei Grill-Methoden jenseits der Suppe"
+
+  - id: halloween
+    label: "Halloween"
+    von: "10-10"
+    bis: "10-31"
+    anlass: "10-31"
+    kontext: >
+      Verspielt, aber handwerklich sauber: Halloween-Grillabend
+      mit Familie, Optik-Ideen ohne Kitsch-Übertreibung.
+    themen:
+      - "Halloween am Grill: Ein Familien-Grillabend, der nicht albern schmeckt"

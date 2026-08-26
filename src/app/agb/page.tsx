@@ -28,7 +28,7 @@ export default function AgbPage() {
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">
             Allgemeine Geschäftsbedingungen
           </h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juli 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: August 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -51,7 +51,7 @@ export default function AgbPage() {
               </p>
               <p>
                 Die Zahlungsabwicklung für digitale Produkte (Steak-Beichte, Mein Protokoll,
-                BBQ Grundkurs und weitere) erfolgt über <strong className="text-text-primary">Digistore24 GmbH</strong>,
+                Grillmeister-Diplom und weitere) erfolgt über <strong className="text-text-primary">Digistore24 GmbH</strong>,
                 St.-Kilian-Str. 14, 97236 Randersacker. Digistore24 agiert im Rahmen des Kaufvorgangs
                 als Zahlungsdienstleister. Die Allgemeinen Geschäftsbedingungen von Digistore24
                 gelten ergänzend und sind unter{' '}

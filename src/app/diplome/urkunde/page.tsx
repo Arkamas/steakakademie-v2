@@ -199,6 +199,7 @@ export default function UrkudePage() {
                 Die digitale Urkunde bleibt kostenlos. Für die gedruckte Variante nehmen wir nach dem
                 Absenden Kontakt zur Zahlung auf (9,99 € + 4,99 € Porto = 14,98 €).
                 Deine Adresse wird ausschließlich für den Versand verwendet.
+                Gemäß § 19 UStG (Kleinunternehmerregelung) wird keine Umsatzsteuer ausgewiesen.
               </p>
 
               <button

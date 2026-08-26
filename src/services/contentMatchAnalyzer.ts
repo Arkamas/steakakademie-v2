@@ -158,7 +158,8 @@ const PILLAR_CLUSTERS: Array<{ label: string; signals: string[] }> = [
 // ─── Service ─────────────────────────────────────────────────────────────────
 
 export class ContentMatchAnalyzer implements ContentMatchAnalyzerLike {
-  private readonly provider:  LlmProvider;
+  /** Public so the engine can report provenance on every ValidationResult. */
+  readonly provider:          LlmProvider;
   private readonly apiKey:    string | undefined;
   private readonly model:     string;
   private readonly timeoutMs: number;

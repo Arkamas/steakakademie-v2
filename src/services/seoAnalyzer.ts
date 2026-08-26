@@ -163,7 +163,8 @@ const TEMPLATE_GROUPS_DE: TemplateSpec[] = [
 // ─── Service ─────────────────────────────────────────────────────────────────
 
 export class SeoAnalyzer {
-  private readonly provider:        SeoProvider;
+  /** Public so the engine can report provenance on every ValidationResult. */
+  readonly provider:                SeoProvider;
   private readonly apiKey:          string | undefined;
   private readonly keywordLimit:    number;
   private readonly competitorLimit: number;

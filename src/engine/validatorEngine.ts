@@ -32,6 +32,9 @@ import type {
   ContentPipelineSpec,
   MonetizationStackItem,
   DesignTokens,
+  LlmProvider,
+  DataProvenance,
+  ContentMatchSource,
 } from '@/types/validator';
 import {
   NicheInputSchema,
@@ -81,6 +84,11 @@ export interface ValidatorEngineConfig {
  */
 export interface ContentMatchAnalyzerLike {
   analyze(niche: string, language: string): Promise<ContentMatchMetrics>;
+  /**
+   * Optional — implementations that declare it get accurate provenance on the
+   * ValidationResult. Omitting it reports the source as 'unknown'.
+   */
+  readonly provider?: LlmProvider;
 }
 
 // ─── Engine ──────────────────────────────────────────────────────────────────
@@ -147,6 +155,28 @@ export class ValidatorEngine {
       blueprint,
       durationMs:    Date.now() - start,
       engineVersion: ENGINE_VERSION,
+      provenance:    this.describeProvenance(),
+    };
+  }
+
+  /**
+   * Report which source produced each metric block. Simulation providers emit
+   * numbers shaped like market data, so a result that does not carry its own
+   * provenance is indistinguishable from a live one.
+   */
+  private describeProvenance(): DataProvenance {
+    const contentMatch: ContentMatchSource = this.contentMatch
+      ? (this.contentMatch.provider ?? 'unknown')
+      : 'heuristic';
+
+    return {
+      simulated:
+        this.seo.provider === 'simulation' ||
+        contentMatch === 'simulation' ||
+        contentMatch === 'heuristic',
+      seo:          this.seo.provider,
+      contentMatch,
+      monetization: 'derived',
     };
   }
 

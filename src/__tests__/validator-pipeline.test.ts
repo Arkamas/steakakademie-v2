@@ -201,6 +201,40 @@ describe('ValidatorEngine — full pipeline', () => {
     expect(result.metrics.contentMatch).toBeDefined();
   });
 
+  it('flags simulated data in provenance', async () => {
+    const { provenance } = await engine.validate(COFFEE);
+
+    expect(provenance.simulated).toBe(true);
+    expect(provenance.seo).toBe('simulation');
+    expect(provenance.contentMatch).toBe('simulation');
+    expect(provenance.monetization).toBe('derived');
+  });
+
+  it('reports the heuristic stub when no content-match service is wired', async () => {
+    const bare = new ValidatorEngine({
+      seo:          new SeoAnalyzer({ provider: 'simulation' }),
+      monetization: new MonetizationEvaluator(),
+    });
+    const { provenance } = await bare.validate(COFFEE);
+
+    expect(provenance.contentMatch).toBe('heuristic');
+    expect(provenance.simulated).toBe(true);
+  });
+
+  it('reports unknown for a custom analyzer that declares no provider', async () => {
+    const custom = new ValidatorEngine({
+      seo:          new SeoAnalyzer({ provider: 'simulation' }),
+      monetization: new MonetizationEvaluator(),
+      contentMatch: {
+        analyze: (niche, language) =>
+          new ContentMatchAnalyzer({ provider: 'simulation' }).analyze(niche, language),
+      },
+    });
+    const { provenance } = await custom.validate(COFFEE);
+
+    expect(provenance.contentMatch).toBe('unknown');
+  });
+
   it('score.overall is within [0, 100]', async () => {
     const { score } = await engine.validate(COFFEE);
     expect(score.overall).toBeGreaterThanOrEqual(0);

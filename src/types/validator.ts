@@ -261,6 +261,37 @@ export interface BlueprintConfig {
 
 // ─── ENGINE OUTPUT (top-level return type) ───────────────────────────────────
 
+/**
+ * Where the content-match block came from.
+ * - a LlmProvider  → that service produced it
+ * - 'heuristic'    → no service wired; engine used its internal stub
+ * - 'unknown'      → a custom implementation that does not declare a provider
+ */
+export type ContentMatchSource = LlmProvider | 'heuristic' | 'unknown';
+
+/**
+ * Provenance of the numbers in a ValidationResult.
+ *
+ * The simulation providers synthesise plausible-looking metrics from a seeded
+ * RNG — they are shaped like market data but are not market data. Because the
+ * output is otherwise indistinguishable from a live run, every result carries
+ * its own provenance so consumers can tell the difference.
+ *
+ * Check `simulated` before presenting metrics as real, or acting on a verdict.
+ */
+export interface DataProvenance {
+  /**
+   * True when any dimension came from a known-synthetic source (a 'simulation'
+   * provider or the built-in heuristic). A 'unknown' content-match source does
+   * NOT set this — read `contentMatch` directly if that distinction matters.
+   */
+  simulated: boolean;
+  seo: SeoProvider;
+  contentMatch: ContentMatchSource;
+  /** Monetization has no provider of its own — it is computed from the SEO block. */
+  monetization: 'derived';
+}
+
 export interface ValidationResult {
   input: NicheInput;
   metrics: ValidationMetrics;
@@ -271,6 +302,8 @@ export interface ValidationResult {
   durationMs: number;
   /** Versioning for downstream consumers */
   engineVersion: string;
+  /** Whether these metrics are real or synthesised — see DataProvenance */
+  provenance: DataProvenance;
 }
 
 // ─── RUNTIME SCHEMAS (Zod — for boundary validation) ─────────────────────────

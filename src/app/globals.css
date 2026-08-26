@@ -323,3 +323,41 @@ nav a, header button, .nav-sharp {
   ::-webkit-scrollbar-thumb  { background: #3D2210; border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: #5A3A18; }
 }
+
+/* ── EDITORIAL-EMBER-VARIANTE (A/B-Test Startseite, Variante B) ──────────────
+   Heller Magazin-Look nach der "Editorial Ember"-Designidee (texasmonthly-ref,
+   ideas.md): Cremeweiß als Basis, Tinte statt Weiß als Text, Glut-Orange bleibt
+   Aktionsfarbe. Gleiche Technik wie .reading-light (scoped Overrides) — die
+   dunkle Original-Startseite (Variante A) bleibt unberührt. Zuteilung per
+   Cookie `sa_ab_home` in src/middleware.ts; Route /home-b (noindex). */
+.theme-ember {
+  background: #FAFAF7;
+  color: #1C1512;
+  --callout-text:   #4A443C;
+  --callout-strong: #1C1512;
+}
+.theme-ember ::selection { background: rgba(212, 82, 26, 0.18); }
+
+/* Flächen: Karten weiß mit Haarlinien, erhöhte Flächen leicht getönt */
+.theme-ember .bg-surface-card     { background-color: #FFFFFF !important; }
+.theme-ember .bg-surface-elevated { background-color: #F4F0E8 !important; }
+.theme-ember .bg-surface-base     { background-color: #F1EDE4 !important; }
+.theme-ember .bg-surface-dark     { background-color: #FAFAF7 !important; }
+
+/* Text: Tinte auf Creme (alle AA-geprüft gegen #FAFAF7/#FFFFFF) */
+.theme-ember .text-text-primary   { color: #1C1512 !important; }
+.theme-ember .text-text-light     { color: #1C1512 !important; }
+.theme-ember .text-text-secondary { color: #443D34 !important; }
+.theme-ember .text-text-muted     { color: #5D554B !important; }
+
+/* Rahmen: Haarlinien statt dunkler Kanten; Gold bleibt Gold */
+.theme-ember .border-border-subtle { border-color: #E3DCCE !important; }
+.theme-ember .fill-border-subtle   { fill:  #E3DCCE !important; }
+.theme-ember .text-border-subtle   { color: #E3DCCE !important; }
+
+/* Links/Akzente: kräftigeres Editorial-Orange auf hellem Grund
+   (das dunkle #E85018 wirkt auf Creme leicht ausgewaschen) */
+.theme-ember .text-brand-fire { color: #D4521A !important; }
+
+/* CTA-Buttons bleiben bewusst kräftig orange (btn-affiliate/bg-brand-fire
+   unverändert) — die Aktionsfarbe ist der rote Faden zwischen A und B. */

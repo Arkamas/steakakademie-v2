@@ -124,7 +124,12 @@ export async function POST(req: NextRequest) {
     // DOI-Token und Bestätigungs-URL generieren.
     // A2-Fix: source + userGroup wandern in den Token, damit /confirm sie kennt.
     const config = SOURCE_CONFIG[source] ?? SOURCE_CONFIG.default;
-    const token = createDOIToken(normalizedEmail, source, config.userGroup);
+    // A/B-Messung Startseite: B-Besucher (Editorial Ember, Cookie aus
+    // src/middleware.ts) bekommen "-vb" an die source — in Loops damit je
+    // Variante auszählbar. Config-Lookup läuft bewusst auf der Basis-source.
+    const abVariant = req.cookies.get('sa_ab_home')?.value;
+    const trackedSource = abVariant === 'b' ? `${source}-vb` : source;
+    const token = createDOIToken(normalizedEmail, trackedSource, config.userGroup);
     const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${encodeURIComponent(token)}`;
 
     // ── A2-Fix „ehrlicher Fehler" (16.08.2026) ──────────────────────────────

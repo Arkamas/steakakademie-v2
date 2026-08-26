@@ -48,6 +48,7 @@ module.exports = {
   priority: 0.7,
   sitemapSize: 5000,
   exclude: [
+    '/home-b',        // A/B-Variante (Editorial Ember) — noindex, Canonical auf /
     '/go/*',
     '/api/*',
     '/admin/*',

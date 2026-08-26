@@ -86,6 +86,14 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    passiert. Abgesichert durch `scripts/check-startseiten-hierarchie.mjs` (Build-Gate,
    läuft im prebuild). Reihenfolge ändern = Soll-Liste im Skript bewusst anpassen UND
    hier vermerken. Nicht durch stilles Umsortieren in `page.tsx`.
+   **A/B-Test „Editorial Ember" (seit 26.08.2026):** `/` wird per Cookie `sa_ab_home`
+   50/50 gesplittet (src/middleware.ts). Variante B = interner Rewrite auf `/home-b`
+   (noindex, Canonical auf `/`): dieselbe page.tsx, eingehüllt in den hellen
+   `.theme-ember`-Layer (globals.css, Palette aus texasmonthly-ref/ideas.md „Editorial
+   Ember"). Inhalte + Doktrin-Reihenfolge identisch — das Gate prüft weiterhin die eine
+   Quelle. Messung: /api/newsletter hängt für B-Besucher `-vb` an die Loops-source
+   (Vergleich in Loops: Anmeldungen mit/ohne Suffix). Test beenden = Middleware-Block
+   entfernen + Gewinner-Look fest verdrahten.
 
 9. **Arbeitsstände sichern — uncommitteter Code ist ungeschützter Code (23.08.2026).**
    Anlass: Eine fertige Homepage im Texas-Monthly-Stil lag tagelang uncommittet im

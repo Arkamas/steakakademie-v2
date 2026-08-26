@@ -1,5 +1,9 @@
 # Weihnachts-Gutscheine scharfschalten — Uwes Checkliste
 
+> ⏳ **VERKAUFSSTART: 01.10.2026** (Gewerbeanmeldung zum 01.10. — vorher keine
+> neuen Verkaufsprodukte anlegen). Bis dahin: Saison-Generator baut den
+> Weihnachts-Content auf; die Schritte unten sind ab dem 01.10. dran.
+>
 > Stand 26.08.2026. Das Gutschein-System ist **code-seitig komplett** (seit
 > Migration `20260607_vouchers.sql`): Kaufabwicklung über Digistore24-Webhook,
 > Code-Erzeugung, druckbare Gutschein-Seite (`/gutschein/[code]`), Einlösung

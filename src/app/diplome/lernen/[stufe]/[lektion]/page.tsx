@@ -6,7 +6,8 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { breadcrumbSchema } from '@/lib/schema';
-import { ChevronRight, ChevronLeft, ArrowRight, BookOpen, Lightbulb } from 'lucide-react';
+import { cookies } from 'next/headers';
+import { ChevronRight, ChevronLeft, ArrowRight, BookOpen, Lightbulb, Lock } from 'lucide-react';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import KontextRail from '@/components/diplome/KontextRail';
 import AnimatedBar from '@/components/diplome/AnimatedBar';
@@ -89,6 +90,19 @@ export default function DiplomLektionPage({ params }: Props) {
   const meta = STUFE_META[lektion.stufe] ?? STUFE_META[1];
   const MDXContent = useMDXComponent(lektion.body.code);
 
+  // ── BEZAHLPRODUKT-SCHUTZ (26.08.2026, docs/konzept-diplom-stufe-2-5.md) ──
+  // Stufe 1 (Bronze) ist der kostenlose Trichter. Stufe 2-5 sind das
+  // kostenpflichtige Grillmeister-Diplom (99 EUR Gruendungspreis / 149 EUR) —
+  // bis heute standen alle Volltexte oeffentlich im Netz UND im Sitemap.
+  // Oeffentlich bleibt ein Anreisser (Excerpt + Lernziele); der Volltext
+  // oeffnet sich erst mit Kauf-Berechtigung.
+  // TODO Vorverkauf: sobald der Digistore-Webhook Kaeufe in Supabase schreibt
+  // (ab 01.10.2026, Gewerbeanmeldung), hier zusaetzlich das User-Entitlement
+  // pruefen. Bis dahin sieht nur Uwe (Admin-Cookie) die Volltexte.
+  const isPaidTier = lektion.stufe >= 2;
+  const isAdmin = cookies().get('admin_auth')?.value === process.env.ADMIN_PASSWORD;
+  const locked = isPaidTier && !isAdmin;
+
   // Geschwister-Lektionen derselben Stufe, nach order sortiert
   const siblings = allDiplomLektions
     .filter((l) => l.stufe === lektion.stufe)
@@ -157,8 +171,52 @@ export default function DiplomLektionPage({ params }: Props) {
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12">
             <article className="max-w-content">
-              <MDXContent components={mdxComponents} />
+              {locked ? (
+                <div>
+                  {/* Anreisser — oeffentlich sichtbarer Teil der Bezahl-Lektion */}
+                  <p className="font-body text-[1.0625rem] leading-[1.8] text-text-primary mb-8">
+                    {lektion.excerpt}
+                  </p>
+                  <div className="border p-7 sm:p-9 text-center" style={{ borderColor: `${meta.color}50`, background: `${meta.color}0D` }}>
+                    <span
+                      className="inline-flex w-12 h-12 items-center justify-center rounded-full mb-4"
+                      style={{ background: `${meta.color}20`, color: meta.color }}
+                    >
+                      <Lock size={20} />
+                    </span>
+                    <h2 className="font-serif text-2xl font-bold text-text-light mb-2">
+                      Teil der Grillmeister-Ausbildung
+                    </h2>
+                    <p className="font-body text-text-secondary leading-relaxed max-w-md mx-auto mb-3">
+                      Diese Lektion gehört zu Stufe {lektion.stufe} ({meta.cert}) des
+                      kostenpflichtigen Grillmeister-Diploms. Stufe 1 mit sieben
+                      vollständigen Lektionen ist frei zugänglich.
+                    </p>
+                    <p className="font-sans text-xs text-text-muted mb-6">
+                      Verkaufsstart 01.10.2026 — Gründungs-Preis 99&nbsp;€ für die ersten 100,
+                      danach 149&nbsp;€.
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-3">
+                      <Link
+                        href="/diplome"
+                        className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-xs uppercase tracking-widest text-white bg-brand-fire hover:opacity-90 transition-opacity"
+                      >
+                        Zur Ausbildung <ArrowRight size={14} />
+                      </Link>
+                      <Link
+                        href="/diplome/lernen/stufe-1/grillarten"
+                        className="inline-flex items-center gap-2 px-6 py-3 font-sans font-bold text-xs uppercase tracking-widest border border-brand-gold/40 text-text-light hover:bg-brand-gold hover:text-ink transition-colors"
+                      >
+                        Stufe 1 kostenlos lernen
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <MDXContent components={mdxComponents} />
+              )}
 
+              {!locked && (<>
               {/* Merksatz */}
               <div
                 className="mt-10 p-6 rounded-r-sm border-l-[3px]"
@@ -174,6 +232,7 @@ export default function DiplomLektionPage({ params }: Props) {
                   „{lektion.merksatz}&quot;
                 </p>
               </div>
+              </>)}
 
               {/* Prev / Next */}
               <div className="mt-10 flex items-stretch justify-between gap-4">

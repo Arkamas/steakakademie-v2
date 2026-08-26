@@ -49,6 +49,14 @@ module.exports = {
   sitemapSize: 5000,
   exclude: [
     '/home-b',        // A/B-Variante (Editorial Ember) — noindex, Canonical auf /
+    // Bezahlprodukt-Schutz (26.08.2026): Stufe 2-5 sind Teil des kostenpflichtigen
+    // Grillmeister-Diploms. Oeffentlich bleibt nur der Anreisser auf der Seite
+    // selbst — die Volltexte gehoeren nicht in den Index. Stufe 1 (Bronze,
+    // kostenloser Trichter) bleibt drin.
+    '/diplome/lernen/stufe-2/*',
+    '/diplome/lernen/stufe-3/*',
+    '/diplome/lernen/stufe-4/*',
+    '/diplome/lernen/stufe-5/*',
     '/go/*',
     '/api/*',
     '/admin/*',

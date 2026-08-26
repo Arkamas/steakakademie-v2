@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'Grilltechniken im Detail: Reverse Sear, direktes und indirektes Grillen, Räuchern, Sous-vide. Physik, Temperaturen und Praxiswissen für jeden Grillstil.',
   alternates: { canonical: 'https://steakakademie.de/methoden' },
   openGraph: {
-    title: 'Grilltechniken — Methoden & Techniken | Steakakademie',
+    title: 'Grilltechniken — Methoden & Techniken',
     description: 'Reverse Sear, Räuchern, direkt & indirekt — alle Grilltechniken mit Physik und Praxiswissen.',
     url: 'https://steakakademie.de/methoden',
     type: 'website',

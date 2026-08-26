@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const r = await getRecipe(params.slug);
   if (!r) return { title: 'Rezept nicht gefunden' };
   return {
-    title: `${r.title} — Community-Rezept | Steakakademie`,
+    title: `${r.title} — Community-Rezept`,
     description: r.description,
     alternates: { canonical: `https://steakakademie.de/rezepte/community/${r.slug}` },
     openGraph: {

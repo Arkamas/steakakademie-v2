@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!data) return { title: 'Grillmeister-Profil' };
   const name = data.profile.display_name ?? 'Grillmeister';
   return {
-    title: `${name} — Grillmeister-Vita | Steakakademie`,
+    title: `${name} — Grillmeister-Vita`,
     description: `Die Diplom-Fortschritte von ${name} an der Steakakademie.`,
     alternates: { canonical: `https://steakakademie.de/griller/${params.slug}` },
   };

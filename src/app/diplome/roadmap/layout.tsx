@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Grillmeister-Roadmap — 5 Stufen, Quiz & Prüfung | Steakakademie',
+  title: 'Grillmeister-Roadmap — 5 Stufen, Quiz & Prüfung',
   description: 'Die interaktive Grillmeister-Ausbildung: 5 Stufen von Bronze bis Meister mit Lektionen, Quiz und Flashcards. Lerne systematisch und schalte deine Diplome frei.',
   alternates: { canonical: 'https://steakakademie.de/diplome/roadmap' },
   openGraph: {

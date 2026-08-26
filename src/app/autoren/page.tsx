@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'Marco, Jonas und Elena — die redaktionellen KI-Personas der Steakakademie. Fachlich geprüft und verantwortet von Gründer Uwe Yendell.',
   alternates: { canonical: 'https://steakakademie.de/autoren' },
   openGraph: {
-    title: 'Unsere Autoren | Steakakademie',
+    title: 'Unsere Autoren',
     description: 'Lerne die Experten hinter der Steakakademie kennen — Pitmaster, Enthusiast und Food-Wissenschaftlerin.',
     url: 'https://steakakademie.de/autoren',
     type: 'website',

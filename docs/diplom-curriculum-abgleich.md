@@ -77,7 +77,14 @@ Lernziel-Katalogs und der Prüfungsbasis.
 
 ## Offen (Folge-Arbeit, Regel 8b)
 
-Geschriebene **MDX-Lektionen** existieren bisher nur für **Stufe 1** (7 Stück).
+> **KORREKTUR 26.08.2026:** Der folgende Absatz war veraltet. Es existieren
+> **alle 35 MDX-Lektionen** (7 je Stufe, Stufen 1–5), gebaut und erreichbar unter
+> `/diplome/lernen/stufe-N/<slug>`. Die offene Arbeit ist nicht mehr *schreiben*,
+> sondern *vertiefen und zugangsgeschützt verkaufbar machen* — siehe
+> `docs/konzept-diplom-stufe-2-5.md`. Regel 8b ist seit dem 26.08.2026 in
+> CLAUDE.md definiert.
+
+~~Geschriebene **MDX-Lektionen** existieren bisher nur für **Stufe 1** (7 Stück).~~
 Für die neuen Kompetenzen + alle Stufen 2–5 sind die eigentlichen Lektionstexte
 noch zu erstellen — jeweils vorher Elemente + Inhalt gemeinsam planen (Regel 8b),
 dann schreiben. Neue Lektions-Kandidaten aus diesem Abgleich:

@@ -6,12 +6,12 @@ import { allRecipes } from 'contentlayer/generated';
 import MenueComposer, { type MenuRezept } from '@/components/menue/MenueComposer';
 
 export const metadata: Metadata = {
-  title: 'Menü-Planer — BBQ-Menü mit Einkaufsliste | Steakakademie',
+  title: 'Menü-Planer — BBQ-Menü mit Einkaufsliste',
   description:
     'Stelle dein Grill-Menü aus geprüften Rezepten zusammen: Hauptgang, Beilagen, Saucen, Dessert. Personenzahl wählen — die Einkaufsliste rechnet alle Mengen automatisch um.',
   alternates: { canonical: 'https://steakakademie.de/menue' },
   openGraph: {
-    title: 'Menü-Planer | Steakakademie',
+    title: 'Menü-Planer',
     description: 'BBQ-Menü zusammenstellen, Personenzahl wählen, fertige Einkaufsliste kopieren.',
     url: 'https://steakakademie.de/menue',
     type: 'website',

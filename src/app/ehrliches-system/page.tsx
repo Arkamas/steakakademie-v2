@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     'Reproduzierbares Betriebssystem für Solo-Selbstständige — entwickelt live beim Aufbau von steakakademie.de. Echte Zahlen, keine Phantasie-Screenshots. Drei Säulen: Gründung, Steuern, Agentur-Unabhängigkeit.',
   alternates: { canonical: 'https://steakakademie.de/ehrliches-system' },
   openGraph: {
-    title: 'Das Ehrliche System | Steakakademie',
+    title: 'Das Ehrliche System',
     description:
       'Kein Hype. Keine vagen Versprechen. Ein reproduzierbares KI-Business-Betriebssystem, das wir live beim Aufbau von steakakademie.de entwickelt haben.',
     url: 'https://steakakademie.de/ehrliches-system',

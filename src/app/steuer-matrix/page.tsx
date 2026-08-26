@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     'Interaktiver Netto-Vergleich: Wieviel bleibt dir als Solo-Selbstständiger in 23 Ländern wirklich übrig? Deutschland, Portugal, Niederlande und 20 weitere — echte Zahlen, kein Marketing.',
   alternates: { canonical: 'https://steakakademie.de/steuer-matrix' },
   openGraph: {
-    title: 'Steuer-Matrix — 23 Länder im Vergleich | Steakakademie',
+    title: 'Steuer-Matrix — 23 Länder im Vergleich',
     description: 'Datengestützte Entscheidungshilfe für Solo-Selbstständige: 23 Länder im Netto-Vergleich. Finde heraus, wo du als Solopreneur am meisten behältst.',
     url: 'https://steakakademie.de/steuer-matrix',
     type: 'website',

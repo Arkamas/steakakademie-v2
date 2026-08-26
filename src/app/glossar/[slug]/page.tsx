@@ -25,7 +25,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const entry = sichtbareBegriffe.find(g => g.slug === params.slug);
   if (!entry) return {};
-  const title = entry.seoTitle ?? `${entry.title} — BBQ-Glossar | Steakakademie`;
+  const title = entry.seoTitle ?? `${entry.title} — BBQ-Glossar`;
   const description = entry.seoDescription ?? entry.shortDefinition;
   return {
     title,

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     'Salzen vorher oder nachher, temperieren oder kalt auflegen, Edelstahl oder Guss: Die strittigen Grillfragen, jeweils mit beiden Positionen, der Zielgröße dahinter und einer klaren Entscheidung aus 30 Jahren Praxis.',
   alternates: { canonical: 'https://steakakademie.de/streitfaelle' },
   openGraph: {
-    title: 'Streitfälle am Grill | Steakakademie',
+    title: 'Streitfälle am Grill',
     description:
       'Die strittigen Grillfragen — beide Seiten fair dargestellt, dann eine klare Entscheidung mit der Bedingung, unter der die andere Antwort gewinnt.',
     url: 'https://steakakademie.de/streitfaelle',

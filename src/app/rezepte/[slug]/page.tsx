@@ -140,11 +140,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const kat = KATEGORIEN[params.slug];
   if (!kat) return {};
   return {
-    title: `${kat.label} — BBQ-Rezepte | Steakakademie`,
+    title: `${kat.label} — BBQ-Rezepte`,
     description: kat.description,
     alternates: { canonical: `https://steakakademie.de/rezepte/${params.slug}` },
     openGraph: {
-      title: `${kat.label} | Steakakademie`,
+      title: `${kat.label}`,
       description: kat.description,
       url: `https://steakakademie.de/rezepte/${params.slug}`,
       type: 'website',
@@ -159,7 +159,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${kat.label} | Steakakademie`,
+      title: `${kat.label}`,
       description: kat.description,
       images: [`https://steakakademie.de${kat.heroImage}`],
     },

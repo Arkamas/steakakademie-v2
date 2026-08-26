@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     'Präzise BBQ-Rezepte mit interaktivem Portionsrechner und Schritt-für-Schritt Koch-Coach. Sous-Vide, Reverse Sear, Low & Slow — jedes Rezept mehrfach getestet.',
   alternates: { canonical: 'https://steakakademie.de/rezepte' },
   openGraph: {
-    title: 'BBQ-Rezepte | Steakakademie',
+    title: 'BBQ-Rezepte',
     description: 'Geprüfte Grill-Rezepte mit interaktivem Koch-Coach und automatischer Portionsskalierung.',
     url: 'https://steakakademie.de/rezepte',
     type: 'website',

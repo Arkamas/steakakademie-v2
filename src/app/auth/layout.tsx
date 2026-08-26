@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 // Login/Auth: keine Index-relevanten Seiten.
 export const metadata: Metadata = {
-  title: 'Anmelden | Steakakademie',
+  title: 'Anmelden',
   robots: { index: false, follow: false },
 };
 

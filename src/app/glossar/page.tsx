@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     'Von Maillard-Reaktion bis Plateauphase: Das vollständige BBQ- und Grill-Lexikon der Steakakademie. Jeder Begriff präzise definiert — mit wissenschaftlichem Hintergrund und Praxistipp.',
   alternates: { canonical: 'https://steakakademie.de/glossar' },
   openGraph: {
-    title: 'BBQ-Glossar | Steakakademie',
+    title: 'BBQ-Glossar',
     description: 'Das komplette Fachbegriff-Lexikon für Grillmeister. Maillard-Reaktion, Reverse Sear, Dry Aging — alles erklärt.',
     url: 'https://steakakademie.de/glossar',
     type: 'website',

@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
 
+const IS_CRAWLER =
+  /bot|crawler|spider|crawling|slurp|googlebot|bingbot|duckduckbot|baiduspider|yandex|applebot|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|discordbot|gptbot|oai-searchbot|chatgpt-user|claudebot|claude-searchbot|anthropic-ai|perplexitybot|perplexity-user|ccbot|bytespider|amazonbot|google-extended|lighthouse|pagespeed|ahrefs|semrush|screaming frog/i;
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -9,6 +12,30 @@ export async function middleware(request: NextRequest) {
   // ist sticky (90 Tage), damit Besucher konsistent EINE Variante sehen.
   // Messung: /api/newsletter liest dasselbe Cookie (source-Suffix "-vb").
   if (pathname === '/') {
+    // SEO-SCHUTZ (26.08.2026): Suchmaschinen und Answer-Engines werden vom
+    // Test AUSGENOMMEN und sehen immer Variante A. Grund: der Rewrite auf
+    // /home-b liefert dessen Metadaten unter der Adresse "/" aus — inklusive
+    // `robots: { index: false }`. Ohne diese Ausnahme bekam jeder zweite
+    // Googlebot-Abruf der Startseite ein noindex, was die wichtigste Seite
+    // der Domain aus dem Index werfen kann. Bots bekommen ausserdem kein
+    // Cookie, damit die 50/50-Messung unter Menschen sauber bleibt.
+    if (IS_CRAWLER.test(request.headers.get('user-agent') ?? '')) {
+      return NextResponse.next();
+    }
+
+    // NOT-AUS (26.08.2026): Der Test laeuft nur, wenn AB_HOME_ENABLED === '1'.
+    // Standard ist AUS. Grund: Variante B ist in der ausgelieferten Fassung
+    // optisch defekt — .theme-ember dreht die Text-Utilities auf Tinte (#1C1512),
+    // waehrend Abschnitte mit dunklem Verlauf oder Foto-Hintergrund dunkel
+    // bleiben (Hero-Radial-Verlauf, Ribeye-Aufmacher) und Kopf/Navigation
+    // weiterhin text-white auf nun hellem bg-surface-dark setzen. Gemessene
+    // Kontraste auf der Startseite: Navigation 1,05:1 · Topbar 1,18:1 ·
+    // Hero-Absatz 1,18:1 · Gold-Wortmarke 2,86:1 (WCAG AA verlangt 4,5:1,
+    // Grosstext 3:1). Wieder einschalten, wenn B abgenommen ist.
+    if (process.env.AB_HOME_ENABLED !== '1') {
+      return NextResponse.next();
+    }
+
     const existing = request.cookies.get('sa_ab_home')?.value;
     const variant = existing === 'a' || existing === 'b'
       ? existing

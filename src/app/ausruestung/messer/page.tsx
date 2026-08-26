@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     'Kochmesser, Damast-Messer und BBQ-Tranchiermesser im Überblick: Premium-Segment (Wüsthof, Güde), Damast (Miyabi, Kai Shun), Mittelklasse (F. Dick, Victorinox) und BBQ-Spezialisten.',
   alternates: { canonical: 'https://steakakademie.de/ausruestung/messer' },
   openGraph: {
-    title: 'Messer für den Grill | Steakakademie',
+    title: 'Messer für den Grill',
     description:
       'Deutsches Handwerk trifft japanische Präzision — 11 Messer in 4 Segmenten für Steaks, Brisket und BBQ.',
     url: 'https://steakakademie.de/ausruestung/messer',

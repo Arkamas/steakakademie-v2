@@ -27,7 +27,9 @@ export const metadata: Metadata = {
   alternates: { canonical: '/' },
 };
 
-const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
+// Exportiert fuer die A/B-Variante /home-b (Editorial-Ember-Layout nach
+// Texas-Monthly-Referenz) — EINE Datenquelle fuer beide Startseiten.
+export const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
   {
     slug: 'ribeye-guide-der-perfekte-cut',
     url: '/cuts/ribeye',

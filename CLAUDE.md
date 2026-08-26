@@ -95,6 +95,22 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    (Vergleich in Loops: Anmeldungen mit/ohne Suffix). Test beenden = Middleware-Block
    entfernen + Gewinner-Look fest verdrahten.
 
+8b. **Lerninhalte: erst planen, dann schreiben (kodifiziert 26.08.2026).** Diese Regel
+   wurde seit dem Curriculum-Abgleich zweimal zitiert, war aber nie definiert — hiermit
+   nachgeholt. Bevor eine Diplom-Lektion, ein Kursmodul oder eine Lerneinheit **geschrieben**
+   wird, liegt ein **Konzept** vor, das Uwe freigibt. Das Konzept benennt verbindlich:
+   (a) **Lernziel** in einem Satz — was kann der Lernende danach, was er vorher nicht konnte;
+   (b) **Elemente** — welche Bausteine die Einheit enthält (Text, `<Schnelluebersicht>`,
+   `<TempBox>`, `<Achtung>`, `<ProTipp>`, Bild, Video, Quiz, interaktive Lernmethode aus
+   `roadmap/page.tsx`), und in welcher Reihenfolge;
+   (c) **Umfang** — Zielwortzahl bzw. Videolänge, damit Tiefe nicht dem Zufall überlassen bleibt;
+   (d) **Faktenquellen** — welche Werte aus `data/kerntemperatur-referenz.yaml` oder welcher
+   belegten Quelle stammen (Regel 8c gilt unverändert);
+   (e) **Prüfungsbezug** — welche Frage der Stufenprüfung diese Einheit beantwortbar macht.
+   Erst nach Freigabe wird produziert. Grund: Lektionen ohne vorherige Element-Planung
+   geraten zu gleichförmigem Fließtext ohne Prüfungsbezug — genau das ist bei den 35
+   bestehenden Lektionen passiert (durchweg 320–440 Wörter, kaum interaktive Elemente).
+
 9. **Arbeitsstände sichern — uncommitteter Code ist ungeschützter Code (23.08.2026).**
    Anlass: Eine fertige Homepage im Texas-Monthly-Stil lag tagelang uncommittet im
    Arbeitsbaum und ist spurlos verschwunden. Git konnte nichts retten, weil Git nur

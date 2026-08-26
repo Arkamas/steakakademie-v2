@@ -9,6 +9,24 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/wip-autosave.mjs\" --quiet"
+          }
+        ]
+      }
     ]
+  },
+  "sandbox": {
+    "network": {
+      "allowedDomains": [
+        "api.voyageai.com",
+        "bbgdrzhlellxzggbbqcm.supabase.co"
+      ]
+    }
   }
 }

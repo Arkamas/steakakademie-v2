@@ -87,6 +87,28 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    läuft im prebuild). Reihenfolge ändern = Soll-Liste im Skript bewusst anpassen UND
    hier vermerken. Nicht durch stilles Umsortieren in `page.tsx`.
 
+9. **Arbeitsstände sichern — uncommitteter Code ist ungeschützter Code (23.08.2026).**
+   Anlass: Eine fertige Homepage im Texas-Monthly-Stil lag tagelang uncommittet im
+   Arbeitsbaum und ist spurlos verschwunden. Git konnte nichts retten, weil Git nur
+   schützt, was committet ist. Daraus folgt, verbindlich:
+   - **Sichtbares Ergebnis = sofort committen.** Sobald etwas im Browser funktioniert
+     oder abgenommen wird, gehört es in einen Commit — nicht „später, wenn es fertig ist".
+     Ein unfertiger Commit auf einem Zweig ist jederzeit korrigierbar; eine überschriebene
+     Datei ohne Commit ist es nie.
+   - **`git clean` NIE direkt.** Immer `git clean-safe` (Alias: sichert erst nach
+     `wip/auto`, zeigt dann den Trockenlauf `git clean -nd`). `git clean -fd` löscht
+     unversionierte Dateien ohne Rückfrage und ohne Wiederherstellung.
+   - **Automatisches Netz:** Der `Stop`-Hook ruft `scripts/wip-autosave.mjs`, das den
+     kompletten Arbeitsbaum am Sitzungsende auf den lokalen Branch `wip/auto` schreibt —
+     ohne Arbeitsbaum, HEAD oder Staging-Bereich anzufassen. Manuell: `git wip`.
+     Ansehen: `git wip-log`. Zurückholen: `git checkout wip/auto -- <pfad>`.
+     `wip/auto` wird **nie gepusht und nie gemerged** — es ist ein Netz, kein Verlauf.
+   - **Vor riskanten Operationen** (Verschieben des Projekts, Löschen einer Arbeitskopie,
+     Rebase, `reset --hard`, Aufräumen) zuerst `git wip` ausführen.
+   - **Eine Arbeitskopie, nicht zwei.** Parallelkopien in OneDrive und `C:\Dev` haben
+     an diesem Tag zusätzlich Verwirrung gestiftet und Arbeit gekostet. Kanonisch ist
+     `C:\Dev\steakakademie-v2`.
+
 7. **Epistemische Ehrlichkeit (Uwe, 03.07.2026) — gilt für JEDE Antwort/JEDEN Output:**
    - Wenn Informationen unsicher, unvollständig oder spekulativ sind, das klar sagen.
      Keine Fakten, Quellen oder Zahlen erfinden.

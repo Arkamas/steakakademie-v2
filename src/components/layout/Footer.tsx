@@ -25,6 +25,7 @@ const FOOTER_LINKS = {
   ],
   Akademie: [
     { label: 'Grillmeister-Diplome', href: '/diplome' },
+    { label: 'BBQ-Grundkurs', href: '/bbq-grundkurs' },
     // Vorher standen hier Marco, Jonas und Elena als drei Eintraege — alle drei
     // zeigten auf dieselbe Seite /autoren. Drei Zeilen fuer ein Ziel sind
     // verschenkter Platz und fuer den Nutzer eine Enttaeuschung beim zweiten Klick.

@@ -488,7 +488,7 @@ export default makeSource({
   // Datendateien (kein Document-Typ) von der Doc-Klassifizierung ausnehmen,
   // sonst meldet Contentlayer sie als "problem" → Warn-Rauschen, das echte
   // Build-Fehler verdeckt (siehe KAN-26: 33 stille Rezept-404s).
-  contentDirExclude: ['glossar/terms.json'],
+  contentDirExclude: ['glossar/terms.json', '_archiv'],
   documentTypes: [Artikel, Cut, Methode, Vergleich, Streitfall, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe, DiplomLektion, SprintModul],
   mdx: {
     // GitHub Flavored Markdown — sonst rendern Markdown-Tabellen als roher

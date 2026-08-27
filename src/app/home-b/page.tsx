@@ -46,7 +46,7 @@ const NAV = [
   { label: 'Wissen', href: '/wissen' },
   { label: 'Rezepte', href: '/rezepte' },
   { label: 'Ausrüstung', href: '/kategorie/ausruestung' },
-  { label: 'Community', href: '/community' },
+  { label: 'Community', href: '/rezepte/community' },
   { label: 'USA-Expedition', href: '/usa-expedition' },
   { label: 'Ehrliches System', href: '/ehrliches-system' },
 ];

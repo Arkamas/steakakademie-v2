@@ -173,7 +173,10 @@ async function main() {
     }
     for (const [feldName, anzahl] of proFeld) console.log(`    ${c.y('·')} ${feldName}: ${anzahl}`)
     console.log(c.d(`\n    Diese Rezepte werden ueber das laufende Tagging nachgezogen und`))
-    console.log(c.d(`    brechen den Build nicht. Ab ${STICHTAG} veroeffentlichte Rezepte schon.`))
+    console.log(c.d(`    brechen den Build nicht.`))
+    console.log(c.d(`    STICHTAG IST KEIN KALENDERDATUM: hart geprueft wird jedes Rezept mit`))
+    console.log(c.d(`    publishedAt >= ${STICHTAG} — unabhaengig davon, welcher Tag heute ist.`))
+    console.log(c.d(`    Diese Warnungen verschwinden erst, wenn die Altrezepte getaggt sind.`))
     console.log(c.d(`    Vollstaendige Liste mit --strict.\n`))
     if (STRICT) {
       for (const w of warnungen) console.log(`    ${c.y('·')} ${w.slug.padEnd(38)} ${w.text}`)

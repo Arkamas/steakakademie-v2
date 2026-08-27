@@ -195,7 +195,11 @@ async function main() {
   if (warnungen.length) {
     console.log(c.y(`  ⚠ ${warnungen.length} Warnungen (Altbestand vor ${STICHTAG}):\n`))
     console.log(c.d('    Diese Dokumente sind vor Einfuehrung des Redaktionsvorbehalts'))
-    console.log(c.d(`    entstanden und brechen den Build nicht. Ab ${STICHTAG} ist es hart.`))
+    console.log(c.d(`    entstanden und brechen den Build nicht.`))
+    console.log(c.d(`    STICHTAG IST KEIN KALENDERDATUM: hart geprueft wird jedes Dokument mit`))
+    console.log(c.d(`    publishedAt >= ${STICHTAG} — unabhaengig davon, welcher Tag heute ist.`))
+    console.log(c.d(`    Diese Warnungen verschwinden also nicht "wenn der Stichtag vorbei ist",`))
+    console.log(c.d(`    sondern erst, wenn die Altdokumente status/reviewed bekommen.`))
     console.log(c.d('    Vollstaendige Liste mit --strict.\n'))
     if (STRICT) {
       for (const w of warnungen) console.log(`    ${c.y('·')} ${w.slug.padEnd(46)} ${w.text}`)

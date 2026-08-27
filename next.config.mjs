@@ -98,7 +98,18 @@ const nextConfig = {
     ];
   },
   async redirects() {
-    return [];
+    return [
+      // Glossar-Duplikat zusammengelegt (27.08.2026): "Smoker-Temperatur" gab es
+      // zweimal, unter /glossar/smoker-temp und /glossar/smoker-temperatur —
+      // gleicher Titel, widersprechende Werte (100-130 gegen 100-150 Grad C) und
+      // beide bezeichneten die Garraumtemperatur faelschlich als Kerntemperatur.
+      // Der laengere Slug ueberlebt; die alte URL leitet dauerhaft dorthin.
+      {
+        source: '/glossar/smoker-temp',
+        destination: '/glossar/smoker-temperatur',
+        permanent: true,
+      },
+    ];
   },
 };
 

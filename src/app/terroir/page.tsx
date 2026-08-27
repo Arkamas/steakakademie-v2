@@ -3,7 +3,7 @@ import TerroirClient from './TerroirClient';
 
 export const metadata: Metadata = {
   title: 'Meat Terroir — Herkunft prägt Geschmack',
-  description: 'Wie Herkunft, Rasse, Fütterung und Klima den Geschmack von Fleisch prägen. Japan Wagyu, Argentinien Pampas, USA Prime, Schottland Highland — 6 Herkunftsregionen im Vergleich.',
+  description: 'Wie Herkunft, Rasse, Fütterung und Klima den Geschmack prägen. Japan Wagyu, Argentinien Pampas, USA Prime, Schottland Highland — 6 Regionen im Vergleich.',
   alternates: { canonical: 'https://steakakademie.de/terroir' },
   openGraph: {
     title: 'Meat Terroir — Wie Herkunft den Geschmack prägt',

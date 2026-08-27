@@ -6,9 +6,9 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Das Ehrliche System — KI-Business für Solo-Selbstständige',
+  title: 'Das Ehrliche System für Solo-Selbstständige',
   description:
-    'Reproduzierbares Betriebssystem für Solo-Selbstständige — entwickelt live beim Aufbau von steakakademie.de. Echte Zahlen, keine Phantasie-Screenshots. Drei Säulen: Gründung, Steuern, Agentur-Unabhängigkeit.',
+    'Reproduzierbares Betriebssystem für Solo-Selbstständige, entwickelt beim Aufbau von steakakademie.de. Drei Säulen: Gründung, Steuern, Agentur-Unabhängigkeit.',
   alternates: { canonical: 'https://steakakademie.de/ehrliches-system' },
   openGraph: {
     title: 'Das Ehrliche System',

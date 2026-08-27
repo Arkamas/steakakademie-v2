@@ -7,6 +7,7 @@ import { sichtbareArtikel } from '@/lib/redaktion';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import { breadcrumbSchema, definedTermSchema } from '@/lib/schema';
 
 interface Props {
@@ -41,6 +42,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const mdxComponents = {
+  // Callouts wie in Rezepten, Methoden und Diplom-Lektionen. Ohne die
+  // Registrierung bricht MDX ab, sobald ein Glossar-Eintrag einen Callout
+  // benutzt — und gerade Warnhinweise gehoeren ins Glossar (Regel 8c).
+  Schnelluebersicht, Achtung, ProTipp, TempBox,
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
       className="font-serif text-2xl font-bold text-text-light mt-10 mb-4 pb-3 leading-tight"

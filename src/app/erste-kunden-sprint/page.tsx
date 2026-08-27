@@ -10,9 +10,9 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Erste-Kunden-Sprint — Von der Gründung zu ersten Aufträgen in 72h',
+  title: 'Erste-Kunden-Sprint — erste Aufträge in 72h',
   description:
-    'Gewerbe angemeldet, Website live — und jetzt? In 72 Stunden zum ersten bezahlten Auftrag. Positionierung, Angebot, Direktansprache. Kein Marketing-Kurs, kein Kaltakquise-Script.',
+    'Gewerbe angemeldet, Website live — und jetzt? In 72 Stunden zum ersten bezahlten Auftrag. Positionierung, Angebot, Direktansprache. Kein Marketing-Kurs.',
   alternates: { canonical: 'https://steakakademie.de/erste-kunden-sprint' },
   openGraph: {
     title: 'Erste-Kunden-Sprint — Erste Aufträge in 72h',

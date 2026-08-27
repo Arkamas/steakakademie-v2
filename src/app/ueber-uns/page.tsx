@@ -10,9 +10,9 @@ export const metadata: Metadata = {
   // Der erste Eindruck in der Suchergebnisliste ist die Herkunft, nicht der
   // Abschluss. Titel und Beschreibung folgen der Reihenfolge der Seite selbst:
   // erst die Praxis, dann der Nachweis.
-  title: 'Uwe Yendell — 50 Jahre am Feuer | steakakademie.de',
+  title: 'Uwe Yendell — 50 Jahre am Feuer',
   description:
-    'Mit sieben bei der Oma angefangen, später Profi-Koch und Weber-zertifizierter Grillmeister. Wer hinter steakakademie.de steckt — und warum hier Technik vor Budget steht.',
+    'Mit sieben bei der Oma angefangen, später Profi-Koch und Weber-zertifizierter Grillmeister. Wer hinter steakakademie.de steckt und warum Technik zuerst kommt.',
   alternates: { canonical: 'https://steakakademie.de/ueber-uns' },
   openGraph: {
     title: 'Uwe Yendell — 50 Jahre am Feuer',

@@ -11,9 +11,9 @@ import WerkzeugHinweis from '@/components/gruendung/WerkzeugHinweis';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Gründer-Schmiede — KI-gesteuert dein Business bauen',
+  title: 'Gründer-Schmiede — 6 Module zum KI-Business',
   description:
-    'Meine echte Methode: wie du mit KI ein digitales Business aufbaust, ohne dich im Chaos zu verlieren. Sechs Module, das Gründer-Nachschlagewerk „Das Komplettikon" und ein Arbeitszeit-Planer — von Tag 1 dokumentiert.',
+    'Sechs Module, das Gründer-Nachschlagewerk „Das Komplettikon" und ein Arbeitszeit-Planer: die Methode hinter steakakademie.de, von Tag 1 dokumentiert.',
   alternates: { canonical: 'https://steakakademie.de/gruender-schmiede' },
   openGraph: {
     title: 'Gründer-Schmiede — KI-gesteuert dein Business bauen',

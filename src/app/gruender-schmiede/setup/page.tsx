@@ -10,9 +10,9 @@ import Footer from '@/components/layout/Footer';
 import { breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  title: 'Mein komplettes Setup — So baue ich das hier wirklich | Gründer-Schmiede',
+  title: 'Mein Setup — KI-Agenten und Werkzeuge',
   description:
-    'Volle Transparenz: die KI-Agenten, Programme, Konnektoren und Werkzeuge, mit denen die Steakakademie als Ein-Personen-Betrieb läuft. Kein Theorie-Modell — das laufende System.',
+    'Die KI-Agenten, Konnektoren und Werkzeuge, mit denen die Steakakademie als Ein-Personen-Betrieb läuft — kein Theorie-Modell, sondern das laufende System.',
   alternates: { canonical: 'https://steakakademie.de/gruender-schmiede/setup' },
 };
 

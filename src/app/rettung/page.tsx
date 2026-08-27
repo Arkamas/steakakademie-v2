@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import RettungClient from './RettungClient';
 
 export const metadata: Metadata = {
-  title: 'Steak-Rettungs-Bibliothek — Was tun wenn\'s schiefläuft?',
-  description: '6 häufigste Grillkatastrophen und wie man sie rettet: zu durch, zu roh, trocken, verbrennt außen, kein Kruste, Fleisch klebt. Mit Schritt-für-Schritt-Anleitungen.',
+  title: 'Steak-Rettungs-Bibliothek — 6 Grillfehler',
+  description: 'Die 6 häufigsten Grillkatastrophen und wie du sie rettest: zu durch, zu roh, trocken, außen verbrannt, keine Kruste, Fleisch klebt. Mit Anleitungen.',
   alternates: { canonical: 'https://steakakademie.de/rettung' },
   openGraph: {
     title: 'Steak-Rettungs-Bibliothek — 6 Grillkatastrophen und ihre Lösung',

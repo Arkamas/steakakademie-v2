@@ -6,9 +6,9 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Steuer-Matrix — 23 Länder Steuervergleich für Solo-Selbstständige',
+  title: 'Steuer-Matrix — 23 Länder im Steuervergleich',
   description:
-    'Interaktiver Netto-Vergleich: Wieviel bleibt dir als Solo-Selbstständiger in 23 Ländern wirklich übrig? Deutschland, Portugal, Niederlande und 20 weitere — echte Zahlen, kein Marketing.',
+    'Interaktiver Netto-Vergleich für Solo-Selbstständige: Was bleibt in 23 Ländern übrig? Deutschland, Portugal, Niederlande und 20 weitere — echte Zahlen.',
   alternates: { canonical: 'https://steakakademie.de/steuer-matrix' },
   openGraph: {
     title: 'Steuer-Matrix — 23 Länder im Vergleich',

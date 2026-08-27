@@ -7,9 +7,9 @@ import GruendungsBuerokratie from '@/components/gruendung/GruendungsBuerokratie'
 import { breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  title: 'Das Komplettikon — komplettes Gründer-Nachschlagewerk | Gründer-Schmiede',
+  title: 'Gründer-Nachschlagewerk — Das Komplettikon',
   description:
-    'Die komplette Orientierung für deinen Start in die Selbständigkeit: Schritte zum Status, was beantragt werden muss und welche Kosten in den ersten 6 Monaten ab Gewerbeanmeldung auf dich zukommen. Keine Steuer-/Rechtsberatung.',
+    'Orientierung für deinen Start in die Selbständigkeit: Schritte zum Status, nötige Anträge und Kosten der ersten 6 Monate. Keine Steuer-/Rechtsberatung.',
   alternates: { canonical: 'https://steakakademie.de/gruender-schmiede/gruendung-basics' },
 };
 

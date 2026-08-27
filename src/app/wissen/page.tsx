@@ -5,7 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Wissen — BBQ-Grundlagen, Technik & Fleischkunde',
+  title: 'BBQ-Wissen — Technik, Fleischkunde, Cuts',
   description:
     'Das gebündelte BBQ-Wissen der Steakakademie: Kerntemperaturen, Grilltechniken, Fleischreifung, Cuts, Lexikon und mehr — methodisch, präzise, nachvollziehbar.',
   alternates: { canonical: 'https://steakakademie.de/wissen' },

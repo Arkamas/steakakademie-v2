@@ -7,9 +7,9 @@ import ArbeitszeitPlaner from '@/components/gruendung/ArbeitszeitPlaner';
 import { breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  title: 'Arbeitszeit-Planer: dein realistischer Timetable | Gründer-Schmiede',
+  title: 'Arbeitszeit-Planer für deinen Timetable',
   description:
-    'Trag deine verfügbare Zeit pro Tag ein — der Planer verteilt alle anstehenden Gründungs- und Aufbau-Aufgaben auf einen realistischen Timetable und aktualisiert ihn automatisch, während dein Projekt wächst.',
+    'Trag deine verfügbare Zeit pro Tag ein — der Planer verteilt alle Gründungs- und Aufbau-Aufgaben auf einen realistischen Timetable und hält ihn aktuell.',
   alternates: { canonical: 'https://steakakademie.de/gruender-schmiede/planer' },
 };
 

@@ -7,7 +7,7 @@ import { allMethodes } from 'contentlayer/generated';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  title: 'Grilltechniken — Reverse Sear, Räuchern, Direkt & Indirekt',
+  title: 'Grilltechniken — Reverse Sear und Räuchern',
   description:
     'Grilltechniken im Detail: Reverse Sear, direktes und indirektes Grillen, Räuchern, Sous-vide. Physik, Temperaturen und Praxiswissen für jeden Grillstil.',
   alternates: { canonical: 'https://steakakademie.de/methoden' },

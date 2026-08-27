@@ -8,7 +8,7 @@ import Footer from '@/components/layout/Footer';
 export const metadata: Metadata = {
   title: 'The Pitmaster Pilgrimage — US-BBQ-Expedition',
   description:
-    'Die heiligen Vier Stile, US-Zertifikate, Camp Brisket an der Texas A&M und geführte BBQ-Roadtrips. Die ultimative Pilgerstätten-Karte für ernsthafte Grillmeister.',
+    'Die heiligen Vier Stile, US-Zertifikate, Camp Brisket an der Texas A&M und geführte BBQ-Roadtrips. Die Pilgerstätten-Karte für ernsthafte Grillmeister.',
 };
 
 const SACRED_FOUR = [

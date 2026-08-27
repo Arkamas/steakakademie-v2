@@ -10,7 +10,7 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'Agentur-Killer-Sprint — Full-Ownership deiner Website in 72h',
+  title: 'Agentur-Killer-Sprint: Full-Ownership in 72h',
   description:
     'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel + GitHub in 72 Stunden. Einmal aufgesetzt — für immer unabhängig.',
   alternates: { canonical: 'https://steakakademie.de/agentur-killer-sprint' },

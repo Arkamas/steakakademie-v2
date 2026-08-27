@@ -14,7 +14,7 @@ import { toCardData } from '@/lib/rezept/card-data';
 // ─── Kategorie-Definitionen ──────────────────────────────────────────────────
 
 const KATEGORIEN: Record<string, {
-  label: string; subtitle: string; description: string;
+  label: string; subtitle: string; description: string; seoDescription?: string;
   heroImage: string; heroAlt: string;
 }> = {
   fleisch: {
@@ -28,6 +28,7 @@ const KATEGORIEN: Record<string, {
     label:       'Fisch & Meeresfrüchte',
     subtitle:    'Vom Rost ins Meer',
     description: 'Lachs auf der Zedernholzplanke, blutrotes Thunfisch-Steak, die ganze Dorade über der Glut — Fisch und Meeresfrüchte vom Grill, präzise gegart mit exakten Kerntemperaturen. Der feine Unterschied zwischen saftig und übergart.',
+    seoDescription: 'Lachs auf der Zedernholzplanke, Thunfisch-Steak, ganze Dorade über der Glut: Fisch und Meeresfrüchte vom Grill, präzise gegart mit exakten Kerntemperaturen.',
     heroImage:   '/images/rezepte/cedar-plank-lachs-hero.jpg',
     heroAlt:     'Cedar-Plank-Lachs über Flammen auf dem Grill — dramatischer Eyecatcher',
   },
@@ -56,6 +57,7 @@ const KATEGORIEN: Record<string, {
     label:       'Wine, Spirits & Cocktails',
     subtitle:    'Die vierte Dimension des Grillens',
     description: 'Bordeaux zum Brisket, Islay Single Malt zum Ribeye, Smoked Old Fashioned am Grill. Pairing-Protokolle, Cocktail-Rezepte und die Wissenschaft dahinter — warum manche Kombinationen auf molekularer Ebene funktionieren.',
+    seoDescription: 'Bordeaux zum Brisket, Islay Single Malt zum Ribeye, Smoked Old Fashioned am Grill: Pairing-Protokolle, Cocktail-Rezepte und die Wissenschaft dahinter.',
     heroImage:   '/images/wine-spirits-hero.webp',
     heroAlt:     'Whisky-Gläser auf dunklem Holz — warmes Amberlicht, rauchige Atmosphäre',
   },
@@ -139,13 +141,14 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const kat = KATEGORIEN[params.slug];
   if (!kat) return {};
+  const metaDescription = kat.seoDescription ?? kat.description;
   return {
     title: `${kat.label} — BBQ-Rezepte`,
-    description: kat.description,
+    description: metaDescription,
     alternates: { canonical: `https://steakakademie.de/rezepte/${params.slug}` },
     openGraph: {
       title: `${kat.label}`,
-      description: kat.description,
+      description: metaDescription,
       url: `https://steakakademie.de/rezepte/${params.slug}`,
       type: 'website',
       images: [
@@ -160,7 +163,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: 'summary_large_image',
       title: `${kat.label}`,
-      description: kat.description,
+      description: metaDescription,
       images: [`https://steakakademie.de${kat.heroImage}`],
     },
   };

@@ -8,9 +8,9 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Steuer-Matrix LIVE — Jährliche Updates für alle 23 Länder',
+  title: 'Steuer-Matrix LIVE: Update-Abo für 23 Länder',
   description:
-    'Steuerrecht ändert sich jedes Jahr. Deine Steuer-Matrix bleibt aktuell — mit dem Jahres-Update-Abo für alle 23 Länder. Neue Steuersätze, geänderte Regelungen, sofortige Benachrichtigung.',
+    'Steuerrecht ändert sich jedes Jahr. Das Jahres-Update-Abo hält deine Steuer-Matrix für alle 23 Länder aktuell: neue Steuersätze, geänderte Regelungen.',
   alternates: { canonical: 'https://steakakademie.de/steuer-matrix-live' },
   openGraph: {
     title: 'Steuer-Matrix LIVE — Immer aktuelle Steuerdaten für 23 Länder',

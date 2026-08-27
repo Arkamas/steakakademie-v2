@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   // Suchergebnis-Zeile verbrennen (Google schneidet ab ~60 Zeichen ab).
   title: { absolute: 'BBQ-Glossar — Fachbegriffe der Steakakademie erklärt' },
   description:
-    'Von Maillard-Reaktion bis Plateauphase: Das vollständige BBQ- und Grill-Lexikon der Steakakademie. Jeder Begriff präzise definiert — mit wissenschaftlichem Hintergrund und Praxistipp.',
+    'Von Maillard-Reaktion bis Plateauphase: das vollständige BBQ- und Grill-Lexikon. Jeder Begriff präzise definiert — mit wissenschaftlichem Hintergrund.',
   alternates: { canonical: 'https://steakakademie.de/glossar' },
   openGraph: {
     title: 'BBQ-Glossar',

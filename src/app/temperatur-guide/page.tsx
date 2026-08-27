@@ -11,9 +11,9 @@ import { breadcrumbSchema, faqSchema, howToSchema } from '@/lib/schema';
 // ── Metadata ─────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: 'Kerntemperaturen Fleisch — Komplette Tabelle 2026',
+  title: 'Kerntemperaturen Fleisch — Tabelle 2026',
   description:
-    'Kerntemperaturen für Rind, Schwein, Lamm, Geflügel und Wild — mit Garzeiten, Ruhephase und Lebensmittelsicherheits-Hinweisen. Die vollständigste Kerntemperatur-Tabelle auf Deutsch.',
+    'Kerntemperaturen für Rind, Schwein, Lamm, Geflügel und Wild — mit Garzeiten, Ruhephase und Hinweisen zur Lebensmittelsicherheit. Alles in einer Tabelle.',
   alternates: { canonical: 'https://steakakademie.de/temperatur-guide' },
   openGraph: {
     title: 'Kerntemperaturen Fleisch — Komplette Tabelle 2026',

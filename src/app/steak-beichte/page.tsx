@@ -8,9 +8,9 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Steak-Beichte — KI-Diagnose für dein Grill-Problem',
+  title: 'Steak-Beichte — KI-Diagnose für Grill-Fehler',
   description:
-    'Beschreibe was schiefgelaufen ist — du bekommst die genaue Ursache und ein Korrektur-Protokoll für das nächste Mal. Kein Forum, kein Raten, keine allgemeinen Tipps.',
+    'Beschreibe, was schiefgelaufen ist — du bekommst die genaue Ursache und ein Korrektur-Protokoll für das nächste Mal. Kein Forum, kein Raten, keine Tipps.',
   alternates: { canonical: 'https://steakakademie.de/steak-beichte' },
   openGraph: {
     title: 'Steak-Beichte — KI-Diagnose für dein Grill-Problem',

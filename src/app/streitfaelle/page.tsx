@@ -7,9 +7,9 @@ import { allStreitfalls } from 'contentlayer/generated';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  title: 'Streitfälle am Grill — beide Seiten, und dann eine Entscheidung',
+  title: 'Streitfälle am Grill — klare Entscheidungen',
   description:
-    'Salzen vorher oder nachher, temperieren oder kalt auflegen, Edelstahl oder Guss: Die strittigen Grillfragen, jeweils mit beiden Positionen, der Zielgröße dahinter und einer klaren Entscheidung aus 30 Jahren Praxis.',
+    'Salzen vorher oder nachher, Edelstahl oder Guss: die strittigen Grillfragen mit beiden Positionen und einer klaren Entscheidung aus 30 Jahren Praxis.',
   alternates: { canonical: 'https://steakakademie.de/streitfaelle' },
   openGraph: {
     title: 'Streitfälle am Grill',

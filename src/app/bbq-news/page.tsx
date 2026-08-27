@@ -16,9 +16,9 @@ import {
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'BBQ-News — Aktuelles aus der Grillszene USA & Deutschland',
+  title: 'BBQ-News — Aktuelles aus der Grillszene',
   description:
-    'Frische News aus der internationalen Grillwelt: Trends aus den USA, Entwicklungen in Deutschland, neue Techniken, Wettbewerbe und Produkte. Kuratiert von der Steakakademie.',
+    'Frische News aus der Grillwelt: Trends aus den USA, Entwicklungen in Deutschland, neue Techniken, Wettbewerbe und Produkte. Kuratiert von der Steakakademie.',
   alternates: { canonical: 'https://steakakademie.de/bbq-news' },
   openGraph: {
     title: 'BBQ-News — Grillszene USA & Deutschland',

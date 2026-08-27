@@ -7,9 +7,9 @@ import { allVergleiches } from 'contentlayer/generated';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  title: 'BBQ-Ausrüstung im Test — Fleischthermometer, Grills & Smoker',
+  title: 'BBQ-Ausrüstung im Test — Thermometer, Grills',
   description:
-    'Unabhängige BBQ-Tests: Fleischthermometer, Oberhitzegrills, Dry-Ager. Jedes Produkt wochenlang im Praxiseinsatz geprüft — keine Herstellerdaten, echte Ergebnisse.',
+    'Unabhängige BBQ-Tests: Fleischthermometer, Oberhitzegrills, Dry-Ager. Jedes Produkt wochenlang im Praxiseinsatz geprüft — keine Herstellerdaten, echte Werte.',
   alternates: { canonical: 'https://steakakademie.de/vergleich' },
   openGraph: {
     title: 'BBQ-Ausrüstung im Test',

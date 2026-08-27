@@ -9,9 +9,9 @@ import BuerokratieHinweis from '@/components/gruendung/BuerokratieHinweis';
 import WerkzeugHinweis from '@/components/gruendung/WerkzeugHinweis';
 
 export const metadata: Metadata = {
-  title: 'Die Methode: KI-gesteuert ein Business bauen | Gründer-Schmiede',
+  title: 'KI-gesteuert ein Business bauen',
   description:
-    'Sechs Module: vom Chef-Prinzip über KI-Projektsteuerung mit Jira + Confluence bis zum täglichen Arbeits-Loop — wie du KI-gesteuert ein digitales Business aufbaust.',
+    'Sechs Module: vom Chef-Prinzip über KI-Projektsteuerung mit Jira + Confluence bis zum täglichen Arbeits-Loop — wie du KI-gesteuert ein Business aufbaust.',
   alternates: { canonical: 'https://steakakademie.de/gruender-schmiede/lernen' },
 };
 

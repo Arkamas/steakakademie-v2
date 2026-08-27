@@ -10,9 +10,9 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
-  title: 'SEO-Sprint — Deine Website auf Google sichtbar in 72h',
+  title: 'SEO-Sprint — Google-Sichtbarkeit in 72h',
   description:
-    'Website live — aber niemand findet sie? In 72 Stunden: Google Search Console, On-Page-SEO, Keyword-Strategie, erste Backlinks, lokale Sichtbarkeit. Kein Agentur-Budget, kein Fachwissen nötig.',
+    'Website live — aber niemand findet sie? In 72 Stunden: Google Search Console, On-Page-SEO, Keyword-Strategie, erste Backlinks, lokale Sichtbarkeit.',
   alternates: { canonical: 'https://steakakademie.de/seo-sprint' },
   openGraph: {
     title: 'SEO-Sprint — Google-Sichtbarkeit in 72h',

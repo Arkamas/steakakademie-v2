@@ -8,9 +8,9 @@ import { getApprovedDrafts } from '@/lib/content-feed';
 export const revalidate = 86400;
 
 export const metadata: Metadata = {
-  title: 'Pflanzlich & Vegan grillen — Gemüse, Halloumi & mehr',
+  title: 'Pflanzlich und vegan grillen mit Methode',
   description:
-    'Der Grillmeister kennt auch das Andere. Vegetarisch und vegan grillen mit Methode: Portobello, Halloumi, Blumenkohl-Steak, Tofu und Gemüse — mit präziser Technik zum perfekten Ergebnis.',
+    'Vegetarisch und vegan grillen mit Methode: Portobello, Halloumi, Blumenkohl-Steak, Tofu und Gemüse — mit präziser Technik zum perfekten Ergebnis.',
   alternates: { canonical: 'https://steakakademie.de/pflanzlich' },
   openGraph: {
     title: 'Pflanzlich & Vegan grillen — mit Methode',

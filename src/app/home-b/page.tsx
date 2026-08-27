@@ -13,7 +13,7 @@ import { getRecommendedProducts } from '@/lib/products';
 import { getPlattformPuls } from '@/lib/plattform-puls';
 import { getFrischSaisonal } from '@/lib/frisch-saisonal';
 import { getNewsItems } from '@/lib/bbq-news';
-import { STARTSEITEN_ARTIKEL } from '../page';
+import { STARTSEITEN_ARTIKEL } from '@/lib/startseiten-artikel';
 import type { ArticleMeta } from '@/types';
 
 export const revalidate = 86400;

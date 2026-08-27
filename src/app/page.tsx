@@ -16,8 +16,7 @@ import { getRecommendedProducts } from '@/lib/products';
 import { getPlattformPuls } from '@/lib/plattform-puls';
 import { getFrischSaisonal } from '@/lib/frisch-saisonal';
 import { getNewsItems } from '@/lib/bbq-news';
-import type { ArticleMeta } from '@/types';
-import { getStartseitenArtikel } from '@/lib/startseiten-artikel';
+import { STARTSEITEN_ARTIKEL } from '@/lib/startseiten-artikel';
 
 export const revalidate = 86400;
 
@@ -30,113 +29,6 @@ export const metadata: Metadata = {
     'Die methodisch tiefste BBQ-Wissensplattform auf Deutsch. Cuts, Grilltechniken, Thermometer-Tests und Grillmeister-Diplome für ernsthafte Hobbygriller.',
   alternates: { canonical: '/' },
 };
-
-// Exportiert fuer die A/B-Variante /home-b (Editorial-Ember-Layout nach
-// Texas-Monthly-Referenz) — EINE Datenquelle fuer beide Startseiten.
-const FALLBACK_ARTICLES: ArticleMeta[] = [
-  {
-    slug: 'ribeye-guide-der-perfekte-cut',
-    url: '/cuts/ribeye',
-    title: 'Ribeye: Alles über Deutschlands beliebtesten Premium-Cut',
-    excerpt:
-      'Vom Longissimus dorsi bis zum Spinalis — wir erklären, was ein Ribeye ausmacht, wie Marmorierung bewertet wird und wie du ihn perfekt auf den Punkt bringst.',
-    image: '/images/articles/ribeye-premium-cut.webp',
-    imageAlt: 'Perfekt gebratenes Ribeye Steak auf schwarzem Schieferbrett, aufgeschnitten mit rosa Kern und sichtbarem Fettdeckel',
-    category: 'Cuts & Fleischkunde',
-    categorySlug: 'cuts',
-    author: 'Marco, der Pitmaster',
-    authorSlug: 'marco',
-    formattedDate: '20. Mai 2026',
-    readingTime: 12,
-    featured: true,
-  },
-  {
-    slug: 'fleischthermometer-test-2026',
-    url: '/vergleich/fleischthermometer',
-    title: 'Fleischthermometer Test 2026: Wir haben 8 Modelle verglichen',
-    excerpt:
-      'Mit kalibriertem Referenzgerät bei 5 Temperaturen gemessen. Meater Plus, Thermapen ONE und Inkbird im direkten Vergleich — klare Empfehlung für jeden Bedarf.',
-    image: '/images/articles/thermometer-test-steak-grill-1.webp',
-    imageAlt: 'Fleischthermometer-Sonde im Ribeye Steak auf dem Grill',
-    category: 'Ausrüstung',
-    categorySlug: 'ausruestung',
-    author: 'Jonas — Der Enthusiast',
-    authorSlug: 'jonas',
-    formattedDate: '18. Mai 2026',
-    readingTime: 15,
-    featured: true,
-  },
-  {
-    slug: 'reverse-sear-methode',
-    url: '/methoden/reverse-sear',
-    title: 'Reverse Sear: Warum diese Methode alles andere schlägt',
-    excerpt:
-      'Erst niedrig garen, dann kurz scharf anbraten — Reverse Sear erzeugt die perfekte Kruste bei exakter Kerntemperatur. Schritt für Schritt erklärt.',
-    image: '/images/articles/reverse-sear-cast-iron-steak.webp',
-    imageAlt: 'Steak in gusseiserner Pfanne mit Flammen — Reverse Sear Methode',
-    category: 'Grilltechniken',
-    categorySlug: 'grilltechniken',
-    author: 'Marco, der Pitmaster',
-    authorSlug: 'marco',
-    formattedDate: '15. Mai 2026',
-    readingTime: 10,
-    featured: false,
-  },
-  {
-    slug: 'brisket-anleitung-komplett',
-    url: '/cuts/brisket',
-    title: 'Brisket: Die komplette Anleitung für Low & Slow BBQ',
-    excerpt:
-      'Brisket ist die Königsdisziplin des BBQ. Wir erklären Flat vs. Point, Bark-Aufbau, den Stall und warum Texas-Style kein Zufall ist.',
-    image: '/images/articles/brisket-texas-smoked.webp',
-    imageAlt: 'Aufgeschnittenes Texas Brisket mit dunkler Bark-Kruste auf Schneidebrett',
-    category: 'Cuts & Fleischkunde',
-    categorySlug: 'cuts',
-    author: 'Jonas — Der Enthusiast',
-    authorSlug: 'jonas',
-    formattedDate: '12. Mai 2026',
-    readingTime: 18,
-    featured: false,
-  },
-  {
-    slug: 'dry-aged-beef-zu-hause',
-    url: '/aging',
-    title: 'Dry Aged Beef zu Hause: Was wirklich funktioniert',
-    excerpt:
-      'Trockengereiftes Fleisch ist kein Mythos — aber es braucht Kontrolle. Wir zeigen, was mit einem Dry-Ager für Zuhause realistisch möglich ist.',
-    image: '/images/articles/dry-aged-beef-reifeschrank.webp',
-    imageAlt: 'Dry Aged Beef im Reifeschrank — dunkle Kruste sichtbar',
-    category: 'Wissen',
-    categorySlug: 'wissen',
-    author: 'Elena — Die Stimme',
-    authorSlug: 'elena',
-    formattedDate: '10. Mai 2026',
-    readingTime: 9,
-    featured: false,
-  },
-  {
-    slug: 'kerntemperaturen-guide',
-    url: '/temperatur-guide',
-    title: 'Kerntemperaturen: Die vollständige Tabelle für jedes Fleisch',
-    excerpt:
-      'Von Rare bis Well Done, von Rind bis Geflügel — alle Kerntemperaturen auf einen Blick, mit Erklärung der Prozesse dahinter.',
-    image: '/images/articles/thermometer-test-steak-grill-2.webp',
-    imageAlt: 'Digitales Fleischthermometer misst Kerntemperatur im Steak',
-    category: 'Wissen',
-    categorySlug: 'wissen',
-    author: 'Marco, der Pitmaster',
-    authorSlug: 'marco',
-    formattedDate: '8. Mai 2026',
-    readingTime: 7,
-    featured: false,
-  },
-];
-
-// Echte, wachsende Aufmacher-Liste (27.08.2026): neueste veroeffentlichte
-// Inhalte zuerst, Redaktionsvorbehalt beruecksichtigt; die alte
-// Platzhalter-Liste fuellt nur noch auf. Auch /home-b liest von hier —
-// EINE Datenquelle fuer beide Startseiten.
-export const STARTSEITEN_ARTIKEL: ArticleMeta[] = getStartseitenArtikel(FALLBACK_ARTICLES);
 
 const CATEGORY_SECTIONS = [
   { title: 'Grilltechniken',      slug: 'grilltechniken', articles: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'grilltechniken') },

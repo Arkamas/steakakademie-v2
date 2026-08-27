@@ -27,6 +27,13 @@ entschieden, **was zu Weihnachten verkauft wird**. Drei saubere Wege:
    kostet. Passt zur Marke, ist aber ein dünneres Verkaufsargument.
 3. **BBQ-Grundkurs bleibt separates Produkt** mit anderem Inhalt — dann braucht er eine neue
    Abgrenzung jenseits des Formats.
+   → **ENTSCHIEDEN (Uwe, 27.08.2026): Weg 1 UND Weg 3.** Der Videopfad wird das
+   Bezahlprodukt des Diploms, und der Grundkurs bleibt als eigenes Einstiegsprodukt
+   bestehen. Die neue Abgrenzung läuft über den **Anlass** statt über das Format:
+   der Grundkurs ist ein Abend, das Diplom eine Ausbildung mit Prüfung und
+   Zertifikat. Konzept: `docs/konzept-bbq-grundkurs.md`.
+   Die frühere Notiz „BBQ-Grundkurs geht darin auf, entfällt als eigenes Produkt"
+   beschrieb das Ende der *Doppelung*, nicht das Ende des Kurses.
 
 Ohne diese Entscheidung gibt es kein Gutschein-Produkt für die Video-Strecke.
 

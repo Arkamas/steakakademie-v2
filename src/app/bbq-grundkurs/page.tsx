@@ -13,7 +13,7 @@ import { courseSchema, breadcrumbSchema } from '@/lib/schema';
 export const metadata: Metadata = {
   title: 'BBQ Grundkurs — Systematisch besser grillen',
   description:
-    'Der erste vollständige BBQ-Videokurs der Steakakademie. Feuer, Temperatur, 5 Cuts, echte Technik. Aktuell in Vorbereitung — Kursstart geplant 2026.',
+    'Der Einstiegskurs der Steakakademie: Hitzezonen, Kerntemperatur, fünf Cuts, Reverse Sear und Fehlerbehebung. In Vorbereitung — noch kein Starttermin.',
   alternates: { canonical: 'https://steakakademie.de/bbq-grundkurs' },
   openGraph: {
     title: 'BBQ Grundkurs — Wer jetzt lernt, dominiert den Rest der Saison',
@@ -68,7 +68,7 @@ const MODULES = [
 
 const WHATS_INCLUDED = [
   { label: '5 Video-Module', detail: '~4 Stunden Lernzeit, abrufbar wann du willst', Icon: Play },
-  { label: 'Begleit-PDFs', detail: 'Kerntemperatur-Tabellen, Cut-Guides, Checklisten — zum Kursstart', Icon: BookOpen },
+  { label: 'Begleit-PDFs', detail: 'Kerntemperatur-Tabellen, Cut-Guides, Checklisten — beim Start dabei', Icon: BookOpen },
   { label: '8-Wochen-Lernplan', detail: 'Strukturierter Zeitplan damit du weißt was wann drankommt', Icon: Clock },
   { label: '24/7 Zugang', detail: 'Einmal gekauft — jederzeit abrufbar', Icon: CheckCircle },
 ];
@@ -76,7 +76,7 @@ const WHATS_INCLUDED = [
 const FAQ = [
   {
     q: 'Wann ist der Kurs verfügbar?',
-    a: 'Der Kurs ist aktuell in Vorbereitung. Sobald er buchbar ist, informieren wir über den Newsletter. Geplanter Kursstart mit Video-Modulen und Begleit-PDFs: 2026.',
+    a: 'Der Kurs ist in Vorbereitung. Einen Starttermin nennen wir erst, wenn er steht — wir kündigen nichts an, was wir nicht halten können. Sobald er buchbar ist, erfährst du es zuerst über den Newsletter.',
   },
   {
     q: 'Für wen ist dieser Kurs?',
@@ -103,11 +103,13 @@ const FAQ = [
 // â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function BbqGrundkursPage() {
-  // Schema.org — Course (ohne Offer: Produkt "In Vorbereitung") + Breadcrumb
+  // Schema.org — Course (bewusst OHNE Offer: das Produkt ist nicht buchbar.
+  // Ein Offer ohne Kaufmoeglichkeit ist eine Falschangabe gegenueber Google
+  // und dem Nutzer.) + Breadcrumb
   const courseSch = courseSchema({
     name: 'BBQ Grundkurs',
     description:
-      'Der erste vollständige BBQ-Videokurs der Steakakademie. Feuer, Temperatur, 5 Cuts, echte Technik. Aktuell in Vorbereitung — Kursstart geplant 2026.',
+      'Der Einstiegskurs der Steakakademie: Hitzezonen, Kerntemperatur, fünf Cuts, Reverse Sear und Fehlerbehebung. In Vorbereitung — noch kein Starttermin.',
     url: '/bbq-grundkurs',
     teaches: [
       'Direkte und indirekte Hitze & Temperaturzonen',
@@ -158,7 +160,7 @@ export default function BbqGrundkursPage() {
                    style={{ borderColor: 'rgba(232,80,24,0.4)', background: 'rgba(232,80,24,0.07)' }}>
                 <Flame size={12} className="text-brand-fire" />
                 <span className="text-[11px] font-sans font-bold tracking-[0.14em] uppercase text-brand-fire">
-                  In Vorbereitung · Kursstart geplant 2026
+                  In Vorbereitung
                 </span>
               </div>
 
@@ -178,7 +180,7 @@ export default function BbqGrundkursPage() {
                   '5 Video-Module',
                   '~4 Stunden Lernzeit',
                   'Begleit-PDFs',
-                  'Kursstart geplant 2026',
+                  'Noch kein Starttermin',
                   '24/7 Zugang',
                 ].map((chip) => (
                   <span
@@ -298,8 +300,8 @@ export default function BbqGrundkursPage() {
                 Dieser Kurs ist in Vorbereitung.
               </h2>
               <p className="font-body text-sm text-text-secondary mb-10 max-w-xl">
-                Der Kurs wird gerade erstellt. Geplanter Kursstart mit Video-Modulen und Begleit-PDFs:
-                2026. Sobald er buchbar ist, erfährst du es zuerst über den Newsletter.
+                Der Kurs wird gerade erstellt. Einen Starttermin nennen wir erst, wenn er steht.
+                Sobald er buchbar ist, erfährst du es zuerst über den Newsletter.
               </p>
 
               <div

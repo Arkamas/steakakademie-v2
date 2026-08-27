@@ -47,13 +47,20 @@ const WAISEN_ERLAUBT = [
   // Premium und Corporate, bewusst nicht indexiert (robots: noindex).
   // Bewusste Geschaeftsentscheidung, nachgeprueft am 17.08.2026.
   /^\/prive$/,
+  // A/B-Variante der Startseite: wird nur per Rewrite aus der Middleware
+  // erreicht, hat noindex und Canonical auf "/". Sie wird NIE verlinkt werden —
+  // anders als /bbq-grundkurs ist das kein Versaeumnis, sondern die Bauart.
+  /^\/home-b$/,
 ];
 
 // BEWUSST NICHT auf der Liste: /bbq-grundkurs und /challenge-teilnahmebedingungen.
-// Beide sind fertig gebaut, aber noch nicht gestartet — der Kurs beginnt 2026, die
-// Challenge wartet auf die Community und die anwaltliche Freigabe. Sie sollen als
-// Warnung stehen bleiben, damit sie beim Start nicht vergessen werden. Eine Liste,
-// die alles stillstellt, damit am Ende null steht, ist keine Pruefung mehr.
+// Beide sind fertig gebaut, aber noch nicht gestartet. Sie sollen als Warnung
+// stehen bleiben, damit sie beim Start nicht vergessen werden. Eine Liste, die
+// alles stillstellt, damit am Ende null steht, ist keine Pruefung mehr.
+//   /bbq-grundkurs — bleibt eigenes Produkt (Uwe, 27.08.2026): Einstiegskurs
+//     zwischen Gratis-Trichter und Diplom. Konzept: docs/konzept-bbq-grundkurs.md.
+//     KEIN Starttermin mehr auf der Seite — die frueheren "2026"-Zusagen sind raus.
+//   /challenge-teilnahmebedingungen — wartet auf Community und Rechtsfreigabe.
 
 // Routen mit dynamischem Segment, z. B. /rezepte/[slug] oder /autoren/[slug].
 // Deren konkrete Werte stehen in generateStaticParams und lassen sich statisch

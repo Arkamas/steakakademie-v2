@@ -130,7 +130,7 @@ export class RateLimiter {
   private sweep(now: number): void {
     if (now - this.lastSweep < 60_000) return;
     this.lastSweep = now;
-    for (const [k, e] of this.store) if (e.resetAt <= now) this.store.delete(k);
+    this.store.forEach((e, k) => { if (e.resetAt <= now) this.store.delete(k); });
   }
 }
 

@@ -27,7 +27,10 @@ export const metadata: Metadata = {
 type Hit = { url: string; title: string; snippet: string; kind: string };
 
 function norm(s: string) {
-  return s.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+  // Kombinierende Diakritika (U+0300–U+036F) — genau das, was normalize('NFD')
+  // abspaltet. Bewusst nicht /\p{Diacritic}/gu: das braucht ein ES6-Ziel, das
+  // die tsconfig nicht setzt, und hat den Vercel-Build rot gemacht.
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
 function collect(): Hit[] {

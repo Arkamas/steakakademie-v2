@@ -1,3 +1,8 @@
+-- ANGEWENDET am 27.08.2026 auf Projekt bbgdrzhlellxzggbbqcm (per MCP apply_migration).
+-- Im Ledger supabase_migrations.schema_migrations als Version 20260827203759
+-- verzeichnet — deshalb traegt die Datei genau diesen Zeitstempel. Wer hier eine
+-- offene Migration vermutet: erst `list_migrations` bzw. das Ledger pruefen.
+-- Alle Anweisungen unten sind wiederholbar (ALTER/REVOKE/CREATE OR REPLACE).
 -- ─────────────────────────────────────────────────────────────────────────────
 -- Supabase Security Advisor (27.08.2026): zwei Views liefen als SECURITY DEFINER
 -- und umgingen damit die RLS der zugrunde liegenden Tabellen fuer JEDEN Aufrufer.

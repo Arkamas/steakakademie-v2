@@ -13,7 +13,8 @@ meta:
   carryover: "Nachziehen +2–5 °C — ca. 3 °C vor Ziel vom Grill nehmen"
   ruhen: "Steaks 3–5 Min., große Braten 10–20 Min."
   messen: "Einstich in den dicksten Punkt, NICHT am Knochen"
-  ziehtemperatur: "Bei Reverse Sear liegt die ZIEHtemperatur unter dem Badge-Wert — Searing und Nachziehen heben den Kern noch an. Medium Rare: bei 52–54 °C ziehen, serviert 54–58 °C. Ein Ziehwert unter dem Badge ist deshalb kein Widerspruch zu dieser Referenz."
+  ziehtemperatur: "Bei Reverse Sear liegt die ZIEHtemperatur unter dem Badge-Wert. Kurzes, sehr heisses Searing hebt den Kern noch einmal um 2-3 °C (Uwe, 27.08.2026); dazu kommt das Nachziehen. Medium Rare: bei 52-54 °C ziehen, serviert 54-58 °C. Ein Ziehwert unterhalb des Badges ist deshalb KEIN Widerspruch zu dieser Referenz."
+  spannen: "Die range-Werte sind Korridore, keine Punktwerte — sie decken die Garbereiche von Rare bis Well Done ab. Der c-Wert ist die Anzeige-Empfehlung innerhalb des Korridors."
 
 # Badge-Werte für Promos/Content. `c` = empfohlene Serviertemperatur (ein Wert
 # für die Anzeige), `range` = Korridor, `label` = Garstufe/Hinweis.

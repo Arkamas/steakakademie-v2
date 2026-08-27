@@ -50,18 +50,14 @@ const TOOL_REDIRECT: Record<string, string> = {
 const DEFAULT_REDIRECT = 'https://steakakademie.de/auth/callback?next=/mein-system';
 
 /**
- * Steak-Beichte (Produkt A) — Credits-Modell (verbrauchbar, KEIN Course-Gate).
- * Modell A: getrennte product_ids pro Stufe.
- *   696394                          → 1 Credit (Einzeldiagnose 7€)
- *   DIGISTORE_PRODUCT_BEICHTE_5ER   → 5 Credits (5er-Pack 25€) — von Uwe nach Anlage gesetzt
+ * Credit-Produkte (verbrauchbares Guthaben, KEIN Course-Gate) — heute die Steak-Beichte.
+ * Wie viele Credits ein Kauf gutschreibt, steht in digistore_products.credit_amount;
+ * NULL dort heisst: normales Kurs-Produkt. Ein neues Paket ist damit EINE Zeile und
+ * kein Deploy — frueher war es eine hartkodierte Liste plus eine Env-Variable je Paket.
+ * Dieselbe Mechanik traegt spaeter das Stundenkonto des Personal-Coachings
+ * (docs/coaching-gruender-schmiede.md, Abschnitt 3).
  */
-const CREDIT_PRODUCTS: Record<string, number> = {
-  '696394': 1,
-  ...(process.env.DIGISTORE_PRODUCT_BEICHTE_5ER
-    ? { [process.env.DIGISTORE_PRODUCT_BEICHTE_5ER]: 5 }
-    : {}),
-};
-const CREDIT_COURSE_SLUG = 'steak-beichte';
+const CREDIT_FALLBACK_SLUG = 'steak-beichte';
 
 // ─── Authentifizierung ──────────────────────────────────────────────────────
 
@@ -198,18 +194,10 @@ export async function POST(req: Request) {
     { auth: { autoRefreshToken: false, persistSession: false } },
   );
 
-  // 0) Credit-Produkte (Steak-Beichte) — eigener Pfad, kein Course-Gate.
-  const creditAmount = CREDIT_PRODUCTS[productId];
-  if (creditAmount) {
-    return handleCreditProduct(supabase, {
-      event, orderId, productId, email, params, rawBody, creditAmount,
-    });
-  }
-
-  // 1) Produkt → Course Mapping aus DB
+  // 1) Produkt → Mapping aus DB (Kurs, Gutschein, Credits)
   const { data: mapping } = await supabase
     .from('digistore_products')
-    .select('course_id, is_voucher, voucher_credit_amount, courses(slug, title)')
+    .select('course_id, is_voucher, voucher_credit_amount, credit_amount, courses(slug, title)')
     .eq('ds_product_id', productId)
     .maybeSingle();
 
@@ -218,6 +206,18 @@ export async function POST(req: Request) {
   const courseTitle   = (mapping?.courses as any)?.title ?? null;
   const isVoucher     = mapping?.is_voucher ?? false;
   const voucherCredit = mapping?.voucher_credit_amount ?? null;  // gesetzt = Credit-Gutschein
+  const creditAmount  = (mapping?.credit_amount as number | null) ?? null;
+
+  // 0) Credit-Produkt — eigener Pfad, kein Course-Gate. Vor dem Gutschein-Zweig:
+  //    ein Gutschein AUF Credits ist etwas anderes (der Kaeufer verschenkt ihn).
+  if (!isVoucher && creditAmount && creditAmount > 0) {
+    return handleCreditProduct(supabase, {
+      event, orderId, productId, email, params, rawBody,
+      creditAmount,
+      courseSlug: courseSlug ?? CREDIT_FALLBACK_SLUG,
+      courseTitle,
+    });
+  }
 
   // 0b) Geschenkgutschein — Kauf erzeugt NUR einen Code (keine Freischaltung
   //     beim Käufer). Der Beschenkte löst den Code unter /gutschein/einloesen ein.
@@ -329,9 +329,10 @@ async function handleCreditProduct(
   args: {
     event: string; orderId: string; productId: string; email: string;
     params: Record<string, string>; rawBody: string; creditAmount: number;
+    courseSlug: string; courseTitle: string | null;
   },
 ): Promise<Response> {
-  const { event, orderId, productId, email, params, rawBody, creditAmount } = args;
+  const { event, orderId, productId, email, params, rawBody, creditAmount, courseSlug, courseTitle } = args;
 
   // Order protokollieren (course_id null — Credits sind kein Course).
   const rec = await recordOrder(supabase, {
@@ -350,7 +351,7 @@ async function handleCreditProduct(
 
   try {
     if (event === 'payment' || event === 'rebill' || event === 'rebill_resumed') {
-      const userId = await ensureUser(supabase, email, CREDIT_COURSE_SLUG);
+      const userId = await ensureUser(supabase, email, courseSlug);
 
       const { error: grantErr } = await supabase.rpc('grant_diagnose_credits', {
         p_user_id: userId,
@@ -358,7 +359,7 @@ async function handleCreditProduct(
       });
       if (grantErr) throw new Error(`grant_diagnose_credits failed: ${grantErr.message}`);
 
-      await sendMagicLink(supabase, email, CREDIT_COURSE_SLUG, 'deiner Steak-Beichte');
+      await sendMagicLink(supabase, email, courseSlug, courseTitle ?? 'deiner Steak-Beichte');
 
       await supabase
         .from('digistore_orders')

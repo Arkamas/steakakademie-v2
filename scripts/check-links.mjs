@@ -29,6 +29,14 @@ const APP_DIR = path.join(ROOT, 'src', 'app');
 const CL_DIR = path.join(ROOT, '.contentlayer', 'generated');
 const STRICT = process.argv.includes('--strict');
 
+// TOTE LINKS BRECHEN DEN BUILD — IMMER (Uwe, 27.08.2026).
+// Vorher hing der Abbruch an --strict, und der postbuild-Lauf in package.json
+// ruft das Skript OHNE dieses Flag auf. Das Gate hat also gemeldet und nie
+// gebissen: ein toter interner Link ging gruen durch bis auf die Live-Seite.
+// Ein kaputter Link ist ein Defekt, keine Anmerkung.
+// --strict eskaliert seither zusaetzlich die WARNUNGEN (Waisen, Mehrfachziele)
+// zu Fehlern; die sind Hinweise und duerfen den Build allein nicht kippen.
+
 // Routen, die absichtlich nicht verlinkt sind (Landeseiten, rechtliche Seiten,
 // Kampagnenziele). Waisenmeldungen dazu sind Rauschen, keine Befunde.
 const WAISEN_ERLAUBT = [
@@ -269,7 +277,9 @@ const routen = new Set([...statisch, ...ausInhalten]);
 
 if (routen.size === 0) {
   console.error('Keine Routen gefunden — stimmt das Arbeitsverzeichnis?');
-  process.exit(STRICT ? 1 : 0);
+  // Immer 1: eine Pruefung, die gar nicht laufen konnte, ist keine bestandene
+  // Pruefung. Vorher meldete ein Lauf im falschen Verzeichnis "erfolgreich".
+  process.exit(1);
 }
 
 const links = sammleLinks();
@@ -370,4 +380,12 @@ if (waisen.length) {
 }
 
 console.log('');
-if (STRICT && tote.length) process.exit(1);
+if (tote.length) {
+  console.log(`❌ ${tote.length} tote${tote.length === 1 ? 'r' : ''} interne${tote.length === 1 ? 'r' : ''} Link — Build gestoppt.`);
+  process.exit(1);
+}
+if (STRICT && (waisen.length || mehrfach.length)) {
+  console.log('❌ --strict: Warnungen gelten als Fehler — Build gestoppt.');
+  process.exit(1);
+}
+console.log('✓ Link-Gate bestanden.');

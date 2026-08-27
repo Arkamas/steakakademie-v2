@@ -29,6 +29,8 @@ interface Props {
  *
  * Konzept: docs/konzept-nutzerbeteiligung.md
  */
+type Summe = { option_key: string; stimmen: number };
+
 export default function StreitfallUmfrage({ slug, frage, optionen }: Props) {
   const [ergebnis, setErgebnis] = useState<Record<string, number> | null>(null);
   const [eigeneWahl, setEigeneWahl] = useState<string | null>(null);
@@ -42,13 +44,15 @@ export default function StreitfallUmfrage({ slug, frage, optionen }: Props) {
 
     (async () => {
       const [{ data: summen }, { data: sitzung }] = await Promise.all([
-        supabase.from('streitfall_ergebnis').select('option_key, stimmen').eq('slug', slug),
+        // RPC statt View: streitfall_votes ist RLS-geschuetzt (nur eigene Stimme);
+        // die SECURITY-DEFINER-Funktion liefert ausschliesslich Summen.
+        supabase.rpc('streitfall_ergebnis_summen', { p_slug: slug }),
         supabase.auth.getUser(),
       ]);
       if (abgebrochen) return;
 
       setErgebnis(
-        Object.fromEntries((summen ?? []).map((z) => [z.option_key as string, z.stimmen as number])),
+        Object.fromEntries(((summen ?? []) as Summe[]).map((z) => [z.option_key, z.stimmen])),
       );
 
       const nutzer = sitzung?.user ?? null;

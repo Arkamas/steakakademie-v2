@@ -1,16 +1,30 @@
 /**
- * Digistore24 Webhook — v3
+ * Digistore24 Webhook — v4
  * ========================
- * POST /api/webhooks/digistore24?token=DIGISTORE_WEBHOOK_TOKEN
+ * POST /api/webhooks/digistore24
  *
- * Sicherheit: Secret-Token als URL-Parameter (Digistore24 Webhook-Typ
- * unterstützt keine sha_sign-Passphrase — nur der ältere IPN-Typ tut das).
+ * Authentifizierung (eine der drei Stufen muss greifen, Reihenfolge = Prüfreihenfolge):
+ *   1. Header  `X-Webhook-Token: <DIGISTORE_WEBHOOK_TOKEN>`  (oder `Authorization: Bearer …`)
+ *      → für Relays/Tests. Digistore24 selbst kann KEINE eigenen Header senden
+ *      (Webhook-Konfiguration kennt nur URL + GET-Parameter).
+ *   2. `sha_sign` im POST-Body, geprüft gegen DIGISTORE_IPN_PASSPHRASE
+ *      (SHA-512 über sortierte Felder, Digistore-Referenz sha_sign.php).
+ *      → der von Digistore24 vorgesehene Weg: IPN-Typ „Standard" mit IPN-Passwort.
+ *   3. URL-Parameter `?token=` — NUR noch als Übergang, wenn
+ *      DIGISTORE_WEBHOOK_ALLOW_URL_TOKEN=true gesetzt ist. Danach entfernen:
+ *      Secrets in URLs landen in Proxy-/Access-Logs.
  *
- * Webhook-URL in Digistore24 eintragen:
- *   https://steakakademie.de/api/webhooks/digistore24?token=<DIGISTORE_WEBHOOK_TOKEN>
+ * Idempotenz: UNIQUE(ds_order_id, ds_event) in digistore_orders. Eine zweite
+ * Zustellung trifft auf den bestehenden Datensatz:
+ *   processed → 200 „duplicate" (nichts passiert erneut)
+ *   pending   → 200 „in progress" (parallele Zustellung, laeuft schon) —
+ *               ausser der Datensatz ist aelter als STALE_PENDING_MS (abgestuerzt) → erneut verarbeiten
+ *   failed    → erneut verarbeiten (Digistore wiederholt nach 5xx — genau dafuer)
  *
  * Env benötigt:
- *   DIGISTORE_WEBHOOK_TOKEN        — Secret-Token in der Webhook-URL
+ *   DIGISTORE_WEBHOOK_TOKEN        — Secret fuer Header-Auth (Stufe 1) und Uebergangs-URL (Stufe 3)
+ *   DIGISTORE_IPN_PASSPHRASE       — IPN-Passwort aus Digistore24 (Stufe 2)
+ *   DIGISTORE_WEBHOOK_ALLOW_URL_TOKEN — 'true' nur waehrend der Umstellung
  *   SUPABASE_SERVICE_ROLE_KEY      — Service-Role (NICHT anon)
  *   NEXT_PUBLIC_SUPABASE_URL
  *   LOOPS_API_KEY                  — Transactional E-Mail
@@ -21,7 +35,9 @@
 export const runtime  = 'nodejs';
 export const dynamic  = 'force-dynamic';
 
+import { timingSafeEqual } from 'node:crypto';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { digistoreSignature } from '@/lib/digistore/signature';
 
 const TOOL_REDIRECT: Record<string, string> = {
   'steuer-matrix':         'https://steakakademie.de/auth/callback?next=/steuer-matrix/rechner',
@@ -47,23 +63,123 @@ const CREDIT_PRODUCTS: Record<string, number> = {
 };
 const CREDIT_COURSE_SLUG = 'steak-beichte';
 
-export async function POST(req: Request) {
-  // Token-Verifikation via URL-Parameter
-  const url   = new URL(req.url);
-  const token = url.searchParams.get('token');
-  const expectedToken = process.env.DIGISTORE_WEBHOOK_TOKEN;
+// ─── Authentifizierung ──────────────────────────────────────────────────────
 
-  if (!expectedToken) {
-    console.error('[ds-webhook] DIGISTORE_WEBHOOK_TOKEN not set');
-    return new Response('Server misconfiguration', { status: 500 });
+function safeEqual(a: string, b: string): boolean {
+  const ba = Buffer.from(a, 'utf8');
+  const bb = Buffer.from(b, 'utf8');
+  return ba.length === bb.length && timingSafeEqual(ba, bb);
+}
+
+type AuthResult = { ok: true; via: 'header' | 'sha_sign' | 'url-token' } | { ok: false; reason: string };
+
+function authenticate(req: Request, params: Record<string, string>): AuthResult {
+  const token      = process.env.DIGISTORE_WEBHOOK_TOKEN;
+  const passphrase = process.env.DIGISTORE_IPN_PASSPHRASE;
+
+  // 1) Header
+  const headerToken =
+    req.headers.get('x-webhook-token') ??
+    req.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ??
+    null;
+  if (headerToken && token) {
+    return safeEqual(headerToken, token) ? { ok: true, via: 'header' } : { ok: false, reason: 'header token mismatch' };
   }
-  if (!token || token !== expectedToken) {
-    console.warn('[ds-webhook] invalid or missing token');
-    return new Response('Unauthorized', { status: 401 });
+
+  // 2) sha_sign (Digistore24 IPN)
+  if (params.sha_sign) {
+    if (!passphrase) return { ok: false, reason: 'sha_sign received but DIGISTORE_IPN_PASSPHRASE not set' };
+    return safeEqual(params.sha_sign.toUpperCase(), digistoreSignature(passphrase, params))
+      ? { ok: true, via: 'sha_sign' }
+      : { ok: false, reason: 'sha_sign mismatch' };
+  }
+
+  // 3) URL-Token — Uebergang, explizit freigeschaltet
+  if (process.env.DIGISTORE_WEBHOOK_ALLOW_URL_TOKEN === 'true' && token) {
+    const urlToken = new URL(req.url).searchParams.get('token');
+    if (urlToken && safeEqual(urlToken, token)) {
+      console.warn('[ds-webhook] DEPRECATED: authenticated via URL token — auf sha_sign umstellen');
+      return { ok: true, via: 'url-token' };
+    }
+  }
+
+  return { ok: false, reason: 'no valid credential (header, sha_sign or url token)' };
+}
+
+// ─── Idempotenz ─────────────────────────────────────────────────────────────
+
+const STALE_PENDING_MS = 10 * 60_000;
+
+type OrderInsert = {
+  ds_order_id: string; ds_product_id: string; ds_email: string; ds_event: string;
+  course_id: string | null; raw_payload: Record<string, string>; raw_body: string;
+  processing_status: 'pending' | 'failed'; error_message: string | null;
+};
+
+type RecordResult = { kind: 'new'; id: string } | { kind: 'done'; response: Response };
+
+/**
+ * Order protokollieren. Trifft der Insert auf UNIQUE(ds_order_id, ds_event),
+ * entscheidet der Zustand des vorhandenen Datensatzes, ob erneut verarbeitet wird.
+ */
+async function recordOrder(supabase: SupabaseClient, row: OrderInsert): Promise<RecordResult> {
+  const { data: inserted, error } = await supabase
+    .from('digistore_orders')
+    .insert(row)
+    .select('id')
+    .single();
+
+  if (!error && inserted) return { kind: 'new', id: inserted.id as string };
+
+  if (error?.code !== '23505') {
+    console.error('[ds-webhook] order insert failed', error);
+    return { kind: 'done', response: new Response('Internal error', { status: 500 }) };
+  }
+
+  const { data: existing } = await supabase
+    .from('digistore_orders')
+    .select('id, processing_status, created_at')
+    .eq('ds_order_id', row.ds_order_id)
+    .eq('ds_event', row.ds_event)
+    .maybeSingle();
+
+  if (!existing) {
+    return { kind: 'done', response: new Response('Internal error', { status: 500 }) };
+  }
+
+  const status = existing.processing_status as 'pending' | 'processed' | 'failed';
+  const ageMs  = Date.now() - new Date(existing.created_at as string).getTime();
+
+  if (status === 'processed') {
+    return { kind: 'done', response: new Response('OK (duplicate)', { status: 200 }) };
+  }
+  if (status === 'pending' && ageMs < STALE_PENDING_MS) {
+    return { kind: 'done', response: new Response('OK (in progress)', { status: 200 }) };
+  }
+
+  // failed oder haengend → erneut verarbeiten, Datensatz zuruecksetzen
+  console.warn('[ds-webhook] reprocessing order', { orderId: row.ds_order_id, event: row.ds_event, status, ageMs });
+  await supabase
+    .from('digistore_orders')
+    .update({ processing_status: 'pending', error_message: null, raw_payload: row.raw_payload, raw_body: row.raw_body })
+    .eq('id', existing.id);
+  return { kind: 'new', id: existing.id as string };
+}
+
+export async function POST(req: Request) {
+  if (!process.env.DIGISTORE_WEBHOOK_TOKEN && !process.env.DIGISTORE_IPN_PASSPHRASE) {
+    console.error('[ds-webhook] neither DIGISTORE_WEBHOOK_TOKEN nor DIGISTORE_IPN_PASSPHRASE set');
+    return new Response('Server misconfiguration', { status: 500 });
   }
 
   const rawBody = await req.text();
   const params  = Object.fromEntries(new URLSearchParams(rawBody));
+
+  const auth = authenticate(req, params);
+  if (!auth.ok) {
+    console.warn('[ds-webhook] unauthorized:', auth.reason);
+    return new Response('Unauthorized', { status: 401 });
+  }
 
   // Digistore24 sendet Events OHNE "on_"-Präfix ("payment", "refund", …);
   // ältere/Test-Aufrufe nutzten "on_payment". Normalisieren → beide Formen funktionieren.
@@ -112,30 +228,20 @@ export async function POST(req: Request) {
   }
 
   // 2) Order immer protokollieren — auch unbekannte Produkte (Forensik).
-  //    UNIQUE(ds_order_id, ds_event) garantiert Idempotenz: zweiter Aufruf → 23505.
-  const { data: orderRow, error: orderErr } = await supabase
-    .from('digistore_orders')
-    .insert({
-      ds_order_id:        orderId,
-      ds_product_id:      productId,
-      ds_email:           email,
-      ds_event:           event,
-      course_id:          courseId,
-      raw_payload:        params,
-      raw_body:           rawBody,
-      processing_status:  courseId ? 'pending' : 'failed',
-      error_message:      courseId ? null : `Unknown product_id: ${productId}`,
-    })
-    .select('id')
-    .single();
-
-  if (orderErr) {
-    if (orderErr.code === '23505') {
-      return new Response('OK (duplicate)', { status: 200 });
-    }
-    console.error('[ds-webhook] order insert failed', orderErr);
-    return new Response('Internal error', { status: 500 });
-  }
+  //    Idempotenz siehe recordOrder().
+  const rec = await recordOrder(supabase, {
+    ds_order_id:        orderId,
+    ds_product_id:      productId,
+    ds_email:           email,
+    ds_event:           event,
+    course_id:          courseId,
+    raw_payload:        params,
+    raw_body:           rawBody,
+    processing_status:  courseId ? 'pending' : 'failed',
+    error_message:      courseId ? null : `Unknown product_id: ${productId}`,
+  });
+  if (rec.kind === 'done') return rec.response;
+  const orderRow = { id: rec.id };
 
   if (!courseId) {
     console.error('[ds-webhook] unknown product_id', productId);
@@ -228,30 +334,19 @@ async function handleCreditProduct(
   const { event, orderId, productId, email, params, rawBody, creditAmount } = args;
 
   // Order protokollieren (course_id null — Credits sind kein Course).
-  // UNIQUE(ds_order_id, ds_event) → Idempotenz.
-  const { data: orderRow, error: orderErr } = await supabase
-    .from('digistore_orders')
-    .insert({
-      ds_order_id:       orderId,
-      ds_product_id:     productId,
-      ds_email:          email,
-      ds_event:          event,
-      course_id:         null,
-      raw_payload:       params,
-      raw_body:          rawBody,
-      processing_status: 'pending',
-      error_message:     `credit product: ${creditAmount} credit(s)`,
-    })
-    .select('id')
-    .single();
-
-  if (orderErr) {
-    if (orderErr.code === '23505') {
-      return new Response('OK (duplicate)', { status: 200 });
-    }
-    console.error('[ds-webhook] credit order insert failed', orderErr);
-    return new Response('Internal error', { status: 500 });
-  }
+  const rec = await recordOrder(supabase, {
+    ds_order_id:       orderId,
+    ds_product_id:     productId,
+    ds_email:          email,
+    ds_event:          event,
+    course_id:         null,
+    raw_payload:       params,
+    raw_body:          rawBody,
+    processing_status: 'pending',
+    error_message:     `credit product: ${creditAmount} credit(s)`,
+  });
+  if (rec.kind === 'done') return rec.response;
+  const orderRow = { id: rec.id };
 
   try {
     if (event === 'payment' || event === 'rebill' || event === 'rebill_resumed') {
@@ -322,27 +417,19 @@ async function handleVoucherProduct(
 ): Promise<Response> {
   const { event, orderId, productId, email, params, rawBody, courseId, courseTitle, creditAmount } = args;
 
-  const { data: orderRow, error: orderErr } = await supabase
-    .from('digistore_orders')
-    .insert({
-      ds_order_id:       orderId,
-      ds_product_id:     productId,
-      ds_email:          email,
-      ds_event:          event,
-      course_id:         courseId,
-      raw_payload:       params,
-      raw_body:          rawBody,
-      processing_status: 'pending',
-      error_message:     'gift voucher',
-    })
-    .select('id')
-    .single();
-
-  if (orderErr) {
-    if (orderErr.code === '23505') return new Response('OK (duplicate)', { status: 200 });
-    console.error('[ds-webhook] voucher order insert failed', orderErr);
-    return new Response('Internal error', { status: 500 });
-  }
+  const rec = await recordOrder(supabase, {
+    ds_order_id:       orderId,
+    ds_product_id:     productId,
+    ds_email:          email,
+    ds_event:          event,
+    course_id:         courseId,
+    raw_payload:       params,
+    raw_body:          rawBody,
+    processing_status: 'pending',
+    error_message:     'gift voucher',
+  });
+  if (rec.kind === 'done') return rec.response;
+  const orderRow = { id: rec.id };
 
   try {
     if (event === 'payment' || event === 'rebill' || event === 'rebill_resumed') {

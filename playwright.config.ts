@@ -34,7 +34,8 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: true,
-    timeout: 120_000,
+    // Kaltstart nach sauberem Build (ohne .next-Cache) braucht deutlich laenger als 2 min.
+    timeout: 300_000,
     stdout: 'ignore',
     stderr: 'pipe',
   },

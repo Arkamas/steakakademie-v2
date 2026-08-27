@@ -7,7 +7,7 @@ import { createClient }    from '@/lib/supabase/server';
 import { ChevronRight, BookOpen, Lock, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title:       'Meine Kurse — Steakakademie',
+  title:       'Meine Kurse',
   description: 'Deine gebuchten Kurse und Diplom-Fortschritt auf Steakakademie.de.',
   robots: { index: false, follow: false },
 };

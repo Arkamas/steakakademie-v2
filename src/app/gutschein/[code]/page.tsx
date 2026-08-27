@@ -10,7 +10,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Dein Geschenkgutschein — Steakakademie',
+  title: 'Dein Geschenkgutschein',
   robots: { index: false, follow: false },
 };
 

@@ -8,13 +8,21 @@ import { getAuthorBySlug } from '@/lib/authors';
 
 const BASE_URL = 'https://steakakademie.de';
 
+// ── Kanonische Entitäts-IDs ──────────────────────────────────────────────────
+// EINE Entität pro realer Sache. Jede Seite, die Uwe oder die Organisation
+// erwähnt, referenziert diese @id statt eine zweite Entität zu erzeugen —
+// sonst zerfällt das E-E-A-T-Signal auf mehrere halbe Entitäten.
+
+export const ORGANIZATION_ID = `${BASE_URL}/#organization`;
+export const FOUNDER_ID = `${BASE_URL}/ueber-uns#person`;
+
 // ── Organisation & Website ───────────────────────────────────────────────────
 
 export function organizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    '@id': `${BASE_URL}/#organization`,
+    '@id': ORGANIZATION_ID,
     name: 'Steakakademie',
     url: BASE_URL,
     logo: {
@@ -35,6 +43,15 @@ export function organizationSchema() {
       email: 'pitmaster@steakakademie.de',
       contactType: 'customer service',
       availableLanguage: 'German',
+    },
+    // E-E-A-T: verknüpft die Marke maschinenlesbar mit dem realen Gründer.
+    // Ohne diese Kante bleibt "Steakakademie" für Google/LLMs eine namenlose
+    // Website und "Uwe Yendell" eine unverbundene Person.
+    founder: {
+      '@type': 'Person',
+      '@id': FOUNDER_ID,
+      name: 'Uwe Yendell',
+      url: `${BASE_URL}/ueber-uns`,
     },
   };
 }
@@ -82,9 +99,16 @@ export function breadcrumbSchema(items: BreadcrumbItem[]) {
 export function authorSchemaRef(authorSlug: string) {
   const a = getAuthorBySlug(authorSlug);
   if (a?.realPerson) {
-    return { '@type': 'Person' as const, name: a.name, url: `${BASE_URL}/autoren/${a.slug}` };
+    // Reale Autoren zeigen auf ihre kanonische @id (aktuell nur Uwe), damit
+    // Artikel-Autorschaft auf DIESELBE Entität einzahlt wie founder + /ueber-uns.
+    return {
+      '@type': 'Person' as const,
+      ...(a.slug === 'uwe-yendell' ? { '@id': FOUNDER_ID } : {}),
+      name: a.name,
+      url: `${BASE_URL}/autoren/${a.slug}`,
+    };
   }
-  return { '@type': 'Organization' as const, name: 'Steakakademie', url: BASE_URL };
+  return { '@type': 'Organization' as const, '@id': ORGANIZATION_ID, name: 'Steakakademie', url: BASE_URL };
 }
 
 // ── Artikel / Fachbeitrag ────────────────────────────────────────────────────

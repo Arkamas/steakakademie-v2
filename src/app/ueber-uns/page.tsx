@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { ChevronRight, ArrowRight, Mail } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { FOUNDER_ID, ORGANIZATION_ID } from '@/lib/schema';
 
 export const metadata: Metadata = {
   // Der erste Eindruck in der Suchergebnisliste ist die Herkunft, nicht der
@@ -30,33 +31,61 @@ export const metadata: Metadata = {
   },
 };
 
+// Kanonische Person-Entität für Uwe. Organization.founder, die Artikel-
+// Autorschaft und /autoren/uwe-yendell referenzieren nur noch diese @id —
+// vorher existierten mehrere unverbundene "Uwe Yendell"-Blöcke, deren
+// E-E-A-T-Signal sich aufgeteilt hat statt sich zu addieren.
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
+  '@id': FOUNDER_ID,
   name: 'Uwe Yendell',
   jobTitle: 'Weber-zertifizierter Grillmeister, Koch, Marketing-Manager',
-  hasOccupation: {
-    '@type': 'Occupation',
-    name: 'Geschäftsführer und Grillmeister, Genusskunst GmbH',
-    occupationalCategory: 'Gastronomie / Kulinarische Weiterbildung',
-  },
+  hasOccupation: [
+    {
+      '@type': 'Occupation',
+      name: 'Geschäftsführer und Grillmeister, Genusskunst GmbH',
+      occupationalCategory: 'Gastronomie / Kulinarische Weiterbildung',
+      description:
+        '8 Jahre Geschäftsführer der Genusskunst GmbH (Eventküche) und Leiter der dort betriebenen offiziellen Weber Grillakademie — Unterricht aller Grill-Kurs-Klassen des Programms (2013–2021).',
+    },
+    {
+      '@type': 'Occupation',
+      name: 'Mietkoch (deutschlandweit)',
+      occupationalCategory: 'Gastronomie',
+      description:
+        'Nach der Genusskunst bis 2025 immer wieder als Mietkoch in wechselnden Küchen deutschlandweit im Einsatz — durchgehende Kochpraxis bis unmittelbar vor dem Aufbau der Steakakademie.',
+    },
+  ],
   url: 'https://steakakademie.de/ueber-uns',
   image: 'https://steakakademie.de/images/uwe-yendell.png',
   email: 'info@steakakademie.de',
   description:
-    'Gründer der Steakakademie. Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister, von 2013 bis 2021 Kursleiter an der Weber Grillakademie seiner eigenen Eventküche Genusskunst GmbH. Kocht seit dem siebten Lebensjahr, seit dem Alter von vierzehn für Gruppen.',
+    'Gründer der Steakakademie. Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister, von 2013 bis 2021 Geschäftsführer der Genusskunst GmbH und Kursleiter der dort betriebenen Weber Grillakademie. Danach bis 2025 deutschlandweit als Mietkoch tätig. Kocht seit dem siebten Lebensjahr, seit dem Alter von vierzehn für Gruppen.',
   knowsAbout: [
     'Grillen', 'Barbecue', 'Fleischkunde', 'Cuts', 'Kerntemperaturen',
     'Reverse Sear', 'Low and Slow', 'Dry Aging',
   ],
-  address: { '@type': 'PostalAddress', addressLocality: 'Wuppertal', addressCountry: 'DE' },
-  sameAs: [
-    'https://www.instagram.com/steakakademie',
-    'https://www.youtube.com/@steakakademie',
-    'https://www.tiktok.com/@steakakademie',
-    'https://www.facebook.com/steakakademie.de',
-    'https://steakakademie.de',
+  hasCredential: [
+    {
+      '@type': 'EducationalOccupationalCredential',
+      credentialCategory: 'certification',
+      name: 'Weber-zertifizierter Grillmeister',
+    },
+    {
+      '@type': 'EducationalOccupationalCredential',
+      credentialCategory: 'certification',
+      name: 'Zertifizierter Marketing-Manager (Master-Niveau)',
+    },
   ],
+  address: { '@type': 'PostalAddress', addressLocality: 'Wuppertal', addressCountry: 'DE' },
+  worksFor: { '@id': ORGANIZATION_ID },
+  founderOf: { '@id': ORGANIZATION_ID },
+  // Bewusst KEIN sameAs auf die Marken-Accounts: sameAs bedeutet "diese Entität
+  // IST dieses Profil". @steakakademie sind Organisations-Profile (korrekt am
+  // Organization-Schema gelistet) — sie hier zu wiederholen würde behaupten,
+  // Uwe sei der Instagram-Account, und verwässert beide Entitäten.
+  // Ergänzen, sobald echte Personenprofile existieren (LinkedIn/Xing/Wikidata).
 };
 
 const KOMPETENZEN = [
@@ -64,7 +93,7 @@ const KOMPETENZEN = [
     kicker: 'Der Koch',
     titel: 'Weber-zertifizierter Grillmeister',
     text:
-      'Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister. Von 2013 bis 2021 Kursleiter an der Weber Grillakademie meiner eigenen Eventküche — mit allen Klassen, die das Programm umfasst. Handwerk, das ich selbst abgenommen bekommen habe, bevor ich es weitergegeben habe.',
+      'Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister. Von 2013 bis 2021 Geschäftsführer der Genusskunst GmbH und Kursleiter der dort betriebenen Weber Grillakademie — mit allen Klassen, die das Programm umfasst. Danach bis 2025 immer wieder deutschlandweit als Mietkoch am Herd. Handwerk, das ich selbst abgenommen bekommen habe, bevor ich es weitergegeben habe.',
   },
   {
     kicker: 'Der Marketing-Manager',
@@ -305,15 +334,22 @@ export default function UeberUnsPage() {
               zurückbekommen.
             </p>
             <p className="font-body text-base text-text-secondary leading-relaxed mb-6">
-              <strong className="text-text-light">Genusskunst</strong> — meine Eventküche.
-              Von 2013 bis 2021 Geschäftsführer der Genusskunst GmbH — meiner Eventküche
-              mit angeschlossener Weber Grillakademie.
-              Ich habe dort alle Grill-Kurs-Klassen unterrichtet — vom Einsteigerkurs bis zu
-              den fortgeschrittenen Programmen. Dafür habe ich die Weber-Grillmeister-Ausbildung
-              selbst absolviert und abgeschlossen. Das war echtes Handwerk, echte Verantwortung,
-              echte Teilnehmer. Was nicht funktioniert hat: das Geschäftsmodell drumherum.
-              Ich habe zu früh skaliert, bevor die Struktur stand. Das Können war real —
-              das Timing war falsch.
+              <strong className="text-text-light">Genusskunst</strong> — von 2013 bis 2021
+              Geschäftsführer der Genusskunst GmbH, meiner Eventküche mit angeschlossener
+              Weber Grillakademie. Ich habe dort alle Grill-Kurs-Klassen unterrichtet — vom
+              Einsteigerkurs bis zu den fortgeschrittenen Programmen. Dafür habe ich die
+              Weber-Grillmeister-Ausbildung selbst absolviert und abgeschlossen. Personal,
+              Kalkulation, Einkauf, Kurse: die Verantwortung lag bei mir. Das war echtes
+              Handwerk, echte Verantwortung, echte Teilnehmer. Was nicht funktioniert hat:
+              das Geschäftsmodell drumherum. Ich habe zu früh skaliert, bevor die Struktur
+              stand. Das Können war real — das Timing war falsch.
+            </p>
+            <p className="font-body text-base text-text-secondary leading-relaxed mb-6">
+              <strong className="text-text-light">Danach: Mietkoch, bis 2025.</strong>{' '}
+              Ich bin nicht in die Theorie ausgewichen. Ich habe weitergekocht — als Mietkoch
+              in fremden Küchen quer durch Deutschland, immer wieder, bis 2025. Fremde Geräte,
+              fremde Abläufe, fremde Gäste, und das Ergebnis muss trotzdem stimmen. Wer das
+              jahrelang macht, hört auf, über Fleisch zu theoretisieren.
             </p>
             <blockquote
               className="border-l-2 pl-5 py-1"

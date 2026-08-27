@@ -6,7 +6,7 @@ import { GIFTABLE_PRODUCTS } from '@/lib/gutschein-products';
 import { Gift, Mail, Flame, Ticket } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Geschenkgutscheine — Steakakademie',
+  title: 'Geschenkgutscheine',
   description: 'Verschenke Grillkönnen: digitale Geschenkgutscheine für Kurse der Steakakademie. Sofort per E-Mail, 3 Jahre gültig.',
   alternates: { canonical: 'https://steakakademie.de/gutschein' },
 };

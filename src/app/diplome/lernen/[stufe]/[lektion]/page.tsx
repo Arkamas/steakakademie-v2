@@ -99,8 +99,15 @@ export default function DiplomLektionPage({ params }: Props) {
   // TODO Vorverkauf: sobald der Digistore-Webhook Kaeufe in Supabase schreibt
   // (ab 01.10.2026, Gewerbeanmeldung), hier zusaetzlich das User-Entitlement
   // pruefen. Bis dahin sieht nur Uwe (Admin-Cookie) die Volltexte.
+  //
+  // cookies() NUR fuer Bezahlstufen lesen: jeder Aufruf einer dynamischen API
+  // laesst Next das Prerendering dieser Seite abbrechen. Unbedingt aufgerufen
+  // wurden dadurch auch die sieben KOSTENLOSEN Stufe-1-Lektionen dynamisch —
+  // und fielen aus dem statischen Manifest, aus dem next-sitemap seine URLs
+  // liest. Der Trichter verschwand aus dem Sitemap. Jetzt bleibt Stufe 1
+  // statisch, nur Stufe 2-5 rendern pro Anfrage.
   const isPaidTier = lektion.stufe >= 2;
-  const isAdmin = cookies().get('admin_auth')?.value === process.env.ADMIN_PASSWORD;
+  const isAdmin = isPaidTier && cookies().get('admin_auth')?.value === process.env.ADMIN_PASSWORD;
   const locked = isPaidTier && !isAdmin;
 
   // Geschwister-Lektionen derselben Stufe, nach order sortiert

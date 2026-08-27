@@ -7,7 +7,7 @@ import Footer from '@/components/layout/Footer';
 import { getAuthorBySlug, getAllAuthors } from '@/lib/authors';
 import { allCuts, allArtikels } from 'contentlayer/generated';
 import { nurVeroeffentlicht } from '@/lib/redaktion';
-import { breadcrumbSchema } from '@/lib/schema';
+import { breadcrumbSchema, FOUNDER_ID, ORGANIZATION_ID } from '@/lib/schema';
 
 interface Props {
   params: { slug: string };
@@ -21,7 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const author = getAuthorBySlug(params.slug);
   if (!author) return {};
   return {
-    title: `${author.name} — Autor bei Steakakademie`,
+    // `absolute`: Marke steht bereits im Titel (siehe autoren/page.tsx).
+    title: { absolute: `${author.name} — Autor bei Steakakademie` },
     description: author.shortBio,
     alternates: { canonical: `https://steakakademie.de/autoren/${author.slug}` },
   };
@@ -39,19 +40,24 @@ export default function AutorPage({ params }: Props) {
   // Schema.org Person — NUR für reale Autoren (KI-Personas bekommen kein
   // Person-Markup: maschinenlesbare Behauptung einer echten Person wäre
   // irreführend; SEO-Audit 07.07.2026).
+  //
+  // Uwe bekommt die kanonische @id aus /ueber-uns statt einer zweiten Entität:
+  // vorher existierten zwei unverbundene "Uwe Yendell"-Person-Blöcke, deren
+  // E-E-A-T-Signal sich aufgeteilt hat statt sich zu addieren.
+  const isFounder = author.slug === 'uwe-yendell';
   const schema = author.realPerson ? {
     '@context': 'https://schema.org',
     '@type': 'Person',
+    ...(isFounder
+      ? { '@id': FOUNDER_ID, mainEntityOfPage: 'https://steakakademie.de/ueber-uns' }
+      : {}),
     name: author.name,
     url: `https://steakakademie.de/autoren/${author.slug}`,
     image: `https://steakakademie.de${author.avatar}`,
     description: author.bio,
     jobTitle: author.jobTitle ?? 'Autor',
-    worksFor: {
-      '@type': 'Organization',
-      name: 'Steakakademie',
-      url: 'https://steakakademie.de',
-    },
+    worksFor: { '@id': ORGANIZATION_ID },
+    ...(isFounder ? { founderOf: { '@id': ORGANIZATION_ID } } : {}),
     knowsAbout: author.expertise,
     ...(author.credential
       ? { hasCredential: { '@type': 'EducationalOccupationalCredential', name: author.credential } }

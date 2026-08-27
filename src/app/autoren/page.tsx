@@ -7,7 +7,10 @@ import { getAllAuthors } from '@/lib/authors';
 import { breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  title: 'Unsere Autoren — Die Köpfe hinter der Steakakademie',
+  // `absolute`: die Marke steht schon im Titel selbst — das Root-Template
+  // wuerde ein zweites " | Steakakademie" anhaengen und Platz in der
+  // Suchergebnis-Zeile verbrennen (Google schneidet ab ~60 Zeichen ab).
+  title: { absolute: 'Unsere Autoren — Die Köpfe hinter der Steakakademie' },
   description:
     'Marco, Jonas und Elena — die redaktionellen KI-Personas der Steakakademie. Fachlich geprüft und verantwortet von Gründer Uwe Yendell.',
   alternates: { canonical: 'https://steakakademie.de/autoren' },

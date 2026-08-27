@@ -8,7 +8,10 @@ import { Crown, Users, Sparkles, Gift, Mail, Check } from 'lucide-react';
 // Anfrage-basiert (kein Live-Checkout), bewusst noindex bis Angebot + Event-AGB/
 // Haftung/Gewerbe geklärt sind (Rechts-Gate, CLAUDE.md Regel 12). Pakete = Entwurf.
 export const metadata: Metadata = {
-  title: 'Steakakademie Privé — Premium & Corporate',
+  // `absolute`: die Marke steht schon im Titel selbst — das Root-Template
+  // wuerde ein zweites " | Steakakademie" anhaengen und Platz in der
+  // Suchergebnis-Zeile verbrennen (Google schneidet ab ~60 Zeichen ab).
+  title: { absolute: 'Steakakademie Privé — Premium & Corporate' },
   description: 'Exklusive Grill-Erlebnisse und Premium-Coaching für Unternehmen und besondere Anlässe.',
   robots: { index: false, follow: false },
 };

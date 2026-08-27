@@ -21,19 +21,19 @@ type CategoryConfig = {
 
 const CATEGORIES: Record<string, CategoryConfig> = {
   cuts: {
-    title: 'Cuts & Fleischkunde — Steakakademie',
+    title: 'Cuts & Fleischkunde',
     description: 'Ribeye, Brisket, Pulled Pork und mehr — alles über Cuts, Anatomie und optimale Zubereitung.',
     label: 'Cuts & Fleischkunde',
     canonical: 'https://steakakademie.de/kategorie/cuts',
   },
   grilltechniken: {
-    title: 'Grilltechniken — Steakakademie',
+    title: 'Grilltechniken',
     description: 'Reverse Sear, Low & Slow, Direct Heat — alle Grilltechniken methodisch erklärt.',
     label: 'Grilltechniken',
     canonical: 'https://steakakademie.de/kategorie/grilltechniken',
   },
   ausruestung: {
-    title: 'Ausrüstung & Tests — Steakakademie',
+    title: 'Ausrüstung & Tests',
     description: 'Thermometer, Grills, Messer — praxiserprobte Produktvergleiche ohne Werbung.',
     label: 'Ausrüstung & Tests',
     canonical: 'https://steakakademie.de/kategorie/ausruestung',

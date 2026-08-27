@@ -5,7 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Nutzungsbedingungen (Community) — Steakakademie',
+  title: 'Nutzungsbedingungen (Community)',
   robots: { index: false, follow: false },
 };
 

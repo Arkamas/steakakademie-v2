@@ -8,7 +8,10 @@ import { sichtbareArtikel } from '@/lib/redaktion';
 import { breadcrumbSchema, collectionPageSchema, definedTermSetSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  title: 'BBQ-Glossar — Fachbegriffe der Steakakademie erklärt',
+  // `absolute`: die Marke steht schon im Titel selbst — das Root-Template
+  // wuerde ein zweites " | Steakakademie" anhaengen und Platz in der
+  // Suchergebnis-Zeile verbrennen (Google schneidet ab ~60 Zeichen ab).
+  title: { absolute: 'BBQ-Glossar — Fachbegriffe der Steakakademie erklärt' },
   description:
     'Von Maillard-Reaktion bis Plateauphase: Das vollständige BBQ- und Grill-Lexikon der Steakakademie. Jeder Begriff präzise definiert — mit wissenschaftlichem Hintergrund und Praxistipp.',
   alternates: { canonical: 'https://steakakademie.de/glossar' },

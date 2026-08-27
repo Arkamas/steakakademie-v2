@@ -91,12 +91,33 @@ module.exports = {
   // SSR-Seiten (dynamisch wegen Supabase-Preisen) fehlen im Prerender-Manifest
   // → next-sitemap sieht sie nicht. Verkaufs-Landingpages hier explizit aufnehmen.
   additionalPaths: async () => {
+    // Stufe-1-Lektionen explizit nachtragen. Sie sind der kostenlose Trichter
+    // und muessen im Index bleiben. Nicht auf das Build-Manifest verlassen:
+    // die Route teilt sich eine Datei mit den Bezahlstufen, und deren
+    // Zugangspruefung kann sie jederzeit wieder dynamisch machen. Frontmatter
+    // direkt gelesen, weil diese Datei CommonJS ist und contentlayer ESM.
+    const stufe1 = (() => {
+      const dir = path.join(__dirname, 'content', 'diplom-lektionen', 'stufe-1');
+      let dateien;
+      try { dateien = fs.readdirSync(dir).filter((f) => f.endsWith('.mdx')); }
+      catch { return []; }
+      return dateien.map((f) => {
+        const raw = fs.readFileSync(path.join(dir, f), 'utf8');
+        const m = raw.match(/^lektionSlug:[ \t]*(.*?)[ \t\r]*$/m);
+        const slug = m ? m[1].replace(/^["']|["']$/g, '').trim() : null;
+        return slug ? { loc: `/diplome/lernen/stufe-1/${slug}`, changefreq: 'monthly', priority: 0.7 } : null;
+      }).filter(Boolean);
+    })();
+
     const ssrPaths = [
       '/gruender-schmiede', '/ehrliches-system', '/steuer-matrix',
       '/agentur-killer-sprint', '/erste-kunden-sprint', '/seo-sprint',
       '/cut-generator', '/steak-beichte', '/mein-protokoll', '/rezepte/community',
     ];
-    return ssrPaths.map((loc) => ({ loc, changefreq: 'weekly', priority: 0.8 }));
+    return [
+      ...ssrPaths.map((loc) => ({ loc, changefreq: 'weekly', priority: 0.8 })),
+      ...stufe1,
+    ];
   },
   robotsTxtOptions: {
     additionalSitemaps: [],

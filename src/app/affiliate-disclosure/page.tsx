@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 import { getActivePrograms, getPendingPrograms } from '@/lib/affiliate-programs';
 
 export const metadata: Metadata = {
-  title: 'Affiliate-Disclosure — Steakakademie',
+  title: 'Affiliate-Disclosure',
   description: 'Transparenz über Affiliate-Links und Vergütungen auf Steakakademie.de.',
   robots: { index: false, follow: false },
 };

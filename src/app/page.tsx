@@ -21,7 +21,10 @@ import type { ArticleMeta } from '@/types';
 export const revalidate = 86400;
 
 export const metadata: Metadata = {
-  title: 'Steakakademie — BBQ Wissen, Cuts & Grillmeister-Diplome',
+  // `absolute` wie in /home-b: der Markenname ist der Titel. Ohne das haengt
+  // das Root-Template ein zweites " | Steakakademie" an die wichtigste
+  // Seite der Domain.
+  title: { absolute: 'Steakakademie — BBQ Wissen, Cuts & Grillmeister-Diplome' },
   description:
     'Die methodisch tiefste BBQ-Wissensplattform auf Deutsch. Cuts, Grilltechniken, Thermometer-Tests und Grillmeister-Diplome für ernsthafte Hobbygriller.',
   alternates: { canonical: '/' },

@@ -5,7 +5,7 @@ import RedeemForm from '@/components/gutschein/RedeemForm';
 import { Gift } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Gutschein einlösen — Steakakademie',
+  title: 'Gutschein einlösen',
   description: 'Löse deinen Steakakademie-Geschenkgutschein ein und schalte dein Produkt frei.',
   robots: { index: false, follow: false },
 };

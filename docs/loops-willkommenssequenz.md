@@ -106,3 +106,59 @@ Uwe — Steakakademie
 1. loops.so → **Loops** → „+ New Loop" → Trigger: **Contact added** (Audience-Filter: source enthält `newsletter`, falls gesetzt).
 2. 4 E-Mails anlegen (Copy oben), Delays: 0 / 2 Tage / 3 Tage / 3 Tage.
 3. Loop aktivieren. Test: eigene Mail über steakakademie.de/newsletter anmelden, DOI bestätigen, Mail 1 prüfen.
+
+---
+
+## Status: per Workflows API angelegt (20.08.2026)
+
+Die Sequenz wurde **nicht** im Editor, sondern über die Loops Workflows API gebaut
+(der UI-Weg schlug fehl → Loops-Support-Ticket #20060).
+
+- **Workflow-ID:** `cmt1wxrmn07uo0j0aofqglkmv`
+- **Name:** „Willkommenssequenz Wissens-Brief"
+- **Status:** `Sending` — aktiviert am 20.08.2026 (Aktivierung nur in der Loops-UI moeglich, kein Publish-Endpunkt in der API)
+
+### Graph
+| # | Node | Typ | Detail |
+|---|------|-----|--------|
+| 1 | n1 | SignupTrigger | Kontakt angelegt (passiert erst nach DOI-Bestätigung, siehe `api/newsletter/confirm`) |
+| 2 | n3 | AudienceFilter | `source` contains `doi-confirmed`, `appliesDownstream: true` |
+| 3 | n4 | SendEmailAction | Mail 1 — Spickzettel |
+| 4 | n5 | TimerAction | 2 Tage |
+| 5 | n6 | SendEmailAction | Mail 2 — Ruhen lassen |
+| 6 | n7 | TimerAction | 3 Tage |
+| 7 | n8 | SendEmailAction | Mail 3 — Diplom |
+| 8 | n9 | TimerAction | 3 Tage |
+| 9 | n10 | SendEmailAction | Mail 4 — Steak-Beichte |
+| 10 | n2 | ExitAction | — |
+
+### Email-Message-IDs (für spätere Content-Updates via `/v1/email-messages/{id}`)
+- Mail 1: `cmt1wz9xs080x0j0ardpynkon`
+- Mail 2: `cmt1wzam308gq0jzufvgv3vbw`
+- Mail 3: `cmt1wzb8y085o0j0dft01wu1h`
+- Mail 4: `cmt1wzbux08720jysur0aular`
+
+Absender: `Steakakademie <pitmaster@…>`, Reply-To `pitmaster@steakakademie.de`.
+Guardian-Check: 0 Errors, 0 Warnings für alle vier Mails.
+Inhalt als LMX; Änderungen brauchen die aktuelle `contentRevisionId` (Revision-Locking).
+
+### End-to-End-Test 20.08.2026 — bestanden
+| Schritt | Ergebnis |
+|---|---|
+| `POST /api/newsletter` (live) | HTTP 200 |
+| `LOOPS_DOI_TEMPLATE_ID` in Produktion | gesetzt (sonst 503) |
+| DOI-Mail zugestellt | 19:45 |
+| Kontakt angelegt nach Bestätigung | 19:47:09, `source: steakakademie-website-footer-doi-confirmed` |
+| Mail 1 ausgeliefert | 19:47:10 — 1 Sekunde nach Kontaktanlage |
+
+Wichtig für künftige Tests: `SignupTrigger` feuert **nur bei Neuanlage** eines Kontakts.
+Existiert die Testadresse in Loops bereits, läuft `/api/newsletter/confirm` in den
+409-/Update-Zweig — der Workflow startet dann nicht, der Test sieht aber trotzdem grün aus.
+Testadresse also vorher in Loops löschen.
+
+### Offen
+- Workflow „Wöchentlicher Newsletter" (`cmr0ayxxf066d0jzrzlx3wvwn`) ist serverseitig defekt:
+  `GET /v1/workflows/{id}` liefert `{"message":"Internal error"}`. Andere Workflows im selben
+  Team laden normal → Datenproblem an genau diesem Workflow, nicht am Account. Loops-Ticket #20060.
+- `LOOPS_DOI_TEMPLATE_ID` und `LOOPS_MAGIC_LINK_TEMPLATE_ID` fehlen in der lokalen `.env.local`
+  (Produktion ist ok) — lokale DOI-/Magic-Link-Tests schlagen deshalb fehl.

@@ -16,9 +16,17 @@
  * als Teaser weiter unten. Das entspricht der Strategie „Reichweite zuerst,
  * dann aktivieren".
  *
- * ÄNDERN DER REIHENFOLGE IST ERLAUBT — aber nur bewusst: SOLL_REIHENFOLGE unten
- * anpassen UND in CLAUDE.md Abschnitt 2 vermerken. Wer nur page.tsx umbaut,
- * bekommt einen roten Build. Genau das ist der Zweck.
+ * POSITION 1 IST ENDGUELTIG (Uwe, 27.08.2026): Der Magazin-Aufmacher (HERO)
+ * steht an erster Stelle. Diese Entscheidung wurde bereits einmal getroffen und
+ * spaeter ueber den "Soll-Liste bewusst anpassen"-Weg wieder umgestossen —
+ * genau dieser Ausweg ist damit fuer Position 1 GESCHLOSSEN. Das Skript unten
+ * erzwingt HERO an Position 1 unabhaengig vom Inhalt der Soll-Liste; wer das
+ * aendern will, braucht ein woertliches Uwe-Zitat mit Datum in CLAUDE.md
+ * Regel 8 UND muss diesen Riegel hier ausbauen. Ein Agent tut das nicht.
+ *
+ * Fuer die Abschnitte AB Position 3 bleibt der alte Weg: Soll-Liste anpassen
+ * und in CLAUDE.md vermerken. Wer nur page.tsx umbaut, bekommt einen roten
+ * Build. Genau das ist der Zweck.
  */
 
 import { readFileSync } from 'node:fs';
@@ -47,6 +55,16 @@ const SOLL_REIHENFOLGE = [
   'NEUESTE ARTIKEL',
   'TRUST-BAR',
 ];
+
+// ── RIEGEL (endgueltig, Uwe 27.08.2026): HERO an Position 1, Artikel-Reihe an 2.
+// Faengt auch den Fall, dass eine kuenftige Session die Soll-Liste selbst
+// "regelkonform" umsortiert — dieser Fehler ist genau so schon einmal passiert.
+if (SOLL_REIHENFOLGE[0] !== 'HERO' || SOLL_REIHENFOLGE[1] !== 'SECONDARY ARTICLES') {
+  console.error('❌ RIEGEL: HERO muss an Position 1 stehen, SECONDARY ARTICLES an 2.');
+  console.error('   Diese Reihenfolge ist ENDGUELTIG (Uwe, 27.08.2026) — auch eine');
+  console.error('   Aenderung der Soll-Liste hebt sie nicht auf. Siehe Kopfkommentar.');
+  process.exit(1);
+}
 
 /**
  * Abschnitte, die NICHT über einer bestimmten Grenze stehen dürfen.

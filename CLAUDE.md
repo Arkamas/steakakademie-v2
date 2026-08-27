@@ -86,14 +86,19 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    passiert. Abgesichert durch `scripts/check-startseiten-hierarchie.mjs` (Build-Gate,
    läuft im prebuild). Reihenfolge ändern = Soll-Liste im Skript bewusst anpassen UND
    hier vermerken. Nicht durch stilles Umsortieren in `page.tsx`.
-   **Aufmacher zuerst (Uwe, 27.08.2026):** Der Magazin-Aufmacher (HERO, neuester
-   veröffentlichter Inhalt) steht an Position 1, davor nichts. Danach: Artikel-Reihe,
-   Value-Prop-Band mit H1 + Rubriken, Werkzeuge, dann der Rest wie gehabt. INHALT
-   ZUERST bleibt der Maßstab — ein redaktioneller Artikel ist mehr „Thema" als die
-   Selbstbeschreibung. Der Aufmacher speist sich seit demselben Tag automatisch aus
-   dem neuesten veröffentlichten Inhalt (src/lib/startseiten-artikel.ts, Redaktions-
-   vorbehalt berücksichtigt) — die frühere Platzhalter-Liste (Ribeye, „20. Mai") ist
-   nur noch Auffüll-Fallback. Neue Inhalte freigeben = Startseite dreht sich von selbst.
+   **Aufmacher zuerst — ENDGÜLTIG (Uwe, 27.08.2026):** Der Magazin-Aufmacher
+   (HERO, neuester veröffentlichter Inhalt) steht an Position 1, davor nichts.
+   Danach: Artikel-Reihe, Value-Prop-Band mit H1 + Rubriken, Werkzeuge, Rest wie
+   gehabt. Diese Entscheidung war schon einmal gefallen und wurde später über den
+   „Soll-Liste bewusst anpassen"-Weg wieder umgestoßen — dieser Ausweg ist für
+   Position 1 deshalb GESCHLOSSEN: das Gate erzwingt HERO an Position 1 jetzt
+   unabhängig von der Soll-Liste (Riegel im Skript). Aufheben kann das nur Uwe
+   selbst, mit wörtlichem Zitat und Datum an dieser Stelle. Für Abschnitte ab
+   Position 3 gilt der alte Änderungsweg weiter. Der Aufmacher speist sich
+   automatisch aus dem neuesten veröffentlichten Inhalt
+   (src/lib/startseiten-artikel.ts, Redaktionsvorbehalt berücksichtigt) — die
+   frühere Platzhalter-Liste ist nur noch Auffüll-Fallback. Neue Inhalte
+   freigeben = Startseite dreht sich von selbst.
    **A/B-Test „Editorial Ember" (seit 26.08.2026):** `/` wird per Cookie `sa_ab_home`
    50/50 gesplittet (src/middleware.ts). Variante B = interner Rewrite auf `/home-b`
    (noindex, Canonical auf `/`): dieselbe page.tsx, eingehüllt in den hellen

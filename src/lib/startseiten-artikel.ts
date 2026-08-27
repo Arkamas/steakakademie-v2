@@ -17,6 +17,7 @@ import {
   allArtikels, allCuts, allMethodes, allVergleiches, allStreitfalls, allUsaBbqStyles,
 } from 'contentlayer/generated';
 import { nurVeroeffentlicht } from '@/lib/redaktion';
+import bildHelligkeit from '../../data/bild-helligkeit.json';
 import type { ArticleMeta } from '@/types';
 
 type Doc = {
@@ -88,8 +89,34 @@ function zuArticleMeta(doc: Doc): ArticleMeta | null {
   };
 }
 
+// ── Hero-Tauglichkeit (27.08.2026) ──────────────────────────────────────────
+// Anlass: Der erste automatische Aufmacher (holz-waessern.jpg) hat ein Motiv,
+// dessen linkes Drittel — genau dort liegt die Textspalte des Heros — fast
+// reines Schwarz ist (Luminanz 22/255). Mit dem Lesbarkeits-Overlay darueber
+// sah die Startseite aus, als haette sie sich gar nicht geoeffnet.
+// data/bild-helligkeit.json haelt die gemessene mittlere Luminanz je Bild
+// (gesamt + linkes Drittel). Ein Bild traegt den Vollbild-Hero nur, wenn die
+// Textzone sichtbare Zeichnung hat. Referenz: das bewaehrte alte Hero-Bild
+// (hero-ribeye.png) misst 48/43 — die Schwellen liegen knapp darunter.
+// UNBEKANNTE Bilder (noch nicht gemessen) gelten als tauglich: die Automatik
+// darf nicht an einer fehlenden Messung verhungern; dunkle Neuzugaenge werden
+// bei der naechsten Messrunde aussortiert. Dunkle Motive fliegen nicht raus —
+// sie erscheinen in der Artikel-Reihe (kleine Karten), nur nicht als Vollbild.
+const HELLIGKEIT: Record<string, { gesamt: number; links: number }> =
+  (bildHelligkeit as { werte: Record<string, { gesamt: number; links: number }> }).werte;
+const MIN_GESAMT = 45;
+const MIN_LINKS = 35;
+
+function heroTauglich(image: string): boolean {
+  const h = HELLIGKEIT[image];
+  if (!h) return true; // nicht gemessen -> nicht blockieren
+  return h.gesamt >= MIN_GESAMT && h.links >= MIN_LINKS;
+}
+
 /**
  * Aufmacher-Liste der Startseite: neueste veroeffentlichte Inhalte zuerst.
+ * Position 1 (Vollbild-Hero) bekommt der neueste Inhalt mit hero-tauglichem
+ * Bild; zu dunkle Motive ruecken in die Artikel-Reihe.
  * `fallback` (die fruehere Platzhalter-Liste) fuellt nur auf, falls der echte
  * Bestand einmal zu duenn ist — Eintraege mit bereits vorhandener URL werden
  * dabei uebersprungen, damit nichts doppelt erscheint.
@@ -104,6 +131,13 @@ export function getStartseitenArtikel(fallback: ArticleMeta[], mindestens = 8): 
     .sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)))
     .map(zuArticleMeta)
     .filter((a): a is ArticleMeta => a !== null);
+
+  // Hero-Auswahl: erster Eintrag mit tragfaehigem Bild nach vorn
+  const heroIdx = echt.findIndex((a) => heroTauglich(a.image));
+  if (heroIdx > 0) {
+    const [hero] = echt.splice(heroIdx, 1);
+    echt.unshift(hero);
+  }
 
   const urls = new Set(echt.map((a) => a.url));
   const out = [...echt];

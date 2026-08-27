@@ -1,0 +1,121 @@
+{
+ "_hinweis": "Gemessen von scripts/ideen-radar-Umfeld 27.08.2026. gesamt/links = mittlere Luminanz 0-255 (64x64-Verkleinerung; links = erstes Drittel, dort liegt die Hero-Textspalte). Neu messen: scripts/bild-helligkeit.py-Logik im Commit-Text.",
+ "werte": {
+  "/images/articles/ribeye-premium-cut.webp": {
+   "gesamt": 41,
+   "links": 43
+  },
+  "/images/hero-ribeye.png": {
+   "gesamt": 48,
+   "links": 43
+  },
+  "/images/hero-thermometer.png": {
+   "gesamt": 48,
+   "links": 30
+  },
+  "/images/methode-kamado.png": {
+   "gesamt": 20,
+   "links": 10
+  },
+  "/images/methode-smoker.png": {
+   "gesamt": 33,
+   "links": 21
+  },
+  "/images/methoden/oberhitze-grillen.jpg": {
+   "gesamt": 47,
+   "links": 46
+  },
+  "/images/methoden/plancha-feuerplatte.jpg": {
+   "gesamt": 99,
+   "links": 106
+  },
+  "/images/methoden/rotisserie-drehspiess.jpg": {
+   "gesamt": 45,
+   "links": 26
+  },
+  "/images/streitfaelle/holz-waessern.jpg": {
+   "gesamt": 52,
+   "links": 22
+  },
+  "/images/streitfaelle/myoglobin.jpg": {
+   "gesamt": 64,
+   "links": 67
+  },
+  "/images/streitfaelle/natron-methode.jpg": {
+   "gesamt": 57,
+   "links": 71
+  },
+  "/images/streitfaelle/poren-schliessen.jpg": {
+   "gesamt": 40,
+   "links": 38
+  },
+  "/images/streitfaelle/ruhen-untergrund.jpg": {
+   "gesamt": 58,
+   "links": 69
+  },
+  "/images/streitfaelle/salzen-vorher-nachher.jpg": {
+   "gesamt": 58,
+   "links": 46
+  },
+  "/images/streitfaelle/temperieren-oder-kalt.jpg": {
+   "gesamt": 65,
+   "links": 70
+  },
+  "/images/streitfaelle/wenden.jpg": {
+   "gesamt": 50,
+   "links": 35
+  },
+  "/images/vergleich/dry-aging-kuehlschrank-vergleich.webp": {
+   "gesamt": 168,
+   "links": 169
+  },
+  "/images/vergleich/kuechenmaschine-vergleich.webp": {
+   "gesamt": 174,
+   "links": 165
+  },
+  "/images/vergleich/oberhitzegrill-vergleich.webp": {
+   "gesamt": 154,
+   "links": 144
+  },
+  "https://images.unsplash.com/photo-1432139509613-5c4255815697?w=800&q=80": {
+   "gesamt": 135,
+   "links": 148
+  },
+  "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=800&q=80": {
+   "gesamt": 106,
+   "links": 143
+  },
+  "https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?w=1200&q=85": {
+   "gesamt": 68,
+   "links": 61
+  },
+  "https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=85": {
+   "gesamt": 87,
+   "links": 85
+  },
+  "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=85": {
+   "gesamt": 166,
+   "links": 164
+  },
+  "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80": {
+   "gesamt": 98,
+   "links": 98
+  },
+  "https://images.unsplash.com/photo-1558030006-450675393462?w=800&q=80": {
+   "gesamt": 69,
+   "links": 58
+  },
+  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85": {
+   "gesamt": 112,
+   "links": 154
+  },
+  "https://images.unsplash.com/photo-1593618998160-e34014e67546?w=1200&q=85": {
+   "gesamt": 203,
+   "links": 211
+  },
+  "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=1200&q=85": {
+   "gesamt": 92,
+   "links": 86
+  }
+ }
+}

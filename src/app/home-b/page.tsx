@@ -1,10 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight, Flame, Menu, Search } from 'lucide-react';
+import { ChevronRight, Flame, Menu, Search, Newspaper, Award } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
+import ProductCard from '@/components/affiliate/ProductCard';
+import DiplomaProgressSection from '@/components/home/DiplomaProgressSection';
+import PlattformPuls from '@/components/home/PlattformPuls';
+import FrischSaisonal from '@/components/home/FrischSaisonal';
+import ToolBoxes from '@/components/home/ToolBoxes';
+import { SecondaryFeature, CompactItem } from '@/components/news/NewsLayout';
+import { getRecommendedProducts } from '@/lib/products';
+import { getPlattformPuls } from '@/lib/plattform-puls';
+import { getFrischSaisonal } from '@/lib/frisch-saisonal';
+import { getNewsItems } from '@/lib/bbq-news';
 import { STARTSEITEN_ARTIKEL } from '../page';
 import type { ArticleMeta } from '@/types';
+
+export const revalidate = 86400;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Startseiten-Variante B — "Editorial Ember" (A/B-Test)
@@ -151,7 +163,23 @@ function MediumCard({ a }: { a: ArticleMeta }) {
   );
 }
 
-export default function HomeVariantB() {
+// Dunkles Vollbreiten-Band. Die interaktiven Bloecke (Werkzeuge, Plattform-Puls,
+// Diplom-Stufen, BBQ-News) sind fuer den dunklen Grund gebaut. Sie hier in Creme
+// zu duplizieren hiesse, jede kuenftige Aenderung zweimal zu machen — und genau
+// dieses Nachfaerben liess die erste Ember-Fassung kaputt aussehen. Ein
+// Editorial-Layout vertraegt dunkle Einschuebe; sie sind Absicht, kein Ausrutscher.
+function DarkBand({ children }: { children: React.ReactNode }) {
+  return <div style={{ background: INK }}>{children}</div>;
+}
+
+export default async function HomeVariantB() {
+  const recommendedProducts = getRecommendedProducts(3);
+  const puls = getPlattformPuls();
+  const frischSaisonal = getFrischSaisonal();
+  const news = await getNewsItems();
+  const newsLead = news[0];
+  const newsCompact = news.slice(1, 4);
+
   const hero = STARTSEITEN_ARTIKEL[0];
   const side = STARTSEITEN_ARTIKEL.slice(1, 4);
   const feature = STARTSEITEN_ARTIKEL[4];
@@ -291,6 +319,11 @@ export default function HomeVariantB() {
           </section>
         ))}
 
+        {/* ── WERKZEUGE — Cut-Generator · Foodpairing · Rezept-Schmiede ── */}
+        <DarkBand>
+          <ToolBoxes />
+        </DarkBand>
+
         {/* ── LEADMAGNET: Spickzettel (Inhalt vor Angebot — Regel 8) ── */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="border p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5" style={{ borderColor: HAIR, background: '#FFFFFF' }}>
@@ -313,46 +346,112 @@ export default function HomeVariantB() {
           </div>
         </section>
 
-        {/* ── DIPLOM-TEASER: dunkles Band, bewusst weit unten (Regel 8) ── */}
-        <section className="py-10 my-8" style={{ background: INK }}>
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="text-center md:text-left">
-                <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
-                  <Flame size={18} style={{ color: '#E8A34C' }} />
-                  <span className="text-xs font-bold tracking-widest uppercase font-sans" style={{ color: '#E8A34C' }}>
-                    Grillmeister-Ausbildung
-                  </span>
-                </div>
-                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white mb-2">
-                  Werde zertifizierter Grillmeister
-                </h2>
-                <p className="font-sans text-sm text-white/60 max-w-lg">
-                  Von Bronze bis Meister — sammle Punkte, bestehe Prüfungen und erhalte
-                  dein Diplom in 5 Stufen. Der Einstieg ist kostenlos.
-                </p>
-              </div>
-              <div className="flex items-center gap-3 shrink-0" aria-hidden="true">
-                {['🥉', '🥈', '🥇', '💎', '🔥'].map((icon, i) => (
-                  <span
-                    key={icon}
-                    className="w-12 h-12 flex items-center justify-center bg-white/10 text-2xl"
-                    title={['Bronze', 'Silber', 'Gold', 'Platin', 'Meister'][i]}
-                  >
-                    {icon}
-                  </span>
-                ))}
-              </div>
-              <Link
-                href="/diplome"
-                className="shrink-0 font-sans text-xs font-bold tracking-widest uppercase px-6 py-3 text-white transition-opacity hover:opacity-90"
-                style={{ background: EMBER }}
-              >
-                Jetzt starten
-              </Link>
-            </div>
+        {/* ── PLATTFORM-PULS — echte, wachsende Inhaltszahlen ── */}
+        <DarkBand>
+          <PlattformPuls data={puls} />
+        </DarkBand>
+
+        {/* ── FRISCH & SAISONAL — rotierendes Spotlight.
+            Bringt seinen eigenen hellen Grund mit (.reading-light) und passt
+            damit ohne Zutun in das Editorial-Layout. ── */}
+        <FrischSaisonal data={frischSaisonal} />
+
+        {/* ── MANIFEST — Auszeichnungszitat, echt in Ember gesetzt ── */}
+        <section className="max-w-[820px] mx-auto px-4 sm:px-6 py-14">
+          <div className="flex items-center gap-5 mb-8">
+            <div className="h-px flex-1" style={{ background: HAIR }} />
+            <span className="font-sans text-[10px] tracking-[0.35em] uppercase" style={{ color: MUT }}>Manifest</span>
+            <div className="h-px flex-1" style={{ background: HAIR }} />
+          </div>
+          <blockquote
+            className="font-serif text-2xl sm:text-3xl lg:text-[2rem] font-bold italic leading-[1.4] text-center"
+            style={{ color: INK }}
+          >
+            Feuer ist Geduld. Rauch ist Zeit.
+            <br />
+            Das perfekte Steak ist keine Technik —
+            <br />
+            es ist ein Standpunkt.
+          </blockquote>
+          <div className="mt-8 flex items-center justify-center gap-5">
+            <div className="h-px w-16" style={{ background: EMBER }} />
+            <cite className="font-sans text-xs tracking-[0.22em] uppercase not-italic" style={{ color: MUT }}>
+              Marco, der Pitmaster
+            </cite>
           </div>
         </section>
+
+        {/* ── DIPLOM-TEASER — bewusst weit unten (Regel 8: Inhalt vor Angebot).
+            Nutzt dieselbe Komponente wie Variante A: echte Medaillen-Bilder
+            statt der Emoji-Reihe, die hier vorher stand. ── */}
+        <DarkBand>
+          <DiplomaProgressSection />
+        </DarkBand>
+
+        {/* ── BBQ-NEWS ── */}
+        <DarkBand>
+          <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="flex items-center justify-between">
+              <Link href="/bbq-news" className="flex items-center gap-3 group">
+                <Newspaper size={20} style={{ color: '#E8A34C' }} />
+                <h2 className="font-serif text-2xl font-bold text-white transition-colors group-hover:text-[#E8A34C]">
+                  BBQ-News
+                </h2>
+              </Link>
+              <Link
+                href="/bbq-news"
+                className="flex items-center gap-1 text-xs font-sans font-bold tracking-widest uppercase hover:underline"
+                style={{ color: '#E8A34C' }}
+              >
+                Alle News <ChevronRight size={14} />
+              </Link>
+            </div>
+            <div className="border-t-2 mt-2 mb-3" style={{ borderColor: 'rgba(255,255,255,0.22)' }} />
+            <p className="text-sm font-sans text-white/55 mb-8">
+              Aus der Grillszene USA &amp; Deutschland — kuratiert, nicht kopiert.
+            </p>
+            {newsLead && (
+              <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12">
+                <SecondaryFeature item={newsLead} />
+                {newsCompact.length > 0 && (
+                  <div>
+                    {newsCompact.map((it) => <CompactItem key={it.id} item={it} />)}
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
+        </DarkBand>
+
+        {/* ── TESTSIEGER — weisse Insel im Creme-Grund ── */}
+        {recommendedProducts.length > 0 && (
+          <section className="py-12 my-4" style={{ background: '#FFFFFF', borderTop: `1px solid ${HAIR}`, borderBottom: `1px solid ${HAIR}` }}>
+            <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Award size={20} style={{ color: EMBER }} />
+                  <h2 className="font-serif text-2xl font-bold" style={{ color: INK }}>Unsere Testsieger</h2>
+                </div>
+                <Link
+                  href="/kategorie/ausruestung"
+                  className="flex items-center gap-1 text-xs font-sans font-bold tracking-widest uppercase hover:underline"
+                  style={{ color: EMBER }}
+                >
+                  Alle Tests <ChevronRight size={14} />
+                </Link>
+              </div>
+              <div className="border-t-2 mt-2 mb-3" style={{ borderColor: INK }} />
+              <p className="text-sm font-sans mb-8" style={{ color: MUT }}>
+                Selbst getestet, methodisch bewertet. Affiliate-Links gekennzeichnet.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {recommendedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} variant="default" />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ── NEUESTE ARTIKEL + SEITENLEISTE ── */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -420,6 +519,59 @@ export default function HomeVariantB() {
             </aside>
           </div>
         </section>
+        {/* ── ZAHLEN-BAND ── */}
+        <section className="py-12" style={{ borderTop: `1px solid ${HAIR}` }}>
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {[
+                { stat: '35',   label: 'Diplom-Lektionen — Bronze bis Meister' },
+                { stat: '30',   label: 'Jahre Lehrerfahrung hinter der Methodik' },
+                { stat: '100%', label: 'Affiliate-transparent' },
+                { stat: '2026', label: 'Inhalte aktuell' },
+              ].map(({ stat, label }) => (
+                <div key={label}>
+                  <p className="font-serif text-4xl sm:text-5xl font-black" style={{ color: EMBER }}>{stat}</p>
+                  <p className="text-xs font-sans mt-2 tracking-wide" style={{ color: MUT }}>{label}</p>
+                </div>
+              ))}
+            </div>
+            <p className="text-center mt-8">
+              <Link
+                href="/ueber-uns"
+                className="text-xs font-sans font-bold tracking-widest uppercase hover:underline"
+                style={{ color: EMBER }}
+              >
+                Wer hinter der Akademie steht →
+              </Link>
+            </p>
+          </div>
+        </section>
+
+        {/* ── SCHLUSS-CTA — Wiederholung der EINEN Haupt-Aktion ── */}
+        <section style={{ background: INK }}>
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center">
+            <div className="flex items-center gap-2 justify-center mb-3">
+              <Flame size={16} style={{ color: '#E8A34C' }} />
+              <span className="font-sans text-[10px] font-bold tracking-[0.22em] uppercase" style={{ color: '#E8A34C' }}>
+                Grillmeister-Ausbildung
+              </span>
+            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-white mb-3">
+              Bereit für dein erstes Diplom?
+            </h2>
+            <p className="font-sans text-base text-white/60 max-w-xl mx-auto mb-7">
+              Kostenlos registrieren, Fortschritt speichern — von Bronze bis Meister.
+            </p>
+            <Link
+              href="/auth/login"
+              className="inline-flex items-center gap-2 px-7 py-3.5 font-sans font-bold text-sm uppercase tracking-wide text-white transition-opacity hover:opacity-90"
+              style={{ background: EMBER }}
+            >
+              Werde SteakAdemiker — kostenlos <ChevronRight size={16} />
+            </Link>
+          </div>
+        </section>
+
       </main>
 
       <Footer />

@@ -1,0 +1,67 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Ideen-Radar — alle 3 Tage zwei US-BBQ-Quellen nach Themen-Signalen abfragen.
+#
+# Laeuft an Monatstagen 1/4/7/... um 05:15 UTC — nach Glossar (03:00), Rezept
+# (03:30) und Saison-Generator (04:30), damit die naechtlichen Laeufe sich
+# nicht ins Gehege kommen.
+#
+# Was gesammelt wird: NUR Titel, Link, Datum, Kategorien aus dem RSS-Feed.
+# Kein fremder Fliesstext, keine Zutatenlisten, keine Bilder. Das Ergebnis ist
+# ein interner Themenspeicher (data/ideen-backlog.json), aus dem die
+# bestehende Rezept- und Artikel-Pipeline Auftraege zieht — die schreibt dann
+# aus Primaerquellen selbst. Begruendung und Quellenpruefung stehen im Kopf
+# von data/rezept-quellen.yaml.
+#
+# Kein API-Schluessel noetig: das Skript ruft nur oeffentliche Feeds ab.
+# Der Backlog wird zurueck ins Repo committet, damit die Entdopplung ueber
+# Laeufe hinweg funktioniert — deshalb contents: write.
+# ═══════════════════════════════════════════════════════════════════════════
+name: ideen-radar
+
+on:
+  schedule:
+    - cron: '15 5 */3 * *'
+  workflow_dispatch:
+    inputs:
+      alle:
+        description: 'Ausnahmsweise alle Quellen abfragen statt der Tagesrotation'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  sammeln:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Ideen sammeln
+        run: |
+          if [ "${{ inputs.alle }}" = "true" ]; then
+            node scripts/ideen-radar.mjs --alle
+          else
+            node scripts/ideen-radar.mjs
+          fi
+
+      - name: Backlog sichern
+        run: |
+          if git diff --quiet -- data/ideen-backlog.json; then
+            echo "Keine neuen Ideen — nichts zu committen."
+            exit 0
+          fi
+          git config user.name  "steakakademie-bot"
+          git config user.email "pitmaster@steakakademie.de"
+          ANZAHL=$(node -e "const b=require('./data/ideen-backlog.json');console.log(b.eintraege.length)")
+          git add data/ideen-backlog.json
+          git commit -m "chore(ideen): Radar-Lauf — Backlog jetzt ${ANZAHL} Eintraege
+
+          Nur Titel/Link/Datum/Kategorien aus oeffentlichen RSS-Feeds.
+          Interner Themenspeicher, kein veroeffentlichter Inhalt."
+          git push

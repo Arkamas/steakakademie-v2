@@ -26,11 +26,16 @@ import { readFileSync } from 'node:fs';
 const DATEI = 'src/app/page.tsx';
 
 /** Marker-Kommentare in src/app/page.tsx, in der verbindlichen Reihenfolge. */
+// GEAENDERT (Uwe, 27.08.2026): Der Magazin-Aufmacher (HERO) steht an Position 1 —
+// die Startseite oeffnet wie ein Magazin mit der aktuellsten Geschichte, nicht
+// mit der Selbstbeschreibung. INHALT ZUERST bleibt damit erst recht erfuellt:
+// ein redaktioneller Artikel ist mehr "Thema" als das Value-Prop-Band. Der
+// Mitglieder-CTA bleibt unterhalb. Vermerkt in CLAUDE.md Regel 8.
 const SOLL_REIHENFOLGE = [
-  'VALUE-PROP-BAND',
-  'WERKZEUGE',
   'HERO',
   'SECONDARY ARTICLES',
+  'VALUE-PROP-BAND',
+  'WERKZEUGE',
   'LEADMAGNET',
   'PLATTFORM-PULS',
   'FRISCH & SAISONAL',

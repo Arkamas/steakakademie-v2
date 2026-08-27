@@ -17,6 +17,7 @@ import { getPlattformPuls } from '@/lib/plattform-puls';
 import { getFrischSaisonal } from '@/lib/frisch-saisonal';
 import { getNewsItems } from '@/lib/bbq-news';
 import type { ArticleMeta } from '@/types';
+import { getStartseitenArtikel } from '@/lib/startseiten-artikel';
 
 export const revalidate = 86400;
 
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
 
 // Exportiert fuer die A/B-Variante /home-b (Editorial-Ember-Layout nach
 // Texas-Monthly-Referenz) — EINE Datenquelle fuer beide Startseiten.
-export const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
+const FALLBACK_ARTICLES: ArticleMeta[] = [
   {
     slug: 'ribeye-guide-der-perfekte-cut',
     url: '/cuts/ribeye',
@@ -131,17 +132,23 @@ export const PLACEHOLDER_ARTICLES: ArticleMeta[] = [
   },
 ];
 
+// Echte, wachsende Aufmacher-Liste (27.08.2026): neueste veroeffentlichte
+// Inhalte zuerst, Redaktionsvorbehalt beruecksichtigt; die alte
+// Platzhalter-Liste fuellt nur noch auf. Auch /home-b liest von hier —
+// EINE Datenquelle fuer beide Startseiten.
+export const STARTSEITEN_ARTIKEL: ArticleMeta[] = getStartseitenArtikel(FALLBACK_ARTICLES);
+
 const CATEGORY_SECTIONS = [
-  { title: 'Grilltechniken',      slug: 'grilltechniken', articles: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'grilltechniken') },
-  { title: 'Cuts & Fleischkunde', slug: 'cuts',           articles: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'cuts') },
-  { title: 'Wissen & Wissenschaft', slug: 'wissen',       articles: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'wissen') },
+  { title: 'Grilltechniken',      slug: 'grilltechniken', articles: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'grilltechniken') },
+  { title: 'Cuts & Fleischkunde', slug: 'cuts',           articles: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'cuts') },
+  { title: 'Wissen & Wissenschaft', slug: 'wissen',       articles: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'wissen') },
 ];
 
 export default async function HomePage() {
   const recommendedProducts = getRecommendedProducts(3);
-  const heroArticle    = PLACEHOLDER_ARTICLES[0];
-  const sideArticles   = PLACEHOLDER_ARTICLES.slice(1, 4);
-  const latestArticles = PLACEHOLDER_ARTICLES.slice(2);
+  const heroArticle    = STARTSEITEN_ARTIKEL[0];
+  const sideArticles   = STARTSEITEN_ARTIKEL.slice(1, 4);
+  const latestArticles = STARTSEITEN_ARTIKEL.slice(2);
 
   // Plattform-Puls: echte, automatisch wachsende Content-Zahlen + frisch dazugekommene Inhalte
   const puls = getPlattformPuls();
@@ -157,6 +164,52 @@ export default async function HomePage() {
       <Header />
 
       <main>
+
+        {/* ── HERO — Full-Bleed 70vh ────────────────────────────────────── */}
+        <section className="hero-fullbleed" style={{ height: '70vh', minHeight: '520px' }}>
+          <Image
+            src={heroArticle.image}
+            alt={heroArticle.imageAlt}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover hero-fullbleed-image"
+          />
+          <div className="hero-fullbleed-overlay" />
+          <div className="hero-fullbleed-content">
+            <div className="max-w-editorial mx-auto w-full px-4 sm:px-6 lg:px-8 pb-14 lg:pb-20">
+              <Link href={heroArticle.url} className="group block max-w-3xl">
+                <span className="category-label mb-4 block">{heroArticle.category}</span>
+                <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text-light leading-[1.08] mb-5 group-hover:text-brand-gold transition-colors duration-300">
+                  {heroArticle.title}
+                </h2>
+                <p className="font-body text-lg text-text-light/65 leading-relaxed mb-7 max-w-2xl">
+                  {heroArticle.excerpt}
+                </p>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-sans text-text-light/60">
+                  <span>{heroArticle.author}</span>
+                  {heroArticle.readingTime ? (
+                    <>
+                      <span className="text-brand-gold/40">·</span>
+                      <span>{heroArticle.readingTime} min Lesezeit</span>
+                    </>
+                  ) : null}
+                  <span className="text-brand-gold/40">·</span>
+                  <span>{heroArticle.formattedDate}</span>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── SECONDARY ARTICLES — unter dem Hero ──────────────────────── */}
+        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {sideArticles.map((article) => (
+              <ArticleCard key={article.slug} article={article} variant="medium" />
+            ))}
+          </div>
+        </section>
 
         {/* ── VALUE-PROP-BAND — erster Eindruck: warme Glut statt flachem Schwarz ── */}
         <section
@@ -224,48 +277,6 @@ export default async function HomePage() {
 
         {/* ── WERKZEUGE — Head-Boxen (Cut-Atlas · Foodpairing · Rezept-Schmiede) ── */}
         <ToolBoxes />
-
-        {/* ── HERO — Full-Bleed 70vh ────────────────────────────────────── */}
-        <section className="hero-fullbleed" style={{ height: '70vh', minHeight: '520px' }}>
-          <Image
-            src="/images/hero-ribeye.png"
-            alt="Premium Ribeye Steak auf glühenden Holzkohleglut — Steakakademie"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover hero-fullbleed-image"
-          />
-          <div className="hero-fullbleed-overlay" />
-          <div className="hero-fullbleed-content">
-            <div className="max-w-editorial mx-auto w-full px-4 sm:px-6 lg:px-8 pb-14 lg:pb-20">
-              <Link href={heroArticle.url} className="group block max-w-3xl">
-                <span className="category-label mb-4 block">{heroArticle.category}</span>
-                <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-text-light leading-[1.08] mb-5 group-hover:text-brand-gold transition-colors duration-300">
-                  {heroArticle.title}
-                </h2>
-                <p className="font-body text-lg text-text-light/65 leading-relaxed mb-7 max-w-2xl">
-                  {heroArticle.excerpt}
-                </p>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-sans text-text-light/60">
-                  <span>{heroArticle.author}</span>
-                  <span className="text-brand-gold/40">·</span>
-                  <span>{heroArticle.readingTime} min Lesezeit</span>
-                  <span className="text-brand-gold/40">·</span>
-                  <span>{heroArticle.formattedDate}</span>
-                </div>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* ── SECONDARY ARTICLES — unter dem Hero ──────────────────────── */}
-        <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {sideArticles.map((article) => (
-              <ArticleCard key={article.slug} article={article} variant="medium" />
-            ))}
-          </div>
-        </section>
 
         {/* ── LEADMAGNET — nach dem redaktionellen Einstieg (Uwe, 16.08.2026) ──
             Entscheidung: erst Inhalt beweisen, dann Geschenk anbieten (Reziprozitaet,

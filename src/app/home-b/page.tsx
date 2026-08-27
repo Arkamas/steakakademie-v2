@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight, Flame, Menu, Search } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
-import { PLACEHOLDER_ARTICLES } from '../page';
+import { STARTSEITEN_ARTIKEL } from '../page';
 import type { ArticleMeta } from '@/types';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -152,13 +152,13 @@ function MediumCard({ a }: { a: ArticleMeta }) {
 }
 
 export default function HomeVariantB() {
-  const hero = PLACEHOLDER_ARTICLES[0];
-  const side = PLACEHOLDER_ARTICLES.slice(1, 4);
-  const feature = PLACEHOLDER_ARTICLES[4];
+  const hero = STARTSEITEN_ARTIKEL[0];
+  const side = STARTSEITEN_ARTIKEL.slice(1, 4);
+  const feature = STARTSEITEN_ARTIKEL[4];
   const sections = [
-    { title: 'Cuts & Fleischkunde', href: '/cuts', items: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'cuts') },
-    { title: 'Grilltechniken', href: '/methoden', items: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'grilltechniken') },
-    { title: 'Wissen & Wissenschaft', href: '/wissen', items: PLACEHOLDER_ARTICLES.filter((a) => a.categorySlug === 'wissen') },
+    { title: 'Cuts & Fleischkunde', href: '/cuts', items: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'cuts') },
+    { title: 'Grilltechniken', href: '/methoden', items: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'grilltechniken') },
+    { title: 'Wissen & Wissenschaft', href: '/wissen', items: STARTSEITEN_ARTIKEL.filter((a) => a.categorySlug === 'wissen') },
   ];
 
   return (
@@ -360,7 +360,7 @@ export default function HomeVariantB() {
           <div className="border-t-2 mb-6 mt-2" style={{ borderColor: INK }} />
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8">
             <div>
-              {PLACEHOLDER_ARTICLES.slice(1).map((a) => (
+              {STARTSEITEN_ARTIKEL.slice(1).map((a) => (
                 <article key={a.slug} className="group flex gap-4 items-start py-4 border-b last:border-0" style={{ borderColor: HAIR }}>
                   <Link href={a.url} className="shrink-0">
                     <div className="overflow-hidden w-28 h-20">

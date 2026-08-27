@@ -86,6 +86,14 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    passiert. Abgesichert durch `scripts/check-startseiten-hierarchie.mjs` (Build-Gate,
    läuft im prebuild). Reihenfolge ändern = Soll-Liste im Skript bewusst anpassen UND
    hier vermerken. Nicht durch stilles Umsortieren in `page.tsx`.
+   **Aufmacher zuerst (Uwe, 27.08.2026):** Der Magazin-Aufmacher (HERO, neuester
+   veröffentlichter Inhalt) steht an Position 1, davor nichts. Danach: Artikel-Reihe,
+   Value-Prop-Band mit H1 + Rubriken, Werkzeuge, dann der Rest wie gehabt. INHALT
+   ZUERST bleibt der Maßstab — ein redaktioneller Artikel ist mehr „Thema" als die
+   Selbstbeschreibung. Der Aufmacher speist sich seit demselben Tag automatisch aus
+   dem neuesten veröffentlichten Inhalt (src/lib/startseiten-artikel.ts, Redaktions-
+   vorbehalt berücksichtigt) — die frühere Platzhalter-Liste (Ribeye, „20. Mai") ist
+   nur noch Auffüll-Fallback. Neue Inhalte freigeben = Startseite dreht sich von selbst.
    **A/B-Test „Editorial Ember" (seit 26.08.2026):** `/` wird per Cookie `sa_ab_home`
    50/50 gesplittet (src/middleware.ts). Variante B = interner Rewrite auf `/home-b`
    (noindex, Canonical auf `/`): dieselbe page.tsx, eingehüllt in den hellen

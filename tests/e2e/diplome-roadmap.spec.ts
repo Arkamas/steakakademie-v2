@@ -151,7 +151,7 @@ test.describe('Phase 2 — Bronze: FeuerzoneSpiel + Quiz', () => {
     const correctAnswers = [
       'Sobald ein grauer Aschefilm sichtbar ist',
       '230-290 °C',
-      'Große Stücke, Low & Slow',
+      'Große Stücke schonend durchgaren',
       'Deckel schließen',
       '10-15 cm',
     ];

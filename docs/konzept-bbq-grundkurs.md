@@ -82,14 +82,24 @@ Zertifikat — das ist das Unterscheidungsmerkmal zum Diplom und muss es bleiben
 
 Gesamtumfang: ~40 Minuten Video, ~4.000 Wörter, 15 Selbsttestfragen, 5 PDFs.
 
-## 5. Was Uwe entscheiden muss
+## 5. Entschieden (Uwe, 27.08.2026)
 
-1. **Preis.** Vorschlag **39 €**, anrechenbar auf das Diplom. Hoch genug, um
-   ernst genommen zu werden, niedrig genug fürs Verschenken.
-2. **Zeitpunkt.** Das Diplom hat Vorrang bis 01.10. Der Grundkurs teilt sich
-   Produktionsmittel und Stimme mit ihm — realistisch nach dem Diplom-Vorverkauf.
-3. **Anrechnung ja oder nein.** Sie macht den Kauf risikofrei, kostet aber
-   Marge bei jedem, der ohnehin das Diplom gekauft hätte.
+1. **Preis: 49 €.**
+2. **Anrechnung: 50 %** — wer den Grundkurs besitzt, bekommt **24,50 €** auf das
+   Grillmeister-Diplom angerechnet (Vorverkauf 99 € → 74,50 €; regulär
+   149 € → 124,50 €). Die halbe statt der vollen Anrechnung hält die Marge und
+   bleibt trotzdem ein spürbarer Aufstiegs-Anreiz.
+3. **Zeitpunkt: weiterhin offen.** Das Diplom hat Vorrang bis zum 01.10.;
+   der Grundkurs teilt sich Marcos Stimme und die Produktionsstrecke mit ihm —
+   realistisch nach dem Diplom-Vorverkauf. Bis dahin bleibt die Seite ohne
+   Starttermin (siehe §6) und es wird kein Digistore-Produkt angelegt
+   (Gewerbeanmeldung 01.10., Vorgabe vom 26.08.).
+
+**Umsetzungsnotiz Kaufabwicklung (wenn es so weit ist):** Die Anrechnung läuft
+am einfachsten über einen personalisierten Digistore-Gutscheincode über 24,50 €,
+der Grundkurs-Käufern nach dem Kauf automatisch per Mail zugeht — kein
+Sonderpreis-Produkt, keine zweite Preisliste, sauber nachweisbar. Auf der
+Kursseite wird die Anrechnung erst beworben, wenn beide Produkte kaufbar sind.
 
 ## 6. Sofort erledigt (27.08.2026)
 

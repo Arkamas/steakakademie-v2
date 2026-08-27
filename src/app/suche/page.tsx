@@ -4,8 +4,8 @@ import { Search, ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import {
-  allArtikels, allCuts, allMethodes, allVergleichs, allGlossars,
-  allRecipes, allUsaBbqStyles, allStreitfaelles, allPersoenlichkeits,
+  allArtikels, allCuts, allMethodes, allVergleiches, allGlossars,
+  allRecipes, allUsaBbqStyles, allStreitfalls, allPersoenlichkeits,
 } from 'contentlayer/generated';
 import { nurVeroeffentlicht } from '@/lib/redaktion';
 
@@ -47,11 +47,11 @@ function collect(): Hit[] {
     ...of(allCuts, 'Cut', 'excerpt'),
     ...of(allMethodes, 'Grilltechnik', 'excerpt'),
     ...of(allArtikels, 'Artikel', 'excerpt'),
-    ...of(allVergleichs, 'Test & Vergleich', 'excerpt'),
+    ...of(allVergleiches, 'Test & Vergleich', 'excerpt'),
     ...of(allRecipes, 'Rezept', 'excerpt'),
     ...of(allGlossars, 'Glossar', 'shortDefinition'),
     ...of(allUsaBbqStyles, 'USA-Expedition', 'excerpt'),
-    ...of(allStreitfaelles, 'Streitfall', 'excerpt'),
+    ...of(allStreitfalls, 'Streitfall', 'excerpt'),
     ...of(allPersoenlichkeits, 'Persönlichkeit', 'excerpt'),
   ];
 }

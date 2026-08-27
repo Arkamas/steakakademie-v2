@@ -7,6 +7,7 @@ import {
   allArtikels, allCuts, allMethodes, allVergleichs, allGlossars,
   allRecipes, allUsaBbqStyles, allStreitfaelles, allPersoenlichkeits,
 } from 'contentlayer/generated';
+import { nurVeroeffentlicht } from '@/lib/redaktion';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /suche — Volltextsuche über alle Inhalte
@@ -30,8 +31,13 @@ function norm(s: string) {
 }
 
 function collect(): Hit[] {
+  // Redaktionsvorbehalt (AI Act Art. 50 Abs. 4): Entwuerfe duerfen nicht
+  // auffindbar sein. Bewusst nurVeroeffentlicht() statt sichtbareArtikel() —
+  // letzteres zeigt Entwuerfe in der Entwicklung, und genau so wird eine
+  // Entwurfs-URL versehentlich weitergegeben. Eine Suche darf nie auf etwas
+  // zeigen, das noch niemand freigegeben hat.
   const of = (docs: any[], kind: string, snippetKey: string): Hit[] =>
-    docs.map((d) => ({
+    nurVeroeffentlicht(docs).map((d) => ({
       url: d.url as string,
       title: d.title as string,
       snippet: (d[snippetKey] ?? d.excerpt ?? d.shortDefinition ?? '') as string,

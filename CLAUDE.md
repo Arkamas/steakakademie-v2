@@ -8,6 +8,53 @@
 
 ---
 
+## A. Umgebung & Verifikation — VOR jeder Arbeit lesen
+
+> Diese Karte steht bewusst ganz oben und ist bewusst kurz. Jede Zeile hier hat
+> mindestens einmal einen halben Arbeitstag gekostet. Sie gehoert NICHT nach
+> memory.md — dort geht sie unter (Stand 27.08.: 55 KB Fliesstext).
+
+**Bauen und Pruefen**
+- `node_modules` in diesem Arbeitsbaum ist eine **Windows-Installation**. Native
+  Binaries (esbuild, swc) starten unter Linux nicht. Eine Cloud-/Linux-Session
+  kann hier **lesen, aendern und pruefen — aber NICHT bauen und nicht typechecken**.
+  `npm run build` und `tsc` laufen ausschliesslich in der Windows-Session.
+- **Exitcode pruefen, immer.** Ein Befehl, der nichts ausgibt, ist nicht gruen.
+  `timeout` liefert Exitcode 124 — das ist ein Abbruch ohne Ergebnis, kein Bestehen.
+- Ein voller Typecheck passt **nicht** in ein 45-Sekunden-Fenster. Nicht anfangen,
+  sondern uebergeben.
+- Schnelle Alternative ohne native Binaries: TSX-Syntax ueber den TypeScript-Parser
+  (`ts.createSourceFile(...).parseDiagnostics`). Faengt Syntax, **keine Typen** —
+  und genau so ist es zu berichten.
+
+**Git**
+- Vor jeder Aussage zu `ahead`/`behind`: **erst `git fetch`**. Ohne das ist
+  `origin/main` in diesem Arbeitsbaum beliebig alt.
+- Reihenfolge ist **commit → `npm run build` → push**, nie commit → push → hoffen.
+  Vier rote Deployments am 26.08. kamen aus dieser einen Vertauschung.
+- **Nie `git add -A`**, auch nicht auf ein Unterverzeichnis. Immer Pfade einzeln
+  nennen — sonst wandert uncommitteter Fremdstand mit (Regel 9).
+- Ein Linux-Zugriff ueber die Ordner-Bruecke darf keine Dateien loeschen. git legt
+  bei jedem Index-Zugriff `.git/index.lock` an und kann sie danach nicht raeumen:
+  Lock nach `.git/_to_delete/` **verschieben**, dann weiterarbeiten.
+
+**Deployment-Status ohne Raten**
+- Vercel `projectId: prj_h30tTBcRtSAiIjluBXn8lu5xRUMg`,
+  `teamId: team_tEPqF2rHcoOrrPEGRD7Q4hl8` — damit liefert die Vercel-MCP
+  `state: READY|ERROR` je Commit. Env-Variablen kann sie **nicht** lesen.
+
+**Startseite**
+- Es gibt zwei Varianten. `/` = A (dunkel), `/home-b` = B (Editorial Ember,
+  Texas-Monthly-Layout). Die Middleware teilt nur zu, wenn **`AB_HOME_ENABLED === '1'`**.
+  Steht der Schalter anders, bekommt **jeder** Besucher A — auch Uwe. Wer eine
+  Aussage ueber „die neue Startseite" trifft, prueft vorher diesen Schalter.
+
+**Berichtspflicht**
+- Jede Uebergabe nennt ausdruecklich, **was NICHT geprueft wurde**. „Gates gruen"
+  ohne den Satz, dass Build und Typecheck nicht liefen, ist eine Falschaussage.
+
+---
+
 ## 0. Meine Rolle — Projekt-Director
 
 Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative Instanz

@@ -26,10 +26,17 @@ import { withSentryConfig } from '@sentry/nextjs';
  * Aendern heisst pruefen: Nach jeder Aenderung die Seiten mit externen Skripten
  * im Browser oeffnen und die Konsole auf CSP-Verstoesse ansehen. Eine zu strenge
  * Richtlinie bricht still — es gibt keine Fehlermeldung auf der Seite.
+ *
+ * 'unsafe-eval' NUR im Dev-Modus: Der Next-Dev-Server (React Refresh,
+ * Source-Maps via eval) braucht es, sonst bleibt die Seite unter `next dev`
+ * weiss und die E2E-Tests laufen gegen eine leere Seite. `next build` setzt
+ * NODE_ENV=production — dort wird der Zusatz nie ausgegeben.
  */
+const isDev = process.env.NODE_ENV === 'development';
+
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://plausible.io https://*.clarity.ms",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://plausible.io https://*.clarity.ms`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://*.clarity.ms",
   "font-src 'self' data:",

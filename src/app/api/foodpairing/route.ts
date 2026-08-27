@@ -13,6 +13,8 @@
 
 import { NextResponse } from 'next/server';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
+import { z } from 'zod';
+import { guardRequest } from '@/lib/api/guard';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -29,16 +31,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Supabase-Konfiguration fehlt.' }, { status: 500 });
   }
 
-  let zutat: string;
-  let limit: number;
-  try {
-    const body = await req.json();
-    zutat = String(body.zutat ?? '').trim();
-    limit = Math.min(Math.max(parseInt(body.limit, 10) || 20, 1), 50);
-    if (!zutat) throw new Error('leer');
-  } catch {
-    return NextResponse.json({ error: 'Ungültige Eingabe — "zutat" fehlt.' }, { status: 400 });
-  }
+  const guard = await guardRequest(req, {
+    key: 'foodpairing',
+    rate: { limit: 60, windowMs: 10 * 60_000 },
+    schema: z.object({
+      zutat: z.string().trim().min(1).max(80),
+      limit: z.coerce.number().catch(20).transform((n) => Math.min(Math.max(Math.trunc(n) || 20, 1), 50)),
+    }),
+    maxBodyBytes: 4 * 1024,
+  });
+  if (!guard.ok) return guard.response;
+  const { zutat, limit } = guard.body;
 
   const admin = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,

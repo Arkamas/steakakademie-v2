@@ -1,5 +1,7 @@
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
+import { z } from 'zod';
+import { guardRequest } from '@/lib/api/guard';
 
 export const runtime = 'edge';
 
@@ -62,16 +64,27 @@ Wenn jemand danach fragt, nenn die URL direkt:
 ## Kontext
 Steakakademie.de — Deutschlands führende BBQ-Wissensplattform. Premium, autoritativ, leidenschaftlich. Marco ist im Chat-Modus: erklärt, navigiert, berät — als erfahrener Meister der jeden Besucher ernst nimmt.`;
 
-export async function POST(req: Request) {
-  try {
-    const { messages } = await req.json();
+// Nur user/assistant — eine 'system'-Rolle aus dem Client wäre Prompt-Injection
+// auf System-Ebene. Zusatzfelder von useChat (id, createdAt, parts) werden
+// gestrippt; das Modell braucht nur role + content (CoreMessage).
+const ChatBody = z.object({
+  messages: z
+    .array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(4_000) }))
+    .min(1)
+    .max(30),
+});
 
-    if (!messages || !Array.isArray(messages)) {
-      return new Response(JSON.stringify({ error: 'Invalid messages format' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
+export async function POST(req: Request) {
+  const guard = await guardRequest(req, {
+    key: 'chat',
+    rate: { limit: 30, windowMs: 10 * 60_000 },
+    schema: ChatBody,
+    maxBodyBytes: 64 * 1024,
+  });
+  if (!guard.ok) return guard.response;
+  const { messages } = guard.body;
+
+  try {
 
     const result = streamText({
       model: anthropic('claude-haiku-4-5-20251001'),

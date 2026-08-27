@@ -10,6 +10,8 @@ import { streamObject } from 'ai';
 import { NextResponse } from 'next/server';
 import { NicheAnalysisSchema } from '@/lib/niche-validator/schema';
 import { SYSTEM_PROMPT, buildUserPrompt } from '@/lib/niche-validator/prompts';
+import { z } from 'zod';
+import { guardRequest } from '@/lib/api/guard';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -22,27 +24,15 @@ export async function POST(req: Request) {
     );
   }
 
-  let niche: string | undefined;
-  try {
-    const body = await req.json();
-    niche = typeof body?.niche === 'string' ? body.niche : undefined;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON body.' }, { status: 400 });
-  }
-
-  if (!niche || niche.trim().length < 2) {
-    return NextResponse.json(
-      { error: 'Niche must be at least 2 characters.' },
-      { status: 400 },
-    );
-  }
-
-  if (niche.length > 120) {
-    return NextResponse.json(
-      { error: 'Niche must be shorter than 120 characters.' },
-      { status: 400 },
-    );
-  }
+  // Sonnet + 2400 Output-Tokens pro Aufruf → knappes Limit.
+  const guard = await guardRequest(req, {
+    key: 'niche-validator',
+    rate: { limit: 5, windowMs: 60 * 60_000 },
+    schema: z.object({ niche: z.string().trim().min(2).max(120) }),
+    maxBodyBytes: 4 * 1024,
+  });
+  if (!guard.ok) return guard.response;
+  const { niche } = guard.body;
 
   const result = streamObject({
     model: anthropic('claude-sonnet-4-5'),

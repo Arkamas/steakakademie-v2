@@ -22,6 +22,8 @@ import { generateText } from 'ai';
 import { NextResponse } from 'next/server';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
 import { searchKochwissen, buildKontext, type Treffer } from '@/lib/kochwissen/retrieval';
+import { z } from 'zod';
+import { guardRequest } from '@/lib/api/guard';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -70,6 +72,16 @@ const NIVEAU_REGELN: Record<1 | 2 | 3, string> = {
 - Mehrkomponentig auf Restaurant-Niveau; nenne Spezialgeräte und exakte Parameter.`,
 };
 
+const GenerierenBody = z.object({
+  auftrag:   z.string().trim().min(3).max(500),
+  art:       z.enum(['rezept', 'artikel']).default('rezept'),
+  niveau:    z.coerce.number().int().pipe(z.union([z.literal(1), z.literal(2), z.literal(3)])).catch(2), // Default: ⭐⭐ Fortgeschritten
+  personen:  z.coerce.number().catch(2).transform((n) => Math.min(Math.max(Math.trunc(n) || 2, 1), 20)),
+  kategorie: z.string().trim().max(80).nullish().transform((v) => v || null),
+  cut:       z.string().trim().max(80).nullish().transform((v) => v || null),
+  limit:     z.coerce.number().catch(12).transform((n) => Math.min(Math.max(Math.trunc(n) || 12, 1), 20)),
+});
+
 export async function POST(req: Request) {
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json({ error: 'ANTHROPIC_API_KEY fehlt.' }, { status: 500 });
@@ -78,28 +90,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'VOYAGE_API_KEY fehlt.' }, { status: 500 });
   }
 
-  // 1) Eingabe
-  let auftrag: string;
-  let art: 'rezept' | 'artikel';
-  let niveau: 1 | 2 | 3;
-  let personen: number;
-  let kategorie: string | null;
-  let cut: string | null;
-  let limit: number;
-  try {
-    const body = await req.json();
-    auftrag = String(body.auftrag ?? '').trim();
-    art = body.art === 'artikel' ? 'artikel' : 'rezept';
-    const n = parseInt(body.niveau, 10);
-    niveau = n === 1 || n === 3 ? n : 2; // Default: ⭐⭐ Fortgeschritten
-    personen = Math.min(Math.max(parseInt(body.personen, 10) || 2, 1), 20);
-    kategorie = body.kategorie ? String(body.kategorie) : null;
-    cut = body.cut ? String(body.cut) : null;
-    limit = Math.min(Math.max(parseInt(body.limit, 10) || 12, 1), 20);
-    if (!auftrag) throw new Error('leer');
-  } catch {
-    return NextResponse.json({ error: 'Ungültige Eingabe — "auftrag" fehlt.' }, { status: 400 });
-  }
+  // 1) Guard: Same-Origin, Rate-Limit, Login ODER Admin, Schema.
+  //    Teuerster Endpunkt (Voyage-Retrieval + Claude, bis 90 s) → nicht anonym.
+  const guard = await guardRequest(req, {
+    key: 'kochwissen-generieren',
+    rate: { limit: 10, windowMs: 60 * 60_000 },
+    schema: GenerierenBody,
+    auth: 'user-or-admin',
+  });
+  if (!guard.ok) return guard.response;
+  const { auftrag, art, niveau, personen, kategorie, cut, limit } = guard.body;
 
   const admin = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

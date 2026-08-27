@@ -230,6 +230,10 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
           }
         }
         setRezeptLinks(Array.from(links.values()).slice(0, 3));
+      } else if (res.status === 401) {
+        setHinweis('Die Rezept-Schmiede ist Mitgliedern vorbehalten — melde dich kostenlos an, dann schmiedet Marco dein Rezept.');
+      } else if (res.status === 429) {
+        setHinweis(String(data?.error ?? 'Zu viele Anfragen — bitte gleich noch einmal versuchen.'));
       } else {
         setHinweis('Die Rezept-Schmiede wird gerade scharfgeschaltet — gleich kannst du hier aus geprüftem Wissen Rezepte erzeugen.');
       }
@@ -334,7 +338,14 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
           </span>
         </div>
       )}
-      {hinweis && <p className="mt-3 text-[11px] text-text-muted italic">{hinweis}</p>}
+      {hinweis && (
+        <p className="mt-3 text-[11px] text-text-muted italic">
+          {hinweis}
+          {hinweis.includes('Mitgliedern vorbehalten') && (
+            <> <Link href="/auth/login" className="not-italic font-semibold text-brand-gold underline">Jetzt anmelden</Link></>
+          )}
+        </p>
+      )}
       {ergebnis && (
         <div className="mt-3 max-h-72 overflow-y-auto rounded-lg border border-border-subtle bg-surface-base p-3">
           {/* Live-Mengenrechner: Basis 1 Person, deterministisch skaliert */}

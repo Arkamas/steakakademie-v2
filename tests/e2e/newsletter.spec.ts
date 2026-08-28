@@ -20,9 +20,31 @@ import { test, expect, type Page } from '@playwright/test';
 const URL = '/newsletter';
 const VALID_EMAIL = 'e2e@example.com';
 
-const emailField = (p: Page) => p.getByPlaceholder('deine@email.de');
-const consentBox = (p: Page) => p.getByRole('checkbox');
-const submitBtn = (p: Page) => p.getByRole('button', { name: /Wissens-Brief abonnieren|Sendet/ });
+/**
+ * mainArea statt signup fuer Zustandsmeldungen: Im Erfolgsfall ersetzt
+ * NewsletterSignup die <section aria-label="Newsletter-Anmeldung"> durch ein
+ * <div role="status"> ohne dieses Label. Ein an signup gehaengter Text-Locator
+ * findet die Erfolgsmeldung deshalb nie.
+ */
+
+/**
+ * Die Anmeldebox der SEITE.
+ *
+ * NewsletterSignup steht zusaetzlich im Footer (Footer.tsx) und damit auf jeder
+ * Seite ein zweites Mal im DOM. Ohne diese Eingrenzung trifft jeder Locator hier
+ * beide Instanzen und Playwright bricht mit einer strict mode violation ab.
+ */
+const mainArea = (p: Page) => p.getByRole('main');
+const signup = (p: Page) => mainArea(p).getByRole('region', { name: 'Newsletter-Anmeldung' });
+
+const emailField = (p: Page) => signup(p).getByPlaceholder('deine@email.de');
+const consentBox = (p: Page) => signup(p).getByRole('checkbox');
+// Beschriftung = Prop `cta` von NewsletterSignup, Default 'Spickzettel sichern'
+// (NewsletterSignup.tsx). /newsletter uebergibt keinen eigenen Wert. Aendert sich
+// der Default, muss dieses Regex mit — vorher stand hier noch die Beschriftung
+// von vor a8a6f1f und der Button war schlicht nicht auffindbar.
+const submitBtn = (p: Page) =>
+  signup(p).getByRole('button', { name: /Spickzettel sichern|Sendet/ });
 
 /** Wartet, bis die Client-Komponente hydriert ist (Button reagiert auf Eingaben). */
 async function enableViaValidInput(page: Page) {
@@ -36,7 +58,7 @@ async function enableViaValidInput(page: Page) {
 test.describe('Newsletter-Anmeldung', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
-    await expect(page.getByLabel('Newsletter-Anmeldung')).toBeVisible();
+    await expect(signup(page)).toBeVisible();
   });
 
   test('Happy Path: gültige Eingabe + Consent → Erfolgsmeldung', async ({ page }) => {
@@ -58,7 +80,7 @@ test.describe('Newsletter-Anmeldung', () => {
 
     // Erfolgszustand (Double-Opt-in-Hinweis) erscheint
     await expect(
-      page.getByText('Fast geschafft — bitte E-Mail bestätigen.'),
+      mainArea(page).getByText('Fast geschafft — bitte E-Mail bestätigen.'),
     ).toBeVisible({ timeout: 10_000 });
 
     // Der Client hat die erwartete Nutzlast gesendet (inkl. leerem Honeypot).
@@ -80,9 +102,9 @@ test.describe('Newsletter-Anmeldung', () => {
 
     // Spezifisch auf den Meldungstext prüfen (Next.js rendert einen leeren
     // role="alert"-Route-Announcer, daher getByText statt getByRole('alert')).
-    await expect(page.getByText(/Zu viele Anmeldeversuche/i)).toBeVisible();
+    await expect(mainArea(page).getByText(/Zu viele Anmeldeversuche/i)).toBeVisible();
     await expect(
-      page.getByText('Fast geschafft — bitte E-Mail bestätigen.'),
+      mainArea(page).getByText('Fast geschafft — bitte E-Mail bestätigen.'),
     ).toHaveCount(0);
   });
 

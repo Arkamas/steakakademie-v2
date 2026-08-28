@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "dev:full": "node scripts/recipe-agent.mjs && node scripts/seo-image-optimizer.mjs && node scripts/glossary-agent.mjs && next dev",
-    "build": "node scripts/check-redaktionsvorbehalt.mjs && node scripts/seo-image-optimizer.mjs && next build",
+    "build": "node scripts/seo-image-optimizer.mjs && next build",
+    "check": "node scripts/check-redaktionsvorbehalt.mjs && node scripts/check-startseiten-hierarchie.mjs && node scripts/validate-frontmatter.mjs && node scripts/check-links.mjs",
     "build:with-agents": "node scripts/check-redaktionsvorbehalt.mjs && node scripts/recipe-agent.mjs && node scripts/seo-image-optimizer.mjs && node scripts/glossary-agent.mjs && next build",
     "recipes": "node scripts/recipe-agent.mjs",
     "recipes:force": "node scripts/recipe-agent.mjs --force",
@@ -18,7 +19,7 @@
     "build-guard": "node scripts/build-guard.mjs",
     "check-redaktionsvorbehalt": "node scripts/check-redaktionsvorbehalt.mjs",
     "legal-guard": "node scripts/legal-guard.mjs",
-    "postbuild": "next-sitemap && node scripts/validate-frontmatter.mjs && node scripts/check-links.mjs",
+    "postbuild": "next-sitemap",
     "r2:migrate": "node scripts/migrate-to-r2.mjs",
     "r2:dry-run": "node scripts/migrate-to-r2.mjs --dry-run",
     "qa-scan": "node scripts/qa-manager.js",
@@ -51,7 +52,6 @@
     "check:frontmatter": "node scripts/validate-frontmatter.mjs",
     "index:knowledge": "node scripts/generate-embeddings.js --code",
     "check:startseite": "node scripts/check-startseiten-hierarchie.mjs",
-    "prebuild": "node scripts/check-startseiten-hierarchie.mjs",
     "cache:selftest": "node scripts/cache-selftest.mjs",
     "cache:selftest:opus": "node scripts/cache-selftest.mjs --model claude-opus-5",
     "wip": "node scripts/wip-autosave.mjs"

@@ -25,7 +25,7 @@ export const revalidate = 86400;
 // (.theme-ember) über der dunklen Seite und sah entsprechend kaputt aus.
 // Diese Fassung ist das ECHTE Editorial-Layout nach der Texas-Monthly-
 // Referenz (C:\Dev\texasmonthly-ref, ideas.md "Editorial Ember"):
-//   · Cremeweiß #FAFAF7, Tinte #1C1512, Glut-Orange #D4521A als Akzent
+//   · Cremeweiß #FAFAF7, Tinte #1C1512, Glut-Orange #C2440F als Akzent
 //   · zentrierte Serif-Wortmarke, dünne Haarlinien, Versalien-Kategorielabels
 //   · asymmetrisches 3-Spalten-Hero-Grid (55/25/20) wie Texas Monthly
 // Datenquelle: dieselben Artikel wie Variante A (Export aus ../page).
@@ -45,10 +45,12 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://steakakademie.de/' },
 };
 
-// Editorial-Ember-Palette (ideas.md, Idee 1)
+// Editorial-Ember-Palette (ideas.md, Idee 1).
+// EMBER: #C2440F statt Referenz-#D4521A — Original misst nur 4,00:1 auf Creme
+// und 4,18:1 unter Weiß (WCAG-AA-Fail für Kleintext). #C2440F: 4,87 / 5,09.
 const INK = '#1C1512';
 const PAPER = '#FAFAF7';
-const EMBER = '#D4521A';
+const EMBER = '#C2440F';
 const HAIR = '#E3DCCE';
 const MUT = '#5D554B';
 
@@ -96,7 +98,7 @@ function HeroCard({ a }: { a: ArticleMeta }) {
         </div>
         <CategoryLabel>{a.category}</CategoryLabel>
         <h2
-          className="font-serif text-3xl sm:text-4xl font-bold mt-2 mb-3 leading-tight transition-colors duration-150 group-hover:text-[#D4521A]"
+          className="font-serif text-3xl sm:text-4xl font-bold mt-2 mb-3 leading-tight transition-colors duration-150 group-hover:text-[#C2440F]"
           style={{ color: INK }}
         >
           {a.title}
@@ -125,7 +127,7 @@ function SmallCard({ a }: { a: ArticleMeta }) {
         <CategoryLabel>{a.category}</CategoryLabel>
         <Link href={a.url}>
           <h4
-            className="font-serif text-sm font-bold mt-0.5 leading-snug line-clamp-3 transition-colors duration-150 group-hover:text-[#D4521A]"
+            className="font-serif text-sm font-bold mt-0.5 leading-snug line-clamp-3 transition-colors duration-150 group-hover:text-[#C2440F]"
             style={{ color: INK }}
           >
             {a.title}
@@ -149,7 +151,7 @@ function MediumCard({ a }: { a: ArticleMeta }) {
         </div>
         <CategoryLabel>{a.category}</CategoryLabel>
         <h3
-          className="font-serif text-xl font-bold mt-1 mb-2 leading-snug transition-colors duration-150 group-hover:text-[#D4521A]"
+          className="font-serif text-xl font-bold mt-1 mb-2 leading-snug transition-colors duration-150 group-hover:text-[#C2440F]"
           style={{ color: INK }}
         >
           {a.title}
@@ -207,14 +209,14 @@ export default async function HomeVariantB() {
             <div className="flex-1 flex justify-center">
               <Link
                 href="/"
-                className="font-serif font-black text-3xl sm:text-4xl select-none transition-colors hover:text-[#D4521A]"
+                className="font-serif font-black text-3xl sm:text-4xl select-none transition-colors hover:text-[#C2440F]"
                 style={{ color: INK, letterSpacing: '-0.02em' }}
               >
                 Steakakademie
               </Link>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
-              <Link href="/suche" aria-label="Suche" className="p-2 transition-colors hover:text-[#D4521A]" style={{ color: INK }}>
+              <Link href="/suche" aria-label="Suche" className="p-2 transition-colors hover:text-[#C2440F]" style={{ color: INK }}>
                 <Search size={18} />
               </Link>
               <Link
@@ -229,12 +231,12 @@ export default async function HomeVariantB() {
         </div>
         <nav className="border-t" style={{ borderColor: HAIR }} aria-label="Rubriken">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">
-            <ul className="flex items-center gap-6 overflow-x-auto h-11 whitespace-nowrap">
+            <ul className="flex items-center lg:justify-center gap-6 overflow-x-auto h-11 whitespace-nowrap">
               {NAV.map((n) => (
                 <li key={n.href}>
                   <Link
                     href={n.href}
-                    className="font-sans text-[11px] font-bold tracking-[0.14em] uppercase transition-colors hover:text-[#D4521A]"
+                    className="font-sans text-[11px] font-bold tracking-[0.14em] uppercase transition-colors hover:text-[#C2440F]"
                     style={{ color: '#443D34' }}
                   >
                     {n.label}
@@ -277,7 +279,7 @@ export default async function HomeVariantB() {
                   </div>
                   <CategoryLabel>{feature.category}</CategoryLabel>
                   <h3
-                    className="font-serif text-lg font-bold mt-1 mb-2 leading-snug transition-colors group-hover:text-[#D4521A]"
+                    className="font-serif text-lg font-bold mt-1 mb-2 leading-snug transition-colors group-hover:text-[#C2440F]"
                     style={{ color: INK }}
                   >
                     {feature.title}
@@ -300,7 +302,7 @@ export default async function HomeVariantB() {
           <section key={s.href} className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center justify-between">
               <Link href={s.href}>
-                <h2 className="font-serif text-2xl font-bold transition-colors hover:text-[#D4521A]" style={{ color: INK }}>
+                <h2 className="font-serif text-2xl font-bold transition-colors hover:text-[#C2440F]" style={{ color: INK }}>
                   {s.title}
                 </h2>
               </Link>
@@ -459,7 +461,9 @@ export default async function HomeVariantB() {
           <div className="border-t-2 mb-6 mt-2" style={{ borderColor: INK }} />
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8">
             <div>
-              {STARTSEITEN_ARTIKEL.slice(1).map((a) => (
+              {/* slice(5): Position 0–4 stehen bereits im Hero-Grid — sonst
+                  doppelt die Liste sichtbar dieselben Artikel (Referenz: latest[4..10]) */}
+              {STARTSEITEN_ARTIKEL.slice(5).map((a) => (
                 <article key={a.slug} className="group flex gap-4 items-start py-4 border-b last:border-0" style={{ borderColor: HAIR }}>
                   <Link href={a.url} className="shrink-0">
                     <div className="overflow-hidden w-28 h-20">
@@ -472,7 +476,7 @@ export default async function HomeVariantB() {
                   <div className="flex-1 min-w-0">
                     <CategoryLabel>{a.category}</CategoryLabel>
                     <Link href={a.url}>
-                      <h4 className="font-serif text-base font-bold mt-0.5 leading-snug line-clamp-2 transition-colors group-hover:text-[#D4521A]" style={{ color: INK }}>
+                      <h4 className="font-serif text-base font-bold mt-0.5 leading-snug line-clamp-2 transition-colors group-hover:text-[#C2440F]" style={{ color: INK }}>
                         {a.title}
                       </h4>
                     </Link>
@@ -491,7 +495,7 @@ export default async function HomeVariantB() {
                     <li key={n.href}>
                       <Link
                         href={n.href}
-                        className="flex items-center justify-between py-2 border-b text-sm font-sans transition-colors hover:text-[#D4521A] group"
+                        className="flex items-center justify-between py-2 border-b text-sm font-sans transition-colors hover:text-[#C2440F] group"
                         style={{ borderColor: HAIR, color: '#443D34' }}
                       >
                         {n.label}

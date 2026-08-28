@@ -1,0 +1,42 @@
+name: Content-Gates
+
+# Die vier P0-Gates aus `npm run check` (KAN-29-Familie):
+#   • check-redaktionsvorbehalt.mjs  — ungetaggte Rezepte
+#   • check-startseiten-hierarchie.mjs
+#   • validate-frontmatter.mjs
+#   • check-links.mjs                — tote interne Links
+# Vorher hingen diese Skripte an prebuild/build/postbuild und liefen damit bei
+# jedem Vercel-Deploy mit. Seit der Trennung in ein eigenes `check`-Skript ruft
+# der Deploy sie nicht mehr auf ("buildCommand": "npm run build") — dieser
+# Workflow ist der Ersatz-Gate.
+# Hinweis: blockiert NICHT den Vercel-Deploy (der laeuft parallel). Harte Sperre
+# braeuchte Branch-Protection (Admin), vgl. build-guard.yml.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: P0-Gates pruefen
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      # Bewusst als ein Schritt: so ist der Workflow genau das, was auch lokal
+      # vor dem Commit laeuft. Welches der vier Gates rot war, steht im Run-Log.
+      - name: npm run check
+        run: npm run check

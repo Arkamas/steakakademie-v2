@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight, Flame, Menu, Search, Newspaper, Award } from 'lucide-react';
@@ -36,6 +36,15 @@ export const revalidate = 86400;
 // (Cookie sa_ab_home=b, Schalter AB_HOME_ENABLED=1); direkt aufgerufen ist
 // sie noindex mit Canonical auf "/".
 // ─────────────────────────────────────────────────────────────────────────────
+
+// 'only light' ist der dokumentierte Opt-out gegen erzwungenes Auto-Darkening
+// (Chrome Android "Automatisches dunkles Design", Samsung Internet): ohne ihn
+// faerbt der Browser Creme #FAFAF7 + Ember in Brauntoene um (Uwe-Befund
+// 28.08.2026, Handy). Gilt nur fuer diese Route; Variante A (dunkel) bleibt
+// unangetastet.
+export const viewport: Viewport = {
+  colorScheme: 'only light',
+};
 
 export const metadata: Metadata = {
   // `absolute` verhindert das Root-Template ' | Steakakademie' — unter der

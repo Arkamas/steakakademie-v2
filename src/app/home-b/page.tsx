@@ -203,6 +203,22 @@ export default async function HomeVariantB() {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: PAPER }}>
 
+      {/* Der globale Grund gehoert Variante A: globals.css legt einen dunkel-
+          braunen Radial-Gradient auf <html> (#3E2D1C -> #120C07), <body> ist
+          transparent und body::before legt einen Ember-Glow darueber. Dieser
+          Grund scheint auf /home-b ueberall dort durch, wo das Editorial-Layout
+          nicht selbst malt — am Desktop kaum sichtbar, am Handy als deutlicher
+          Braunstich (Uwe-Befund 28.08.2026; gemessen: body-BG rgb(23,16,11)
+          trotz color-scheme 'only light'). Diese Route setzt den Grund deshalb
+          explizit auf Creme und schaltet den Glow ab. Scoped auf /home-b —
+          Variante A bleibt unberuehrt. */}
+      <style>{`
+        html { background: ${PAPER} !important; }
+        body { background: ${PAPER} !important; color: ${INK}; }
+        body::before { display: none !important; }
+      `}</style>
+
+
       {/* ── KOPF: zentrierte Wortmarke, Haarlinie, Versalien-Navigation ── */}
       <header className="border-b sticky top-0 z-50" style={{ background: '#FFFFFF', borderColor: HAIR }}>
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8">

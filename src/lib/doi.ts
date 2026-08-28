@@ -15,6 +15,10 @@ export interface TokenPayload {
   iat: number;
   source?: string;
   userGroup?: string;
+  /** ID der Einwilligungsfassung (siehe @/lib/consent). Beweis: worin wurde eingewilligt? */
+  cv?: string;
+  /** IP-Adresse zum Zeitpunkt der Anmeldung. Beweis: wer hat angefordert? */
+  ip?: string;
 }
 
 /**
@@ -27,13 +31,26 @@ export interface TokenPayload {
  * "newsletter", die Quellen-Segmentierung (Plausible-Vergleich der 8 Block-A-
  * Sammelpunkte) war damit blind.
  */
-export function createDOIToken(email: string, source?: string, userGroup?: string): string {
+export function createDOIToken(
+  email: string,
+  source?: string,
+  userGroup?: string,
+  consentVersion?: string,
+  signupIp?: string,
+): string {
   const payload = Buffer.from(
     JSON.stringify({
       email: email.toLowerCase().trim(),
       iat: Date.now(),
       ...(source ? { source } : {}),
       ...(userGroup ? { userGroup } : {}),
+      // Rechts-Audit 28.08.2026 — Beweislast nach Art. 7 Abs. 1 DSGVO.
+      // Einwilligungsfassung und Anmelde-IP reisen signiert im Token mit und
+      // werden beim Confirm am Kontakt festgeschrieben. Der HMAC schützt sie
+      // vor nachträglicher Veränderung: Ein manipuliertes Protokoll wäre als
+      // Beweismittel wertlos.
+      ...(consentVersion ? { cv: consentVersion } : {}),
+      ...(signupIp ? { ip: signupIp } : {}),
     }),
   ).toString('base64url');
   const sig = createHmac('sha256', DOI_SECRET).update(payload).digest('base64url');

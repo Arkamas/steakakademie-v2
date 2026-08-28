@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyDOIToken } from '@/lib/doi';
+import { NEWSLETTER_CONSENT_HISTORY, NEWSLETTER_CONSENT_VERSION } from '@/lib/newsletter-consent';
 
 /**
  * GET /api/newsletter/confirm?token=...
@@ -13,7 +14,15 @@ import { verifyDOIToken } from '@/lib/doi';
  * RECHTLICHER HINWEIS:
  * Erst nach erfolgter Bestätigung hier wird der Kontakt in Loops angelegt.
  * Kein Kontakt in der Mailing-Liste ohne nachgewiesene Einwilligung.
- * Konform mit DSGVO Art. 6 Abs. 1 lit. a und UWG §7 Abs. 2 Nr. 3.
+ * Konform mit DSGVO Art. 6 Abs. 1 lit. a und UWG § 7 Abs. 2 Nr. 2.
+ *
+ * BEWEISLAST (ergänzt im Rechts-Audit 28.08.2026):
+ * Art. 7 Abs. 1 DSGVO verlangt, dass der Verantwortliche die Einwilligung
+ * NACHWEISEN kann. `subscribed: true` allein ist ein Ergebnis, kein Nachweis.
+ * Deshalb wird am Kontakt festgeschrieben:
+ *   consentVersion · consentText · signupIp · signupAt · confirmIp · doiConfirmedAt
+ * Die ersten vier Werte stammen aus dem HMAC-signierten Token und sind seit der
+ * Anmeldung nachweislich unverändert.
  */
 
 const LOOPS_API_KEY = process.env.LOOPS_API_KEY;
@@ -31,6 +40,23 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(`${APP_URL}/?newsletter=invalid`);
   }
 
+  // ── Einwilligungsnachweis zusammenstellen (Art. 7 Abs. 1 DSGVO) ────────────
+  // Alles außer der Bestätigungs-IP stammt aus dem HMAC-signierten Token und ist
+  // damit nachweislich unverändert seit der Anmeldung. Der Volltext wird
+  // mitgeschrieben, nicht nur die Versions-ID: Das Protokoll muss auch dann noch
+  // aussagekräftig sein, wenn dieses Repository nicht mehr vorliegt.
+  const confirmIp = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? '';
+  const consentVersion = payload.cv ?? NEWSLETTER_CONSENT_VERSION;
+  const consentText = NEWSLETTER_CONSENT_HISTORY[consentVersion] ?? '';
+  const consentEvidence = {
+    consentVersion,
+    consentText,
+    signupIp: payload.ip ?? '',
+    signupAt: new Date(payload.iat).toISOString(),
+    confirmIp,
+    doiConfirmedAt: new Date().toISOString(),
+  };
+
   // Kontakt in Loops anlegen (subscribed: true — nachgewiesene Einwilligung)
   if (LOOPS_API_KEY) {
     try {
@@ -45,7 +71,7 @@ export async function GET(req: NextRequest) {
           subscribed: true,
           source: `steakakademie-website-${payload.source ?? 'default'}-doi-confirmed`,
           userGroup: payload.userGroup ?? 'newsletter',
-          doiConfirmedAt: new Date().toISOString(),
+          ...consentEvidence,
         }),
       });
 
@@ -60,7 +86,7 @@ export async function GET(req: NextRequest) {
           body: JSON.stringify({
             email: payload.email,
             subscribed: true,
-            doiConfirmedAt: new Date().toISOString(),
+            ...consentEvidence,
           }),
         });
       } else if (!createRes.ok) {

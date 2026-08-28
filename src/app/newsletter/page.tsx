@@ -75,10 +75,15 @@ export default function NewsletterPage() {
               ))}
             </div>
 
+            {/* Rechts-Audit 28.08.2026: „Keine Weitergabe deiner Daten" entfernt —
+                unzutreffend (Versand über Astrodon Corporation, USA) und im
+                Widerspruch zur eigenen Datenschutzerklärung. § 5 UWG. */}
             <p className="text-center font-body text-xs text-text-muted mt-12">
               Mit der Anmeldung bestätigst du den Erhalt des Newsletters (Double-Opt-in).
-              Abmeldung jederzeit mit einem Klick. Keine Weitergabe deiner Daten —
-              Details in der <a href="/datenschutz" className="text-brand-fire hover:underline">Datenschutzerklärung</a>.
+              Der Wissens-Brief enthält Werbung und Affiliate-Links. Abmeldung jederzeit
+              mit einem Klick. Kein Verkauf deiner Daten und keine Weitergabe an Dritte
+              für deren eigene Werbezwecke — Details in der{' '}
+              <a href="/datenschutz" className="text-brand-fire hover:underline">Datenschutzerklärung</a>.
             </p>
           </div>
         </section>

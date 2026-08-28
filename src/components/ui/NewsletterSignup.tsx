@@ -4,6 +4,7 @@ import { useId, useState } from 'react';
 import { Flame, Check, Loader2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { trackEvent } from '@/components/analytics/PlausibleScript';
+import { NEWSLETTER_CONSENT_TEXT, NEWSLETTER_CONSENT_VERSION } from '@/lib/newsletter-consent';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -54,7 +55,11 @@ function hexToRgbTriple(hex: string): string {
  *  - Honeypot-Feld gegen Bots (für Menschen unsichtbar)
  *  - Plausible-Event bei erfolgreicher Anmeldung
  *
- * Trust-Signale (Conversion): kostenlos, jederzeit abmeldbar, keine Weitergabe.
+ * Trust-Signale (Conversion): kostenlos, jederzeit abmeldbar, kein Verkauf der Daten.
+ *
+ * Der Einwilligungstext liegt versioniert in @/lib/newsletter-consent und wird von dort
+ * gerendert UND als `consentVersion` an die API übergeben — beides muss dieselbe
+ * Quelle haben, sonst ist der Nachweis nach Art. 7 Abs. 1 DSGVO wertlos.
  */
 export default function NewsletterSignup({
   source = 'default',
@@ -108,7 +113,9 @@ export default function NewsletterSignup({
       const res = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), source, website }),
+        // consentVersion wandert mit: Sie ist der Schlüssel, mit dem sich später
+        // belegen lässt, WORIN eingewilligt wurde (Art. 7 Abs. 1 DSGVO).
+        body: JSON.stringify({ email: email.trim(), source, website, consentVersion: NEWSLETTER_CONSENT_VERSION }),
       });
 
       if (res.ok) {
@@ -259,22 +266,38 @@ export default function NewsletterSignup({
                 required
                 className="mt-0.5 h-4 w-4 shrink-0 accent-[rgb(var(--nl-gold))] cursor-pointer"
               />
+              {/* Rechts-Audit 28.08.2026 — Wortlaut aus @/lib/newsletter-consent (versioniert).
+                  Der Text nennt jetzt ausdrücklich Werbung und den beworbenen
+                  Produktbereich (§ 7 Abs. 2 Nr. 2 UWG; BGH „Payback"/„Happy
+                  Digits"). Vorher war nur vom „Wissens-Brief" die Rede, versendet
+                  werden aber Produktempfehlungen und Affiliate-Links.
+                  NICHT ohne Grund ändern: siehe Versionierungsregel in
+                  newsletter-consent.ts (alte Fassungen bleiben Beweismittel). */}
               <label
                 htmlFor={consentId}
                 className="text-xs font-body text-text-secondary leading-relaxed cursor-pointer"
               >
-                Ja, ich möchte den Wissens-Brief per E-Mail erhalten und bin mit der{' '}
-                <a
-                  href="/datenschutz"
-                  className="text-[rgb(var(--nl-fire))] hover:underline"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Datenschutzerklärung
-                </a>{' '}
-                einverstanden. Abmeldung jederzeit mit einem Klick.
+                {NEWSLETTER_CONSENT_TEXT}
               </label>
             </div>
+
+            {/* Die Datenschutzerklärung ist bewusst KEIN Bestandteil der Checkbox:
+                Sie ist Information nach Art. 13 DSGVO, kein Einwilligungsgegenstand.
+                Deshalb steht sie hier als Hinweis daneben — außerhalb des <label>. */}
+            <p className="text-xs font-body text-text-muted leading-relaxed">
+              Versand über Loops (Astrodon Corporation, USA). Wie wir deine Daten
+              verarbeiten, welche Garantien für die Übermittlung gelten und welche
+              Rechte du hast, steht in der{' '}
+              <a
+                href="/datenschutz"
+                className="text-[rgb(var(--nl-fire))] hover:underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Datenschutzerklärung
+              </a>
+              .
+            </p>
 
             {/* Fehlermeldung */}
             {status === 'error' && errorMsg && (
@@ -288,9 +311,17 @@ export default function NewsletterSignup({
             )}
           </form>
 
-          {/* Lesbarkeits-Fix: 10px/60%-Deckkraft war unter jeder Kontrastgrenze. */}
+          {/* Lesbarkeits-Fix: 10px/60%-Deckkraft war unter jeder Kontrastgrenze.
+              Rechts-Audit 28.08.2026: „Keine Weitergabe deiner Daten" war
+              unzutreffend — die Adresse geht an Astrodon Corporation (USA).
+              Eine unzutreffende Datenschutz-Zusage ist nach § 5 UWG irreführend
+              und widersprach zudem der eigenen Datenschutzerklärung. Die
+              Präzisierung „an Dritte für deren eigene Werbezwecke" bleibt ein
+              Verkaufsargument und ist zugleich richtig: Die Übermittlung an
+              Loops ist Auftragsverarbeitung, keine Weitergabe zu Fremdzwecken. */}
           <p className="text-[11px] font-sans text-text-muted mt-3">
-            Kostenlos · Double-Opt-in · Jederzeit abmeldbar · Keine Weitergabe deiner Daten
+            Kostenlos · Double-Opt-in · Jederzeit abmeldbar · Kein Verkauf deiner Daten und
+            keine Weitergabe an Dritte für deren eigene Werbezwecke
           </p>
         </div>
       </div>

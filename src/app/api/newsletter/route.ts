@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createDOIToken } from '@/lib/doi';
+import { NEWSLETTER_CONSENT_VERSION, NEWSLETTER_CONSENT_HISTORY } from '@/lib/newsletter-consent';
 
 /**
  * Newsletter API — Loops.so Integration mit Double-Opt-In (DOI)
@@ -91,10 +92,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
     }
 
-    const { email, source = 'default', website } = (body ?? {}) as {
+    const { email, source = 'default', website, consentVersion } = (body ?? {}) as {
       email?: unknown;
       source?: string;
       website?: unknown; // Honeypot — von echten Nutzern nie befüllt
+      consentVersion?: unknown; // Fassung des akzeptierten Einwilligungstextes
     };
 
     // ── Bot-Honeypot ─────────────────────────────────────────────────────────
@@ -129,7 +131,29 @@ export async function POST(req: NextRequest) {
     // Variante auszählbar. Config-Lookup läuft bewusst auf der Basis-source.
     const abVariant = req.cookies.get('sa_ab_home')?.value;
     const trackedSource = abVariant === 'b' ? `${source}-vb` : source;
-    const token = createDOIToken(normalizedEmail, trackedSource, config.userGroup);
+
+    // ── Beweislast Art. 7 Abs. 1 DSGVO (Rechts-Audit 28.08.2026) ─────────────
+    // Der Client meldet, welche Fassung des Einwilligungstextes er angezeigt hat.
+    // Kennen wir die Fassung nicht (veralteter Client-Cache, manipulierter
+    // Request), fällt der Server bewusst auf die SERVERSEITIG aktuelle Fassung
+    // zurück statt einen unbekannten Wert zu protokollieren — ein Protokoll mit
+    // erfundener Versionsangabe wäre als Beweismittel schlimmer als keines.
+    const claimedVersion = typeof consentVersion === 'string' ? consentVersion : undefined;
+    const loggedConsentVersion =
+      claimedVersion && claimedVersion in NEWSLETTER_CONSENT_HISTORY ? claimedVersion : NEWSLETTER_CONSENT_VERSION;
+    if (claimedVersion && claimedVersion !== loggedConsentVersion) {
+      console.warn(
+        `[Newsletter] Unbekannte consentVersion "${claimedVersion}" — protokolliere ${loggedConsentVersion}.`,
+      );
+    }
+
+    const token = createDOIToken(
+      normalizedEmail,
+      trackedSource,
+      config.userGroup,
+      loggedConsentVersion,
+      ip,
+    );
     const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${encodeURIComponent(token)}`;
 
     // ── A2-Fix „ehrlicher Fehler" (16.08.2026) ──────────────────────────────

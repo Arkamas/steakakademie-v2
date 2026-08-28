@@ -166,27 +166,115 @@ export default function DatenschutzPage() {
               </p>
             </section>
 
+            {/* Rechts-Audit 28.08.2026 — vollständig ersetzt.
+                Behobene Mängel: falsche Rechtsperson („Loops Software Inc." statt
+                Astrodon Corporation), fehlender Drittlandhinweis USA samt Garantie
+                (Art. 13 Abs. 1 lit. f), fehlende Protokollierung (Art. 13 Abs. 1
+                lit. c), fehlende Löschfrist für Nichtbestätiger (Art. 13 Abs. 2
+                lit. a), Widerspruch zwischen „unverzüglich gelöscht" und der
+                Pflicht zu Sperrliste und Einwilligungsnachweis, sowie die fehlende
+                Abdeckung der Transaktionsmails über denselben Dienstleister. */}
             <section>
-              <h2 className={h2Class}>7. Newsletter & E-Mail-Benachrichtigungen (Loops)</h2>
+              <h2 className={h2Class}>7. Newsletter (Wissens-Brief) und E-Mail-Versand</h2>
+
+              <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.1 Anbieter und Empfänger</h3>
               <p className="mb-3">
-                Wenn du dich für unseren Newsletter anmeldest, übermittelst du deine E-Mail-Adresse
-                an Loops Software Inc. (loops.so). Die Anmeldung erfolgt im Double-Opt-In-Verfahren:
-                Du erhältst eine Bestätigungs-E-Mail und wirst erst nach Klick auf den
-                Bestätigungslink in den Verteiler aufgenommen.
+                Für den Versand unseres Newsletters und unserer Transaktions-E-Mails
+                (Bestätigungen aus dem Kontaktformular, Widerrufsbestätigungen,
+                Geschenkgutscheine, Login-Links) nutzen wir den Dienst Loops der{' '}
+                <strong className="text-text-primary">Astrodon Corporation</strong>,
+                9450 SW Gemini Dr, PMB 22902, Beaverton, Oregon 97008-7105, USA.
               </p>
               <p className="mb-3">
-                Loops verarbeitet diese Daten ausschließlich zur Zustellung unserer E-Mails.
-                Die Einwilligung kann jederzeit widerrufen werden (Abmelde-Link in jedem
-                Newsletter oder per E-Mail an{' '}
-                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>).
+                Astrodon verarbeitet die Daten ausschließlich weisungsgebunden für uns. Wir haben
+                einen Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO geschlossen (
+                <a href="https://loops.so/dpa" target="_blank" rel="noopener noreferrer" className={linkClass}>loops.so/dpa</a>
+                ). Die eingesetzten Unterauftragsverarbeiter sind unter{' '}
+                <a href="https://loops.so/subprocessors" target="_blank" rel="noopener noreferrer" className={linkClass}>loops.so/subprocessors</a>{' '}
+                einsehbar. Astrodon prüft versandte E-Mails automatisiert und im Einzelfall
+                manuell auf Spam und schädliche Inhalte.
               </p>
+
+              <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.2 Übermittlung in die USA</h3>
               <p className="mb-3">
-                <strong className="text-text-primary">Speicherdauer:</strong> Deine E-Mail-Adresse
-                bleibt gespeichert, bis du dich abmeldest bzw. die Einwilligung widerrufst —
-                danach wird sie unverzüglich aus dem aktiven Verteiler gelöscht.
+                Die Verarbeitung findet in den USA statt — einem Drittland im Sinne der DSGVO.
+                Astrodon Corporation ist nach dem EU-U.S. Data Privacy Framework zertifiziert;
+                für die Übermittlung besteht damit ein Angemessenheitsbeschluss der Europäischen
+                Kommission nach Art. 45 DSGVO. Den Zertifizierungsstatus kannst du unter{' '}
+                <a href="https://www.dataprivacyframework.gov/list" target="_blank" rel="noopener noreferrer" className={linkClass}>dataprivacyframework.gov/list</a>{' '}
+                einsehen. Ergänzend gelten die Standardvertragsklauseln der Europäischen Kommission
+                nach Art. 46 Abs. 2 lit. c DSGVO. Trotz dieser Garantien lässt sich nicht
+                vollständig ausschließen, dass US-Behörden auf die Daten zugreifen.
               </p>
+
+              <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.3 Anmeldung im Double-Opt-In-Verfahren</h3>
+              <p className="mb-3">
+                Nach Eingabe deiner E-Mail-Adresse senden wir dir eine Bestätigungsmail. Erst nach
+                Klick auf den darin enthaltenen Link nehmen wir dich in den Verteiler auf. Der Link
+                ist 48 Stunden gültig. Ohne Bestätigung wird kein Kontakt angelegt.
+              </p>
+
+              <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.4 Protokollierung</h3>
+              <p className="mb-3">
+                Zum Nachweis der Einwilligung nach Art. 7 Abs. 1 DSGVO speichern wir: Zeitpunkt und
+                IP-Adresse der Anmeldung, Zeitpunkt und IP-Adresse der Bestätigung sowie den
+                Wortlaut des Einwilligungstextes, dem du zugestimmt hast. Diese Protokollierung ist
+                zur Erfüllung unserer Rechenschaftspflicht nach Art. 5 Abs. 2 DSGVO erforderlich.
+              </p>
+
+              <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.5 Inhalte</h3>
+              <p className="mb-3">
+                Der Wissens-Brief enthält redaktionelle Beiträge rund um Grillen und BBQ sowie
+                Werbung und Produktempfehlungen, auch von Partnern über Affiliate-Links.
+              </p>
+
+              {/* ⚠️ ABHÄNGIGKEIT — NICHT ÜBERSEHEN
+                  Dieser Absatz beschreibt den SOLL-Zustand: Tracking aus.
+                  Er wird erst wahr, wenn in Loops unter Settings → Sending das
+                  Open- und Click-Tracking deaktiviert ist. Die Loops-API stellt
+                  diesen Schalter nicht bereit, er muss im UI umgelegt werden.
+                  Solange Tracking aktiv ist, ist dieser Absatz eine unzutreffende
+                  Datenschutzangabe — schlimmer als gar keine.
+                  Wird Tracking bewusst beibehalten, braucht es stattdessen:
+                    1. eine gesonderte, freiwillige Einwilligungs-Checkbox
+                       (§ 25 Abs. 1 TDDDG — ein DSE-Hinweis genügt NICHT),
+                    2. den Tracking-Passus in diesem Abschnitt,
+                    3. TRACKING_CONSENT_IMPLEMENTED = true in @/lib/consent. */}
+              <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.6 Erfolgsmessung</h3>
+              <p className="mb-3">
+                Wir messen weder das Öffnen unserer E-Mails noch Klicks auf enthaltene Links
+                personenbezogen. Unsere E-Mails enthalten kein Zählpixel.
+              </p>
+
+              <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.7 Rechtsgrundlage</h3>
+              <p className="mb-3">
+                Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) sowie § 7 Abs. 2 Nr. 2 UWG. Für
+                Transaktions-E-Mails: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) bzw.
+                Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Beantwortung von Anfragen).
+              </p>
+
+              <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.8 Widerruf</h3>
+              <p className="mb-3">
+                Du kannst deine Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen — über
+                den Abmeldelink in jeder E-Mail oder per Nachricht an{' '}
+                <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>.
+                Die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung bleibt unberührt.
+              </p>
+
+              <h3 className="font-serif font-bold text-text-primary mt-4 mb-2">7.9 Speicherdauer</h3>
+              <ul className="list-disc pl-5 space-y-1 mb-3">
+                <li>Bestätigte Abonnements: bis zum Widerruf.</li>
+                <li>Nicht bestätigte Anmeldungen: automatische Löschung nach 30 Tagen.</li>
+                <li>
+                  Nach Widerruf: Entfernung aus dem aktiven Verteiler. Deine Adresse wird in eine
+                  Sperrliste aufgenommen, damit du keine weiteren E-Mails erhältst. Den
+                  Einwilligungsnachweis bewahren wir 3 Jahre auf, um die rechtmäßige Zusendung im
+                  Streitfall belegen zu können (Art. 6 Abs. 1 lit. f DSGVO, §§ 195, 199 BGB).
+                </li>
+              </ul>
+
               <p>
-                Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung). Details:{' '}
+                Weitere Informationen:{' '}
                 <a href="https://loops.so/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
                   loops.so/privacy
                 </a>

@@ -18,8 +18,13 @@ function walk(dir, ext, acc = []) {
   if (!existsSync(dir)) return acc;
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
-    if (e.isDirectory()) walk(p, ext, acc);
-    else if (e.name.endsWith(ext)) acc.push(p);
+    // contentDirExclude in contentlayer.config.ts schliesst '_archiv' aus —
+    // hier mitziehen, sonst zaehlt der Guard Quellen mit, die Contentlayer nie
+    // generiert, und meldet einen stummen Doc-Drop, den es gar nicht gibt.
+    if (e.isDirectory()) {
+      if (e.name === '_archiv') continue;
+      walk(p, ext, acc);
+    } else if (e.name.endsWith(ext)) acc.push(p);
   }
   return acc;
 }

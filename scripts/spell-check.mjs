@@ -95,7 +95,8 @@ async function ltCheck (text, attempt = 1) {
       // und unbekannte Fachbegriffe. Grammatik gezielt per --grammar zuschalten.
       ...(GRAMMAR
         ? { disabledCategories: 'STYLE,COLLOQUIALISMS,REDUNDANCY,TYPOGRAPHY' }
-        : { enabledCategories: 'TYPOS', enabledOnly: 'true' }),
+        : { enabledCategories: 'TYPOS', enabledOnly: 'true',
+            disabledRules: 'DOPPELTES_VERB,AUF_AUS,CONFUSION_RULE_MIT_MIR,DE_PROHIBITED_COMPOUNDS_NAME_NAHME,SAGT_RUFT' }),
     }),
   })
   if ((res.status === 429 || res.status >= 500) && attempt < 5) {
@@ -136,8 +137,17 @@ for (const file of files) {
 
   let matches = []
   try {
-    for (let i = 0; i < text.length; i += MAX_REQ_CHARS) {
-      matches.push(...await ltCheck(text.slice(i, i + MAX_REQ_CHARS)))
+    // An Wortgrenzen splitten — harter Schnitt zerteilte Woerter ('auf' -> 'a|uf')
+    // und erzeugte Phantom-Funde am Chunk-Anfang.
+    let pos = 0
+    while (pos < text.length) {
+      let ende = Math.min(pos + MAX_REQ_CHARS, text.length)
+      if (ende < text.length) {
+        const brk = text.lastIndexOf(' ', ende)
+        if (brk > pos + MAX_REQ_CHARS / 2) ende = brk
+      }
+      matches.push(...await ltCheck(text.slice(pos, ende)))
+      pos = ende
       await sleep(WAIT_MS)
     }
   } catch (err) {
@@ -149,7 +159,13 @@ for (const file of files) {
   }
   // Whitelist: gemeldetes Wort (oder Bindestrich-Bestandteile) bekannt → kein Fund
   matches = matches.filter((m) => {
-    const wort = m.context.text.slice(m.context.offset, m.context.offset + m.context.length).trim()
+    const ctx = m.context.text
+    let a = m.context.offset, b = m.context.offset + m.context.length
+    // Geflaggtes Wort ueber Bindestrich-Komposita ausdehnen ("Tip" -> "Tri-Tip"),
+    // damit die Whitelist ganze Fachbegriffe matchen kann.
+    while (a > 1 && ctx[a - 1] === '-' && /[\wäöüÄÖÜß]/.test(ctx[a - 2] || '')) { a -= 2; while (a > 0 && /[\wäöüÄÖÜß]/.test(ctx[a - 1])) a-- }
+    while (b < ctx.length - 1 && ctx[b] === '-' && /[\wäöüÄÖÜß]/.test(ctx[b + 1] || '')) { b += 2; while (b < ctx.length && /[\wäöüÄÖÜß]/.test(ctx[b])) b++ }
+    const wort = ctx.slice(a, b).trim()
     const parts = wort.toLowerCase().split(/[-\s]/)
     if (whitelist.has(wort.toLowerCase()) || parts.every((p) => !p || whitelist.has(p))) return false
     if (m.rule?.id === 'GERMAN_SPELLER_RULE') wortFrequenz[wort] = (wortFrequenz[wort] || 0) + 1

@@ -233,6 +233,12 @@ Analytics & Data · CRM & Monetization.
   NICHT Keyword-Stuffing. `docs/geo-llm-ranking-factors.md`. Auto-Check: `geo-check.yml`.
 - **TikTok:** Story-Highlights aktiv nutzen (Reichweiten-Bonus), immer benennen.
 - **Werbekennzeichnung:** siehe §2.1.
+- **Rechtschreibprüfung (22.08.2026):** `npm run spell:check` prüft content/ gegen die
+  LanguageTool-API (de-DE), inkrementell über data/spell-check-cache.json, Fachbegriffe in
+  data/rechtschreib-whitelist.txt. Läuft report-only im Netlify-postbuild (bricht NIE den
+  Build — auch nicht bei API-Ausfall); --strict für CI, --force für Vollprüfung. Erster
+  Voll-Lauf: ~392 Dateien ÷ 20 Req/min ≈ 25 Min in Uwes Terminal, danach nur Deltas.
+
 - **Voyage-Vollausbau (22.08.2026):** Zentraler Client `src/lib/voyage/client.ts`
   (Embeddings, Reranker, Kontext-Embeddings, Multimodal; Retry bei 429). Wissenssuche ist
   zweistufig: pgvector-Recall → `rerank-2.5-lite` (abschaltbar: VOYAGE_RERANK=off, Ausfall

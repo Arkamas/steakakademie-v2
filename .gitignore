@@ -125,3 +125,6 @@ dev-start.cmd
 # Kontaktbogen. Bleibt lokal — ins Repo geht nur das abgenommene Endbild unter
 # public/images/rezepte/.
 bild-austausch/
+
+# Rechtschreib-Report (Arbeitsdatei, wird je Lauf neu erzeugt)
+data/spell-check-report.json

@@ -39,6 +39,7 @@ const FORCE   = !!flag('force', false)
 const STRICT  = !!flag('strict', false)
 const DRY     = !!flag('dry-run', false)
 const DIR     = String(flag('dir', 'content'))
+const GRAMMAR = !!flag('grammar', false)
 const API     = process.env.LANGUAGETOOL_API_URL || 'https://api.languagetool.org/v2/check'
 const WAIT_MS = parseInt(flag('throttle-ms', '3200'), 10)
 const MAX_REQ_CHARS = 18000 // < 20-KB-Limit der freien API
@@ -87,8 +88,12 @@ async function ltCheck (text, attempt = 1) {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       text, language: 'de-DE', level: 'default',
-      // Stil-/Interpunktions-Pedanterie raus — wir jagen echte Fehler:
-      disabledCategories: 'STYLE,COLLOQUIALISMS,REDUNDANCY,TYPOGRAPHY',
+      // Standard: NUR Rechtschreibung (TYPOS). Der erste Voll-Lauf mit allen
+      // Regeln meldete 379/392 Dateien — fast alles Grammatik-/Komma-Pedanterie
+      // und unbekannte Fachbegriffe. Grammatik gezielt per --grammar zuschalten.
+      ...(GRAMMAR
+        ? { disabledCategories: 'STYLE,COLLOQUIALISMS,REDUNDANCY,TYPOGRAPHY' }
+        : { enabledCategories: 'TYPOS', enabledOnly: 'true' }),
     }),
   })
   if ((res.status === 429 || res.status >= 500) && attempt < 5) {
@@ -117,6 +122,7 @@ console.log(`\n📝 Rechtschreibprüfung (${DIR}/): ${files.length} Datei(en), W
 
 let checked = 0, skipped = 0, findings = 0, unpruefbar = 0
 const report = []
+const wortFrequenz = {}
 
 for (const file of files) {
   const rel = relative(ROOT, file).replace(/\\/g, '/')
@@ -143,7 +149,9 @@ for (const file of files) {
   matches = matches.filter((m) => {
     const wort = m.context.text.slice(m.context.offset, m.context.offset + m.context.length).trim()
     const parts = wort.toLowerCase().split(/[-\s]/)
-    return !(whitelist.has(wort.toLowerCase()) || parts.every((p) => !p || whitelist.has(p)))
+    if (whitelist.has(wort.toLowerCase()) || parts.every((p) => !p || whitelist.has(p))) return false
+    if (m.rule?.id === 'GERMAN_SPELLER_RULE') wortFrequenz[wort] = (wortFrequenz[wort] || 0) + 1
+    return true
   })
 
   checked++
@@ -153,18 +161,26 @@ for (const file of files) {
   } else {
     findings += matches.length
     console.log(c.r(`  ✗ ${rel} — ${matches.length} Fund(e)`))
-    for (const m of matches.slice(0, 10)) {
+    for (const m of matches) {
+      const zeige = report.filter((r) => r.file === rel).length < 10
       const ctx = m.context.text
       const mark = ctx.slice(0, m.context.offset) + '»' + ctx.slice(m.context.offset, m.context.offset + m.context.length) + '«' + ctx.slice(m.context.offset + m.context.length)
       const vorschlag = (m.replacements || []).slice(0, 3).map((r) => r.value).join(' | ')
-      console.log(`      ${mark.trim()}${vorschlag ? c.d(`  → ${vorschlag}`) : ''}`)
+      if (zeige) console.log(`      ${mark.trim()}${vorschlag ? c.d(`  → ${vorschlag}`) : ''}`)
       report.push({ file: rel, kontext: mark.trim(), vorschlag, regel: m.rule?.id })
     }
     if (matches.length > 10) console.log(c.d(`      … ${matches.length - 10} weitere`))
   }
 }
 
-if (!DRY) await writeFile(CACHE_FILE, JSON.stringify(cache, null, 1) + '\n')
+if (!DRY) {
+  await writeFile(CACHE_FILE, JSON.stringify(cache, null, 1) + '\n')
+  const topWoerter = Object.entries(wortFrequenz).sort((a, b) => b[1] - a[1])
+  await writeFile(join(ROOT, 'data', 'spell-check-report.json'),
+    JSON.stringify({ stand: new Date().toISOString(), modus: GRAMMAR ? 'grammatik' : 'nur-rechtschreibung',
+      funde: report, haeufigste_unbekannte_woerter: topWoerter }, null, 1) + '\n')
+  if (report.length) console.log(c.d(`   Voller Report: data/spell-check-report.json (${report.length} Funde)`))
+}
 
 console.log(`\n🏁 ${checked} geprüft, ${skipped} unverändert übersprungen${unpruefbar ? c.y(`, ${unpruefbar} nicht prüfbar (API)`) : ''}, ${c[findings ? 'r' : 'g'](findings + ' Fund(e)')}`)
 if (findings) console.log(c.y('   Fehlalarm? Begriff in data/rechtschreib-whitelist.txt eintragen.\n'))

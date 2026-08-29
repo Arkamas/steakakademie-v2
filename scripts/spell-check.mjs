@@ -59,10 +59,10 @@ async function loadWhitelist () {
 /* ── MDX → prüfbarer Fließtext ──────────────────────────────────────────── */
 function extractText (raw) {
   let fmText = ''
-  let body = raw
-  const fm = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/)
+  let body = raw.replace(/^\uFEFF/, '').replace(/^\s+/, '')
+  const fm = body.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/)
   if (fm) {
-    body = raw.slice(fm[0].length)
+    body = body.slice(fm[0].length)
     for (const key of ['title', 'description', 'seoTitle', 'seoDescription']) {
       const m = fm[1].match(new RegExp(`^${key}:\\s*["']?(.+?)["']?\\s*$`, 'm'))
       if (m) fmText += m[1] + '\n'
@@ -71,7 +71,9 @@ function extractText (raw) {
   const text = body
     .replace(/```[\s\S]*?```/g, ' ')            // Codeblöcke
     .replace(/`[^`\n]*`/g, ' ')                  // Inline-Code
-    .replace(/<[^>\n]{1,200}>/g, ' ')            // JSX/HTML-Tags
+    .replace(/<[A-Za-z][^>]{0,2000}?>/gs, ' ')   // JSX/HTML-Tags (auch mehrzeilig)
+    .replace(/<\/[A-Za-z][^>]{0,80}>/g, ' ')     // schliessende Tags
+    .replace(/\{[^{}\n]{0,200}\}/g, ' ')          // MDX-Ausdruecke
     .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')       // Bilder
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')     // Links → Linktext
     .replace(/^\s*(import|export)\s.+$/gm, ' ')  // MDX-Imports

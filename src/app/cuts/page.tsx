@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, Sparkles } from 'lucide-react';
+import { ChevronRight, Download, Sparkles } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CutAtlasClient from '@/components/cuts/CutAtlasClient';
@@ -89,6 +89,78 @@ export default function CutsPage() {
         {/* Atlas */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <CutAtlasClient bySpecies={bySpecies} recipeMap={recipeMap} />
+        </section>
+
+        {/* ── ÜBERSICHTSPOSTER (Uwe abgenommen, 30.08.2026) ────────────────
+            Der Atlas zeigt immer eine Tierart und ein Teilstück. Das Poster
+            zeigt alles auf einmal — der Blick, den der interaktive Atlas
+            bauartbedingt nicht liefert.
+
+            Bewusst <img> statt next/image: die Datei ist ein 17-KB-SVG, der
+            Optimizer hat daran nichts zu gewinnen, und ohne
+            dangerouslyAllowSVG in next.config.mjs weist er SVG ohnehin ab.
+
+            Die kleinsten Beschriftungen liegen bei 8–10 px auf 1600 px
+            Breite; auf dem Telefon sind das rund 2 px. Darum ist "in voller
+            Größe öffnen" hier kein Zierrat, sondern der eigentliche Weg zum
+            Lesen — und der Download der Weg zum Ausdrucken. */}
+        <section className="border-t border-brand-gold/15" style={{ background: '#0D0A06' }}>
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-16">
+            <div className="max-w-2xl mb-8">
+              <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
+                Alle Rinder-Cuts auf einen Blick
+              </span>
+              <h2 className="font-serif text-3xl lg:text-4xl font-bold text-text-light leading-tight mb-4">
+                Die große Übersicht
+              </h2>
+              {/* Die 40 ist bewusst fest verdrahtet und NICHT ALL_CUTS.length:
+                  das Poster ist eine statische Datei und zeigt ausschliesslich
+                  Rind. ALL_CUTS zaehlt 64 (40 Rind + 24 Schwein) — die Zahl
+                  waere hier schlicht falsch. Wer das Poster neu setzt, zieht
+                  diese Zahl mit. */}
+              <p className="font-body text-lg text-text-light/70 leading-relaxed">
+                Alle 40 Rinder-Cuts auf einem Blatt — inklusive Ochsenbacke und
+                Ochsenschwanz. Als Vektorgrafik angelegt: beliebig vergrößerbar,
+                ohne dass die Beschriftung ausfranst.
+              </p>
+            </div>
+
+            {/* Das Poster selbst — Klick öffnet die Datei in voller Größe.
+                Der eigene Untergrund des SVG ist #0D0A06, deshalb sitzt es
+                hier randlos auf demselben Ton. */}
+            <a
+              href="/images/cut-atlas-poster.svg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block border border-brand-gold/25 hover:border-brand-gold/60 transition-colors"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/cut-atlas-poster.svg"
+                alt="Übersichtsposter des Cut-Atlas: Rind in Seitenansicht mit allen 40 Teilstücken und ihren Bezeichnungen, dazu Ochsenbacke und Ochsenschwanz."
+                width={1600}
+                height={900}
+                loading="lazy"
+                className="w-full h-auto block"
+              />
+            </a>
+
+            {/* Download-Hinweis */}
+            <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+              <a
+                href="/images/cut-atlas-poster.svg"
+                download="steakakademie-cut-atlas-poster.svg"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-brand-gold/60 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/10 transition-colors"
+              >
+                <Download size={15} />
+                Poster herunterladen
+              </a>
+              <p className="font-sans text-xs text-text-light/45 leading-relaxed">
+                SVG, 16:9 — auf dem Telefon am besten antippen und in voller Größe öffnen.
+                Für die Küchenwand in jeder gewünschten Größe ausdruckbar.
+              </p>
+            </div>
+          </div>
         </section>
 
         {/* ── LEADMAGNET (Audit 15.08.2026) ───────────────────────────────

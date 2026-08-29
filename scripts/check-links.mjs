@@ -298,10 +298,22 @@ function musterZuRegex(muster) {
 
 const musterRegex = [...dynamischeMuster].map(musterZuRegex);
 
+// Ein href kann auf eine Datei unter public/ zeigen statt auf eine Route —
+// ein Poster zum Oeffnen, ein PDF zum Herunterladen. Die Datei existiert, der
+// Link ist gueltig; ohne diese Pruefung meldet das Gate sie als tot, weil es
+// nur Routen kennt (aufgefallen 30.08.2026 am Cut-Atlas-Poster auf /cuts).
+// Bewusst existsSync auf den konkreten Pfad: geraten wird hier nichts.
+function istOeffentlicheDatei(ziel) {
+  const p = path.join(ROOT, 'public', decodeURIComponent(ziel));
+  // Kein Verzeichnis-Treffer: /images ist keine gueltige Verlinkung.
+  return fs.existsSync(p) && fs.statSync(p).isFile();
+}
+
 const tote = [];
 const ungeprueft = [];
 for (const [ziel, quellen] of links) {
   if (routen.has(ziel)) continue;
+  if (istOeffentlicheDatei(ziel)) continue;
   const eintrag = { ziel, quellen: [...quellen] };
   if (musterRegex.some((re) => re.test(ziel))) ungeprueft.push(eintrag);
   else tote.push(eintrag);

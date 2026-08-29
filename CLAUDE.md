@@ -238,6 +238,14 @@ Analytics & Data · CRM & Monetization.
   data/rechtschreib-whitelist.txt. Läuft report-only im Netlify-postbuild (bricht NIE den
   Build — auch nicht bei API-Ausfall); --strict für CI, --force für Vollprüfung. Erster
   Voll-Lauf: ~392 Dateien ÷ 20 Req/min ≈ 25 Min in Uwes Terminal, danach nur Deltas.
+  Der Checker maskiert JSX-Tags — Bezeichner sind kein Fließtext (Vorfall 30.08.2026, 7f19d67).
+  Konkret: `JSX_TAG` in scripts/spell-check.mjs entfernt Tags samt Attributnamen vor dem
+  API-Call, `JSX_REST` meldet jede Komponente, die die Maske überlebt hat (unter --strict
+  Exit 1). Zweiter Riegel: die Komponentennamen stehen in data/rechtschreib-whitelist.txt.
+  **Beim Abarbeiten des Reports gilt: ein Treffer, der wie ein Bezeichner aussieht, wird
+  nicht korrigiert, sondern gemeldet.** 7f19d67 hat genau das verletzt und `<Schnelluebersicht>`
+  zu `<Schnellübersicht>` eingedeutscht — 94 Stellen in 47 Dateien, Build-Bruch auf
+  /methoden/*, /diplome/lernen/* und /gruender-schmiede/lernen/* (Fix: 7a1fdb3).
 
 - **Voyage-Vollausbau (22.08.2026):** Zentraler Client `src/lib/voyage/client.ts`
   (Embeddings, Reranker, Kontext-Embeddings, Multimodal; Retry bei 429). Wissenssuche ist

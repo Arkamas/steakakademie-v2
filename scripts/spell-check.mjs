@@ -56,6 +56,28 @@ async function loadWhitelist () {
   return new Set(lines.map((l) => l.trim().toLowerCase()).filter((l) => l && !l.startsWith('#')))
 }
 
+/* ── JSX-Maske ──────────────────────────────────────────────────────────────
+ * Ein Komponentenname ist ein Bezeichner, kein Fliesstext. Er darf der
+ * Rechtschreibpruefung gar nicht erst vorgelegt werden — sonst steht er als
+ * "Tippfehler" im Report, und wer den Report abarbeitet, "korrigiert" ihn.
+ * Vorfall 30.08.2026: 7f19d67 machte aus <Schnelluebersicht> ein
+ * <Schnellübersicht>, 94 Stellen in 47 Dateien; der Export brach danach auf
+ * /methoden/*, /diplome/lernen/* und /gruender-schmiede/lernen/*.
+ *
+ * Die Vorgaenger-Regex (<[A-Za-z][^>]{0,2000}?>) stolperte ueber jedes '>'
+ * in einem Attributwert und ueber Tags jenseits der Laengengrenze. Diese
+ * hier kennt Attributwerte: "…", '…' und {…} duerfen '>' enthalten, ohne
+ * dass das Tag vorzeitig endet. Attributnamen faellt sie mit ab.
+ */
+const JSX_TAG = /<\/?[A-Za-z][A-Za-z0-9.:_-]*(?:\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|\{(?:[^{}]|\{[^{}]*\})*\}|[^\s"'>`]+))?)*\s*\/?>/g
+
+/* Selbstkontrolle der Maske. Geprueft wird auf ueberlebende TAG-SYNTAX, nicht
+ * auf den blossen Namen: 'Achtung' ist zugleich Komponente und normales Wort,
+ * ein Namensvergleich haette jeden Fliesstext mit "Achtung" falsch gemeldet.
+ * Nur Grossbuchstaben-Bezeichner — Komponenten. Kleingeschriebenes faengt
+ * sonst Autolinks (<https://…>) und HTML ein. */
+const JSX_REST = /<\/?[A-Z][A-Za-z0-9.:_-]*(?=[\s/>])/g
+
 /* ── MDX → prüfbarer Fließtext ──────────────────────────────────────────── */
 function extractText (raw) {
   let fmText = ''
@@ -68,11 +90,15 @@ function extractText (raw) {
       if (m) fmText += m[1] + '\n'
     }
   }
-  const text = body
+  // Erst Code, dann Tags — was im Codeblock steht, ist ohnehin schon weg.
+  const ohneTags = body
     .replace(/```[\s\S]*?```/g, ' ')            // Codeblöcke
     .replace(/`[^`\n]*`/g, ' ')                  // Inline-Code
-    .replace(/<[A-Za-z][^>]{0,2000}?>/gs, ' ')   // JSX/HTML-Tags (auch mehrzeilig)
-    .replace(/<\/[A-Za-z][^>]{0,80}>/g, ' ')     // schliessende Tags
+    .replace(JSX_TAG, ' ')                       // JSX/HTML-Tags samt Attributnamen
+
+  const lecks = [...new Set([...ohneTags.matchAll(JSX_REST)].map((m) => m[0]))]
+
+  const text = ohneTags
     .replace(/\{[^{}\n]{0,200}\}/g, ' ')          // MDX-Ausdruecke
     .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')       // Bilder
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')     // Links → Linktext
@@ -80,8 +106,16 @@ function extractText (raw) {
     .replace(/https?:\/\/\S+/g, ' ')             // nackte URLs
     .replace(/^[|:\-\s|]+$/gm, ' ')              // Tabellen-Trennzeilen
     .replace(/[*_#>|]/g, ' ')                    // Markdown-Zeichen
-  return (fmText + text).replace(/[ \t]+/g, ' ')
+  return { text: (fmText + text).replace(/[ \t]+/g, ' '), lecks }
 }
+
+/* Regeln, die im Rechtschreibmodus nur Rauschen erzeugt haben. Frueher als
+ * disabledRules mitgeschickt; das vertraegt sich nicht mehr mit enabledOnly,
+ * darum jetzt clientseitig. */
+const RAUSGEFILTERTE_REGELN = new Set([
+  'DOPPELTES_VERB', 'AUF_AUS', 'CONFUSION_RULE_MIT_MIR',
+  'DE_PROHIBITED_COMPOUNDS_NAME_NAHME', 'SAGT_RUFT',
+])
 
 /* ── LanguageTool-Call mit Retry ────────────────────────────────────────── */
 async function ltCheck (text, attempt = 1) {
@@ -93,10 +127,16 @@ async function ltCheck (text, attempt = 1) {
       // Standard: NUR Rechtschreibung (TYPOS). Der erste Voll-Lauf mit allen
       // Regeln meldete 379/392 Dateien — fast alles Grammatik-/Komma-Pedanterie
       // und unbekannte Fachbegriffe. Grammatik gezielt per --grammar zuschalten.
+      //
+      // 30.08.2026: disabledRules NICHT mehr mitschicken, wenn enabledOnly
+      // gesetzt ist — die API weist das seit einer Aenderung mit HTTP 400 ab
+      // ("You cannot specify disabled rules or categories using enabledOnly=true").
+      // Weil das Skript report-only laeuft, fiel das nicht auf: jede Datei
+      // wurde still als "nicht pruefbar" gezaehlt, der Checker war faktisch
+      // aus. Die Regeln werden jetzt unten aus der Antwort gefiltert.
       ...(GRAMMAR
         ? { disabledCategories: 'STYLE,COLLOQUIALISMS,REDUNDANCY,TYPOGRAPHY' }
-        : { enabledCategories: 'TYPOS', enabledOnly: 'true',
-            disabledRules: 'DOPPELTES_VERB,AUF_AUS,CONFUSION_RULE_MIT_MIR,DE_PROHIBITED_COMPOUNDS_NAME_NAHME,SAGT_RUFT' }),
+        : { enabledCategories: 'TYPOS', enabledOnly: 'true' }),
     }),
   })
   if ((res.status === 429 || res.status >= 500) && attempt < 5) {
@@ -104,7 +144,8 @@ async function ltCheck (text, attempt = 1) {
     return ltCheck(text, attempt + 1)
   }
   if (!res.ok) throw new Error(`LanguageTool ${res.status}: ${(await res.text()).slice(0, 150)}`)
-  return (await res.json()).matches || []
+  const matches = (await res.json()).matches || []
+  return matches.filter((m) => !RAUSGEFILTERTE_REGELN.has(m.rule?.id))
 }
 
 /* ── Hauptlauf ──────────────────────────────────────────────────────────── */
@@ -123,7 +164,7 @@ const cache = existsSync(CACHE_FILE) ? JSON.parse(await readFile(CACHE_FILE, 'ut
 const files = await walk(join(ROOT, DIR))
 console.log(`\n📝 Rechtschreibprüfung (${DIR}/): ${files.length} Datei(en), Whitelist ${whitelist.size} Begriffe${DRY ? ' — dry-run' : ''}\n`)
 
-let checked = 0, skipped = 0, findings = 0, unpruefbar = 0
+let checked = 0, skipped = 0, findings = 0, unpruefbar = 0, tagLecks = 0
 const report = []
 const wortFrequenz = {}
 
@@ -132,7 +173,13 @@ for (const file of files) {
   const raw = await readFile(file, 'utf8')
   const hash = createHash('sha256').update(raw).digest('hex').slice(0, 16)
   if (!FORCE && cache[rel] === hash) { skipped++; continue }
-  const text = extractText(raw)
+  const { text, lecks } = extractText(raw)
+  // Ein durchgesickerter Bezeichner ist ein Fehler der Maske, kein Tippfehler.
+  // Laut melden, statt ihn LanguageTool als Wort vorzulegen.
+  if (lecks.length) {
+    tagLecks++
+    console.log(c.y(`  ⚠ ${rel} — JSX-Bezeichner im Prüftext: ${lecks.join(', ')} (Maske in JSX_TAG nachziehen)`))
+  }
   if (DRY) { checked++; console.log(c.d(`  ~ ${rel} (${text.length} Zeichen)`)); continue }
 
   let matches = []
@@ -202,4 +249,7 @@ if (!DRY) {
 
 console.log(`\n🏁 ${checked} geprüft, ${skipped} unverändert übersprungen${unpruefbar ? c.y(`, ${unpruefbar} nicht prüfbar (API)`) : ''}, ${c[findings ? 'r' : 'g'](findings + ' Fund(e)')}`)
 if (findings) console.log(c.y('   Fehlalarm? Begriff in data/rechtschreib-whitelist.txt eintragen.\n'))
-process.exit(STRICT && findings ? 1 : 0)
+if (tagLecks) console.log(c.r(`   ${tagLecks} Datei(en) mit durchgesickerten JSX-Bezeichnern — Maske reparieren, Funde NICHT als Tippfehler abarbeiten.\n`))
+// Ein Leck ist auch im Report-only-Modus ein Defekt des Pruefers: unter --strict
+// bricht es ab, damit niemand Bezeichner-"Funde" in den Content zurueckschreibt.
+process.exit(STRICT && (findings || tagLecks) ? 1 : 0)

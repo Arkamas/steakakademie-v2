@@ -1787,3 +1787,17 @@ Read-only-Discovery
 ungepresst
 temperaturgenauen
 Pflichtname
+
+# ── MDX-Komponentennamen (Bezeichner, kein Fließtext) ───────────────────────
+# Zweiter Riegel hinter der JSX-Maske in scripts/spell-check.mjs. Sollte die
+# Maske je eine Lücke haben, taucht der Name hier trotzdem nicht als Fund auf.
+# Vorfall 30.08.2026: 7f19d67 "korrigierte" <Schnelluebersicht> zu
+# <Schnellübersicht> — 94 Stellen, Build-Bruch. Namen NIE eindeutschen.
+Achtung
+InlineAffiliate
+MDXBuyingGuideBlock
+MDXComparisonTable
+MDXProductCard
+ProTipp
+Schnelluebersicht
+TempBox

@@ -88,8 +88,15 @@ const QUELLEN = {
                      url: () => null, ohneId: true },
 }
 
-/** Ordner, die nie ingestiert werden. _unsortiert ist Durchlaufstation, kein Lager. */
-const IGNORIERT = ['_unsortiert', '_screenshots', '_referenz', '_fertig']
+/**
+ * Ordner, die nie ingestiert werden.
+ *   _unsortiert  Durchlaufstation ohne belegte Herkunft, kein Lager
+ *   _werkstatt   Kontaktboegen, Vergleichsraster, LoRA-Referenzen — Arbeitsmaterial,
+ *                das wie ein Motiv aussieht, aber nie auf die Website gehoert
+ *   _marke       Logos und Banner: Marken-Assets, keine Motivbilder
+ *   _kandidaten  Wegwerf-Vorschauen aus der Stock-Suche (--aufraeumen)
+ */
+const IGNORIERT = ['_unsortiert', '_screenshots', '_referenz', '_fertig', '_werkstatt', '_marke', '_kandidaten']
 
 /* ------------------------------------------------------------------ *
  * Stock-Suche. Dieselben Endpunkte und dieselbe Quellenreihenfolge wie

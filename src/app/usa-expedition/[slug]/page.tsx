@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import BildCredit from '@/components/BildCredit';
 import Link from 'next/link';
 import { allUsaBbqStyles } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
@@ -156,6 +157,9 @@ export default function UsaExpeditionSlugPage({ params }: Props) {
             sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-surface-base via-surface-base/60 to-transparent" />
+          {/* Rendert nur, was Pflicht ist: Attributionszeile bei lizenzpflichtigen
+              Quellen, KI-Badge bei imageAI. Siehe BildCredit.tsx. */}
+          <BildCredit source={entry.imageSource} ai={entry.imageAI} />
 
           {/* Breadcrumb */}
           <div className="absolute top-6 left-0 right-0 px-6">

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import BildCredit from '@/components/BildCredit';
 import Link from 'next/link';
 import { allVergleiches } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
@@ -269,9 +270,14 @@ export default function VergleichPage({ params }: Props) {
                   priority
                 />
               </div>
-              <p className="text-xs font-sans text-text-light/40 mb-10 italic">
+              <p className="text-xs font-sans text-text-light/40 mb-1 italic">
                 {vergleich.imageAlt}
               </p>
+              {/* Bildnachweis unter der Bildunterschrift — diese Seite hat keinen
+                  Full-Bleed-Hero, deshalb die Inline-Variante statt des Badges. */}
+              <div className="mb-10">
+                <BildCredit source={vergleich.imageSource} ai={vergleich.imageAI} variant="inline" />
+              </div>
 
               {/* MDX content */}
               <div className="max-w-content">

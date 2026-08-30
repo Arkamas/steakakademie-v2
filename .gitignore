@@ -128,3 +128,23 @@ bild-austausch/
 
 # Rechtschreib-Report (Arbeitsdatei, wird je Lauf neu erzeugt)
 data/spell-check-report.json
+
+# Git-Lock-Muell. Eine Linux-Session ueber die Ordner-Bruecke kann .git/index.lock
+# nicht loeschen (EPERM); die Datei wird stattdessen hierher verschoben, damit die
+# naechste Git-Operation nicht blockiert (CLAUDE.md, Abschnitt A). Rein lokal.
+_to_delete/
+
+# Lokale Claude-Einstellungen dieser Arbeitskopie, kein Projektbestandteil.
+.claude/settings.local.json
+
+# 17 MB Affinity-Arbeitsdateien und Zwischenstaende des Cut-Generators. Lagen bis
+# 30.08.2026 unter public/images/Cut Generator Bulle/ und waeren von dort oeffentlich
+# ausgeliefert worden; verschoben nach docs/cut-atlas/werkstatt/ — gleicher Weg wie
+# docs/bildstil/ weiter oben. Bleibt lokal: Arbeitsmaterial, kein Seiteninhalt, und
+# 17 MB Binaerdateien gehoeren nicht in die Git-History.
+docs/cut-atlas/werkstatt/
+
+# Aeltere, unreferenzierte Fassung des Cut-Posters. Live eingebunden ist
+# public/images/cut-atlas-poster.svg; diese Datei ist eine Dublette von
+# docs/cut-atlas/cut-diagramm.svg und hat unter public/ nichts verloren.
+public/images/cut-diagramm.svg

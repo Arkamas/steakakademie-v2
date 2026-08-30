@@ -20,6 +20,11 @@ export const Artikel = defineDocumentType(() => ({
     categorySlug: { type: 'string', required: true },
     image: { type: 'string', required: true },
     imageAlt: { type: 'string', required: true },
+    // Bildherkunft und KI-Kennzeichnung (analog Recipe/Streitfall, KAN-64).
+    // imageSource: Klartext-Herkunft. imageAI: steuert die sichtbare Kennzeichnung
+    // nach EU AI Act Art. 50 Abs. 4.
+    imageSource: { type: 'string' },
+    imageAI: { type: 'boolean', default: false },
     tags: { type: 'list', of: { type: 'string' } },
     featured: { type: 'boolean', default: false },
     readingTime: { type: 'number' }, // in minutes
@@ -72,6 +77,11 @@ export const Cut = defineDocumentType(() => ({
     authorSlug: { type: 'string', required: true },
     image: { type: 'string', required: true },
     imageAlt: { type: 'string', required: true },
+    // Bildherkunft und KI-Kennzeichnung (analog Recipe/Streitfall, KAN-64).
+    // imageSource: Klartext-Herkunft. imageAI: steuert die sichtbare Kennzeichnung
+    // nach EU AI Act Art. 50 Abs. 4.
+    imageSource: { type: 'string' },
+    imageAI: { type: 'boolean', default: false },
     seoTitle: { type: 'string' },
     seoDescription: { type: 'string' },
     schemaType: { type: 'string', default: 'Article' },
@@ -111,6 +121,11 @@ export const Methode = defineDocumentType(() => ({
     authorSlug: { type: 'string', required: true },
     image: { type: 'string', required: true },
     imageAlt: { type: 'string', required: true },
+    // Bildherkunft und KI-Kennzeichnung (analog Recipe/Streitfall, KAN-64).
+    // imageSource: Klartext-Herkunft. imageAI: steuert die sichtbare Kennzeichnung
+    // nach EU AI Act Art. 50 Abs. 4.
+    imageSource: { type: 'string' },
+    imageAI: { type: 'boolean', default: false },
     difficulty: { type: 'enum', options: ['Einfach', 'Mittel', 'Fortgeschritten'], required: true },
     timeMinutes: { type: 'number' },
     seoTitle: { type: 'string' },
@@ -148,6 +163,11 @@ export const Vergleich = defineDocumentType(() => ({
     authorSlug: { type: 'string', required: true },
     image: { type: 'string', required: true },
     imageAlt: { type: 'string', required: true },
+    // Bildherkunft und KI-Kennzeichnung (analog Recipe/Streitfall, KAN-64).
+    // imageSource: Klartext-Herkunft. imageAI: steuert die sichtbare Kennzeichnung
+    // nach EU AI Act Art. 50 Abs. 4.
+    imageSource: { type: 'string' },
+    imageAI: { type: 'boolean', default: false },
     testedCount: { type: 'number' },
     testDuration: { type: 'string' },
     seoTitle: { type: 'string' },
@@ -190,6 +210,11 @@ export const Persoenlichkeit = defineDocumentType(() => ({
     claim: { type: 'string', required: true },
     image: { type: 'string', required: true },
     imageAlt: { type: 'string', required: true },
+    // Bildherkunft und KI-Kennzeichnung (analog Recipe/Streitfall, KAN-64).
+    // imageSource: Klartext-Herkunft. imageAI: steuert die sichtbare Kennzeichnung
+    // nach EU AI Act Art. 50 Abs. 4.
+    imageSource: { type: 'string' },
+    imageAI: { type: 'boolean', default: false },
     website: { type: 'string' },
     instagram: { type: 'string' },
     tags: { type: 'list', of: { type: 'string' } },
@@ -265,6 +290,9 @@ export const UsaBbqStyle = defineDocumentType(() => ({
     excerpt:       { type: 'string', required: true },
     image:         { type: 'string', required: true },
     imageAlt:      { type: 'string', required: true },
+    // Bildherkunft und KI-Kennzeichnung (analog Recipe/Streitfall, KAN-64).
+    imageSource:   { type: 'string' },
+    imageAI:       { type: 'boolean', default: false },
     seoTitle:      { type: 'string' },
     seoDescription:{ type: 'string' },
   },

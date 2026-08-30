@@ -100,3 +100,5 @@ dienen ausschließlich als zweites Eingangsbild mit expliziter Rollenzuweisung.
 | Slug | Stand |
 |------|-------|
 | — | Derzeit keine. `flat-iron` ist am 14.08.2026 aus Pixabay `2758553` geschlossen worden. |
+| `brisket.jpg` | Aufgeschnittenes Brisket mit dunkler Bark und rosa Rauchring, Messer daneben auf Holzbrett | Pexels | 36869213 | https://www.pexels.com/photo/36869213/ |
+| `pulled-pork.jpg` | Zerpflücktes, dampfendes Schweinefleisch mit grober Gewürzkruste | Pexels | 36850055 | https://www.pexels.com/photo/36850055/ |

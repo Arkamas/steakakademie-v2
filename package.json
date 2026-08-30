@@ -14,6 +14,8 @@
     "recipes:dry": "node scripts/recipe-agent.mjs --dry-run",
     "seo-images": "node scripts/seo-image-optimizer.mjs",
     "seo-images:dry": "node scripts/seo-image-optimizer.mjs --dry-run",
+    "bild-ingest": "node scripts/bild-ingest.mjs",
+    "bild-ingest:dry": "node scripts/bild-ingest.mjs --dry-run",
     "seo-images:force": "node scripts/seo-image-optimizer.mjs --force",
     "start": "next start",
     "lint": "next lint",

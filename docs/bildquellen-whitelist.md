@@ -22,7 +22,7 @@ Und: Vor Übernahme IMMER Einzelbild-Prüfung auf KI-Kennzeichnung (Doktrin bild
 |---|---|---|
 | pixabay.com | Pixabay Content License | KI-Bilder vorhanden, aber GEKENNZEICHNET und im Filter abwählbar → nur Nicht-KI wählen ODER imageAI: true setzen. Keine Bilder mit erkennbaren Marken/Logos |
 | foodiesfeed.com | eigene | Hostet echte UND KI-Bilder, kennzeichnet KI auf der Bildseite → Einzelbild-Prüfung Pflicht (Doktrin seit 17.08., Fall rinder-tacos) |
-| magnific.com/de/bilder | = umbenanntes FREEPIK | Free-Account: ATTRIBUTIONSPFLICHT (Nennung Freepik/Magnific)! Mischbestand mit KI, nicht durchgängig gekennzeichnet. „Editorial only"-Assets tabu. KI-Assets meiden (separate AI-Terms). Empfehlung: nur nachrangig nutzen |
+| magnific.com/de/bilder | = umbenanntes FREEPIK | Free-Account: ATTRIBUTIONSPFLICHT (Nennung Freepik/Magnific)! Exakte Formel laut Lizenzzertifikat: `designed by <autor> Magnific.com`, verlinkt auf magnific.com. Lizenz-PDF beim Download IMMER mitspeichern (einzige Quelle mit Beweispflicht). Mischbestand mit KI, nicht durchgängig gekennzeichnet. „Editorial only"-Assets tabu. KI-Assets meiden (separate AI-Terms). Empfehlung: nur nachrangig nutzen |
 
 ## ❌ ROT — nicht (mehr) verwenden
 
@@ -39,3 +39,21 @@ Erlaubte Such-Domains in Priorität: pexels → unsplash → stocksnap → kaboo
 
 Bestandsprüfung: Stammen live verwendete Bilder (v. a. Artikel/Cuts) aus NOS oder Reshot?
 NOS-Funde ersetzen; Reshot-Funde: Lizenznachweis archivieren.
+
+## Ablage beim Download (Fundgrube)
+
+Rohdownloads liegen in `C:\Dev\_bilder-fundgrube\` — **ausserhalb des Repos**, weil das
+Repo oeffentlich ist und ein versehentlich committetes Stock-Original dauerhaft in der
+Git-History steht.
+
+| Regel | Warum |
+|---|---|
+| Unterordner = Quelle (`pexels/`, `pixabay/`, `magnific/`, `unsplash/`, `shopify-burst/`, `eigene-fotos/`, `ki-eigen/`) | Der Pfad traegt die Herkunft, ohne dass beim Ablegen etwas dokumentiert werden muss |
+| Bild-ID vorn im Dateinamen (`5252598-grill-holzkohle.jpg`) | Aus der ID laesst sich Autor und Lizenz jederzeit rekonstruieren |
+| Attributionstexte NICHT in den Dateinamen | Windows bricht bei 260 Zeichen Pfadlaenge; `&` und `=` stoeren Skripte |
+| Nur bei Magnific: Lizenz-PDF danebenlegen | Einzige Quelle mit Attributionspflicht = einzige mit Beweispflicht |
+| Nichts in den Wurzelordner | Ohne Quellordner ist die Herkunft verloren |
+| `_unsortiert/` ist Durchlaufstation, kein Lager | Wird vom Ingest hart ignoriert; nach ~30 Tagen ist die Chrome-Download-Historie weg und die Herkunft nicht mehr belegbar |
+
+Verarbeitung: `node scripts/bild-ingest.mjs` — leitet Quelle aus Ordner und ID aus Dateiname
+ab, setzt `imageSource`/`imageAI` und schreibt die CREDITS.md-Zeile.

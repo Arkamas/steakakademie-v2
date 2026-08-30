@@ -12,6 +12,7 @@ import { authorSchemaRef } from '@/lib/schema';
 import { cn } from '@/lib/utils';
 import { Clock, Calendar, ChevronRight, RotateCcw } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
+import BildCredit from '@/components/BildCredit';
 
 interface Props {
   params: { slug: string };
@@ -198,6 +199,9 @@ export default function CutPage({ params }: Props) {
             className="object-cover hero-fullbleed-image"
           />
           <div className="hero-fullbleed-overlay" />
+          {/* Rendert nur, was Pflicht ist: Attributionszeile bei lizenzpflichtigen
+              Quellen, KI-Badge bei imageAI. Siehe BildCredit.tsx. */}
+          <BildCredit source={cut.imageSource} ai={cut.imageAI} />
           <div className="hero-fullbleed-content">
             {/* Breadcrumb — oben */}
             <div className="absolute top-0 left-0 right-0">

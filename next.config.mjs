@@ -64,8 +64,17 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
-      { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: '**.steakakademie.de' },
+      // 29.08.2026: images.unsplash.com ist hier BEWUSST entfernt — aus demselben
+      // Grund wie die Amazon-Hosts unten. Die 13 Seiten, die von dort hotlinkten,
+      // liegen jetzt lokal unter public/images/ (scripts/bild-ingest.mjs); ein
+      // externer Request beim Seitenaufruf entfaellt damit ersatzlos.
+      //
+      // Der Eintrag ist der Riegel: Ohne ihn scheitert ein versehentlicher
+      // Rueckfall auf einen Hotlink sichtbar beim Rendern, statt still wieder
+      // Besucher-IPs an einen US-Host zu schicken. Wieder aufnehmen nur mit
+      // Einwilligungsschranke davor.
+      //
       // KAN-71 (20.08.2026): Die drei Amazon-Hosts sind hier BEWUSST entfernt.
       //
       // Datenschutz: Ein von Amazon geladenes Produktbild schickt die IP jedes

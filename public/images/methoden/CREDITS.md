@@ -18,6 +18,7 @@ Tageslicht, echtes Gerät, Hände und Menschen ausdrücklich erlaubt.
 |---|---|---|---|---|
 | `plancha-feuerplatte.jpg` | Feuerplatte über offener Glut, Spieße dicht an dicht auf dem Stahlring, Gussrost über den Kohlen | Sergei Starostin (`sejio402`) | 29274607 | https://www.pexels.com/photo/29274607/ |
 | *(Reserve, noch nicht eingebunden)* | Feuerplatte mit offener Feuerschale, Warmhalte-Etage darüber, Kräuterkruste am Außenring | Ann H | 36318468 | https://www.pexels.com/photo/36318468/ |
+| `direktes-grillen.jpg` | Kugelgrill von oben, Holzkohle mit grauem Ascheüberzug, rote Glut schimmert durch, leerer Rost | Stefan Maritz | 35963583 | https://www.pexels.com/photo/35963583/ |
 
 Beide Pexels-Lizenz: kommerzielle Nutzung frei, Bearbeitung erlaubt, **keine
 Attributionspflicht** — die Angaben hier dienen der eigenen Nachweisführung.
@@ -46,6 +47,9 @@ Erzeugt mit `scripts/hero-images.mjs`. Prompts und Abnahme-Notizen stehen dort j
 |---|---|---|---|
 | `oberhitze-grillen.jpg` | Steak unter glühendem Oberhitzebrenner | 1 | 16.08.2026 |
 | `rotisserie-drehspiess.jpg` | Gebundener Braten am Drehspieß über Glut | 2 | 16.08.2026 |
+| `searing-perfekte-kruste.jpg` | Steak in heißer Gusseisenpfanne, Dampf steigt über der bräunenden Oberfläche auf | Pexels | 13854062 | https://www.pexels.com/photo/13854062/ |
+| `smoken-low-and-slow.jpg` | Barrel-Smoker im Freien, geöffneter Deckel, Fleischstücke auf dem Rost | Pexels | 37931814 | https://www.pexels.com/photo/37931814/ |
+| `sous-vide.jpg` | Rohes, fein marmoriertes Steak vakuumverpackt in Folie | Unsplash | TDwxg8i8lfE | https://unsplash.com/photos/TDwxg8i8lfE |
 
 > **Offen:** Für KI-generierte Bilder gibt es bislang keine Kennzeichnung im Frontend.
 > Mit Blick auf EU AI Act Art. 50 separat zu klären — betrifft auch die bestehenden
@@ -55,7 +59,10 @@ Erzeugt mit `scripts/hero-images.mjs`. Prompts und Abnahme-Notizen stehen dort j
 
 ## Noch nicht versorgt
 
-- `direktes-grillen`, `searing-perfekte-kruste`, `smoken-low-and-slow`, `sous-vide`
+- `searing-perfekte-kruste`, `smoken-low-and-slow`, `sous-vide`
   hotlinken live auf `images.unsplash.com` — kein lokales Asset, keine
   `next/image`-Optimierung, externer Request bei jedem Seitenaufruf.
 - `reverse-sear` nutzt weiterhin den Platzhalter `/images/hero-ribeye.png`.
+
+**Erledigt 29.08.2026:** `direktes-grillen` auf lokales Pexels-Foto umgestellt
+(`scripts/bild-ingest.mjs`). Damit entfaellt dort der externe Request vor Consent.

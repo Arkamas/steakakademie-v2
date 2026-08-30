@@ -15,6 +15,7 @@ import { authorSchemaRef } from '@/lib/schema';
 import HeroRecommendation from '@/components/affiliate/HeroRecommendation';
 import EquipmentFooter from '@/components/affiliate/EquipmentFooter';
 import InlineAffiliate from '@/components/affiliate/InlineAffiliate';
+import BildCredit from '@/components/BildCredit';
 
 interface Props {
   params: { slug: string };
@@ -139,6 +140,10 @@ export default function MethodePage({ params }: Props) {
             className="object-cover hero-fullbleed-image"
           />
           <div className="hero-fullbleed-overlay" />
+          {/* Bildnachweis und KI-Kennzeichnung. Rendert nur, was Pflicht ist:
+              Attributionszeile bei lizenzpflichtigen Quellen, KI-Badge bei
+              erzeugten oder wesentlich veraenderten Bildern. Siehe BildCredit.tsx. */}
+          <BildCredit source={methode.imageSource} ai={methode.imageAI} />
           <div className="hero-fullbleed-content">
             {/* Breadcrumb — oben */}
             <div className="absolute top-0 left-0 right-0">

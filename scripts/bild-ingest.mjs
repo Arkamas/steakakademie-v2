@@ -253,10 +253,24 @@ function leseId(datei, quelle) {
   return irgendwo ? irgendwo[1] : null
 }
 
-async function dateienIn(ordner) {
+/**
+ * Listet Bilddateien eines Quellordners — einschliesslich Unterordnern.
+ *
+ * Unterordner sind gewollt: `eigene-fotos/genusskunst/` gliedert nach Anlass,
+ * ohne die Quelle zu verlieren (die steckt weiterhin im obersten Ordner).
+ * Eine Version, die nur die oberste Ebene las, hat neun Bilder stillschweigend
+ * uebersehen — schlimmer als ein Fehler, weil der Bericht trotzdem gruen aussah.
+ */
+async function dateienIn(ordner, praefix = '') {
   if (!existsSync(ordner)) return []
   const alle = await readdir(ordner, { withFileTypes: true })
-  return alle.filter(e => e.isFile() && /\.(jpe?g|png|webp|avif)$/i.test(e.name)).map(e => e.name)
+  const treffer = []
+  for (const e of alle) {
+    const rel = praefix ? `${praefix}/${e.name}` : e.name
+    if (e.isDirectory()) treffer.push(...await dateienIn(join(ordner, e.name), rel))
+    else if (/\.(jpe?g|png|webp|avif)$/i.test(e.name)) treffer.push(rel)
+  }
+  return treffer
 }
 
 /* ------------------------------------------------------------------ *
@@ -333,7 +347,11 @@ async function ingest() {
     process.exit(1)
   }
 
-  const [ordner, dateiname] = rel.split(/[/\\]/)
+  // Erster Pfadteil ist die Quelle, alles Weitere darf Unterordner enthalten
+  // (z. B. eigene-fotos/genusskunst/roastbeef.jpg).
+  const teile = rel.split(/[/\\]/)
+  const ordner = teile[0]
+  const dateiname = teile.slice(1).join('/')
   const q = QUELLEN[ordner]
   if (!q) {
     console.log(c.r(`✗ Unbekannte Quelle "${ordner}".`))

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, Thermometer, Flame, Snowflake, Beef, BookOpen, LifeBuoy, Globe, Wheat } from 'lucide-react';
+import { ChevronRight, Thermometer, Flame, Snowflake, Beef, BookOpen, LifeBuoy, Globe } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
@@ -19,7 +19,11 @@ const HUB = [
   { href: '/glossar', icon: BookOpen, title: 'BBQ-Lexikon', desc: 'Begriffe von A bis Z — Bark, Stall, Smoke Ring, Plateauphase: das Vokabular der Pitmaster.' },
   { href: '/rettung', icon: LifeBuoy, title: 'Steak-Rettung', desc: 'Wenn etwas schiefläuft: die häufigsten Fehler und wie du sie beim nächsten Mal vermeidest.' },
   { href: '/terroir', icon: Globe, title: 'Meat-Terroir', desc: 'Warum Herkunft schmeckt: Rasse, Fütterung, Region — und was das für dein Fleisch bedeutet.' },
-  { href: '/fleischwissen', icon: Wheat, title: 'Fleischwissen', desc: 'Dreiteilige Serie zur Herkunft: US-Feedlot gegen deutsche Bullenmast, Gras gegen Getreide, und was Schlachtstress mit deinem Steak macht. Mit Primärquellen.' },
+  // Fleischwissen-Kachel bewusst ausgebaut (Uwe, 30.08.2026): Die drei Serienteile
+  // stehen auf status: review, /fleischwissen zeigt bis zur Freigabe nur den
+  // Leerzustand. Route und Seite bleiben, nur der Einstieg fehlt. Wieder rein,
+  // sobald freigegeben; dann auch Wheat wieder aus lucide-react importieren:
+  // { href: '/fleischwissen', icon: Wheat, title: 'Fleischwissen', desc: 'Dreiteilige Serie zur Herkunft: US-Feedlot gegen deutsche Bullenmast, Gras gegen Getreide, und was Schlachtstress mit deinem Steak macht. Mit Primärquellen.' },
 ];
 
 export default function WissenHub() {

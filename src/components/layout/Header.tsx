@@ -41,7 +41,12 @@ const NAV_CATEGORIES = [
       { label: 'Kerntemperaturen', href: '/temperatur-guide' },
       { label: '★ Kerntemperatur-Spickzettel (gratis)', href: '/kerntemperatur-spickzettel' },
       { label: 'Streitfälle am Grill', href: '/streitfaelle' },
-      { label: 'Fleischwissen', href: '/fleischwissen' },
+      // Fleischwissen ist bewusst NICHT verlinkt (Uwe, 30.08.2026): Die drei
+      // Serienteile stehen auf status: review, /fleischwissen rendert deshalb
+      // nur den Leerzustand. Ein Menuepunkt, der ins Leere fuehrt, ist
+      // schlimmer als kein Menuepunkt. Route und Seite bleiben bestehen.
+      // Wieder eintragen, sobald die Teile freigegeben sind:
+      //   { label: 'Fleischwissen', href: '/fleischwissen' },
       { label: 'Maillard-Reaktion', href: '/wissen' },
       { label: 'Dry-Aging & Reifung', href: '/aging' },
     ],

@@ -24,13 +24,26 @@
 // abgeschafften Terminsteuerung nichts zu tun.
 // ─────────────────────────────────────────────────────────────────────────────
 import { allFleischwissens } from 'contentlayer/generated';
-import { nurVeroeffentlicht } from '@/lib/redaktion';
+import { sichtbareArtikel } from '@/lib/redaktion';
 
 export type FleischwissenDoc = (typeof allFleischwissens)[number];
 
-/** Alle Teile in Serienreihenfolge (Teil 1 → 2 → 3). */
+/**
+ * Alle Teile in Serienreihenfolge (Teil 1 → 2 → 3).
+ *
+ * `sichtbareArtikel` statt `nurVeroeffentlicht`: In der Entwicklung sind auch
+ * Entwuerfe sichtbar, in Produktion nicht. Anlass (30.08.2026) ist ein
+ * praktisches Problem — die drei Teile stehen auf status: review, und ohne
+ * diesen Schalter waeren sie auch lokal unsichtbar. Uwe koennte sie dann nicht
+ * auf der Seite lesen, um sie freizugeben, sondern nur im MDX.
+ *
+ * Die Richtung ist bewusst so herum: `sichtbareArtikel` faellt in Produktion auf
+ * `nurVeroeffentlicht` zurueck. Wenn die Umgebungserkennung je fehlschlaegt,
+ * zeigt die Seite zu wenig statt ungeprueften Text — der teurere Fehler ist der
+ * zweite (compliance/ai-act-einstufung.md Punkt 3).
+ */
 export function serie(): FleischwissenDoc[] {
-  return nurVeroeffentlicht(allFleischwissens).sort((a, b) => a.serieTeil - b.serieTeil);
+  return sichtbareArtikel(allFleischwissens).sort((a, b) => a.serieTeil - b.serieTeil);
 }
 
 /** Ein Teil ueber seinen Slug. */

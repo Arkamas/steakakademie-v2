@@ -1,0 +1,464 @@
+# Bildregister — Nachweis der Nutzungsrechte
+#
+# WARUM ES DAS GIBT
+# Im Streitfall liegt die Beweislast fuer die Lizenz bei uns, nicht beim
+# Abmahnenden. Die Erinnerung "war doch von Unsplash" ist kein Nachweis:
+# Lizenzbedingungen aendern sich, und es gilt die Fassung zum Zeitpunkt des
+# Downloads. Deshalb wird hier JEDES Bild unter public/ mit Herkunft gefuehrt.
+#
+# HARTE REGEL
+# scripts/legal-guard.mjs bricht den Build ab, sobald ein Bild unter public/
+# keinen Eintrag hier hat. Neues Bild = neuer Eintrag, ohne Ausnahme.
+#
+# STATUS-WERTE
+#   eigen     Eigene Aufnahme oder eigene Grafik. Unbedenklich.
+#   ki        KI-erzeugt. Kommerzielle Nutzung haengt am Anbieter-Tarif —
+#             bei Adobe Firefly den eigenen Plan pruefen. Ausserdem pruefen,
+#             ob das Modell ungewollt Marken oder Gesichter reproduziert hat.
+#   lizenz    Fremdbild mit dokumentierter Lizenz. Dann sind quelle, lizenz,
+#             lizenz_url und erworben_am Pflicht.
+#   offen     Herkunft noch nicht geklaert. ARBEITSVORRAT — der Guard meldet
+#             die Anzahl, bricht aber nicht ab. Ziel ist null.
+#
+# WORAUF ES ANKOMMT (unabhaengig von der Quelle)
+#   - Erkennbare Personen brauchen eine Einwilligung (Paragraph 22 KUG),
+#     auch auf "freien" Fotos. Unsplash und Pexels liefern KEIN Model-Release.
+#   - Sichtbare Marken und Logos auf Grills, Messern, Verpackungen sind
+#     Markenrecht. Bei BBQ-Motiven ist der Herstellerkessel schnell im Bild.
+#   - namensnennung: true bedeutet, die Nennung MUSS am Bild erscheinen
+#     (CC BY, CC BY-SA). In einer E-Mail ist das unpraktisch — solche Bilder
+#     dort besser meiden.
+#
+# Angelegt im Rechts-Audit vom 2026-08-30.
+
+stichtag: 2026-08-30
+
+bilder:
+  images/Beilagen_zu_Steak_1800x1000_6c5b974a-f29a-492b-95fb-424e0c4624d3.webp: { status: offen }
+  images/Firefly_-ceramic kamado BBQ grill, cinematic product photography,_matte black background, dra 803574.png:
+    status: ki
+    quelle: KI-erzeugt (Dateiname deutet auf Adobe Firefly bzw. Gemini)
+    urheber: Uwe Yendell
+    namensnennung: false
+    hinweis: Anbieter-Tarif auf kommerzielle Nutzung pruefen
+  images/Firefly_Gemini Flash_professional editorial product photography, a sleek modern pellet smoker grill, matte 980421.png:
+    status: ki
+    quelle: KI-erzeugt (Dateiname deutet auf Adobe Firefly bzw. Gemini)
+    urheber: Uwe Yendell
+    namensnennung: false
+    hinweis: Anbieter-Tarif auf kommerzielle Nutzung pruefen
+  images/Medaillen Final.png: { status: offen }
+  images/articles/brisket-texas-smoked.webp: { status: offen }
+  images/articles/dry-aged-beef-reifeschrank.webp: { status: offen }
+  images/articles/pellet-grills-usa-2026.png: { status: offen }
+  images/articles/reverse-sear-cast-iron-steak.webp: { status: offen }
+  images/articles/ribeye-premium-cut.webp: { status: offen }
+  images/articles/thermometer-test-steak-grill-1.webp: { status: offen }
+  images/articles/thermometer-test-steak-grill-2.webp: { status: offen }
+  images/articles/usa-expedition-smoker-hero.webp: { status: offen }
+  images/authors/marco-richter.jpg: { status: offen }
+  images/beilagen-salate-hero.jpg: { status: offen }
+  images/bulle-freigestellt.png: { status: offen }
+  images/cut-atlas-stier.jpg: { status: offen }
+  images/cuts/abanico.jpg: { status: offen }
+  images/cuts/bauchspeck.jpg: { status: offen }
+  images/cuts/beinscheibe.jpg: { status: offen }
+  images/cuts/brisket.jpg:
+    status: lizenz
+    quelle: Pexels (ID 36869213)
+    urheber: Bezalens JGP
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/sliced-cooked-brisket-on-wooden-cutting-board-36869213/
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/cuts/chateaubriand.jpg: { status: offen }
+  images/cuts/chuck-eye.jpg: { status: offen }
+  images/cuts/club-steak.jpg: { status: offen }
+  images/cuts/cote-de-boeuf.jpg: { status: offen }
+  images/cuts/denver.jpg: { status: offen }
+  images/cuts/diagramm-schwein.jpg: { status: offen }
+  images/cuts/falsches-filet.jpg: { status: offen }
+  images/cuts/filet.jpg: { status: offen }
+  images/cuts/flank.jpg: { status: offen }
+  images/cuts/flat-iron.jpg: { status: offen }
+  images/cuts/hueftsteak.jpg: { status: offen }
+  images/cuts/karree.jpg: { status: offen }
+  images/cuts/kotelett.jpg: { status: offen }
+  images/cuts/kugel.jpg: { status: offen }
+  images/cuts/nacken.jpg: { status: offen }
+  images/cuts/nackensteak.jpg: { status: offen }
+  images/cuts/new-york-strip.jpg: { status: offen }
+  images/cuts/nuss-schwein.jpg: { status: offen }
+  images/cuts/oberschale-schwein.jpg: { status: offen }
+  images/cuts/oberschale.jpg: { status: offen }
+  images/cuts/onglet.jpg: { status: offen }
+  images/cuts/picanha.jpg: { status: offen }
+  images/cuts/pluma.jpg: { status: offen }
+  images/cuts/porterhouse.jpg: { status: offen }
+  images/cuts/presa.jpg: { status: offen }
+  images/cuts/prime-rib.jpg: { status: offen }
+  images/cuts/pulled-pork.jpg:
+    status: lizenz
+    quelle: Pexels (ID 36850055)
+    urheber: Mohamed  Olwy
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/steaming-tender-pulled-pork-on-rustic-wooden-board-36850055/
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/cuts/ribeye-cap.jpg: { status: offen }
+  images/cuts/ribeye.jpg: { status: offen }
+  images/cuts/rindergulasch.jpg: { status: offen }
+  images/cuts/rumpsteak.jpg: { status: offen }
+  images/cuts/schaeufele.jpg: { status: offen }
+  images/cuts/schaufelstueck.jpg: { status: offen }
+  images/cuts/schinkenbraten.jpg: { status: offen }
+  images/cuts/schulterbraten.jpg: { status: offen }
+  images/cuts/schwanzrolle.jpg: { status: offen }
+  images/cuts/schweinebacke.jpg: { status: offen }
+  images/cuts/schweinebauch.jpg: { status: offen }
+  images/cuts/schweinegulasch.jpg: { status: offen }
+  images/cuts/schweinenacken.jpg: { status: offen }
+  images/cuts/secreto.jpg: { status: offen }
+  images/cuts/short-ribs.jpg: { status: offen }
+  images/cuts/skirt.jpg: { status: offen }
+  images/cuts/spareribs.jpg: { status: offen }
+  images/cuts/spider-steak.jpg: { status: offen }
+  images/cuts/t-bone.jpg: { status: offen }
+  images/cuts/tafelspitz.jpg: { status: offen }
+  images/cuts/tomahawk.jpg: { status: offen }
+  images/diplome/medal-bronze.png: { status: offen }
+  images/diplome/medal-gold.png: { status: offen }
+  images/diplome/medal-master.png: { status: offen }
+  images/diplome/medal-platin.png: { status: offen }
+  images/diplome/medal-silber.png: { status: offen }
+  images/diplome/medals-hero-v2.png: { status: offen }
+  images/diplome/medals-hero.png: { status: offen }
+  images/email/hero-ribeye-1200.jpg:
+    status: eigen
+    quelle: Zuschnitt aus public/images/hero-ribeye.png
+    urheber: Uwe Yendell
+    namensnennung: false
+    verwendung: Hero-Vorlage im Newsletter (Loops)
+  images/email/logo-steakakademie-240.jpg:
+    status: eigen
+    quelle: Verkleinerung aus public/images/logo-barrel-avatar.jpg
+    urheber: Uwe Yendell
+    namensnennung: false
+    verwendung: Kopf-Baustein im Newsletter (Loops)
+  images/facebook-cover-text.jpg: { status: offen }
+  images/facebook-cover.jpg: { status: offen }
+  images/hero-ribeye.png: { status: offen }
+  images/hero-thermometer.png: { status: offen }
+  images/hf_20260524_192054_b2e1cfcc-5e51-4eaa-8feb-4437a8e41161_min.webp:
+    status: ki
+    quelle: KI-erzeugt (Dateiname deutet auf Adobe Firefly bzw. Gemini)
+    urheber: Uwe Yendell
+    namensnennung: false
+    hinweis: Anbieter-Tarif auf kommerzielle Nutzung pruefen
+  images/image.png: { status: offen }
+  images/logo-barrel-avatar.jpg: { status: offen }
+  images/logo-barrel.jpg: { status: offen }
+  images/marco-back.jpg: { status: offen }
+  images/methode-kamado.png: { status: offen }
+  images/methode-smoker.png: { status: offen }
+  images/methoden/direktes-grillen.jpg:
+    status: lizenz
+    quelle: Pexels (ID 35963583)
+    urheber: Stefan Maritz
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/glowing-charcoal-in-outdoor-grill-for-bbq-35963583/
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/methoden/oberhitze-grillen.jpg: { status: offen }
+  images/methoden/plancha-feuerplatte.jpg: { status: offen }
+  images/methoden/rotisserie-drehspiess.jpg: { status: offen }
+  images/methoden/searing-perfekte-kruste.jpg:
+    status: lizenz
+    quelle: Pexels (ID 13854062)
+    urheber: Deane Bayas
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/steak-on-a-pan-13854062/
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/methoden/smoken-low-and-slow.jpg:
+    status: lizenz
+    quelle: Pexels (ID 37931814)
+    urheber: Robin Godefridi
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/outdoor-bbq-grill-with-smoking-meat-strips-37931814/
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/methoden/sous-vide.jpg:
+    status: lizenz
+    quelle: Unsplash (ID TDwxg8i8lfE)
+    urheber: Toxic Smoker
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/raw-marbled-steak-vacuum-sealed-in-plastic-TDwxg8i8lfE
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/rezepte/adana-kebab.jpg: { status: offen }
+  images/rezepte/alabama-white-sauce.jpg: { status: offen }
+  images/rezepte/asado-de-tira-hero.jpg: { status: offen }
+  images/rezepte/asado-de-tira.jpg: { status: offen }
+  images/rezepte/aussie-lamb-leg-butterflied.jpg: { status: offen }
+  images/rezepte/australische-riesengarnelen-barbie.jpg: { status: offen }
+  images/rezepte/avocado-gremolata-grill.jpg: { status: offen }
+  images/rezepte/baked-alaska-grill.jpg: { status: offen }
+  images/rezepte/barramundi-grill.jpg: { status: offen }
+  images/rezepte/bavette-skirt-steak-hero.jpg: { status: offen }
+  images/rezepte/bavette-skirt-steak.jpg: { status: offen }
+  images/rezepte/beef-back-ribs-hero.jpg: { status: offen }
+  images/rezepte/beef-back-ribs.jpg: { status: offen }
+  images/rezepte/beef-short-ribs-hero.jpg: { status: offen }
+  images/rezepte/beef-short-ribs.jpg: { status: offen }
+  images/rezepte/beer-can-chicken-hero.jpg: { status: offen }
+  images/rezepte/beer-can-chicken.jpg: { status: offen }
+  images/rezepte/blitz-mayonnaise.jpg: { status: offen }
+  images/rezepte/blumenkohl-beutel-marinade.jpg: { status: offen }
+  images/rezepte/boerewors-braai.jpg: { status: offen }
+  images/rezepte/bourbon-brisket-pairing.jpg: { status: offen }
+  images/rezepte/braaibroodjies.jpg: { status: offen }
+  images/rezepte/brisket-low-slow-hero.jpg: { status: offen }
+  images/rezepte/brisket-low-slow.jpg: { status: offen }
+  images/rezepte/bun-cha-hanoi.jpg: { status: offen }
+  images/rezepte/burnt-ends-hero.jpg: { status: offen }
+  images/rezepte/burnt-ends.jpg: { status: offen }
+  images/rezepte/buttermilchbrot-grill.jpg: { status: offen }
+  images/rezepte/ca-nuong-bananenblatt.jpg: { status: offen }
+  images/rezepte/carolina-mustard-sauce.jpg: { status: offen }
+  images/rezepte/cedar-plank-lachs-hero.jpg: { status: offen }
+  images/rezepte/cedar-plank-lachs.jpg: { status: offen }
+  images/rezepte/chateaubriand-filet-hero.jpg: { status: offen }
+  images/rezepte/chateaubriand-filet.jpg: { status: offen }
+  images/rezepte/cheesecake-vom-grill.jpg: { status: offen }
+  images/rezepte/chicken-wings-bier-injection.jpg: { status: offen }
+  images/rezepte/chili-kraeuterbutter.jpg: { status: offen }
+  images/rezepte/chorizo-argentino-choripan.jpg: { status: offen }
+  images/rezepte/costela-gaucha-churrasco.jpg: { status: offen }
+  images/rezepte/drillinge-salzkruste.jpg: { status: offen }
+  images/rezepte/dry-aged-ribeye-hero.jpg: { status: offen }
+  images/rezepte/dry-aged-ribeye.jpg: { status: offen }
+  images/rezepte/ente-vom-grill-hero.jpg: { status: offen }
+  images/rezepte/ente-vom-grill.jpg: { status: offen }
+  images/rezepte/entrana-asado-argentino.jpg: { status: offen }
+  images/rezepte/entrecote-grillen-hero.jpg: { status: offen }
+  images/rezepte/entrecote-grillen.jpg: { status: offen }
+  images/rezepte/faecherkartoffeln-grill.jpg: { status: offen }
+  images/rezepte/flank-steak-grillen-hero.jpg: { status: offen }
+  images/rezepte/flank-steak-grillen.jpg: { status: offen }
+  images/rezepte/frango-churrasco-brasil.jpg: { status: offen }
+  images/rezepte/gai-yang-isaan.jpg: { status: offen }
+  images/rezepte/ganze-dorade-grill-hero.jpg: { status: offen }
+  images/rezepte/ganze-dorade-grill.jpg: { status: offen }
+  images/rezepte/ganze-makrele-grill-hero.jpg: { status: offen }
+  images/rezepte/ganze-makrele-grill.jpg: { status: offen }
+  images/rezepte/gegrillter-pfirsich-bourbon.jpg: { status: offen }
+  images/rezepte/gemuese-spiesse-grill.jpg: { status: offen }
+  images/rezepte/gruener-spargel-grill.jpg: { status: offen }
+  images/rezepte/guinness-sauce.jpg: { status: offen }
+  images/rezepte/iberico-carrillera-hero.jpg: { status: offen }
+  images/rezepte/iberico-carrillera.jpg: { status: offen }
+  images/rezepte/iberico-pluma-hero.jpg: { status: offen }
+  images/rezepte/iberico-pluma.jpg: { status: offen }
+  images/rezepte/iberico-presa-hero.jpg: { status: offen }
+  images/rezepte/iberico-presa.jpg: { status: offen }
+  images/rezepte/iberico-secreto-hero.jpg: { status: offen }
+  images/rezepte/iberico-secreto.jpg: { status: offen }
+  images/rezepte/ikan-bakar-singapur.jpg: { status: offen }
+  images/rezepte/kansas-city-bbq-sauce.jpg: { status: offen }
+  images/rezepte/kofte-mangal.jpg: { status: offen }
+  images/rezepte/korean-bbq-bulgogi-hero.jpg: { status: offen }
+  images/rezepte/korean-bbq-bulgogi.jpg: { status: offen }
+  images/rezepte/krustenbraten-grill-hero.jpg: { status: offen }
+  images/rezepte/krustenbraten-grill.jpg: { status: offen }
+  images/rezepte/lachsforelle-sabayone.jpg: { status: offen }
+  images/rezepte/lamb-chops-braai-sa.jpg: { status: offen }
+  images/rezepte/lammhuefte-rotweinsud.jpg: { status: offen }
+  images/rezepte/lammkarree-grillen-hero.jpg: { status: offen }
+  images/rezepte/lammkarree-grillen.jpg: { status: offen }
+  images/rezepte/lammkeule-drehspiess-hero.jpg: { status: offen }
+  images/rezepte/lammkeule-drehspiess.jpg: { status: offen }
+  images/rezepte/lammkoteletts-mediterran-hero.jpg: { status: offen }
+  images/rezepte/lammkoteletts-mediterran.jpg: { status: offen }
+  images/rezepte/mac-and-cheese-smoker.jpg: { status: offen }
+  images/rezepte/mahi-mahi-grill-hero.jpg: { status: offen }
+  images/rezepte/mahi-mahi-grill.jpg: { status: offen }
+  images/rezepte/maiskolben-elote.jpg: { status: offen }
+  images/rezepte/maple-glazed-spareribs-kanada.jpg: { status: offen }
+  images/rezepte/minutensteaks-apfel-chili-lake.jpg: { status: offen }
+  images/rezepte/mollejas-asado.jpg: { status: offen }
+  images/rezepte/moo-ping.jpg: { status: offen }
+  images/rezepte/naan-pizzastein.jpg: { status: offen }
+  images/rezepte/nackenbraten-kraeuter-rub.jpg: { status: offen }
+  images/rezepte/ochsenbaeckchen-geschmort-hero.jpg: { status: offen }
+  images/rezepte/ochsenbaeckchen-geschmort.jpg: { status: offen }
+  images/rezepte/onglet-hanger-steak-hero.jpg: { status: offen }
+  images/rezepte/onglet-hanger-steak.jpg: { status: offen }
+  images/rezepte/paella-vom-grill.jpg: { status: offen }
+  images/rezepte/pastrami-rinderhuefte.jpg: { status: offen }
+  images/rezepte/picanha-churrasco-hero.jpg: { status: offen }
+  images/rezepte/picanha-churrasco.jpg: { status: offen }
+  images/rezepte/pla-pao-salzkruste.jpg: { status: offen }
+  images/rezepte/pork-chops-schoko-pfeffer.jpg: { status: offen }
+  images/rezepte/porterhouse-grill-hero.jpg: { status: offen }
+  images/rezepte/porterhouse-grill.jpg: { status: offen }
+  images/rezepte/pulled-chicken-hero.jpg: { status: offen }
+  images/rezepte/pulled-chicken.jpg: { status: offen }
+  images/rezepte/pulled-pork-boston-butt-hero.jpg: { status: offen }
+  images/rezepte/pulled-pork-boston-butt.jpg: { status: offen }
+  images/rezepte/ribeye-sous-vide-hero.jpg: { status: offen }
+  images/rezepte/ribeye-sous-vide.jpg: { status: offen }
+  images/rezepte/rinder-tacos-guenstiger-cut-hero.jpg: { status: offen }
+  images/rezepte/rinder-tacos-guenstiger-cut.jpg: { status: offen }
+  images/rezepte/rinderhuefte-gasgrill-smoke.jpg: { status: offen }
+  images/rezepte/roastbeef-reverse-sear-hero.jpg: { status: offen }
+  images/rezepte/roastbeef-reverse-sear.jpg: { status: offen }
+  images/rezepte/romana-salatherzen-grill.jpg: { status: offen }
+  images/rezepte/rotbarbe-grill-hero.jpg: { status: offen }
+  images/rezepte/rotbarbe-grill.jpg: { status: offen }
+  images/rezepte/sardinen-vom-grill-hero.jpg: { status: offen }
+  images/rezepte/sardinen-vom-grill.jpg: { status: offen }
+  images/rezepte/saucen-espresso-bbq.jpg: { status: offen }
+  images/rezepte/schafskaese-warm-geraeuchert.jpg: { status: offen }
+  images/rezepte/schoko-soft-cake-grill.jpg: { status: offen }
+  images/rezepte/schweinekarree-honig-rosmarin.jpg: { status: offen }
+  images/rezepte/schwertfisch-steak-grill-hero.jpg: { status: offen }
+  images/rezepte/schwertfisch-steak-grill.jpg: { status: offen }
+  images/rezepte/singapore-satay.jpg: { status: offen }
+  images/rezepte/sis-kebab-tuerkisch.jpg: { status: offen }
+  images/rezepte/smash-burger-hero.jpg: { status: offen }
+  images/rezepte/smash-burger.jpg: { status: offen }
+  images/rezepte/smoked-arctic-char-kanada.jpg: { status: offen }
+  images/rezepte/smoked-baked-potatoes.jpg: { status: offen }
+  images/rezepte/sosaties-braai.jpg: { status: offen }
+  images/rezepte/spareribs-3-2-1-bark.jpg: { status: offen }
+  images/rezepte/spareribs-3-2-1-hero.jpg: { status: offen }
+  images/rezepte/spareribs-3-2-1.jpg: { status: offen }
+  images/rezepte/spatchcock-haehnchen-hero.jpg: { status: offen }
+  images/rezepte/spatchcock-haehnchen.jpg: { status: offen }
+  images/rezepte/t-bone-direktgrill-hero.jpg: { status: offen }
+  images/rezepte/t-bone-direktgrill.jpg: { status: offen }
+  images/rezepte/t-bone-fiorentina-hero.jpg: { status: offen }
+  images/rezepte/t-bone-fiorentina.jpg: { status: offen }
+  images/rezepte/tagliata-di-manzo-hero.jpg: { status: offen }
+  images/rezepte/tagliata-di-manzo.jpg: { status: offen }
+  images/rezepte/tavuk-sis-kebab.jpg: { status: offen }
+  images/rezepte/texas-coleslaw.jpg: { status: offen }
+  images/rezepte/texas-dry-rub.jpg: { status: offen }
+  images/rezepte/thit-nuong-vietnam.jpg: { status: offen }
+  images/rezepte/thunfisch-steak-grill-hero.jpg: { status: offen }
+  images/rezepte/thunfisch-steak-grill.jpg: { status: offen }
+  images/rezepte/tomahawk-reverse-sear-hero.jpg: { status: offen }
+  images/rezepte/tomahawk-reverse-sear.jpg: { status: offen }
+  images/rezepte/tri-tip-santa-maria-hero.jpg: { status: offen }
+  images/rezepte/tri-tip-santa-maria.jpg: { status: offen }
+  images/rezepte/wagyu-burger-hero.jpg: { status: offen }
+  images/rezepte/wagyu-burger.jpg: { status: offen }
+  images/rezepte/wagyu-steak-braten-hero.jpg: { status: offen }
+  images/rezepte/wagyu-steak-braten.jpg: { status: offen }
+  images/rezepte/wagyu-yakiniku-hero.jpg: { status: offen }
+  images/rezepte/wagyu-yakiniku.jpg: { status: offen }
+  images/rezepte/wine-dog.jpg: { status: offen }
+  images/social/banner-1.jpg: { status: offen }
+  images/social/banner-2.jpg: { status: offen }
+  images/streitfaelle/holz-waessern.jpg: { status: offen }
+  images/streitfaelle/myoglobin.jpg: { status: offen }
+  images/streitfaelle/natron-methode.jpg: { status: offen }
+  images/streitfaelle/poren-schliessen.jpg: { status: offen }
+  images/streitfaelle/ruhen-untergrund.jpg: { status: offen }
+  images/streitfaelle/salzen-vorher-nachher.jpg: { status: offen }
+  images/streitfaelle/temperieren-oder-kalt.jpg: { status: offen }
+  images/streitfaelle/wenden.jpg: { status: offen }
+  images/tomahawk-hero.png: { status: offen }
+  images/usa/carolinas.jpg:
+    status: lizenz
+    quelle: Pexels (ID 6430736)
+    urheber: Skylar Kang
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/pig-grilling-on-broach-in-farm-yard-6430736/
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/usa/kansas-city.jpg:
+    status: lizenz
+    quelle: Pexels (ID 8250685)
+    urheber: Julia Filirovska
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/cooked-meat-on-the-grill-8250685/
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/usa/memphis.jpg:
+    status: lizenz
+    quelle: Pexels (ID 8250273)
+    urheber: Julia Filirovska
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/a-baby-back-ribs-cooking-on-the-grill-8250273/
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/usa/texas-style.jpg:
+    status: lizenz
+    quelle: Pexels (ID 9397270)
+    urheber: Hayden Walker
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/a-person-slicing-barbecue-beef-brisket-9397270/
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/uwe-yendell.png: { status: offen }
+  images/vergleich/dry-aging-kuehlschrank-vergleich.jpg: { status: offen }
+  images/vergleich/dry-aging-kuehlschrank-vergleich.webp: { status: offen }
+  images/vergleich/fleischthermometer.jpg:
+    status: lizenz
+    quelle: Unsplash (ID ZASXYTnkP-U)
+    urheber: ThermoPro
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/green-and-black-digital-device-at-0-ZASXYTnkP-U
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/vergleich/grills.jpg:
+    status: lizenz
+    quelle: Pexels (ID 8704464)
+    urheber: Rasa Kasparaviciene
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    quell_url: https://www.pexels.com/photo/black-kettle-grill-8704464/
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/vergleich/kuechenmaschine-vergleich.jpg: { status: offen }
+  images/vergleich/kuechenmaschine-vergleich.webp: { status: offen }
+  images/vergleich/messer.jpg:
+    status: lizenz
+    quelle: Unsplash (ID M8COBu-_Va8)
+    urheber: Sergey Kotenev
+    lizenz: Unsplash-Lizenz
+    lizenz_url: https://unsplash.com/license
+    quell_url: https://unsplash.com/photos/a-knife-and-a-board-on-a-wooden-surface-M8COBu-_Va8
+    erworben_am: 2026-08-30
+    namensnennung: false
+    hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
+  images/vergleich/oberhitzegrill-vergleich.jpg: { status: offen }
+  images/vergleich/oberhitzegrill-vergleich.webp: { status: offen }
+  images/vergleich/premium-fleischthermometer.jpg: { status: offen }
+  images/vergleich/premium-fleischthermometer.webp: { status: offen }
+  images/wine-spirits-hero.webp: { status: offen }

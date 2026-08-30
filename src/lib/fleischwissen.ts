@@ -1,79 +1,44 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// Fleischwissen — Serienlogik und Erscheinungssperre
+// Fleischwissen — Serienlogik
 //
-// Die Serie erscheint gestaffelt: Teil 1 am 02.10.2026, Teil 2 am 09.10.,
-// Teil 3 am 16.10. Vor dem jeweiligen Datum darf ein Teil NICHT verlinkt und
-// NICHT in der Sitemap auftauchen — die Uebersicht zeigt ihn als „erscheint
-// am …" ohne Ziel.
+// ALLE DREI TEILE SIND LIVE. Es gibt hier bewusst KEINEN Datumsfilter.
 //
-// Warum das hier steht und nicht als `.filter()` auf jeder Seite:
-// Der Filter muss an drei Orten identisch gelten (Uebersicht, Detailseite,
-// Sitemap). Drei handgeschriebene Datumsvergleiche driften auseinander, und
-// zwar still — der Fehler faellt erst auf, wenn ein unfertiger Artikel im
-// Index steht. Dieselbe Ueberlegung wie bei nurVeroeffentlicht() in
-// src/lib/redaktion.ts, nur fuer die zweite, unabhaengige Sperre.
+// Diese Datei enthielt bis zum 30.08.2026 eine gestaffelte Erscheinungssperre
+// (Teil 1 ab 02.10., Teil 2 ab 09.10., Teil 3 ab 16.10.) mit noindex,
+// Sitemap-Ausschluss und „erscheint am"-Karten. Uwe hat die Staffelung
+// abgeschafft: alle drei gehen sofort live. Der Vermerk steht hier, damit
+// niemand die Sperre als „vergessen" wieder einbaut — sie war da und ist
+// absichtlich weg.
 //
-// VIERTE STELLE, die dieselbe Regel kennen muss: next-sitemap.config.js.
-// Die Datei ist CommonJS und kann dieses Modul nicht importieren; sie liest
-// die Frontmatter direkt (gleiches Muster wie dort schon fuer die
-// Stufe-1-Lektionen). Wer die Regel hier aendert, aendert sie dort mit.
+// `newsletterAt` im Frontmatter (02.10. / 09.10. / 16.10.2026) ist der Termin,
+// an dem der jeweilige Teil als Newsletter-Aufmacher verschickt wird. Das ist
+// DOKUMENTATION. Es darf die Sichtbarkeit auf der Website nicht beeinflussen,
+// und diese Datei liest es deshalb gar nicht erst.
 //
-// Zeitzone: Vergleich auf Tagesbasis in lokaler Zeit. `publishedAt` kommt aus
-// Contentlayer als ISO-String in UTC (2026-10-02T00:00:00.000Z). Ein naiver
-// `new Date(publishedAt) <= new Date()` haette in Deutschland dazu gefuehrt,
-// dass ein Artikel am Erscheinungstag zwischen 00:00 und 02:00 MESZ schon
-// sichtbar ist bzw. — je nach Richtung — einen Tag zu frueh. Deshalb wird auf
-// beiden Seiten auf das reine Kalenderdatum reduziert.
+// Was bleibt: die Reihenfolge. `serieTeil` bestimmt Sortierung und Vor/Zurueck-
+// Navigation — das ist eine Leseordnung, keine Freigabe.
+//
+// Der Redaktionsvorbehalt (src/lib/redaktion.ts) gilt unveraendert weiter: ein
+// Dokument mit status draft/review oder reviewed: false erscheint nicht. Das ist
+// die AI-Act-Pflicht aus compliance/ai-act-einstufung.md und hat mit der
+// abgeschafften Terminsteuerung nichts zu tun.
 // ─────────────────────────────────────────────────────────────────────────────
 import { allFleischwissens } from 'contentlayer/generated';
 import { nurVeroeffentlicht } from '@/lib/redaktion';
 
 export type FleischwissenDoc = (typeof allFleischwissens)[number];
 
-/** Kalendertag als YYYY-MM-DD, aus einem ISO-String in UTC gelesen. */
-function tag(iso: string): string {
-  return iso.slice(0, 10);
-}
-
-/** Heutiger Kalendertag als YYYY-MM-DD in lokaler Zeit. */
-function heute(): string {
-  const d = new Date();
-  const p = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-}
-
-/** Ist dieser Teil heute oder frueher erschienen? */
-export function istErschienen(doc: Pick<FleischwissenDoc, 'publishedAt'>): boolean {
-  return tag(doc.publishedAt) <= heute();
-}
-
-/**
- * Alle Teile in Serienreihenfolge — auch die noch nicht erschienenen.
- *
- * Fuer die Uebersichtsseite, die den kompletten Fahrplan zeigen soll. Ob ein
- * Eintrag verlinkt wird, entscheidet der Aufrufer ueber istErschienen().
- */
+/** Alle Teile in Serienreihenfolge (Teil 1 → 2 → 3). */
 export function serie(): FleischwissenDoc[] {
   return nurVeroeffentlicht(allFleischwissens).sort((a, b) => a.serieTeil - b.serieTeil);
 }
 
-/** Nur die heute bereits erschienenen Teile — fuer Verlinkung und Indexierung. */
-export function erschieneneSerie(): FleischwissenDoc[] {
-  return serie().filter(istErschienen);
-}
-
-/** Ein Teil ueber seinen Slug, unabhaengig vom Erscheinungsdatum. */
+/** Ein Teil ueber seinen Slug. */
 export function teilBySlug(slug: string): FleischwissenDoc | undefined {
   return serie().find((d) => d.slug === slug);
 }
 
-/**
- * Nachbarn in der Serie fuer die Vor/Zurueck-Navigation.
- *
- * Gibt auch noch nicht erschienene Nachbarn zurueck — die Detailseite zeigt sie
- * als deaktivierten Ausblick statt als Link. Das ist Absicht: „Teil 3 erscheint
- * am 16. Oktober" ist eine Information, ein toter Link waere ein Defekt.
- */
+/** Nachbarn in der Serie fuer die Vor/Zurueck-Navigation. */
 export function nachbarn(doc: FleischwissenDoc): {
   vorheriger?: FleischwissenDoc;
   naechster?: FleischwissenDoc;
@@ -84,14 +49,4 @@ export function nachbarn(doc: FleischwissenDoc): {
     vorheriger: i > 0 ? alle[i - 1] : undefined,
     naechster: i >= 0 && i < alle.length - 1 ? alle[i + 1] : undefined,
   };
-}
-
-/** „2. Oktober 2026" — fuer die „erscheint am …"-Zeile. */
-export function erscheinungsdatum(doc: Pick<FleischwissenDoc, 'publishedAt'>): string {
-  const [jahr, monat, tagZahl] = tag(doc.publishedAt).split('-').map(Number);
-  const MONATE = [
-    'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
-    'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
-  ];
-  return `${tagZahl}. ${MONATE[monat - 1]} ${jahr}`;
 }

@@ -513,13 +513,14 @@ export const Streitfall = defineDocumentType(() => ({
 
 // ── FLEISCHWISSEN ─────────────────────────────────────────────────────────────
 // Dreiteilige Serie zur Fleischherkunft (Produktionssysteme, Fuetterung,
-// Schlachtstress). Eigener Typ statt `Artikel`, weil die Serie zwei Dinge
-// braucht, die `Artikel` nicht kennt: die Position in der Reihenfolge
-// (`serieTeil`/`serieGesamt`) fuer die Vor/Zurueck-Navigation, und ein
-// Erscheinungsdatum, das die Sichtbarkeit STEUERT statt sie nur zu
-// dokumentieren. Teil 2 und 3 sind auf den 09.10. und 16.10.2026 datiert und
-// duerfen vorher nirgends verlinkt auftauchen — durchgesetzt in
-// src/lib/fleischwissen.ts, nicht per Hand pro Seite.
+// Schlachtstress). Eigener Typ statt `Artikel` wegen der Position in der
+// Reihenfolge (`serieTeil`/`serieGesamt`) fuer die Vor/Zurueck-Navigation.
+//
+// ALLE DREI TEILE SIND SOFORT LIVE (Uwe, 30.08.2026). Eine frueher gebaute
+// Staffelung nach `publishedAt` ist auf seine ausdrueckliche Ansage hin wieder
+// ausgebaut worden. `newsletterAt` haelt nur fest, wann der jeweilige Teil als
+// Newsletter-Aufmacher rausgeht — es ist DOKUMENTATION, kein Schalter. Wer
+// daraus eine Sichtbarkeitslogik baut, dreht die Entscheidung still zurueck.
 //
 // `image`/`imageAlt` sind hier OPTIONAL, anders als bei Artikel/Cut/Methode:
 // Die Hero-Motive liefert Uwe nach. Ein Pflichtfeld haette entweder einen
@@ -534,6 +535,8 @@ export const Fleischwissen = defineDocumentType(() => ({
     excerpt: { type: 'string', required: true },
     publishedAt: { type: 'date', required: true },
     updatedAt: { type: 'date' },
+    // Rein dokumentarisch: Newsletter-Aufmacher-Termin. KEIN Sichtbarkeitsfilter.
+    newsletterAt: { type: 'date' },
     author: { type: 'string', required: true },
     authorSlug: { type: 'string', required: true },
     // Optional — siehe Kommentar oben.

@@ -40,47 +40,10 @@ function hatFreigegebeneArtikel() {
 
 const ARTIKEL_FREIGEGEBEN = hatFreigegebeneArtikel();
 
-/**
- * Welche Fleischwissen-Teile sind heute noch NICHT erschienen?
- *
- * Die Serie ist auf den 02./09./16.10.2026 gestaffelt. Ein Teil, der noch nicht
- * erschienen ist, darf nicht in der Sitemap stehen — sonst laedt Google ihn
- * ein, bevor er verlinkt ist, und die Staffelung ist wertlos.
- *
- * Die Regel lebt fachlich in src/lib/fleischwissen.ts. Diese Datei ist CommonJS
- * und die contentlayer-Ausgabe ESM, deshalb wird die Frontmatter hier direkt
- * gelesen — dasselbe Muster wie oben bei den Stufe-1-Lektionen. Wer die Regel
- * dort aendert, aendert sie hier mit; die Konsistenz haelt kein Compiler.
- *
- * Vergleich auf reiner Kalendertagsbasis (String-Vergleich auf YYYY-MM-DD),
- * damit Zeitzone und Uhrzeit nicht mitspielen.
- */
-function nichtErschieneneFleischwissenPfade() {
-  const dir = path.join(__dirname, 'content', 'fleischwissen');
-  let dateien;
-  try {
-    dateien = fs.readdirSync(dir).filter((f) => f.endsWith('.mdx'));
-  } catch {
-    return [];
-  }
-  const d = new Date();
-  const p = (n) => String(n).padStart(2, '0');
-  const heute = `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-
-  return dateien
-    .map((f) => {
-      const raw = fs.readFileSync(path.join(dir, f), 'utf8');
-      // \r wegen CRLF-Dateien im Repo (KAN-26). Kommentarzeilen im Frontmatter
-      // beginnen mit '#' und werden von diesem Muster nicht getroffen.
-      const m = raw.match(/^publishedAt:[ \t]*(.*?)[ \t\r]*$/m);
-      const publishedAt = m ? m[1].replace(/^["']|["']$/g, '').trim() : null;
-      if (!publishedAt) return null;
-      return publishedAt.slice(0, 10) > heute ? `/fleischwissen/${f.replace(/\.mdx$/, '')}` : null;
-    })
-    .filter(Boolean);
-}
-
-const FLEISCHWISSEN_GESPERRT = nichtErschieneneFleischwissenPfade();
+// Hinweis (30.08.2026): Hier stand ein Ausschluss fuer noch nicht erschienene
+// Fleischwissen-Teile. Die Staffelung ist abgeschafft — alle drei Teile gehoeren
+// in die Sitemap. Das Feld `newsletterAt` in den MDX ist rein dokumentarisch und
+// darf hier NICHT als Filter wiederauftauchen.
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
@@ -177,12 +140,6 @@ module.exports = {
     // Die Detailseiten brauchen keine Regel: generateStaticParams erzeugt sie in
     // Produktion gar nicht erst, sie stehen also ohnehin nicht im Manifest.
     if (!ARTIKEL_FREIGEGEBEN && path.startsWith('/artikel')) {
-      return null;
-    }
-    // Noch nicht erschienene Serienteile: raus (null = ausschliessen).
-    // Die Uebersicht /fleischwissen bleibt drin — sie ist die Serienseite und
-    // zeigt die kommenden Teile bewusst als Ankuendigung.
-    if (FLEISCHWISSEN_GESPERRT.includes(path)) {
       return null;
     }
     // Serie als Pillar-Content: gleiche Prioritaet wie Cuts/Methoden.

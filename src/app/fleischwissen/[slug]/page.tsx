@@ -9,24 +9,16 @@ import BildCredit from '@/components/BildCredit';
 import DiplomCTA from '@/components/mdx/DiplomCTA';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { getAuthorBySlug } from '@/lib/authors';
-import {
-  serie, teilBySlug, nachbarn, istErschienen, erscheinungsdatum,
-} from '@/lib/fleischwissen';
-import { Calendar, Clock, ChevronRight, ChevronLeft, Lock, RotateCcw } from 'lucide-react';
+import { serie, teilBySlug, nachbarn } from '@/lib/fleischwissen';
+import { Calendar, Clock, ChevronRight, ChevronLeft, RotateCcw } from 'lucide-react';
 
 interface Props {
   params: { slug: string };
 }
 
-// Gleicher Rhythmus wie auf der Uebersicht: Wenn Teil 2 am 09.10. erscheint,
-// muss die Detailseite ihr noindex verlieren, ohne dass jemand deployt.
-export const revalidate = 3600;
-
-// Alle drei Teile werden gebaut — auch die noch nicht erschienenen. Das ist
-// bewusst so (der Auftrag laesst es ausdruecklich zu) und macht eine Vorschau
-// per direkter URL moeglich. Oeffentlich „erscheinen" tun sie deswegen nicht:
-// kein Link auf der Uebersicht, kein Sitemap-Eintrag, und robots:noindex bis
-// zum Erscheinungstag (siehe generateMetadata).
+// Alle drei Teile sind live und indexierbar. Eine frueher hier gebaute
+// Erscheinungssperre (noindex + Sitemap-Ausschluss bis zum jeweiligen Datum)
+// ist auf Uwes Ansage vom 30.08.2026 ausgebaut — siehe src/lib/fleischwissen.ts.
 export async function generateStaticParams() {
   return serie().map((d) => ({ slug: d.slug }));
 }
@@ -40,17 +32,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Hero-Motive fehlen noch (Auftrag Punkt 7). Solange kein `image` gesetzt
   // ist, greift das dynamische Standard-OG-Bild der Seite.
   const ogBild = doc.image ?? '/api/og';
-  const erschienen = istErschienen(doc);
 
   return {
     title,
     description,
     alternates: { canonical: `https://steakakademie.de${doc.url}` },
-    // Vor dem Erscheinungsdatum darf der Artikel nicht in den Index. Die Seite
-    // ist zwar gebaut und per URL erreichbar, aber sie ist noch nicht
-    // veroeffentlicht — und was nicht veroeffentlicht ist, gehoert nicht in
-    // die Suche.
-    robots: erschienen ? undefined : { index: false, follow: false },
     openGraph: {
       title,
       description,
@@ -132,7 +118,6 @@ export default function FleischwissenArtikel({ params }: Props) {
   const MDXContent = useMDXComponent(doc.body.code);
   const autor = getAuthorBySlug(doc.authorSlug);
   const { vorheriger, naechster } = nachbarn(doc);
-  const erschienen = istErschienen(doc);
 
   const faqItems = (doc.faq as Array<{ question: string; answer: string }> | undefined) ?? [];
 
@@ -183,21 +168,6 @@ export default function FleischwissenArtikel({ params }: Props) {
                 {doc.title}
               </h1>
               <p className="font-body text-lg text-text-light/75 leading-relaxed mb-6">{doc.excerpt}</p>
-
-              {/* Wer die Seite vor dem Erscheinungstag direkt aufruft, soll das
-                  wissen — sonst wirkt ein Vorschau-Aufruf wie ein Live-Artikel. */}
-              {!erschienen && (
-                <div
-                  className="flex items-start gap-3 p-4 mb-6"
-                  style={{ background: 'rgba(200,136,42,0.08)', border: '1px solid rgba(200,136,42,0.3)' }}
-                >
-                  <Lock size={17} className="text-brand-gold shrink-0 mt-0.5" />
-                  <p className="font-sans text-sm text-text-light/80 leading-relaxed">
-                    Dieser Teil erscheint am <strong className="text-text-light">{erscheinungsdatum(doc)}</strong>.
-                    Bis dahin ist die Seite weder verlinkt noch in der Suche zu finden.
-                  </p>
-                </div>
-              )}
 
               <div
                 className="flex flex-wrap items-center gap-4 text-xs font-sans text-text-light/45 pb-6"
@@ -287,53 +257,34 @@ export default function FleischwissenArtikel({ params }: Props) {
               </section>
             )}
 
-            {/* Serien-Navigation. Ein noch nicht erschienener Nachbar wird als
-                Ausblick gezeigt, nicht als Link — sonst waere es ein toter Link
-                auf eine noindex-Seite. */}
+            {/* Serien-Navigation. Alle Teile sind live, also ist jeder Nachbar
+                ein Link. Fehlt ein Nachbar (Teil 1 hat keinen Vorgaenger), bleibt
+                der Platz auf breiten Viewports leer, damit der vorhandene Link
+                nicht ueber die volle Breite springt. */}
             <nav className="mt-12 grid gap-4 sm:grid-cols-2" aria-label="Serien-Navigation">
               {[
                 { doc: vorheriger, richtung: 'zurueck' as const },
                 { doc: naechster, richtung: 'vor' as const },
               ].map(({ doc: nachbar, richtung }) => {
                 if (!nachbar) return <div key={richtung} className="hidden sm:block" />;
-                const nachbarErschienen = istErschienen(nachbar);
                 const label = richtung === 'zurueck' ? 'Vorheriger Teil' : 'Nächster Teil';
 
-                const kern = (
-                  <>
-                    <span className="flex items-center gap-1.5 font-sans text-[11px] font-bold tracking-[0.12em] uppercase text-brand-gold mb-2">
-                      {richtung === 'zurueck' && <ChevronLeft size={12} />}
-                      {label} · Teil {nachbar.serieTeil}
-                      {richtung === 'vor' && <ChevronRight size={12} />}
-                    </span>
-                    <span className={`font-serif text-base font-bold leading-snug block ${nachbarErschienen ? 'text-text-light' : 'text-text-light/50'}`}>
-                      {nachbar.title}
-                    </span>
-                    {!nachbarErschienen && (
-                      <span className="font-sans text-xs text-text-light/45 mt-2 block">
-                        Erscheint am {erscheinungsdatum(nachbar)}
-                      </span>
-                    )}
-                  </>
-                );
-
-                return nachbarErschienen ? (
+                return (
                   <Link
                     key={richtung}
                     href={nachbar.url}
                     className="block p-5 transition-colors hover:border-brand-gold/40"
                     style={{ border: '1px solid rgba(200,136,42,0.18)', background: 'rgba(255,255,255,0.02)' }}
                   >
-                    {kern}
+                    <span className="flex items-center gap-1.5 font-sans text-[11px] font-bold tracking-[0.12em] uppercase text-brand-gold mb-2">
+                      {richtung === 'zurueck' && <ChevronLeft size={12} />}
+                      {label} · Teil {nachbar.serieTeil}
+                      {richtung === 'vor' && <ChevronRight size={12} />}
+                    </span>
+                    <span className="font-serif text-base font-bold leading-snug block text-text-light">
+                      {nachbar.title}
+                    </span>
                   </Link>
-                ) : (
-                  <div
-                    key={richtung}
-                    className="block p-5"
-                    style={{ border: '1px dashed rgba(200,136,42,0.22)', background: 'rgba(255,255,255,0.012)' }}
-                  >
-                    {kern}
-                  </div>
                 );
               })}
             </nav>

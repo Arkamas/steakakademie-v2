@@ -247,6 +247,21 @@ Analytics & Data · CRM & Monetization.
   zu `<Schnellübersicht>` eingedeutscht — 94 Stellen in 47 Dateien, Build-Bruch auf
   /methoden/*, /diplome/lernen/* und /gruender-schmiede/lernen/* (Fix: 7a1fdb3).
 
+- **MDX-Komponenten-Gate (30.08.2026):** `scripts/check-mdx-komponenten.mjs` prüft, dass
+  jedes `<Großbuchstaben-Tag>` in content/ einen passenden Namen im Code hat — benannter
+  Export unter src/components/ oder Schlüssel in einer mdxComponents-Zuordnung. Fehlt der
+  Name, bricht der Build mit Datei, Zeile und Tagname ab. Läuft im `prebuild`, also VOR
+  `next build`, und zusätzlich in `npm run check`; einzeln: `npm run check:mdx`.
+  **Warum:** 7f19d67 war ein Fehler in content/, den tsc nicht sieht — er fiel erst im
+  Vercel-Build auf, nach dem Push, und die Produktion stand mehrere Tage rot. Die Maske in
+  spell-check.mjs härtet den *Prüfer*; dieses Gate fängt den Bezeichner unabhängig davon,
+  wer ihn kaputtgemacht hat. Zwei Dinge, die beim Bauen des Gates aufgefallen sind und die
+  man wissen muss: der Tag-Scanner arbeitet mit Unicode-Klassen (`\p{Lu}`), denn mit
+  `[A-Za-z]` bricht das Muster genau am `ü` von `Schnellübersicht` ab — das Gate lief in der
+  ersten Fassung grün durch seinen eigenen Anlassfall. Und geprüft wird gegen die
+  *Vereinigung* aller bekannten Namen, nicht pro Route: eine Komponente, die zwar existiert,
+  aber in der mdxComponents-Zuordnung genau dieser Route fehlt, fällt hier nicht auf.
+
 - **Voyage-Vollausbau (22.08.2026):** Zentraler Client `src/lib/voyage/client.ts`
   (Embeddings, Reranker, Kontext-Embeddings, Multimodal; Retry bei 429). Wissenssuche ist
   zweistufig: pgvector-Recall → `rerank-2.5-lite` (abschaltbar: VOYAGE_RERANK=off, Ausfall

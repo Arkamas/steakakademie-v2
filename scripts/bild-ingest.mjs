@@ -284,6 +284,66 @@ async function dateienIn(ordner, praefix = '') {
 }
 
 /* ------------------------------------------------------------------ *
+ * Bildregister (data/bildregister.yaml)
+ *
+ * Bewusst TEXTBASIERT statt ueber js-yaml geschrieben: Ein Round-Trip durch
+ * einen YAML-Serialisierer wuerde saemtliche Kommentare der Datei verwerfen —
+ * und dort steht die Begruendung, warum es das Register ueberhaupt gibt.
+ * Bei einem Beweismittel ist die Begruendung Teil des Werts.
+ * ------------------------------------------------------------------ */
+
+const LIZENZTEXT = {
+  pexels:          ['Pexels-Lizenz',   'https://www.pexels.com/license/'],
+  unsplash:        ['Unsplash-Lizenz', 'https://unsplash.com/license'],
+  pixabay:         ['Pixabay Content License', 'https://pixabay.com/service/license-summary/'],
+  'shopify-burst': ['Burst / Shopify Photo License', 'https://www.shopify.com/stock-photos/license'],
+  stocksnap:       ['CC0', 'https://stocksnap.io/license'],
+  magnific:        ['Freepik/Magnific Free (mit Attribution)', 'https://www.magnific.com/de/profil/lizenzen'],
+  wikimedia:       ['siehe Dateiseite (CC — pro Datei pruefen)', 'https://commons.wikimedia.org/'],
+}
+
+async function registerEintrag(pfad, ordner, q, id, autor, quellUrl, ki) {
+  const datei = join(ROOT, 'data', 'bildregister.yaml')
+  if (!existsSync(datei)) { console.log(c.d('  · kein Bildregister vorhanden — uebersprungen')); return }
+
+  let s = await readFile(datei, 'utf8')
+  const schluessel = `  ${pfad}:`
+
+  // Bereits ausgefuellt? Dann nicht anfassen — ein bestehender Nachweis wird
+  // nie ueberschrieben (gleiche Regel wie bei imageSource im Frontmatter).
+  const zeilen = s.split('\n')
+  const idx = zeilen.findIndex(z => z.startsWith(schluessel))
+  if (idx >= 0 && !zeilen[idx].includes('status: offen')) {
+    console.log(c.d('  · Bildregister: Eintrag existiert bereits')); return
+  }
+
+  const [lname, lurl] = LIZENZTEXT[ordner] || ['—', '—']
+  const block = ki
+    ? [`  ${pfad}:`, '    status: ki', `    quelle: ${q.name}`,
+       '    urheber: Uwe Yendell', '    namensnennung: false',
+       '    hinweis: Anbieter-Tarif auf kommerzielle Nutzung pruefen']
+    : ordner === 'eigene-fotos'
+    ? [`  ${pfad}:`, '    status: eigen', '    quelle: Eigene Aufnahme',
+       '    urheber: Uwe Yendell', '    namensnennung: false']
+    : [`  ${pfad}:`, '    status: lizenz', `    quelle: ${q.name}${id ? ` (ID ${id})` : ''}`,
+       `    urheber: ${autor || '—'}`, `    lizenz: ${lname}`, `    lizenz_url: ${lurl}`,
+       ...(quellUrl ? [`    quell_url: ${quellUrl}`] : []),
+       `    erworben_am: ${new Date().toISOString().slice(0, 10)}`,
+       `    namensnennung: ${q.attribution}`,
+       '    hinweis: Ingest ueber scripts/bild-ingest.mjs']
+
+  if (idx >= 0) zeilen.splice(idx, 1, ...block)      // "{ status: offen }" ersetzen
+  else {
+    // Alphabetisch einsortieren, damit die Datei lesbar bleibt.
+    let ziel = zeilen.findIndex(z => /^  images\//.test(z) && z > schluessel)
+    if (ziel < 0) ziel = zeilen.length
+    zeilen.splice(ziel, 0, ...block)
+  }
+  await writeFile(datei, zeilen.join('\n'))
+  console.log(c.g('  ✓ Bildregister ergaenzt'))
+}
+
+/* ------------------------------------------------------------------ *
  * Statusbericht — was liegt in der Fundgrube, was ist verwertbar
  * ------------------------------------------------------------------ */
 async function bericht() {
@@ -477,6 +537,12 @@ async function ingest() {
       `| Datei | Motiv | Quelle | ID | Link |\n|---|---|---|---|---|\n${zeile}\n`)
     console.log(c.g('  ✓ CREDITS.md angelegt'))
   }
+
+  // Bildregister fortschreiben. Ohne diesen Schritt meldet scripts/legal-guard.mjs
+  // jedes frisch ingestierte Bild als "ohne Eintrag" — das Werkzeug wuerde also
+  // Arbeit erzeugen statt sie abzunehmen. Das Register ist der Rechtsnachweis,
+  // das Frontmatter nur die Anzeige; beide muessen dasselbe sagen.
+  await registerEintrag(`images/${typ}/${slug}.jpg`, ordner, q, id, autor, quellUrl, ki)
 
   // Original archivieren, damit die Fundgrube nicht zum Lager wird
   await mkdir(join(FUNDGRUBE, '_fertig', ordner), { recursive: true })

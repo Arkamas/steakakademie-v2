@@ -511,13 +511,72 @@ export const Streitfall = defineDocumentType(() => ({
   },
 }));
 
+// ── FLEISCHWISSEN ─────────────────────────────────────────────────────────────
+// Dreiteilige Serie zur Fleischherkunft (Produktionssysteme, Fuetterung,
+// Schlachtstress). Eigener Typ statt `Artikel`, weil die Serie zwei Dinge
+// braucht, die `Artikel` nicht kennt: die Position in der Reihenfolge
+// (`serieTeil`/`serieGesamt`) fuer die Vor/Zurueck-Navigation, und ein
+// Erscheinungsdatum, das die Sichtbarkeit STEUERT statt sie nur zu
+// dokumentieren. Teil 2 und 3 sind auf den 09.10. und 16.10.2026 datiert und
+// duerfen vorher nirgends verlinkt auftauchen — durchgesetzt in
+// src/lib/fleischwissen.ts, nicht per Hand pro Seite.
+//
+// `image`/`imageAlt` sind hier OPTIONAL, anders als bei Artikel/Cut/Methode:
+// Die Hero-Motive liefert Uwe nach. Ein Pflichtfeld haette entweder einen
+// erfundenen Pfad oder eine kaputte Kachel erzwungen. Layout und OG-Bild
+// haben deshalb einen Fallback.
+export const Fleischwissen = defineDocumentType(() => ({
+  name: 'Fleischwissen',
+  filePathPattern: 'fleischwissen/**/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title: { type: 'string', required: true },
+    excerpt: { type: 'string', required: true },
+    publishedAt: { type: 'date', required: true },
+    updatedAt: { type: 'date' },
+    author: { type: 'string', required: true },
+    authorSlug: { type: 'string', required: true },
+    // Optional — siehe Kommentar oben.
+    image: { type: 'string' },
+    imageAlt: { type: 'string' },
+    imageSource: { type: 'string' },
+    imageAI: { type: 'boolean', default: false },
+    serieTeil: { type: 'number', required: true },
+    serieGesamt: { type: 'number', required: true },
+    tags: { type: 'list', of: { type: 'string' } },
+    readingTime: { type: 'number' },
+    seoTitle: { type: 'string' },
+    seoDescription: { type: 'string' },
+    faq: { type: 'json' },
+    // Redaktionsvorbehalt wie bei Artikel (AI Act Art. 50 Abs. 4).
+    status: { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
+    reviewed: { type: 'boolean', default: true },
+    reviewedAt: { type: 'date' },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: (doc) => doc._raw.flattenedPath.replace('fleischwissen/', ''),
+    },
+    url: {
+      type: 'string',
+      resolve: (doc) => `/fleischwissen/${doc._raw.flattenedPath.replace('fleischwissen/', '')}`,
+    },
+    formattedDate: {
+      type: 'string',
+      resolve: (doc) =>
+        format(parseISO(doc.publishedAt), 'd. MMMM yyyy', { locale: de }),
+    },
+  },
+}));
+
 export default makeSource({
   contentDirPath: 'content',
   // Datendateien (kein Document-Typ) von der Doc-Klassifizierung ausnehmen,
   // sonst meldet Contentlayer sie als "problem" → Warn-Rauschen, das echte
   // Build-Fehler verdeckt (siehe KAN-26: 33 stille Rezept-404s).
   contentDirExclude: ['glossar/terms.json', '_archiv'],
-  documentTypes: [Artikel, Cut, Methode, Vergleich, Streitfall, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe, DiplomLektion, SprintModul],
+  documentTypes: [Artikel, Cut, Methode, Vergleich, Streitfall, Fleischwissen, Persoenlichkeit, Glossar, UsaBbqStyle, Recipe, DiplomLektion, SprintModul],
   mdx: {
     // GitHub Flavored Markdown — sonst rendern Markdown-Tabellen als roher
     // Pipe-Text statt als <table> (KAN-28). Aktiviert auch Task-Lists/Autolinks.

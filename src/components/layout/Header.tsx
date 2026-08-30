@@ -41,6 +41,7 @@ const NAV_CATEGORIES = [
       { label: 'Kerntemperaturen', href: '/temperatur-guide' },
       { label: '★ Kerntemperatur-Spickzettel (gratis)', href: '/kerntemperatur-spickzettel' },
       { label: 'Streitfälle am Grill', href: '/streitfaelle' },
+      { label: 'Fleischwissen', href: '/fleischwissen' },
       { label: 'Maillard-Reaktion', href: '/wissen' },
       { label: 'Dry-Aging & Reifung', href: '/aging' },
     ],

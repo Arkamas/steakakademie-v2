@@ -82,6 +82,16 @@ const QUELLEN = {
                      url: id => `https://www.magnific.com/de/bilder/${id}`,
                      lizenzBeleg: true,
                      hinweis: 'ATTRIBUTIONSPFLICHT. Lizenz-PDF muss neben der Bilddatei liegen.' },
+  // Wikimedia Commons: Lizenz steht PRO DATEI, meist CC BY-SA oder CC BY, teils
+  // gemeinfrei. Attribution ist deshalb pauschal auf true gesetzt — lieber eine
+  // Credit-Zeile zu viel als eine fehlende Pflichtnennung. Bei Share-Alike-Dateien
+  // (BY-SA) faellt eine BEARBEITUNG unter dieselbe Lizenz: eingedeutschte oder
+  // umgefaerbte Fassungen muessen dann selbst CC BY-SA stehen. Vor jeder Bearbeitung
+  // die konkrete Dateiseite pruefen.
+  'wikimedia':     { name: 'Wikimedia Commons', ampel: 'gelb', attribution: true, kiDefault: false,
+                     url: id => `https://commons.wikimedia.org/wiki/File:${id}`,
+                     ohneId: true,
+                     hinweis: 'Lizenz pro Datei pruefen. Bei CC BY-SA gilt Share-Alike auch fuer Bearbeitungen.' },
   'eigene-fotos':  { name: 'Eigenes Foto',  ampel: 'gruen', attribution: false, kiDefault: false,
                      url: () => null, ohneId: true },
   'ki-eigen':      { name: 'Eigene KI',     ampel: 'gruen', attribution: false, kiDefault: true,
@@ -321,7 +331,11 @@ async function bericht() {
     console.log()
   }
 
-  const wurzel = await dateienIn(FUNDGRUBE)
+  // Bewusst NICHT dateienIn(): das laeuft rekursiv und wuerde hier den gesamten
+  // Bestand als "im Wurzelordner" melden. Gesucht ist nur die oberste Ebene.
+  const wurzel = (await readdir(FUNDGRUBE, { withFileTypes: true }))
+    .filter(e => e.isFile() && /\.(jpe?g|png|webp|avif)$/i.test(e.name))
+    .map(e => e.name)
   if (wurzel.length) {
     console.log(c.r(`✗ ${wurzel.length} Datei(en) direkt im Wurzelordner — ohne Quellordner keine Herkunft:`))
     wurzel.forEach(d => console.log(`   ${d}`))

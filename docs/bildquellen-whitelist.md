@@ -22,6 +22,7 @@ Und: Vor Übernahme IMMER Einzelbild-Prüfung auf KI-Kennzeichnung (Doktrin bild
 |---|---|---|
 | pixabay.com | Pixabay Content License | KI-Bilder vorhanden, aber GEKENNZEICHNET und im Filter abwählbar → nur Nicht-KI wählen ODER imageAI: true setzen. Keine Bilder mit erkennbaren Marken/Logos |
 | foodiesfeed.com | eigene | Hostet echte UND KI-Bilder, kennzeichnet KI auf der Bildseite → Einzelbild-Prüfung Pflicht (Doktrin seit 17.08., Fall rinder-tacos) |
+| commons.wikimedia.org | CC-Lizenz **pro Datei** | "Frei" heisst frei LIZENZIERT, nicht rechtefrei. Meist CC BY oder CC BY-SA -> Namensnennung PFLICHT; bei BY-SA gilt Share-Alike auch fuer Bearbeitungen (eingedeutschte Fassung waere selbst CC BY-SA). Nur PD/CC0 ist auflagenfrei. ACHTUNG: Die englische Wikipedia hostet Logos und Cover unter US-Fair-Use — in Deutschland NICHT nutzbar; nur verwenden, was auf Commons liegt. Lizenz je Datei ueber den Knopf "Weiterverwenden" auf der Dateiseite pruefen |
 | magnific.com/de/bilder | = umbenanntes FREEPIK | Free-Account: ATTRIBUTIONSPFLICHT (Nennung Freepik/Magnific)! Exakte Formel laut Lizenzzertifikat: `designed by <autor> Magnific.com`, verlinkt auf magnific.com. Lizenz-PDF beim Download IMMER mitspeichern (einzige Quelle mit Beweispflicht). Mischbestand mit KI, nicht durchgängig gekennzeichnet. „Editorial only"-Assets tabu. KI-Assets meiden (separate AI-Terms). Empfehlung: nur nachrangig nutzen |
 
 ## ❌ ROT — nicht (mehr) verwenden

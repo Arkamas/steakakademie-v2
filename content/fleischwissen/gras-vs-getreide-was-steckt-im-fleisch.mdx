@@ -28,11 +28,14 @@ seoDescription: "Weidefleisch oder Getreidemast? Die belegten Unterschiede bei O
 # imageSource: ""
 # imageAI: true
 # ── Redaktionsvorbehalt (AI Act Art. 50 Abs. 4) ────────────────────────
-# Zwei dokumentierte Faktencheck-Runden am 30.08.2026 (Protokoll im
-# Quellordner). `reviewedAt` bleibt bewusst leer, bis Uwe selbst abnimmt —
-# ein Pruefdatum, das niemand gesetzt hat, waere ein erfundener Nachweis.
-status: "published"
-reviewed: true
+# NOCH NICHT FREIGEGEBEN (Uwe, 30.08.2026). Zwei dokumentierte Faktencheck-
+# Runden am 30.08.2026 (Protokoll im Quellordner) ersetzen die redaktionelle
+# Abnahme nicht. Solange status auf review steht, filtert nurVeroeffentlicht()
+# den Artikel aus Uebersicht, Sitemap und generateStaticParams heraus.
+# Freigabe = status auf published, reviewed auf true und reviewedAt auf das
+# Datum der Abnahme. Ein Pruefdatum, das niemand gesetzt hat, waere ein
+# erfundener Nachweis — deshalb bleibt reviewedAt bis dahin ganz weg.
+status: "review"
 faq:
   - question: "Ist grasgefüttertes Rindfleisch gesünder?"
     answer: "Es hat ein messbar anderes Nährstoffprofil: ein günstigeres Omega-6-zu-Omega-3-Verhältnis, etwa dreimal so viel Vitamin E und deutlich mehr Beta-Carotin. Ob daraus ein gesundheitlicher Vorteil für den Menschen folgt, hängt von der Gesamternährung ab und ist über normale Portionsgrößen nicht belegt."

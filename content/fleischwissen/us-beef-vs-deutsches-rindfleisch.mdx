@@ -28,11 +28,14 @@ seoDescription: "Ist US-Beef wirklich besser? Wir vergleichen Feedlot und deutsc
 # imageSource: ""
 # imageAI: true
 # ── Redaktionsvorbehalt (AI Act Art. 50 Abs. 4) ────────────────────────
-# Zwei dokumentierte Faktencheck-Runden am 30.08.2026 (Protokoll im
-# Quellordner). `reviewedAt` bleibt bewusst leer, bis Uwe selbst abnimmt —
-# ein Pruefdatum, das niemand gesetzt hat, waere ein erfundener Nachweis.
-status: "published"
-reviewed: true
+# NOCH NICHT FREIGEGEBEN (Uwe, 30.08.2026). Zwei dokumentierte Faktencheck-
+# Runden am 30.08.2026 (Protokoll im Quellordner) ersetzen die redaktionelle
+# Abnahme nicht. Solange status auf review steht, filtert nurVeroeffentlicht()
+# den Artikel aus Uebersicht, Sitemap und generateStaticParams heraus.
+# Freigabe = status auf published, reviewed auf true und reviewedAt auf das
+# Datum der Abnahme. Ein Pruefdatum, das niemand gesetzt hat, waere ein
+# erfundener Nachweis — deshalb bleibt reviewedAt bis dahin ganz weg.
+status: "review"
 faq:
   - question: "Ist US-Beef besser als deutsches Rindfleisch?"
     answer: "Nicht pauschal. US-Beef der Spitzenklasse (USDA Prime) ist stärker marmoriert und dadurch oft zarter und saftiger. Deutsches Rindfleisch punktet bei Hormonverbot, kürzeren Transportwegen und einem günstigeren Fettsäureprofil, wenn es aus Weidehaltung stammt. Entscheidend ist nicht das Land, sondern das Produktionssystem."

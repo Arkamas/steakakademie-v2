@@ -28,11 +28,14 @@ seoDescription: "Stress vor der Schlachtung verändert den pH-Wert im Fleisch. W
 # imageSource: ""
 # imageAI: true
 # ── Redaktionsvorbehalt (AI Act Art. 50 Abs. 4) ────────────────────────
-# Zwei dokumentierte Faktencheck-Runden am 30.08.2026 (Protokoll im
-# Quellordner). `reviewedAt` bleibt bewusst leer, bis Uwe selbst abnimmt —
-# ein Pruefdatum, das niemand gesetzt hat, waere ein erfundener Nachweis.
-status: "published"
-reviewed: true
+# NOCH NICHT FREIGEGEBEN (Uwe, 30.08.2026). Zwei dokumentierte Faktencheck-
+# Runden am 30.08.2026 (Protokoll im Quellordner) ersetzen die redaktionelle
+# Abnahme nicht. Solange status auf review steht, filtert nurVeroeffentlicht()
+# den Artikel aus Uebersicht, Sitemap und generateStaticParams heraus.
+# Freigabe = status auf published, reviewed auf true und reviewedAt auf das
+# Datum der Abnahme. Ein Pruefdatum, das niemand gesetzt hat, waere ein
+# erfundener Nachweis — deshalb bleibt reviewedAt bis dahin ganz weg.
+status: "review"
 faq:
   - question: "Was ist DFD-Fleisch?"
     answer: "DFD steht für dark, firm, dry — dunkel, fest, trocken. Es entsteht, wenn ein Tier vor der Schlachtung seine Muskelglykogen-Reserven durch Stress aufgebraucht hat. Der End-pH bleibt dann bei 6,0 oder darüber, statt auf die normalen 5,4 bis 5,7 zu fallen. Ausgeprägtes DFD liegt bei pH 6,2 bis 6,5."

@@ -137,6 +137,11 @@ _to_delete/
 # Lokale Claude-Einstellungen dieser Arbeitskopie, kein Projektbestandteil.
 .claude/settings.local.json
 
+# Symlinks, die "npx skills add" von .claude/skills/ nach .agents/skills/ legt.
+# Maschinenlokal und auf einem anderen Rechner wertlos; der Inhalt selbst ist
+# unter .agents/skills/ versioniert und "npx skills add" erzeugt die Links neu.
+.claude/skills/
+
 # 17 MB Affinity-Arbeitsdateien und Zwischenstaende des Cut-Generators. Lagen bis
 # 30.08.2026 unter public/images/Cut Generator Bulle/ und waeren von dort oeffentlich
 # ausgeliefert worden; verschoben nach docs/cut-atlas/werkstatt/ — gleicher Weg wie

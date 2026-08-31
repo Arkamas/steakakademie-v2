@@ -2,8 +2,12 @@
  * POST /api/rezept-einreichen   (application/json)
  *
  * Flow:
- *  1. Auth — eingeloggter Nutzer (Kosten-/Spam-Schutz, Attribution für Hall of Fame)
- *  2. Input validieren (Zod, Spiegel des Frontend-Schemas)
+ *  1. Guard — Same-Origin → Rate-Limit → Zod-Body (zentral, src/lib/api/guard.ts).
+ *     Sitzt hier, weil jeder Aufruf einen bezahlten Anthropic-Moderations-Call
+ *     (generateObject, Haiku) auslöst — ohne Limit wäre das ein offener Kostenhahn.
+ *  2. Auth — eingeloggter Nutzer (Kosten-/Spam-Schutz, Attribution für Hall of Fame).
+ *     Bleibt bewusst IN der Route statt im Guard: das Frontend (RecipeSubmitModal)
+ *     hängt am 401-Shape { error, needsLogin } — der Guard-401 hätte kein needsLogin.
  *  3. KI-Moderation (Doppel-Tor: safe + is_recipe) via generateObject
  *  4. Status ableiten: approved | needs_review | rejected
  *  5. Slug erzeugen (eindeutig), Insert via Service-Role
@@ -21,6 +25,7 @@ import {
   MODERATION_SYSTEM,
   buildModerationPrompt,
 } from '@/lib/rezept/moderation';
+import { guardRequest } from '@/lib/api/guard';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -66,7 +71,24 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'ANTHROPIC_API_KEY fehlt.' }, { status: 500 });
   }
 
-  // 1) Auth
+  // 1) Guard: Same-Origin → Rate-Limit → Zod-Body.
+  // Kostenschutz: jede Einreichung kostet einen Anthropic-Moderations-Call.
+  // Limit bewusst konservativ — Rezept-Einreichung ist ein seltenes Ereignis;
+  // 5 pro Stunde pro IP (Guard zählt pro IP, siehe guard.ts) reichen jedem
+  // legitimen Nutzer und deckeln Skript-Schleifen.
+  // Auth läuft danach weiterhin in der Route (401-Shape mit needsLogin, s. o.).
+  const guard = await guardRequest(req, {
+    key: 'rezept-einreichen',
+    rate: { limit: 5, windowMs: 60 * 60_000 },
+    schema: InputSchema,
+    // Großzügig: bis zu 30 Schritte à 1200 Zeichen + 40 Zutaten passen nicht in
+    // die 16-KiB-Voreinstellung des Guards.
+    maxBodyBytes: 128 * 1024,
+  });
+  if (!guard.ok) return guard.response;
+  const input = guard.body;
+
+  // 2) Auth — Shape { error, needsLogin } NICHT ändern (RecipeSubmitModal.tsx).
   const supabase = createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
@@ -74,15 +96,6 @@ export async function POST(req: Request) {
       { error: 'Bitte melde dich an, um ein Rezept einzureichen.', needsLogin: true },
       { status: 401 },
     );
-  }
-
-  // 2) Input
-  let input: z.infer<typeof InputSchema>;
-  try {
-    const body = await req.json();
-    input = InputSchema.parse(body);
-  } catch {
-    return NextResponse.json({ error: 'Ungültige Eingabe.' }, { status: 400 });
   }
 
   const admin = createAdminClient(

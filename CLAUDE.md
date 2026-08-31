@@ -338,3 +338,61 @@ Rules:
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+### Betrieb (Stand 31.08.2026)
+
+**Die Auto-Hooks sind entfernt.** `post-commit` und `post-checkout` stießen bei
+jedem Commit bzw. Branch-Wechsel einen vollen Rebuild an. Weil ein Label-Lauf
+länger braucht als der Abstand zwischen zwei Commits, wurde er regelmäßig von
+der nächsten Runde überholt — deshalb veralteten die Community-Labels ständig.
+Sicherungskopien liegen unter `_to_delete/graphify-hooks/`. Wieder einspielen
+ginge mit `graphify hook install`; das ist aber genau der Zustand, den wir
+verlassen haben.
+
+Der Graph wird ab jetzt **von Hand** aktualisiert, in dieser Reihenfolge:
+
+```powershell
+graphify update .                                      # AST-Struktur, keine API-Kosten
+graphify label . --max-concurrency=1 --batch-size=200  # semantische Labels
+```
+
+Die beiden Flags sind nicht optional: Ohne sie läuft der Label-Lauf in das
+Rate-Limit des Gemini-Free-Tiers und bricht mittendrin ab. Mit ihnen läuft er
+langsam, aber durch.
+
+**Offener Rückstand:** 927 der 1313 Dateien im Manifest (70 %) haben
+`semantic_hash: ""`, sind also nie gelabelt worden — darunter alle vier
+Rechtstexte (`agb`, `datenschutz`, `impressum`, `nutzungsbedingungen`). Sie
+stehen mit ihrer AST-Struktur im Graphen, aber ohne semantische Beschreibung.
+Ein vollständiger Label-Lauf mit den obigen Flags arbeitet das ab.
+
+**Bekannter Defekt:** `src/app/datenschutz/page.tsx` liefert als einzige der 103
+Seiten unter `src/app/` keinen einzigen Symbol-Knoten, nur den Datei-Knoten.
+Die strukturgleichen Nachbarn (`nutzungsbedingungen`, `impressum`, `agb`)
+liefern je drei. Ausgeschlossen wurden: Syntaxfehler (der TypeScript-Parser
+meldet 0 parseDiagnostics und findet 5 Imports, `metadata` und
+`DatenschutzPage`), Dateigröße (eine 84-KB-Datei liefert 47 Knoten) und ein
+veralteter Cache (der AST-Cache enthält nur Dokumente, keine Code-Dateien).
+Die Ursache liegt damit im Symbol-Extraktor von graphify selbst und ist von
+außen nicht weiter eingrenzbar. Reproduktion:
+
+```powershell
+graphify update .
+python -c "import json,collections; g=json.load(open('graphify-out/graph.json')); c=collections.Counter(n['source_file'] for n in g['nodes'] if n.get('source_file')); print(c['src/app/datenschutz/page.tsx'], c['src/app/nutzungsbedingungen/page.tsx'])"
+# erwartet 3 3 - tatsaechlich 1 3
+```
+
+### Git-Wartung
+
+`gc.auto=0`, `gc.autoDetach=false` und `maintenance.auto=false` sind in
+`.git/config` gesetzt. Grund: Wird die automatische Garbage Collection aus einer
+Umgebung heraus ausgelöst, die im Repo nicht löschen darf (etwa der
+Cowork-Mount), scheitert sie mitten im Lauf und hinterlässt `.lock`-Dateien auf
+`refs/heads/main`, `refs/remotes/origin/*` und `packed-refs`. Die blockieren
+danach jede weitere Git-Operation, auch `git push`.
+
+Aufräumen darf deshalb nur, wer löschen kann — also von Hand aus PowerShell:
+
+```powershell
+git gc --prune=now
+```

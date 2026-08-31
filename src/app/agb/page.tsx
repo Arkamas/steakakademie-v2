@@ -305,15 +305,20 @@ export default function AgbPage() {
             </section>
 
             <section id="community" className="scroll-mt-24">
-              <h2 className={h2Class}>§ 12 Community-Rezepte &amp; nutzergenerierte Inhalte</h2>
+              <h2 className={h2Class}>§ 12 Community-Rezepte, Erfahrungsberichte &amp; nutzergenerierte Inhalte</h2>
               <p className="mb-3">
-                Eingeloggte Nutzer können eigene Rezepte einreichen, die nach automatisierter
-                Prüfung auf steakakademie.de veröffentlicht werden können. Für diese Inhalte gilt:
+                Eingeloggte Nutzer können eigene <strong className="text-text-primary">Rezepte</strong>{' '}
+                einreichen, die nach automatisierter Prüfung auf steakakademie.de veröffentlicht werden
+                können, sowie kurze <strong className="text-text-primary">Erfahrungsberichte zu
+                Streitfällen</strong> („Stimme aus der Praxis", max. 600 Zeichen, ein Beitrag je
+                Streitfall). Erfahrungsberichte erscheinen ausschließlich nach vorheriger manueller
+                Freigabe durch uns; ein Anspruch auf Veröffentlichung besteht nicht. Für alle diese
+                Inhalte — nachfolgend einheitlich „Beiträge" — gilt:
               </p>
               <ul className="list-disc pl-5 space-y-2 mb-3">
                 <li>
                   <strong className="text-text-primary">Zusicherung der Rechte:</strong> Du sicherst
-                  zu, dass das eingereichte Rezept von dir stammt bzw. du über alle erforderlichen
+                  zu, dass der eingereichte Beitrag von dir stammt bzw. du über alle erforderlichen
                   Rechte verfügst und keine Rechte Dritter (Urheber-, Marken-, Persönlichkeits- oder
                   sonstige Rechte) verletzt. Es dürfen keine personenbezogenen Daten Dritter
                   enthalten sein.
@@ -321,21 +326,24 @@ export default function AgbPage() {
                 <li>
                   <strong className="text-text-primary">Nutzungsrechtseinräumung:</strong> Mit der
                   Einreichung räumst du uns ein einfaches, räumlich und zeitlich unbeschränktes,
-                  unentgeltliches Nutzungsrecht ein, das Rezept sowie ein dazu automatisch
-                  generiertes KI-Bild auf der Plattform und in damit verbundenen Kanälen zu
+                  unentgeltliches Nutzungsrecht ein, den Beitrag (Rezept bzw. Erfahrungsbericht)
+                  sowie ein dazu automatisch generiertes KI-Bild auf der Plattform und in damit verbundenen Kanälen zu
                   speichern, zu bearbeiten (z.&nbsp;B. redaktionelle Anpassung, Kürzung), öffentlich
                   zugänglich zu machen und zu bewerben. Ein Vergütungsanspruch besteht nicht.
                 </li>
                 <li>
                   <strong className="text-text-primary">Autoren-Anzeige:</strong> Sofern du einen
                   Anzeigenamen gesetzt hast, wird dieser als Autor angezeigt. Ohne Anzeigenamen
-                  erfolgt die Veröffentlichung unter einer neutralen Bezeichnung.
+                  erfolgt die Veröffentlichung unter einer neutralen Bezeichnung. Bei
+                  Erfahrungsberichten ist der Anzeigename Teil der Einsendung (Vorname und Ort,
+                  z.&nbsp;B. „Thomas aus Kassel"); gib dort keine Nachnamen und keine Daten Dritter an.
                 </li>
                 <li>
                   <strong className="text-text-primary">Moderation &amp; Entfernung:</strong> Wir
-                  prüfen Einreichungen automatisiert (KI) und behalten uns vor, Inhalte ohne
+                  prüfen Rezept-Einreichungen automatisiert (KI) und Erfahrungsberichte
+                  ausnahmslos manuell vor der Veröffentlichung. Wir behalten uns vor, Inhalte ohne
                   Angabe von Gründen abzulehnen, zu bearbeiten oder zu entfernen. Du kannst die
-                  Löschung deines veröffentlichten Rezepts jederzeit per E-Mail an{' '}
+                  Löschung deines veröffentlichten Beitrags jederzeit per E-Mail an{' '}
                   <a href="mailto:pitmaster@steakakademie.de" className={linkClass}>pitmaster@steakakademie.de</a>{' '}
                   verlangen.
                 </li>
@@ -344,7 +352,10 @@ export default function AgbPage() {
                   Inhalte ist der jeweilige Nutzer verantwortlich. Wir machen uns nutzergenerierte
                   Inhalte nicht zu eigen und haften nach den §§ 7&nbsp;ff. DDG erst ab Kenntnis einer
                   konkreten Rechtsverletzung; bei Hinweisen entfernen wir betroffene Inhalte
-                  unverzüglich.
+                  unverzüglich. Rechtswidrige Inhalte kannst du jederzeit über das Melde- und
+                  Abhilfeverfahren nach § 7 unserer{' '}
+                  <a href="/nutzungsbedingungen#melden" className={linkClass}>Nutzungsbedingungen</a>{' '}
+                  melden.
                 </li>
                 <li>
                   <strong className="text-text-primary">Freistellung:</strong> Verletzt ein von dir

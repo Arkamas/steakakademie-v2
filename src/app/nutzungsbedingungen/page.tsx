@@ -113,7 +113,7 @@ export default function NutzungsbedingungenPage() {
               </p>
             </section>
 
-            <section>
+            <section id="melden" className="scroll-mt-24">
               <h2 className={h2Class}>§ 7 Melde- & Abhilfeverfahren (DSA)</h2>
               <p className="mb-3">
                 Du kannst uns rechtswidrige oder gegen diese Bedingungen verstoßende Inhalte jederzeit

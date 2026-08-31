@@ -1,16 +1,22 @@
 name: Content-Gates
 
-# Die vier P0-Gates aus `npm run check` (KAN-29-Familie):
+# Die Gates aus `npm run check` (KAN-29-Familie):
 #   • check-redaktionsvorbehalt.mjs  — ungetaggte Rezepte
 #   • check-startseiten-hierarchie.mjs
+#   • check-mdx-komponenten.mjs      — unbekannte JSX-Tags in content/
 #   • validate-frontmatter.mjs
 #   • check-links.mjs                — tote interne Links
-# Vorher hingen diese Skripte an prebuild/build/postbuild und liefen damit bei
-# jedem Vercel-Deploy mit. Seit der Trennung in ein eigenes `check`-Skript ruft
-# der Deploy sie nicht mehr auf ("buildCommand": "npm run build") — dieser
-# Workflow ist der Ersatz-Gate.
-# Hinweis: blockiert NICHT den Vercel-Deploy (der laeuft parallel). Harte Sperre
-# braeuchte Branch-Protection (Admin), vgl. build-guard.yml.
+#
+# STAND 31.08.2026 (Uwe): Die ersten drei laufen wieder im `prebuild` und
+# blockieren damit den Vercel-Deploy — der frueher hier stehende Satz "der
+# Deploy ruft sie nicht mehr auf" stimmt nicht mehr. Gates aus prebuild
+# entfernen ist eine Uwe-Entscheidung, kein Refactoring (CLAUDE.md §4).
+# Dieser Workflow bleibt trotzdem sinnvoll: er laeuft auch auf Pull Requests,
+# also bevor etwas auf main landet, und deckt zusaetzlich Frontmatter und
+# Links ab, die im postbuild erst NACH dem Build greifen.
+# Hinweis: dieser Workflow blockiert den Vercel-Deploy nicht (der laeuft
+# parallel). Harte Sperre braeuchte Branch-Protection (Admin), vgl.
+# build-guard.yml.
 
 on:
   push:
@@ -37,6 +43,56 @@ jobs:
         run: npm ci --ignore-scripts
 
       # Bewusst als ein Schritt: so ist der Workflow genau das, was auch lokal
-      # vor dem Commit laeuft. Welches der vier Gates rot war, steht im Run-Log.
+      # vor dem Commit laeuft. Welches der Gates rot war, steht im Run-Log.
       - name: npm run check
         run: npm run check
+
+  # Rechtschreibung laeuft BEWUSST als eigener Job und BEWUSST nicht blockierend.
+  #
+  # Warum eigener Job: die Pruefung haengt an der oeffentlichen LanguageTool-API
+  # (20 Requests/Minute), das Skript drosselt sich deshalb selbst mit 3,2 s pro
+  # Anfrage. Bei einem groesseren Content-Push sind das viele Minuten. Im selben
+  # Job wuerde das die P0-Gates hinter sich einreihen und deren 12-Minuten-Fenster
+  # sprengen.
+  #
+  # Warum nicht blockierend: der Korpus ist voller Fachvokabular und
+  # Produktnamen — IBBQ, Feedlot, Distillers Grains, Tri-Tip, Mop. Der letzte
+  # Lauf meldete 214 Funde, praktisch alle Fehlalarme. Ein Gate, das fast nur
+  # Rauschen produziert, wird ignoriert oder abgeschaltet; als Meldung ist es
+  # nuetzlich, als Sperre waere es schaedlich.
+  #
+  # Vorher lief das im postbuild und damit bei jedem Vercel-Deploy mit (Uwe,
+  # 31.08.2026: raus). Report-only konnte es den Deploy ohnehin nie retten — es
+  # hat nur Build-Zeit gekostet, nachdem efea468 den kaputten API-Aufruf
+  # repariert hatte und die Pruefung wieder tatsaechlich lief.
+  rechtschreibung:
+    name: Rechtschreibung (nur Bericht)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      # Inkrementell ueber data/spell-check-cache.json: geprueft wird nur, was
+      # sich seit dem letzten Lauf geaendert hat. Ohne --strict, Exitcode bleibt
+      # 0 auch bei Funden; das `|| true` faengt zusaetzlich einen API-Ausfall ab.
+      - name: npm run spell:check
+        run: npm run spell:check || true
+
+      - name: Report als Artefakt sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rechtschreib-report
+          path: data/spell-check-report.json
+          if-no-files-found: ignore

@@ -22,7 +22,7 @@
     "build-guard": "node scripts/build-guard.mjs",
     "check-redaktionsvorbehalt": "node scripts/check-redaktionsvorbehalt.mjs",
     "legal-guard": "node scripts/legal-guard.mjs",
-    "postbuild": "next-sitemap && node scripts/validate-frontmatter.mjs && node scripts/check-links.mjs && node scripts/spell-check.mjs",
+    "postbuild": "next-sitemap && node scripts/validate-frontmatter.mjs && node scripts/check-links.mjs",
     "r2:migrate": "node scripts/migrate-to-r2.mjs",
     "r2:dry-run": "node scripts/migrate-to-r2.mjs --dry-run",
     "qa-scan": "node scripts/qa-manager.js",

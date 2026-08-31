@@ -153,3 +153,9 @@ docs/cut-atlas/werkstatt/
 # public/images/cut-atlas-poster.svg; diese Datei ist eine Dublette von
 # docs/cut-atlas/cut-diagramm.svg und hat unter public/ nichts verloren.
 public/images/cut-diagramm.svg
+
+# Lokaler Zustand der Supabase-CLI (Link zum Projekt, zwischengespeicherte
+# Versionsnummern). Wird von der CLI selbst geschrieben und neu erzeugt —
+# cli-latest aenderte sich bei jedem Aufruf und stand dauerhaft im git status.
+# Kein Projektinhalt: nichts in src/, scripts/ oder .github/ liest daraus.
+supabase/.temp/

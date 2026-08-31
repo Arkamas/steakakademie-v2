@@ -38,6 +38,15 @@
   bei jedem Index-Zugriff `.git/index.lock` an und kann sie danach nicht raeumen:
   Lock nach `.git/_to_delete/` **verschieben**, dann weiterarbeiten.
 
+**Frischer Klon: erst `supabase link`**
+- `supabase/.temp/` ist seit 02bdb71 (31.08.2026) ignoriert. In einer neuen
+  Arbeitskopie fehlen damit `linked-project.json`, `project-ref` und `pooler-url` —
+  die Supabase-CLI ist dort **erst nach einmaligem `supabase link`** einsatzbereit.
+  Wer stattdessen anfaengt, einen kaputten CLI-Zustand zu debuggen, sucht am
+  falschen Ende. Kein Zugangsdatum betroffen: `pooler-url` hat die Form
+  `postgresql://user@host:port/db` und enthaelt **kein** Passwort (in der History
+  nachgeprueft, das Repository ist oeffentlich).
+
 **Deployment-Status ohne Raten**
 - Vercel `projectId: prj_h30tTBcRtSAiIjluBXn8lu5xRUMg`,
   `teamId: team_tEPqF2rHcoOrrPEGRD7Q4hl8` — damit liefert die Vercel-MCP

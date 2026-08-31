@@ -89,6 +89,15 @@ jobs:
       - name: npm run spell:check
         run: npm run spell:check || true
 
+      # Macht die Zahl in der Job-Summary sichtbar, ohne zu blockieren. Ohne
+      # diesen Schritt lag der Befund nur im Artefakt — eine Pruefung, deren
+      # Ergebnis niemand oeffnet, ist faktisch abgeschaltet. `if: always()`,
+      # weil gerade der Fall "Lauf kam nicht durch" sichtbar sein muss; das
+      # Skript beendet sich immer mit 0.
+      - name: Zusammenfassung in die Job-Summary
+        if: always()
+        run: node scripts/spell-check-summary.mjs
+
       - name: Report als Artefakt sichern
         if: always()
         uses: actions/upload-artifact@v4

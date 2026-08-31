@@ -10,12 +10,17 @@
  * Scannt bewusst NICHT compliance/ und docs/ (dort stehen die Regeln als Text).
  *
  * Exit 0 = sauber · Exit 1 = mindestens ein Verstoß.
- * Keine externen Dependencies.
+ *
+ * Dependencies: js-yaml (seit Regel 6 — liest data/bildregister.yaml). Bis
+ * dahin lief der Guard dependency-frei; die Ausnahme ist bewusst, weil ein
+ * handgeschriebener YAML-Parser bei einem Beweismittel die falsche Sparsamkeit
+ * waere.
  */
 
-import { readFileSync, readdirSync, statSync } from 'fs';
+import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
 import { join, extname, dirname, relative, sep } from 'path';
 import { fileURLToPath } from 'url';
+import { load } from 'js-yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -168,12 +173,71 @@ for (const f of contentFiles) {
   }
 }
 
+// ── 6) Bilder ohne Eintrag im Bildregister ──────────────────────────────────
+// Im Streitfall liegt die Beweislast fuer die Lizenz bei uns. "War doch von
+// Unsplash" ist kein Nachweis — Lizenzbedingungen aendern sich, und es gilt die
+// Fassung zum Zeitpunkt des Downloads. Deshalb fuehrt data/bildregister.yaml
+// jedes Bild unter public/ mit seiner Herkunft.
+//
+// Absichtlich hart fuer NEUE Bilder: ein Bild ohne Eintrag setzt den Build rot.
+// Die Reibung ist der Zweck — sie erzwingt die Dokumentation im Moment des
+// Hinzufuegens, nicht Monate spaeter, wenn niemand mehr weiss, woher es kam.
+//
+// Der Altbestand steht mit `status: offen` im Register und wird nur gezaehlt,
+// nicht als Verstoss gewertet — gleiche Logik wie BILD_ALTBESTAND oben: sichtbar
+// halten, abarbeiten, nicht wachsen lassen.
+const BILD_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif'];
+const REGISTER_PFAD = join(ROOT, 'data', 'bildregister.yaml');
+
+let registerOffen = 0;
+let registerNamensnennung = [];
+if (existsSync(REGISTER_PFAD)) {
+  const register = load(readFileSync(REGISTER_PFAD, 'utf8')) ?? {};
+  const eintraege = register.bilder ?? {};
+
+  for (const bild of walk(join(ROOT, 'public'), BILD_EXTS)) {
+    const pfad = relative(join(ROOT, 'public'), bild).split(sep).join('/');
+    const eintrag = eintraege[pfad];
+
+    if (!eintrag) {
+      add(
+        'Bild ohne Registereintrag',
+        bild,
+        `kein Eintrag in data/bildregister.yaml — Herkunft und Lizenz dort eintragen (status: eigen | ki | lizenz)`,
+      );
+      continue;
+    }
+    if (eintrag.status === 'offen') { registerOffen++; continue; }
+
+    // Fremdbild muss belegbar sein, sonst ist der Eintrag wertlos.
+    if (eintrag.status === 'lizenz' && !(eintrag.quelle && eintrag.lizenz && eintrag.erworben_am)) {
+      add(
+        'Bildregister unvollstaendig',
+        bild,
+        'status: lizenz verlangt quelle, lizenz und erworben_am — ohne die drei ist der Eintrag kein Nachweis',
+      );
+    }
+    // CC BY und CC BY-SA verlangen die Nennung AM Bild. In E-Mails kaum
+    // umsetzbar, deshalb hier sichtbar machen statt still durchlaufen lassen.
+    if (eintrag.namensnennung === true) registerNamensnennung.push(pfad);
+  }
+} else {
+  add('Bildregister fehlt', REGISTER_PFAD, 'data/bildregister.yaml nicht gefunden — Regel 6 kann nicht pruefen');
+}
+
 // ── Report ───────────────────────────────────────────────────────────────────
 const scanned = srcFiles.length + publicFiles.length + contentFiles.length;
 if (violations.length === 0) {
   console.log(`✅ Legal-Guard: keine Abmahn-Regressionen (${scanned} Dateien geprüft).`);
   if (altbestandTreffer) {
     console.log(`   Hinweis: ${altbestandTreffer} externe Bild-URL(n) im Altbestand (BILD_ALTBESTAND, ${BILD_ALTBESTAND.size} Dateien) — geduldet, nicht geloest.`);
+  }
+  if (registerOffen) {
+    console.log(`   Hinweis: ${registerOffen} Bild(er) im Bildregister mit "status: offen" — Herkunft noch nicht geklaert. Ziel ist null.`);
+  }
+  if (registerNamensnennung.length) {
+    console.log(`   Hinweis: ${registerNamensnennung.length} Bild(er) mit Pflicht zur Namensnennung — in E-Mails meiden:`);
+    for (const p of registerNamensnennung) console.log(`     · ${p}`);
   }
   process.exit(0);
 }

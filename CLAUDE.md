@@ -30,8 +30,19 @@
 **Git**
 - Vor jeder Aussage zu `ahead`/`behind`: **erst `git fetch`**. Ohne das ist
   `origin/main` in diesem Arbeitsbaum beliebig alt.
-- Reihenfolge ist **commit → `npm run build` → push**, nie commit → push → hoffen.
-  Vier rote Deployments am 26.08. kamen aus dieser einen Vertauschung.
+- **main ist seit 01.09.2026 durch GitHub Branch Protection geschuetzt.**
+  Direct-Push auf main ist blockiert. Ablauf fuer jede Code-, AGB-, Content- oder
+  Styling-Aenderung: eigener Branch (`feature/...` oder `fix/...`) → Push auf
+  diesen Branch → Vercel baut ein Preview-Deployment mit denselben Gates wie die
+  Produktion (`check-mdx-komponenten`, `check-redaktionsvorbehalt`,
+  `check-startseiten-hierarchie`, Linter) → Pull Request nach main.
+- Reihenfolge bleibt **commit → `npm run build` → push**, nur jetzt auf den
+  Branch statt auf main. Ohne lokalen Build vorher wird das Preview rot statt
+  der Produktion — aber rot bleibt rot: Vier rote Deployments am 26.08. kamen aus
+  genau dieser Vertauschung.
+- Ob die vier Gates als Required Status Checks den Merge-Button sperren oder nur
+  informativ im Preview laufen, ist noch nicht geprueft — vor dem ersten PR
+  dieser Art in `Settings → Branches → main` nachsehen.
 - **Nie `git add -A`**, auch nicht auf ein Unterverzeichnis. Immer Pfade einzeln
   nennen — sonst wandert uncommitteter Fremdstand mit (Regel 9).
 - Ein Linux-Zugriff ueber die Ordner-Bruecke darf keine Dateien loeschen. git legt

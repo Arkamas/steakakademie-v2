@@ -3,6 +3,158 @@
 > Wöchentlicher Status-Check gegen die Audit-Baseline vom 07.07.2026.
 > Neuester Eintrag oben. Erhebung via US-basierter WebSearch → DE-SERP kann abweichen (Caveat je Zeile).
 
+## KW36 — 31.08.2026
+
+> Vorwoche = **KW35 (28.08.)**, direkt darunter. Abstand 3 Tage (Montag statt Freitag erhoben) —
+> kurze Spanne, Deltas entsprechend vorsichtig lesen.
+
+### Rankings (Google Top 10, US-basierte Websuche — DE-SERP kann abweichen)
+
+| Keyword | steakakademie.de Top 10? | Wer stattdessen (Top 3) | Δ KW35 | Δ Baseline |
+|---|---|---|---|---|
+| „Kerntemperatur Steak" | ✅ **ja — Rang 5 der Trefferliste** (`/temperatur-guide`, Titel „Kerntemperaturen Fleisch — Tabelle 2026") | grillclub.amainfo.at · shop.block-house.de · grillfuerst.de | 🟢 **Verbesserung** (KW35: Rang 8/9, allerdings mit abweichender Query) | 🟢 **Verbesserung** (Baseline: nicht in Top 10) |
+| „Ribeye" | ❌ nein | Kansas City Steaks · Omaha Steaks · meatnbone.com | = | = |
+| „Reverse Sear" | ❌ nein | nocrumbsleft.net · theglamorousgourmet.com · jessicagavin.com | = | = |
+| „Brisket Anleitung" | ❌ nein — trotz eigenem Brisket-Guide nicht gelistet | bbqpit.de · ofen.de · grillkameraden.de | = (Top 3 identisch) | = |
+| „Steakakademie" (Brand) | ✅ **ja — Rang 3** (`steakakademie.de/`); davor nur die **eigenen** Kanäle Instagram (#1) und Facebook (#2) | Instagram @steakakademie · Facebook Steakakademie (Bochum, fremd) · **steakakademie.de** | 🟢 Verbesserung (KW35: „nicht sichtbar") | 🔴 schlechter (Baseline: Platz 1) |
+
+⚠️ **Methodik-Caveats:**
+- Queries diesmal **wörtlich** wie im Auftrag („Kerntemperatur Steak", „Ribeye", „Reverse Sear",
+  „Brisket Anleitung", „Steakakademie") — also wieder vergleichbar mit der Baseline, aber **nicht
+  1:1 mit KW35**, wo bei zwei Zeilen erweiterte Queries liefen. Die Verbesserung bei
+  „Kerntemperatur Steak" ist daher **teilweise ein Query-Effekt**, nicht sicher ein Ranking-Effekt.
+- „Ribeye" und „Reverse Sear" lieferten diese Woche eine **rein US/EN-SERP** (US-Händler,
+  US-Foodblogs, kein einziges DE-Ergebnis). Für den DACH-Markt ist das Ergebnis **nicht
+  aussagekräftig** — als „nicht gefunden" gewertet, aber ehrlich: hier wurde faktisch der
+  falsche Markt gemessen. Ohne DE-Standort-Check keine belastbare Aussage.
+- Trefferliste ≠ exakte Google-Position (Methodik-Korrektur aus `docs/geo-baseline.md`, Messung 3).
+
+**Befund:** Erstmals seit Beginn dieser Log-Reihe erscheint `/temperatur-guide` beim
+Kopf-Keyword „Kerntemperatur Steak" in der Trefferliste — Rang 5, zwischen Grillfürst und
+Grillcenter Nord. Das deckt sich mit dem Muster aus `geo-baseline.md`: die Seite ist indexiert
+und thematisch korrekt zugeordnet, das Umfeld bleibt aber unverändert von Händlern mit
+Domain-Autorität besetzt. Auf den drei anderen Sach-Keywords weiterhin keine Sichtbarkeit.
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de`: **weiterhin 0 echte externe Erwähnungen/Backlinks.**
+Alle Treffer sind Namensvettern bzw. fremde Anbieter, keine Verlinkung auf unsere Domain:
+- https://www.facebook.com/steakakademie/ (Steakakademie Bochum / Grillakademie Ruhr — fremd)
+- https://www.oberpfalz-beef.de/gutschein-kurs-steaktasting/7024
+- https://beisser.de/fleischerei/steakakademie/
+- https://www.grillkonzept.de/kurstermin/steakakademie-100-bestes-fleisch-2024-01-05/
+- https://akademie-der-kochenden-kuenste.de/kurse/kochkurse/steak-kochkurse/…
+
+**Δ KW35 (0) und Δ Baseline (0): unverändert 0 — jetzt 8 Wochen.**
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ KW35 |
+|---|---|---|---|
+| www → non-www Redirect | `https://www.steakakademie.de/` → `https://steakakademie.de/`, Seite lädt vollständig, Canonical `https://steakakademie.de` | 🟢 ok | = |
+| `/llms.txt` erreichbar | vollständig ausgeliefert (`Content-Type: text/plain`), Kern-Referenzen + Weitere Inhalte + Über | 🟢 ok | = (3. Woche in Folge sauber) |
+| `/robots.txt` endet mit Sitemap-Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` als letzte Zeile vorhanden; AI-Crawler-Block (GPTBot, ClaudeBot, PerplexityBot u. a.) unverändert erlaubt | 🟢 ok | = |
+
+### Offene Punkte / GEO
+
+- Wikidata **Q140455747** in `src/lib/schema.ts` (`sameAs`, Zeile 35) ✅ weiterhin verdrahtet — nichts offen.
+- **AI-Abfragen-Tabelle in `docs/geo-baseline.md`:** Messung 3 (09.08.) ist **vollständig ausgefüllt**
+  (ChatGPT ❌, Perplexity ✅ erstmals zitiert, Google AIO ❌). Offen ist die **Tabelle von Messung 2
+  (04.08.)** — dort sind alle drei Zeilen noch leer. Nächster turnusmäßiger AI-Re-Check laut
+  4-Wochen-Rhythmus: **~06.09.2026, in 6 Tagen.** Nur manuell durch Uwe erhebbar.
+- **Backlinks = 0** bleibt der strukturelle Engpass — jetzt 8 Wochen unverändert.
+
+### Ampeln
+
+- Rankings: 🟡 (von 🔴 hoch — erstmals ein Treffer beim Kopf-Keyword, aber Query-Effekt nicht ausschließbar; 3 von 5 Keywords weiter ohne Sichtbarkeit)
+- Off-Page: 🔴 (8 Wochen 0 Backlinks — Ursache Nr. 1)
+- Technik: 🟢 (alle drei Checks sauber)
+
+### Handlungsempfehlung (max. 1)
+
+**Backlink-Beschaffung starten statt weiter zu messen.** Acht Wochen Nullstand bei den
+Erwähnungen ist kein Rauschen mehr, sondern der Befund. Konkret und diese Woche machbar:
+`/temperatur-guide` bei 3–5 deutschen BBQ-Foren/Communities als Referenz einbringen
+(Regel 5 beachten: kein Spam — nur dort, wo die Tabelle eine gestellte Frage tatsächlich
+beantwortet). Alles andere im SEO-Bereich ist nachrangig, solange die Autoritäts-Seite null ist.
+
+### Trend vs. Vorwoche
+
+Erster sichtbarer Lichtblick beim Kopf-Keyword „Kerntemperatur Steak" (Rang 5 statt gar nicht) —
+methodisch aber unsicher, weil die Query gewechselt hat; Off-Page und Technik unverändert.
+
+---
+
+## KW35 — 28.08.2026
+
+> Vorwoche = **KW34 (17.08.)**, direkt darunter. Lücke: kein KW35-Eintrag zwischen 17.08.
+> und heute — normaler Wochenabstand (11 Tage, Freitag statt Montag erhoben).
+
+### Rankings (Google Top 10, US-basierte Websuche — DE-SERP kann abweichen)
+
+| Keyword | steakakademie.de Top 10? | Wer stattdessen (Top 3) | Δ KW34 | Δ Baseline |
+|---|---|---|---|---|
+| „Kerntemperatur Steak" | ❌ nein — taucht in der breiteren Trefferliste auf Rang 8/9 auf, nicht Top 3 | REWE · Block House · Schickling-Grill | = | = |
+| „Ribeye" | ❌ nein — trotz eigenem Ribeye-Guide nicht gelistet | spice.alibaba · Grillgoods.de · Die Frau am Grill — diesmal SERP größtenteils DE (Verbesserung ggü. sonstigem US/EN-Caveat) | = | = |
+| „Reverse Sear" (Query: „Reverse Sear Steak Methode Anleitung") | ❌ nein | MeatEater (US) · **bbqpit.de** · Snake River Farms — **identisches Top-3 wie KW34** | = | = |
+| „Brisket Anleitung" | ❌ nein — trotz eigenem Brisket-Guide nicht gelistet | bbqpit.de · ofen.de · grillkameraden.de | leichte Rotation (bbqlicate.de raus Top3, ofen.de neu #2) | = |
+| „Steakakademie" (Brand) | ❌ nicht sichtbar | FB Bochum (Grillakademie Ruhr) · Beisser · GrillKonzept | = | = |
+
+⚠️ **Methodik-Caveat Zeile 1:** Query lautete „Kerntemperatur Steak Tabelle Grad" (Zusatz ggü.
+Vorwochen-Query „Kerntemperatur Steak") — bedingt vergleichbar, deshalb keine Wertung als
+Verbesserung, nur als Beobachtung notiert.
+
+**Befund:** Siebte Messung in Folge ohne generische Sichtbarkeit auf allen 5 Keywords — auch dort,
+wo eigene Guides existieren (Ribeye, Brisket). Konkurrenzfeld unverändert: Händler/Magazine/DE-BBQ-
+Portale mit Domain-Autorität. Keine neue Bewegung.
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de`: **weiterhin 0 echte externe Erwähnungen/Backlinks.**
+Alle Treffer = fremde Steak-Akademien (FB Bochum, Oberpfalz Beef, Beisser, GrillKonzept) oder
+themenfremde Wikipedia-Treffer (Nordakademie, Kunstakademie Düsseldorf, Theaterakademie Mannheim).
+**Δ KW34 (0) und Δ Baseline (0): unverändert 0 — jetzt 7 Wochen.**
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ KW34 |
+|---|---|---|---|
+| www → non-www Redirect | `https://www.steakakademie.de/` → `https://steakakademie.de` | 🟢 ok | = |
+| `/llms.txt` erreichbar | vollständiger Inhalt beim Abruf (Kern-Referenzen, Weitere Inhalte, Über; `Content-Type: text/plain`) | 🟢 ok | = (**2. Woche in Folge sauber — Stabilität bestätigt**) |
+| `/robots.txt` endet mit Sitemap-Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` vorhanden | 🟢 ok | = |
+
+**Neuer Fund (kein Delta bestimmbar, da in Vorwochen nicht geprüft):** `/robots.txt` enthält jetzt
+einen expliziten Block mit ausdrücklich erlaubten AI-/Answer-Engine-Crawlern (GPTBot, ClaudeBot,
+anthropic-ai, PerplexityBot, Google-Extended, Applebot-Extended, Amazonbot, CCBot, Bytespider) —
+deckt sich mit der GEO-Doktrin „Burggraben 3". Ehrlich: unklar, seit wann das so ist, da frühere
+Checks nur die Sitemap-Zeile prüften. Reiner Fakt, keine Wertung als „neu diese Woche".
+
+### Offene Punkte / GEO
+
+- Wikidata **Q140455747** in `src/lib/schema.ts` (`sameAs`, Zeile 35) ✅ bestätigt — nichts offen.
+- Nächster AI-Re-Check (ChatGPT/Perplexity/Google AIO) laut `docs/geo-baseline.md` fällig
+  **~06.09.2026** — noch **9 Tage hin, diese Woche kein Handlungsbedarf.** Nur manuell durch Uwe erhebbar.
+- **Backlinks = 0** bleibt der strukturelle Engpass — jetzt 7 Wochen unverändert.
+
+### Ampeln
+
+- Rankings: 🔴 (null generische Sichtbarkeit, 7 Wochen ohne Bewegung, auch auf Keywords mit eigenem Content)
+- Off-Page: 🔴 (weiter 0 Backlinks — Ursache Nr. 1)
+- Technik: 🟢 (llms.txt zweite Woche grün — Stabilität bestätigt; Redirect + robots weiter ok)
+- GEO-Setup: 🟢 (Wikidata gesetzt, letzter AI-Re-Check dokumentiert, nächster erst 06.09. fällig)
+
+### Handlungsempfehlung (1)
+
+**Affiliate-/Partner-Anmeldungen abarbeiten** (Santosgrills, Grillfürst, Ankerkraut, Otto Gourmet) —
+seit KW23 offen, jetzt 7 Wochen 0 Backlinks in Folge. Technik ist kein Engpass mehr, Content ist da
+(auch für Ribeye/Brisket kein Ranking trotz eigenem Guide) — ohne externe Domain-Signale bewegt sich
+bei den Rankings strukturell nichts.
+
+**Trend vs. Vorwoche (KW34):** Stillstand bei Rankings und Backlinks (unverändert 0/0); Technik
+bestätigt sich als stabil (llms.txt zweite grüne Woche in Folge) statt neuem Fortschritt.
+
+---
+
 ## KW34 — 17.08.2026
 
 > Vorwoche = **KW33 (10.08.)**, direkt darunter.

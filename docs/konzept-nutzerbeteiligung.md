@@ -181,3 +181,24 @@ die nie wieder endet.
 
 Stufe 1 ist überschaubar. Stufe 2 ist die Stelle, an der aus einem Feature eine Pflicht
 wird — die würde ich erst angehen, wenn die Streitfälle inhaltlich stehen.
+
+---
+
+## 9. Status der Umsetzung
+
+**Stufe 2 implementiert am 30.08.2026, hinter dem Feature-Flag
+`STREITFALL_BEITRAEGE_ENABLED`** (nur bei Wert `'1'` wird die Komponente auf der
+Streitfall-Seite überhaupt gerendert — serverseitig geprüft). Bestandteile:
+Migration `supabase/migrations/20260830130000_streitfall_beitraege.sql`
+(Tabelle `streitfall_beitraege`, RLS: Insert nur eigener Beitrag mit Status
+`neu`, lesbar nur Freigegebenes plus der eigene Beitrag, kein Client-Update/-Delete),
+API `POST /api/streitfall-beitrag`, Komponente
+`src/components/streitfaelle/StreitfallBeitraege.tsx` („Stimmen aus der
+Praxis"), Moderation unter `/admin/beitraege` (+ `/api/admin/beitraege`,
+Service-Role, `admin_auth`-Cookie). Abweichung zum Entwurf in Abschnitt 2: Der
+Anzeigename („Thomas aus Kassel") wird vom Nutzer bei der Einsendung angegeben
+und bei der Freigabe redaktionell mitgeprüft, statt vom Betreiber nachträglich
+gesetzt.
+
+**Offen vor dem Livegang:** anwaltliche DSA-Prüfung + Nutzungsbedingungen-Update
+(Abschnitt 5). Erst danach setzt Uwe das Flag.

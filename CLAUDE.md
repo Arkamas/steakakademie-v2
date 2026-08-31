@@ -271,6 +271,17 @@ Analytics & Data · CRM & Monetization.
   *Vereinigung* aller bekannten Namen, nicht pro Route: eine Komponente, die zwar existiert,
   aber in der mdxComponents-Zuordnung genau dieser Route fehlt, fällt hier nicht auf.
 
+- **Inhalts-Gates im prebuild (Uwe, 31.08.2026).** `prebuild` führt drei Gates aus, in dieser
+  Reihenfolge: `check-mdx-komponenten.mjs`, `check-redaktionsvorbehalt.mjs`,
+  `check-startseiten-hierarchie.mjs`. npm ruft `prebuild` automatisch vor `build` auf, also
+  auch auf Vercel — dort ist es die einzige Stelle, an der die Gates greifen.
+  **Gates aus prebuild entfernen ist eine Uwe-Entscheidung, kein Refactoring.**
+  31a7083 („Inhalts-Gates aus build/prebuild → npm run check") hat genau das ohne diese
+  Abwägung getan und damit den Redaktionsvorbehalt entschärft, an dem die
+  AI-Act-Dokumentation hängt, sowie das Hierarchie-Gate, das sich laut eigenem Skript-Header
+  und §2 Regel 8 ausdrücklich als *Build*-Gate versteht. `npm run check` darf zusätzlich
+  existieren, ersetzt `prebuild` aber nicht: **Vercel führt `check` nie aus.**
+
 - **Voyage-Vollausbau (22.08.2026):** Zentraler Client `src/lib/voyage/client.ts`
   (Embeddings, Reranker, Kontext-Embeddings, Multimodal; Retry bei 429). Wissenssuche ist
   zweistufig: pgvector-Recall → `rerank-2.5-lite` (abschaltbar: VOYAGE_RERANK=off, Ausfall

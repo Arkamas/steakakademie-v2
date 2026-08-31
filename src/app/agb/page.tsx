@@ -310,10 +310,10 @@ export default function AgbPage() {
                 Eingeloggte Nutzer können eigene <strong className="text-text-primary">Rezepte</strong>{' '}
                 einreichen, die nach automatisierter Prüfung auf steakakademie.de veröffentlicht werden
                 können, sowie kurze <strong className="text-text-primary">Erfahrungsberichte zu
-                Streitfällen</strong> („Stimme aus der Praxis", max. 600 Zeichen, ein Beitrag je
+                Streitfällen</strong> („Stimme aus der Praxis&ldquo;, max. 600 Zeichen, ein Beitrag je
                 Streitfall). Erfahrungsberichte erscheinen ausschließlich nach vorheriger manueller
                 Freigabe durch uns; ein Anspruch auf Veröffentlichung besteht nicht. Für alle diese
-                Inhalte — nachfolgend einheitlich „Beiträge" — gilt:
+                Inhalte — nachfolgend einheitlich „Beiträge&ldquo; — gilt:
               </p>
               <ul className="list-disc pl-5 space-y-2 mb-3">
                 <li>
@@ -336,7 +336,7 @@ export default function AgbPage() {
                   Anzeigenamen gesetzt hast, wird dieser als Autor angezeigt. Ohne Anzeigenamen
                   erfolgt die Veröffentlichung unter einer neutralen Bezeichnung. Bei
                   Erfahrungsberichten ist der Anzeigename Teil der Einsendung (Vorname und Ort,
-                  z.&nbsp;B. „Thomas aus Kassel"); gib dort keine Nachnamen und keine Daten Dritter an.
+                  z.&nbsp;B. „Thomas aus Kassel&ldquo;); gib dort keine Nachnamen und keine Daten Dritter an.
                 </li>
                 <li>
                   <strong className="text-text-primary">Moderation &amp; Entfernung:</strong> Wir

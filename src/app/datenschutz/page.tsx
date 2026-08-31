@@ -339,9 +339,16 @@ export default function DatenschutzPage() {
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Speicherdauer:</strong> Eingereichte Inhalte
-                werden gespeichert, bis du sie bzw. dein Konto löschst oder die Veröffentlichung
-                widerrufst. Es gelten ergänzend unsere{' '}
+                werden gespeichert, bis du sie löschst oder die Veröffentlichung widerrufst.
+                Es gelten ergänzend unsere{' '}
                 <Link href="/nutzungsbedingungen" className={linkClass}>Nutzungsbedingungen</Link>.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Bei Löschung deines Kontos:</strong> Bereits
+                veröffentlichte Rezepte bleiben als Bestandteil des Community-Bereichs erhalten.
+                Dein Anzeigename wird dabei entfernt und durch &bdquo;Ehemaliges Mitglied&ldquo;
+                ersetzt, und die Verknüpfung zu deinem Nutzerkonto wird gelöst — ein Personenbezug
+                besteht danach nicht mehr.
               </p>
               <p>
                 Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Nutzungsverhältnis) sowie lit. f

@@ -6,6 +6,8 @@ import { ChevronRight, ExternalLink, Copy, Check, Linkedin, LogOut, Map, Graduat
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
+import MeineEinreichungen from './MeineEinreichungen';
+import KontoLoeschen from './KontoLoeschen';
 
 type State = 'loading' | 'anon' | 'ready' | 'saving';
 
@@ -182,6 +184,8 @@ export default function ProfilClient() {
             </div>
           )}
 
+          {state === 'ready' && <MeineEinreichungen />}
+
           {state === 'ready' && isPublic && slug && (
             <div className="mt-6 space-y-5 border border-border-subtle bg-surface-elevated p-6">
               <h2 className="font-serif text-lg font-bold text-text-primary">Zeigen & verlinken</h2>
@@ -211,6 +215,8 @@ export default function ProfilClient() {
               </div>
             </div>
           )}
+
+          {state === 'ready' && <KontoLoeschen />}
         </div>
       </main>
       <Footer />

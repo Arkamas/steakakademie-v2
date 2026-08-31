@@ -233,6 +233,15 @@ Analytics & Data · CRM & Monetization.
   NICHT Keyword-Stuffing. `docs/geo-llm-ranking-factors.md`. Auto-Check: `geo-check.yml`.
 - **TikTok:** Story-Highlights aktiv nutzen (Reichweiten-Bonus), immer benennen.
 - **Werbekennzeichnung:** siehe §2.1.
+- **Stufe 2 (Streitfall-Beiträge) LIVE seit 31.08.2026:** Erfahrungsberichte unter Streitfällen,
+  Flag `STREITFALL_BEITRAEGE_ENABLED=1` (Netlify alle Kontexte + .env.local). Nichts erscheint
+  automatisch — jeder Beitrag landet mit status `neu` in der Warteschlange und wird manuell unter
+  `/admin/beitraege` freigegeben. Ein Beitrag je Nutzer und Streitfall (UNIQUE slug+user_id),
+  max. 600 Zeichen, Anzeigename Vorname+Ort. Rechtlich abgedeckt: AGB §12 (Rechtseinräumung,
+  manuelle Freigabe, keine Nachnamen) und Melde-Link an jedem Beitrag (Art. 16 DSA) plus
+  Nutzungsbedingungen §7. OFFEN: anwaltliche Prüfung durch RAin Nieweg steht aus (Konzept
+  Abschnitt 5) — Rückbau jederzeit durch Flag auf 0.
+
 - **Rechtschreibprüfung (22.08.2026):** `npm run spell:check` prüft content/ gegen die
   LanguageTool-API (de-DE), inkrementell über data/spell-check-cache.json, Fachbegriffe in
   data/rechtschreib-whitelist.txt. Läuft report-only im Netlify-postbuild (bricht NIE den

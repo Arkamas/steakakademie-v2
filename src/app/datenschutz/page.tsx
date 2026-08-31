@@ -26,7 +26,7 @@ export default function DatenschutzPage() {
           </nav>
 
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">Datenschutzerklärung</h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: Juli 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: August 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 

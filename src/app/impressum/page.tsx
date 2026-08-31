@@ -41,11 +41,24 @@ export default function ImpressumPage() {
               <h2 className="font-sans text-sm font-bold tracking-[0.12em] uppercase text-text-primary mb-3">
                 Kontakt
               </h2>
+              {/* Rechts-Audit 30.08.2026 — private Mobilnummer entfernt.
+                  § 5 Abs. 1 Nr. 2 DDG verlangt Angaben, die eine schnelle
+                  elektronische Kontaktaufnahme und unmittelbare Kommunikation
+                  ermöglichen. Eine Telefonnummer ist dafür NICHT zwingend
+                  (EuGH, Urteil vom 16.10.2008, Rs. C-298/07) — verlangt wird
+                  aber ein zweiter, zügiger Kanal neben der E-Mail.
+                  ACHTUNG: Das Kontaktformular sagt derzeit 24–48 Stunden zu.
+                  Das erfüllt „unmittelbar" nicht sicher. Bis eine geschäftliche
+                  Rufnummer eingetragen ist, besteht hier ein Restrisiko. */}
               <p>
-                Telefon: 01520 1778340<br />
                 E-Mail:{' '}
                 <a href="mailto:pitmaster@steakakademie.de" className="text-brand-fire hover:underline">
                   pitmaster@steakakademie.de
+                </a>
+                <br />
+                Kontaktformular:{' '}
+                <a href="/kontakt" className="text-brand-fire hover:underline">
+                  steakakademie.de/kontakt
                 </a>
               </p>
             </section>

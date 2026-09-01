@@ -27,12 +27,12 @@ export default function ArticleCard({
               alt={imageAlt}
               width={800}
               height={500}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
               priority
             />
           </div>
           <span className="category-label">{category}</span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-2 mb-3 leading-tight article-title-link">
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-2 mb-3 leading-tight article-title-link group-hover:text-brand-fire">
             {title}
           </h1>
           <p className="font-body text-base leading-relaxed mb-4 line-clamp-3 text-text-light/70">
@@ -65,14 +65,14 @@ export default function ArticleCard({
               alt={imageAlt}
               width={100}
               height={70}
-              className="w-24 h-16 object-cover"
+              className="w-24 h-16 object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
             />
           </div>
         </Link>
         <div className="min-w-0">
           <span className="category-label">{category}</span>
           <Link href={url}>
-            <h3 className="font-serif text-base font-bold mt-1 leading-snug article-title-link line-clamp-3">
+            <h3 className="font-serif text-base font-bold mt-1 leading-snug article-title-link group-hover:text-brand-fire line-clamp-3">
               {title}
             </h3>
           </Link>
@@ -93,14 +93,14 @@ export default function ArticleCard({
               alt={imageAlt}
               width={140}
               height={90}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
             />
           </div>
         </Link>
         <div className="flex flex-col justify-center min-w-0">
           <span className="category-label">{category}</span>
           <Link href={url}>
-            <h3 className="font-serif text-lg sm:text-xl font-bold mt-1 mb-2 leading-snug article-title-link line-clamp-2">
+            <h3 className="font-serif text-lg sm:text-xl font-bold mt-1 mb-2 leading-snug article-title-link group-hover:text-brand-fire line-clamp-2">
               {title}
             </h3>
           </Link>
@@ -127,11 +127,11 @@ export default function ArticleCard({
             alt={imageAlt}
             width={600}
             height={380}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
           />
         </div>
         <span className="category-label">{category}</span>
-        <h2 className="font-serif text-xl font-bold mt-2 mb-2 leading-snug article-title-link line-clamp-3">
+        <h2 className="font-serif text-xl font-bold mt-2 mb-2 leading-snug article-title-link group-hover:text-brand-fire line-clamp-3">
           {title}
         </h2>
         <div className="flex items-center gap-2 text-xs font-sans text-text-light/45 mb-2">

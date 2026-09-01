@@ -45,7 +45,7 @@ export default function GenerateImageButton({ slug }: { slug: string }) {
       <button
         onClick={generate}
         disabled={state === 'loading'}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase disabled:opacity-60"
+        className="inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase disabled:opacity-60 transition duration-150 ease-out active:scale-[0.98] disabled:active:scale-100"
       >
         {state === 'loading'
           ? <><Loader2 size={14} className="animate-spin" /> Wird erstellt…</>

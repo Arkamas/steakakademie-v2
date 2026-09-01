@@ -81,7 +81,7 @@ export default function RezeptModerationPage() {
 
       {err && <p className="text-red-400 text-xs mb-4">{err}</p>}
       {loading ? (
-        <p className="text-[#8a7e6a] text-sm animate-pulse">Lade Einreichungen…</p>
+        <p className="text-[#8a7e6a] text-sm animate-pulse motion-reduce:animate-none">Lade Einreichungen…</p>
       ) : recipes.length === 0 ? (
         <p className="text-[#8a7e6a] text-sm">Keine offenen Einreichungen. 🔥</p>
       ) : (

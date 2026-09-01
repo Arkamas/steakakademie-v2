@@ -219,7 +219,7 @@ export default function DiplomaProgressSection() {
         <div className="flex justify-center">
           <Link
             href="/diplome"
-            className="group flex items-center gap-3 font-sans font-bold tracking-[0.16em] uppercase text-xs sm:text-sm px-10 py-4 transition-all duration-300"
+            className="group flex items-center gap-3 font-sans font-bold tracking-[0.16em] uppercase text-xs sm:text-sm px-10 py-4 transition-all duration-300 active:scale-[0.98] motion-reduce:active:scale-100"
             style={{
               background: 'linear-gradient(135deg, #2a1a0a 0%, #1a0e06 100%)',
               border: '1px solid rgba(200,152,32,0.4)',

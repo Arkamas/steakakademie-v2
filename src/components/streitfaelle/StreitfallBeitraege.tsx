@@ -173,7 +173,7 @@ export default function StreitfallBeitraege({ slug }: Props) {
             minLength={2}
             maxLength={40}
             placeholder="Anzeigename, z. B. Thomas aus Kassel"
-            className="w-full px-4 py-3 font-body text-[0.95rem] text-text-light bg-transparent focus:outline-none"
+            className="w-full px-4 py-3 font-body text-[0.95rem] text-text-light bg-transparent"
             style={{ border: '1px solid rgba(200,136,42,0.18)', background: 'rgba(0,0,0,0.25)' }}
           />
           <textarea
@@ -184,7 +184,7 @@ export default function StreitfallBeitraege({ slug }: Props) {
             maxLength={MAX_ZEICHEN}
             rows={4}
             placeholder="Dein Erfahrungsbericht (20 bis 600 Zeichen)"
-            className="w-full px-4 py-3 font-body text-[0.95rem] text-text-light bg-transparent focus:outline-none resize-y"
+            className="w-full px-4 py-3 font-body text-[0.95rem] text-text-light bg-transparent resize-y"
             style={{ border: '1px solid rgba(200,136,42,0.18)', background: 'rgba(0,0,0,0.25)' }}
           />
           <div className="flex items-center justify-between gap-4">

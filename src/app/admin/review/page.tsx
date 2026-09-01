@@ -65,7 +65,7 @@ export default function ReviewPage() {
 
       {err && <p className="text-red-400 text-xs mb-4">{err}</p>}
       {loading ? (
-        <p className="text-[#8a7e6a] text-sm animate-pulse">Lade Entwürfe…</p>
+        <p className="text-[#8a7e6a] text-sm animate-pulse motion-reduce:animate-none">Lade Entwürfe…</p>
       ) : drafts.length === 0 ? (
         <p className="text-[#8a7e6a] text-sm">Keine offenen Entwürfe.</p>
       ) : (

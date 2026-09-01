@@ -73,7 +73,7 @@ export default function AnimalDiagram({
             tabIndex={0}
             aria-label={p.nameDE}
             aria-pressed={isSel}
-            className="cursor-pointer outline-none group"
+            className="cursor-pointer group"
             onClick={() => onSelectPrimal(p.id)}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onSelectPrimal(p.id))}
           >

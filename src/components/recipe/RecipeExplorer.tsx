@@ -206,7 +206,7 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
                     onChange={(e) => { setQuery(e.target.value); resetPage(); }}
                     placeholder="Rezepte der Steakakademie durchsuchen …"
                     aria-label="Rezepte durchsuchen"
-                    className="w-full font-body text-[15px] pl-11 pr-4 py-3.5 bg-white/95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#241A12]"
+                    className="w-full font-body text-[15px] pl-11 pr-4 py-3.5 bg-white/95"
                     style={{ color: INK }}
                   />
                 </div>
@@ -366,7 +366,7 @@ export default function RecipeExplorer({ recipes, activeKategorie, hideKategorie
               onChange={(e) => { setQuery(e.target.value); resetPage(); }}
               placeholder="Rezept, Cut oder Methode suchen …"
               aria-label="Rezepte durchsuchen"
-              className="w-full font-body text-sm pl-9 pr-9 py-2.5 border bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#241A12] transition-colors"
+              className="w-full font-body text-sm pl-9 pr-9 py-2.5 border bg-transparent transition-colors"
               style={{ borderColor: LINE, color: INK }}
             />
             {query && (

@@ -146,7 +146,7 @@ export default function DiagnoseForm() {
         style={{ background: '#C8882A', color: '#0D0A06' }}
       >
         {loading ? (
-          <><Loader2 size={16} className="animate-spin" /> Diagnose läuft … (bis zu 60 Sek.)</>
+          <><Loader2 size={16} className="animate-spin motion-reduce:animate-none" /> Diagnose läuft … (bis zu 60 Sek.)</>
         ) : (
           <>Diagnose anfordern <ArrowRight size={16} /></>
         )}

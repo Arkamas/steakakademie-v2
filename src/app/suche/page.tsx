@@ -101,7 +101,7 @@ export default function SuchePage({
                 name="q"
                 defaultValue={query}
                 placeholder="Cuts, Techniken, Rezepte, Begriffe …"
-                className="w-full bg-transparent outline-none font-sans text-sm text-text-primary placeholder:text-text-muted"
+                className="w-full bg-transparent font-sans text-sm text-text-primary placeholder:text-text-muted"
                 maxLength={80}
               />
             </div>

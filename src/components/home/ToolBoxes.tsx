@@ -83,14 +83,14 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
           value={zutat}
           onChange={(e) => setZutat(e.target.value)}
           placeholder="z. B. Ribeye"
-          className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold focus:outline-none"
+          className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold"
         />
         <button
           type="submit"
           disabled={loading}
           className="inline-flex items-center gap-1 rounded-lg bg-brand-fire px-3 py-2 text-xs font-bold uppercase tracking-wide text-ink hover:opacity-90 disabled:opacity-50"
         >
-          {loading ? <Loader2 size={14} className="animate-spin" /> : <Search size={14} />} Finden
+          {loading ? <Loader2 size={14} className="animate-spin motion-reduce:animate-none" /> : <Search size={14} />} Finden
         </button>
       </form>
 
@@ -318,20 +318,20 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
           value={auftrag}
           onChange={(e) => setAuftrag(e.target.value)}
           placeholder="z. B. Ribeye mit Kaffee-Kruste"
-          className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold focus:outline-none"
+          className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold"
         />
         <button
           type="submit"
           disabled={loading}
           className="inline-flex items-center gap-1 rounded-lg bg-brand-fire px-3 py-2 text-xs font-bold uppercase tracking-wide text-ink hover:opacity-90 disabled:opacity-50"
         >
-          {loading ? <Loader2 size={14} className="animate-spin" /> : <ChevronRight size={14} />} Erstellen
+          {loading ? <Loader2 size={14} className="animate-spin motion-reduce:animate-none" /> : <ChevronRight size={14} />} Erstellen
         </button>
       </form>
 
       {loading && (
         <div className="mt-3 flex items-center gap-2 text-[11px] text-brand-gold">
-          <Loader2 size={13} className="animate-spin shrink-0" />
+          <Loader2 size={13} className="animate-spin motion-reduce:animate-none shrink-0" />
           <span>
             Claude schreibt dein Rezept … {elapsed}s{' '}
             <span className="text-text-muted">(meist 10–20 s)</span>

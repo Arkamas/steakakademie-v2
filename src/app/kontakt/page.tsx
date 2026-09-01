@@ -75,7 +75,7 @@ export default function KontaktPage() {
     }
   }
 
-  const inputClass = 'w-full bg-surface-dark border border-brand-gold/20 px-4 py-3 text-text-primary text-sm font-body focus:outline-none focus:border-brand-gold/50 transition-colors placeholder:text-text-muted';
+  const inputClass = 'w-full bg-surface-dark border border-brand-gold/20 px-4 py-3 text-text-primary text-sm font-body focus:border-brand-gold/50 transition-colors placeholder:text-text-muted';
   const labelClass = 'block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-1.5';
 
   return (

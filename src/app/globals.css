@@ -138,6 +138,11 @@ body::before {
   box-shadow: 0 4px 24px rgba(232, 80, 24, 0.45);
   transform: translateY(-1px);
 }
+/* Active: Druckpunkt statt Anheben — jeder Hover braucht eine Klick-Antwort. */
+.btn-affiliate:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 8px rgba(232, 80, 24, 0.3);
+}
 
 /* ── GOLD-BUTTON (sekundäre CTA) ─────────────────────────────────────── */
 
@@ -151,6 +156,10 @@ body::before {
   background-color: #b07020;
   box-shadow: 0 4px 24px rgba(200, 136, 42, 0.4);
   transform: translateY(-1px);
+}
+.btn-gold:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 8px rgba(200, 136, 42, 0.28);
 }
 
 /* ── CINEMA FRAME — cinématische FLUX-Bild-Container ─────────────────── */
@@ -178,13 +187,16 @@ body::before {
   pointer-events: none;
   z-index: 1;
 }
+/* Hover-Feedback gehoert in das 150-250ms-Fenster: 0.65s las sich als Nachlauf,
+   nicht als Antwort. Die Karten (ArticleCard) triggern denselben Zoom zusaetzlich
+   ueber group-hover, damit die ganze Kachel reagiert und nicht nur das Bild. */
 .cinema-frame img {
-  transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              filter 0.45s ease;
+  transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1),
+              filter 0.2s cubic-bezier(0, 0, 0.2, 1);
   filter: brightness(0.86) contrast(1.07) saturate(0.82);
 }
 .cinema-frame:hover img {
-  transform: scale(1.04);
+  transform: scale(1.03);
   filter: brightness(0.9) contrast(1.05) saturate(0.88);
 }
 
@@ -266,16 +278,19 @@ nav a, header button, .nav-sharp {
 
 /* ── FOCUS ───────────────────────────────────────────────────────────── */
 
-:focus-visible {
+/* Ein einziger Fokus-Ring fuer die ganze Seite. Komponenten entfernen den
+   Outline nicht mehr selbst (outline-none-Aufraeumen 01.09.2026) — wer einen
+   eigenen Fokus-Stil braucht, ueberschreibt hier gezielt. */
+*:focus-visible {
   outline: 2px solid var(--color-gold);
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 /* Heller Lese-Layer: Gold (#C8882A) erreicht auf Pergament nur 1.54-1.78:1 und
    verfehlt damit WCAG 1.4.11 (3:1). Auf dem dunklen Rahmen bleibt Gold richtig
    (5.18:1) - die Korrektur wird deshalb bewusst nur hier gescoped, nicht global.
    #241A12 (INK) liefert 8.79:1 am unteren Verlaufsende. */
-.reading-light :focus-visible {
+.reading-light *:focus-visible {
   outline-color: #241A12;
 }
 
@@ -361,3 +376,18 @@ nav a, header button, .nav-sharp {
 
 /* CTA-Buttons bleiben bewusst kräftig orange (btn-affiliate/bg-brand-fire
    unverändert) — die Aktionsfarbe ist der rote Faden zwischen A und B. */
+
+/* ── REDUCED MOTION ──────────────────────────────────────────────────────
+   Bewegung ist hier Feedback, nie Inhalt. Wer prefers-reduced-motion setzt,
+   behaelt Farbe, Schatten und Rahmen als Rueckmeldung — Verschiebung und
+   Skalierung entfallen. Die Tailwind-Seite deckt motion-reduce:* ab,
+   Framer-Motion-Komponenten regeln es ueber useReducedMotion. */
+@media (prefers-reduced-motion: reduce) {
+  .btn-affiliate:hover,
+  .btn-affiliate:active,
+  .btn-gold:hover,
+  .btn-gold:active,
+  .cinema-frame:hover img {
+    transform: none;
+  }
+}

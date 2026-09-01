@@ -61,7 +61,7 @@ export default function RedeemForm({ initialCode = '' }: { initialCode?: string 
           placeholder="SA-XXXX-XXXX"
           autoComplete="off"
           spellCheck={false}
-          className="w-full bg-surface-base border border-border-subtle px-4 py-3 font-mono text-lg tracking-widest text-text-primary uppercase placeholder:text-text-muted/50 focus:border-brand-gold outline-none"
+          className="w-full bg-surface-base border border-border-subtle px-4 py-3 font-mono text-lg tracking-widest text-text-primary uppercase placeholder:text-text-muted/50 focus:border-brand-gold transition-colors duration-150"
         />
       </div>
 
@@ -88,7 +88,7 @@ export default function RedeemForm({ initialCode = '' }: { initialCode?: string 
         disabled={loading || code.trim().length < 4}
         className="btn-affiliate w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? <Loader2 size={16} className="animate-spin" /> : <Gift size={16} />}
+        {loading ? <Loader2 size={16} className="animate-spin motion-reduce:animate-none" /> : <Gift size={16} />}
         {loading ? 'Wird eingelöst …' : 'Gutschein einlösen'}
       </button>
     </form>

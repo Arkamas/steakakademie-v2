@@ -9,7 +9,7 @@ import { ChevronDown } from 'lucide-react';
 
 const FIELD_BASE =
   'peer w-full bg-transparent px-4 py-3.5 text-sm font-body text-text-primary ' +
-  'border transition-colors duration-150 focus:outline-none ';
+  'border transition-colors duration-150 ';
 
 const FIELD_NORMAL  = 'border-border-subtle hover:border-text-muted/60 focus:border-brand-gold focus:ring-0';
 const FIELD_ERROR   = 'border-brand-fire hover:border-brand-fire focus:border-brand-fire';

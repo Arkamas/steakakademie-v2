@@ -163,14 +163,14 @@ export default function PmAgentPage() {
           ▸ TAGES-BRIEFING
         </div>
         {briefingLoading && !briefing ? (
-          <div className="text-[#8a7e6a] text-sm animate-pulse">
+          <div className="text-[#8a7e6a] text-sm animate-pulse motion-reduce:animate-none">
             Analysiere Projektstatus...
           </div>
         ) : (
           <div className="text-sm leading-relaxed whitespace-pre-wrap text-[#e8dcc8]">
             {briefing}
             {briefingLoading && (
-              <span className="inline-block w-1 h-3 bg-[#c8621a] ml-1 animate-pulse" />
+              <span className="inline-block w-1 h-3 bg-[#c8621a] ml-1 animate-pulse motion-reduce:animate-none" />
             )}
           </div>
         )}
@@ -335,7 +335,7 @@ export default function PmAgentPage() {
                   <div className="whitespace-pre-wrap">
                     {msg.content}
                     {chatLoading && i === messages.length - 1 && (
-                      <span className="inline-block w-1 h-3 bg-[#c8621a] ml-1 animate-pulse" />
+                      <span className="inline-block w-1 h-3 bg-[#c8621a] ml-1 animate-pulse motion-reduce:animate-none" />
                     )}
                   </div>
                 )}
@@ -353,7 +353,7 @@ export default function PmAgentPage() {
               onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
               placeholder="Frage stellen..."
               className="flex-1 bg-[#0a0805] border border-[#2a2416] text-[#e8dcc8]
-                         text-xs p-3 outline-none focus:border-[#c8621a] transition-colors"
+                         text-xs p-3 focus:border-[#c8621a] transition-colors"
             />
             <button
               onClick={sendMessage}

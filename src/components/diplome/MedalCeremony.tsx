@@ -170,7 +170,7 @@ export default function MedalCeremony({
               onChange={(e) => persistName(e.target.value)}
               placeholder="Dein Name für die Urkunde (optional)"
               maxLength={40}
-              className="w-full mb-4 px-4 py-2.5 rounded-lg font-sans text-sm text-text-light text-center outline-none"
+              className="w-full mb-4 px-4 py-2.5 rounded-lg font-sans text-sm text-text-light text-center"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)' }}
             />
 

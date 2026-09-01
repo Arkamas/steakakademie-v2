@@ -102,7 +102,7 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
                         src={slide.image}
                         alt={slide.imageAlt}
                         loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-105 motion-reduce:group-hover:scale-100"
                       />
                       {/* Badge oben links */}
                       <span

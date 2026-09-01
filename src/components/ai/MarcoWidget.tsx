@@ -113,7 +113,7 @@ export default function MarcoWidget() {
 
         <button
           onClick={handleToggle}
-          className="relative focus:outline-none"
+          className="relative"
           aria-label="KI-Assistent Marco öffnen — Chatbot, keine echte Person"
           aria-expanded={open}
         >
@@ -239,7 +239,7 @@ export default function MarcoWidget() {
                       {[0, 1, 2].map((i) => (
                         <span
                           key={i}
-                          className="h-1.5 w-1.5 rounded-full bg-brand-gold animate-bounce"
+                          className="h-1.5 w-1.5 rounded-full bg-brand-gold animate-bounce motion-reduce:animate-none"
                           style={{ animationDelay: `${i * 0.15}s` }}
                         />
                       ))}
@@ -264,7 +264,7 @@ export default function MarcoWidget() {
                 placeholder="Deine BBQ-Frage…"
                 disabled={isLoading}
                 autoComplete="off"
-                className="flex-1 border border-white/10 bg-white/5 px-3 py-2 text-sm font-sans text-white placeholder-white/30 outline-none focus:border-brand-gold/50 disabled:opacity-50"
+                className="flex-1 border border-white/10 bg-white/5 px-3 py-2 text-sm font-sans text-white placeholder-white/30 focus:border-brand-gold/50 disabled:opacity-50"
               />
               <button
                 type="submit"

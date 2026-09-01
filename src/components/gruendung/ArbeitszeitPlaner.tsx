@@ -203,7 +203,7 @@ export default function ArbeitszeitPlaner() {
                       const v = parseFloat(e.target.value);
                       setHours((h) => h.map((x, j) => (j === i ? (Number.isFinite(v) ? v : 0) : x)));
                     }}
-                    className="w-full rounded-sm border border-border-subtle bg-surface-elevated px-1 py-1.5 text-center font-sans text-sm text-text-primary focus:border-brand-fire focus:outline-none"
+                    className="w-full rounded-sm border border-border-subtle bg-surface-elevated px-1 py-1.5 text-center font-sans text-sm text-text-primary focus:border-brand-fire"
                   />
                 </label>
               ))}
@@ -303,7 +303,7 @@ export default function ArbeitszeitPlaner() {
                   step={0.5}
                   value={t.effortH}
                   onChange={(e) => setEffort(t.id, parseFloat(e.target.value) || 0)}
-                  className="w-14 rounded-sm border border-border-subtle bg-surface-base px-1 py-1 text-center font-sans text-sm text-text-primary focus:border-brand-fire focus:outline-none"
+                  className="w-14 rounded-sm border border-border-subtle bg-surface-base px-1 py-1 text-center font-sans text-sm text-text-primary focus:border-brand-fire"
                   aria-label="Stunden"
                 />
                 <span className="font-sans text-[11px] text-text-muted">Std.</span>
@@ -322,12 +322,12 @@ export default function ArbeitszeitPlaner() {
                 onChange={(e) => setNtTitle(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && addTask()}
                 placeholder="Neue Aufgabe …"
-                className="min-w-0 flex-1 rounded-sm border border-border-subtle bg-surface-base px-3 py-1.5 font-body text-sm text-text-primary focus:border-brand-fire focus:outline-none"
+                className="min-w-0 flex-1 rounded-sm border border-border-subtle bg-surface-base px-3 py-1.5 font-body text-sm text-text-primary focus:border-brand-fire"
               />
               <select
                 value={ntCat}
                 onChange={(e) => setNtCat(e.target.value as RoadmapKategorie)}
-                className="rounded-sm border border-border-subtle bg-surface-base px-2 py-1.5 font-sans text-sm text-text-primary focus:border-brand-fire focus:outline-none"
+                className="rounded-sm border border-border-subtle bg-surface-base px-2 py-1.5 font-sans text-sm text-text-primary focus:border-brand-fire"
               >
                 {KATEGORIEN.map((k) => (
                   <option key={k} value={k}>{k}</option>
@@ -339,7 +339,7 @@ export default function ArbeitszeitPlaner() {
                 step={0.5}
                 value={ntEffort}
                 onChange={(e) => setNtEffort(e.target.value)}
-                className="w-16 rounded-sm border border-border-subtle bg-surface-base px-2 py-1.5 text-center font-sans text-sm text-text-primary focus:border-brand-fire focus:outline-none"
+                className="w-16 rounded-sm border border-border-subtle bg-surface-base px-2 py-1.5 text-center font-sans text-sm text-text-primary focus:border-brand-fire"
                 aria-label="Stunden"
               />
               <button

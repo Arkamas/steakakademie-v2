@@ -15,6 +15,12 @@
  * dahin lief der Guard dependency-frei; die Ausnahme ist bewusst, weil ein
  * handgeschriebener YAML-Parser bei einem Beweismittel die falsche Sparsamkeit
  * waere.
+ *
+ * ACHTUNG bei weiteren Abhaengigkeiten: .github/workflows/legal-guard.yml laeuft
+ * ohne `npm ci` und installiert nur js-yaml einzeln. Ein neuer Import ohne
+ * Ergaenzung dort laesst den Job mit ERR_MODULE_NOT_FOUND abbrechen — der Guard
+ * ist dann rot, ohne je eine Regel geprueft zu haben (passiert am 31.08.2026,
+ * zehn Laeufe lang unbemerkt).
  */
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'fs';

@@ -6,8 +6,16 @@ name: Legal-Guard
 #   • einwilligungspflichtige Tracker ohne Consent (Seite ist cookieless)
 #   • Affiliate-Links ohne sichtbare „Anzeige"-Kennzeichnung / ohne rel="sponsored"
 # Regeln + Begründung je Punkt: compliance/website-rechtscheck.yaml
-# Läuft schnell, ohne npm install (reines Node-Skript). Bei Verstoß: rot.
-# Blockiert NICHT den Deploy (läuft parallel) — Frühwarn-Signal.
+# Läuft schnell: statt eines vollen `npm ci` wird nur js-yaml geholt — das ist
+# die einzige Abhängigkeit des Skripts (seit Regel 6, liest data/bildregister.yaml).
+# Bei Verstoß: rot. Blockiert NICHT den Deploy (läuft parallel) — Frühwarn-Signal.
+#
+# 01.09.2026: Der Job lief von 077d0e8 (31.08., 08:36) bis hierher in JEDEM Lauf
+# rot — ERR_MODULE_NOT_FOUND auf js-yaml, Abbruch nach 14 s, bevor eine einzige
+# Regel geprüft wurde. Regel 6 hatte den Import gebracht, der Workflow blieb auf
+# der Annahme "reines Node-Skript ohne Install" stehen. Zehn rote Läufe in Folge,
+# auch auf main. Wer hier künftig eine Abhängigkeit ergänzt, ergänzt sie auch im
+# Install-Schritt unten — sonst prüft der Guard wieder nichts und sagt es nicht.
 #
 # Trigger: Push auf main + jeder PR. Ursprünglich lief der Guard auf allen
 # Branches (d3ac137); das kostet bei täglicher Arbeit einen CI-Lauf pro Push,
@@ -39,6 +47,18 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '20'
+
+      # Kein volles `npm ci`: der Guard braucht genau ein Paket, und der Job soll
+      # in Sekunden durch sein. Die Version kommt exakt aus package-lock.json, nicht
+      # aus dem Range in package.json — ein Rechts-Check soll bei gleichem Commit
+      # dasselbe Ergebnis liefern und nicht davon abhaengen, welche Minor-Version
+      # die Registry heute ausliefert. Fallback auf den Range, falls das Lockfile
+      # den Eintrag mal nicht in dieser Form fuehrt.
+      - name: js-yaml bereitstellen
+        run: |
+          VERSION=$(node -p "const l=require('./package-lock.json'); (l.packages && l.packages['node_modules/js-yaml'] && l.packages['node_modules/js-yaml'].version) || require('./package.json').dependencies['js-yaml']")
+          echo "js-yaml@$VERSION"
+          npm install "js-yaml@$VERSION" --no-save --no-audit --no-fund --loglevel=error
 
       - name: Legal-Guard ausführen
         run: |

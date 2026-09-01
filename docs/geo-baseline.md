@@ -190,6 +190,80 @@ sollte prüfen, ob der Perplexity-Treffer **stabil** bleibt — einmalig ≠ Ran
 
 Screenshots nach `docs/geo-baseline-screenshots/`.
 
+## Messung 4 — 01.09.2026 (Re-Check, automatisierter Lauf)
+
+Maßnahme seit Baseline unverändert: Wikidata-Item **Q140455747** live + in `sameAs`
+des Organization-Markups (Commit `bf19328`). **Keine gezielte neue GEO-Maßnahme seit
+Messung 2.** Was sich seither faktisch verändert hat, ist der Content-Umfang der Domain
+insgesamt (laufende Rezept-/Wissens-Produktion) — ob das auf diese Query wirkt, ist
+**nicht belegbar** und wird hier ausdrücklich nicht als Ursache behauptet.
+
+### Google (klassische Suche) — nur INDIKATOR, keine Position
+
+⚠️ **Methodik (seit Messung 3 verbindlich):** Die verfügbare Websuche ist US-basiert und
+liefert **keine deutschen SERP-Positionen**. Am 09.08. meldete sie für die verwandte
+Query Rang 3, der echte DE-Inkognito-Check zeigte Seite 4 (~Platz 33). Die folgenden
+Zeilen sagen deshalb nur aus: **taucht die Domain in der zurückgegebenen Trefferliste
+auf, ja/nein** — plus die Reihenfolge *innerhalb dieser Liste*. Das ist **kein Ranking**.
+Leitmessung bleibt der manuelle DE-Inkognito-Check durch Uwe (siehe unten, **noch nicht
+erhoben**).
+
+| Query | steakakademie.de in der Trefferliste? | Wer erscheint sonst (erste 3 der Liste) | Δ ggü. Messung 3 |
+|---|---|---|---|
+| „Kerntemperatur Steak" | ✅ **ja** — Listenplatz 5 von 6 (`/temperatur-guide`, Titel „Kerntemperaturen Fleisch — Tabelle 2026") | grillclub.amainfo.at, shop.block-house.de, grillfuerst.de | 🟡 **erstmals überhaupt in der Liste beim Kopf-Keyword** (Messung 1–3: ❌ nie) — Wert unbestätigt |
+| „Kerntemperatur Steak medium Tabelle" | ✅ ja — Listenplatz 8 von 9 (`/temperatur-guide`) | shop.block-house.de, rewe.de, tastybits.de | 🟡 weiterhin vorhanden, aber **deutlich weiter hinten in der Liste** als am 04.08./09.08. (dort Listenplatz 3) |
+| Brand-Query „steakakademie.de Kerntemperatur" | (nicht erhoben in diesem Lauf) | — | — |
+
+**Vorsichtige Einordnung, ausdrücklich als Annahme gekennzeichnet:** Die beiden
+Bewegungen zeigen in gegenläufige Richtungen (Kopf-Keyword neu drin, Long-Tail weiter
+hinten). Bei einem Werkzeug, das nachweislich keine verlässlichen DE-Positionen liefert,
+ist das **nicht als Ranking-Veränderung interpretierbar** — es kann genauso gut
+Listen-Rauschen sein. **Keine Trendaussage ohne den DE-Inkognito-Check.**
+
+Titel-Drift am Rande, gesichert beobachtbar: Der Seitentitel lautet in dieser Messung
+„Kerntemperaturen Fleisch — **Tabelle 2026**", in Messung 2 und 3 noch „… **Komplette
+Tabelle 2026**". Ursache nicht geprüft (Titeländerung im Repo vs. Google-Rewrite) — wenn
+das nicht bewusst geändert wurde, lohnt ein Blick in die Metadaten von
+`/temperatur-guide`.
+
+**DE-Gegencheck (Leitmessung):** ❌ **nicht erhoben** — erfordert Uwes manuellen
+Inkognito-Check, siehe Bitte unten.
+
+### AI-Suche (manuell von Uwe zu erheben — je ~5 Min)
+
+Frage jeweils wörtlich: **„Was ist die richtige Kerntemperatur für ein Steak medium?"**
+
+| Plattform | Datum | Steakakademie zitiert/erwähnt? | Wer wird zitiert? | Screenshot abgelegt? |
+|---|---|---|---|---|
+| ChatGPT | — | nicht erhoben | — | ☐ |
+| Perplexity (**normaler Suchmodus**, NICHT „Computer") | — | nicht erhoben | — | ☐ |
+| Google AI Overview (google.de, DE-Standort, Inkognito) | — | nicht erhoben | — | ☐ |
+
+Screenshots nach `docs/geo-baseline-screenshots/`.
+
+### Bewertung Messung 4 — Bewegung? Ehrliche Antwort: unentschieden
+
+| Kanal | Messung 3 (09.08.) | Messung 4 (01.09.) | Δ |
+|---|---|---|---|
+| Google DE organisch (Leitmessung) | Seite 4 (~Platz 33) | **nicht erhoben** | ⚪ keine Aussage möglich |
+| US-Websuche (Indikator) | Kopf-KW ❌ / Long-Tail Listenplatz 3 | Kopf-KW ✅ Listenplatz 5 / Long-Tail Listenplatz 8 | 🟡 widersprüchlich, nicht belastbar |
+| ChatGPT | nicht zitiert (kein Retrieval) | **nicht erhoben** | ⚪ |
+| **Perplexity** | ✅ erstmals zitiert | **nicht erhoben** | ⚪ **Stabilitätsfrage offen** |
+| Google AI Overview | nicht zitiert | **nicht erhoben** | ⚪ |
+
+**Die zentrale offene Frage dieser Messung ist unbeantwortet geblieben:** Messung 3
+formulierte als Prüfauftrag, ob der Perplexity-Treffer **stabil** bleibt — ein einzelner
+Treffer ist noch kein Ranking. Das lässt sich nur manuell klären. Bis dahin gilt der
+Perplexity-Erfolg vom 09.08. als **einmalig beobachtet, nicht als bestätigtes Ranking**.
+
+**Wikidata-Wirkung:** unverändert **nicht kausal belegbar**. Es gibt weiterhin keine
+Messanordnung, die Entity-Signal von Index-Reifung trennt. Wer hier Kausalität behauptet,
+überschreibt Regel 7.
+
+**Widerruf früherer Einschätzungen:** keiner. Die Methodik-Korrektur aus Messung 3
+(US-Werkzeug = Indikator, nicht Position) hat sich in diesem Lauf bestätigt und wird
+nicht abgeschwächt.
+
 ## Re-Check-Rhythmus
 
 Alle 4 Wochen dieselben 3 Google-Queries + 3 AI-Abfragen wiederholen und hier

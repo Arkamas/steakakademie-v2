@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { getAuthorBySlug } from '@/lib/authors';
 import StreitfallUmfrage from '@/components/streitfaelle/StreitfallUmfrage';
+import StreitfallBeitraege from '@/components/streitfaelle/StreitfallBeitraege';
 import { Calendar, ChevronRight, RotateCcw, Scale, AlertTriangle, Sparkles } from 'lucide-react';
 
 interface Props {
@@ -268,6 +269,16 @@ export default function StreitfallPage({ params }: Props) {
                 frage={(doc.umfrage as { frage: string }).frage}
                 optionen={(doc.umfrage as { optionen: { key: string; label: string }[] }).optionen}
               />
+            ) : null}
+
+            {/* Stufe 2 — "Stimmen aus der Praxis" (Erfahrungsberichte mit
+                Moderations-Warteschlange). STRENG hinter Feature-Flag:
+                Livegang erst nach anwaltlicher DSA-Pruefung +
+                Nutzungsbedingungen-Update — Flag setzt Uwe.
+                Serverseitig geprueft; ohne Flag wird die Komponente gar
+                nicht gerendert und laedt auch keinen Client-Code. */}
+            {process.env.STREITFALL_BEITRAEGE_ENABLED === '1' ? (
+              <StreitfallBeitraege slug={doc.slug} />
             ) : null}
 
             {faqItems.length > 0 && (

@@ -234,7 +234,7 @@ export default function NewsletterSignup({
                   placeholder="deine@email.de"
                   required
                   aria-invalid={status === 'error' && !emailValid}
-                  className="w-full min-w-0 bg-surface-dark border border-[rgb(var(--nl-gold)/0.2)] px-3.5 py-2.5 text-sm font-body text-text-primary placeholder:text-text-muted focus:outline-none focus:border-[rgb(var(--nl-gold)/0.5)] transition-colors"
+                  className="w-full min-w-0 bg-surface-dark border border-[rgb(var(--nl-gold)/0.2)] px-3.5 py-2.5 text-sm font-body text-text-primary placeholder:text-text-muted focus:border-[rgb(var(--nl-gold)/0.5)] transition-colors"
                 />
               </div>
               <button

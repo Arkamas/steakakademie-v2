@@ -9,12 +9,12 @@ import { z } from 'zod';
 
 const inputCls =
   'w-full bg-surface-elevated border border-border-subtle px-3 py-2.5 text-sm font-body ' +
-  'text-text-primary placeholder:text-text-muted/55 focus:outline-none focus:border-brand-gold ' +
+  'text-text-primary placeholder:text-text-muted/55 focus:border-brand-gold ' +
   'focus:ring-1 focus:ring-brand-gold/25 transition-colors';
 
 const selectCls =
   'bg-surface-elevated border border-border-subtle px-3 py-2.5 text-sm font-body ' +
-  'text-text-primary focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold/25 ' +
+  'text-text-primary focus:border-brand-gold focus:ring-1 focus:ring-brand-gold/25 ' +
   'transition-colors appearance-none cursor-pointer';
 
 const labelCls = 'block text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-muted mb-1.5';

@@ -275,16 +275,19 @@ nav a, header button, .nav-sharp {
 
 /* ── FOCUS ───────────────────────────────────────────────────────────── */
 
-:focus-visible {
+/* Ein einziger Fokus-Ring fuer die ganze Seite. Komponenten entfernen den
+   Outline nicht mehr selbst (outline-none-Aufraeumen 01.09.2026) — wer einen
+   eigenen Fokus-Stil braucht, ueberschreibt hier gezielt. */
+*:focus-visible {
   outline: 2px solid var(--color-gold);
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 /* Heller Lese-Layer: Gold (#C8882A) erreicht auf Pergament nur 1.54-1.78:1 und
    verfehlt damit WCAG 1.4.11 (3:1). Auf dem dunklen Rahmen bleibt Gold richtig
    (5.18:1) - die Korrektur wird deshalb bewusst nur hier gescoped, nicht global.
    #241A12 (INK) liefert 8.79:1 am unteren Verlaufsende. */
-.reading-light :focus-visible {
+.reading-light *:focus-visible {
   outline-color: #241A12;
 }
 

@@ -108,7 +108,7 @@ export default function NicheValidator() {
                   w-full bg-surface-elevated border border-border-subtle
                   px-5 py-5 sm:py-6 text-base sm:text-lg font-body text-text-primary
                   placeholder:text-text-muted/55
-                  focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold/25
+                  focus:border-brand-gold focus:ring-1 focus:ring-brand-gold/25
                   transition-colors
                   disabled:opacity-60
                 "
@@ -474,7 +474,7 @@ export default function NicheValidator() {
                               w-full bg-surface-elevated border border-border-subtle
                               pl-10 pr-4 py-3 text-sm font-body text-text-primary
                               placeholder:text-text-muted/55
-                              focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold/25
+                              focus:border-brand-gold focus:ring-1 focus:ring-brand-gold/25
                               transition-colors
                             "
                           />

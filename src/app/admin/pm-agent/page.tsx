@@ -353,7 +353,7 @@ export default function PmAgentPage() {
               onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
               placeholder="Frage stellen..."
               className="flex-1 bg-[#0a0805] border border-[#2a2416] text-[#e8dcc8]
-                         text-xs p-3 outline-none focus:border-[#c8621a] transition-colors"
+                         text-xs p-3 focus:border-[#c8621a] transition-colors"
             />
             <button
               onClick={sendMessage}

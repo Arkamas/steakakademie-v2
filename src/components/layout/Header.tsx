@@ -242,7 +242,7 @@ export default function Header() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Brisket, Thermometer, Reverse Sear …"
-                  className="flex-1 bg-transparent text-sm font-sans text-text-light placeholder:text-text-light/40 outline-none border-b border-text-light/20 pb-1 focus:border-brand-gold transition-colors"
+                  className="flex-1 bg-transparent text-sm font-sans text-text-light placeholder:text-text-light/40 border-b border-text-light/20 pb-1 focus:border-brand-gold transition-colors"
                 />
                 <button
                   type="submit"

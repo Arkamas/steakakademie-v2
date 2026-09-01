@@ -83,7 +83,7 @@ function FoodpairingBox({ onSeedRezept }: { onSeedRezept: (zutat: string, partne
           value={zutat}
           onChange={(e) => setZutat(e.target.value)}
           placeholder="z. B. Ribeye"
-          className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold focus:outline-none"
+          className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold"
         />
         <button
           type="submit"
@@ -318,7 +318,7 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
           value={auftrag}
           onChange={(e) => setAuftrag(e.target.value)}
           placeholder="z. B. Ribeye mit Kaffee-Kruste"
-          className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold focus:outline-none"
+          className="flex-1 min-w-0 rounded-lg border border-border-subtle bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-gold"
         />
         <button
           type="submit"

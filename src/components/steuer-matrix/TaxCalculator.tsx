@@ -133,7 +133,7 @@ export default function TaxCalculator() {
               inputMode="numeric"
               value={inputRaw}
               onChange={(e) => handleGrossInput(e.target.value)}
-              className="w-24 bg-transparent font-serif text-xl font-bold text-brand-gold outline-none"
+              className="w-24 bg-transparent font-serif text-xl font-bold text-brand-gold"
             />
             <span className="font-sans text-sm text-text-muted">€ / Monat</span>
           </div>

@@ -122,7 +122,7 @@ export default function AnimalDiagramPhoto({
                 role="button"
                 tabIndex={0}
                 aria-label={p.nameDE}
-                className="cursor-pointer outline-none group"
+                className="cursor-pointer group"
                 onClick={() => onSelectPrimal(p.id)}
                 onKeyDown={(e) =>
                   (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onSelectPrimal(p.id))
@@ -201,7 +201,7 @@ export default function AnimalDiagramPhoto({
                         role="button"
                         tabIndex={0}
                         aria-label={`${cut.nameDE} ansehen`}
-                        className="cursor-pointer outline-none group/chip"
+                        className="cursor-pointer group/chip"
                         onClick={() => onSelectCut?.(pin.id)}
                         onKeyDown={(e) =>
                           (e.key === 'Enter' || e.key === ' ') &&
@@ -268,7 +268,7 @@ export default function AnimalDiagramPhoto({
                       role="button"
                       tabIndex={0}
                       aria-label={`${cut.nameDE} ansehen`}
-                      className="cursor-pointer outline-none group/chip"
+                      className="cursor-pointer group/chip"
                       onClick={() => onSelectCut?.(pin.id)}
                       onKeyDown={(e) =>
                         (e.key === 'Enter' || e.key === ' ') &&
@@ -316,7 +316,7 @@ export default function AnimalDiagramPhoto({
           role="button"
           tabIndex={0}
           aria-label="Zurück zur Gesamtansicht"
-          className="cursor-pointer outline-none group/back"
+          className="cursor-pointer group/back"
           onClick={() => onSelectPrimal(selectedPrimal!)}
           onKeyDown={(e) =>
             (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onSelectPrimal(selectedPrimal!))

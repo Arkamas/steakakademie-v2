@@ -121,7 +121,7 @@ export default function ProfilClient() {
                 <label className="block text-xs font-sans font-bold uppercase tracking-wide text-text-muted mb-1.5">Anzeigename</label>
                 <input value={name} onChange={(e) => setName(e.target.value)} maxLength={40}
                   placeholder="z. B. Max Mustermann"
-                  className="w-full px-4 py-2.5 bg-surface-base border border-border-subtle text-text-primary font-sans text-sm outline-none focus:border-brand-gold/50" />
+                  className="w-full px-4 py-2.5 bg-surface-base border border-border-subtle text-text-primary font-sans text-sm focus:border-brand-gold/50" />
               </div>
               <div>
                 <label className="block text-xs font-sans font-bold uppercase tracking-wide text-text-muted mb-1.5">Profil-Adresse</label>
@@ -129,7 +129,7 @@ export default function ProfilClient() {
                   <span className="text-text-muted text-sm font-sans">/griller/</span>
                   <input value={slug} onChange={(e) => setSlug(slugify(e.target.value))} maxLength={40}
                     placeholder={slugify(name) || 'dein-name'}
-                    className="flex-1 px-4 py-2.5 bg-surface-base border border-border-subtle text-text-primary font-sans text-sm outline-none focus:border-brand-gold/50" />
+                    className="flex-1 px-4 py-2.5 bg-surface-base border border-border-subtle text-text-primary font-sans text-sm focus:border-brand-gold/50" />
                 </div>
               </div>
               <label className="flex items-center gap-3 cursor-pointer select-none">

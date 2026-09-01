@@ -97,7 +97,7 @@ export default function KontoLoeschen() {
               onChange={(e) => setEingabe(e.target.value)}
               placeholder="LÖSCHEN"
               autoComplete="off"
-              className="w-full px-4 py-2.5 bg-surface-base border border-border-subtle text-text-primary font-sans text-sm outline-none focus:border-brand-fire/50" />
+              className="w-full px-4 py-2.5 bg-surface-base border border-border-subtle text-text-primary font-sans text-sm focus:border-brand-fire/50" />
           </div>
 
           {fehler && <p className="text-sm font-sans text-brand-fire">{fehler}</p>}

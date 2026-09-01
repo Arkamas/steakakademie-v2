@@ -37,7 +37,7 @@ export default function LoginPage() {
           onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
           placeholder="Passwort"
           className="w-full bg-[#16130a] border border-[#2a2416] text-[#e8dcc8]
-                     font-mono text-sm p-3 outline-none mb-3
+                     font-mono text-sm p-3 mb-3
                      focus:border-[#c8621a] transition-colors"
         />
         {error && (

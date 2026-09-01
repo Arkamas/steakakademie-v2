@@ -138,6 +138,11 @@ body::before {
   box-shadow: 0 4px 24px rgba(232, 80, 24, 0.45);
   transform: translateY(-1px);
 }
+/* Active: Druckpunkt statt Anheben — jeder Hover braucht eine Klick-Antwort. */
+.btn-affiliate:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 8px rgba(232, 80, 24, 0.3);
+}
 
 /* ── GOLD-BUTTON (sekundäre CTA) ─────────────────────────────────────── */
 
@@ -151,6 +156,10 @@ body::before {
   background-color: #b07020;
   box-shadow: 0 4px 24px rgba(200, 136, 42, 0.4);
   transform: translateY(-1px);
+}
+.btn-gold:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 8px rgba(200, 136, 42, 0.28);
 }
 
 /* ── CINEMA FRAME — cinématische FLUX-Bild-Container ─────────────────── */

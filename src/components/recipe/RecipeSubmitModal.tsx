@@ -230,7 +230,7 @@ export default function RecipeSubmitModal() {
           {/* CTA */}
           <button
             onClick={() => setOpen(true)}
-            className="w-full bg-brand-gold hover:bg-[#b07020] active:bg-[#9a6010] text-ink font-sans font-bold text-xs tracking-[0.14em] uppercase py-3 px-4 transition-colors"
+            className="w-full bg-brand-gold hover:bg-[#b07020] active:bg-[#9a6010] active:scale-[0.98] text-ink font-sans font-bold text-xs tracking-[0.14em] uppercase py-3 px-4 transition duration-200 ease-out"
           >
             REZEPT EINREICHEN
           </button>
@@ -285,7 +285,7 @@ export default function RecipeSubmitModal() {
                   </div>
                   <button
                     onClick={handleClose}
-                    className="text-text-muted hover:text-text-primary transition-colors p-1 -mr-1"
+                    className="text-text-muted hover:text-text-primary transition duration-200 ease-out active:scale-[0.98] p-1 -mr-1"
                     aria-label="Schließen"
                   >
                     <X size={16} />
@@ -326,20 +326,20 @@ export default function RecipeSubmitModal() {
                           {/* Aktionen je Ergebnis */}
                           {s === 'approved' && result?.slug && (
                             <a href={`/rezepte/community/${result.slug}`}
-                              className="mt-7 inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase">
+                              className="mt-7 inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase hover:bg-[#b07020] transition duration-200 ease-out active:scale-[0.98]">
                               Rezept ansehen <ExternalLink size={13} />
                             </a>
                           )}
                           {s === 'login' && (
                             <a href="/auth/login?redirectTo=/rezepte"
-                              className="mt-7 inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase">
+                              className="mt-7 inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase hover:bg-[#b07020] transition duration-200 ease-out active:scale-[0.98]">
                               Zum Login <LogIn size={13} />
                             </a>
                           )}
                           {(s === 'rejected' || s === 'error') && (
                             <button
                               onClick={() => { setSubmitted(false); setResult(null); }}
-                              className="mt-7 inline-flex items-center gap-2 px-6 py-3 border border-brand-gold/40 text-brand-gold font-sans font-bold text-xs tracking-[0.12em] uppercase hover:bg-brand-gold/10 transition-colors">
+                              className="mt-7 inline-flex items-center gap-2 px-6 py-3 border border-brand-gold/40 text-brand-gold font-sans font-bold text-xs tracking-[0.12em] uppercase hover:bg-brand-gold/10 transition duration-200 ease-out active:scale-[0.98]">
                               Rezept überarbeiten
                             </button>
                           )}
@@ -624,7 +624,7 @@ export default function RecipeSubmitModal() {
                       form="rezept-form"
                       type="submit"
                       disabled={sending}
-                      className="shrink-0 bg-brand-gold hover:bg-[#b07020] active:bg-[#9a6010] disabled:opacity-50 disabled:cursor-not-allowed text-ink font-sans font-bold text-xs tracking-[0.14em] uppercase px-7 py-3 transition-colors"
+                      className="shrink-0 bg-brand-gold hover:bg-[#b07020] active:bg-[#9a6010] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 text-ink font-sans font-bold text-xs tracking-[0.14em] uppercase px-7 py-3 transition duration-200 ease-out"
                     >
                       {sending ? 'Einreichen …' : 'EINREICHEN'}
                     </button>

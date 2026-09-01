@@ -118,7 +118,7 @@ export default function Footer() {
           {/* Gesetzlicher Widerrufsbutton (ab 19.06.2026) — ständig und leicht auffindbar, farblich hervorgehoben */}
           <Link
             href="/widerruf"
-            className="inline-flex items-center gap-1.5 mb-5 px-4 py-2 border border-brand-gold/50 text-brand-gold text-xs font-sans font-bold tracking-wide uppercase hover:bg-brand-gold/10 transition-colors"
+            className="inline-flex items-center gap-1.5 mb-5 px-4 py-2 border border-brand-gold/50 text-brand-gold text-xs font-sans font-bold tracking-wide uppercase hover:bg-brand-gold/10 transition duration-200 ease-out active:scale-[0.98]"
           >
             Vertrag widerrufen
           </Link>

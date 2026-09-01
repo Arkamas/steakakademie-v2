@@ -192,7 +192,7 @@ export default function Header() {
             <div className="flex items-center gap-1 sm:gap-2">
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="p-2 text-text-light/60 hover:text-brand-gold transition-colors"
+                className="p-2 text-text-light/60 hover:text-brand-gold transition duration-200 ease-out active:scale-[0.98]"
                 aria-label="Suche öffnen"
               >
                 <Search size={18} />
@@ -213,14 +213,14 @@ export default function Header() {
               <AccountLink />
               <Link
                 href="/diplome"
-                className="hidden sm:flex items-center gap-1.5 bg-brand-gold text-ink font-sans text-[11px] font-bold tracking-[0.12em] uppercase px-3 py-2 hover:bg-[#b07020] transition-colors"
+                className="hidden sm:flex items-center gap-1.5 bg-brand-gold text-ink font-sans text-[11px] font-bold tracking-[0.12em] uppercase px-3 py-2 hover:bg-[#b07020] transition duration-200 ease-out active:scale-[0.98]"
               >
                 <Flame size={12} />
                 Diplome
               </Link>
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden w-8 h-8 flex items-center justify-center bg-brand-fire text-white hover:bg-[#cc4412] transition-colors shrink-0 ml-1"
+                className="md:hidden w-8 h-8 flex items-center justify-center bg-brand-fire text-white hover:bg-[#cc4412] transition duration-200 ease-out active:scale-[0.98] shrink-0 ml-1"
                 aria-label={mobileOpen ? 'Menü schließen' : 'Menü öffnen'}
                 aria-expanded={mobileOpen}
               >
@@ -336,7 +336,7 @@ export default function Header() {
                   komplett geschlossen (Exit-Intent feuert auf Touch-Geräten nie). */}
               <Link
                 href="/kerntemperatur-spickzettel"
-                className="flex items-center gap-2 border border-brand-gold/40 bg-brand-gold/5 px-4 py-3 text-sm font-sans font-bold text-brand-gold hover:bg-brand-gold/10 transition-colors"
+                className="flex items-center gap-2 border border-brand-gold/40 bg-brand-gold/5 px-4 py-3 text-sm font-sans font-bold text-brand-gold hover:bg-brand-gold/10 transition duration-200 ease-out active:scale-[0.98]"
               >
                 <Gift size={15} />
                 Kerntemperatur-Spickzettel — gratis
@@ -350,7 +350,7 @@ export default function Header() {
               <AccountLink mobile />
               <Link
                 href="/diplome"
-                className="inline-flex items-center gap-2 bg-brand-gold text-ink font-sans text-sm font-bold tracking-wide uppercase px-5 py-3 hover:bg-[#b07020] transition-colors"
+                className="inline-flex items-center gap-2 bg-brand-gold text-ink font-sans text-sm font-bold tracking-wide uppercase px-5 py-3 hover:bg-[#b07020] transition duration-200 ease-out active:scale-[0.98]"
               >
                 <Flame size={14} />
                 Grillmeister-Diplome starten

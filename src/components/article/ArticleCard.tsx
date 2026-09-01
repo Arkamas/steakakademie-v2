@@ -32,7 +32,7 @@ export default function ArticleCard({
             />
           </div>
           <span className="category-label">{category}</span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-2 mb-3 leading-tight article-title-link group-hover:text-brand-fire">
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-2 mb-3 leading-tight article-title-link group-hover:text-brand-gold">
             {title}
           </h1>
           <p className="font-body text-base leading-relaxed mb-4 line-clamp-3 text-text-light/70">
@@ -72,7 +72,7 @@ export default function ArticleCard({
         <div className="min-w-0">
           <span className="category-label">{category}</span>
           <Link href={url}>
-            <h3 className="font-serif text-base font-bold mt-1 leading-snug article-title-link group-hover:text-brand-fire line-clamp-3">
+            <h3 className="font-serif text-base font-bold mt-1 leading-snug article-title-link group-hover:text-brand-gold line-clamp-3">
               {title}
             </h3>
           </Link>
@@ -100,7 +100,7 @@ export default function ArticleCard({
         <div className="flex flex-col justify-center min-w-0">
           <span className="category-label">{category}</span>
           <Link href={url}>
-            <h3 className="font-serif text-lg sm:text-xl font-bold mt-1 mb-2 leading-snug article-title-link group-hover:text-brand-fire line-clamp-2">
+            <h3 className="font-serif text-lg sm:text-xl font-bold mt-1 mb-2 leading-snug article-title-link group-hover:text-brand-gold line-clamp-2">
               {title}
             </h3>
           </Link>
@@ -131,7 +131,7 @@ export default function ArticleCard({
           />
         </div>
         <span className="category-label">{category}</span>
-        <h2 className="font-serif text-xl font-bold mt-2 mb-2 leading-snug article-title-link group-hover:text-brand-fire line-clamp-3">
+        <h2 className="font-serif text-xl font-bold mt-2 mb-2 leading-snug article-title-link group-hover:text-brand-gold line-clamp-3">
           {title}
         </h2>
         <div className="flex items-center gap-2 text-xs font-sans text-text-light/45 mb-2">

@@ -149,7 +149,7 @@ export default function FragebogenForm() {
       >
         {loading ? (
           <>
-            <Loader2 size={16} className="animate-spin" />
+            <Loader2 size={16} className="animate-spin motion-reduce:animate-none" />
             Plan wird generiert … (bis zu 60 Sek.)
           </>
         ) : (

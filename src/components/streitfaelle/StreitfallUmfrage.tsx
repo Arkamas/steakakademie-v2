@@ -141,7 +141,7 @@ export default function StreitfallUmfrage({ slug, frage, optionen }: Props) {
                 onClick={() => abstimmen(o.key)}
                 disabled={laeuft}
                 aria-pressed={gewaehlt}
-                className="relative w-full text-left px-4 py-3 transition-colors disabled:opacity-60"
+                className="relative w-full text-left px-4 py-3 transition-colors duration-200 ease-out motion-reduce:transition-none disabled:opacity-60"
                 style={{
                   border: gewaehlt
                     ? '1px solid rgba(200,136,42,0.6)'
@@ -154,7 +154,7 @@ export default function StreitfallUmfrage({ slug, frage, optionen }: Props) {
                 {zeigeErgebnis && (
                   <span
                     aria-hidden
-                    className="absolute inset-y-0 left-0 transition-all duration-500"
+                    className="absolute inset-y-0 left-0 transition-all duration-500 motion-reduce:transition-none"
                     style={{ width: `${anteil}%`, background: 'rgba(200,136,42,0.16)' }}
                   />
                 )}

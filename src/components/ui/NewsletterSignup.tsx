@@ -244,7 +244,7 @@ export default function NewsletterSignup({
               >
                 {status === 'loading' ? (
                   <>
-                    <Loader2 size={14} className="animate-spin" />
+                    <Loader2 size={14} className="animate-spin motion-reduce:animate-none" />
                     Sendet…
                   </>
                 ) : (

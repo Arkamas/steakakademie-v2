@@ -45,10 +45,10 @@ export default function GenerateImageButton({ slug }: { slug: string }) {
       <button
         onClick={generate}
         disabled={state === 'loading'}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase disabled:opacity-60 transition duration-150 ease-out active:scale-[0.98] disabled:active:scale-100"
+        className="inline-flex items-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold text-xs tracking-[0.12em] uppercase disabled:opacity-60 transition duration-150 ease-out active:scale-[0.98] motion-reduce:active:scale-100 disabled:active:scale-100"
       >
         {state === 'loading'
-          ? <><Loader2 size={14} className="animate-spin" /> Wird erstellt…</>
+          ? <><Loader2 size={14} className="animate-spin motion-reduce:animate-none" /> Wird erstellt…</>
           : <><ImagePlus size={14} /> Bild generieren</>}
       </button>
       {state === 'error' && <p className="text-xs font-sans text-brand-fire mt-3">{msg}</p>}

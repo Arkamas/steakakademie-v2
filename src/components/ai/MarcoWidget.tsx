@@ -239,7 +239,7 @@ export default function MarcoWidget() {
                       {[0, 1, 2].map((i) => (
                         <span
                           key={i}
-                          className="h-1.5 w-1.5 rounded-full bg-brand-gold animate-bounce"
+                          className="h-1.5 w-1.5 rounded-full bg-brand-gold animate-bounce motion-reduce:animate-none"
                           style={{ animationDelay: `${i * 0.15}s` }}
                         />
                       ))}

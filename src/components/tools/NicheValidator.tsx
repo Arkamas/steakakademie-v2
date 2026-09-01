@@ -127,7 +127,7 @@ export default function NicheValidator() {
                 "
               >
                 {isLoading ? (
-                  <><Loader2 size={13} className="animate-spin" /> Analyzing</>
+                  <><Loader2 size={13} className="animate-spin motion-reduce:animate-none" /> Analyzing</>
                 ) : (
                   <>Analyze <ArrowRight size={13} /></>
                 )}
@@ -162,7 +162,7 @@ export default function NicheValidator() {
             className="max-w-3xl mx-auto px-6 py-16"
           >
             <div className="flex items-center gap-3 text-text-muted">
-              <Loader2 size={14} className="animate-spin text-brand-gold" />
+              <Loader2 size={14} className="animate-spin motion-reduce:animate-none text-brand-gold" />
               <span className="text-sm font-sans tracking-wide">
                 {STAGE_MESSAGES[stage]}
               </span>
@@ -171,7 +171,7 @@ export default function NicheValidator() {
               {[...Array(4)].map((_, i) => (
                 <div
                   key={i}
-                  className="h-12 bg-surface-elevated/40 border border-border-subtle/40 animate-pulse"
+                  className="h-12 bg-surface-elevated/40 border border-border-subtle/40 animate-pulse motion-reduce:animate-none"
                 />
               ))}
             </div>
@@ -490,7 +490,7 @@ export default function NicheValidator() {
                           "
                         >
                           {leadState === 'sending' ? (
-                            <><Loader2 size={13} className="animate-spin" /> Sending</>
+                            <><Loader2 size={13} className="animate-spin motion-reduce:animate-none" /> Sending</>
                           ) : (
                             <>Send brief <ArrowRight size={13} /></>
                           )}

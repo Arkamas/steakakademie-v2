@@ -27,7 +27,7 @@ export default function ArticleCard({
               alt={imageAlt}
               width={800}
               height={500}
-              className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
+              className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
               priority
             />
           </div>
@@ -65,7 +65,7 @@ export default function ArticleCard({
               alt={imageAlt}
               width={100}
               height={70}
-              className="w-24 h-16 object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
+              className="w-24 h-16 object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
             />
           </div>
         </Link>
@@ -93,7 +93,7 @@ export default function ArticleCard({
               alt={imageAlt}
               width={140}
               height={90}
-              className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
+              className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
             />
           </div>
         </Link>
@@ -127,7 +127,7 @@ export default function ArticleCard({
             alt={imageAlt}
             width={600}
             height={380}
-            className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
+            className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
           />
         </div>
         <span className="category-label">{category}</span>

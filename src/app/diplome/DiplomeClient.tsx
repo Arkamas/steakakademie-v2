@@ -170,7 +170,7 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
           <div className="text-center mt-12 space-y-5 max-w-xl mx-auto">
             <Link
               href="/diplome/roadmap"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition duration-200 ease-out active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
             >
               Roadmap &mdash; Was du in jeder Stufe lernst &rarr;
             </Link>
@@ -180,19 +180,19 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/diplome/simulation"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-[#b07020] transition duration-200 ease-out active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-gold text-ink font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-[#b07020] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
               >
                 System kennenlernen &rarr;
               </Link>
               <Link
                 href="/diplome/urkunde"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition duration-200 ease-out active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
               >
                 Urkunde per Post &mdash; 9,99 &euro; + Porto
               </Link>
               <Link
                 href="/diplome/profil"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition duration-200 ease-out active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
               >
                 Mein Profil &amp; Vita &rarr;
               </Link>

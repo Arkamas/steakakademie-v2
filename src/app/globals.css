@@ -376,3 +376,18 @@ nav a, header button, .nav-sharp {
 
 /* CTA-Buttons bleiben bewusst kräftig orange (btn-affiliate/bg-brand-fire
    unverändert) — die Aktionsfarbe ist der rote Faden zwischen A und B. */
+
+/* ── REDUCED MOTION ──────────────────────────────────────────────────────
+   Bewegung ist hier Feedback, nie Inhalt. Wer prefers-reduced-motion setzt,
+   behaelt Farbe, Schatten und Rahmen als Rueckmeldung — Verschiebung und
+   Skalierung entfallen. Die Tailwind-Seite deckt motion-reduce:* ab,
+   Framer-Motion-Komponenten regeln es ueber useReducedMotion. */
+@media (prefers-reduced-motion: reduce) {
+  .btn-affiliate:hover,
+  .btn-affiliate:active,
+  .btn-gold:hover,
+  .btn-gold:active,
+  .cinema-frame:hover img {
+    transform: none;
+  }
+}

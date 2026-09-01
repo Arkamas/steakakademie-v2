@@ -88,7 +88,7 @@ export default function RedeemForm({ initialCode = '' }: { initialCode?: string 
         disabled={loading || code.trim().length < 4}
         className="btn-affiliate w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? <Loader2 size={16} className="animate-spin" /> : <Gift size={16} />}
+        {loading ? <Loader2 size={16} className="animate-spin motion-reduce:animate-none" /> : <Gift size={16} />}
         {loading ? 'Wird eingelöst …' : 'Gutschein einlösen'}
       </button>
     </form>

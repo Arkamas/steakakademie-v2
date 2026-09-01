@@ -105,7 +105,7 @@ export default function WiderrufForm() {
       <button type="submit" disabled={!canSubmit}
         className="inline-flex items-center gap-2 px-7 py-3.5 font-sans font-bold text-base transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
         style={{ background: '#C8882A', color: '#0D0A06' }}>
-        {loading ? (<><Loader2 size={16} className="animate-spin" /> Wird verarbeitet …</>) : 'Widerruf bestätigen'}
+        {loading ? (<><Loader2 size={16} className="animate-spin motion-reduce:animate-none" /> Wird verarbeitet …</>) : 'Widerruf bestätigen'}
       </button>
     </form>
   );

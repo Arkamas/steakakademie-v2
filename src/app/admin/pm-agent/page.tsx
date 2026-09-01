@@ -163,14 +163,14 @@ export default function PmAgentPage() {
           ▸ TAGES-BRIEFING
         </div>
         {briefingLoading && !briefing ? (
-          <div className="text-[#8a7e6a] text-sm animate-pulse">
+          <div className="text-[#8a7e6a] text-sm animate-pulse motion-reduce:animate-none">
             Analysiere Projektstatus...
           </div>
         ) : (
           <div className="text-sm leading-relaxed whitespace-pre-wrap text-[#e8dcc8]">
             {briefing}
             {briefingLoading && (
-              <span className="inline-block w-1 h-3 bg-[#c8621a] ml-1 animate-pulse" />
+              <span className="inline-block w-1 h-3 bg-[#c8621a] ml-1 animate-pulse motion-reduce:animate-none" />
             )}
           </div>
         )}
@@ -335,7 +335,7 @@ export default function PmAgentPage() {
                   <div className="whitespace-pre-wrap">
                     {msg.content}
                     {chatLoading && i === messages.length - 1 && (
-                      <span className="inline-block w-1 h-3 bg-[#c8621a] ml-1 animate-pulse" />
+                      <span className="inline-block w-1 h-3 bg-[#c8621a] ml-1 animate-pulse motion-reduce:animate-none" />
                     )}
                   </div>
                 )}

@@ -59,7 +59,7 @@ export default function CookCoach({ steps }: Props) {
           aria-valuemax={steps.length}
         >
           <div
-            className="h-full bg-gradient-to-r from-brand-fire to-brand-gold transition-all duration-500 ease-out"
+            className="h-full bg-gradient-to-r from-brand-fire to-brand-gold transition-all duration-500 ease-out motion-reduce:transition-none"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -78,7 +78,7 @@ export default function CookCoach({ steps }: Props) {
               onClick={() => toggle(idx)}
               className={[
                 'px-6 py-5 border-b border-border-subtle/40 last:border-0',
-                'cursor-pointer select-none group transition-all duration-300',
+                'cursor-pointer select-none group transition-all duration-300 motion-reduce:transition-none',
                 isDone
                   ? 'bg-surface-base/70 opacity-50'
                   : 'hover:bg-surface-base/30',
@@ -86,11 +86,11 @@ export default function CookCoach({ steps }: Props) {
             >
               <div className="flex gap-4">
                 {/* Checkbox-Icon */}
-                <div className="mt-0.5 shrink-0 transition-transform duration-200 group-hover:scale-110">
+                <div className="mt-0.5 shrink-0 transition-transform duration-200 ease-out group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100">
                   {isDone ? (
                     <CheckCircle2 size={20} className="text-brand-gold" />
                   ) : (
-                    <Circle size={20} className="text-border-subtle group-hover:text-brand-gold/50 transition-colors" />
+                    <Circle size={20} className="text-border-subtle group-hover:text-brand-gold/50 transition-colors duration-200 motion-reduce:transition-none" />
                   )}
                 </div>
 
@@ -111,7 +111,7 @@ export default function CookCoach({ steps }: Props) {
                   {/* Titel */}
                   <h3
                     className={[
-                      'font-serif text-base font-bold mb-2 leading-snug transition-colors duration-300',
+                      'font-serif text-base font-bold mb-2 leading-snug transition-colors duration-300 motion-reduce:transition-none',
                       isDone
                         ? 'text-text-muted line-through decoration-brand-gold/30'
                         : 'text-text-primary',

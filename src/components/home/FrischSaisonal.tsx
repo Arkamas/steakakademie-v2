@@ -150,10 +150,10 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
                 <div className="h-0.5 w-full bg-black/5">
                   <motion.div
                     key={`${slide.url}-bar`}
-                    className="h-full"
-                    style={{ background: '#C8882A' }}
-                    initial={{ width: '0%' }}
-                    animate={{ width: paused ? '0%' : '100%' }}
+                    className="h-full w-full"
+                    style={{ background: '#C8882A', transformOrigin: 'left' }}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: paused ? 0 : 1 }}
                     transition={{ duration: paused ? 0 : ROTATE_MS / 1000, ease: 'linear' }}
                   />
                 </div>

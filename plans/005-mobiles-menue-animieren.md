@@ -1,6 +1,6 @@
 # 005 — Mobiles Menü mit Ein- und Ausblendung versehen
 
-- **Status**: TODO
+- **Status**: DONE — umgesetzt und verifiziert am 02.09.2026 (Messwerte am Ende)
 - **Commit**: 14448e2
 - **Severity**: MEDIUM (additive Verbesserung, kein Defekt)
 - **Category**: Missed opportunity — preventing a jarring change
@@ -112,3 +112,33 @@ Werte, die exakt so zu übernehmen sind:
   - DevTools → Animations-Panel, Wiedergabe auf 10 % stellen und einmal öffnen: Die Bewegung startet schnell und läuft weich aus (Ease-out). Startet sie langsam, wurde die Kurve falsch übernommen.
   - Falls Plan 002 bereits erledigt: `prefers-reduced-motion: reduce` emulieren → Overlay blendet nur noch auf, ohne den 8-px-Versatz.
 - **Done when**: Öffnen und Schließen sind beide sichtbar animiert, schnelles Umschalten flackert nicht, und Inhalt sowie Layout des Menüs sind unverändert gegenüber vorher.
+
+## Ergebnis (02.09.2026)
+
+Umgesetzt wie beschrieben. Plan 002 war vorher fertig, der `MotionProvider` greift also bereits. Inhalt und Klassen des Menüs sind unverändert — der Diff enthält außer den Motion-Props nur die Einrückung, die durch die zusätzliche Verschachtelungsebene entsteht (`git diff -w` zeigt genau die geplanten Zeilen).
+
+Mechanisch: `tsc --noEmit`, `next lint` und `next build` (501 Seiten) je ohne Fehler.
+
+Verhalten pro Frame gemessen (Playwright, Chromium 390×844 mit `hasTouch`, Produktions-Build):
+
+**Ohne Reduced Motion — Öffnen** (~250 ms, Ease-out deutlich erkennbar: schneller Start, weiches Auslaufen)
+
+| Zeit | Opacity | `translateY` |
+| --- | --- | --- |
+| 87 ms | 0 | −6,82 px |
+| 112 ms | 0,57 | −3,33 px |
+| 147 ms | 0,87 | −0,97 px |
+| 195 ms | 0,98 | −0,14 px |
+| 247 ms | 0,999 | −0,005 px |
+
+**Ohne Reduced Motion — Schließen** (~140 ms ab Bewegungsbeginn, wie spezifiziert)
+
+Opacity 1 → 0, `translateY` 0 → −8 px. Das Element bleibt über den gesamten Verlauf im DOM (`da=true`) und verschwindet erst danach — die Exit-Animation läuft also wirklich, statt im ersten Frame abgeschnitten zu werden. Das war der Kernpunkt des Plans.
+
+**Mit Reduced Motion**: Transform steht nach einem Frame auf seinem Zielwert und interpoliert nicht (`none` beim Öffnen, `−8 px` beim Schließen), Opacity blendet weiter. Der `MotionProvider` aus Plan 002 wirkt hier wie vorgesehen.
+
+### Der Nebenbefund aus Plan 002 tritt auch hier auf
+
+Beim **Schließen mit aktivem Reduced Motion** springt die Opacity bei 198 ms für einen Frame von 6,4 × 10⁻⁵ zurück auf **1**, bevor das Element bei 214 ms aus dem DOM verschwindet. Das ist dasselbe Muster wie beim Marco-Panel (Plan 002, „Offener Nebenbefund") und der zweite unabhängige Beleg dafür, dass es sich um ein allgemeines Verhalten von framer-motion unter `reducedMotion="user"` am Animationsende handelt und nicht um etwas Komponentenspezifisches.
+
+Sichtbar ist es als kurzes Aufblitzen des Menüs unmittelbar vor dem Verschwinden. Gemessen an der Ausgangslage — das Menü verschwand vorher komplett übergangslos — bleibt die Änderung trotzdem die bessere Variante. Der Befund wird in Plan 002 geführt.

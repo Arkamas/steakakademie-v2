@@ -12,7 +12,9 @@ Jeder Plan ist selbsttragend: exakte Dateipfade, aktueller Code im Zitat, exakte
 | [002](002-reduced-motion-framer.md) | Reduced-Motion-Vertrag für framer-motion einlösen | HIGH | Accessibility | 1 neue Datei + 2 Dateien | **DONE**² |
 | [003](003-transition-all-ersetzen.md) | `transition-all` durch benannte Properties ersetzen | MEDIUM | Performance | 75 Stellen in 41 Dateien | **DONE**³ |
 | [004](004-hover-nur-mit-echtem-zeiger.md) | Hover-Motion nur noch bei echtem Zeigegerät auslösen | LOW | Accessibility | 1 Datei, 3 Zeilen | **DONE**¹ |
-| [005](005-mobiles-menue-animieren.md) | Mobiles Menü mit Ein- und Ausblendung versehen | MEDIUM | Missed opportunity | 1 Datei, ~10 Zeilen | TODO |
+| [005](005-mobiles-menue-animieren.md) | Mobiles Menü mit Ein- und Ausblendung versehen | MEDIUM | Missed opportunity | 1 Datei, ~10 Zeilen | **DONE**⁴ |
+
+⁴ Umgesetzt und verifiziert am 02.09.2026. Öffnen ~250 ms, Schließen ~140 ms, Element bleibt während der Exit-Animation im DOM. Der Nebenbefund aus Plan 002 tritt hier ebenfalls auf und ist damit als allgemeines framer-motion-Verhalten belegt — dort nachgetragen.
 
 ³ Umgesetzt am 02.09.2026: 68 von 75 Vorkommen ersetzt, 7 bewusst stehen gelassen, weil sich an diesen Elementen nachweislich keine Property ändert — Liste und Begründung im Plan. Alle erzeugten Regeln im gebauten CSS gegengeprüft, Verhalten pro Gruppe automatisiert verifiziert. Zwei Lücken in der Entscheidungstabelle des Plans wurden dabei korrigiert und dort dokumentiert.
 

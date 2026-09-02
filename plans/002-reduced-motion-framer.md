@@ -200,3 +200,5 @@ Es ist also durch diesen Plan entstanden und kein Dev-Artefakt. Drei Hypothesen 
 Der Wert von `0` entspricht exakt dem `initial` des Panels, was auf ein einmaliges Wiederanwenden des Initialzustands am Animationsende hindeutet — die Ursache in framer-motion ist damit aber nicht belegt.
 
 **Bewertung**: Ein 16-ms-Blinzeln an einer Komponente steht dem Nutzen gegenüber, dass 15 Komponenten überhaupt erst auf `prefers-reduced-motion` reagieren. Die Änderung bleibt daher drin. Der Befund ist offen und gehört als eigene Aufgabe untersucht — nicht als Teil dieses Plans.
+
+**Nachtrag (Plan 005, 02.09.2026)**: Das Muster ist nicht komponentenspezifisch. Beim Schließen des mobilen Menüs — einer davon unabhängigen Komponente in `Header.tsx` — springt die Opacity mit aktivem Reduced Motion ebenfalls für einen Frame zurück auf `1`, kurz bevor das Element aus dem DOM verschwindet. Zwei unabhängige Belege sprechen damit für ein allgemeines Verhalten von framer-motion unter `reducedMotion="user"` am Ende einer Opacity-Animation. Wer den Befund aufgreift, sollte dort ansetzen statt an einzelnen Komponenten.

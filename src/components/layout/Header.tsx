@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Menu, X, ChevronDown, Flame, Gift } from 'lucide-react';
 // Flame kept for Diplome CTA button
 import Image from 'next/image';
@@ -331,52 +332,61 @@ export default function Header() {
       </header>
 
       {/* Mobile menu overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-40 bg-surface-dark overflow-y-auto md:hidden pt-16">
-          <div className="p-6">
-            <p className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-light/40 mb-4">
-              Kategorien
-            </p>
-            <ul className="space-y-0">
-              {NAV_CATEGORIES.map((cat) => (
-                <li key={cat.href}>
-                  <Link
-                    href={cat.href}
-                    className="block py-4 border-b border-brand-gold/15 font-serif text-xl text-text-light hover:text-brand-gold transition-colors"
-                  >
-                    {cat.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 space-y-4">
-              {/* Leadmagnet zuerst — mobil war der Trichter bis zum Audit 15.08.2026
-                  komplett geschlossen (Exit-Intent feuert auf Touch-Geräten nie). */}
-              <Link
-                href="/kerntemperatur-spickzettel"
-                className="flex items-center gap-2 border border-brand-gold/40 bg-brand-gold/5 px-4 py-3 text-sm font-sans font-bold text-brand-gold hover:bg-brand-gold/10 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
-              >
-                <Gift size={15} />
-                Kerntemperatur-Spickzettel — gratis
-              </Link>
-              <Link
-                href="/vergleich/fleischthermometer"
-                className="block text-sm font-sans font-semibold text-text-light/60 hover:text-brand-gold transition-colors"
-              >
-                Produkttests &amp; Vergleiche
-              </Link>
-              <AccountLink mobile />
-              <Link
-                href="/diplome"
-                className="inline-flex items-center gap-2 bg-brand-gold text-ink font-sans text-sm font-bold tracking-wide uppercase px-5 py-3 hover:bg-[#b07020] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
-              >
-                <Flame size={14} />
-                Grillmeister-Diplome starten
-              </Link>
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            key="mobile-menu"
+            className="fixed inset-0 z-40 bg-surface-dark overflow-y-auto md:hidden pt-16"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8, transition: { duration: 0.15, ease: [0.23, 1, 0.32, 1] } }}
+            transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+          >
+            <div className="p-6">
+              <p className="text-[10px] font-sans font-bold tracking-[0.15em] uppercase text-text-light/40 mb-4">
+                Kategorien
+              </p>
+              <ul className="space-y-0">
+                {NAV_CATEGORIES.map((cat) => (
+                  <li key={cat.href}>
+                    <Link
+                      href={cat.href}
+                      className="block py-4 border-b border-brand-gold/15 font-serif text-xl text-text-light hover:text-brand-gold transition-colors"
+                    >
+                      {cat.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8 space-y-4">
+                {/* Leadmagnet zuerst — mobil war der Trichter bis zum Audit 15.08.2026
+                    komplett geschlossen (Exit-Intent feuert auf Touch-Geräten nie). */}
+                <Link
+                  href="/kerntemperatur-spickzettel"
+                  className="flex items-center gap-2 border border-brand-gold/40 bg-brand-gold/5 px-4 py-3 text-sm font-sans font-bold text-brand-gold hover:bg-brand-gold/10 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                >
+                  <Gift size={15} />
+                  Kerntemperatur-Spickzettel — gratis
+                </Link>
+                <Link
+                  href="/vergleich/fleischthermometer"
+                  className="block text-sm font-sans font-semibold text-text-light/60 hover:text-brand-gold transition-colors"
+                >
+                  Produkttests &amp; Vergleiche
+                </Link>
+                <AccountLink mobile />
+                <Link
+                  href="/diplome"
+                  className="inline-flex items-center gap-2 bg-brand-gold text-ink font-sans text-sm font-bold tracking-wide uppercase px-5 py-3 hover:bg-[#b07020] transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                >
+                  <Flame size={14} />
+                  Grillmeister-Diplome starten
+                </Link>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

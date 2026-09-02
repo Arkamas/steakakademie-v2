@@ -7,6 +7,9 @@ import GruendungsBuerokratie from '@/components/gruendung/GruendungsBuerokratie'
 import { breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
+  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  robots: { index: false, follow: false },
   title: 'Gründer-Nachschlagewerk — Das Komplettikon',
   description:
     'Orientierung für deinen Start in die Selbständigkeit: Schritte zum Status, nötige Anträge und Kosten der ersten 6 Monate. Keine Steuer-/Rechtsberatung.',

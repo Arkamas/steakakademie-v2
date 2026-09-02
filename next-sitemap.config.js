@@ -65,6 +65,21 @@ module.exports = {
     '/go/*',
     '/api/*',
     '/admin/*',
+    // Uwe, 02.09.2026: Gruender-Bereich ("Ehrliches System") raus aus der Sitemap.
+    // Nav und Footer sind seit 641b346 ausgebaut; solange die Seiten indexiert
+    // bleiben, sieht Google die Domain weiter thematisch gemischt (BBQ + Gruender-
+    // Tools). CLAUDE.md Abschnitt 10: GF3 wird nicht vermarktet, bevor GF1 liefert.
+    // Die Routen bleiben erreichbar, nur Sitemap und Index sind sie los.
+    // Passend dazu: noindex in den page.tsx dieser Routen.
+    '/ehrliches-system',
+    '/gruender-schmiede',
+    '/gruender-schmiede/*',
+    '/steuer-matrix',
+    '/steuer-matrix/*',
+    '/steuer-matrix-live',
+    '/seo-sprint',
+    '/agentur-killer-sprint',
+    '/erste-kunden-sprint',
     '/mein-system',
     '/meine-kurse',
     '/profil',
@@ -114,9 +129,11 @@ module.exports = {
       }).filter(Boolean);
     })();
 
+    // 02.09.2026: Gruender-Routen (gruender-schmiede, ehrliches-system, steuer-matrix,
+    // agentur-killer-sprint, erste-kunden-sprint, seo-sprint) hier entfernt — siehe
+    // exclude oben. Sie wurden explizit nachgetragen, weil SSR sie aus dem Manifest
+    // haelt; ohne diese Zeile fallen sie von allein weg.
     const ssrPaths = [
-      '/gruender-schmiede', '/ehrliches-system', '/steuer-matrix',
-      '/agentur-killer-sprint', '/erste-kunden-sprint', '/seo-sprint',
       '/cut-generator', '/steak-beichte', '/mein-protokoll', '/rezepte/community',
     ];
     return [
@@ -147,7 +164,7 @@ module.exports = {
       return { loc: path, changefreq: 'monthly', priority: 0.9 };
     }
     // Pillar Pages: höchste Priorität
-    if (path === '/ehrliches-system' || path.startsWith('/cuts/') || path.startsWith('/vergleich/') || path.startsWith('/methoden/')) {
+    if (path.startsWith('/cuts/') || path.startsWith('/vergleich/') || path.startsWith('/methoden/')) {
       return { loc: path, changefreq: 'monthly', priority: 0.9 };
     }
     // Artikel

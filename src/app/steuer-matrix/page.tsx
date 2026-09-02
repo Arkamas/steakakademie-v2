@@ -6,6 +6,9 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
+  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  robots: { index: false, follow: false },
   title: 'Steuer-Matrix — 23 Länder im Steuervergleich',
   description:
     'Interaktiver Netto-Vergleich für Solo-Selbstständige: Was bleibt in 23 Ländern übrig? Deutschland, Portugal, Niederlande und 20 weitere — echte Zahlen.',

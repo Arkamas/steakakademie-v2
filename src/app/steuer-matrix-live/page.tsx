@@ -8,6 +8,9 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
+  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  robots: { index: false, follow: false },
   title: 'Steuer-Matrix LIVE: Update-Abo für 23 Länder',
   description:
     'Steuerrecht ändert sich jedes Jahr. Das Jahres-Update-Abo hält deine Steuer-Matrix für alle 23 Länder aktuell: neue Steuersätze, geänderte Regelungen.',

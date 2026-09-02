@@ -10,6 +10,9 @@ import Footer from '@/components/layout/Footer';
 import { breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
+  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  robots: { index: false, follow: false },
   title: 'Mein Setup — KI-Agenten und Werkzeuge',
   description:
     'Die KI-Agenten, Konnektoren und Werkzeuge, mit denen die Steakakademie als Ein-Personen-Betrieb läuft — kein Theorie-Modell, sondern das laufende System.',

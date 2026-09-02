@@ -22,6 +22,7 @@ export function generateMetadata({ params }: Props): Metadata {
   const m = allSprintModuls.find((x) => x.slug === params.slug);
   if (!m) return {};
   return {
+    robots: { index: false, follow: false }, // Gruender-Bereich ausgebaut, 02.09.2026
     title: m.seoTitle ?? `${m.title} | Gründer-Schmiede`,
     description: m.seoDescription ?? m.excerpt,
     alternates: { canonical: `https://steakakademie.de${m.url}` },

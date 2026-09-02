@@ -9,6 +9,9 @@ import BuerokratieHinweis from '@/components/gruendung/BuerokratieHinweis';
 import WerkzeugHinweis from '@/components/gruendung/WerkzeugHinweis';
 
 export const metadata: Metadata = {
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
+  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  robots: { index: false, follow: false },
   title: 'KI-gesteuert ein Business bauen',
   description:
     'Sechs Module: vom Chef-Prinzip über KI-Projektsteuerung mit Jira + Confluence bis zum täglichen Arbeits-Loop — wie du KI-gesteuert ein Business aufbaust.',

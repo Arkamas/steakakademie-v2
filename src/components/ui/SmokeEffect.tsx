@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { m as motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 // ── Feste Puff-Konfigurationen — kein Math.random() (SSR-sicher) ─────────────

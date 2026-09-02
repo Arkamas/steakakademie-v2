@@ -20,14 +20,14 @@ export const metadata: Metadata = {
       'Vom Kochen für die Gruppe zum Weber-zertifizierten Grillmeister. Warum auf steakakademie.de Technik vor Budget steht.',
     url: 'https://steakakademie.de/ueber-uns',
     type: 'profile',
-    images: [{ url: '/images/uwe-yendell.png', width: 800, height: 800 }],
+    images: [{ url: '/images/uwe-yendell.jpg', width: 800, height: 800 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Uwe Yendell — 50 Jahre am Feuer',
     description:
       'Vom Kochen für die Gruppe zum Weber-zertifizierten Grillmeister. Warum hier Technik vor Budget steht.',
-    images: ['/images/uwe-yendell.png'],
+    images: ['/images/uwe-yendell.jpg'],
   },
 };
 
@@ -58,7 +58,7 @@ const jsonLd = {
     },
   ],
   url: 'https://steakakademie.de/ueber-uns',
-  image: 'https://steakakademie.de/images/uwe-yendell.png',
+  image: 'https://steakakademie.de/images/uwe-yendell.jpg',
   email: 'info@steakakademie.de',
   description:
     'Gründer der Steakakademie. Ausgebildeter Profi-Koch und Weber-zertifizierter Grillmeister, von 2013 bis 2021 Geschäftsführer der Genusskunst GmbH und Kursleiter der dort betriebenen Weber Grillakademie. Danach bis 2025 deutschlandweit als Mietkoch tätig. Kocht seit dem siebten Lebensjahr, seit dem Alter von vierzehn für Gruppen.',
@@ -148,7 +148,7 @@ export default function UeberUnsPage() {
                   style={{ border: '1px solid rgba(200,136,42,0.3)' }}
                 >
                   <Image
-                    src="/images/uwe-yendell.png"
+                    src="/images/uwe-yendell.jpg"
                     alt="Uwe Yendell"
                     width={176}
                     height={176}

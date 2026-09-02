@@ -35,22 +35,9 @@ stichtag: 2026-08-30
 
 bilder:
   images/Beilagen_zu_Steak_1800x1000_6c5b974a-f29a-492b-95fb-424e0c4624d3.webp: { status: offen }
-  images/Firefly_-ceramic kamado BBQ grill, cinematic product photography,_matte black background, dra 803574.png:
-    status: ki
-    quelle: KI-erzeugt (Dateiname deutet auf Adobe Firefly bzw. Gemini)
-    urheber: Uwe Yendell
-    namensnennung: false
-    hinweis: Anbieter-Tarif auf kommerzielle Nutzung pruefen
-  images/Firefly_Gemini Flash_professional editorial product photography, a sleek modern pellet smoker grill, matte 980421.png:
-    status: ki
-    quelle: KI-erzeugt (Dateiname deutet auf Adobe Firefly bzw. Gemini)
-    urheber: Uwe Yendell
-    namensnennung: false
-    hinweis: Anbieter-Tarif auf kommerzielle Nutzung pruefen
-  images/Medaillen Final.png: { status: offen }
   images/articles/brisket-texas-smoked.webp: { status: offen }
   images/articles/dry-aged-beef-reifeschrank.webp: { status: offen }
-  images/articles/pellet-grills-usa-2026.png: { status: offen }
+  images/articles/pellet-grills-usa-2026.jpg: { status: offen }
   images/articles/reverse-sear-cast-iron-steak.webp: { status: offen }
   images/articles/ribeye-premium-cut.webp: { status: offen }
   images/articles/thermometer-test-steak-grill-1.webp: { status: offen }
@@ -136,10 +123,9 @@ bilder:
   images/diplome/medal-platin.png: { status: offen }
   images/diplome/medal-silber.png: { status: offen }
   images/diplome/medals-hero-v2.png: { status: offen }
-  images/diplome/medals-hero.png: { status: offen }
   images/email/hero-ribeye-1200.jpg:
     status: eigen
-    quelle: Zuschnitt aus public/images/hero-ribeye.png
+    quelle: Zuschnitt aus public/images/hero-ribeye.jpg
     urheber: Uwe Yendell
     namensnennung: false
     verwendung: Hero-Vorlage im Newsletter (Loops)
@@ -151,20 +137,25 @@ bilder:
     verwendung: Kopf-Baustein im Newsletter (Loops)
   images/facebook-cover-text.jpg: { status: offen }
   images/facebook-cover.jpg: { status: offen }
-  images/hero-ribeye.png: { status: offen }
-  images/hero-thermometer.png: { status: offen }
+  images/hero-ribeye.jpg: { status: offen }
+  images/hero-thermometer.jpg: { status: offen }
   images/hf_20260524_192054_b2e1cfcc-5e51-4eaa-8feb-4437a8e41161_min.webp:
     status: ki
     quelle: KI-erzeugt (Dateiname deutet auf Adobe Firefly bzw. Gemini)
     urheber: Uwe Yendell
     namensnennung: false
     hinweis: Anbieter-Tarif auf kommerzielle Nutzung pruefen
-  images/image.png: { status: offen }
   images/logo-barrel-avatar.jpg: { status: offen }
   images/logo-barrel.jpg: { status: offen }
   images/marco-back.jpg: { status: offen }
-  images/methode-kamado.png: { status: offen }
-  images/methode-smoker.png: { status: offen }
+  images/marco-back-128.webp:
+    status: offen
+    quelle: Verkleinerung (128 px) aus public/images/marco-back.jpg fuer den Chat-Avatar
+  images/marco-portrait-128.webp:
+    status: offen
+    quelle: Verkleinerung (128 px) aus public/images/authors/marco-richter.jpg fuer den Chat-Avatar
+  images/methode-kamado.jpg: { status: offen }
+  images/methode-smoker.jpg: { status: offen }
   images/methoden/direktes-grillen.jpg:
     status: lizenz
     quelle: Pexels (ID 35963583)
@@ -381,7 +372,7 @@ bilder:
   images/streitfaelle/salzen-vorher-nachher.jpg: { status: offen }
   images/streitfaelle/temperieren-oder-kalt.jpg: { status: offen }
   images/streitfaelle/wenden.jpg: { status: offen }
-  images/tomahawk-hero.png: { status: offen }
+  images/tomahawk-hero.jpg: { status: offen }
   images/usa/carolinas.jpg:
     status: lizenz
     quelle: Pexels (ID 6430736)
@@ -422,7 +413,7 @@ bilder:
     erworben_am: 2026-08-30
     namensnennung: false
     hinweis: Ingest ueber scripts/bild-ingest.mjs; Herkunft auch im MDX-Frontmatter (imageSource)
-  images/uwe-yendell.png: { status: offen }
+  images/uwe-yendell.jpg: { status: offen }
   images/vergleich/dry-aging-kuehlschrank-vergleich.jpg: { status: offen }
   images/vergleich/dry-aging-kuehlschrank-vergleich.webp: { status: offen }
   images/vergleich/fleischthermometer.jpg:

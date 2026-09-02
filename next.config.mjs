@@ -59,8 +59,24 @@ const nextConfig = {
   // die Datei bleibt die Telemetrie im Marco-Chat wirkungslos (No-op-Tracer).
   // Ab Next 15 ist der Hook stabil und die Zeile entfaellt.
   experimental: { instrumentationHook: true },
+  webpack(config, { isServer, webpack }) {
+    if (!isServer) {
+      // Browser-Tracing des Sentry-SDK aus dem Client-Bundle entfernen
+      // (Perf-Audit 02.09.2026, Begruendung in sentry.client.config.ts).
+      // Nur Client: der Server behaelt Tracing fuer das Agent-Monitoring.
+      config.plugins.push(new webpack.DefinePlugin({ __SENTRY_TRACING__: false }));
+    }
+    return config;
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
+    // Optimierte Bilder einen Tag lang cachen (Standard: 60 s). Live gemessen
+    // am 02.09.2026: /_next/image kam mit max-age=0 zurueck, der Browser hat
+    // also jedes Bild bei jeder Navigation neu angefragt und Vercel hat die
+    // Transformation nach einer Minute verworfen. Ein Tag ist der Kompromiss
+    // zwischen Wiederbesuch-Tempo und der Sichtbarkeit ausgetauschter Motive
+    // (Austausch unter gleichem Dateinamen wird spaetestens nach 24 h sichtbar).
+    minimumCacheTTL: 86400,
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
@@ -109,6 +125,17 @@ const nextConfig = {
         source: '/_next/static/(.*)',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      // Bilder und Videos aus public/: ohne diese Regel liefert Vercel
+      // max-age=0 und der Browser fragt jedes Bild bei jeder Navigation neu an
+      // (Messung 02.09.2026). Ein Tag frisch, danach eine Woche
+      // stale-while-revalidate — Wiederbesucher sehen die Seite sofort, ein
+      // ausgetauschtes Motiv unter gleichem Namen spaetestens nach 24 h.
+      {
+        source: '/(images|videos)/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
         ],
       },
     ];
@@ -181,6 +208,26 @@ export default withSentryConfig(withContentlayer(nextConfig), {
 
   widenClientFileUpload: true,
   hideSourceMaps: true,
+
+  // Bundle-Deckel (Perf-Audit 02.09.2026): Der Sentry-Browser-Client lag mit
+  // ~108 kB (komprimiert) als groesster Einzelchunk in JEDEM First-Load-Bundle.
+  // Replay ist per Config aus (Sample-Rate 0, siehe sentry.client.config.ts),
+  // Browser-Tracing wird bewusst nicht mehr genutzt (dort ebenfalls entfernt),
+  // Debug-Statements gehoeren nicht in die Produktion. Diese Schalter lassen
+  // den Bundler den zugehoerigen Code komplett wegwerfen statt ihn nur nicht
+  // aufzurufen. Fehler-Erfassung (Exceptions, unhandled rejections, Breadcrumbs)
+  // bleibt vollstaendig erhalten.
+  // excludeTracing steht hier BEWUSST NICHT: der Schalter wirkt auf alle
+  // Kompilate, auch den Server — dort ist Tracing die Grundlage des
+  // Agent-Monitorings der KI-Routen (sentry.server.config.ts). Das Browser-
+  // Tracing wird stattdessen client-seitig ueber __SENTRY_TRACING__ im
+  // webpack-Block von nextConfig abgeschaltet.
+  bundleSizeOptimizations: {
+    excludeDebugStatements: true,
+    excludeReplayIframe: true,
+    excludeReplayShadowDom: true,
+    excludeReplayWorker: true,
+  },
   // Entfernt Sentry-Debug-Logs aus dem Produktions-Bundle.
   webpack: { treeshake: { removeDebugLogging: true } },
 

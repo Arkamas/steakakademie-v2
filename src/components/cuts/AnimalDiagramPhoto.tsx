@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import type { Cut, Primal, Species } from '@/lib/cuts-catalog';
 import { PHOTO_DIAGRAMS } from '@/lib/cut-photo-zones';
 import AnimalDiagram from './AnimalDiagram';

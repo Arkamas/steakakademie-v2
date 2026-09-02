@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { m as motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import type { AvatarState } from '@/hooks/useAvatarStateMachine';
 
 // ── Video-Assets (werden in /public/videos/marco/ abgelegt) ──────────────────
@@ -175,6 +175,9 @@ export default function MarcoAvatar({
             <img
               src={portraitSrc}
               alt="Marco"
+              width={dim}
+              height={dim}
+              decoding="async"
               className="w-full h-full object-cover"
             />
           ) : (
@@ -245,6 +248,9 @@ export default function MarcoAvatar({
             <img
               src={backFaceSrc}
               alt="Marco am Grill"
+              width={dim}
+              height={dim}
+              decoding="async"
               className="w-full h-full object-cover"
             />
           ) : (

@@ -126,7 +126,7 @@ export const FALLBACK_NEWS: NewsItem[] = [
     isoDate: '2026-05-27',
     source: 'Steakakademie Redaktion',
     featured: true,
-    image: '/images/articles/pellet-grills-usa-2026.png',
+    image: '/images/articles/pellet-grills-usa-2026.jpg',
   },
   {
     id: 'grillsaison-dgr-2026',

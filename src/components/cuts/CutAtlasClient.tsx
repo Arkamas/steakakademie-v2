@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { X, Flame, Thermometer, BookOpen, ShoppingCart, MousePointerClick } from 'lucide-react';
 import AnimalDiagram from './AnimalDiagram';

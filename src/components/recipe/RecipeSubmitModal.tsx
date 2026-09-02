@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { X, ChefHat, Plus, Trash2, ChevronDown, Award, CheckCircle, Clock, AlertCircle, LogIn, ExternalLink } from 'lucide-react';
 import { z } from 'zod';
 

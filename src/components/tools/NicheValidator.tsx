@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { experimental_useObject as useObject } from 'ai/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight, CheckCircle2, AlertTriangle, XCircle,
   TrendingUp, Target, Users, Trophy, Lightbulb,

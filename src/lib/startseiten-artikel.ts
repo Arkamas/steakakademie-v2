@@ -97,7 +97,7 @@ function zuArticleMeta(doc: Doc): ArticleMeta | null {
 // data/bild-helligkeit.json haelt die gemessene mittlere Luminanz je Bild
 // (gesamt + linkes Drittel). Ein Bild traegt den Vollbild-Hero nur, wenn die
 // Textzone sichtbare Zeichnung hat. Referenz: das bewaehrte alte Hero-Bild
-// (hero-ribeye.png) misst 48/43 — die Schwellen liegen knapp darunter.
+// (hero-ribeye.jpg) misst 48/43 — die Schwellen liegen knapp darunter.
 // UNBEKANNTE Bilder (noch nicht gemessen) gelten als tauglich: die Automatik
 // darf nicht an einer fehlenden Messung verhungern; dunkle Neuzugaenge werden
 // bei der naechsten Messrunde aussortiert. Dunkle Motive fliegen nicht raus —

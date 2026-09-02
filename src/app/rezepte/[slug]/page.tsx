@@ -50,7 +50,7 @@ const KATEGORIEN: Record<string, {
     label:       'Fire-Desserts',
     subtitle:    'Das süße Finale',
     description: 'Vom karamellisierten Pfirsich bis zur Flammen-Ananas — Desserts, die das offene Feuer als Instrument nutzen und die Glut bis zur letzten Kohle ausreizen.',
-    heroImage:   '/images/tomahawk-hero.png',
+    heroImage:   '/images/tomahawk-hero.jpg',
     heroAlt:     'Offenes Feuer am Grill — Glut für Fire-Desserts',
   },
   'wine-spirits': {

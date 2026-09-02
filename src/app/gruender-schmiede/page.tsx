@@ -415,7 +415,7 @@ export default async function GruenderSchmiedePage() {
                   >
                     {/* Foto → /public/images/uwe-yendell.jpg */}
                     <Image
-                      src="/images/uwe-yendell.png"
+                      src="/images/uwe-yendell.jpg"
                       alt="Uwe Yendell"
                       width={128}
                       height={128}

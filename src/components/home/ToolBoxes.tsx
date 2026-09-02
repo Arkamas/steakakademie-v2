@@ -13,8 +13,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2, Users, Plus, Minus } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import LazyMarkdown from '@/components/ui/LazyMarkdown';
 
 type Pairing = { partner: string; category: string | null; shared: number; shared_examples: string[] | null };
 
@@ -374,7 +373,7 @@ function RezeptSchmiedeBox({ seed }: { seed: { auftrag: string; nonce: number } 
             </div>
           )}
           <div className="prose prose-sm max-w-none prose-headings:text-text-light prose-headings:font-serif">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{ergebnis}</ReactMarkdown>
+            <LazyMarkdown>{ergebnis}</LazyMarkdown>
           </div>
           {rezeptLinks.length > 0 && (
             <div className="mt-3 border-t border-border-subtle pt-2.5">

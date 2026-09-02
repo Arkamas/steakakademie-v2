@@ -4,7 +4,7 @@ export const AUTHORS: Author[] = [
   {
     name: 'Uwe Yendell',
     slug: 'uwe-yendell',
-    avatar: '/images/uwe-yendell.png',
+    avatar: '/images/uwe-yendell.jpg',
     bio: 'Uwe Yendell ist Gründer der Steakakademie. Er kocht, seit er sieben ist, und hat mit vierzehn angefangen, für Gruppen zu kochen — im Jugendwohnhaus, später als Jugendbetreuer in AWO-Feriencamps und in der Kombüse von Plattbodenschiffen. Die Ausbildung zum Koch kam danach, dann die Jahre als Mietkoch, die Weber-Grillmeister-Ausbildung. Von 2013 bis 2021 führte er als Geschäftsführer die Genusskunst GmbH — seine eigene Eventküche mit angeschlossener Weber Grillakademie, an der er alle Grill-Kurs-Klassen unterrichtete. Danach stand er bis 2025 immer wieder deutschlandweit als Mietkoch am Herd — durchgehende Praxis bis unmittelbar vor dem Aufbau der Steakakademie. Dazu kommt eine zertifizierte Marketing-Ausbildung auf Master-Niveau und 22 Jahre als Sport- und Gymnastiklehrer. Diese Dreifach-Kompetenz — Küchenhandwerk, Marketing-Methodik und Coaching — prägt jede Entscheidung der Steakakademie. Uwe schreibt nicht als Theoretiker, sondern als krisenerprobter Praktiker, der weiß, wie Küchen, Fleisch und Menschen wirklich funktionieren.',
     shortBio: 'Gründer der Steakakademie · Profi-Koch · Weber-zertifizierter Grillmeister · kocht seit dem siebten Lebensjahr.',
     expertise: ['BBQ & Grillen', 'Fleischkunde & Cuts', 'Gastronomie-Praxis', 'Kerntemperaturen', 'Existenzgründung'],

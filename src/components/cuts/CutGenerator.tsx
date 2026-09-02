@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { RotateCcw, Share2, ShoppingCart, ChevronRight, Check } from 'lucide-react';
 import CutDnaRadar from './CutDnaRadar';

@@ -310,7 +310,7 @@ export default async function SeoSprintPage() {
                     style={{ border: '1px solid rgba(200,136,42,0.28)' }}
                   >
                     <Image
-                      src="/images/uwe-yendell.png"
+                      src="/images/uwe-yendell.jpg"
                       alt="Uwe Yendell"
                       width={128}
                       height={128}

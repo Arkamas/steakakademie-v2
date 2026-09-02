@@ -1,6 +1,6 @@
 # 004 — Hover-Motion nur noch bei echtem Zeigegerät auslösen
 
-- **Status**: DONE (mechanisch verifiziert am 02.09.2026 — Feel Check am Gerät steht noch aus)
+- **Status**: DONE — umgesetzt und vollständig verifiziert am 02.09.2026 (Messwerte am Ende)
 - **Commit**: 14448e2
 - **Severity**: LOW
 - **Category**: Accessibility
@@ -96,4 +96,19 @@ Erzeugtes CSS danach, exemplarisch:
   - **Touch**: DevTools → Device Toolbar → ein Mobilgerät wählen und **Touch-Simulation aktivieren** (nicht nur die Fenstergröße ändern, sonst greift `pointer: fine` weiterhin). Eine Artikelkarte antippen: Das Bild darf **nicht** mehr zoomen, die Navigation passiert direkt.
   - Nach der Rückkehr per Browser-Zurück darf keine Karte in einem "hängengebliebenen" Hover-Zustand stehen.
   - Zusätzlich am echten Telefon gegenprüfen, falls erreichbar: Die Emulation bildet `pointer: coarse` zuverlässig ab, aber das Zusammenspiel mit dem Zurück-Cache ist am Gerät ehrlicher.
-- **Done when**: `grep -c "hover: hover" .next/static/css/*.css` liefert Treffer, Desktop-Hover verhält sich unverändert, und in der Touch-Emulation löst ein Tap keine Hover-Animation mehr aus.
+- **Done when**: Der Grep liefert Treffer, Desktop-Hover verhält sich unverändert, und in der Touch-Emulation löst ein Tap keine Hover-Animation mehr aus.
+
+## Ergebnis (02.09.2026)
+
+Mechanisch: `tsc --noEmit`, `next lint` und `next build` (501 Seiten) je ohne Fehler. Im gebauten CSS 4 `@media (hover:hover) and (pointer:fine)`-Blöcke, vorher 0.
+
+Verhalten automatisiert gemessen (Playwright aus dem Repo, Dev-Server):
+
+| Kontext | `(hover: hover) and (pointer: fine)` | Bild-Transform |
+| --- | --- | --- |
+| Desktop 1440×900, Maus | `true` | Hover: `none` → `matrix(1.03, 0, 0, 1.03, 0, 0)` — unverändert |
+| Touch 390×844, `hasTouch` (`hover: none`, `pointer: coarse`) | `false` | Nach Tap: `none` — kein Zoom |
+
+Der Tap-Test allein wäre angreifbar, weil der Consent-Banner den Tap abfangen kann. Zusätzlich wurde deshalb das CSSOM ausgelesen: **alle sechs** `group-hover:scale-*`-Regeln (`scale-105`, `scale-110`, `scale-[1.02]`, `scale-[1.03]`, `scale-[1.04]`, `motion-reduce:group-hover:scale-100`) liegen in `@media (hover: hover) and (pointer: fine)` — im Desktop-Kontext mit `mediaMatches: true`, im Touch-Kontext mit `mediaMatches: false`. Die Regeln können auf Touch also unabhängig vom Tap-Ziel nicht greifen.
+
+Keine Regression im Desktop-Hover gefunden.

@@ -14,7 +14,7 @@ Jeder Plan ist selbsttragend: exakte Dateipfade, aktueller Code im Zitat, exakte
 | [004](004-hover-nur-mit-echtem-zeiger.md) | Hover-Motion nur noch bei echtem Zeigegerät auslösen | LOW | Accessibility | 1 Datei, 3 Zeilen | **DONE**¹ |
 | [005](005-mobiles-menue-animieren.md) | Mobiles Menü mit Ein- und Ausblendung versehen | MEDIUM | Missed opportunity | 1 Datei, ~10 Zeilen | TODO |
 
-¹ Umgesetzt am 02.09.2026. Mechanische Verifikation vollständig (`tsc --noEmit`, `next lint`, `next build` mit 501 Seiten, CSS-Ausgabe geprüft). Die Feel Checks im Browser stehen noch aus.
+¹ Umgesetzt und vollständig verifiziert am 02.09.2026. Mechanisch: `tsc --noEmit`, `next lint`, `next build` (501 Seiten) je ohne Fehler. Verhalten: automatisiert im Browser gemessen (Playwright aus dem Repo) — Messwerte stehen im jeweiligen Plan unter „Ergebnis". Keine Regression gefunden.
 
 ## Empfohlene Reihenfolge
 

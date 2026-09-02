@@ -1,6 +1,6 @@
 # 001 — Startseiten-Fortschrittsbalken von `width` auf `scaleX` umstellen
 
-- **Status**: DONE (mechanisch verifiziert am 02.09.2026 — Feel Check im Browser steht noch aus)
+- **Status**: DONE — umgesetzt und vollständig verifiziert am 02.09.2026 (Messwerte am Ende)
 - **Commit**: 14448e2
 - **Severity**: HIGH
 - **Category**: Performance
@@ -118,3 +118,20 @@ Fortschrittsbalken korrekt (konstante Bewegung, siehe Regel „Constant motion �
     `Layout`-Einträge mehr auftauchen, nur `Composite Layers`.
 - **Done when**: Balken sieht identisch aus, läuft identisch lang, und Paint Flashing zeigt
   während der Animation keine Repaints des Karussell-Bereichs mehr.
+
+## Ergebnis (02.09.2026)
+
+Mechanisch: `tsc --noEmit`, `next lint` und `next build` (501 Seiten) je ohne Fehler.
+
+Verhalten automatisiert gemessen (Playwright aus dem Repo, Chromium 1440×900, Dev-Server):
+
+| Messung | Ergebnis |
+| --- | --- |
+| `transform-origin` (computed) | `0px 1px` — linke Kante |
+| `scaleX` über 3,2 s, alle 400 ms | 0,837 → 0,917 → 0,994 → *(Slide-Wechsel)* → 0,071 → 0,151 → 0,228 → 0,305 → 0,385 |
+| `width` (computed) | `476.656px` bei **jeder** Messung identisch |
+| `offsetWidth` | `477` konstant |
+
+Die konstante Layout-Breite bei gleichzeitig wachsendem `scaleX` ist der eigentliche Nachweis:
+Vor der Änderung wäre `offsetWidth` im selben Zeitraum von 0 auf 477 gewandert. Paint Flashing
+wurde nicht separat geprüft — die konstante Layout-Breite deckt dieselbe Ursache ab.

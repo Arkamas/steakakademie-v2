@@ -57,6 +57,50 @@ export default async function HomePage() {
 
       <main>
 
+        {/* ── VALUE-PROP-BAND — Kopfbereich der Startseite (Uwe, 02.09.2026):
+            H1 + Rubriken-Einstieg, OHNE Mitglieder-Button. Der Button steht
+            bewusst weiter unten (MITGLIEDER-CTA) — „nicht auf den ersten Blick".
+            Reihenfolge ist Doktrin, siehe CLAUDE.md Regel 8 + Build-Gate. ── */}
+        <section
+          className="border-b border-brand-gold/15"
+          style={{
+            background:
+              'radial-gradient(125% 105% at 50% 118%, rgba(232,80,24,0.34) 0%, rgba(232,80,24,0.10) 38%, rgba(200,136,42,0.05) 58%, transparent 72%), linear-gradient(180deg, #20130A 0%, #130C07 100%)',
+          }}
+        >
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-14 text-center">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.22em] uppercase text-brand-fire mb-4">
+              <Flame size={12} /> Die methodisch tiefste BBQ-Plattform auf Deutsch
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-text-light leading-[1.1] mb-4 max-w-3xl mx-auto">
+              Wer das perfekte Steak will, wird hier zum{' '}
+              <span className="text-brand-gold">SteakAdemiker</span>.
+            </h1>
+            <p className="font-body text-base sm:text-lg text-text-light/65 leading-relaxed max-w-2xl mx-auto mb-7">
+              In 5 Rubriken vom Anfänger zum Pitmaster — Fleischkunde, Grilltechniken, Wissen,
+              Rezepte, Ausrüstung. Methodisch, geprüft, ohne Bullshit.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-2.5">
+              {[
+                { label: 'Cuts & Fleischkunde', href: '/cuts' },
+                { label: 'Grilltechniken',      href: '/methoden' },
+                { label: 'Wissen',              href: '/wissen' },
+                { label: 'Rezepte',             href: '/rezepte' },
+                { label: 'Ausrüstung',          href: '/kategorie/ausruestung' },
+              ].map(({ label, href }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/30 px-4 py-2 text-xs font-sans font-bold tracking-wide uppercase text-text-light/80 hover:text-ink hover:bg-brand-gold hover:border-brand-gold transition-colors"
+                >
+                  {label} <ChevronRight size={12} />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── HERO — Full-Bleed 70vh ────────────────────────────────────── */}
         <section className="hero-fullbleed" style={{ height: '70vh', minHeight: '520px' }}>
           <Image
@@ -103,63 +147,36 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── VALUE-PROP-BAND — erster Eindruck: warme Glut statt flachem Schwarz ── */}
+        {/* ── MITGLIEDER-CTA — EINE Haupt-Aktion pro Seite, unterhalb des ersten Bildschirms ──
+
+            REIHENFOLGE IST DOKTRIN (Uwe, 20.08.2026 / 02.09.2026): Rubriken und
+            Aufmacher stehen VOR dieser Aktion — Inhalt zuerst, Angebot danach. Am
+            02.09.2026 hat Uwe den Button ausdrücklich aus dem Kopfbereich nach unten
+            gesetzt („stört auf den ersten Blick"). Das Ausbildungsangebot ist mehrfach
+            von selbst nach oben gewandert; abgesichert durch CLAUDE.md Abschnitt 2
+            Regel 8 + scripts/check-startseiten-hierarchie.mjs (Build-Gate: oberhalb
+            des HERO darf kein /auth/login-CTA stehen). Wer hier umsortiert, bekommt
+            einen roten Build. */}
         <section
-          className="border-b border-brand-gold/15"
+          className="border-y border-brand-gold/15"
           style={{
             background:
-              'radial-gradient(125% 105% at 50% 118%, rgba(232,80,24,0.34) 0%, rgba(232,80,24,0.10) 38%, rgba(200,136,42,0.05) 58%, transparent 72%), linear-gradient(180deg, #20130A 0%, #130C07 100%)',
+              'radial-gradient(120% 140% at 50% 130%, rgba(232,80,24,0.22) 0%, rgba(232,80,24,0.06) 45%, transparent 70%), linear-gradient(180deg, #17100B 0%, #1B110A 100%)',
           }}
+          aria-labelledby="mitglieder-cta-heading"
         >
-          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-14 text-center">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold tracking-[0.22em] uppercase text-brand-fire mb-4">
-              <Flame size={12} /> Die methodisch tiefste BBQ-Plattform auf Deutsch
-            </span>
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-text-light leading-[1.1] mb-4 max-w-3xl mx-auto">
-              Wer das perfekte Steak will, wird hier zum{' '}
-              <span className="text-brand-gold">SteakAdemiker</span>.
-            </h1>
-            <p className="font-body text-base sm:text-lg text-text-light/65 leading-relaxed max-w-2xl mx-auto mb-7">
-              In 5 Rubriken vom Anfänger zum Pitmaster — Fleischkunde, Grilltechniken, Wissen,
-              Rezepte, Ausrüstung. Methodisch, geprüft, ohne Bullshit.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-2.5">
-              {[
-                { label: 'Cuts & Fleischkunde', href: '/cuts' },
-                { label: 'Grilltechniken',      href: '/methoden' },
-                { label: 'Wissen',              href: '/wissen' },
-                { label: 'Rezepte',             href: '/rezepte' },
-                { label: 'Ausrüstung',          href: '/kategorie/ausruestung' },
-              ].map(({ label, href }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/30 px-4 py-2 text-xs font-sans font-bold tracking-wide uppercase text-text-light/80 hover:text-ink hover:bg-brand-gold hover:border-brand-gold transition-colors"
-                >
-                  {label} <ChevronRight size={12} />
-                </Link>
-              ))}
-            </div>
-
-            {/* Mitglieder-Zugang — EINE Haupt-Aktion pro Seite.
-
-                REIHENFOLGE IST DOKTRIN (Uwe, 20.08.2026): Die Rubriken stehen VOR
-                dieser Aktion — Inhalt zuerst, Angebot danach. Das Ausbildungsangebot
-                ist mehrfach von selbst nach oben gewandert, weil CLAUDE.md Abschnitt 5
-                „Umsatz zuerst" sagt und keine Gegenregel existierte. Jetzt geregelt:
-                CLAUDE.md Abschnitt 2 Regel 8 + scripts/check-startseiten-hierarchie.mjs
-                (Build-Gate). Wer hier umsortiert, bekommt einen roten Build. */}
-            <div className="flex flex-col items-center gap-3 mb-9">
-              <div className="flex flex-wrap items-center justify-center gap-3">
-                <Link
-                  href="/auth/login"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 font-sans font-bold text-sm uppercase tracking-wide hover:opacity-90 transition-opacity"
-                  style={{ background: '#C8882A', color: '#0D0A06' }}
-                >
-                  Werde SteakAdemiker — kostenlos <ChevronRight size={16} />
-                </Link>
-              </div>
+          <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12 text-center">
+            <h2 id="mitglieder-cta-heading" className="font-serif text-xl sm:text-2xl font-bold text-text-light mb-5">
+              Vom Leser zum <span className="text-brand-gold">SteakAdemiker</span>.
+            </h2>
+            <div className="flex flex-col items-center gap-3">
+              <Link
+                href="/auth/login"
+                className="inline-flex items-center gap-2 px-7 py-3.5 font-sans font-bold text-sm uppercase tracking-wide hover:opacity-90 transition-opacity"
+                style={{ background: '#C8882A', color: '#0D0A06' }}
+              >
+                Werde SteakAdemiker — kostenlos <ChevronRight size={16} />
+              </Link>
               <p className="text-xs font-sans text-text-light/60">
                 Kostenloser Mitglieder-Zugang — dein Diplom-Fortschritt wird gespeichert. Kein Abo, keine Kreditkarte.
               </p>

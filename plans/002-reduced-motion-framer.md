@@ -1,6 +1,6 @@
 # 002 — Reduced-Motion-Vertrag für framer-motion einlösen
 
-- **Status**: TODO
+- **Status**: DONE — umgesetzt und verifiziert am 02.09.2026. **Ein offener Nebenbefund**, siehe „Ergebnis" am Ende
 - **Commit**: 14448e2
 - **Severity**: HIGH
 - **Category**: Accessibility
@@ -163,3 +163,40 @@ Was der Provider **nicht** abdeckt und weshalb Schritt 2 und 3 nötig sind:
   - `/terroir`, `/manifest`, `/rettung`: Inhalte erscheinen durch Aufblenden, ohne Hochwandern.
   - Emulation wieder ausschalten und dieselben Stellen prüfen: Alles bewegt sich exakt wie vorher. Der Provider darf im Normalfall **nichts** verändern.
 - **Done when**: Mit aktivem `prefers-reduced-motion` findet auf Startseite, Marco-Widget und zwei Content-Seiten keine Positions- oder Größenänderung mehr statt, Opacity-Feedback und die Marco-Ladeindikatoren funktionieren weiter, und ohne die Einstellung ist kein Unterschied zum Zustand vor dem Plan sichtbar.
+
+## Ergebnis (02.09.2026)
+
+Umgesetzt wie beschrieben: `MotionProvider` neu, in `layout.tsx` um den `<body>`-Inhalt gelegt, `MarcoAvatar` mit Opacity-Ersatz für die beiden Endlos-Ladeindikatoren. Schritt 3 entfiel als reine Kontrolle (Plan 001 war bereits erledigt).
+
+Mechanisch: `tsc --noEmit`, `next lint` und `next build` (501 Seiten) je ohne Fehler — insbesondere keine Server-Component-Fehler durch den Client-Provider im Root-Layout.
+
+Verhalten automatisiert gemessen (Playwright aus dem Repo, Chromium 1440×900, `reducedMotion`-Emulation, Sampling pro Frame via `requestAnimationFrame`):
+
+| Element | ohne Reduced Motion | mit Reduced Motion |
+| --- | --- | --- |
+| Karussell-Fortschrittsbalken | `scaleX` läuft 0,907 → 0,987 → *(Wechsel)* → 0,063 → 0,303 | `transform: none` durchgehend — keine Bewegung |
+| Karussell-Slide (`y: 12 → 0 → -12`) | `translateY` −11,6 px → 0,73 px während des Wechsels | `transform: none` durchgehend — reines Überblenden |
+| Marco-Panel (`opacity`, `y: 20`, `scale: 0.95`) | Transform interpoliert über ~260 ms: `scale 0,954 → 0,967 → 0,982 → 0,994 → 1`, `translateY 18,5 → 13,1 → 7,2 → 2,4 → 0` | Transform nur **einen** Frame auf `matrix(0.95, 0, 0, 0.95, 0, 20)`, danach sofort `none` — kein Interpolieren |
+| Marco-Panel `opacity` | 0 → 0,12 → 0,25 → … → 1, sauberer Verlauf | 0 → 0,50 → 0,85 → … → 0,99 → **0** → 1 |
+
+Der Vertrag ist damit eingelöst: Transform-Animationen entfallen, Opacity bleibt.
+
+### Offener Nebenbefund — ein Frame Opacity 0 am Ende des Marco-Panels
+
+Beim Öffnen des Marco-Panels fällt die Opacity **nur mit aktivem Reduced Motion** unmittelbar vor dem Ende der Einblendung für genau einen Frame (~16 ms) von 0,99 auf 0 und dann auf 1. Vier Messungen grenzen es ein:
+
+| | ohne Reduced Motion | mit Reduced Motion |
+| --- | --- | --- |
+| Dev-Server | kein Einbruch | **Einbruch** |
+| Produktions-Build | kein Einbruch | **Einbruch** |
+
+Es ist also durch diesen Plan entstanden und kein Dev-Artefakt. Drei Hypothesen wurden geprüft und **widerlegt**:
+
+1. *Messartefakt durch Neu-Mount* — widerlegt: identische Node-ID und `querySelectorAll().length === 1` über den gesamten Verlauf.
+2. *Fehlender `key` am `AnimatePresence`-Kind* — `key="marco-panel"` ergänzt, Einbruch blieb. Zurückgenommen.
+3. *React StrictMode (`next.config.mjs:57`) rendert im Dev doppelt* — widerlegt: tritt im Produktions-Build genauso auf.
+4. *`initial` mit Transform-Werten trotz abgeschalteter Transforms* — `initial`/`animate`/`exit` in `MarcoWidget.tsx` auf `reduce` verzweigt (Muster aus `MedalCeremony.tsx:106-108`), Einbruch blieb. Zurückgenommen.
+
+Der Wert von `0` entspricht exakt dem `initial` des Panels, was auf ein einmaliges Wiederanwenden des Initialzustands am Animationsende hindeutet — die Ursache in framer-motion ist damit aber nicht belegt.
+
+**Bewertung**: Ein 16-ms-Blinzeln an einer Komponente steht dem Nutzen gegenüber, dass 15 Komponenten überhaupt erst auf `prefers-reduced-motion` reagieren. Die Änderung bleibt daher drin. Der Befund ist offen und gehört als eigene Aufgabe untersucht — nicht als Teil dieses Plans.

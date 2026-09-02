@@ -9,10 +9,12 @@ Jeder Plan ist selbsttragend: exakte Dateipfade, aktueller Code im Zitat, exakte
 | # | Titel | Severity | Kategorie | Umfang | Status |
 | --- | --- | --- | --- | --- | --- |
 | [001](001-fortschrittsbalken-scalex.md) | Startseiten-Fortschrittsbalken von `width` auf `scaleX` umstellen | HIGH | Performance | 1 Datei, ~6 Zeilen | **DONE**¹ |
-| [002](002-reduced-motion-framer.md) | Reduced-Motion-Vertrag für framer-motion einlösen | HIGH | Accessibility | 1 neue Datei + 2 Dateien | TODO |
+| [002](002-reduced-motion-framer.md) | Reduced-Motion-Vertrag für framer-motion einlösen | HIGH | Accessibility | 1 neue Datei + 2 Dateien | **DONE**² |
 | [003](003-transition-all-ersetzen.md) | `transition-all` durch benannte Properties ersetzen | MEDIUM | Performance | 75 Stellen in 41 Dateien | TODO |
 | [004](004-hover-nur-mit-echtem-zeiger.md) | Hover-Motion nur noch bei echtem Zeigegerät auslösen | LOW | Accessibility | 1 Datei, 3 Zeilen | **DONE**¹ |
 | [005](005-mobiles-menue-animieren.md) | Mobiles Menü mit Ein- und Ausblendung versehen | MEDIUM | Missed opportunity | 1 Datei, ~10 Zeilen | TODO |
+
+² Umgesetzt und verifiziert am 02.09.2026, mit **einem offenen Nebenbefund**: Beim Öffnen des Marco-Panels fällt die Opacity nur mit aktivem Reduced Motion für einen Frame (~16 ms) auf 0. Reproduzierbar in Dev und Produktion, vier Hypothesen geprüft und widerlegt — Details im Plan unter „Offener Nebenbefund". Gehört als eigene Aufgabe untersucht.
 
 ¹ Umgesetzt und vollständig verifiziert am 02.09.2026. Mechanisch: `tsc --noEmit`, `next lint`, `next build` (501 Seiten) je ohne Fehler. Verhalten: automatisiert im Browser gemessen (Playwright aus dem Repo) — Messwerte stehen im jeweiligen Plan unter „Ergebnis". Keine Regression gefunden.
 

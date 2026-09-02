@@ -175,7 +175,7 @@ export default function Header() {
 
       <header
         className={cn(
-          'bg-surface-dark border-b border-brand-gold/15 sticky top-0 z-50 transition-all duration-200',
+          'bg-surface-dark border-b border-brand-gold/15 sticky top-0 z-50 transition-shadow duration-200',
           scrolled && 'shadow-[0_4px_32px_rgba(0,0,0,0.45),0_1px_0_rgba(200,136,42,0.15)]'
         )}
       >
@@ -310,7 +310,7 @@ export default function Header() {
 
                     {/* Dropdown */}
                     {cat.sub.length > 0 && (
-                      <div className="absolute top-full left-0 bg-surface-elevated border border-brand-gold/15 shadow-[0_8px_32px_rgba(0,0,0,0.45)] min-w-[200px] z-50 opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-all duration-150 translate-y-1 group-hover:translate-y-0">
+                      <div className="absolute top-full left-0 bg-surface-elevated border border-brand-gold/15 shadow-[0_8px_32px_rgba(0,0,0,0.45)] min-w-[200px] z-50 opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-[opacity,visibility,transform] duration-150 translate-y-1 group-hover:translate-y-0">
                         {cat.sub.map((sub) => (
                           <Link
                             key={sub.href + sub.label}

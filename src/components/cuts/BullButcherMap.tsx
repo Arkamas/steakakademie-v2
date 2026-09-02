@@ -254,7 +254,7 @@ export default function BullButcherMap({
               stroke={isActive ? "rgba(251,191,36,1)" : "rgba(245,158,11,0.78)"}
               strokeWidth={isActive ? 2.5 : 2}
               strokeDasharray="8 6"
-              className="cursor-pointer transition-all duration-200 ease-out"
+              className="cursor-pointer transition-[fill-opacity,stroke,stroke-width] duration-200 ease-out"
               onMouseEnter={() => setHoveredZoneId(zone.id)}
               onMouseLeave={() => setHoveredZoneId((current) => (current === zone.id ? null : current))}
               onClick={() => onZoneClick?.(zone)}

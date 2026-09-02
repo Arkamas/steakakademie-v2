@@ -244,7 +244,7 @@ export default async function EhrlichesSystemPage() {
                 <div
                   key={pillar.slug}
                   id={`saule-${pillar.number.toLowerCase()}`}
-                  className="scroll-mt-24 bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-all duration-200 p-7 flex flex-col"
+                  className="scroll-mt-24 bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-colors duration-200 p-7 flex flex-col"
                 >
                   {/* Header */}
                   <div className="flex items-start justify-between mb-5">
@@ -309,7 +309,7 @@ export default async function EhrlichesSystemPage() {
                     {course?.published ? (
                       <Link
                         href={`/${pillar.slug}`}
-                        className="flex items-center gap-2 text-sm font-sans font-semibold text-brand-fire hover:gap-3 transition-all"
+                        className="flex items-center gap-2 text-sm font-sans font-semibold text-brand-fire hover:gap-3 transition-[gap]"
                       >
                         Jetzt kaufen <ArrowRight size={14} />
                       </Link>
@@ -343,7 +343,7 @@ export default async function EhrlichesSystemPage() {
               {MODELS.map((model) => (
                 <div
                   key={model.model}
-                  className={`p-6 border transition-all ${
+                  className={`p-6 border transition-colors ${
                     model.highlight
                       ? 'border-brand-gold/50 bg-surface-card'
                       : 'border-border-subtle bg-surface-base/40'

@@ -154,7 +154,7 @@ export default function StreitfallUmfrage({ slug, frage, optionen }: Props) {
                 {zeigeErgebnis && (
                   <span
                     aria-hidden
-                    className="absolute inset-y-0 left-0 transition-all duration-500 motion-reduce:transition-none"
+                    className="absolute inset-y-0 left-0 transition-[width] duration-500 motion-reduce:transition-none"
                     style={{ width: `${anteil}%`, background: 'rgba(200,136,42,0.16)' }}
                   />
                 )}

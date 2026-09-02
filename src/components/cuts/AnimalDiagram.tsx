@@ -84,7 +84,7 @@ export default function AnimalDiagram({
               stroke={isSel ? '#F4E4C6' : 'transparent'}
               strokeWidth={isSel ? 2.5 : 0}
               strokeLinejoin="round"
-              className="transition-all duration-200 group-hover:[fill-opacity:0.30]"
+              className="transition-[fill-opacity] duration-200 group-hover:[fill-opacity:0.30]"
             />
             <text
               x={p.labelX}

@@ -91,7 +91,7 @@ const VEGAN_DISHES: Dish[] = [
 
 function DishCard({ d }: { d: Dish }) {
   return (
-    <article className="h-full flex flex-col bg-surface-card border border-border-subtle p-6 transition-all duration-200 hover:border-brand-gold/40">
+    <article className="h-full flex flex-col bg-surface-card border border-border-subtle p-6 transition-colors duration-200 hover:border-brand-gold/40">
       <div className="flex items-center justify-between mb-3">
         <span className="text-[11px] font-sans font-bold tracking-wider uppercase text-text-muted">{d.meta}</span>
         {d.vegan && (
@@ -202,7 +202,7 @@ export default async function PflanzlichPage() {
               {feed.map((a) => (
                 <article
                   key={a.id}
-                  className="h-full flex flex-col bg-surface-card border border-border-subtle p-6 transition-all duration-200 hover:border-brand-gold/40"
+                  className="h-full flex flex-col bg-surface-card border border-border-subtle p-6 transition-colors duration-200 hover:border-brand-gold/40"
                 >
                   <time className="text-[11px] font-sans font-bold tracking-wider uppercase text-text-muted" dateTime={a.isoDate}>
                     {a.date}

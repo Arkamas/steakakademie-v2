@@ -355,7 +355,7 @@ function OptBtn({ label, hint, onClick, active }: { label: string; hint?: string
   return (
     <button
       onClick={onClick}
-      className={`text-left p-4 border transition-all duration-150 group ${
+      className={`text-left p-4 border transition-colors duration-150 group ${
         active
           ? 'border-brand-gold bg-brand-gold/10'
           : 'border-border-subtle bg-surface-card hover:border-brand-gold/40 hover:bg-surface-elevated'

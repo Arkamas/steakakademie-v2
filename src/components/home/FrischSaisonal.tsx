@@ -168,7 +168,7 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
                     key={s.url}
                     onClick={() => go(i)}
                     aria-label={`Zu Folie ${i + 1}: ${s.title}`}
-                    className="h-1.5 rounded-full transition-all duration-300"
+                    className="h-1.5 rounded-full transition-[width,background-color] duration-300"
                     style={{
                       width: i === idx ? 22 : 6,
                       background: i === idx ? '#C8882A' : 'rgba(0,0,0,0.18)',

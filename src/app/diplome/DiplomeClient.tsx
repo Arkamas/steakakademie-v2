@@ -125,7 +125,7 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.04, duration: 0.35 }}
-                className={`border p-6 transition-all duration-300 ${
+                className={`border p-6 transition-[background-color,border-color,opacity] duration-300 ${
                   level.locked
                     ? 'bg-surface-card border-border-subtle opacity-50'
                     : 'bg-surface-elevated border-brand-gold/30'

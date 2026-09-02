@@ -248,7 +248,7 @@ export default function UsaExpeditionPage() {
                   <Link
                     key={region.state}
                     href={region.href}
-                    className="group block relative overflow-hidden transition-all duration-300 border border-brand-gold/[0.12] hover:border-brand-gold/[0.35]"
+                    className="group block relative overflow-hidden transition-colors duration-300 border border-brand-gold/[0.12] hover:border-brand-gold/[0.35]"
                     style={{ background: '#1E1410' }}
                   >
                     {/* Ambient gradient top */}

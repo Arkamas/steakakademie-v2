@@ -25,7 +25,7 @@ function ScoreBar({
       </div>
       <div className="h-1 bg-[#2a2416] rounded-full overflow-hidden">
         <div
-          className="h-full rounded-full transition-all duration-700"
+          className="h-full rounded-full transition-[width] duration-700"
           style={{ width: `${value}%`, backgroundColor: color }}
         />
       </div>

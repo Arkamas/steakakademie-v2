@@ -50,7 +50,7 @@ export default function MesserClient({ products }: Props) {
               aria-selected={isActive}
               onClick={() => setActive(key)}
               className={[
-                'px-4 py-2 text-sm font-sans font-semibold tracking-wide transition-all duration-150',
+                'px-4 py-2 text-sm font-sans font-semibold tracking-wide transition-colors duration-150',
                 isActive
                   ? 'bg-brand-gold text-ink'
                   : 'bg-surface-card border border-border-subtle text-text-secondary hover:border-brand-gold/40 hover:text-text-primary',

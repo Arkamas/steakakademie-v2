@@ -59,7 +59,7 @@ export default function CookCoach({ steps }: Props) {
           aria-valuemax={steps.length}
         >
           <div
-            className="h-full bg-gradient-to-r from-brand-fire to-brand-gold transition-all duration-500 ease-out motion-reduce:transition-none"
+            className="h-full bg-gradient-to-r from-brand-fire to-brand-gold transition-[width] duration-500 ease-out motion-reduce:transition-none"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -78,7 +78,7 @@ export default function CookCoach({ steps }: Props) {
               onClick={() => toggle(idx)}
               className={[
                 'px-6 py-5 border-b border-border-subtle/40 last:border-0',
-                'cursor-pointer select-none group transition-all duration-300 motion-reduce:transition-none',
+                'cursor-pointer select-none group transition-[background-color,opacity] duration-300 motion-reduce:transition-none',
                 isDone
                   ? 'bg-surface-base/70 opacity-50'
                   : 'hover:bg-surface-base/30',

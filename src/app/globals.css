@@ -126,7 +126,7 @@ body::before {
 /* ── AFFILIATE-BUTTON — Glut-Orange CTA ─────────────────────────────── */
 
 .btn-affiliate {
-  @apply inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-5 py-3 transition-all duration-200;
+  @apply inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-5 py-3 transition-[background-color,box-shadow,transform] duration-200;
   background-color: var(--color-ember);
   /* WCAG-Fix: Weiß auf Glut-Orange = 3.76:1 (FAIL bei 14px) → Ink = 4.96:1 (AA PASS).
      Wichtig für Lesbarkeit im Freien/Sonnenlicht. */
@@ -147,7 +147,7 @@ body::before {
 /* ── GOLD-BUTTON (sekundäre CTA) ─────────────────────────────────────── */
 
 .btn-gold {
-  @apply inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-5 py-3 transition-all duration-200;
+  @apply inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-5 py-3 transition-[background-color,box-shadow,transform] duration-200;
   background-color: var(--color-gold);
   color: #1C1008;
   -webkit-font-smoothing: antialiased;

@@ -165,7 +165,7 @@ export default function SprintModulPage({ params }: Props) {
                   </p>
                   <Link
                     href="/ehrliches-system"
-                    className="inline-flex items-center gap-2 font-sans font-bold text-sm text-brand-fire hover:gap-3 transition-all"
+                    className="inline-flex items-center gap-2 font-sans font-bold text-sm text-brand-fire hover:gap-3 transition-[gap]"
                   >
                     Weiter zu „Das ehrliche System&quot; <ArrowRight size={16} />
                   </Link>

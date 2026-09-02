@@ -160,13 +160,13 @@ export default function ManifestClient() {
         <section className="no-print pb-20 px-4 flex flex-col sm:flex-row gap-4 justify-center items-center border-t border-brand-gold/10 pt-12">
           <button
             onClick={() => window.print()}
-            className="px-8 py-3 border border-brand-gold/40 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition-all duration-300"
+            className="px-8 py-3 border border-brand-gold/40 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition-colors duration-300"
           >
             Drucken / Als PDF speichern ↓
           </button>
           <Link
             href="/diplome"
-            className="px-8 py-3 bg-brand-gold/10 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/20 transition-all duration-300"
+            className="px-8 py-3 bg-brand-gold/10 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/20 transition-colors duration-300"
           >
             Zum Diplom-System →
           </Link>

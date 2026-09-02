@@ -142,7 +142,7 @@ export default function VergleichIndexPage() {
                 <Link
                   key={cat.slug}
                   href={linkHref}
-                  className="group block bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-all duration-200 p-6"
+                  className="group block bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-colors duration-200 p-6"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <span className="text-3xl">{cat.icon}</span>

@@ -438,7 +438,7 @@ export default function ToolBoxes() {
             <p className="text-xs text-text-secondary mb-4">
               Jeder Cut erklärt — Lage, Muskel, Marmorierung und der perfekte Garpunkt.
             </p>
-            <span className="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-all">
+            <span className="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
               Entdecken <ChevronRight size={14} />
             </span>
           </Link>

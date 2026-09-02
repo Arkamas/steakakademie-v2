@@ -170,7 +170,7 @@ function LoginForm() {
                   placeholder="deine@email.de"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-sm font-sans text-sm text-text-light placeholder:text-text-muted transition-all"
+                  className="w-full px-4 py-3 rounded-sm font-sans text-sm text-text-light placeholder:text-text-muted transition-colors"
                   style={{ background: '#120C07', border: '1px solid rgba(58,42,30,0.9)' }}
                   onFocus={e => e.target.style.borderColor = '#C8882A'}
                   onBlur={e  => e.target.style.borderColor = 'rgba(58,42,30,0.9)'}
@@ -190,7 +190,7 @@ function LoginForm() {
                     placeholder="••••••••"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 rounded-sm font-sans text-sm text-text-light placeholder:text-text-muted transition-all"
+                    className="w-full px-4 py-3 rounded-sm font-sans text-sm text-text-light placeholder:text-text-muted transition-colors"
                     style={{ background: '#120C07', border: '1px solid rgba(58,42,30,0.9)' }}
                     onFocus={e => e.target.style.borderColor = '#C8882A'}
                     onBlur={e  => e.target.style.borderColor = 'rgba(58,42,30,0.9)'}

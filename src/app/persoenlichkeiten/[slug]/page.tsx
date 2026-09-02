@@ -341,7 +341,7 @@ export default function PersoenlichkeitPage({ params }: Props) {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {related.map(p => (
                   <Link key={p.slug} href={p.url}
-                    className="group border border-brand-gold/15 bg-surface-elevated p-5 hover:border-brand-gold/35 transition-all">
+                    className="group border border-brand-gold/15 bg-surface-elevated p-5 hover:border-brand-gold/35 transition-colors">
                     <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-brand-fire block mb-2">
                       {CATEGORY_LABELS[p.category] ?? p.category}
                     </span>

@@ -1,6 +1,6 @@
 # 003 — `transition-all` durch benannte Properties ersetzen
 
-- **Status**: TODO
+- **Status**: DONE — 68 von 75 ersetzt am 02.09.2026, 7 bewusst stehen gelassen (siehe „Ergebnis")
 - **Commit**: 14448e2
 - **Severity**: MEDIUM
 - **Category**: Performance
@@ -136,3 +136,56 @@ Die übrigen Vorkommen nach Tabelle klassifizieren.
   - **F** Beliebige Seite: Beim Scrollen bekommt der Header weiterhin weich seinen Schatten.
   - **Regression-Check**: Jede Stelle, die vorher weich war, ist danach weich. Ein hartes Springen an irgendeiner geänderten Stelle bedeutet: falsche Gruppe gewählt.
 - **Done when**: `grep -rn "transition-all" src` liefert nur noch Treffer, die in Schritt 4 begründet aufgelistet sind, und keine der Stichproben aus dem Feel Check springt hart.
+
+## Ergebnis (02.09.2026)
+
+68 von 75 Vorkommen ersetzt, verteilt auf 39 Dateien. Die verbleibenden 7 stehen unverändert, mit Begründung unten.
+
+Mechanisch: `tsc --noEmit`, `next lint` und `next build` (501 Seiten) je ohne Fehler.
+
+### Alle erzeugten Regeln sind im CSS angekommen
+
+Der Plan warnt, dass Tailwind fehlerhafte Arbitrary-Klassen still weglässt. Gegenprobe im gebauten CSS (`cat .next/static/css/*.css | grep -o "transition-property:[^;}]*" | sort | uniq -c`) — jede der 20 erzeugten Property-Listen ist vorhanden:
+
+`width` · `width,background-color` · `gap` · `fill-opacity` · `stroke-opacity` · `fill-opacity,stroke,stroke-width` · `transform` · `transform,border-color` · `box-shadow` · `background-color,box-shadow,transform` (2×) · `background-color,opacity` · `background-color,color,opacity` · `background-color,border-color,opacity` · `background-color,border-color,color` · `background-color,color,border-color` · `background,border-color,box-shadow` · `background,color,border-color,box-shadow` · `opacity,visibility,transform` · `text-decoration-thickness` · die Tailwind-Liste hinter `transition-colors`
+
+### Verhalten pro Gruppe geprüft
+
+Automatisiert gegen den Produktions-Build (Playwright, Hover ausgelöst, computed styles gelesen):
+
+| Gruppe | Stichprobe | `transition-property` | Änderung |
+| --- | --- | --- | --- |
+| A | `/autoren`, Karte | `color, background-color, border-color, …` | `rgb(58,42,30)` → `rgba(200,136,42,0.4)` |
+| A | `/vergleich`, Karte | dito | dito |
+| B | `/methoden`, Karte | `transform, border-color` | `none` → `matrix(1,0,0,1,0,-4)` |
+| C | Startseite, Dot-Navigation | `width, background-color` | aktiver Dot 22 px, übrige 6 px |
+| D | `/ehrliches-system`, Pfeil-Link | `gap` | 8 px → 12 px |
+| E | `/cuts`, Rinder-Diagramm | `fill-opacity, stroke, stroke-width` | Klasse korrekt aufgelöst |
+| F | Header beim Scrollen | `box-shadow` | `none` → Schatten |
+
+Keine Stelle springt hart, keine Regression gefunden.
+
+### Korrekturen an der Entscheidungstabelle oben
+
+Beim Abarbeiten haben sich zwei Lücken in der Tabelle gezeigt:
+
+1. **Gruppe A führt `hover:decoration-*` als Farbe** — falsch für `decoration-2` in `src/app/artikel/[slug]/page.tsx:107`: Das ändert `text-decoration-thickness`, keine Farbe. `transition-colors` hätte den Effekt still abgeschaltet. Umgesetzt als `transition-[text-decoration-thickness]`.
+2. **`disabled:opacity-*`, `visibility` und Gradient-Hintergründe fehlen in der Tabelle.** Sie kamen an 16 Stellen vor und brauchten eigene Property-Listen — etwa `transition-[background-color,opacity]` bei den Absende-Buttons (`kontakt/page.tsx:218`, `urkunde/page.tsx:208`) oder `transition-[opacity,visibility,transform]` beim Desktop-Dropdown (`Header.tsx:313`). Für Farbverläufe muss `background` statt `background-color` stehen, sonst greift die Transition nicht — betrifft die sechs Stellen in `RoadmapClient.tsx`.
+
+### Die 7 unveränderten Vorkommen
+
+An diesen Elementen ändert sich **keine** Property — weder über eigene `hover:`-Klassen noch über einen Zustandswechsel im Inline-`style`. `transition-all` läuft dort ins Leere. Sie fallen damit unter Schritt 4 („passt in keine Gruppe") und bleiben unangetastet:
+
+| Ort | Warum ohne Wirkung |
+| --- | --- |
+| `src/app/glossar/[slug]/page.tsx:167` | `Link` mit statischem Inline-`style`, ohne eigene Hover-Klassen. Die Farbwechsel sitzen auf den Kindern und haben dort eigenes `transition-colors` |
+| `src/app/grillstil/page.tsx:158` | `<a>` mit statischem Inline-`style`, keine Hover-Klasse |
+| `src/app/grillstil/page.tsx:165` | dito |
+| `src/app/grillstil/page.tsx:193` | Karte mit statischem Inline-`style`; trägt zwar `group`, aber die Datei enthält kein einziges `group-hover` |
+| `src/app/grillstil/page.tsx:242` | dito, ohne `group` |
+| `src/app/grillstil/page.tsx:333` | dito |
+| `src/app/usa-expedition/page.tsx:508` | `Link` mit statischem Inline-`style`, keine Hover-Klasse |
+
+Gegengeprüft: `globals.css` enthält keine generische `a:hover`-Regel, die hier greifen könnte.
+
+**Empfehlung für einen Folgeschritt**: An diesen sieben Stellen die Klasse ersatzlos entfernen. Das ist eine Löschung und keine Ersetzung, fällt damit aus dem Rahmen dieses Plans — deshalb hier nur notiert.

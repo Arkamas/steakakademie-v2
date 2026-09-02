@@ -16,7 +16,7 @@ Jeder Plan ist selbsttragend: exakte Dateipfade, aktueller Code im Zitat, exakte
 
 ⁴ Umgesetzt und verifiziert am 02.09.2026. Öffnen ~250 ms, Schließen ~140 ms, Element bleibt während der Exit-Animation im DOM. Der Nebenbefund aus Plan 002 tritt hier ebenfalls auf und ist damit als allgemeines framer-motion-Verhalten belegt — dort nachgetragen.
 
-³ Umgesetzt am 02.09.2026: 68 von 75 Vorkommen ersetzt, 7 bewusst stehen gelassen, weil sich an diesen Elementen nachweislich keine Property ändert — Liste und Begründung im Plan. Alle erzeugten Regeln im gebauten CSS gegengeprüft, Verhalten pro Gruppe automatisiert verifiziert. Zwei Lücken in der Entscheidungstabelle des Plans wurden dabei korrigiert und dort dokumentiert.
+³ Umgesetzt am 02.09.2026: 68 von 75 Vorkommen ersetzt; die restlichen 7 waren wirkungslos (keine Property ändert sich an diesen Elementen) und wurden im Nachgang ersatzlos entfernt. `transition-all` kommt in `src/` nicht mehr vor, `transition-property:all` auch nicht mehr im gebauten CSS. Alle erzeugten Regeln im gebauten CSS gegengeprüft, Verhalten pro Gruppe automatisiert verifiziert. Zwei Lücken in der Entscheidungstabelle des Plans wurden dabei korrigiert und dort dokumentiert.
 
 ² Umgesetzt und verifiziert am 02.09.2026, mit **einem offenen Nebenbefund**: Beim Öffnen des Marco-Panels fällt die Opacity nur mit aktivem Reduced Motion für einen Frame (~16 ms) auf 0. Reproduzierbar in Dev und Produktion, vier Hypothesen geprüft und widerlegt — Details im Plan unter „Offener Nebenbefund". Gehört als eigene Aufgabe untersucht.
 

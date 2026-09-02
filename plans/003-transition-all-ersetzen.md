@@ -1,6 +1,6 @@
 # 003 — `transition-all` durch benannte Properties ersetzen
 
-- **Status**: DONE — 68 von 75 ersetzt am 02.09.2026, 7 bewusst stehen gelassen (siehe „Ergebnis")
+- **Status**: DONE — 68 von 75 ersetzt am 02.09.2026, die restlichen 7 im Nachgang ersatzlos entfernt. `transition-all` kommt in `src/` nicht mehr vor
 - **Commit**: 14448e2
 - **Severity**: MEDIUM
 - **Category**: Performance
@@ -188,4 +188,8 @@ An diesen Elementen ändert sich **keine** Property — weder über eigene `hove
 
 Gegengeprüft: `globals.css` enthält keine generische `a:hover`-Regel, die hier greifen könnte.
 
-**Empfehlung für einen Folgeschritt**: An diesen sieben Stellen die Klasse ersatzlos entfernen. Das ist eine Löschung und keine Ersetzung, fällt damit aus dem Rahmen dieses Plans — deshalb hier nur notiert.
+**Nachtrag (02.09.2026, auf Zuruf umgesetzt)**: Die Empfehlung wurde ausgeführt — an allen sieben Stellen ist `transition-all` ersatzlos entfernt, zusammen mit dem dadurch verwaisten `duration-200`. Eine `duration-*`-Klasse wirkt nur auf Transitions und Animationen; auf keiner der sieben Zeilen steht eine `animate-*`-Klasse, sie war also ebenfalls ohne Wirkung.
+
+Ergebnis: `grep -rn "transition-all" src` liefert **0 Treffer**, und im gebauten CSS taucht `transition-property:all` nicht mehr auf (vorher 1×). `tsc --noEmit`, `next lint` und `next build` (501 Seiten) je ohne Fehler.
+
+Übrig bleibt eine kleinere Beobachtung, die **nicht** angefasst wurde: `src/app/grillstil/page.tsx:193` trägt weiterhin die Klasse `group`, obwohl die Datei kein einziges `group-hover` enthält. Auch sie ist ohne Wirkung, gehört aber nicht zum Thema dieses Plans.

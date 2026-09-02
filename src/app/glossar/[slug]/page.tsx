@@ -164,7 +164,7 @@ export default function GlossarEntryPage({ params }: Props) {
                   <Link
                     key={r.slug}
                     href={r.url}
-                    className="group flex items-start gap-3 p-4 rounded-lg transition-all"
+                    className="group flex items-start gap-3 p-4 rounded-lg"
                     style={{
                       background: 'rgba(255,255,255,0.02)',
                       border: '1px solid rgba(255,255,255,0.06)',

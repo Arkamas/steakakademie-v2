@@ -51,7 +51,6 @@ Jeder Plan ist selbsttragend: exakte Dateipfade, aktueller Code im Zitat, exakte
 Aus dem Audit bestätigt, aber bewusst nicht eingeplant:
 
 - **Vier weitere Fortschrittsbalken auf `width`** — `AgingClient.tsx:137-139`, `diplome/simulation/page.tsx:107-108`, `NicheValidator.tsx:585-587`, `AnimatedBar.tsx:33-36`. Gleiche Ursache wie 001, aber einmalig statt im Loop.
-- **`MarcoWidget`-Panel skaliert aus der Mitte statt vom FAB** (`src/components/ai/MarcoWidget.tsx:157-160`); `transform-origin` kommt in `src/` kein einziges Mal vor.
 - **Keine Motion-Tokens** — Dauern von 0,2 s bis 1,0 s handgetippt über die Codebase verstreut, Easing meist das schwache eingebaute `'easeOut'`.
 - **Entrances laufen beim Mount statt per `whileInView`** (`ManifestClient`, `TerroirClient`, `RettungClient`, `urkunde`) — Inhalt unter dem Fold ist fertig animiert, bevor er sichtbar wird.
 - **Framer-Kurzformen `x`/`y`/`scale` statt vollständiger Transform-Strings**, am ehesten spürbar beim Endlos-Shimmer in `ExitIntent.tsx:21-23`.

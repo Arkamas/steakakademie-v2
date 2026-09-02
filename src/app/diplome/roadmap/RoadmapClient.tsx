@@ -835,7 +835,7 @@ function RoadmapView({
               <button
                 key={i}
                 onClick={() => { setActive(i); setExpanded(null); }}
-                className="flex-none rounded-xl p-3 text-center min-w-[110px] transition-all relative"
+                className="flex-none rounded-xl p-3 text-center min-w-[110px] transition-[background,border-color,box-shadow] relative"
                 style={{
                   background: active === i ? `linear-gradient(135deg, ${st.color}22, ${st.color}44)` : T.panelAlt,
                   border: active === i ? `1px solid ${st.color}` : `1px solid ${T.borderMuted}`,
@@ -896,7 +896,7 @@ function RoadmapView({
           {/* Module-CTA */}
           <button
             onClick={() => onOpenModule(stageModuleKey)}
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-sans font-bold text-[12px] tracking-wider uppercase transition-all"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-sans font-bold text-[12px] tracking-wider uppercase transition-[background,color,border-color,box-shadow]"
             style={{
               background: unlocked
                 ? `linear-gradient(135deg, ${s.color}, ${s.color}cc)`
@@ -999,7 +999,7 @@ function RoadmapView({
                 <div key={i} className="flex items-center flex-1">
                   <button
                     onClick={() => { setActive(i); setExpanded(null); }}
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all flex-none"
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-sm transition-[background,border-color,box-shadow] flex-none"
                     style={{
                       background: done || i <= active ? `linear-gradient(135deg, ${st.color}, ${st.color}88)` : T.borderSubtle,
                       border: i === active ? `2px solid ${st.color}` : `2px solid ${T.borderMuted}`,
@@ -1155,7 +1155,7 @@ function ModuleView({
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className="rounded-lg px-4 py-2 text-[12px] font-sans font-semibold transition-all"
+              className="rounded-lg px-4 py-2 text-[12px] font-sans font-semibold transition-[background-color,color,border-color]"
               style={{
                 background: tab === t.key ? `${meta.color}25` : 'transparent',
                 color:      tab === t.key ? meta.color : T.textMuted,
@@ -1439,7 +1439,7 @@ function FeuerzoneSpiel({ color }: { color: string }) {
                 setSelected(isSelected ? null : item.id);
               }}
               title={placed ? 'Klicken, um neu zu platzieren' : 'Item auswählen'}
-              className="rounded-lg px-3 py-2 flex items-center gap-2 text-[13px] font-sans transition-all"
+              className="rounded-lg px-3 py-2 flex items-center gap-2 text-[13px] font-sans transition-[background-color,border-color,color]"
               style={{
                 background: isSelected ? `${color}30` : (placed ? T.borderSubtle : T.panelAlt),
                 border:     isSelected ? `1px solid ${color}` : `1px solid ${T.borderMuted}`,
@@ -1628,7 +1628,7 @@ function Quiz({
               key={i}
               onClick={() => choose(i)}
               disabled={reveal}
-              className="text-left rounded-lg px-4 py-3 text-[13px] font-sans transition-all"
+              className="text-left rounded-lg px-4 py-3 text-[13px] font-sans transition-[background-color,border-color,color]"
               style={{
                 background: bg,
                 border:     `1px solid ${border}`,

@@ -143,7 +143,7 @@ export default function GlossarPage() {
                     <Link
                       key={entry.slug}
                       href={entry.url}
-                      className="group block rounded-lg p-4 transition-all bg-white/[0.02] border border-white/[0.06] hover:border-brand-gold/30 hover:bg-brand-gold/[0.04]"
+                      className="group block rounded-lg p-4 transition-colors bg-white/[0.02] border border-white/[0.06] hover:border-brand-gold/30 hover:bg-brand-gold/[0.04]"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <span className="font-sans font-semibold text-text-light text-sm group-hover:text-brand-gold transition-colors">

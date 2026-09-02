@@ -82,7 +82,7 @@ export default function MethodenIndexPage() {
                 <Link
                   key={m.slug}
                   href={m.url}
-                  className="group block bg-surface-card border border-border-subtle hover:border-brand-gold/40 rounded-lg overflow-hidden transition-all duration-200 hover:-translate-y-1"
+                  className="group block bg-surface-card border border-border-subtle hover:border-brand-gold/40 rounded-lg overflow-hidden transition-[transform,border-color] duration-200 hover:-translate-y-1"
                 >
                   {/* Bild — bringt Leben in die Übersicht */}
                   <div className="relative aspect-[16/10] overflow-hidden">

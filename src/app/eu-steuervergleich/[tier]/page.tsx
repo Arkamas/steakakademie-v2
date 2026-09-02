@@ -135,7 +135,7 @@ function TierSelector({ current }: { current: string }) {
             key={tier}
             href={`/eu-steuervergleich/${tier}`}
             aria-current={active ? 'page' : undefined}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-sm font-sans text-sm font-semibold transition-all border"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-sm font-sans text-sm font-semibold transition-[background-color,border-color,color] border"
             style={active
               ? { background: 'rgba(200,136,42,0.20)', borderColor: '#C8882A', color: '#F0E8D8' }
               : { background: '#1E1410', borderColor: '#3A2A1E', color: '#C4A882' }

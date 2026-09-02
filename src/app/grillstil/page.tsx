@@ -155,14 +155,14 @@ export default async function GrillstilPage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <a
                 href="#rezepte"
-                className="inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-6 py-3 transition-all duration-200"
+                className="inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-6 py-3"
                 style={{ background: ROSE, color: '#fff', borderRadius: '2px' }}
               >
                 Rezepte entdecken <ChevronRight size={15} />
               </a>
               <a
                 href="#tisch"
-                className="inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-6 py-3 transition-all duration-200"
+                className="inline-flex items-center gap-2 font-sans font-bold text-sm tracking-wide px-6 py-3"
                 style={{ border: `1.5px solid ${ROSE}`, color: '#5A3340', borderRadius: '2px' }}
               >
                 Schöner Tisch
@@ -190,7 +190,7 @@ export default async function GrillstilPage() {
             {PILLARS.map(({ icon: Icon, kicker, title, text, href }) => {
               const inner = (
                 <div
-                  className="h-full p-8 transition-all duration-200 group"
+                  className="h-full p-8 group"
                   style={{ background: CREAM, borderRadius: '4px', border: '1px solid #E6D2CB' }}
                 >
                   <div
@@ -239,7 +239,7 @@ export default async function GrillstilPage() {
               {RECIPES.map((r) => (
                 <article
                   key={r.title}
-                  className="p-7 transition-all duration-200"
+                  className="p-7"
                   style={{ background: '#fff', borderRadius: '4px', border: '1px solid #EAD9D2' }}
                 >
                   <span className="text-[11px] font-sans font-bold tracking-wider uppercase" style={{ color: ROSE }}>
@@ -330,7 +330,7 @@ export default async function GrillstilPage() {
                 {feed.map((a) => (
                   <article
                     key={a.id}
-                    className="h-full flex flex-col p-7 transition-all duration-200"
+                    className="h-full flex flex-col p-7"
                     style={{ background: '#fff', borderRadius: '4px', border: '1px solid #EAD9D2' }}
                   >
                     <time className="text-[11px] font-sans font-bold tracking-wider uppercase" style={{ color: ROSE }} dateTime={a.isoDate}>

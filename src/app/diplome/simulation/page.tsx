@@ -51,7 +51,7 @@ function StepDots({ current, total }: { current: number; total: number }) {
       {Array.from({ length: total }).map((_, i) => (
         <div
           key={i}
-          className="transition-all duration-300 rounded-full"
+          className="transition-[width] duration-300 rounded-full"
           style={{
             width: i === current ? 20 : 6,
             height: 6,
@@ -136,7 +136,7 @@ export default function DiplomSimulation() {
                     <div key={l.id} className="flex items-center gap-1">
                       <div className="relative">
                         <div
-                          className="w-9 h-9 flex items-center justify-center border text-xs font-sans font-bold transition-all"
+                          className="w-9 h-9 flex items-center justify-center border text-xs font-sans font-bold transition-[background-color,border-color,color]"
                           style={{
                             borderColor: l.unlocked ? '#C8882A' : 'rgba(255,255,255,0.1)',
                             background: l.unlocked ? 'rgba(200,136,42,0.15)' : 'transparent',
@@ -335,7 +335,7 @@ export default function DiplomSimulation() {
                         setQuizAnswer(opt.id);
                         setTimeout(next, 600);
                       }}
-                      className={`w-full text-left border p-4 transition-all duration-200 group ${
+                      className={`w-full text-left border p-4 transition-colors duration-200 group ${
                         quizAnswer === opt.id
                           ? opt.correct
                             ? 'border-emerald-500/60 bg-emerald-500/10 text-text-primary'

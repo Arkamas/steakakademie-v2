@@ -142,7 +142,7 @@ export default function TaxCalculator() {
               <button
                 key={p}
                 onClick={() => { setGross(p); setInputRaw(String(p)); }}
-                className={`text-[11px] font-sans font-bold px-2.5 py-1 border transition-all ${
+                className={`text-[11px] font-sans font-bold px-2.5 py-1 border transition-colors ${
                   gross === p
                     ? 'border-brand-gold text-brand-gold bg-brand-gold/10'
                     : 'border-border-subtle text-text-muted hover:border-brand-gold/40'
@@ -175,7 +175,7 @@ export default function TaxCalculator() {
                   <button
                     key={code}
                     onClick={() => toggleCountry(code)}
-                    className={`flex items-center gap-1.5 text-sm font-sans px-2.5 py-1 border transition-all ${
+                    className={`flex items-center gap-1.5 text-sm font-sans px-2.5 py-1 border transition-colors ${
                       selectedCountries.includes(code)
                         ? 'border-brand-gold text-text-primary bg-brand-gold/8'
                         : 'border-border-subtle text-text-muted hover:border-brand-gold/40'
@@ -202,7 +202,7 @@ export default function TaxCalculator() {
           return (
             <div
               key={code}
-              className={`bg-surface-card border p-5 relative transition-all ${
+              className={`bg-surface-card border p-5 relative transition-colors ${
                 isBest && !isDE
                   ? 'border-brand-gold/60'
                   : 'border-border-subtle'
@@ -266,7 +266,7 @@ export default function TaxCalculator() {
               {/* Abgabenquote Bar */}
               <div className="h-1.5 bg-surface-base rounded-full overflow-hidden mb-4">
                 <div
-                  className="h-full bg-brand-gold rounded-full transition-all duration-500"
+                  className="h-full bg-brand-gold rounded-full transition-[width] duration-500"
                   style={{ width: `${Math.round(result.effectiveRate * 100)}%` }}
                 />
               </div>

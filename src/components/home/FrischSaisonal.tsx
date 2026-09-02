@@ -150,10 +150,10 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
                 <div className="h-0.5 w-full bg-black/5">
                   <motion.div
                     key={`${slide.url}-bar`}
-                    className="h-full"
-                    style={{ background: '#C8882A' }}
-                    initial={{ width: '0%' }}
-                    animate={{ width: paused ? '0%' : '100%' }}
+                    className="h-full w-full"
+                    style={{ background: '#C8882A', transformOrigin: 'left' }}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: paused ? 0 : 1 }}
                     transition={{ duration: paused ? 0 : ROTATE_MS / 1000, ease: 'linear' }}
                   />
                 </div>
@@ -168,7 +168,7 @@ export default function FrischSaisonal({ data }: { data: FrischSaisonalData }) {
                     key={s.url}
                     onClick={() => go(i)}
                     aria-label={`Zu Folie ${i + 1}: ${s.title}`}
-                    className="h-1.5 rounded-full transition-all duration-300"
+                    className="h-1.5 rounded-full transition-[width,background-color] duration-300"
                     style={{
                       width: i === idx ? 22 : 6,
                       background: i === idx ? '#C8882A' : 'rgba(0,0,0,0.18)',

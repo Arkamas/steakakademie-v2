@@ -136,7 +136,7 @@ export default function AnimalDiagramPhoto({
                   strokeOpacity={0.45}
                   strokeWidth={1.5}
                   strokeLinejoin="round"
-                  className="transition-all duration-200 group-hover:[fill-opacity:0.30] group-hover:[stroke-opacity:0.9] group-hover:[filter:url(#saZoneGlow)]"
+                  className="transition-[fill-opacity] duration-200 group-hover:[fill-opacity:0.30] group-hover:[stroke-opacity:0.9] group-hover:[filter:url(#saZoneGlow)]"
                 />
                 <text
                   x={zone.labelX}
@@ -227,7 +227,7 @@ export default function AnimalDiagramPhoto({
                           strokeWidth={1.6 / s}
                           strokeDasharray={`${9 / s} ${7 / s}`}
                           strokeLinejoin="round"
-                          className="transition-all duration-150 group-hover/chip:[fill-opacity:0.22] group-hover/chip:[stroke-opacity:1]"
+                          className="transition-[fill-opacity] duration-150 group-hover/chip:[fill-opacity:0.22] group-hover/chip:[stroke-opacity:1]"
                         />
                         <text
                           x={pin.x}
@@ -286,7 +286,7 @@ export default function AnimalDiagramPhoto({
                         stroke="#C8882A"
                         strokeOpacity={0.8}
                         strokeWidth={1.4 / s}
-                        className="transition-all duration-150 group-hover/chip:[fill-opacity:1] group-hover/chip:[stroke-opacity:1] group-hover/chip:[filter:url(#saZoneGlow)]"
+                        className="transition-[fill-opacity] duration-150 group-hover/chip:[fill-opacity:1] group-hover/chip:[stroke-opacity:1] group-hover/chip:[filter:url(#saZoneGlow)]"
                       />
                       <text
                         x={pin.x}
@@ -333,7 +333,7 @@ export default function AnimalDiagramPhoto({
             stroke="#C8882A"
             strokeOpacity={0.7}
             strokeWidth={1.5}
-            className="transition-all duration-150 group-hover/back:[stroke-opacity:1]"
+            className="transition-[stroke-opacity] duration-150 group-hover/back:[stroke-opacity:1]"
           />
           <text
             x={140}

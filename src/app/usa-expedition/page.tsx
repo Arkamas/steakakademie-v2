@@ -248,7 +248,7 @@ export default function UsaExpeditionPage() {
                   <Link
                     key={region.state}
                     href={region.href}
-                    className="group block relative overflow-hidden transition-all duration-300 border border-brand-gold/[0.12] hover:border-brand-gold/[0.35]"
+                    className="group block relative overflow-hidden transition-colors duration-300 border border-brand-gold/[0.12] hover:border-brand-gold/[0.35]"
                     style={{ background: '#1E1410' }}
                   >
                     {/* Ambient gradient top */}
@@ -505,7 +505,7 @@ export default function UsaExpeditionPage() {
           </p>
           <Link
             href="/diplome"
-            className="inline-flex items-center gap-2 px-8 py-4 font-sans font-bold text-sm tracking-[0.1em] uppercase transition-all duration-200"
+            className="inline-flex items-center gap-2 px-8 py-4 font-sans font-bold text-sm tracking-[0.1em] uppercase"
             style={{
               border: '1px solid rgba(200,136,42,0.45)',
               color: '#C8882A',

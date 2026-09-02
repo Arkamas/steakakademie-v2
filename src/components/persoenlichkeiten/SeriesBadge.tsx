@@ -39,7 +39,7 @@ export default function SeriesBadge({
       {/* Progress bar — Zeigarnik effect: incomplete set creates tension */}
       <div className="h-0.5 bg-surface-dark rounded-full mb-4 overflow-hidden">
         <div
-          className="h-full bg-brand-gold transition-all"
+          className="h-full bg-brand-gold transition-[width]"
           style={{ width: `${pct}%` }}
         />
       </div>

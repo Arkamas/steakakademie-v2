@@ -183,7 +183,7 @@ export default function AgingClient() {
               <button
                 key={s.days}
                 onClick={() => setActive(s)}
-                className={`border px-5 py-2.5 text-sm font-sans font-bold transition-all duration-300 ${
+                className={`border px-5 py-2.5 text-sm font-sans font-bold transition-colors duration-300 ${
                   active.days === s.days
                     ? `${s.borderClass} bg-surface-elevated ${s.accentClass}`
                     : 'border-brand-gold/15 text-text-light/30 hover:border-brand-gold/30 hover:text-text-light/60'
@@ -287,7 +287,7 @@ export default function AgingClient() {
                   onClick={() => setActive(s)}
                   className="flex flex-col items-center gap-2"
                 >
-                  <div className={`relative z-10 flex h-8 w-8 items-center justify-center border-2 transition-all duration-300 ${
+                  <div className={`relative z-10 flex h-8 w-8 items-center justify-center border-2 transition-colors duration-300 ${
                     active.days === s.days
                       ? `${s.borderClass} bg-surface-elevated`
                       : 'border-brand-gold/10 bg-surface-dark hover:border-brand-gold/25'

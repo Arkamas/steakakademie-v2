@@ -184,6 +184,15 @@ export default withSentryConfig(withContentlayer(nextConfig), {
   // Entfernt Sentry-Debug-Logs aus dem Produktions-Bundle.
   webpack: { treeshake: { removeDebugLogging: true } },
 
+  // Plugin-Telemetrie aus, in JEDER Umgebung. Sie meldet Fehler- und
+  // Performancedaten des Build-Plugins an Sentry und dient Sentry dazu, das
+  // eigene Plugin zu verbessern - fuer uns bringt sie nichts. Nach dem
+  // 45-Minuten-Abbruch vom 01.09.2026 ist jeder Netzaufruf zu Sentry waehrend
+  // des Builds ein Risiko ohne Gegenwert. Damit ist ein Preview-Build
+  // vollstaendig Sentry-frei; in der Produktion bleibt genau ein Kontakt
+  // uebrig, der etwas liefert: der Source-Map-Upload.
+  telemetry: false,
+
   // Der Deckel: ausserhalb der Produktion faellt jeder Netzaufruf zu Sentry weg.
   sourcemaps: { disable: !SENTRY_UPLOAD },
   release: {

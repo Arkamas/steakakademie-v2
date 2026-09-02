@@ -71,7 +71,11 @@ const NAV = [
   { label: 'Ausrüstung', href: '/kategorie/ausruestung' },
   { label: 'Community', href: '/rezepte/community' },
   { label: 'USA-Expedition', href: '/usa-expedition' },
-  { label: 'Ehrliches System', href: '/ehrliches-system' },
+  // Uwe, 30.08.2026: ausgebaut, wie in Header.tsx und Footer.tsx — Begruendung
+  // steht dort. /home-b fuehrt eine EIGENE Navigationsliste; ohne diese Zeile
+  // haette Variante B den Eintrag behalten, waehrend Variante A ihn verliert.
+  // WIEDEREINSETZEN: hier UND in Header.tsx/Footer.tsx gemeinsam.
+  // { label: 'Ehrliches System', href: '/ehrliches-system' },
 ];
 
 function CategoryLabel({ children }: { children: React.ReactNode }) {

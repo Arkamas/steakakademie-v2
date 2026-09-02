@@ -98,16 +98,34 @@ const NAV_CATEGORIES = [
     href: '/diplome',
     sub: [],
   },
-  {
-    name: 'Ehrliches System',
-    href: '/ehrliches-system',
-    sub: [
-      { label: 'Gründer-Schmiede', href: '/gruender-schmiede' },
-      { label: 'Steuer-Matrix', href: '/steuer-matrix' },
-      { label: 'Agentur-Killer-Sprint', href: '/ehrliches-system#saule-iii' },
-      { label: 'Mein Zugang', href: '/mein-system' },
-    ],
-  },
+  // Uwe, 30.08.2026: "Ehrliches System" ist aus der Navigation ausgebaut.
+  //
+  // GRUND — zwei, die beide fuer sich reichen:
+  // 1. Eigene Regel. CLAUDE.md, Abschnitt 10: "GF3 wird nicht vermarktet bevor GF1
+  //    messbare Ergebnisse liefert." GF1 steht bei 52 % Verkaufsfaehigkeit und 22 %
+  //    Monetarisierung — es liefert noch nichts Messbares. Trotzdem bewarb bisher
+  //    jede der ~500 Seiten das Blueprint-Produkt.
+  // 2. Positionierung. Ein Besucher, der wegen Reverse Sear kommt, findet im Menue
+  //    "Steuer-Matrix" und "Gruender-Schmiede". Das schwaecht beide Themen: Google
+  //    bewertet thematische Fokussierung, und der Leser sieht ein unklares Angebot.
+  //
+  // Routen und Seiten bleiben unveraendert bestehen — ausgebaut ist allein der
+  // Einstieg, genau wie bei /fleischwissen (c26fce2). Das Angebot wandert in ein
+  // eigenes Vorhaben ausserhalb der Steakakademie; siehe
+  // Projects/Steakakademie/Zweites-Standbein-Websites-Konzept.md.
+  //
+  // WIEDEREINSETZEN: diesen Block entkommentieren. Erst wenn GF1 messbare
+  // Ergebnisse liefert — und dann besser als eigene Marke, nicht hier.
+  // {
+  //   name: 'Ehrliches System',
+  //   href: '/ehrliches-system',
+  //   sub: [
+  //     { label: 'Gründer-Schmiede', href: '/gruender-schmiede' },
+  //     { label: 'Steuer-Matrix', href: '/steuer-matrix' },
+  //     { label: 'Agentur-Killer-Sprint', href: '/ehrliches-system#saule-iii' },
+  //     { label: 'Mein Zugang', href: '/mein-system' },
+  //   ],
+  // },
 ];
 
 export default function Header() {

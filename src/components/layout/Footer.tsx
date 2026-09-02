@@ -32,12 +32,20 @@ const FOOTER_LINKS = {
     { label: 'Autoren & Redaktion', href: '/autoren' },
     { label: 'Über uns', href: '/ueber-uns' },
   ],
-  'Ehrliches System': [
-    { label: 'Das Ehrliche System', href: '/ehrliches-system' },
-    { label: 'SEO-Sprint', href: '/seo-sprint' },
-    { label: 'Steuer-Matrix LIVE', href: '/steuer-matrix-live' },
-    { label: 'Niche Validator', href: '/tools/niche-validator' },
-  ],
+  // Uwe, 30.08.2026: Spalte "Ehrliches System" ausgebaut — dieselbe Entscheidung
+  // wie im Header, dort steht die ausfuehrliche Begruendung. Kurz: CLAUDE.md
+  // Abschnitt 10 verbietet die Vermarktung von GF3, solange GF1 nichts Messbares
+  // liefert; und ein BBQ-Besucher, der im Footer "Steuer-Matrix" liest, sieht ein
+  // unklares Angebot. Die Spalte lag auf allen ~500 Seiten.
+  //
+  // Routen bleiben erreichbar, nur die Verlinkung entfaellt.
+  // WIEDEREINSETZEN: entkommentieren — aber erst, wenn GF1 liefert.
+  // 'Ehrliches System': [
+  //   { label: 'Das Ehrliche System', href: '/ehrliches-system' },
+  //   { label: 'SEO-Sprint', href: '/seo-sprint' },
+  //   { label: 'Steuer-Matrix LIVE', href: '/steuer-matrix-live' },
+  //   { label: 'Niche Validator', href: '/tools/niche-validator' },
+  // ],
   // Audit 15.08.2026: Der Footer lag auf allen 517 Seiten und sammelte nichts.
   // Spickzettel + Wissens-Brief + Gutscheine waren site-weit unverlinkt.
   'Wissens-Brief': [

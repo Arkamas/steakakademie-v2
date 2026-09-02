@@ -1,6 +1,6 @@
 # 006 — EmberGlow vom Repaint auf Compositor-Layer umstellen
 
-- **Status**: OPEN — Messung liegt vor (02.09.2026), Umsetzung offen
+- **Status**: DONE — umgesetzt und verifiziert am 02.09.2026 (Messwerte am Ende)
 - **Commit**: `fc059a0`
 - **Severity**: LOW
 - **Category**: Performance
@@ -240,3 +240,65 @@ noch deutlich besser als der Ist-Zustand.
     Blitz über der gesamten Fläche muss verschwinden. Das ist die anschaulichste Probe.
   - DevTools → Layers: Es dürfen nicht mehr Layer entstehen als die fünf Ebenen plus
     Container.
+
+## Ergebnis (02.09.2026)
+
+Mechanisch: `npx tsc --noEmit` exit 0, `npx next lint --dir src/components/ui` ohne Warnung,
+`npm run build` exit 0 (alle Gates grün).
+
+### Vorher/Nachher auf demselben Server
+
+Beide Fassungen wurden gegen denselben lokalen Produktionsbuild (`npm start`) gemessen —
+die Zahlen aus dem Abschnitt „Messung" stammen von der Produktion und sind mit diesen
+**nicht** direkt vergleichbar. Aussagekräftig ist allein die Differenz **innerhalb** eines
+Builds. Methode wie beschrieben, zusätzlich ein verworfener Aufwärmlauf, 6 Läufe je
+Zustand, **Median** statt Mittelwert, Aussetzer unter 20 fps aus der Wertung.
+
+| | alt (`background`) | neu (5 Ebenen) |
+| --- | --- | --- |
+| Paint-Ereignisse mit / ohne | 376 / 300 → **+76** | 258 / 258 → **±0** |
+| Paint gesamt mit / ohne | 591 / 536 ms → +55 ms | 388 / 387 ms → +0,7 ms |
+| Bilder/s mit / ohne | 53,3 / 57,3 → **−4,0** | 51,0 / 51,3 → **−0,3** |
+
+Der EmberGlow zurechenbare Aufwand ist damit von +76 Paints und −4 Bildern/s auf **null
+messbaren Unterschied** gefallen. Das Abnahmekriterium („die Einzelläufe überlappen sich")
+ist erfüllt: neu mit 207–270 gegen ohne 87–306.
+
+**Ehrliche Einschränkung:** Diese Maschine rauschte während der Messung deutlich stärker als
+bei der Produktionsmessung — mehrere Läufe brachen auf 9–24 fps ein und wurden verworfen.
+Auch die Kontrollgruppe driftet zwischen den beiden Builds (300 → 258 Paints, 57,3 → 51,3
+Bilder/s), obwohl an ihr nichts geändert wurde. Absolutwerte über Build-Grenzen hinweg sind
+deshalb wertlos; belastbar ist nur die Differenz mit/ohne innerhalb eines Laufs.
+
+### Optisch identisch
+
+Die Ebenen-Gewichte treffen die Farben der alten Interpolation exakt:
+
+| Scrolltiefe | alt (`--ember-rgb`) | neu (Ebenen-Opacity) |
+| --- | --- | --- |
+| 0 % | `140 47 57` = Rare | Rare 1.00, Rest 0 |
+| 50 % | `201 126 82` = Medium | Medium 1.00, Rest 0 |
+| 100 % | `110 75 46` = Well Done | Well Done 1.00, Rest 0 |
+
+Screenshots beider Fassungen an denselben drei Positionen, verglichen über die mittlere
+Farbe im Glut-Bereich (unteres Drittel, 400×150 px): Abweichung **höchstens 1,4 von 255**
+je Kanal (0,5 %), und der größte Wert liegt bei 50 % — dort, wo das rotierende Spotlight
+den Inhalt ohnehin verändert.
+
+**Nicht gemessen:** die im Plan hergeleitete 3-%-Alpha-Abweichung zwischen zwei Garstufen.
+An allen drei Stichproben ist `f = 0`, es ist also genau eine Ebene sichtbar und die
+Komposition mathematisch identisch. Die Abweichung tritt nur zwischen den Stufen auf und
+wurde dort nicht separat geprüft — beim Durchscrollen war kein „Loch" sichtbar.
+
+### Reduced Motion
+
+Mit `prefers-reduced-motion: reduce` steht `transition-property: none` auf dem Container
+**und** auf allen fünf Ebenen (5 Ebenen gezählt). Ohne die Einstellung: `opacity / 0.7s`.
+Die Farbe wechselt weiterhin mit der Scrolltiefe, nur hart statt weich — wie vor dem Umbau.
+
+### Was offenbleibt
+
+- **Paint Flashing** und die Layer-Ansicht in den DevTools sind nicht automatisierbar und
+  wurden nicht per Hand geprüft. Der Nachweis stützt sich auf die Paint-Zahlen aus dem Trace.
+- Das im Plan benannte **Speicher-Risiko** der fünf Compositor-Layer wurde nicht gemessen.
+  Die Rückfallvariante mit zwei Ebenen bleibt dokumentiert, falls sich das je zeigt.

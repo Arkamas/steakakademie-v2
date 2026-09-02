@@ -138,7 +138,42 @@ const nextConfig = {
  *
  * Braucht SENTRY_AUTH_TOKEN (Vercel-Env, Secret). Fehlt der Token, bricht
  * der Build NICHT ab — es fehlen nur die Source-Maps.
+ *
+ * NUR IN DER PRODUKTION HOCHLADEN (01./02.09.2026)
+ * ------------------------------------------------
+ * Am 01.09.2026 ist der Preview-Deploy von PR #35 gescheitert — an einer
+ * Markdown-Aenderung ohne eine einzige Zeile Code. Ursache war nicht der
+ * Commit, sondern die Sentry-API: fuenf Bloecke HTTP 504 ("Downstream
+ * timeout") zwischen 08:10 und 08:38, jedes Mal mit Retries. Der Build lief
+ * 45 Minuten und 3 Sekunden und wurde dann von Vercel im Schritt
+ * "Collecting page data" abgeschnitten — ohne Fehlermeldung im Log. Der
+ * Neuanstoss danach war in 4 Minuten fertig.
+ *
+ * Weder das Plugin noch sentry-cli kennen eine Timeout-Option (geprueft in
+ * @sentry/bundler-plugin-core 10.70.0 und @sentry/cli — es gibt kein
+ * SENTRY_*_TIMEOUT). Der einzige wirksame Deckel ist deshalb, den Upload
+ * dort wegzulassen, wo er nichts bringt:
+ *
+ *   Produktion  → Release anlegen + Source-Maps hochladen (unveraendert).
+ *                 Lesbare Stacktraces sind genau hier den Aufwand wert.
+ *   Preview     → kein Release, kein Deploy-Eintrag, kein Upload. Die Maps
+ *                 eines Vorschau-Builds sieht ohnehin nie jemand an.
+ *   Lokal       → wie Preview (VERCEL_ENV ist nicht gesetzt).
+ *
+ * NOTAUSGANG: Haengt ein PRODUKTIONS-Build an Sentry, laesst sich der Upload
+ * ohne Code-Aenderung abschalten — Vercel-Env `SENTRY_SOURCEMAPS=off`
+ * setzen und neu deployen. Danach wieder entfernen, sonst bleiben die
+ * Stacktraces dauerhaft minifiziert.
+ *
+ * errorHandler: Selbst in der Produktion darf ein Sentry-Ausfall den Build
+ * nicht mehr rot machen. Ohne diesen Handler wirft das Plugin und bricht ab;
+ * mit ihm bleibt eine Warnung im Log stehen und der Deploy laeuft durch.
+ * Er verhindert den Abbruch, nicht die Wartezeit — dafuer ist der
+ * Notausgang oben da.
  */
+const SENTRY_UPLOAD =
+  process.env.VERCEL_ENV === 'production' && process.env.SENTRY_SOURCEMAPS !== 'off';
+
 export default withSentryConfig(withContentlayer(nextConfig), {
   org: 'steakakademie-4t',
   project: 'javascript-nextjs',
@@ -148,6 +183,20 @@ export default withSentryConfig(withContentlayer(nextConfig), {
   hideSourceMaps: true,
   // Entfernt Sentry-Debug-Logs aus dem Produktions-Bundle.
   webpack: { treeshake: { removeDebugLogging: true } },
+
+  // Der Deckel: ausserhalb der Produktion faellt jeder Netzaufruf zu Sentry weg.
+  sourcemaps: { disable: !SENTRY_UPLOAD },
+  release: {
+    create: SENTRY_UPLOAD,
+    finalize: SENTRY_UPLOAD,
+    // Der Deploy-Eintrag war im Fehlerfall der erste haengende Aufruf
+    // (`sentry-cli releases deploys ... new --env vercel-preview`).
+    deploy: SENTRY_UPLOAD ? undefined : false,
+  },
+
+  errorHandler: (err) => {
+    console.warn('[sentry] Upload uebersprungen, Build laeuft weiter:', err.message);
+  },
 
   // Kein tunnelRoute: der Ingest-Host steht offen in der CSP. Ehrlicher
   // gegenueber Adblockern und spart Function-Aufrufe.

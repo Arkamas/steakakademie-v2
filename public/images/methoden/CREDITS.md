@@ -62,7 +62,8 @@ Erzeugt mit `scripts/hero-images.mjs`. Prompts und Abnahme-Notizen stehen dort j
 - `searing-perfekte-kruste`, `smoken-low-and-slow`, `sous-vide`
   hotlinken live auf `images.unsplash.com` — kein lokales Asset, keine
   `next/image`-Optimierung, externer Request bei jedem Seitenaufruf.
-- `reverse-sear` nutzt weiterhin den Platzhalter `/images/hero-ribeye.png`.
+- `reverse-sear` nutzt weiterhin den Platzhalter `/images/hero-ribeye.jpg`
+  (bis zum Perf-Audit 02.09.2026 eine PNG-Datei mit 9,2 MB, seitdem JPEG mit 182 kB).
 
 **Erledigt 29.08.2026:** `direktes-grillen` auf lokales Pexels-Foto umgestellt
 (`scripts/bild-ingest.mjs`). Damit entfaellt dort der externe Request vor Consent.

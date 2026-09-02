@@ -37,7 +37,7 @@ export default function KontextRail({ text, color }: { text: string; color: stri
   return (
     <div className="mt-5 space-y-5">
       {/* Werkzeug-Tipp */}
-      <div className="bg-surface-elevated border border-border-subtle p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-gold/30">
+      <div className="bg-surface-elevated border border-border-subtle p-5 transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-brand-gold/30">
         <div className="flex items-center gap-2 mb-2">
           <Wrench size={14} style={{ color }} />
           <span className="font-sans text-[11px] font-bold tracking-[0.14em] uppercase" style={{ color }}>
@@ -59,7 +59,7 @@ export default function KontextRail({ text, color }: { text: string; color: stri
       </div>
 
       {/* Mehr Wissen */}
-      <div className="bg-surface-elevated border border-border-subtle p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-gold/30">
+      <div className="bg-surface-elevated border border-border-subtle p-5 transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-brand-gold/30">
         <div className="flex items-center gap-2 mb-3">
           <Lightbulb size={14} style={{ color }} />
           <span className="font-sans text-[11px] font-bold tracking-[0.14em] uppercase" style={{ color }}>

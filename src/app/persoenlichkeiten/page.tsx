@@ -78,7 +78,7 @@ export default function PersoenlichkeitenPage() {
               </span>
             </div>
             <Link href={featured.url} className="group block">
-              <div className="border border-brand-gold/25 bg-surface-dark overflow-hidden transition-all hover:border-brand-gold/50">
+              <div className="border border-brand-gold/25 bg-surface-dark overflow-hidden transition-colors hover:border-brand-gold/50">
                 {/* Image placeholder */}
                 <div className="h-56 bg-gradient-to-br from-surface-elevated to-surface-dark flex items-center justify-center border-b border-brand-gold/10">
                   <span className="text-8xl opacity-30">🥩</span>
@@ -103,7 +103,7 @@ export default function PersoenlichkeitenPage() {
                     </p>
                   </div>
                   <div>
-                    <span className="inline-flex items-center gap-2 text-sm font-sans font-bold text-brand-gold group-hover:gap-3 transition-all">
+                    <span className="inline-flex items-center gap-2 text-sm font-sans font-bold text-brand-gold group-hover:gap-3 transition-[gap]">
                       Vollständiges Porträt lesen
                       <ChevronRight size={14} />
                     </span>
@@ -126,7 +126,7 @@ export default function PersoenlichkeitenPage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {rest.map(person => (
-                  <Link key={person.slug} href={person.url} className="group block border border-border-subtle bg-surface-card hover:border-brand-gold/30 hover:bg-surface-elevated transition-all">
+                  <Link key={person.slug} href={person.url} className="group block border border-border-subtle bg-surface-card hover:border-brand-gold/30 hover:bg-surface-elevated transition-colors">
                     <div className="h-32 bg-gradient-to-br from-surface-elevated to-surface-card flex items-center justify-center border-b border-border-subtle">
                       <span className="text-5xl opacity-20">🥩</span>
                     </div>

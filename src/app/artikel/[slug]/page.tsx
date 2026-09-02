@@ -104,7 +104,7 @@ const mdxComponents = {
     return (
       <a
         href={href}
-        className="text-brand-fire underline underline-offset-4 decoration-1 hover:decoration-2 transition-all"
+        className="text-brand-fire underline underline-offset-4 decoration-1 hover:decoration-2 transition-[text-decoration-thickness]"
         {...(extern ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
         {...props}
       >

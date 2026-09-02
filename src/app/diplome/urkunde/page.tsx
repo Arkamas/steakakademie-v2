@@ -205,7 +205,7 @@ export default function UrkudePage() {
               <button
                 type="submit"
                 disabled={state === 'submitting'}
-                className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-[background-color,opacity] duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {state === 'submitting' ? 'Wird gesendet…' : 'Gedruckte Urkunde bestellen — 14,98 € →'}
               </button>

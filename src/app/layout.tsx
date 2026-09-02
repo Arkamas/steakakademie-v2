@@ -9,6 +9,7 @@ import PlausibleScript from '@/components/analytics/PlausibleScript';
 import ClarityScript from '@/components/analytics/ClarityScript';
 import ConsentBanner from '@/components/analytics/ConsentBanner';
 import ExitIntent from '@/components/ui/ExitIntent';
+import MotionProvider from '@/components/layout/MotionProvider';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
 import './globals.css';
 
@@ -105,15 +106,17 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col bg-surface-base antialiased">
-        {children}
-        <EmberGlow />
-        <MarcoWidget />
-        <ExitIntent />
-        {/* Plausible: cookieless, ohne Einwilligung (§ 25 Abs. 2 TDDDG) — läuft immer. */}
-        <PlausibleScript />
-        {/* Microsoft Clarity: einwilligungspflichtig — lädt nur nach Opt-in über den Banner. */}
-        <ClarityScript />
-        <ConsentBanner />
+        <MotionProvider>
+          {children}
+          <EmberGlow />
+          <MarcoWidget />
+          <ExitIntent />
+          {/* Plausible: cookieless, ohne Einwilligung (§ 25 Abs. 2 TDDDG) — läuft immer. */}
+          <PlausibleScript />
+          {/* Microsoft Clarity: einwilligungspflichtig — lädt nur nach Opt-in über den Banner. */}
+          <ClarityScript />
+          <ConsentBanner />
+        </MotionProvider>
       </body>
     </html>
   );

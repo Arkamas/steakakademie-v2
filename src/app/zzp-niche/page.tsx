@@ -60,7 +60,7 @@ function NicheCard({ page, rank }: { page: NLPageContent; rank: number }) {
     <Link
       href={`/zzp-niche/${niche.slug}`}
       className={[
-        'group block relative border transition-all duration-200 hover:-translate-y-0.5',
+        'group block relative border transition-[transform,border-color] duration-200 hover:-translate-y-0.5',
         isTop3
           ? 'border-brand-gold/35 hover:border-brand-gold/60'
           : 'border-border-subtle hover:border-brand-gold/40',
@@ -106,7 +106,7 @@ function NicheCard({ page, rank }: { page: NLPageContent; rank: number }) {
         {/* Score bar */}
         <div className="h-1 rounded-full mb-4 overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
           <div
-            className="h-full rounded-full transition-all"
+            className="h-full rounded-full transition-[width]"
             style={{
               width: `${ev.marketScore}%`,
               background: ev.marketScore >= 80

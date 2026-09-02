@@ -85,7 +85,7 @@ export default function AutorenIndexPage() {
               <Link
                 key={author.slug}
                 href={`/autoren/${author.slug}`}
-                className="group bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-all duration-200 flex flex-col"
+                className="group bg-surface-card border border-border-subtle hover:border-brand-gold/40 transition-colors duration-200 flex flex-col"
               >
                 {/* Gold top accent */}
                 <div className="border-t-2 border-brand-gold" />

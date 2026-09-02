@@ -200,7 +200,7 @@ export default function TerroirClient() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.07, duration: 0.35 }}
                 onClick={() => setSelected(o)}
-                className="text-left border border-brand-gold/15 bg-surface-elevated p-5 transition-all duration-300 hover:border-brand-gold/40 hover:bg-surface-card"
+                className="text-left border border-brand-gold/15 bg-surface-elevated p-5 transition-colors duration-300 hover:border-brand-gold/40 hover:bg-surface-card"
               >
                 <div className="mb-3 flex items-start justify-between">
                   <span className="text-3xl">{o.flag}</span>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import type { AvatarState } from '@/hooks/useAvatarStateMachine';
 
 // ── Video-Assets (werden in /public/videos/marco/ abgelegt) ──────────────────
@@ -91,6 +91,10 @@ export default function MarcoAvatar({
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
+  // MotionConfig reducedMotion="user" schaltet Transform-Animationen ab. Die beiden
+  // Endlos-Ladeindikatoren unten bestuenden dann nur noch aus Transform und stuenden
+  // still — sie brauchen einen Opacity-Ersatz, damit die Rueckmeldung erhalten bleibt.
+  const reduce = useReducedMotion();
 
   const dim = size === 'sm' ? 36 : 56;
 
@@ -189,7 +193,9 @@ export default function MarcoAvatar({
                 key="responding-ring"
                 className="absolute inset-0 rounded-full border-2 border-brand-gold"
                 initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: [0.6, 0, 0.6], scale: [0.85, 1.15, 0.85] }}
+                animate={reduce
+                  ? { opacity: [0.5, 0.15, 0.5] }
+                  : { opacity: [0.6, 0, 0.6], scale: [0.85, 1.15, 0.85] }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
               />
@@ -205,9 +211,11 @@ export default function MarcoAvatar({
                 style={{
                   background: 'conic-gradient(from 0deg, rgba(245,166,35,0) 0%, rgba(245,166,35,0.6) 25%, rgba(245,166,35,0) 50%)',
                 }}
-                animate={{ rotate: 360 }}
+                animate={reduce ? { opacity: [1, 0.35, 1] } : { rotate: 360 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
+                transition={reduce
+                  ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' }
+                  : { duration: 1.2, repeat: Infinity, ease: 'linear' }}
               />
             )}
           </AnimatePresence>

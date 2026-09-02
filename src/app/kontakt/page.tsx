@@ -111,7 +111,7 @@ export default function KontaktPage() {
               <a
                 key={opt.mailto}
                 href={`mailto:${opt.mailto}`}
-                className="group block border border-brand-gold/15 bg-surface-elevated p-6 hover:border-brand-gold/40 transition-all"
+                className="group block border border-brand-gold/15 bg-surface-elevated p-6 hover:border-brand-gold/40 transition-colors"
               >
                 <opt.icon size={20} className="text-brand-gold mb-3" />
                 <h3 className="font-serif font-bold text-text-primary mb-1 group-hover:text-brand-gold transition-colors">
@@ -215,7 +215,7 @@ export default function KontaktPage() {
                 <button
                   type="submit"
                   disabled={state === 'sending' || !form.consent}
-                  className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-[background-color,opacity] disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {state === 'sending' ? 'Wird gesendet…' : 'Nachricht senden →'}
                 </button>

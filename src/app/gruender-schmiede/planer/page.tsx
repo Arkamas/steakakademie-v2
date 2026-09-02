@@ -7,6 +7,9 @@ import ArbeitszeitPlaner from '@/components/gruendung/ArbeitszeitPlaner';
 import { breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
+  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  robots: { index: false, follow: false },
   title: 'Arbeitszeit-Planer für deinen Timetable',
   description:
     'Trag deine verfügbare Zeit pro Tag ein — der Planer verteilt alle Gründungs- und Aufbau-Aufgaben auf einen realistischen Timetable und hält ihn aktuell.',

@@ -6,6 +6,9 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
+  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  robots: { index: false, follow: false },
   title: 'Das Ehrliche System für Solo-Selbstständige',
   description:
     'Reproduzierbares Betriebssystem für Solo-Selbstständige, entwickelt beim Aufbau von steakakademie.de. Drei Säulen: Gründung, Steuern, Agentur-Unabhängigkeit.',

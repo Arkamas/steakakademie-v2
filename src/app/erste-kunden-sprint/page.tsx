@@ -10,6 +10,9 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
+  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  robots: { index: false, follow: false },
   title: 'Erste-Kunden-Sprint — erste Aufträge in 72h',
   description:
     'Gewerbe angemeldet, Website live — und jetzt? In 72 Stunden zum ersten bezahlten Auftrag. Positionierung, Angebot, Direktansprache. Kein Marketing-Kurs.',

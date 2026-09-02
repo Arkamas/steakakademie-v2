@@ -10,6 +10,9 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
+  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  robots: { index: false, follow: false },
   title: 'Agentur-Killer-Sprint: Full-Ownership in 72h',
   description:
     'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel + GitHub in 72 Stunden. Einmal aufgesetzt — für immer unabhängig.',

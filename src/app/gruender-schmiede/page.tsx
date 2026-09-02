@@ -11,6 +11,9 @@ import WerkzeugHinweis from '@/components/gruendung/WerkzeugHinweis';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
+  // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
+  // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
+  robots: { index: false, follow: false },
   title: 'Gründer-Schmiede — 6 Module zum KI-Business',
   description:
     'Sechs Module, das Gründer-Nachschlagewerk „Das Komplettikon" und ein Arbeitszeit-Planer: die Methode hinter steakakademie.de, von Tag 1 dokumentiert.',

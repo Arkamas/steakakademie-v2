@@ -159,7 +159,18 @@ export default function MarcoWidget() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             className="fixed bottom-24 right-6 z-50 flex w-[340px] flex-col border border-white/10 bg-surface-elevated shadow-2xl shadow-black/60 sm:w-[380px]"
-            style={{ maxHeight: '520px' }}
+            style={{
+              maxHeight: '520px',
+              // Das Panel wächst aus dem Button, nicht aus seiner eigenen Mitte.
+              // Herleitung: Der Avatar ist 56 px breit (size="md") und sitzt in
+              // `bottom-6 right-6`, das Panel in `bottom-24 right-6`. Der
+              // Button-Mittelpunkt liegt damit 24+28 = 52 px vom rechten Rand und
+              // 52 px vom unteren Rand — also 28 px links der rechten Panelkante
+              // und 44 px unter dessen Unterkante (96 − 52).
+              // Wer bottom-24, right-6 oder die Avatar-Größe ändert, muss diese
+              // beiden Werte mitziehen.
+              transformOrigin: 'calc(100% - 28px) calc(100% + 44px)',
+            }}
           >
             {/* Panel-Header mit Avatar */}
             <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">

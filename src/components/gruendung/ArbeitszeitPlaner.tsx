@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Clock, Plus, Trash2, Check, CalendarDays, RefreshCw, AlertTriangle } from 'lucide-react';
 import {
   ROADMAP_VORLAGE,
@@ -114,6 +115,8 @@ export default function ArbeitszeitPlaner() {
   const [ntCat, setNtCat] = useState<RoadmapKategorie>('Website');
   const [ntEffort, setNtEffort] = useState('2');
 
+  const reduce = useReducedMotion();
+
   // Laden
   useEffect(() => {
     try {
@@ -174,12 +177,40 @@ export default function ArbeitszeitPlaner() {
     return <div className="py-12 text-center font-body text-text-muted">Lade Planer …</div>;
   }
 
+  // Modal-Motion: Feder wie RecipeSubmitModal, Ausgang bewusst kuerzer als der
+  // Eingang. Bei prefers-reduced-motion bleibt die Deckkraft als Rueckmeldung,
+  // Verschiebung und Skalierung entfallen (siehe globals.css REDUCED MOTION).
+  const maskePanelMotion = reduce
+    ? {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0, transition: { duration: 0.12 } },
+        transition: { duration: 0.15 },
+      }
+    : {
+        initial: { opacity: 0, scale: 0.97, y: 12 },
+        animate: { opacity: 1, scale: 1, y: 0 },
+        exit: { opacity: 0, scale: 0.97, y: 8, transition: { duration: 0.16 } },
+        transition: { type: 'spring' as const, stiffness: 300, damping: 26 },
+      };
+
   return (
     <div className="space-y-8">
       {/* Maske */}
-      {maskOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-lg rounded-sm border border-border-subtle bg-surface-base p-6 shadow-xl">
+      <AnimatePresence>
+        {maskOpen && (
+          <motion.div
+            key="mask-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0, 0, 0.2, 1] }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          >
+          <motion.div
+            {...maskePanelMotion}
+            className="w-full max-w-lg rounded-sm border border-border-subtle bg-surface-base p-6 shadow-xl"
+          >
             <div className="mb-1 flex items-center gap-2">
               <Clock size={18} className="text-brand-fire" />
               <h2 className="font-serif text-xl text-text-primary">Wie viel Zeit hast du?</h2>
@@ -219,9 +250,10 @@ export default function ArbeitszeitPlaner() {
                 Timetable bauen
               </button>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Summary */}
       <div className="grid gap-4 sm:grid-cols-3">

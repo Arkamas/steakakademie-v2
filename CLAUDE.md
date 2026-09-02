@@ -153,7 +153,8 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    passiert. Abgesichert durch `scripts/check-startseiten-hierarchie.mjs` (Build-Gate,
    läuft im prebuild). Reihenfolge ändern = Soll-Liste im Skript bewusst anpassen UND
    hier vermerken. Nicht durch stilles Umsortieren in `page.tsx`.
-   **Aufmacher zuerst — ENDGÜLTIG (Uwe, 27.08.2026):** Der Magazin-Aufmacher
+   **Aufmacher zuerst — ENDGÜLTIG (Uwe, 27.08.2026) — aufgehoben am 02.09.2026, siehe
+   nächsten Absatz:** Der Magazin-Aufmacher
    (HERO, neuester veröffentlichter Inhalt) steht an Position 1, davor nichts.
    Danach: Artikel-Reihe, Value-Prop-Band mit H1 + Rubriken, Werkzeuge, Rest wie
    gehabt. Diese Entscheidung war schon einmal gefallen und wurde später über den
@@ -166,6 +167,21 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    (src/lib/startseiten-artikel.ts, Redaktionsvorbehalt berücksichtigt) — die
    frühere Platzhalter-Liste ist nur noch Auffüll-Fallback. Neue Inhalte
    freigeben = Startseite dreht sich von selbst.
+   **Kopfbereich = Value-Prop-Band, Aufmacher danach, Button unter den Fold
+   (Uwe, 02.09.2026 — wörtlich, Cowork-Chat, mit zwei Screenshots):** „Folgendes
+   tauschen. Bild 1 an die Stelle von Bild 2 verschieben. Den großen Quadratischen
+   Button nach unten setzen. Bild 1 war die eigentliche Headbereich-Website. Was mich
+   aber stört ist der große Button auf den ersten Blick." (Bild 1 = Value-Prop-Band
+   mit H1 + Rubriken, Bild 2 = Magazin-Aufmacher.) Damit ist die 27.08.-Entscheidung
+   auf dem dafür vorgesehenen Weg aufgehoben. Gültige Reihenfolge seitdem:
+   1 VALUE-PROP-BAND (H1 + Rubriken, **ohne** Mitglieder-Button) → 2 HERO →
+   3 SECONDARY ARTICLES → 4 MITGLIEDER-CTA (der Gold-Button „Werde SteakAdemiker",
+   eigener schmaler Abschnitt unter der Artikel-Reihe) → Werkzeuge → Rest wie gehabt.
+   Der Riegel im Skript erzwingt jetzt Positionen 1–4; neue Zusatzregel: oberhalb
+   des HERO darf **kein** `/auth/login`-CTA stehen (Button nicht auf dem ersten
+   Bildschirm). Aufheben wieder nur Uwe selbst, mit wörtlichem Zitat und Datum hier.
+   Variante B (`/home-b`) hat ein eigenes Layout und ist von diesem Tausch nicht
+   berührt.
    **A/B-Test „Editorial Ember" (seit 26.08.2026):** `/` wird per Cookie `sa_ab_home`
    50/50 gesplittet (src/middleware.ts). Variante B = interner Rewrite auf `/home-b`
    (noindex, Canonical auf `/`): dieselbe page.tsx, eingehüllt in den hellen

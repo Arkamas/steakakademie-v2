@@ -27,6 +27,18 @@
  * Fuer die Abschnitte AB Position 3 bleibt der alte Weg: Soll-Liste anpassen
  * und in CLAUDE.md vermerken. Wer nur page.tsx umbaut, bekommt einen roten
  * Build. Genau das ist der Zweck.
+ *
+ * KOPFBEREICH NEU (Uwe, 02.09.2026) — hebt die 27.08.-Entscheidung auf, auf dem
+ * dafuer vorgesehenen Weg (woertliches Uwe-Zitat mit Datum in CLAUDE.md Regel 8):
+ *   "Folgendes tauschen. Bild 1 an die Stelle von Bild 2 verschieben. Den
+ *    grossen Quadratischen Button nach unten setzen. Bild 1 war die eigentliche
+ *    Headbereich-Website. Was mich aber stoert ist der grosse Button auf den
+ *    ersten Blick."  (Bild 1 = VALUE-PROP-BAND, Bild 2 = HERO)
+ * Neue Reihenfolge, per Riegel erzwungen: VALUE-PROP-BAND (H1 + Rubriken, OHNE
+ * Button) → HERO → SECONDARY ARTICLES → MITGLIEDER-CTA (der Gold-Button). Und:
+ * oberhalb des HERO darf KEIN Mitglieder-CTA (/auth/login) stehen — der Button
+ * gehoert nicht auf den ersten Bildschirm. Aendern kann das wieder nur Uwe
+ * selbst, mit Zitat und Datum in CLAUDE.md Regel 8 UND Umbau des Riegels.
  */
 
 import { readFileSync } from 'node:fs';
@@ -34,15 +46,16 @@ import { readFileSync } from 'node:fs';
 const DATEI = 'src/app/page.tsx';
 
 /** Marker-Kommentare in src/app/page.tsx, in der verbindlichen Reihenfolge. */
-// GEAENDERT (Uwe, 27.08.2026): Der Magazin-Aufmacher (HERO) steht an Position 1 —
-// die Startseite oeffnet wie ein Magazin mit der aktuellsten Geschichte, nicht
-// mit der Selbstbeschreibung. INHALT ZUERST bleibt damit erst recht erfuellt:
-// ein redaktioneller Artikel ist mehr "Thema" als das Value-Prop-Band. Der
-// Mitglieder-CTA bleibt unterhalb. Vermerkt in CLAUDE.md Regel 8.
+// GEAENDERT (Uwe, 27.08.2026): HERO an Position 1 (Magazin-Aufmacher zuerst).
+// GEAENDERT (Uwe, 02.09.2026): VALUE-PROP-BAND (H1 + Rubriken) ist wieder der
+// Kopfbereich, HERO folgt direkt danach; der Mitglieder-Button wurde aus dem
+// Kopfbereich in einen eigenen Abschnitt MITGLIEDER-CTA unterhalb der
+// Artikel-Reihe verschoben. Vermerkt in CLAUDE.md Regel 8 (woertliches Zitat).
 const SOLL_REIHENFOLGE = [
+  'VALUE-PROP-BAND',
   'HERO',
   'SECONDARY ARTICLES',
-  'VALUE-PROP-BAND',
+  'MITGLIEDER-CTA',
   'WERKZEUGE',
   'LEADMAGNET',
   'PLATTFORM-PULS',
@@ -56,12 +69,14 @@ const SOLL_REIHENFOLGE = [
   'TRUST-BAR',
 ];
 
-// ── RIEGEL (endgueltig, Uwe 27.08.2026): HERO an Position 1, Artikel-Reihe an 2.
-// Faengt auch den Fall, dass eine kuenftige Session die Soll-Liste selbst
-// "regelkonform" umsortiert — dieser Fehler ist genau so schon einmal passiert.
-if (SOLL_REIHENFOLGE[0] !== 'HERO' || SOLL_REIHENFOLGE[1] !== 'SECONDARY ARTICLES') {
-  console.error('❌ RIEGEL: HERO muss an Position 1 stehen, SECONDARY ARTICLES an 2.');
-  console.error('   Diese Reihenfolge ist ENDGUELTIG (Uwe, 27.08.2026) — auch eine');
+// ── RIEGEL (Uwe, 02.09.2026): VALUE-PROP-BAND an Position 1, HERO an 2,
+// Artikel-Reihe an 3, MITGLIEDER-CTA an 4. Faengt auch den Fall, dass eine
+// kuenftige Session die Soll-Liste selbst "regelkonform" umsortiert — dieser
+// Fehler ist genau so schon einmal passiert (27.08. → davor ebenso).
+const RIEGEL = ['VALUE-PROP-BAND', 'HERO', 'SECONDARY ARTICLES', 'MITGLIEDER-CTA'];
+if (RIEGEL.some((m, i) => SOLL_REIHENFOLGE[i] !== m)) {
+  console.error('❌ RIEGEL: Positionen 1–4 muessen lauten: ' + RIEGEL.join(' → '));
+  console.error('   Diese Reihenfolge ist eine Uwe-Entscheidung (02.09.2026) — auch eine');
   console.error('   Aenderung der Soll-Liste hebt sie nicht auf. Siehe Kopfkommentar.');
   process.exit(1);
 }
@@ -76,6 +91,8 @@ const NICHT_VOR = [
 
 /** Höchstzahl an Links auf /diplome oberhalb des HERO-Abschnitts. */
 const MAX_DIPLOM_LINKS_OBEN = 1;
+/** Höchstzahl an Mitglieder-CTAs (/auth/login) oberhalb des HERO-Abschnitts (Uwe, 02.09.2026). */
+const MAX_CTA_LINKS_OBEN = 0;
 
 const quelle = readFileSync(DATEI, 'utf8');
 const zeilen = quelle.split('\n');
@@ -131,6 +148,17 @@ if (diplomLinks > MAX_DIPLOM_LINKS_OBEN) {
   );
 }
 
+// ── 4) Mitglieder-CTA nicht auf dem ersten Bildschirm (Uwe, 02.09.2026) ─────
+// "Was mich aber stoert ist der grosse Button auf den ersten Blick."
+// Oberhalb des HERO-Abschnitts darf kein Link auf /auth/login stehen.
+const ctaLinksOben = (obenDrueber.match(/href=["']\/auth\/login/g) || []).length;
+if (ctaLinksOben > MAX_CTA_LINKS_OBEN) {
+  fehler.push(
+    `${ctaLinksOben} Mitglieder-CTA(s) (/auth/login) oberhalb des HERO-Abschnitts — erlaubt ist ${MAX_CTA_LINKS_OBEN}.\n` +
+      `   Der Button gehoert unter den ersten Bildschirm (Uwe, 02.09.2026; Abschnitt MITGLIEDER-CTA).`,
+  );
+}
+
 // ── Ergebnis ────────────────────────────────────────────────────────────────
 if (fehler.length) {
   console.error('\n❌ Startseiten-Hierarchie verletzt (' + DATEI + ')\n');
@@ -144,4 +172,4 @@ if (fehler.length) {
   process.exit(1);
 }
 
-console.log(`✅ Startseiten-Hierarchie unverändert (${ist.length} Abschnitte, ${diplomLinks} Diplom-Link(s) oberhalb HERO)`);
+console.log(`✅ Startseiten-Hierarchie unverändert (${ist.length} Abschnitte, ${diplomLinks} Diplom-Link(s), ${ctaLinksOben} Mitglieder-CTA(s) oberhalb HERO)`);

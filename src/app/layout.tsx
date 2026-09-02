@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Playfair_Display, Source_Serif_4, DM_Sans } from 'next/font/google';
-import MarcoWidget from '@/components/ai/MarcoWidget';
+import LayoutExtras from '@/components/layout/LayoutExtras';
 // SmokeEffect ersetzt durch EmberGlow (Uwe, 15.08.2026): keine Dauerschleife
 // mehr — reaktiver Gargrad-Glut-Schein, Details im Komponenten-Kommentar.
 // Revert = diese zwei Zeilen zurücktauschen; SmokeEffect.tsx bleibt im Repo.
@@ -8,7 +8,6 @@ import EmberGlow from '@/components/ui/EmberGlow';
 import PlausibleScript from '@/components/analytics/PlausibleScript';
 import ClarityScript from '@/components/analytics/ClarityScript';
 import ConsentBanner from '@/components/analytics/ConsentBanner';
-import ExitIntent from '@/components/ui/ExitIntent';
 import MotionProvider from '@/components/layout/MotionProvider';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
 import './globals.css';
@@ -18,14 +17,18 @@ const playfair = Playfair_Display({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-playfair',
-  weight: ['400', '500', '600', '700', '800', '900'],
+  // Nur die Gewichte, die im Code vorkommen (Perf-Audit 02.09.2026):
+  // 400 font-normal, 600 Prose-h3, 700 font-bold, 900 font-black.
+  // 500/800 waren nirgends referenziert und kosteten zwei Font-Dateien.
+  weight: ['400', '600', '700', '900'],
 });
 
 const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-source-serif',
-  weight: ['400', '500', '600', '700'],
+  // 400 Fliesstext, 700 Hervorhebungen — 500/600 kamen nirgends vor.
+  weight: ['400', '700'],
 });
 
 const dmSans = DM_Sans({
@@ -109,8 +112,8 @@ export default function RootLayout({
         <MotionProvider>
           {children}
           <EmberGlow />
-          <MarcoWidget />
-          <ExitIntent />
+          {/* Marco-Chat + Exit-Intent: nachgeladen nach Idle/Interaktion, siehe LayoutExtras */}
+          <LayoutExtras />
           {/* Plausible: cookieless, ohne Einwilligung (§ 25 Abs. 2 TDDDG) — läuft immer. */}
           <PlausibleScript />
           {/* Microsoft Clarity: einwilligungspflichtig — lädt nur nach Opt-in über den Banner. */}

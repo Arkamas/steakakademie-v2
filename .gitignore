@@ -85,8 +85,10 @@ pw-shots/
 # Promo-Maschine (generierte Post-Kits)
 promo-output/
 
-# AGB-Export (one-off-Artefakt)
-Steakakademie-AGB.pd
+# AGB-Export (one-off-Artefakt; `node scripts/agb-pdf.mjs` erzeugt ihn neu).
+# Bis 02.09.2026 stand hier ein Tippfehler ("*.pd"), die Datei war deshalb
+# trotzdem getrackt — jetzt aus dem Index genommen, bleibt lokal liegen.
+Steakakademie-AGB.pdf
 # Build-Artefakte (postbuild next-sitemap überschreibt sie ohnehin)
 public/sitemap.xml
 public/sitemap-0.xml
@@ -159,3 +161,10 @@ public/images/cut-diagramm.svg
 # cli-latest aenderte sich bei jedem Aufruf und stand dauerhaft im git status.
 # Kein Projektinhalt: nichts in src/, scripts/ oder .github/ liest daraus.
 supabase/.temp/
+
+# Verworfene KI-Cut-Bilder (59 Dateien, 12 MB) aus der Anatomie-Review vom
+# 03.07.2026. Beleg-Material fuer scripts/cut-images.mjs, aber kein
+# Seiteninhalt — und in einem oeffentlichen Repository ohne geklaerte
+# Bildherkunft fehl am Platz. Seit 02.09.2026 nur noch lokal (aus dem Index
+# genommen, Dateien bleiben auf der Platte).
+training/cut-review/

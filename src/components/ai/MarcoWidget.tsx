@@ -3,7 +3,7 @@
 import { useChat } from 'ai/react';
 import type { Message } from 'ai';
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { X, Send } from 'lucide-react';
 import Link from 'next/link';
 import MarcoAvatar from './MarcoAvatar';
@@ -17,8 +17,11 @@ const SUGGESTIONS = [
 ];
 
 // ── Bilder: Vorderseite (Portrait) + Rückseite (am Grill) ────────────────────
-const MARCO_PORTRAIT  = '/images/authors/marco-richter.jpg';
-const MARCO_BACK      = '/images/marco-back.jpg';
+// 128-px-Ableitungen (Perf-Audit 02.09.2026): Der Avatar wird maximal 56 px
+// gross gezeigt; vorher luden beide Seiten das 512-px-Original (2 x 33 kB)
+// auf jeder Seite. Die Originale bleiben fuer Autorenseite/OG erhalten.
+const MARCO_PORTRAIT  = '/images/marco-portrait-128.webp';
+const MARCO_BACK      = '/images/marco-back-128.webp';
 
 export default function MarcoWidget() {
   const [open, setOpen] = useState(false);

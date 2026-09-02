@@ -6,7 +6,7 @@
  *   cut-images.mjs    → public/images/cuts/<slug>.jpg      (rohe Cut-Poster)
  *   recipe-images.mjs → public/images/rezepte/<slug>.jpg   (Rezept-Fotos)
  *   ...aber für ARTIKEL- und METHODEN-Heroes gab es KEIN Skript. Folge: 4 Methoden-
- *   seiten teilten sich denselben Platzhalter /images/hero-ribeye.png und 3 weitere
+ *   seiten teilten sich denselben Platzhalter /images/hero-ribeye.jpg und 3 weitere
  *   hotlinken bis heute live auf images.unsplash.com (kein lokales Asset, keine
  *   next/image-Optimierung, externer Request bei jedem Seitenaufruf).
  *

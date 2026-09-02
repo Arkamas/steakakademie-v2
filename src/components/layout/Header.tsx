@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Search, Menu, X, ChevronDown, Flame, Gift } from 'lucide-react';
 // Flame kept for Diplome CTA button
 import Image from 'next/image';
@@ -192,7 +192,9 @@ export default function Header() {
                 width={56}
                 height={56}
                 className="rounded-full object-cover"
-                priority
+                // Kein `priority`: Das 56-px-Logo konkurrierte als zweites
+                // Preload-Bild mit dem Hero um Bandbreite (Perf-Audit 02.09.2026).
+                // Es ist so klein, dass es ohne Preload rechtzeitig da ist.
                 style={{
                   filter: 'drop-shadow(0 0 8px rgba(210,125,45,0.35)) drop-shadow(0 0 18px rgba(210,125,45,0.16))',
                 }}

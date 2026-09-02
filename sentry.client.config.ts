@@ -13,14 +13,17 @@
  */
 import * as Sentry from '@sentry/nextjs';
 
-const isProd = process.env.NODE_ENV === 'production';
-
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   enabled: Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN),
   environment: process.env.NODE_ENV,
 
-  tracesSampleRate: isProd ? 0.1 : 1.0,
+  // Kein Browser-Tracing (Perf-Audit 02.09.2026): 10 % Performance-Traces
+  // lieferten fuer eine ueberwiegend statische Seite keinen Erkenntniswert,
+  // kosteten aber 100 % der Besucher ~40 kB JS. Der Tracing-Code wird ueber
+  // __SENTRY_TRACING__ = false (webpack-Block in next.config.mjs, nur Client)
+  // komplett aus dem Bundle entfernt; eine tracesSampleRate haette hier also
+  // keine Wirkung mehr. Server-Tracing (sentry.server.config.ts) ist unberuehrt.
 
   sendDefaultPii: false,
 

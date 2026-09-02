@@ -92,7 +92,8 @@ function buildPrompt(brief, species, slug = '') {
 // (sa_rawcut, trainiert 04.06.2026 für rohe Metzger-Cuts) statt des vorherigen
 // sa_foodstyle-LoRA (der war für angerichtete/gegrillte Rezeptfotos trainiert
 // und passte nicht zur rohen Cut-Anatomie — vermutliche Ursache der 03.07.2026
-// entdeckten anatomischen Fehler, siehe training/cut-review/rejected-2026-07-03/).
+// entdeckten anatomischen Fehler, siehe training/cut-review/rejected-2026-07-03/ —
+// seit 02.09.2026 nur noch lokal, nicht mehr im Repository).
 function loraFor(species) {
   if (species === 'schwein' && PORK_LORA?.url) {
     return { lora: PORK_LORA.url, scale: PORK_LORA.scale ?? 1.0, trigger: PORK_LORA.trigger || 'sa_pork' }

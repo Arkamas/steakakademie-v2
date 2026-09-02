@@ -16,6 +16,11 @@ export default defineConfig({
 
   use: {
     baseURL: 'http://localhost:3000',
+    // Consent-Banner vorab entschieden (abgelehnt): Sonst ueberdeckt das fixed
+    // positionierte Banner untere Seitenbereiche, Hover/Click laufen in Timeouts
+    // und sehen aus wie Regressionen (Befund 02.09.2026). Details und Ausnahme
+    // fuer Banner-Tests: tests/e2e/helpers/consent.ts
+    storageState: 'tests/e2e/fixtures/consent-declined.storage.json',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'off',

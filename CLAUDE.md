@@ -16,9 +16,15 @@
 
 **Bauen und Pruefen**
 - `node_modules` in diesem Arbeitsbaum ist eine **Windows-Installation**. Native
-  Binaries (esbuild, swc) starten unter Linux nicht. Eine Cloud-/Linux-Session
-  kann hier **lesen, aendern und pruefen — aber NICHT bauen und nicht typechecken**.
-  `npm run build` und `tsc` laufen ausschliesslich in der Windows-Session.
+  Binaries (esbuild, swc) starten unter Linux nicht. **Im Arbeitsbaum selbst** kann
+  eine Linux-Session deshalb nur lesen, aendern und Skripte pruefen.
+  **Bauen und typechecken geht trotzdem — in einer eigenen Kopie (02.09.2026):**
+  `git archive HEAD | tar -x -C /tmp/repo && cd /tmp/repo && npm ci && npx tsc --noEmit && npx next build`
+  (2 CPU: tsc 26 s, Build 2:23 min). E2E dazu: `npx playwright install chromium`,
+  fehlende `libXdamage.so.1` ohne root via `apt-get download libxdamage1` +
+  `dpkg-deb -x` + `LD_LIBRARY_PATH`; `next start` und Tests im **selben** Bash-Aufruf
+  starten (Hintergrundprozesse ueberleben den Aufruf nicht). Ergebnis dann per
+  `cp` in den Arbeitsbaum zurueck. Details: docs/PERF-AUDIT-2026-09-02.md.
 - **Exitcode pruefen, immer.** Ein Befehl, der nichts ausgibt, ist nicht gruen.
   `timeout` liefert Exitcode 124 — das ist ein Abbruch ohne Ergebnis, kein Bestehen.
 - Ein voller Typecheck passt **nicht** in ein 45-Sekunden-Fenster. Nicht anfangen,
@@ -68,6 +74,12 @@
   Texas-Monthly-Layout). Die Middleware teilt nur zu, wenn **`AB_HOME_ENABLED === '1'`**.
   Steht der Schalter anders, bekommt **jeder** Besucher A — auch Uwe. Wer eine
   Aussage ueber „die neue Startseite" trifft, prueft vorher diesen Schalter.
+
+**Playwright: Consent-Banner zuerst (Uwe, 02.09.2026)**
+- Das DSGVO-Banner liegt `fixed` unten und faengt Klicks/Hover im unteren Viewport
+  ab. Ein Timeout dort ist eine Ueberdeckung, keine Regression. Seit 02.09.2026 startet
+  jeder E2E-Test mit getroffener Consent-Entscheidung (`storageState` in
+  playwright.config.ts); Banner-Tests heben das gezielt auf — tests/e2e/helpers/consent.ts.
 
 **Berichtspflicht**
 - Jede Uebergabe nennt ausdruecklich, **was NICHT geprueft wurde**. „Gates gruen"

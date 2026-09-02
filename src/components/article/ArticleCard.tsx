@@ -27,6 +27,7 @@ export default function ArticleCard({
               alt={imageAlt}
               width={800}
               height={500}
+              sizes="(max-width: 1024px) 100vw, 800px"
               className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
               priority
             />
@@ -65,6 +66,7 @@ export default function ArticleCard({
               alt={imageAlt}
               width={100}
               height={70}
+              sizes="96px"
               className="w-24 h-16 object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
             />
           </div>
@@ -93,6 +95,7 @@ export default function ArticleCard({
               alt={imageAlt}
               width={140}
               height={90}
+              sizes="144px"
               className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
             />
           </div>
@@ -127,6 +130,10 @@ export default function ArticleCard({
             alt={imageAlt}
             width={600}
             height={380}
+            // Ohne `sizes` nimmt der Browser 100vw an und laedt fuer eine
+            // Grid-Karte das 1200-px-Derivat (Lighthouse 02.09.2026: ~35 kB
+            // Verschwendung je Karte). Die Karte ist maximal ein Drittel breit.
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
           />
         </div>

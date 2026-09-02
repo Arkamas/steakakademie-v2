@@ -155,7 +155,7 @@ separat zu klären.
 
 ## Offene Punkte
 
-- [ ] `reverse-sear.mdx` hängt noch am Platzhalter `hero-ribeye.png`
+- [ ] `reverse-sear.mdx` hängt noch am Platzhalter `hero-ribeye.jpg`
 - [ ] Unsplash-Hotlinks lokal spiegeln: `direktes-grillen`, `searing-perfekte-kruste`,
       `smoken-low-and-slow`, `sous-vide`
 - [ ] `public/images/methoden/CREDITS.md` und `public/images/articles/CREDITS.md` anlegen

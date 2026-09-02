@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { m as motion, useReducedMotion } from 'framer-motion';
 
 // Fortschrittsleiste, die sich beim Sichtbarwerden von 0 → percent füllt.
 // Reduced-motion-sicher (dann sofort voll, keine Animation).

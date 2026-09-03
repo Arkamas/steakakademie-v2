@@ -60,6 +60,19 @@ Seite lieferte 200 und war über die URL kaufbar.
 **Entscheidung Uwe, 03.09.2026, wörtlich:** „Gründung-Sprint bleibt aus, dazu haben wir bereits
 ein anderes Produkt entwickelt."
 
+Gemeint ist das Konzept **„Zweites Standbein: Websites für Lebensmittelhandwerk"**
+(`Projects\Steakakademie\Zweites-Standbein-Websites-Konzept.md`, Stand 30.08.2026).
+Es benennt diese Abschaltung selbst als Auslöser: *„Das Ehrliche System verschwindet von
+steakakademie.de … Die dort steckende Arbeit wandert in ein eigenes Angebot."*
+
+**Wichtig für die Statusbewertung:** Das Konzept ist ausdrücklich **Konzeptstand, nicht
+validiert** — es gibt dafür weder Code noch Website noch Digistore-Produkt (API-Stand
+03.09.2026: sechs Produkte, alle aus dem Bestand). Der Gründer-Bereich ist also nicht durch
+ein laufendes Angebot abgelöst, sondern vorerst nur stillgelegt. Wer hier später liest: Die
+alten Seiten liegen unverlinkt und auf `noindex` herum — das ist eine Zwischenlösung, kein
+Zielzustand. Sobald das Nachfolgeangebot steht, gehören sie entweder dorthin weitergeleitet
+oder entfernt.
+
 Stillgelegt wurden **beide** Kaufwege, nicht nur einer:
 1. `src/app/mein-system/page.tsx` — `checkoutUrl` auf `null`, wie bei 695900.
 2. `src/app/gruender-schmiede/page.tsx` — Kaufbutton entfernt (nicht per CSS versteckt: ein

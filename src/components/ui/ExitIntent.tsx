@@ -30,6 +30,27 @@ function AccentBar() {
 // Routes where the overlay should NOT appear
 const EXCLUDED_PATHS = ['/diplome', '/diplome/simulation', '/kontakt', '/impressum', '/datenschutz', '/agb'];
 
+// Safe sessionStorage access. Mobile Safari (u. a. bei blockierten Cookies /
+// Privatmodus) wirft beim Zugriff auf sessionStorage eine SecurityError
+// (DOMException 18 „The operation is insecure.") — window existiert dann zwar,
+// der Storage-Zugriff ist aber trotzdem gesperrt. Ohne diese Kapselung landete
+// jeder solche Aufruf als Fehler in Sentry (/temperatur-guide, 02.09.2026).
+function safeSessionGet(key: string): string | null {
+  try {
+    return window.sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeSessionSet(key: string, value: string): void {
+  try {
+    window.sessionStorage.setItem(key, value);
+  } catch {
+    /* Storage gesperrt — Overlay verhält sich, als wäre es noch nicht gezeigt worden. */
+  }
+}
+
 export default function ExitIntent() {
   const [visible, setVisible] = useState(false);
   const [armed, setArmed] = useState(false);
@@ -37,7 +58,7 @@ export default function ExitIntent() {
   useEffect(() => {
     // Check session storage — don't show twice
     if (typeof window !== 'undefined') {
-      const shown = sessionStorage.getItem('sa_exit_shown');
+      const shown = safeSessionGet('sa_exit_shown');
       const currentPath = window.location.pathname;
 
       // Don't show on excluded paths
@@ -57,7 +78,7 @@ export default function ExitIntent() {
       // Only trigger when mouse leaves through the TOP of the viewport
       if (e.clientY > 10) return;
       setVisible(true);
-      sessionStorage.setItem('sa_exit_shown', '1');
+      safeSessionSet('sa_exit_shown', '1');
       document.removeEventListener('mouseleave', handleMouseLeave);
     }
 

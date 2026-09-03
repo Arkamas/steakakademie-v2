@@ -29,7 +29,16 @@ const SAULEN = [
     href:        '/gruender-schmiede',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
-    checkoutUrl: 'https://www.digistore24.com/product/695894' as string | null,
+    // Checkout AUS (Uwe, 03.09.2026): "Gründung-Sprint bleibt aus, dazu haben
+    // wir bereits ein anderes Produkt entwickelt." Digistore 695894 bleibt im
+    // Konto aktiv und fuer DS-de genehmigt — nur verkauft wird es hier nicht
+    // mehr. Gleiche Stilllegung wie bei 695900 darunter.
+    //
+    // Anlass: Am 02.09. wurde der Gruender-Bereich deindexiert und aus
+    // Navigation und Footer ausgebaut (63a08d4, 641b346), der Checkout aber
+    // nicht mitgenommen. noindex heisst nur "nicht in Google" — diese Seite
+    // lieferte weiter 200 und war ueber die URL kaufbar.
+    checkoutUrl: null as string | null,
   },
   {
     slug:        'steuer-matrix',

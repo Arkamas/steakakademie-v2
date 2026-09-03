@@ -372,7 +372,26 @@ nav a, header button, .nav-sharp {
 
 /* Links/Akzente: kräftigeres Editorial-Orange auf hellem Grund
    (das dunkle #E85018 wirkt auf Creme leicht ausgewaschen) */
-.theme-ember .text-brand-fire { color: #D4521A !important; }
+/* Kontrastmessung 03.09.2026 (WCAG AA, Fließtext 4,5:1) gegen alle vier
+   hellen Flächen (#FAFAF7 / #FFFFFF / #F4F0E8 / #F1EDE4):
+     #D4521A (alt)  4,00 / 4,18 / 3,68 / 3,58  → nur für große Schrift ok
+     #B53E0E (neu)  5,49 / 5,74 / 5,05 / 4,91  → AA überall, Weiß darauf 5,74
+   Betroffen sind die geteilten Komponenten (ProductCard, ToolBoxes,
+   FrischSaisonal, PlattformPuls), die auf /home-b auf Creme liegen. */
+.theme-ember .text-brand-fire,
+.theme-ember .hover\:text-brand-fire:hover { color: #B53E0E !important; }
+
+/* Gold auf Creme war der Grund, warum Variante B im ersten Anlauf durchfiel
+   (#C8882A auf #FAFAF7 = 2,86:1). Der Header wurde damals auf #C2440F umgebaut,
+   die geteilten Komponenten (ProductCard 6×, ToolBoxes 10×, NewsLayout 7×,
+   Footer 4×) tragen text-brand-gold aber weiterhin. Messung 03.09.2026:
+     #C8882A (alt)  2,86 / 3,00 / 2,63 / 2,56  → FAIL
+     #8F5E14 (neu)  5,31 / 5,56 / 4,89 / 4,76  → AA überall
+   Auf dunklen Inseln innerhalb von B (Aufmacher, Wissens-Brief-Band) wird
+   #E8A34C direkt gesetzt, das ist von dieser Regel nicht berührt. */
+.theme-ember .text-brand-gold,
+.theme-ember .hover\:text-brand-gold:hover,
+.theme-ember .group:hover .group-hover\:text-brand-gold { color: #8F5E14 !important; }
 
 /* CTA-Buttons bleiben bewusst kräftig orange (btn-affiliate/bg-brand-fire
    unverändert) — die Aktionsfarbe ist der rote Faden zwischen A und B. */

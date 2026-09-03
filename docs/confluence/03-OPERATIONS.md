@@ -32,16 +32,30 @@
 
 ## Digistore24-Produkte
 
-| ID | Produkt | Preis | Status |
-|----|---------|-------|--------|
-| 696394 | Steak-Beichte (KI-Diagnose, Credits) | 7€ / 25€ 5er | ✅ liefert (hardcoded Credit) |
-| 696396 | Mein Protokoll (8-Wochen-Plan) | 19€ / 29€ | ✅ verifiziert live 01.06. |
-| 696399 | BBQ-Grundkurs | 79€ / 127€ | „In Vorbereitung" (Substanz fehlt) |
-| 695894 | Gründung-Sprint | — | deaktiviert bis Substanz |
-| 695900 | Agentur-Killer-Sprint | — | deaktiviert bis Substanz |
-| 695797 | Steuer-Matrix | — | live |
+**Stand 03.09.2026, direkt über die Digistore24-API geprüft** (`listProducts`). Die vorherige
+Fassung dieser Tabelle war an drei Stellen falsch — sie führte 695894 und 695900 als
+„deaktiviert bis Substanz". Beide sind im Konto aktiv, 695894 und 695900 sind sogar für
+DS-de **genehmigt**. Wer eine Statusangabe hier ändert, prüft sie vorher gegen die API.
+
+| ID | Produkt | Preis | Digistore: aktiv | Digistore: DS-de | Verkaufsseite | Checkout im Code |
+|----|---------|-------|---|---|---|---|
+| 696394 | Steak-Beichte (KI-Diagnose, Credits) | 7 € / 25 € (5er) | ✅ Y | ✅ genehmigt | `/steak-beichte` (indexiert) | ✅ an |
+| 696396 | Mein Protokoll (8-Wochen-Plan) | 19 € / 29 € | ✅ Y | ⏳ „neu" | `/mein-protokoll` (indexiert) | ✅ an |
+| 696399 | BBQ-Grundkurs | 79 € / 127 € | ✅ Y | ⏳ „neu" | `/bbq-grundkurs` (indexiert) | ❌ keine ID im Code |
+| 695894 | Gründung-Sprint | — | ✅ Y | ✅ genehmigt | `/gruender-schmiede` (**noindex**) | ✅ an, auf `/mein-system` |
+| 695900 | Agentur-Killer-Sprint | — | ✅ Y | ✅ genehmigt | `/agentur-killer-sprint` (**noindex**) | ❌ bewusst aus |
+| 695797 | Steuer-Matrix | — | ✅ Y | ✅ genehmigt | `/steuer-matrix` (**noindex**) | ✅ an, auf `/mein-system` |
 
 ⚠️ **Regel:** Jedes Course-Produkt braucht `courses`-Zeile + `digistore_products`-Mapping, sonst kassiert es ohne Auslieferung. Reaktivierung: **erst Substanz, dann Checkout** — nie umgekehrt.
+
+⚠️ **Offener Punkt (03.09.2026):** Die drei Gründer-Seiten wurden am 02.09. deindexiert und
+aus Navigation und Footer ausgebaut (`63a08d4`, `641b346`) — GF3 wird nicht vermarktet, bevor
+GF1 liefert. **Der Checkout wurde dabei nicht mit abgeschaltet:** `/mein-system` liefert weiter
+HTTP 200 und bietet 695894 und 695797 aktiv zum Kauf an. Die Seite ist zwar `noindex`, aber wer
+die URL hat, kann kaufen. Ob 695894 dann auch ausliefert (`courses` + `digistore_products`),
+ist ungeprüft — der Supabase-Zugang fehlte bei der Prüfung. **Entscheidung Uwe:** entweder
+Checkout auf `/mein-system` stilllegen wie bei 695900, oder Auslieferung verifizieren und
+bewusst offen lassen.
 
 ## Aktive Ops-Blocker (auf Uwe) → Jira
 

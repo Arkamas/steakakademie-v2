@@ -9,18 +9,30 @@ import Footer from '@/components/layout/Footer';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { getAuthorBySlug } from '@/lib/authors';
 import StreitfallUmfrage from '@/components/streitfaelle/StreitfallUmfrage';
+// 03.09.2026: siehe Kommentar in src/app/artikel/[slug]/page.tsx — dieselbe
+// Luecke. Bewusst nur AffiliateBox, KEIN DiplomCTA: ein Streitfall ist kurz,
+// und die Seite spielt aus dem Frontmatter schon Merksatz-, Entscheidungs-
+// und FAQ-Box aus. Ein zweiter Conversion-Block waere einer zu viel.
+import AffiliateBox from '@/components/mdx/AffiliateBox';
+import { sichtbareArtikel } from '@/lib/redaktion';
 import { Calendar, ChevronRight, RotateCcw, Scale, AlertTriangle, Sparkles } from 'lucide-react';
 
 interface Props {
   params: { slug: string };
 }
 
+// sichtbareArtikel statt roher Collection (03.09.2026, Redaktionsvorbehalt).
+// In Produktion erzeugt generateStaticParams damit fuer einen Entwurf gar keine
+// Route — er liefert 404 statt ungepruefter KI-Text. Lokal bleibt er lesbar,
+// damit Uwe ihn vor der Freigabe auf der Seite pruefen kann.
+const sichtbare = () => sichtbareArtikel(allStreitfalls);
+
 export async function generateStaticParams() {
-  return allStreitfalls.map((s) => ({ slug: s.slug }));
+  return sichtbare().map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const doc = allStreitfalls.find((s) => s.slug === params.slug);
+  const doc = sichtbare().find((s) => s.slug === params.slug);
   if (!doc) return {};
   const title = doc.seoTitle ?? doc.title;
   const description = doc.seoDescription ?? doc.excerpt;
@@ -40,6 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const mdxComponents = {
+  AffiliateBox,
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
       className="font-serif text-2xl sm:text-3xl font-bold text-text-light mt-12 mb-5 leading-tight pb-3"
@@ -100,7 +113,7 @@ const mdxComponents = {
 };
 
 export default function StreitfallPage({ params }: Props) {
-  const doc = allStreitfalls.find((s) => s.slug === params.slug);
+  const doc = sichtbare().find((s) => s.slug === params.slug);
   if (!doc) notFound();
 
   const MDXContent = useMDXComponent(doc.body.code);

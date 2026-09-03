@@ -31,6 +31,14 @@ export const Artikel = defineDocumentType(() => ({
     seoTitle: { type: 'string' },
     seoDescription: { type: 'string' },
     noindex: { type: 'boolean', default: false },
+    // Frage-Antwort-Paare fuer den FAQ-Block und das FAQPage-Schema.
+    // Nachgezogen am 03.09.2026: Cut, Vergleich, Streitfall und Fleischwissen
+    // hatten das Feld, Artikel nicht — ein Artikel mit FAQ-Abschnitt lieferte
+    // die Paare deshalb nur als Fliesstext, ohne Schema. Fuer AI-Suchen ist
+    // genau dieses Format die zitierfaehige Einheit (docs/geo-llm-ranking-
+    // factors.md), der Verlust war also kein kosmetischer.
+    // Optional: Artikel ohne FAQ rendern den Block einfach nicht.
+    faq: { type: 'json' },
     // ── Redaktionsvorbehalt (AI Act Art. 50 Abs. 4) ──────────────────────────
     // Die Befreiung von der KI-Kennzeichnungspflicht haengt daran, dass jeder
     // Entwurf geprueft und verantwortet wird. Damit das im Code pruefbar ist
@@ -493,6 +501,21 @@ export const Streitfall = defineDocumentType(() => ({
     seoTitle: { type: 'string' },
     seoDescription: { type: 'string' },
     faq: { type: 'json' },
+    // ── Redaktionsvorbehalt (AI Act Art. 50 Abs. 4) ──────────────────────────
+    // Nachgezogen am 03.09.2026. Streitfaelle hatten diese Felder nicht — ein
+    // KI-Entwurf, der in content/streitfaelle/ landet, waere damit SOFORT live
+    // gewesen: kein Gate haelt ihn zurueck, und es gibt keinen Ort, an dem die
+    // menschliche Pruefung dokumentiert wird. Genau daran haengt aber die
+    // Befreiung von der KI-Kennzeichnungspflicht fuer Texte
+    // (compliance/ai-act-einstufung.md Punkt 3). Aufgefallen an einem
+    // Pipeline-Entwurf fuer Frage #11, der als erster Streitfall aus der
+    // automatisierten Content-Pipeline kam.
+    // Defaults wie bei Artikel und Fleischwissen bewusst
+    // „veroeffentlicht/geprueft": die acht bestehenden Streitfaelle kennen die
+    // Felder nicht und duerfen sich nicht veraendern.
+    status:   { type: 'enum', options: ['draft', 'review', 'published'], default: 'published' },
+    reviewed: { type: 'boolean', default: true },
+    reviewedAt: { type: 'date' },
   },
   computedFields: {
     slug: {

@@ -135,8 +135,13 @@ export default async function AgenturKillerSprintPage() {
     offers: {
       '@type': 'Offer',
       priceCurrency: 'EUR',
-      ...(price ? { price } : {}),
-      availability: 'https://schema.org/InStock',
+      // Discontinued statt InStock (03.09.2026): Der Checkout fuer 695900 ist
+      // seit laengerem bewusst aus ("wuerde kassieren ohne Auslieferung",
+      // siehe src/app/mein-system/page.tsx). Das Schema meldete trotzdem ein
+      // kaufbares Angebot — strukturierte Falschangabe, und Schema.org wird
+      // nicht nur von Googlebot gelesen, noindex schuetzt davor nicht.
+      // Preis ebenfalls raus: kein Preis fuer etwas, das man nicht kaufen kann.
+      availability: 'https://schema.org/Discontinued',
     },
   };
 

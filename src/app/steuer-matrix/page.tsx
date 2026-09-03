@@ -66,28 +66,25 @@ export default async function SteuerMatrixPage() {
     }
   } catch { /* graceful */ }
 
-  // Preis aus Supabase
-  let price: number | null = null;
-  try {
-    const supabase = createClient();
-    const { data } = await supabase
-      .from('courses')
-      .select('price')
-      .eq('slug', 'steuer-matrix')
-      .single();
-    if (data) price = data.price;
-  } catch { /* graceful */ }
+  // Preisabruf entfernt (Uwe, 03.09.2026): Seit die Kauf-CTAs raus sind, wurde
+  // der Wert nirgends mehr angezeigt — eine Supabase-Abfrage pro Aufruf ohne
+  // Abnehmer. Der Preis steht weiterhin in der courses-Tabelle; beim
+  // Wiedereinschalten des Verkaufs kommt dieser Block zurueck.
 
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: 'Steuer-Matrix — EU-Steuervergleich',
     applicationCategory: 'FinanceApplication',
+    // Nicht mehr buchbar (Uwe, 03.09.2026) — deshalb Discontinued statt
+    // InStock und ohne Preis. Gleiche Begruendung wie beim Gruendung-Sprint:
+    // ein Offer mit InStock und Preis ist fuer Parser ein kaufbares Angebot,
+    // und Schema.org wird nicht nur von Googlebot gelesen — noindex schuetzt
+    // davor nicht.
     offers: {
       '@type': 'Offer',
       priceCurrency: 'EUR',
-      ...(price ? { price } : {}),
-      availability: 'https://schema.org/InStock',
+      availability: 'https://schema.org/Discontinued',
     },
   };
 
@@ -144,19 +141,19 @@ export default async function SteuerMatrixPage() {
                   Zum Rechner <ChevronRight size={16} />
                 </Link>
               ) : (
-                <div className="flex flex-wrap items-center gap-4">
-                  {/* Digistore24-Link — wird nach Produkt-Anlage eingetragen */}
-                  <a
-                    href="#kaufen"
-                    className="inline-flex items-center gap-2 bg-brand-gold text-surface-dark font-sans font-bold text-sm px-6 py-3 hover:bg-brand-gold/90 transition-colors"
-                  >
-                    {price
-                      ? `Jetzt kaufen — ${new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 }).format(price)}`
-                      : 'Jetzt kaufen'
-                    }
-                  </a>
-                  <span className="text-xs font-sans text-text-light/40">einmalig · sofortiger Zugang</span>
-                </div>
+                /* Kauf-CTA entfernt (Uwe, 03.09.2026): "Steuer-Matrix ebenfalls
+                   unsichtbar schalten". Wer bereits gekauft hat, sieht oben
+                   weiterhin "Zum Rechner" — hasAccess ist davon unberuehrt.
+                   Der Button hier zeigte ohnehin nur auf den Anker #kaufen,
+                   der auf sich selbst verweist (id und href identisch weiter
+                   unten): ein Kaufversprechen mit Preis, das nirgendwohin
+                   fuehrte. Preis und "sofortiger Zugang" sind mit raus —
+                   beides waere neben einem nicht buchbaren Angebot
+                   irrefuehrend. Zurueckholen zusammen mit dem Checkout in
+                   src/app/mein-system/page.tsx. */
+                <p className="font-sans text-sm text-text-light/50 max-w-xl">
+                  Der Zugang zum Rechner ist derzeit nicht buchbar.
+                </p>
               )}
             </div>
           </div>
@@ -229,26 +226,18 @@ export default async function SteuerMatrixPage() {
               <div className="absolute inset-0 flex items-center justify-center bg-surface-base/80 backdrop-blur-sm">
                 <div className="text-center p-8 max-w-md">
                   <Lock size={32} className="text-brand-gold mx-auto mb-4" />
+                  {/* Kauf-CTA entfernt (Uwe, 03.09.2026) — zweiter von zwei
+                      Kaufversprechen auf dieser Seite. Das Lock-Overlay ueber
+                      der unscharfen Laender-Tabelle bleibt: Es zeigt ehrlich,
+                      dass hier Inhalt liegt, den man freischalten kann. Nur
+                      der Button samt Preis und "Sofortzugang nach Kauf" ist
+                      raus, solange nicht gekauft werden kann. */}
                   <h3 className="font-serif text-xl font-bold text-text-primary mb-3">
-                    Zugang freischalten
+                    Derzeit nicht buchbar
                   </h3>
-                  <p className="font-body text-sm text-text-secondary mb-6">
-                    Einmaliger Kauf — danach 24/7 Zugang zum interaktiven Rechner
-                    mit allen 23 Ländern.
-                  </p>
-                  <a
-                    href="#kaufen"
-                    id="kaufen"
-                    className="inline-flex items-center gap-2 bg-brand-gold text-surface-dark font-sans font-bold text-sm px-6 py-3 hover:bg-brand-gold/90 transition-colors"
-                  >
-                    {price
-                      ? `${new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 }).format(price)} — Jetzt kaufen`
-                      : 'Jetzt kaufen'
-                    }
-                    <ChevronRight size={16} />
-                  </a>
-                  <p className="mt-4 text-[11px] font-sans text-text-muted">
-                    Sofortzugang nach Kauf.
+                  <p className="font-body text-sm text-text-secondary">
+                    Der Zugang zum Rechner mit allen 23 Ländern ist zurzeit nicht erhältlich.
+                    Wer ihn bereits freigeschaltet hat, kommt unverändert hinein.
                   </p>
                 </div>
               </div>

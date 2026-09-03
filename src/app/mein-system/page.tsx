@@ -51,7 +51,11 @@ const SAULEN = [
     href:        '/steuer-matrix',
     toolHref:    '/steuer-matrix/rechner' as string | null,
     toolLabel:   'Rechner öffnen' as string | null,
-    checkoutUrl: 'https://www.digistore24.com/product/695797' as string | null,
+    // Checkout AUS (Uwe, 03.09.2026): "Steuer-Matrix ebenfalls unsichtbar
+    // schalten." Digistore 695797 bleibt im Konto aktiv und genehmigt.
+    // Wer bereits gekauft hat, behaelt seinen Zugang — das laeuft ueber
+    // hasAccess in src/app/steuer-matrix/page.tsx, nicht ueber diese Zeile.
+    checkoutUrl: null as string | null,
   },
   {
     slug:        'agentur-killer-sprint',

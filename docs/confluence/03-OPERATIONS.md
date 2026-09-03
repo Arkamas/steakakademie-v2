@@ -44,7 +44,7 @@ DS-de **genehmigt**. Wer eine Statusangabe hier ändert, prüft sie vorher gegen
 | 696399 | BBQ-Grundkurs | 79 € / 127 € | ✅ Y | ⏳ „neu" | `/bbq-grundkurs` (indexiert) | ❌ keine ID im Code |
 | 695894 | Gründung-Sprint | 99 € | ✅ Y | ✅ genehmigt | `/gruender-schmiede` (**noindex**) | ❌ **aus, 03.09.2026** |
 | 695900 | Agentur-Killer-Sprint | — | ✅ Y | ✅ genehmigt | `/agentur-killer-sprint` (**noindex**) | ❌ bewusst aus |
-| 695797 | Steuer-Matrix | — | ✅ Y | ✅ genehmigt | `/steuer-matrix` (**noindex**) | ✅ an, auf `/mein-system` |
+| 695797 | Steuer-Matrix | — | ✅ Y | ✅ genehmigt | `/steuer-matrix` (**noindex**) | ❌ **aus, 03.09.2026** |
 
 ⚠️ **Regel:** Jedes Course-Produkt braucht `courses`-Zeile + `digistore_products`-Mapping, sonst kassiert es ohne Auslieferung. Reaktivierung: **erst Substanz, dann Checkout** — nie umgekehrt.
 
@@ -72,10 +72,43 @@ Das Produkt bleibt in Digistore aktiv und genehmigt — es wird nur nicht mehr a
 Wiedereinschalten: siehe Kommentare an beiden Stellen im Code, und erst nach verifizierter
 Auslieferung (`courses`-Zeile + `digistore_products`-Mapping).
 
-⚠️ **Weiter offen: 695797 (Steuer-Matrix).** Der Checkout auf `/mein-system` ist unverändert
-aktiv, die Seite `/steuer-matrix` steht auf `noindex`. Uwes Entscheidung vom 03.09. betraf
-ausdrücklich nur den Gründung-Sprint. Ob dieselbe Logik hier gelten soll, ist nicht
-entschieden — und ob 695797 ausliefert, ist ungeprüft (kein Supabase-Zugang bei der Prüfung).
+### Steuer-Matrix (695797) — Checkout stillgelegt am 03.09.2026
+
+**Entscheidung Uwe, 03.09.2026:** „Steuer-Matrix ebenfalls unsichtbar schalten."
+
+- `src/app/mein-system/page.tsx` — `checkoutUrl` auf `null`.
+- `src/app/steuer-matrix/page.tsx` — **zwei** Kauf-CTAs entfernt (Hero und Lock-Overlay über
+  der Ländertabelle), Preis und „sofortiger Zugang" / „Sofortzugang nach Kauf" raus,
+  Product-Schema `InStock` → `Discontinued` ohne Preis, Preisabruf aus Supabase entfernt.
+
+Beide Buttons zeigten ohnehin nur auf den Anker `#kaufen`, dessen `id` am zweiten Button selbst
+hing — ein Kaufversprechen mit Preis, das ins Nichts führte. Der eigentliche Kauf lief allein
+über `/mein-system`.
+
+**Käufer behalten ihren Zugang.** Das läuft über `hasAccess` (Abfrage auf `bookings` +
+`courses.slug = 'steuer-matrix'`) und ist von der Stilllegung unberührt: Wer gekauft hat, sieht
+weiterhin „Zum Rechner", das Lock-Overlay erscheint nur für alle anderen.
+
+### Nebenbefund: `InStock` ohne Kaufweg (03.09.2026 behoben)
+
+Beim Durchgehen aller Gründer-Seiten fiel auf, dass drei weitere Product-Schemas
+`availability: InStock` meldeten, obwohl es dort keinen Kaufweg gibt:
+
+| Seite | vorher | jetzt | Grund |
+|---|---|---|---|
+| `/agentur-killer-sprint` | InStock | `Discontinued` | 695900 existiert, Checkout bewusst aus |
+| `/erste-kunden-sprint` | InStock | `PreOrder` | kein Digistore-Produkt, nie verkauft |
+| `/seo-sprint` | InStock | `PreOrder` | kein Digistore-Produkt, nie verkauft |
+
+Auf den beiden Sprint-Seiten stand zusätzlich je ein „Jetzt kaufen"-Button mit Preis und
+„Sofort verfügbar nach Kauf" — beide zeigten auf `#kaufen` ins Leere. Entfernt.
+`/ehrliches-system` nutzte bereits korrekt `PreOrder`.
+
+**Merksatz:** Sichtbarkeit und Kaufbarkeit sind zwei verschiedene Schalter. Wer einen Bereich
+deindexiert, hat den Verkauf noch nicht abgeschaltet — dazu gehören Checkout-Links, Sprung-CTAs
+mit Preis, die Preisangabe selbst, Zugangsversprechen („Sofortzugang") und `availability` im
+Schema. Und Buttons werden entfernt, nicht per CSS versteckt: ein ausgeblendeter Link bleibt
+klickbar und im HTML auffindbar.
 
 ## Aktive Ops-Blocker (auf Uwe) → Jira
 

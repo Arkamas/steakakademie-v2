@@ -154,6 +154,32 @@ bilder:
   images/marco-portrait-128.webp:
     status: offen
     quelle: Verkleinerung (128 px) aus public/images/authors/marco-richter.jpg fuer den Chat-Avatar
+  # Serie „Fleischwissen" — erzeugt 03.09.2026 mit scripts/hero-images.mjs
+  # (fal.ai FLUX + projekteigener Hausstil-LoRA, LoRA-Staerke 0.3).
+  # Motivvorgabe Uwe 30.08.2026: viel Weide, wenig Rind, goldenes Licht.
+  # Keine erkennbaren Personen, keine Marken, kein Text im Bild (geprueft).
+  # Kennzeichnung im Frontmatter: imageAI: true + imageSource (AI Act Art. 50).
+  images/fleischwissen/us-beef-vs-de-hero.jpg:
+    status: ki
+    quelle: fal.ai (fal-ai/flux-lora), Prompt in scripts/hero-images.mjs Brief fw-us-beef-vs-de
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-03
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  images/fleischwissen/gras-vs-getreide-hero.jpg:
+    status: ki
+    quelle: fal.ai (fal-ai/flux-lora), Prompt in scripts/hero-images.mjs Brief fw-gras-vs-getreide
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-03
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  images/fleischwissen/schlachtstress-hero.jpg:
+    status: ki
+    quelle: fal.ai (fal-ai/flux-lora), Prompt in scripts/hero-images.mjs Brief fw-schlachtstress
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-03
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
   images/methode-kamado.jpg: { status: offen }
   images/methode-smoker.jpg: { status: offen }
   images/methoden/direktes-grillen.jpg:

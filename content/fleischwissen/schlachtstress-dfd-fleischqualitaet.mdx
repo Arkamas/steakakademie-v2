@@ -17,25 +17,26 @@ readingTime: 11
 tags: ["DFD-Fleisch", "Schlachtstress", "pH-Wert", "Dry Aging", "Tiertransport", "Hofschlachtung"]
 seoTitle: "DFD-Fleisch und Schlachtstress: Warum die letzten Stunden über dein Steak entscheiden"
 seoDescription: "Stress vor der Schlachtung verändert den pH-Wert im Fleisch. Was DFD wirklich bedeutet, warum es nicht zäh ist — und warum du es an der Theke nicht erkennst."
-# ── Hero-Bild fehlt noch (Auftrag Punkt 7) ─────────────────────────────
-# Uwe liefert die Motive nach (Nano-Banana-Pipeline). Bis dahin bleiben die
-# Felder auskommentiert: Layout und OG-Bild haben einen Fallback, ein Pfad
-# auf eine nicht existierende Datei haette dagegen eine kaputte Kachel
-# ergeben. Zum Aktivieren: Zeilen entkommentieren, imageAI/imageSource
-# nach dem bestehenden Verfahren (KAN-64) ausfuellen.
-# image: "/images/fleischwissen/schlachtstress-hero.jpg"
-# imageAlt: "Rinderhälften im Reifekühlraum, gedämpftes Licht, Fokus auf die Fleischoberfläche"
-# imageSource: ""
-# imageAI: true
+# ── Hero-Bild (03.09.2026) ─────────────────────────────────────────────
+# Erzeugt ueber scripts/hero-images.mjs (fal.ai FLUX + Hausstil-LoRA).
+# Bildstil nach Uwes Ansage vom 30.08.2026: viel Weide, wenig Rind
+# (~20-25 % Sichtpraesenz), Landschaft und goldenes Licht dominieren,
+# kein Fleisch- und kein Theken-Motiv. Der fruehere Alt-Text (Steaks
+# auf Schiefer bzw. Reifekuehlraum) widersprach dieser Ansage und ist
+# ersetzt. Registereintrag: data/bildregister.yaml, status ki.
+image: "/images/fleischwissen/schlachtstress-hero.jpg"
+imageAlt: "Morgennebel ueber einer Weide, eine ruhige Rinderherde in der Ferne, ein Feldweg fuehrt aus dem Bild"
+imageSource: "KI-generiert (FLUX via fal.ai, Hausstil-LoRA)"
+imageAI: true
 # ── Redaktionsvorbehalt (AI Act Art. 50 Abs. 4) ────────────────────────
-# NOCH NICHT FREIGEGEBEN (Uwe, 30.08.2026). Zwei dokumentierte Faktencheck-
-# Runden am 30.08.2026 (Protokoll im Quellordner) ersetzen die redaktionelle
-# Abnahme nicht. Solange status auf review steht, filtert nurVeroeffentlicht()
-# den Artikel aus Uebersicht, Sitemap und generateStaticParams heraus.
-# Freigabe = status auf published, reviewed auf true und reviewedAt auf das
-# Datum der Abnahme. Ein Pruefdatum, das niemand gesetzt hat, waere ein
-# erfundener Nachweis — deshalb bleibt reviewedAt bis dahin ganz weg.
-status: "review"
+# FREIGEGEBEN (Uwe, 03.09.2026): "Ich hatte die Artikel bereits gelesen, ich
+# gebe sie hiermit frei." Damit ist die redaktionelle Abnahme durch einen
+# Menschen erfolgt — reviewedAt dokumentiert genau dieses Datum, nicht das
+# Datum der Faktenchecks (30.08.2026, Protokoll im Quellordner).
+# Fachliche Verantwortung: Uwe Yendell (src/lib/authors.ts).
+status: "published"
+reviewed: true
+reviewedAt: "2026-09-03"
 faq:
   - question: "Was ist DFD-Fleisch?"
     answer: "DFD steht für dark, firm, dry — dunkel, fest, trocken. Es entsteht, wenn ein Tier vor der Schlachtung seine Muskelglykogen-Reserven durch Stress aufgebraucht hat. Der End-pH bleibt dann bei 6,0 oder darüber, statt auf die normalen 5,4 bis 5,7 zu fallen. Ausgeprägtes DFD liegt bei pH 6,2 bis 6,5."

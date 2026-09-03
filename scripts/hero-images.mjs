@@ -59,6 +59,57 @@ const NEG = 'no text, no watermark, no logo, no people, no hands'
 // GERÄT-geführte Motive (Brenner, Plancha, Spiess) brauchen weniger, sonst frisst
 // der Fleisch-Bias die Technik und alles wird wieder ein Steak-Close-up.
 const BRIEFS = [
+  // ── Serie „Fleischwissen" (03.09.2026) ─────────────────────────────────────
+  // Bildstil-Ansage Uwe, 30.08.2026: „viel Weide, wenig Rind — Tiere klein im
+  // Bild (~20–25 % Sichtpraesenz), Landschaft und goldenes Licht dominieren.
+  // Kein Fleisch-, kein Theken-Motiv."
+  //
+  // Das laeuft dem Hausstil-LoRA direkt zuwider: der ist auf Hero-Steakfotos
+  // trainiert und zieht jedes Motiv Richtung Fleisch-Close-up. Deshalb
+  // scale 0.3 statt der ueblichen 0.5 — gerade genug fuer Lichtstimmung und
+  // Farbwelt, zu wenig fuer den Fleisch-Bias. Und wie bei Ribeye/Plancha
+  // gelernt: KEINE Verneinungen im Positiv-Prompt („no steak" schriebe
+  // „steak" in die Konditionierung). Die Rinder werden stattdessen positiv
+  // klein und fern beschrieben.
+  //
+  // Die drei Motive muessen unterscheidbar bleiben — sie liegen auf der
+  // Uebersicht untereinander. Getrennt ueber Tageszeit und Blickachse:
+  // Teil 1 Abend/Weite, Teil 2 Gegenlicht/Nahdistanz, Teil 3 Morgennebel/Weg.
+  {
+    id: 'fw-us-beef-vs-de',
+    target: 'images/fleischwissen/us-beef-vs-de-hero.jpg',
+    patch: { file: 'content/fleischwissen/us-beef-vs-deutsches-rindfleisch.mdx', field: 'image' },
+    size: 'landscape_16_9',
+    scale: 0.3,
+    prompt: 'a wide open grassland plain at golden hour, warm low sunlight raking across the grass, '
+      + 'a scattered herd of cattle far away on the horizon, the animals small in the frame, '
+      + 'a long wooden fence line running into the distance, big open sky with soft haze, '
+      + 'landscape photography, wide angle, 35mm lens, f/8, deep focus, warm amber tones, ' + NEG,
+  },
+  {
+    id: 'fw-gras-vs-getreide',
+    target: 'images/fleischwissen/gras-vs-getreide-hero.jpg',
+    patch: { file: 'content/fleischwissen/gras-vs-getreide-was-steckt-im-fleisch.mdx', field: 'image' },
+    size: 'landscape_16_9',
+    scale: 0.3,
+    prompt: 'a spring pasture photographed into the light, tall fresh grass blades sharp in the foreground filling the lower half of the frame, '
+      + 'backlit seed heads glowing, a few cattle grazing small and softly out of focus in the middle distance, '
+      + 'warm golden rim light, gentle lens flare, meadow landscape, 85mm lens, f/2.8, shallow foreground focus, ' + NEG,
+  },
+  {
+    id: 'fw-schlachtstress',
+    target: 'images/fleischwissen/schlachtstress-hero.jpg',
+    patch: { file: 'content/fleischwissen/schlachtstress-dfd-fleischqualitaet.mdx', field: 'image' },
+    size: 'landscape_16_9',
+    scale: 0.3,
+    // Der Artikel endet auf „Frag nicht nach der Herkunft. Frag nach dem Weg."
+    // Der Feldweg ist deshalb das Bildmotiv, nicht eine Illustration der
+    // Schlachtung — die waere weder markengerecht noch dem Thema angemessen.
+    prompt: 'early morning mist lying low over a quiet pasture, cool light slowly turning golden, '
+      + 'a calm herd of cattle standing far off in the fog, the animals small and dim in the distance, '
+      + 'an empty dirt farm track curving out of the frame in the foreground, dew on the grass, '
+      + 'still atmospheric landscape photography, 50mm lens, f/5.6, muted palette with warm highlights, ' + NEG,
+  },
   {
     id: 'ribeye',
     // ABGENOMMEN 16.08.2026 (Querformat, knochenlos, Fettrand umlaufend, zwei

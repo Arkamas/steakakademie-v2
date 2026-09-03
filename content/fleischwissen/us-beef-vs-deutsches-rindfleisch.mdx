@@ -17,25 +17,26 @@ readingTime: 9
 tags: ["US-Beef", "Dry Aged", "Marmorierung", "Rindfleischqualität", "Herkunft", "Siegel"]
 seoTitle: "US-Beef vs. deutsches Rindfleisch — der ehrliche Qualitätsvergleich"
 seoDescription: "Ist US-Beef wirklich besser? Wir vergleichen Feedlot und deutsche Bullenmast: Fütterung, Genetik, Hormone, Antibiotika — mit belegten Zahlen statt Marketing."
-# ── Hero-Bild fehlt noch (Auftrag Punkt 7) ─────────────────────────────
-# Uwe liefert die Motive nach (Nano-Banana-Pipeline). Bis dahin bleiben die
-# Felder auskommentiert: Layout und OG-Bild haben einen Fallback, ein Pfad
-# auf eine nicht existierende Datei haette dagegen eine kaputte Kachel
-# ergeben. Zum Aktivieren: Zeilen entkommentieren, imageAI/imageSource
-# nach dem bestehenden Verfahren (KAN-64) ausfuellen.
-# image: "/images/fleischwissen/us-beef-vs-de-hero.jpg"
-# imageAlt: "Zwei Rib-Eye-Steaks nebeneinander auf dunklem Schiefer, links stark marmoriert, rechts magerer"
-# imageSource: ""
-# imageAI: true
+# ── Hero-Bild (03.09.2026) ─────────────────────────────────────────────
+# Erzeugt ueber scripts/hero-images.mjs (fal.ai FLUX + Hausstil-LoRA).
+# Bildstil nach Uwes Ansage vom 30.08.2026: viel Weide, wenig Rind
+# (~20-25 % Sichtpraesenz), Landschaft und goldenes Licht dominieren,
+# kein Fleisch- und kein Theken-Motiv. Der fruehere Alt-Text (Steaks
+# auf Schiefer bzw. Reifekuehlraum) widersprach dieser Ansage und ist
+# ersetzt. Registereintrag: data/bildregister.yaml, status ki.
+image: "/images/fleischwissen/us-beef-vs-de-hero.jpg"
+imageAlt: "Weite Grasebene im goldenen Abendlicht, eine verstreute Rinderherde klein am Horizont, im Hintergrund eine lange Zaunlinie"
+imageSource: "KI-generiert (FLUX via fal.ai, Hausstil-LoRA)"
+imageAI: true
 # ── Redaktionsvorbehalt (AI Act Art. 50 Abs. 4) ────────────────────────
-# NOCH NICHT FREIGEGEBEN (Uwe, 30.08.2026). Zwei dokumentierte Faktencheck-
-# Runden am 30.08.2026 (Protokoll im Quellordner) ersetzen die redaktionelle
-# Abnahme nicht. Solange status auf review steht, filtert nurVeroeffentlicht()
-# den Artikel aus Uebersicht, Sitemap und generateStaticParams heraus.
-# Freigabe = status auf published, reviewed auf true und reviewedAt auf das
-# Datum der Abnahme. Ein Pruefdatum, das niemand gesetzt hat, waere ein
-# erfundener Nachweis — deshalb bleibt reviewedAt bis dahin ganz weg.
-status: "review"
+# FREIGEGEBEN (Uwe, 03.09.2026): "Ich hatte die Artikel bereits gelesen, ich
+# gebe sie hiermit frei." Damit ist die redaktionelle Abnahme durch einen
+# Menschen erfolgt — reviewedAt dokumentiert genau dieses Datum, nicht das
+# Datum der Faktenchecks (30.08.2026, Protokoll im Quellordner).
+# Fachliche Verantwortung: Uwe Yendell (src/lib/authors.ts).
+status: "published"
+reviewed: true
+reviewedAt: "2026-09-03"
 faq:
   - question: "Ist US-Beef besser als deutsches Rindfleisch?"
     answer: "Nicht pauschal. US-Beef der Spitzenklasse (USDA Prime) ist stärker marmoriert und dadurch oft zarter und saftiger. Deutsches Rindfleisch punktet bei Hormonverbot, kürzeren Transportwegen und einem günstigeren Fettsäureprofil, wenn es aus Weidehaltung stammt. Entscheidend ist nicht das Land, sondern das Produktionssystem."

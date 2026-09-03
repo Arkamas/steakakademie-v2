@@ -25,6 +25,15 @@ export interface NewsItem {
   href?: string;
   featured?: boolean;
   image?: string;   // optional — fehlt → markenkonformer Smoke-Placeholder
+  /** Nur bei Live-Daten gesetzt: eigener Pfad unter /bbq-news/<slug>. */
+  slug?: string;
+}
+
+/** Vollstaendiger News-Beitrag fuer die Detailseite /bbq-news/[slug]. */
+export interface NewsArticle extends NewsItem {
+  slug: string;
+  /** Markdown aus content_drafts.content_body. */
+  body: string;
 }
 
 const BBQ_NEWS_CATEGORIES = ROUTE_CATEGORIES['/bbq-news'] ?? [];
@@ -87,7 +96,61 @@ function rowToNewsItem(row: DraftRow, index: number): NewsItem {
     isoDate: d.toISOString().slice(0, 10),
     source: 'Steakakademie Redaktion',
     featured: index === 0,
+    // Eigene URL je Beitrag (03.09.2026). Bis dahin lebten die News nur auf der
+    // Hub-Seite — fuer Google und AI-Suche unsichtbar, die Sitemap fuehrte genau
+    // eine /bbq-news-URL. Der Fallback unten bekommt bewusst KEINEN href: er hat
+    // keinen Textkoerper, eine Detailseite waere leer.
+    slug: row.slug,
+    href: row.slug ? `/bbq-news/${row.slug}` : undefined,
   };
+}
+
+function anonClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key || BBQ_NEWS_CATEGORIES.length === 0) return null;
+  return createClient(url, key, { auth: { persistSession: false } });
+}
+
+/** Ein freigegebener Beitrag ueber seinen Slug — oder null (404). */
+export async function getNewsBySlug(slug: string): Promise<NewsArticle | null> {
+  const supabase = anonClient();
+  if (!supabase || !slug) return null;
+  try {
+    const { data, error } = await supabase
+      .from('content_drafts')
+      .select('id, category, title, slug, seo_description, content_body, generated_at')
+      .eq('status', 'approved')
+      .eq('slug', slug)
+      .in('category', BBQ_NEWS_CATEGORIES)
+      .limit(1)
+      .maybeSingle();
+    if (error || !data) return null;
+    const row = data as DraftRow;
+    return { ...rowToNewsItem(row, 1), slug: row.slug, body: row.content_body ?? '' };
+  } catch {
+    return null;
+  }
+}
+
+/** Alle freigegebenen Slugs — fuer generateStaticParams und die Sitemap. */
+export async function getNewsSlugs(limit = 200): Promise<string[]> {
+  const supabase = anonClient();
+  if (!supabase) return [];
+  try {
+    const { data, error } = await supabase
+      .from('content_drafts')
+      .select('slug')
+      .eq('status', 'approved')
+      .in('category', BBQ_NEWS_CATEGORIES)
+      .not('slug', 'is', null)
+      .order('generated_at', { ascending: false })
+      .limit(limit);
+    if (error || !data) return [];
+    return data.map((r) => (r as { slug: string }).slug).filter(Boolean);
+  } catch {
+    return [];
+  }
 }
 
 /** Holt freigegebene News (Supabase) oder Fallback. */

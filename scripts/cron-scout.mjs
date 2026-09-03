@@ -35,6 +35,13 @@ const SOURCE_ID  = process.argv.includes('--source')
 const THRESHOLD  = process.argv.includes('--threshold')
   ? parseFloat(process.argv[process.argv.indexOf('--threshold') + 1])
   : 3
+// Frische-Filter (03.09.2026): Feeds liefern Altbestand mit — im Probelauf
+// „DGM2022", einen Relaunch von 2023 und Personalien. Ohne Datumsgrenze ging
+// jeder dieser Eintraege in die Opus-Generierung (Kosten) und in die
+// Review-Warteschlange (Uwes Zeit). Eintraege ohne pubDate werden behalten.
+const MAX_AGE_DAYS = process.argv.includes('--max-age')
+  ? parseInt(process.argv[process.argv.indexOf('--max-age') + 1], 10)
+  : 21
 
 // ─── Farben ───────────────────────────────────────────────────────────────────
 
@@ -106,6 +113,7 @@ async function fetchFeed(source) {
       url: item.link,
       title: item.title,
       summary: item.summary,
+      published_at: item.pub ? new Date(item.pub) : null,
       fetched_at: new Date().toISOString(),
     }))
   } catch {
@@ -165,6 +173,14 @@ function detectCategory(article, hint) {
     if (signals.some(s => text.includes(s))) return country
   }
   return hint === 'equipment' ? 'equipment' : 'general-bbq'
+}
+
+// ─── Frische-Filter ───────────────────────────────────────────────────────────
+
+function isStale(article) {
+  const d = article.published_at
+  if (!(d instanceof Date) || isNaN(d.getTime())) return false   // kein Datum → behalten
+  return (Date.now() - d.getTime()) > MAX_AGE_DAYS * 86_400_000
 }
 
 // ─── Discard-Filter (offensichtlich irrelevante Artikel) ─────────────────────
@@ -329,6 +345,7 @@ async function main() {
 
   console.log(c.blue('━━ Phase 1: Scout '))
   const briefings = []
+  let stale = 0
 
   for (const source of sources) {
     process.stdout.write(c.dim(`  Fetch ${source.name}... `))
@@ -337,6 +354,7 @@ async function main() {
     for (const raw of articles) {
       const article = { ...raw, title: decodeEntities(raw.title), summary: decodeEntities(raw.summary) }
       if (shouldDiscard(article)) continue
+      if (isStale(article)) { stale++; continue }
       const relevance = score(article)
       if (relevance < THRESHOLD) continue
 
@@ -358,6 +376,30 @@ async function main() {
     console.log(`  ${icon} [${b.relevance_score.toFixed(1)}] ${b.article.title.slice(0,70)}`)
     console.log(c.dim(`     → ${b.category}`))
   })
+
+  if (stale > 0) console.log(c.dim(`  ${stale} Eintrag/Eintraege aelter als ${MAX_AGE_DAYS} Tage uebersprungen`))
+
+  // Dedupe (03.09.2026): Was schon einmal generiert wurde, wird nicht erneut
+  // durch Opus geschickt. Schluessel ist die Quell-URL (source_briefing_id),
+  // nicht der Slug — der entsteht erst aus dem generierten Titel und waere
+  // beim zweiten Lauf ein anderer. Ohne diesen Schritt haette jeder
+  // Wochenlauf dieselben Feed-Eintraege noch einmal bezahlt und als neue
+  // Entwuerfe in die Warteschlange gelegt.
+  if (!DRY_RUN && briefings.length > 0) {
+    const urls = briefings.map(b => b.article.url).filter(Boolean)
+    const { data: known, error } = await supabase
+      .from('content_drafts')
+      .select('source_briefing_id')
+      .in('source_briefing_id', urls)
+    if (!error && known?.length) {
+      const seen = new Set(known.map(k => k.source_briefing_id))
+      const before = briefings.length
+      for (let i = briefings.length - 1; i >= 0; i--) {
+        if (seen.has(briefings[i].article.url)) briefings.splice(i, 1)
+      }
+      console.log(c.dim(`  ${before - briefings.length} bereits vorhandene Quelle(n) uebersprungen`))
+    }
+  }
 
   if (SCOUT_ONLY || briefings.length === 0) {
     console.log(c.yellow('\n  Scout-Only-Modus oder keine Briefings. Fertig.'))

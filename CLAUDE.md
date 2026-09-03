@@ -369,6 +369,15 @@ Analytics & Data · CRM & Monetization.
 4. **Affiliate-Programme anmelden** (Santos, Grillfürst, Ankerkraut, Otto Gourmet) + PA-API.
 5. **Marken-Frist:** Wortmarke „Steakakademie" — Gebühr offen, Frist ~27.08.2026 (KAN-17).
 
+**Manuelle Restpunkte, übernommen aus den gelöschten `STATUS.md`/`ROADMAP.md`
+(Stand dort Mai 2026, seither NICHT nachgeprüft — 03.09.2026):** Digistore24
+Dankeseiten-URLs für 696394/696396/696399 auf `/danke/*` setzen, Widerrufs-Checkbox
+aktivieren, Genehmigung per „Testkauf anlegen" beantragen · `AMAZON_ACCESS_KEY` +
+`AMAZON_SECRET_KEY` in Vercel eintragen, dann `npm run fetch-images` · Google Business
+Profil anlegen und verifizieren · `GA4_MEASUREMENT_ID` + `GA4_API_SECRET` in Vercel.
+Beide Dateien wurden entfernt, weil sie Netlify als Produktion nannten und am 03.09.
+einen Fehlbefund gestützt haben — Statusquelle ist ausschließlich diese Datei.
+
 ---
 
 ## 6. Projekt-Sicherung (gegen Gedächtnis-/Datenverlust)

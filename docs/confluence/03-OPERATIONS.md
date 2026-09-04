@@ -102,12 +102,27 @@ hing — ein Kaufversprechen mit Preis, das ins Nichts führte. Der eigentliche 
 `courses.slug = 'steuer-matrix'`) und ist von der Stilllegung unberührt: Wer gekauft hat, sieht
 weiterhin „Zum Rechner", das Lock-Overlay erscheint nur für alle anderen.
 
-⚠️ **Weiter offen — der Vorbehalt vom 03.09. gilt unverändert:** Ob 695797 tatsächlich
-ausliefert (`courses`-Zeile + `digistore_products`-Mapping) und ob überhaupt Käufer existieren,
-ist **ungeprüft**. Beim Verifier-Lauf am 04.09.2026 antwortete der Supabase-Zugang erneut mit
-`Unauthorized`; die strukturelle Prüfung im Code ersetzt den Blick in die Tabelle nicht. Der
-Satz wurde am 03.09. beim Umschreiben dieses Abschnitts gelöscht, ohne dass die Frage
-beantwortet war — er bleibt hier stehen, bis jemand mit DB-Zugang sie beantwortet.
+✅ **Beantwortet am 04.09.2026 — direkt in der Produktionsdatenbank** (über den
+claude.ai-Supabase-Connector; der lokale MCP antwortet weiterhin `Unauthorized`):
+
+| `courses.slug` | Preis | published | `digistore_products`-Mapping | Bookings |
+|---|---|---|---|---|
+| steuer-matrix | 197 € | ja | 1 | **2** |
+| gruender-schmiede | 99 € | ja | 1 | 1 |
+| mein-protokoll | 0 | nein | 1 | 2 |
+| steak-beichte | 0 | nein | 1 | 1 |
+| bbq-grundkurs | 0 | nein | 1 | 1 |
+
+Beide stillgelegten Produkte **hätten ausgeliefert** — Kurszeile und Mapping sind vorhanden.
+Die Regel „erst Substanz, dann Checkout" war also erfüllt; die frühere Doku-Angabe
+„deaktiviert bis Substanz" war in beiden Fällen falsch. Die Abschaltung bleibt trotzdem
+richtig, aber aus dem Grund, den Uwe genannt hat (Produkt abgelöst), nicht wegen fehlender
+Auslieferung. **Steuer-Matrix hat zwei Buchungen** — deshalb war es richtig, `hasAccess`
+nicht anzufassen: diese Käufer behalten ihren Rechner.
+
+Nebenbefund: `bbq-grundkurs` hat eine Buchung, obwohl `published: false` und Preis 0 — vermutlich
+ein Testkauf aus der Einrichtung (Digistore 696399 steht auf „neu"). Bei Gelegenheit prüfen,
+ob das eine echte Person ist.
 
 ### Nebenbefund: `InStock` ohne Kaufweg (03.09.2026 behoben)
 

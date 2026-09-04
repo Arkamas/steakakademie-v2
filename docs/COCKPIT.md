@@ -59,7 +59,8 @@ Musik, SadTalker) — Doku `docs/video-toolkit-setup.md`.
 Toolkit) — einer zu viel · Regex-Fix im Setup-Skript (PR offen).
 
 **Nächster Schritt:** Hörtest (7 Takes, `hoertest-marco.ps1`) → Marco in
-`docs/video-toolkit/brand/voice.json` festschreiben. Dann OpenMontage stilllegen.
+`docs/video-toolkit/brand/voice.json` festschreiben, Beschluss mit Datum nach
+`docs/video-toolkit-setup.md` § 6. Dann OpenMontage stilllegen.
 
 ---
 

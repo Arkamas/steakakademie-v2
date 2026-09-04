@@ -133,3 +133,24 @@ er beim nächsten Setup weg. Danach nie wieder ändern: Marco ist öffentlich.
 
 Voice-Design statt Klonen ist bewusst: keine reale Person, keine Einwilligung, kein
 Sprecher-Buyout.
+
+### Stimm-Entscheidung — hier, nicht anderswo
+
+Sobald abgehört ist, wird die Entscheidung an genau zwei Stellen festgehalten:
+
+1. **Hier**, als Zeile in der Tabelle unten: Datum, gewählter Take, Begründung in einem
+   Satz. Das ist der **Beschluss** — er bleibt stehen, auch wenn sich sonst alles ändert.
+2. **`docs/COCKPIT.md`, Abteilung 2 (Studio):** Der Hörtest wandert von *Hängt* nach
+   *Läuft*, der nächste Schritt wird neu gesetzt. Das ist der **Stand**, nicht der
+   Beschluss — drei Zeilen, keine Historie.
+
+Technisch dazu: Gewinner in `docs/video-toolkit/brand/voice.json` eintragen und den Block
+`_offen` dort löschen.
+
+| Datum | Take | Warum |
+|---|---|---|
+| — | offen | Hörtest noch nicht gelaufen |
+
+`memory.md` gibt es nicht mehr (entfernt am 27.08.2026, Commit `9a2f4c4`). Die ältere
+Anweisung, die Stimm-Entscheidung dort zu vermerken, ist durch diesen Abschnitt ersetzt —
+Ablage-Regel: CLAUDE.md § 6.

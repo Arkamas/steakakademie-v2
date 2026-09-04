@@ -49,11 +49,15 @@ Klon-Weg (`--ref-audio`) bleibt bewusst ungenutzt.
 
 ## Danach
 
-Gewinner in `brands/steakakademie/voice.json` eintragen:
+Gewinner in `docs/video-toolkit/brand/voice.json` eintragen — **im Hauptrepo**, nicht in
+der Toolkit-Kopie unter `tools/video-toolkit/brands/steakakademie/`, sonst ist er beim
+nächsten Setup weg:
 
 - Bei einem **A-Take**: `qwen3.speaker` auf `Ryan`/`Aiden`, `qwen3.tone` setzen.
 - Bei einem **B-Take**: den exakten `design-instruct`-Text in `qwen3.instruct`
   übernehmen — Wort für Wort, sonst kommt eine andere Stimme heraus.
 
-Dann den Block `_offen` in `voice.json` löschen und die Entscheidung mit Datum
-in `memory.md` des Hauptrepos vermerken.
+Dann den Block `_offen` in `voice.json` löschen. Die Entscheidung selbst mit Datum nach
+`docs/video-toolkit-setup.md` § 6, den Stand nach `docs/COCKPIT.md`, Abteilung 2 (Studio).
+**Nicht** nach `memory.md`: die Datei ist am 27.08.2026 bewusst entfernt worden und wird
+nicht wiederbelebt (Ablage-Regel: CLAUDE.md § 6).

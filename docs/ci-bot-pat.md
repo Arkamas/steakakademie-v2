@@ -34,6 +34,22 @@ entsteht trotzdem — mit sichtbarer Warnung im PR-Text und im Job-Summary.
 Auto-Merge braucht zusätzlich das Repo-Setting **Settings → General → „Allow auto-merge"**.
 Fehlt es, bleibt der PR offen und die Action schreibt eine Warnung — nichts bricht.
 
+### Riegel: Auto-Merge nur von `main` aus
+
+Der Bot-Branch zweigt vom **Checkout-Ref** ab. Startet man einen Workflow per
+`workflow_dispatch --ref <feature-branch>`, enthält der PR gegen `main` deshalb auch
+**alle Commits dieses Branches** — Auto-Merge würde fremde, ungeprüfte Arbeit unter
+einem harmlosen Titel wie „📖 Glossar-Agent: neue Begriffe" nach `main` schleusen.
+
+Aufgefallen 04.09.2026, bevor der erste Testlauf startete: `glossary-grow` sollte gegen
+`fix/bot-pr-gate` getestet werden — und hätte bei grünen Checks die komplette
+Workflow-Härtung an ihrem eigenen Review-PR vorbei gemergt.
+
+Die Action prüft deshalb `github.ref`: **Auto-Merge greift nur bei `refs/heads/main`.**
+Bei jedem anderen Ref wird es abgeschaltet, der PR bekommt einen Warnhinweis
+(„Testlauf — nicht mergen, danach schließen"), und im Job-Summary steht dasselbe.
+Testläufe gegen Feature-Branches sind damit gefahrlos.
+
 ## Einrichten (Uwe, ~3 Minuten, 0 €)
 
 1. GitHub → Settings (Profil, nicht Repo) → Developer settings → Personal access tokens →

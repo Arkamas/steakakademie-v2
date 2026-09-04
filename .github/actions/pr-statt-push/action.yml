@@ -95,6 +95,7 @@ runs:
         BODY: ${{ inputs.pr-body }}
         AUTO: ${{ inputs.auto-merge }}
         HAT_PAT: ${{ inputs.token != github.token }}
+        LAUF_REF: ${{ github.ref }}
       run: |
         set -euo pipefail
         # Push mit dem übergebenen Token, damit der PR die Checks auslöst.
@@ -105,7 +106,21 @@ runs:
           HINWEIS=$'\n\n> ⚠️ **Ohne BOT_PAT erstellt** — die Pflicht-Checks (build-guard, content-gates) laufen auf diesem PR NICHT an. Entweder Secret `BOT_PAT` anlegen (docs/ci-bot-pat.md) oder die Checks manuell per workflow_dispatch auf diesem Branch starten.'
         fi
 
-        URL=$(gh pr create --base main --head "$BRANCH" --title "$TITEL" --body "${BODY}${HINWEIS}")
+        # RIEGEL (04.09.2026): Der Bot-Branch zweigt vom Checkout-Ref ab. Läuft der
+        # Workflow per workflow_dispatch gegen einen Feature-Branch, enthält der PR
+        # gegen main auch dessen Commits — Auto-Merge würde also fremde, ungeprüfte
+        # Arbeit mitschleusen (aufgefallen beim geplanten Testlauf von glossary-grow
+        # gegen fix/bot-pr-gate). Auto-Merge daher NUR, wenn der Lauf auf main basiert.
+        FREMD=""
+        if [ "$LAUF_REF" != "refs/heads/main" ]; then
+          FREMD=$'\n\n> ⚠️ **Testlauf gegen `'"${LAUF_REF#refs/heads/}"$'`** — dieser PR enthält neben der Bot-Änderung auch die Commits dieses Branches gegenüber `main`. **Nicht mergen.** Er dient nur der Prüfung, ob PR-Erstellung und Pflicht-Checks funktionieren; danach schließen und den Branch löschen. Auto-Merge wurde für diesen Lauf automatisch abgeschaltet.'
+          if [ "$AUTO" = "true" ]; then
+            echo "::warning::Auto-Merge deaktiviert — Lauf basiert auf $LAUF_REF statt main; der PR enthaelt Fremd-Commits."
+            AUTO=false
+          fi
+        fi
+
+        URL=$(gh pr create --base main --head "$BRANCH" --title "$TITEL" --body "${BODY}${HINWEIS}${FREMD}")
         echo "url=$URL" >> "$GITHUB_OUTPUT"
 
         if [ "$AUTO" = "true" ]; then
@@ -116,6 +131,14 @@ runs:
         {
           echo "## 🔀 PR geöffnet — kein Direct-Push auf main"
           echo "$URL"
-          if [ "$AUTO" = "true" ]; then echo "Auto-Merge aktiv: mergt, sobald die Pflicht-Checks grün sind."; else echo "Wartet auf Review (Regel 4 / 8c)."; fi
+          if [ "$AUTO" = "true" ]; then
+            echo "Auto-Merge aktiv: mergt, sobald die Pflicht-Checks grün sind."
+          else
+            echo "Wartet auf Review (Regel 4 / 8c)."
+          fi
+          if [ -n "$FREMD" ]; then
+            echo ""
+            echo "⚠️ **Testlauf gegen \`${LAUF_REF#refs/heads/}\`** — PR enthält Fremd-Commits, Auto-Merge abgeschaltet. Nach der Prüfung schließen."
+          fi
           if [ "$HAT_PAT" != "true" ]; then echo ""; echo "⚠️ **BOT_PAT fehlt** — Checks laufen nicht automatisch. Siehe docs/ci-bot-pat.md"; fi
         } >> "$GITHUB_STEP_SUMMARY"

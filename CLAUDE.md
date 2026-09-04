@@ -18,9 +18,24 @@
 - `node_modules` in diesem Arbeitsbaum ist eine **Windows-Installation**. Native
   Binaries (esbuild, swc) starten unter Linux nicht. **Im Arbeitsbaum selbst** kann
   eine Linux-Session deshalb nur lesen, aendern und Skripte pruefen.
-  **Bauen und typechecken geht trotzdem — in einer eigenen Kopie (02.09.2026):**
-  `git archive HEAD | tar -x -C /tmp/repo && cd /tmp/repo && npm ci && npx tsc --noEmit && npx next build`
-  (2 CPU: tsc 26 s, Build 2:23 min). E2E dazu: `npx playwright install chromium`,
+  **Bauen und typechecken geht trotzdem — in einer eigenen Kopie (02.09.2026,
+  korrigiert 04.09.2026 aus einem echten Verifier-Lauf in der Cowork-VM):**
+  `git archive HEAD | tar -x -C "$HOME/verify-build" && cd "$HOME/verify-build" && npm ci`,
+  dann `npx contentlayer2 build`, dann `npx tsc --noEmit`, dann `npx next build`
+  (2 CPU: tsc 26 s, Build 2:23 min). Vier Dinge, die den Lauf sonst kosten:
+  **(a) nicht nach `/tmp`** — dort darf die Cowork-VM nicht schreiben/raeumen
+  (`rm: Operation not permitted`); `$HOME/verify-build` funktioniert.
+  **(b) `contentlayer2 build` VOR `tsc`** — in einer frischen Kopie fehlt
+  `contentlayer/generated`, tsc meldet dann ~271 Fehler, von denen keiner echt ist.
+  **(c) `next build` ueberschreitet das 120-Sekunden-Fenster** eines Bash-Aufrufs und
+  endet mit **124** — das ist abgeschnitten, nicht gescheitert: erneut aufrufen, der
+  zweite Lauf nutzt den gefuellten Cache und endet mit 0. Nie als gruen und nie als
+  kaputt werten. **(d) Netz-Egress ist vorhanden** (`git fetch`, `npm ci`, `npm ping`
+  je Exit 0) — die frueher hier und in §4 notierte Aussage "lokale Cowork-VM hat
+  keinen Netz-Egress" gilt so nicht mehr. Ausserdem: `pkill -f "next start"` killt
+  in dieser Sandbox die eigene Shell mit (Exit 143) und verwirft die restliche
+  Ausgabe — Aufraeumen gehoert in einen eigenen, letzten Aufruf.
+  E2E dazu: `npx playwright install chromium`,
   fehlende `libXdamage.so.1` ohne root via `apt-get download libxdamage1` +
   `dpkg-deb -x` + `LD_LIBRARY_PATH`; `next start` und Tests im **selben** Bash-Aufruf
   starten (Hintergrundprozesse ueberleben den Aufruf nicht). Ergebnis dann per

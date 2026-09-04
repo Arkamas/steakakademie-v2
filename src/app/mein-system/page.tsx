@@ -324,13 +324,21 @@ export default async function MeinSystemPage() {
                               className="flex items-center justify-center gap-2 w-full py-2.5 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                               style={{ background: '#C8882A', color: '#0D0A06' }}
                             >
-                              {price ? `${eur(price)} — Mehr erfahren` : 'Mehr erfahren'}
+                              Mehr erfahren
                               <ChevronRight size={13} />
                             </Link>
                           )}
-                          <p className="text-center text-[10px] font-sans text-text-muted">
-                            Einmalig · Sofortzugang · Digistore24
-                          </p>
+                          {/* Zugangszusage nur am echten Kaufweg (04.09.2026, Verifier-Befund):
+                              Der Absatz lag ausserhalb des checkoutUrl-Ternaers und versprach
+                              "Sofortzugang" auch fuer die drei stillgelegten Saeulen. Preis am
+                              Fallback-Button aus demselben Grund entfernt — kein Preis und keine
+                              Zugangszusage an etwas, das man nicht kaufen kann.
+                              Merksatz: docs/confluence/03-OPERATIONS.md. */}
+                          {saule.checkoutUrl && (
+                            <p className="text-center text-[10px] font-sans text-text-muted">
+                              Einmalig · Sofortzugang · Digistore24
+                            </p>
+                          )}
                         </>
                       )}
                     </div>

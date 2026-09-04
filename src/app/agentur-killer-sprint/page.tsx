@@ -7,7 +7,6 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
   // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
@@ -95,25 +94,9 @@ const FAQ = [
 ];
 
 export default async function AgenturKillerSprintPage() {
-  let price: number | null = null;
-  try {
-    const supabase = createClient();
-    const { data } = await supabase
-      .from('courses')
-      .select('price')
-      .eq('slug', 'agentur-killer-sprint')
-      .single();
-    if (data) price = data.price;
-  } catch {
-    // Graceful degradation
-  }
-
-  const eur = (n: number) =>
-    new Intl.NumberFormat('de-DE', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 0,
-    }).format(n);
+  // Preisabruf und eur() entfernt (04.09.2026): Seit die Preisangabe raus ist,
+  // hat die Supabase-Abfrage keinen Abnehmer mehr und lief pro Aufruf ins Leere.
+  // Gleiches Vorgehen wie bei /erste-kunden-sprint und /seo-sprint (2f27717).
 
   const faqJsonLd = {
     '@context': 'https://schema.org',
@@ -135,13 +118,16 @@ export default async function AgenturKillerSprintPage() {
     offers: {
       '@type': 'Offer',
       priceCurrency: 'EUR',
-      // Discontinued statt InStock (03.09.2026): Der Checkout fuer 695900 ist
-      // seit laengerem bewusst aus ("wuerde kassieren ohne Auslieferung",
-      // siehe src/app/mein-system/page.tsx). Das Schema meldete trotzdem ein
-      // kaufbares Angebot — strukturierte Falschangabe, und Schema.org wird
-      // nicht nur von Googlebot gelesen, noindex schuetzt davor nicht.
-      // Preis ebenfalls raus: kein Preis fuer etwas, das man nicht kaufen kann.
-      availability: 'https://schema.org/Discontinued',
+      // PreOrder (04.09.2026, Verifier-Befund): InStock war eine strukturierte
+      // Falschangabe — der Checkout fuer 695900 ist bewusst aus ("wuerde
+      // kassieren ohne Auslieferung", siehe src/app/mein-system/page.tsx), und
+      // Schema.org wird nicht nur von Googlebot gelesen, noindex schuetzt davor
+      // nicht. Am 03.09. zunaechst auf Discontinued gesetzt; das widerspricht
+      // aber der Seite selbst, die "In Vorbereitung" und "bald buchbar" sagt.
+      // Massstab ist dasselbe Kriterium wie bei /erste-kunden-sprint: in
+      // Vorbereitung = PreOrder, eingestellt = Discontinued.
+      // Preis bleibt raus: kein Preis fuer etwas, das man nicht kaufen kann.
+      availability: 'https://schema.org/PreOrder',
     },
   };
 
@@ -423,13 +409,13 @@ export default async function AgenturKillerSprintPage() {
                   <h2 className="font-serif text-3xl font-bold text-text-primary">
                     Agentur-Killer-Sprint
                   </h2>
-                  {price && (
-                    <p className="font-serif text-4xl font-bold text-brand-gold mt-2">
-                      {eur(price)}
-                    </p>
-                  )}
+                  {/* Preis und "Sofortzugang" entfernt (04.09.2026, Verifier-Befund):
+                      Der Checkout fuer 695900 ist aus, die Seite sagt selbst "In
+                      Vorbereitung" — eine Preisangabe mit Zugangsversprechen davor ist
+                      ein Kaufversprechen ohne Kaufweg. Beides kommt mit dem Verkauf
+                      zurueck; der Preis steht weiter in der courses-Tabelle. */}
                   <p className="text-sm font-sans text-text-muted mt-1">
-                    Einmalig · Sofortzugang · Abgewickelt über Digistore24
+                    Preis und Buchung folgen mit dem Verkaufsstart.
                   </p>
                 </div>
                 <div className="shrink-0">

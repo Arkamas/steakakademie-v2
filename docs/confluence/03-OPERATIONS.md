@@ -102,6 +102,13 @@ hing — ein Kaufversprechen mit Preis, das ins Nichts führte. Der eigentliche 
 `courses.slug = 'steuer-matrix'`) und ist von der Stilllegung unberührt: Wer gekauft hat, sieht
 weiterhin „Zum Rechner", das Lock-Overlay erscheint nur für alle anderen.
 
+⚠️ **Weiter offen — der Vorbehalt vom 03.09. gilt unverändert:** Ob 695797 tatsächlich
+ausliefert (`courses`-Zeile + `digistore_products`-Mapping) und ob überhaupt Käufer existieren,
+ist **ungeprüft**. Beim Verifier-Lauf am 04.09.2026 antwortete der Supabase-Zugang erneut mit
+`Unauthorized`; die strukturelle Prüfung im Code ersetzt den Blick in die Tabelle nicht. Der
+Satz wurde am 03.09. beim Umschreiben dieses Abschnitts gelöscht, ohne dass die Frage
+beantwortet war — er bleibt hier stehen, bis jemand mit DB-Zugang sie beantwortet.
+
 ### Nebenbefund: `InStock` ohne Kaufweg (03.09.2026 behoben)
 
 Beim Durchgehen aller Gründer-Seiten fiel auf, dass drei weitere Product-Schemas

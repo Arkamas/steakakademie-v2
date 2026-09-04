@@ -297,6 +297,32 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
 
 ## 3. Agentur-Struktur (Betriebsmodell)
 
+### 3.0 Die FÜNF Abteilungen (Uwe, 10.08.2026 — verbindlich)
+
+Übersicht und aktueller Stand: **`docs/COCKPIT.md`** — das ist die einzige Datei, die
+Uwe anheftet, und der Einstieg in alles Weitere.
+
+| # | Abteilung | Ersetzt | Ordner |
+|---|---|---|---|
+| 1 | **Systems & Ops** | Entwicklung + IT-Betrieb | `src/` `scripts/` `supabase/` `tests/` `tools/` `.github/` |
+| 2 | **Studio** | Video-/Bildproduktion | `video/` `training/` `bild-austausch/` |
+| 3 | **Redaktion** | Content-Team + Fachredaktion | `content/` `data/` |
+| 4 | **Wachstum** | SEO/GEO · Social · Newsletter · Affiliate | `products/` `steakakademie-audit/` |
+| 5 | **Kanzlei** | Recht · Steuern · Behörden | `compliance/` `Existenzgruendung-Jobcenter/` |
+
+**Nicht verhandelbar: Es bleibt bei fünf.** Grund: Fünf ist die Grenze dessen, was ohne
+Nachschlagen im Kopf bleibt — und genau der Überblicksverlust war der Anlass. Jedes neue
+Tool, jeder neue Ordner, jede neue Automatisierung wird **einer der fünf zugeordnet**,
+bevor sie entsteht; die Zuordnung gehört sichtbar in den Commit oder die Abteilungs-Doku.
+Passt etwas in keine Abteilung, ist das ein Signal zum Nachdenken (falsch geschnitten?
+gehört es überhaupt ins Projekt?) — **kein** Grund für eine sechste. Eine sechste
+Abteilung kann nur Uwe selbst eröffnen, mit wörtlichem Zitat und Datum an dieser Stelle.
+
+Die Rollen-/RACI-Struktur unten (CMO, Fach-Rollen, Enabler) bleibt davon unberührt —
+sie beschreibt **wer** arbeitet, die fünf Abteilungen beschreiben **wo** es einsortiert wird.
+
+### 3.1 Rollen & Hierarchie
+
 **Vollständig:** `docs/confluence/04-MARKETING-AGENCY-MODEL.md` (Hierarchie, Prioritäts-
 Logik, Pipeline „wer beginnt/was folgt", RACI je Marketing-Frage, Eskalation).
 

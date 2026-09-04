@@ -40,6 +40,16 @@
   `dpkg-deb -x` + `LD_LIBRARY_PATH`; `next start` und Tests im **selben** Bash-Aufruf
   starten (Hintergrundprozesse ueberleben den Aufruf nicht). Ergebnis dann per
   `cp` in den Arbeitsbaum zurueck. Details: docs/PERF-AUDIT-2026-09-02.md.
+- **Eingeloggte Seiten sind auf einem Preview-Deployment NICHT testbar (04.09.2026).**
+  Der Supabase-Auth-Callback leitet auf die hinterlegte Site-URL, und die zeigt auf die
+  Produktion: Wer sich auf `*-git-*.vercel.app` anmeldet, landet auf steakakademie.de
+  und traegt sein Cookie dort ein — auf der Preview bleibt er ausgeloggt. Der
+  `redirectTo`-Parameter wird dabei ueberschrieben. Anonym pruefbar ist nur, DASS das
+  Zugangstor greift (307 auf `/auth/login`). Fuer den Inhalt hinter dem Tor gilt: am
+  Quelltext beweisen (Bedingung + Datenlage, z. B. `checkoutUrl` ist bei allen
+  Eintraegen `null`, also kann der Zweig nicht rendern) und den Blick auf die
+  Produktion nach dem Merge verschieben — oder das Passwort-Formular der Preview
+  nutzen, das ohne Umleitung auskommt. Nie als "geprueft" ausgeben, was nur gelesen wurde.
 - **Exitcode pruefen, immer.** Ein Befehl, der nichts ausgibt, ist nicht gruen.
   `timeout` liefert Exitcode 124 — das ist ein Abbruch ohne Ergebnis, kein Bestehen.
 - Ein voller Typecheck passt **nicht** in ein 45-Sekunden-Fenster. Nicht anfangen,

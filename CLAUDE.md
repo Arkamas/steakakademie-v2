@@ -57,6 +57,18 @@
   diesen Branch → Vercel baut ein Preview-Deployment mit denselben Gates wie die
   Produktion (`check-mdx-komponenten`, `check-redaktionsvorbehalt`,
   `check-startseiten-hierarchie`, Linter) → Pull Request nach main.
+- **Die Gates sind seit 04.09.2026 ein echter Riegel — vorher waren sie es nicht.**
+  Bei PR #46 nachgesehen: "Require status checks to pass" war zwar an, die Liste
+  darunter aber leer ("No required checks"). Ein roter Gate-Lauf haette den
+  Merge-Button also nicht aufgehalten, und "Require branches to be up to date"
+  war wirkungslos mit — das greift erst ab dem ersten eingetragenen Check.
+  Seitdem sind drei Checks als Pflicht hinterlegt: **P0-Gates pruefen** und
+  **Stille Content-Defekte pruefen** (beide Quelle GitHub Actions) sowie
+  **Vercel** (Quelle Vercel). Bewusst NICHT Pflicht: "Rechtschreibung (nur
+  Bericht)" — der Name ist Programm, er meldet und blockiert nicht.
+  Merke: Ein aktivierter Schutzschalter ohne Inhalt sieht im UI genauso aus wie
+  ein scharfer. Wer sich auf einen Riegel verlaesst, sieht einmal nach, ob eine
+  Liste dahinter steht.
 - Reihenfolge bleibt **commit → `npm run build` → push**, nur jetzt auf den
   Branch statt auf main. Ohne lokalen Build vorher wird das Preview rot statt
   der Produktion — aber rot bleibt rot: Vier rote Deployments am 26.08. kamen aus

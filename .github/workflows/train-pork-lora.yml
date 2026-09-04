@@ -19,6 +19,7 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -34,25 +35,45 @@ jobs:
           npm ci --ignore-scripts
           npm i @fal-ai/client --no-save
 
+      - name: Dataset vorhanden? (Guard, 04.09.2026)
+        # training/lora-pork/dataset/ ist gitignored und liegt im Repo NICHT vor —
+        # ohne Bilder bricht train-pork-lora.mjs mit Exit 1 ab und erzeugt ein
+        # Jira-Ticket, obwohl nichts kaputt ist. Deshalb: früh und lesbar stoppen.
+        run: |
+          N=$(find training/lora-pork/dataset -maxdepth 1 -iname '*.jpg' 2>/dev/null | wc -l)
+          if [ "$N" -lt 10 ]; then
+            {
+              echo "## 🐷 Kein Training — Dataset fehlt"
+              echo "training/lora-pork/dataset/ enthält $N Bilder (mind. 10 nötig)."
+              echo "Das Dataset ist gitignored; der Workflow kann nur laufen, wenn die Bilder vorher"
+              echo "in einem Branch committet oder als Artifact bereitgestellt werden."
+              echo "Siehe training/lora-pork/README.md. Kein Fehler, kein Jira-Ticket."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::Dataset fehlt ($N Bilder) — Training übersprungen"
+            exit 0
+          fi
+          echo "$N Bilder gefunden — Training startet"
+          echo "TRAIN=1" >> "$GITHUB_ENV"
+
       - name: LoRA trainieren
+        if: env.TRAIN == '1'
         env:
           FAL_KEY: ${{ secrets.FAL_KEY }}
           PORK_STEPS: ${{ inputs.steps }}
         run: node scripts/train-pork-lora.mjs
 
-      - name: pork-lora.json committen + pushen
-        run: |
-          if [ -z "$(git status --porcelain scripts/pork-lora.json)" ]; then
-            echo "## 🐖 Kein LoRA-Update (pork-lora.json unverändert)" >> $GITHUB_STEP_SUMMARY
-            exit 0
-          fi
-          git config user.name  "lora-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add scripts/pork-lora.json
-          git commit -m "chore(lora): Schwein-LoRA trainiert (pork-lora.json)"
-          git push
-          echo "## 🐖 Schwein-LoRA trainiert" >> $GITHUB_STEP_SUMMARY
-          echo "LoRA-URL in scripts/pork-lora.json. Jetzt Schwein-Cuts mit force=true neu generieren." >> $GITHUB_STEP_SUMMARY
+      - name: pork-lora.json als PR (auto-merge nach grünen Gates)
+        if: env.TRAIN == '1'
+        uses: ./.github/actions/pr-statt-push
+        with:
+          pfade: scripts/pork-lora.json
+          branch-prefix: bot/pork-lora
+          bot-name: lora-bot
+          commit-message: 'chore(lora): Schwein-LoRA trainiert (pork-lora.json)'
+          pr-titel: '🐷 Schwein-LoRA neu trainiert'
+          pr-body: 'Neue LoRA-Weights-URL aus fal.ai-Training. Nur eine JSON-Konfiguration — mergt selbst nach grünen Gates.'
+          auto-merge: 'true'
+          token: ${{ secrets.BOT_PAT || github.token }}
 
       - name: Bei Fehler → Jira-Ticket (KAN)
         if: failure()

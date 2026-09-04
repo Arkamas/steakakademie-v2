@@ -31,6 +31,13 @@
 
 # Binaerformate nie anfassen
 *.pdf   binary
+
+# Audio: voice-design-ref.wav ist Marcos abgenommene Stimme und laut
+# docs/video-toolkit-setup.md §6 unwiederbringlich (Qwen3-TTS hat keinen Seed).
+# Explizit binaer, damit keine Zeilenend-Normalisierung sie je anfasst.
+*.wav binary
+*.mp3 binary
+*.flac binary
 *.png   binary
 *.jpg   binary
 *.jpeg  binary

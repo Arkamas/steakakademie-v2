@@ -15,6 +15,7 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -40,21 +41,17 @@ jobs:
           FAL_KEY: ${{ secrets.FAL_KEY }}
         run: node scripts/recipe-images.mjs
 
-      - name: Neue Rezepte + Bilder committen + pushen
-        run: |
-          if [ -z "$(git status --porcelain content/rezepte public/images/rezepte)" ]; then
-            echo "## 🍖 Rezepte" >> $GITHUB_STEP_SUMMARY
-            echo "Keine neuen Rezepte — Seed-Liste unverändert/abgearbeitet." >> $GITHUB_STEP_SUMMARY
-            exit 0
-          fi
-          NEW=$(git status --porcelain content/rezepte | grep -cE '\.mdx$' || true)
-          git config user.name  "recipe-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add content/rezepte public/images/rezepte
-          git commit -m "chore(rezepte): ${NEW} neue Rezepte + Hero-Bilder (automatisch)"
-          git push
-          echo "## 🍖 Rezept-Bibliothek gewachsen" >> $GITHUB_STEP_SUMMARY
-          echo "**${NEW}** neue/aktualisierte Rezepte committet + gepusht → löst Deploy aus." >> $GITHUB_STEP_SUMMARY
+      - name: Neue Rezepte + Bilder als PR (Review-Gate)
+        uses: ./.github/actions/pr-statt-push
+        with:
+          pfade: content/rezepte public/images/rezepte
+          branch-prefix: bot/rezept
+          bot-name: recipe-bot
+          commit-message: 'chore(rezepte): neue Rezepte + Hero-Bilder (automatisch) — zur Prüfung'
+          pr-titel: '🍖 Rezept-Agent: neues Rezept + Hero-Bild — bitte Bild prüfen (Regel 8c)'
+          pr-body: 'Automatisch generiert (recipe-agent.mjs + recipe-images.mjs / FLUX). **Vor dem Mergen das Hero-Bild gegen das Rezept prüfen** — stimmt Cut, Garstufe, Anrichtung? Text ist Rezept-Wachstum nach Doktrin. Merge löst den Deploy aus.'
+          auto-merge: 'false'
+          token: ${{ secrets.BOT_PAT || github.token }}
 
       - name: Seed-Liste leer → Jira-Hinweis (KAN, dedup)
         if: steps.agent.outputs.seeds_exhausted == 'true'

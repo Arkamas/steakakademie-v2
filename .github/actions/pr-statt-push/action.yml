@@ -1,0 +1,121 @@
+name: 'PR statt Push'
+description: >
+  Committet Änderungen auf einen eigenen Branch und öffnet einen Pull Request nach
+  main — statt direkt zu pushen. Seit 01.09.2026 blockiert Branch Protection jeden
+  Direct-Push auf main; die Bot-Workflows liefen seitdem ins Leere (letzter Bot-Commit
+  27.08., entdeckt 04.09.). Diese Action ist der eine Ort, an dem der Commit/PR-Weg
+  für ALLE Agenten-Workflows steht.
+
+  Token: Ein mit github.token erstellter PR löst KEINE pull_request-Workflows aus
+  (GitHub-Rekursionsschutz) — die Pflicht-Checks (build-guard, content-gates) laufen
+  dann nie, der PR bleibt unmergefähig. Deshalb bevorzugt diese Action das Secret
+  BOT_PAT (fine-grained PAT, nur dieses Repo, Contents RW + Pull requests RW) und
+  warnt sichtbar, wenn es fehlt.
+
+inputs:
+  pfade:
+    description: 'Pfade, die committet werden (leerzeichengetrennt). NIE "." oder -A.'
+    required: true
+  branch-prefix:
+    description: 'Präfix für den Branch, z. B. "bot/glossar" → bot/glossar-20260904-0300'
+    required: true
+  commit-message:
+    description: 'Commit-Nachricht'
+    required: true
+  pr-titel:
+    description: 'PR-Titel'
+    required: true
+  pr-body:
+    description: 'PR-Beschreibung (Markdown)'
+    required: false
+    default: ''
+  bot-name:
+    description: 'git user.name'
+    required: false
+    default: 'steakakademie-bot'
+  auto-merge:
+    description: >
+      "true" = PR mergt automatisch, sobald alle Pflicht-Checks grün sind (nur für
+      reinen Text/Daten-Content ohne Review-Pflicht). "false" = wartet auf Uwe.
+      Braucht das Repo-Setting "Allow auto-merge"; fehlt es, bleibt der PR offen.
+    required: false
+    default: 'false'
+  token:
+    description: 'BOT_PAT bevorzugt, github.token als Fallback (dann ohne Checks)'
+    required: true
+
+outputs:
+  pr-url:
+    description: 'URL des erstellten PRs (leer, wenn nichts zu committen war)'
+    value: ${{ steps.pr.outputs.url }}
+  anzahl:
+    description: 'Anzahl geänderter Dateien'
+    value: ${{ steps.commit.outputs.anzahl }}
+
+runs:
+  using: composite
+  steps:
+    - name: Änderungen prüfen + committen
+      id: commit
+      shell: bash
+      env:
+        PFADE: ${{ inputs.pfade }}
+        PREFIX: ${{ inputs.branch-prefix }}
+        MSG: ${{ inputs.commit-message }}
+        BOT: ${{ inputs.bot-name }}
+      run: |
+        set -euo pipefail
+        # shellcheck disable=SC2086
+        if [ -z "$(git status --porcelain -- $PFADE)" ]; then
+          echo "anzahl=0" >> "$GITHUB_OUTPUT"
+          echo "branch=" >> "$GITHUB_OUTPUT"
+          echo "Keine Änderungen unter: $PFADE"
+          exit 0
+        fi
+        # shellcheck disable=SC2086
+        ANZAHL=$(git status --porcelain -- $PFADE | wc -l | tr -d ' ')
+        BRANCH="${PREFIX}-$(date -u +%Y%m%d-%H%M)"
+        git config user.name  "$BOT"
+        git config user.email "actions@users.noreply.github.com"
+        git checkout -b "$BRANCH"
+        # shellcheck disable=SC2086
+        git add -- $PFADE
+        git commit -m "$MSG"
+        echo "anzahl=$ANZAHL" >> "$GITHUB_OUTPUT"
+        echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+
+    - name: Branch pushen + PR öffnen
+      id: pr
+      if: steps.commit.outputs.anzahl != '0'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        BRANCH: ${{ steps.commit.outputs.branch }}
+        TITEL: ${{ inputs.pr-titel }}
+        BODY: ${{ inputs.pr-body }}
+        AUTO: ${{ inputs.auto-merge }}
+        HAT_PAT: ${{ inputs.token != github.token }}
+      run: |
+        set -euo pipefail
+        # Push mit dem übergebenen Token, damit der PR die Checks auslöst.
+        git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BRANCH}"
+
+        HINWEIS=""
+        if [ "$HAT_PAT" != "true" ]; then
+          HINWEIS=$'\n\n> ⚠️ **Ohne BOT_PAT erstellt** — die Pflicht-Checks (build-guard, content-gates) laufen auf diesem PR NICHT an. Entweder Secret `BOT_PAT` anlegen (docs/ci-bot-pat.md) oder die Checks manuell per workflow_dispatch auf diesem Branch starten.'
+        fi
+
+        URL=$(gh pr create --base main --head "$BRANCH" --title "$TITEL" --body "${BODY}${HINWEIS}")
+        echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+        if [ "$AUTO" = "true" ]; then
+          gh pr merge "$URL" --auto --squash --delete-branch \
+            || echo "::warning::Auto-Merge nicht möglich (Repo-Setting 'Allow auto-merge' fehlt?) — PR bleibt offen: $URL"
+        fi
+
+        {
+          echo "## 🔀 PR geöffnet — kein Direct-Push auf main"
+          echo "$URL"
+          if [ "$AUTO" = "true" ]; then echo "Auto-Merge aktiv: mergt, sobald die Pflicht-Checks grün sind."; else echo "Wartet auf Review (Regel 4 / 8c)."; fi
+          if [ "$HAT_PAT" != "true" ]; then echo ""; echo "⚠️ **BOT_PAT fehlt** — Checks laufen nicht automatisch. Siehe docs/ci-bot-pat.md"; fi
+        } >> "$GITHUB_STEP_SUMMARY"

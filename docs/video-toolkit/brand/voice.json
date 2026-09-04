@@ -1,6 +1,6 @@
 {
   "voiceId": "",
-  "description": "Marco Richter — tiefe, rauchige Whiskey-Maennerstimme, Deutsch, ruhiges Erzaehltempo. Kein Uwe.",
+  "description": "Marco Richter - Voice-Design-Stimme B3 'warm-erfahren', Qwen3-TTS, Deutsch. Abgenommen im Hoertest am 04.09.2026 (7 Takes). Kein Klon einer realen Person. Instruct und seedText sind WORTWOERTLICH die des Hoertests - jede Aenderung ergibt eine andere Stimme.",
   "settings": {
     "stability": 0.8,
     "similarityBoost": 0.9,
@@ -9,19 +9,34 @@
   },
   "model": "eleven_multilingual_v2",
   "qwen3": {
-    "speaker": "Ryan",
+    "speaker": null,
     "language": "German",
-    "tone": "warm, tief, ruhig, erzaehlend",
-    "instruct": "Sprich ruhig und tief, wie ein erfahrener Grillmeister, der einem Freund am Feuer etwas erklaert. Keine Werbestimme.",
-    "clone": null
+    "tone": null,
+    "instruct": null,
+    "clone": {
+      "design": {
+        "instruct": "Warme, tiefe deutsche Maennerstimme, Ende vierzig, leicht rau, freundlich-kumpelhaft, aber praezise. Erklaert einem Freund etwas am Grill.",
+        "seedText": "Die Glut ist bereit, wenn ein grauer Aschefilm auf der Kohle liegt. Nicht vorher. Leg das Ribeye auf die direkte Zone, zwei Minuten je Seite, dann zieh es rueber ins Indirekte. Bei vierundfuenfzig Grad Kerntemperatur nimmst du es runter und laesst es ruhen. Was du dabei riechst, ist die Maillard-Reaktion — und die verzeiht keine Hektik.",
+        "language": "German",
+        "cachedRef": "assets/voice-design-ref.wav"
+      }
+    }
   },
   "sixtydb": {
     "voiceId": "",
-    "settings": { "stability": 0.85, "similarity": 0.95, "speed": 0.95, "enhance": true }
+    "settings": {
+      "stability": 0.85,
+      "similarity": 0.95,
+      "speed": 0.95,
+      "enhance": true
+    }
   },
-  "_offen": [
-    "speaker 'Ryan' ist nur der Toolkit-Default und NICHT abgehoert — vor der ersten Produktion Hoertest mit deutschen Saetzen, dann festschreiben (Uwe-Gate 'Stimm-Abnahme').",
-    "ElevenLabs bewusst leer: kostenpflichtig + zusaetzlicher Auftragsverarbeiter (AVV). Erst wenn Qwen3-TTS nachweislich nicht reicht.",
-    "Sobald die Stimme steht: hier festschreiben und NIE wieder aendern — Marco ist seit Monaten oeffentlich."
-  ]
+  "_abnahme": {
+    "datum": "2026-09-04",
+    "gewinner": "B3-warm-erfahren",
+    "verfahren": "Voice-Design (--design-instruct), kein Klon - keine Einwilligung/Buyout noetig",
+    "takes": "brands/steakakademie/hoertest/ (7 Takes, A1-A3 eingebaute Sprecher, B1-B4 Voice-Design)",
+    "eingefroren": "Marco ist seit Monaten oeffentlich sichtbar - nicht mehr aendern.",
+    "referenz": "assets/voice-design-ref.wav ist die EINZIGE Fassung der abgenommenen Stimme und liegt deshalb versioniert im Repo (docs/video-toolkit/brand/assets/). Qwen3-TTS kennt KEINEN Seed-Parameter — instruct und seedText erzeugen NICHT zuverlaessig dieselbe Stimme noch einmal. Wird die WAV geloescht, ist Marcos Stimme unwiederbringlich weg. Nie loeschen, nie neu generieren, nie ueberschreiben."
+  }
 }

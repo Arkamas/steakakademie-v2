@@ -64,9 +64,21 @@ uv sync durch, Modal-CLI 1.5.0, Brand-Profil schema-kompatibel mit Upstream
 | `MODAL_MUSIC_GEN` | Musik | ✅ |
 | `MODAL_SADTALKER` | Sprechender Kopf | ✅ — **nicht nutzen** (Regel 3: Marco nie als sprechender Kopf) |
 | `MODAL_SOULX` / `LTX2` / `DEWATERMARK` | Video-Generierung u. a. | ❌ — bewusst nicht (LTX-2 braucht A100-80GB) |
-| Cloudflare R2 | Dateitransfer | ❌ — Konto existiert (Nameserver), Bucket fehlt |
+| Cloudflare R2 | Dateitransfer | ❌ **PFLICHT vor Produktion** — Konto existiert (Nameserver), Bucket fehlt |
 
-Es fehlt nichts Generatives mehr. Nächster Schritt ist direkt der **Hörtest** (§6).
+Es fehlt nichts Generatives mehr — aber **R2 muss vor der nächsten Generierung stehen.**
+
+> **Befund 04.09.2026 (Hörtest):** Ohne R2 lädt das Toolkit Referenz-Assets als Fallback
+> zu **litterbox** hoch — einem öffentlichen Filehoster. Im Log: „Uploading
+> voice-design-ref.wav (1068KB)… Upload complete (litterbox)". Das ist ein Marken-Asset
+> bei einem Dritten ohne Vertrag. Kein Personenbezug (synthetische Stimme), aber
+> Kontrollverlust. Deshalb ist R2 seitdem **keine Option mehr**; beide Setup-Skripte
+> warnen rot, solange die vier `R2_*`-Schlüssel fehlen.
+>
+> **Einrichten (0 €, Free Tier 10 GB):** Cloudflare Dashboard → R2 Object Storage →
+> Bucket `video-toolkit` anlegen → „Manage R2 API Tokens" → Token mit *Object Read &
+> Write* → `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME`
+> in `tools\video-toolkit\.env`. Nie ins Repo.
 
 > **Korrektur 10.08.2026:** Die erste Fassung dieser Doku zählte „4 von 8" und nannte die
 > fehlende Stimme als Blocker. Ursache war eine Regex ohne Ziffernklasse (`[A-Z_]`), die
@@ -117,40 +129,33 @@ Aufräumen entfernt werden, damit kein Agent ihn „findet".
 
 ---
 
-## 6. Hörtest Marco — der nächste echte Schritt
+## 6. Marcos Stimme — abgenommen 04.09.2026, eingefroren
 
-Sobald `MODAL_QWEN3_TTS_ENDPOINT_URL` steht:
+**Gewinner: B3 „warm-erfahren"** aus sieben Hörtest-Takes (3 eingebaute Sprecher,
+4 Voice-Design). Verfahren: **Voice-Design** (`--design-instruct`), kein Klon einer
+realen Person — keine Einwilligung, kein Sprecher-Buyout, keine Nutzungsrechte-Frage.
 
-```powershell
-cd C:\Dev\steakakademie-v2\tools\video-toolkit
-uv run brands\steakakademie\hoertest\hoertest-marco.ps1
-```
+Kanonisch festgeschrieben in **`docs/video-toolkit/brand/voice.json`** (im Repo, nicht im
+gitignorierten Toolkit-Ordner — sonst beim nächsten Setup weg). `instruct` und `seedText`
+stehen dort **wortwörtlich** so, wie sie im Hörtest liefen.
 
-Sieben Takes (3 Standard-Sprecher, 4 Voice-Design), Anleitung in
-`docs/video-toolkit/brand/hoertest/README.md`. Gewinner in `voice.json` festschreiben —
-**im Repo** (`docs/video-toolkit/brand/voice.json`), nicht im Toolkit-Ordner, sonst ist
-er beim nächsten Setup weg. Danach nie wieder ändern: Marco ist öffentlich.
+### ⚠️ Die Stimme hängt an einer einzigen Datei
 
-Voice-Design statt Klonen ist bewusst: keine reale Person, keine Einwilligung, kein
-Sprecher-Buyout.
+`docs/video-toolkit/brand/assets/voice-design-ref.wav` (1,1 MB) ist die **einzige**
+Fassung der abgenommenen Stimme. Der Grund, warum sie versioniert im Repo liegt statt
+nur im Toolkit-Cache:
 
-### Stimm-Entscheidung — hier, nicht anderswo
+> **Qwen3-TTS kennt keinen Seed-Parameter.** `instruct` + `seedText` erzeugen die Stimme
+> **nicht** zuverlässig noch einmal — Voice-Design sampelt. Wer die WAV löscht und neu
+> generiert, bekommt eine *andere* Stimme, obwohl der Prompt identisch ist. Marco ist
+> seit Monaten öffentlich sichtbar; eine Stimme, die sich mitten in der Lektionsreihe
+> ändert, ist teurer als jede Nachproduktion.
 
-Sobald abgehört ist, wird die Entscheidung an genau zwei Stellen festgehalten:
+Daraus folgt, verbindlich: **nie löschen, nie neu generieren, nie überschreiben.**
+Das Setup-Skript spielt sie bei jeder Installation aus dem Repo in den Toolkit-Ordner —
+die Kopie dort ist Arbeitsstand, das Repo ist die Wahrheit (Regel 9).
 
-1. **Hier**, als Zeile in der Tabelle unten: Datum, gewählter Take, Begründung in einem
-   Satz. Das ist der **Beschluss** — er bleibt stehen, auch wenn sich sonst alles ändert.
-2. **`docs/COCKPIT.md`, Abteilung 2 (Studio):** Der Hörtest wandert von *Hängt* nach
-   *Läuft*, der nächste Schritt wird neu gesetzt. Das ist der **Stand**, nicht der
-   Beschluss — drei Zeilen, keine Historie.
+### Falls doch einmal neu generiert werden muss
 
-Technisch dazu: Gewinner in `docs/video-toolkit/brand/voice.json` eintragen und den Block
-`_offen` dort löschen.
-
-| Datum | Take | Warum |
-|---|---|---|
-| — | offen | Hörtest noch nicht gelaufen |
-
-`memory.md` gibt es nicht mehr (entfernt am 27.08.2026, Commit `9a2f4c4`). Die ältere
-Anweisung, die Stimm-Entscheidung dort zu vermerken, ist durch diesen Abschnitt ersetzt —
-Ablage-Regel: CLAUDE.md § 6.
+Nur mit ausdrücklicher Freigabe von Uwe, und dann als **bewusste Neu-Abnahme** mit
+neuem Hörtest und neuem Datum in `_abnahme` — nicht als stiller Cache-Rebuild.

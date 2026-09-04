@@ -111,6 +111,14 @@ try {
   if ($setKeys -notcontains 'MODAL_QWEN3_TTS_ENDPOINT_URL') {
     Warn 'MODAL_QWEN3_TTS_ENDPOINT_URL fehlt - ohne Stimme kein Lernvideo. Siehe docs/video-toolkit-setup.md §3.'
   }
+  # R2 ist KEINE Option (Befund 04.09.2026): Ohne R2 laedt das Toolkit Referenz-Assets
+  # (z. B. die Marco-Referenzstimme) als Fallback zu einem oeffentlichen Filehoster
+  # (litterbox) hoch - Marken-Asset an einen Dritten ohne Vertrag.
+  $r2 = @('R2_ACCOUNT_ID','R2_ACCESS_KEY_ID','R2_SECRET_ACCESS_KEY','R2_BUCKET_NAME') | Where-Object { $setKeys -contains $_ }
+  if (@($r2).Count -lt 4) {
+    Warn 'Cloudflare R2 fehlt - ohne R2 gehen Referenz-Assets an einen oeffentlichen Filehoster (litterbox).'
+    Warn '  PFLICHT vor jeder Produktion. Einrichten: docs/video-toolkit-setup.md §3 (Free Tier, 0 EUR).'
+  } else { Ok 'Cloudflare R2 konfiguriert - Dateitransfer bleibt im eigenen Konto' }
   if (Test-Path 'tools\verify_setup.py') { uv run tools/verify_setup.py }
 } finally { Pop-Location }
 
@@ -127,7 +135,7 @@ Write-Host ""
 Write-Host " Nächste Schritte:"
 Write-Host "   cd $Target"
 Write-Host "   claude                  Claude Code im Toolkit starten"
-Write-Host "   /setup                  nur falls neue Endpunkte nötig (R2 optional)"
+Write-Host "   /setup                  nur falls neue Endpunkte noetig (R2 ist PFLICHT, siehe Warnung oben)"
 Write-Host "   npm run vt:check        Preflight jederzeit wiederholen"
 Write-Host ""
 Write-Host " Regel 4 bleibt: /publish erst nach Freigabe durch Uwe."

@@ -76,6 +76,13 @@ modal_set=$(grep -cE '^MODAL_[A-Z0-9_]+=.+' "$TARGET/.env" || true)
 ok "Modal-Endpunkte in .env: $modal_set von 8"
 grep -qE '^MODAL_QWEN3_TTS_ENDPOINT_URL=.+' "$TARGET/.env" \
   || warn 'MODAL_QWEN3_TTS_ENDPOINT_URL fehlt — ohne Stimme kein Lernvideo (docs/video-toolkit-setup.md §3)'
+# R2 ist KEINE Option (Befund 04.09.2026): ohne R2 gehen Referenz-Assets als Fallback
+# an einen öffentlichen Filehoster (litterbox) — Marken-Asset an Dritte ohne Vertrag.
+r2_set=$(grep -cE '^R2_(ACCOUNT_ID|ACCESS_KEY_ID|SECRET_ACCESS_KEY|BUCKET_NAME)=.+' "$TARGET/.env" || true)
+if [ "$r2_set" -lt 4 ]; then
+  warn 'Cloudflare R2 fehlt — ohne R2 gehen Referenz-Assets an einen öffentlichen Filehoster (litterbox).'
+  warn '  PFLICHT vor jeder Produktion. Einrichten: docs/video-toolkit-setup.md §3 (Free Tier, 0 €).'
+else ok 'Cloudflare R2 konfiguriert — Dateitransfer bleibt im eigenen Konto'; fi
 [ -f "$TARGET/tools/verify_setup.py" ] && ( cd "$TARGET" && uv run tools/verify_setup.py ) || true
 
 # --- 7. Abschluss -----------------------------------------------------------

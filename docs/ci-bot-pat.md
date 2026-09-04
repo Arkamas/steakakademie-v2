@@ -51,6 +51,38 @@ Fehlt es, bleibt der PR offen und die Action schreibt eine Warnung — nichts br
 Danach einmal `glossary-grow` per `workflow_dispatch` starten und im Summary prüfen:
 „PR geöffnet", keine PAT-Warnung, Checks laufen an.
 
+## Nebenbei gehärtet: Inputs nie direkt in Shell-Zeilen
+
+`${{ ... }}` wird von GitHub **vor** der Shell in die Zeile eingesetzt — steht dort ein
+von außen setzbarer Wert, ist das ein Einfallstor. Alle 15 Fundstellen laufen jetzt über
+`env:` (`IN_*`) und werden in der Shell als `"$IN_..."` gelesen; `social-grow` prüft sein
+`limit` zusätzlich auf reine Ziffern, weil es direkt an eine Kommandozeile geht.
+
+**Lehre aus der Suche selbst (04.09.):** Der erste Scan suchte nur `inputs.` und übersah
+`content-grow` und `social-grow`, die `github.event.inputs.` schreiben — dieselbe Sache,
+andere Schreibweise. Beim Nachziehen wurde deshalb gegen **alle** von außen
+beeinflussbaren Kontexte geprüft (`github.event.*`, `inputs.*`, `github.head_ref`,
+`github.ref_name`) statt gegen ein Muster. Wer künftig einen Workflow ergänzt, prüft mit:
+
+```bash
+python3 - <<'EOF'
+import yaml, glob, re
+pat = re.compile(r'\$\{\{\s*([^}]+?)\s*\}\}')
+risky = ('github.event.', 'inputs.', 'github.head_ref', 'github.ref_name')
+for f in sorted(glob.glob('.github/workflows/*.yml')):
+    d = yaml.safe_load(open(f, encoding='utf-8'))
+    for job in (d.get('jobs') or {}).values():
+        for st in job.get('steps', []):
+            r = st.get('run')
+            if isinstance(r, str):
+                for m in pat.finditer(r):
+                    if any(x in m.group(1) for x in risky):
+                        print(f, st.get('name'), m.group(1))
+EOF
+```
+
+Kein Treffer = sauber.
+
 ## Was NICHT zu tun ist
 
 - **Kein „Allow GitHub Actions to bypass branch protection".** Das würde die Bots wieder

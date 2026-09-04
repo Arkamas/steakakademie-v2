@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Steakakademie — Fass-Logo, Vektor-Zweitfassung (stilisierte Reduktion
+       des fotorealistischen Hauptlogos logo-barrel.jpg). Farben: CI
+       #C8882A (Gold) / #E85018 (Feuer) auf Holz/Dunkel. -->
+  <defs>
+    <radialGradient id="wood" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0" stop-color="#6b4423"/>
+      <stop offset="0.55" stop-color="#54331a"/>
+      <stop offset="0.85" stop-color="#3a2112"/>
+      <stop offset="1" stop-color="#2c180d"/>
+    </radialGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a5a33"/>
+      <stop offset="0.5" stop-color="#4a2f18"/>
+      <stop offset="1" stop-color="#33200f"/>
+    </linearGradient>
+    <linearGradient id="flameOuter" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#F2B24A"/>
+      <stop offset="1" stop-color="#C8882A"/>
+    </linearGradient>
+    <linearGradient id="flameInner" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#F58A3C"/>
+      <stop offset="1" stop-color="#E85018"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F2B24A"/>
+      <stop offset="1" stop-color="#C8882A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Fass-Rand (Daubenring) -->
+  <circle cx="256" cy="256" r="248" fill="url(#rim)"/>
+  <!-- Dauben-Kerben am Rand -->
+  <g stroke="#241509" stroke-width="6" stroke-linecap="round" opacity="0.75">
+    <line x1="256" y1="10" x2="256" y2="34"/>
+    <line x1="379" y1="43" x2="367" y2="64"/>
+    <line x1="469" y1="133" x2="448" y2="145"/>
+    <line x1="502" y1="256" x2="478" y2="256"/>
+    <line x1="469" y1="379" x2="448" y2="367"/>
+    <line x1="379" y1="469" x2="367" y2="448"/>
+    <line x1="256" y1="502" x2="256" y2="478"/>
+    <line x1="133" y1="469" x2="145" y2="448"/>
+    <line x1="43" y1="379" x2="64" y2="367"/>
+    <line x1="10" y1="256" x2="34" y2="256"/>
+    <line x1="43" y1="133" x2="64" y2="145"/>
+    <line x1="133" y1="43" x2="145" y2="64"/>
+  </g>
+  <!-- Goldreif -->
+  <circle cx="256" cy="256" r="222" fill="none" stroke="#C8882A" stroke-width="5" stroke-opacity="0.9"/>
+  <circle cx="256" cy="256" r="214" fill="none" stroke="#1f1208" stroke-width="3" stroke-opacity="0.6"/>
+
+  <!-- Fassdeckel -->
+  <circle cx="256" cy="256" r="212" fill="url(#wood)"/>
+  <!-- Bretter-Fugen (vertikal) -->
+  <g stroke="#241509" stroke-width="3" opacity="0.45">
+    <line x1="166" y1="72" x2="166" y2="440"/>
+    <line x1="346" y1="72" x2="346" y2="440"/>
+  </g>
+
+  <!-- Flamme — drei separate Zungen (Mitte groß, Seiten kleiner geneigt) -->
+  <g>
+    <!-- linke Zunge -->
+    <g transform="translate(222 254) rotate(-26) scale(1.9) translate(-32 -53)">
+      <path d="M32 8 C 38 20, 44 24, 42 36 C 41 45, 36 51, 32 53 C 28 51, 23 45, 22 36 C 20 24, 26 20, 32 8 Z" fill="url(#flameOuter)"/>
+      <path d="M32 23 C 35 29, 37 32, 36 38 C 35 44, 33 46, 32 47 C 31 46, 28 44, 28 39 C 27 32, 30 28, 32 23 Z" fill="url(#flameInner)"/>
+    </g>
+    <!-- rechte Zunge -->
+    <g transform="translate(291 255) rotate(19) scale(2.25) translate(-32 -53)">
+      <path d="M32 8 C 38 20, 44 24, 42 36 C 41 45, 36 51, 32 53 C 28 51, 23 45, 22 36 C 20 24, 26 20, 32 8 Z" fill="url(#flameOuter)"/>
+      <path d="M32 23 C 35 29, 37 32, 36 38 C 35 44, 33 46, 32 47 C 31 46, 28 44, 28 39 C 27 32, 30 28, 32 23 Z" fill="url(#flameInner)"/>
+    </g>
+    <!-- Hauptzunge Mitte -->
+    <g transform="translate(256 260) scale(3.8) translate(-32 -53)">
+      <path d="M32 8 C 38 20, 44 24, 42 36 C 41 45, 36 51, 32 53 C 28 51, 23 45, 22 36 C 20 24, 26 20, 32 8 Z" fill="url(#flameOuter)"/>
+      <path d="M32 23 C 35 29, 37 32, 36 38 C 35 44, 33 46, 32 47 C 31 46, 28 44, 28 39 C 27 32, 30 28, 32 23 Z" fill="url(#flameInner)"/>
+      <path d="M32 34 C 33.6 37, 34.8 39, 34.4 42.5 C 34 45.5, 32.8 47, 32 47.6 C 31.2 47, 30 45.5, 29.7 42.8 C 29.3 39, 30.6 37, 32 34 Z" fill="#F5C96B"/>
+    </g>
+  </g>
+
+  <!-- Schriftband STEAK -->
+  <rect x="92" y="268" width="328" height="74" rx="6" fill="#2c180d" opacity="0.65"/>
+  <rect x="92" y="268" width="328" height="74" rx="6" fill="none" stroke="#C8882A" stroke-width="2" stroke-opacity="0.55"/>
+  <text x="256" y="326" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="62" letter-spacing="8" fill="url(#gold)">STEAK</text>
+
+  <!-- AKADEMIE -->
+  <text x="256" y="384" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="bold" font-size="30" letter-spacing="7" fill="#F5EFE6" fill-opacity="0.92">AKADEMIE</text>
+
+  <!-- Claim -->
+  <text x="256" y="422" text-anchor="middle" font-family="Georgia, serif" font-size="15" letter-spacing="3" fill="#C8882A" fill-opacity="0.85">FEUER · WISSEN · GENUSS</text>
+</svg>

@@ -1,92 +1,161 @@
-# Video-Toolkit (claude-code-video-toolkit) — Einrichtung & Kosten-Gates
+# Video-Toolkit (claude-code-video-toolkit) — Einrichtung, Kosten, Betrieb
 
-**Stand 26.08.2026.** Ersetzt für die Lernvideo-Produktion perspektivisch OpenMontage
-(`tools/openmontage/`, AGPLv3, Windows-venv). Das neue Toolkit ist **MIT-lizenziert** —
-Teile davon dürfen ins Repo vendort werden, anders als bei OpenMontage.
+**Abteilung 2 (Studio).** Stand 10.08.2026 — ersetzt den Stand vom 26.08.2026.
 
-Installationsort: `C:\Dev\claude-code-video-toolkit` (eigenes Repo, nicht Teil von v2).
+Upstream: https://github.com/digitalsamba/claude-code-video-toolkit · **MIT** ·
+Version 0.20.0 (uv-basiert). Ersetzt perspektivisch OpenMontage (`tools/openmontage/`,
+AGPLv3) für die Lernvideo-Produktion — siehe Einwand in §5.
 
 ---
 
-## 1. Ist-Zustand (geprüft 26.08.2026)
+## 1. Wo es liegt — und warum das geändert wurde
 
-| Bereich | Status |
-|---|---|
-| Repo geklont | ✅ `C:\Dev\claude-code-video-toolkit` |
-| Node / Python / FFmpeg / pip-Pakete | ✅ vorhanden (`tools/verify_setup.py` = „Prerequisites: ready") |
-| `.env` | ⚠️ **unverändert aus `.env.example` kopiert — kein einziger Schlüssel gesetzt** |
-| Cloud-GPU (Modal / RunPod) | ❌ nicht konfiguriert (0 von 8 Werkzeugen) |
-| Dateitransfer (Cloudflare R2) | ❌ nicht konfiguriert |
-| Stimme (Qwen3-TTS / ElevenLabs) | ❌ nicht konfiguriert |
-| Marken-Profil Steakakademie | ✅ **neu angelegt** (siehe §2) |
+| | bis 09.08.2026 | ab 10.08.2026 |
+|---|---|---|
+| Installationsort | `C:\Dev\claude-code-video-toolkit` (eigenes Repo, außerhalb) | **`tools/video-toolkit/`** (im Repo, gitignored) |
+| Upstream-Stand | 26.08.2026, noch `requirements.txt` | aktuell, `uv sync` |
+| Marken-Profil | nur im alten Klon (ungesichert) | **kanonisch in `docs/video-toolkit/brand/`**, wird beim Setup eingespielt |
+| Setup | manuell | `npm run vt:setup:win` (idempotent) |
 
-Prüfbefehl (jederzeit wiederholbar, kostet nichts):
+Entscheidung Uwe 10.08.2026: *„wie OpenMontage behandeln: nach `tools/` installieren,
+gitignored, Doku im Repo."* Grund: Ein Klon außerhalb des Repos hatte das Marken-Profil
+und die Hörtest-Konfiguration ohne Versionierung liegen — genau der Zustand, den Regel 9
+verbietet. Jetzt ist alles Eigene versioniert, nur der Fremdcode nicht.
+
+**Der alte Klon bleibt zunächst stehen.** Das Setup-Skript migriert die `.env` (mit den
+vier bereits deployten Modal-Endpunkten) von dort. Erst wenn `tools/video-toolkit/` einen
+Hörtest sauber durchlaufen hat, wird `C:\Dev\claude-code-video-toolkit` gelöscht.
+
+---
+
+## 2. Einrichten
 
 ```powershell
-cd C:\Dev\claude-code-video-toolkit
-python tools\verify_setup.py
+cd C:\Dev\steakakademie-v2
+npm run vt:setup:win
 ```
 
----
+Das Skript (`scripts/video-toolkit-setup.ps1`):
 
-## 2. Was ohne Kosten bereits eingerichtet ist
+1. prüft Node ≥ 18, git, installiert **uv** falls nötig (offizieller Installer)
+2. klont/aktualisiert Upstream nach `tools/video-toolkit/`
+3. `uv sync --extra modal` — Kern-Abhängigkeiten + Modal-CLI, **ohne** Whisper (zieht
+   torch, ~2 GB) und ohne YouTube-Upload (braucht OAuth-Projekt, Regel 4)
+4. übernimmt die `.env` aus `C:\Dev\claude-code-video-toolkit`, falls vorhanden
+5. spielt `docs/video-toolkit/brand/` → `brands/steakakademie/` ein
+6. Preflight: zählt gesetzte Modal-Endpunkte, warnt, wenn die Stimme fehlt
 
-`brands/steakakademie/` im Toolkit-Repo:
+Danach jederzeit: `npm run vt:check`.
 
-- `brand.json` — Farben und Schriften **1:1 aus `tailwind.config.js`** übernommen
-  (Glut-Orange `#E85018` als primary, Whiskey-Gold `#C8882A`, Ruß-Braun `#17100B`;
-  Playfair Display / Source Serif 4 / DM Sans). Zusätzlich ein `_doktrin`-Block,
-  der die für Video relevanten Regeln aus CLAUDE.md mitführt (kein Uwe vor der Kamera,
-  kein sprechender Kopf, Kerntemperaturen nur aus der Referenz-YAML,
-  Werbekennzeichnung, kein Auto-Publishing).
-- `voice.json` — Marco-Profil (tief, rauchig, Deutsch, ruhiges Erzähltempo).
-  ElevenLabs bewusst **leer gelassen**.
-- `assets/` — Fassbrand-Logo als SVG + JPG.
-
-Damit greifen `/brand`, `/video` und die Remotion-Templates auf den Hausstil zu,
-ohne dass irgendein Cloud-Dienst nötig ist.
+Verifiziert 10.08.2026 in der Linux-Sandbox (`scripts/video-toolkit-setup.sh`):
+uv sync durch, Modal-CLI 1.5.0, Brand-Profil schema-kompatibel mit Upstream
+(`brands/default` als Referenz — kein fehlender Schlüssel).
 
 ---
 
-## 3. Was noch fehlt — und was es kostet
+## 3. Ist-Zustand der Endpunkte (Preflight nach Setup, 10.08.2026)
 
-Das Toolkit ist lokal für **Schnitt, Komposition und Untertitel** (Remotion, FFmpeg,
-MoviePy) vollständig funktionsfähig. Alles **Generative** (Stimme, Bilder, KI-Clips)
-läuft über fremde GPUs und braucht Konten:
+| Endpunkt | Zweck | Status |
+|---|---|---|
+| `MODAL_QWEN3_TTS` | **Marcos Stimme** | ✅ deployed — Hörtest steht aus |
+| `MODAL_FLUX2` | Bildgenerierung | ✅ deployed — für Cut-/Rezeptbilder bleibt trotzdem fal.ai (§4), kein zweiter Bild-Stack |
+| `MODAL_IMAGE_EDIT` | Bildbearbeitung | ✅ |
+| `MODAL_UPSCALE` | Hochskalieren | ✅ |
+| `MODAL_MUSIC_GEN` | Musik | ✅ |
+| `MODAL_SADTALKER` | Sprechender Kopf | ✅ — **nicht nutzen** (Regel 3: Marco nie als sprechender Kopf) |
+| `MODAL_SOULX` / `LTX2` / `DEWATERMARK` | Video-Generierung u. a. | ❌ — bewusst nicht (LTX-2 braucht A100-80GB) |
+| Cloudflare R2 | Dateitransfer | ❌ **PFLICHT vor Produktion** — Konto existiert (Nameserver), Bucket fehlt |
 
-| Baustein | Zweck | Kosten | Freigabe |
-|---|---|---|---|
-| **Modal** | Cloud-GPU-Host für Qwen3-TTS, FLUX.2, Upscaling, Musik | 30 $/Monat Gratis-Kontingent — **setzt ein hinterlegtes Zahlungsmittel voraus** | ⛔ Uwe |
-| **Qwen3-TTS** (auf Modal) | Marcos Stimme, deutlich besser als Piper | 0 € innerhalb des Modal-Kontingents | ⛔ Uwe (mit Modal) |
-| **Cloudflare R2** | Dateitransfer zur GPU, schneller/stabiler als die Gratis-Filehoster | Gratis-Tarif (10 GB) — Konto besteht bereits (Nameserver laufen dort) | ⛔ Uwe |
-| **ElevenLabs** | Premium-TTS | pro Zeichen, kostenpflichtig | ❌ **Empfehlung: nicht** |
-| **LTX-2** (KI-Video) | generierte Bewegtbild-Clips | braucht A100-80GB → Zahlungsmittel zwingend | ⛔ später |
+Es fehlt nichts Generatives mehr — aber **R2 muss vor der nächsten Generierung stehen.**
 
-### Einwand (Regel: Einwände aktiv einbringen)
+> **Befund 04.09.2026 (Hörtest):** Ohne R2 lädt das Toolkit Referenz-Assets als Fallback
+> zu **litterbox** hoch — einem öffentlichen Filehoster. Im Log: „Uploading
+> voice-design-ref.wav (1068KB)… Upload complete (litterbox)". Das ist ein Marken-Asset
+> bei einem Dritten ohne Vertrag. Kein Personenbezug (synthetische Stimme), aber
+> Kontrollverlust. Deshalb ist R2 seitdem **keine Option mehr**; beide Setup-Skripte
+> warnen rot, solange die vier `R2_*`-Schlüssel fehlen.
+>
+> **Einrichten (0 €, Free Tier 10 GB):** Cloudflare Dashboard → R2 Object Storage →
+> Bucket `video-toolkit` anlegen → „Manage R2 API Tokens" → Token mit *Object Read &
+> Write* → `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME`
+> in `tools\video-toolkit\.env`. Nie ins Repo.
 
-**ElevenLabs sollten wir nicht nehmen.** Am 19.08. haben wir teuer gelernt: erst
-Inventur, dann neuer Dienst — jeder zusätzliche Anbieter heißt ein weiterer
-Auftragsverarbeiter, ein AVV, ein Datenschutz-Absatz, ein Login, ein Ausfallpunkt.
-Qwen3-TTS läuft im selben Modal-Kontingent, das wir für Bilder ohnehin brauchen,
-und kostet dort nichts extra. Wenn die Stimme im Hörtest trägt, ist ElevenLabs
-schlicht überflüssig.
-
-**Zwei Video-Stacks parallel sind einer zu viel.** OpenMontage (AGPLv3, Windows-venv,
-Piper) und dieses Toolkit lösen dieselbe Aufgabe. Sobald das neue Toolkit einen
-Lernvideo-Piloten sauber gerendert hat, sollte OpenMontage stillgelegt werden —
-sonst pflegen wir zwei Marken-Playbooks, zwei Stimm-Konfigurationen und zwei
-Approval-Ketten. Die AGPL-Frage aus dem 09.08.-Eintrag (kritisch für GF2, das
-verkaufbare KI-System) löst sich damit gleich mit: MIT ist unproblematisch.
+> **Korrektur 10.08.2026:** Die erste Fassung dieser Doku zählte „4 von 8" und nannte die
+> fehlende Stimme als Blocker. Ursache war eine Regex ohne Ziffernklasse (`[A-Z_]`), die
+> `QWEN3` und `FLUX2` übersah — im Setup-Skript **und** in meiner vorherigen Analyse der
+> alten `.env`. Gefunden vom Claude-Code-Fenster beim ersten Windows-Lauf, Fix in
+> eigenem Branch/PR. Lehre: Schlüsselnamen mit Ziffern sind normal; `[A-Z0-9_]` ist der
+> Standard, nicht die Ausnahme.
 
 ---
 
-## 4. Nächster Schritt (Uwe)
+## 4. Kosten — und die Frage nach günstigeren Alternativen (Uwe, 10.08.2026)
 
-1. Bei **Modal** ein Konto anlegen und ein Zahlungsmittel hinterlegen
-   (30 $/Monat sind gratis, ohne Zahlungsmittel gibt es das Kontingent nicht).
-2. Dann im Toolkit-Ordner `claude` starten und `/setup` laufen lassen —
-   der Assistent trägt die Endpunkt-URLs selbst in die `.env` ein.
-3. Danach **Hörtest**: mehrere Qwen3-Sprecher mit demselben deutschen Absatz,
-   Marco festlegen, in `brands/steakakademie/voice.json` eintragen und einfrieren.
-   Erst danach die erste Lektion vertonen — eine Stimme, die sich mitten in der
-   Reihe ändert, ist teurer als jede Nachproduktion.
+**Kurzantwort: Es gibt keine günstigere Cloud-Option als das, was schon steht.** Modal ist
+mit 30 $/Monat **Gratis**-Kontingent (Starter-Plan, Zahlungsmittel muss hinterlegt sein)
+bei typischer Nutzung von 1–2 $/Monat effektiv 0 €. Was laut Upstream ein Lernvideo kostet:
+Stimme ~0,01 $, Bild ~0,02 $, Musik 0 $ (ACE-Step). Ein 5-Minuten-Video liegt unter 0,50 $.
+
+| Option | Kosten | Bewertung |
+|---|---|---|
+| **Modal** (bereits konfiguriert) | 30 $/Monat gratis, danach nach Verbrauch | ✅ **bleibt** — günstigste Cloud-Variante |
+| RunPod | ~0,44 $/h GPU, kein Gratis-Kontingent | ❌ teurer bei unserer geringen Nutzung |
+| ElevenLabs | pro Zeichen | ❌ zusätzlicher Auftragsverarbeiter (AVV), Qwen3-TTS reicht |
+| fal.ai (bereits im Projekt für Cut-/Rezeptbilder) | pay-per-use ~0,03 $/Bild | ✅ **für Bilder behalten** — kein zweiter Bild-Stack auf Modal |
+| **Lokale Workstation** (§16c-Antrag, 1.800–3.000 €) | 0 € laufend | ✅ **langfristig günstigste Option** — Qwen3-TTS, Whisper, Upscaling laufen lokal; nur schwere Video-Generierung bleibt Cloud |
+
+Die Workstation ist im Jobcenter-Sachgüterantrag (Kanzlei, 4.100 €) bereits enthalten.
+Sobald sie steht, wandern TTS und Upscaling von Modal auf die eigene GPU — dann sinkt
+der Cloud-Verbrauch auf nahe null. Bis dahin ist Modal die richtige Brücke.
+
+**Kosten-Gates (Regel: Kostenpflichtiges ist human-gated):**
+- ⛔ LTX-2 / SoulX (A100-80GB, Zahlungsmittel wird belastet) — nur nach Freigabe
+- ⛔ `uv sync --extra whisper` — kein Geld, aber 2 GB torch; erst wenn Untertitel gebraucht werden
+- ⛔ `uv sync --extra youtube` + `/publish` — Regel 4, erst nach Freigabe je Video
+
+---
+
+## 5. Einwände (Regel 0: Einwände aktiv einbringen)
+
+**Zwei Video-Stacks sind einer zu viel.** OpenMontage (`tools/openmontage/`, AGPLv3,
+Piper-TTS) und dieses Toolkit lösen dieselbe Aufgabe. Sobald der Hörtest steht und ein
+Lernvideo-Pilot sauber gerendert ist, wird OpenMontage stillgelegt: `video:*`-Skripte
+aus `package.json`, `docs/openmontage/`, `tools/openmontage/`. Die AGPL-Frage für GF2
+(verkaufbares KI-System) löst sich damit mit — MIT ist unproblematisch.
+
+**SadTalker ist deployed, darf aber nicht genutzt werden.** Regel 3: Marco nie als
+sprechender Kopf. Der Endpunkt kostet nichts im Leerlauf, sollte aber beim nächsten
+Aufräumen entfernt werden, damit kein Agent ihn „findet".
+
+---
+
+## 6. Marcos Stimme — abgenommen 04.09.2026, eingefroren
+
+**Gewinner: B3 „warm-erfahren"** aus sieben Hörtest-Takes (3 eingebaute Sprecher,
+4 Voice-Design). Verfahren: **Voice-Design** (`--design-instruct`), kein Klon einer
+realen Person — keine Einwilligung, kein Sprecher-Buyout, keine Nutzungsrechte-Frage.
+
+Kanonisch festgeschrieben in **`docs/video-toolkit/brand/voice.json`** (im Repo, nicht im
+gitignorierten Toolkit-Ordner — sonst beim nächsten Setup weg). `instruct` und `seedText`
+stehen dort **wortwörtlich** so, wie sie im Hörtest liefen.
+
+### ⚠️ Die Stimme hängt an einer einzigen Datei
+
+`docs/video-toolkit/brand/assets/voice-design-ref.wav` (1,1 MB) ist die **einzige**
+Fassung der abgenommenen Stimme. Der Grund, warum sie versioniert im Repo liegt statt
+nur im Toolkit-Cache:
+
+> **Qwen3-TTS kennt keinen Seed-Parameter.** `instruct` + `seedText` erzeugen die Stimme
+> **nicht** zuverlässig noch einmal — Voice-Design sampelt. Wer die WAV löscht und neu
+> generiert, bekommt eine *andere* Stimme, obwohl der Prompt identisch ist. Marco ist
+> seit Monaten öffentlich sichtbar; eine Stimme, die sich mitten in der Lektionsreihe
+> ändert, ist teurer als jede Nachproduktion.
+
+Daraus folgt, verbindlich: **nie löschen, nie neu generieren, nie überschreiben.**
+Das Setup-Skript spielt sie bei jeder Installation aus dem Repo in den Toolkit-Ordner —
+die Kopie dort ist Arbeitsstand, das Repo ist die Wahrheit (Regel 9).
+
+### Falls doch einmal neu generiert werden muss
+
+Nur mit ausdrücklicher Freigabe von Uwe, und dann als **bewusste Neu-Abnahme** mit
+neuem Hörtest und neuem Datum in `_abnahme` — nicht als stiller Cache-Rebuild.

@@ -104,6 +104,11 @@ Existenzgruendung-Jobcenter/
 # Kanonische Steakakademie-Konfiguration liegt in docs/openmontage/.
 tools/openmontage/
 
+# Video-Toolkit (MIT, eigenes Upstream-Repo) — wird per `npm run vt:setup[:win]`
+# installiert, nicht vendored. Kanonisches Marken-Profil: docs/video-toolkit/brand/.
+# .env mit Modal-Endpunkten lebt NUR dort (gitignored mit dem Ordner).
+tools/video-toolkit/
+
 # Video-Artefakte: aus script.json + Komposition jederzeit reproduzierbar
 # (`npm run video:kerntemperatur`). Fertige Videos gehören nach R2, nicht ins Repo.
 video/*/out/

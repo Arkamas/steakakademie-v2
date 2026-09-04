@@ -1,0 +1,46 @@
+{
+  "name": "Steakakademie",
+  "description": "FEUER · WISSEN · GENUSS — Premium-Magazin, Full Dark. Whiskey-Gold auf Ruß-Braun, Glut-Orange nur für Aktionen.",
+  "version": "1.0.0",
+
+  "colors": {
+    "primary": "#E85018",
+    "primaryLight": "#C8882A",
+    "textDark": "#17100B",
+    "textMedium": "#C4A882",
+    "textLight": "#947D6C",
+    "bgLight": "#E6D5C3",
+    "bgDark": "#17100B",
+    "bgOverlay": "rgba(23, 16, 11, 0.92)",
+    "divider": "#3A2A1E",
+    "shadow": "rgba(0, 0, 0, 0.45)"
+  },
+
+  "fonts": {
+    "primary": "\"Playfair Display\", Georgia, serif",
+    "body": "\"Source Serif 4\", Georgia, serif",
+    "ui": "\"DM Sans\", system-ui, sans-serif",
+    "mono": "ui-monospace, SFMono-Regular, Menlo, monospace"
+  },
+
+  "spacing":      { "xs": 8, "sm": 16, "md": 24, "lg": 48, "xl": 80, "xxl": 120 },
+  "borderRadius": { "sm": 4, "md": 8, "lg": 14 },
+
+  "typography": {
+    "h1":    { "size": 88, "weight": 700 },
+    "h2":    { "size": 72, "weight": 700 },
+    "h3":    { "size": 48, "weight": 600 },
+    "body":  { "size": 44, "weight": 400 },
+    "label": { "size": 34, "weight": 500, "letterSpacing": 3 }
+  },
+
+  "logo": "assets/logo-barrel-vector.svg",
+
+  "_doktrin": [
+    "Regel 3 CLAUDE.md: KEIN persoenlicher Auftritt von Uwe. Protagonist ist Avatar Marco.",
+    "Regel 3: Marco nie als sprechender Kopf — Stimme + Figur am Grill (von hinten/halbseitlich) + Haende-Nahaufnahmen.",
+    "Regel 2 / 8c: Temperaturen, Cuts, Reifung NIE raten — Quelle ist data/kerntemperatur-referenz.yaml im Hauptrepo.",
+    "Regel 1: Werbekennzeichnung sichtbar VOR dem ersten Klick, auch im Vorschaubild.",
+    "Regel 4: kein Auto-Publishing. /publish erst nach Freigabe durch Uwe."
+  ]
+}

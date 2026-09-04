@@ -1,0 +1,27 @@
+{
+  "voiceId": "",
+  "description": "Marco Richter — tiefe, rauchige Whiskey-Maennerstimme, Deutsch, ruhiges Erzaehltempo. Kein Uwe.",
+  "settings": {
+    "stability": 0.8,
+    "similarityBoost": 0.9,
+    "style": 0.15,
+    "useSpeakerBoost": true
+  },
+  "model": "eleven_multilingual_v2",
+  "qwen3": {
+    "speaker": "Ryan",
+    "language": "German",
+    "tone": "warm, tief, ruhig, erzaehlend",
+    "instruct": "Sprich ruhig und tief, wie ein erfahrener Grillmeister, der einem Freund am Feuer etwas erklaert. Keine Werbestimme.",
+    "clone": null
+  },
+  "sixtydb": {
+    "voiceId": "",
+    "settings": { "stability": 0.85, "similarity": 0.95, "speed": 0.95, "enhance": true }
+  },
+  "_offen": [
+    "speaker 'Ryan' ist nur der Toolkit-Default und NICHT abgehoert — vor der ersten Produktion Hoertest mit deutschen Saetzen, dann festschreiben (Uwe-Gate 'Stimm-Abnahme').",
+    "ElevenLabs bewusst leer: kostenpflichtig + zusaetzlicher Auftragsverarbeiter (AVV). Erst wenn Qwen3-TTS nachweislich nicht reicht.",
+    "Sobald die Stimme steht: hier festschreiben und NIE wieder aendern — Marco ist seit Monaten oeffentlich."
+  ]
+}

@@ -2,12 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  ChevronRight, ArrowRight, Clock, Shield, CheckCircle,
+  ChevronRight, Clock, Shield, CheckCircle,
   Target, Package, Users, MessageSquare, Phone, Mail,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
   // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
@@ -83,25 +82,10 @@ const FAQ = [
 ];
 
 export default async function ErsteKundenSprintPage() {
-  let price: number | null = null;
-  try {
-    const supabase = createClient();
-    const { data } = await supabase
-      .from('courses')
-      .select('price')
-      .eq('slug', 'erste-kunden-sprint')
-      .single();
-    if (data) price = data.price;
-  } catch {
-    // Graceful degradation
-  }
-
-  const eur = (n: number) =>
-    new Intl.NumberFormat('de-DE', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 0,
-    }).format(n);
+  // Preisabruf und eur() entfernt (03.09.2026): Seit die Kauf-CTAs raus sind,
+  // wird kein Preis mehr angezeigt — die Supabase-Abfrage lief pro Aufruf
+  // ohne Abnehmer. Der Preis steht weiterhin in der courses-Tabelle und
+  // kommt mit dem Verkauf zurueck.
 
   const productSchema = {
     '@context': 'https://schema.org',
@@ -113,8 +97,12 @@ export default async function ErsteKundenSprintPage() {
     offers: {
       '@type': 'Offer',
       priceCurrency: 'EUR',
-      ...(price ? { price } : {}),
-      availability: 'https://schema.org/InStock',
+      // PreOrder statt InStock (03.09.2026): Fuer diesen Sprint existiert kein
+      // Digistore-Produkt, es gibt also keinen Kaufweg. InStock behauptete
+      // Verfuegbarkeit. PreOrder — nicht Discontinued — weil das Angebot in
+      // Vorbereitung ist und nie verkauft wurde; so haelt es auch
+      // /ehrliches-system fuer die noch nicht gestarteten Saeulen.
+      availability: 'https://schema.org/PreOrder',
     },
   };
 
@@ -364,27 +352,19 @@ export default async function ErsteKundenSprintPage() {
                   <h2 className="font-serif text-3xl font-bold text-text-primary">
                     Erste-Kunden-Sprint
                   </h2>
-                  {price && (
-                    <p className="font-serif text-4xl font-bold text-brand-gold mt-2">
-                      {eur(price)}
-                    </p>
-                  )}
-                  <p className="text-sm font-sans text-text-muted mt-1">
-                    Einmalig · Sofortzugang · Abgewickelt über Digistore24
-                  </p>
+                  {/* Preis und "Sofortzugang" entfernt (03.09.2026): beides
+                      waere neben einem nicht buchbaren Angebot irrefuehrend. */}
                 </div>
-                <div className="shrink-0">
-                  {/* Digistore24-Link — nach Produkt-Anlage eintragen */}
-                  <a
-                    href="#kaufen"
-                    className="flex items-center justify-center gap-2 px-8 py-4 font-sans font-bold text-base hover:opacity-90 transition-opacity"
-                    style={{ background: '#C8882A', color: '#0D0A06' }}
-                  >
-                    {price ? `${eur(price)} — Jetzt kaufen` : 'Jetzt kaufen'}
-                    <ArrowRight size={16} />
-                  </a>
-                  <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Sofort verfügbar nach Kauf.
+                {/* Kauf-CTA entfernt (03.09.2026). Fuer diesen Sprint existiert
+                    kein Digistore-Produkt — der Button zeigte auf den Anker
+                    #kaufen und damit auf sich selbst. "Jetzt kaufen" samt Preis
+                    und "nach Kauf sofort verfuegbar" war eine Zusage ohne
+                    Einloesung. Zurueckholen, sobald das Produkt angelegt und
+                    die Auslieferung verifiziert ist (courses-Zeile +
+                    digistore_products-Mapping). */}
+                <div className="shrink-0 max-w-xs">
+                  <p className="font-sans text-sm text-text-muted leading-relaxed">
+                    Dieses Angebot ist noch in Vorbereitung und derzeit nicht buchbar.
                   </p>
                 </div>
               </div>

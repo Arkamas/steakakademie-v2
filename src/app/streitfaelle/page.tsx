@@ -4,6 +4,7 @@ import { ChevronRight, Scale, AlertTriangle } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { allStreitfalls } from 'contentlayer/generated';
+import { sichtbareArtikel } from '@/lib/redaktion';
 import { collectionPageSchema, breadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
@@ -24,7 +25,12 @@ export default function StreitfaellePage() {
   // Entschiedene Faelle zuerst, danach Entwuerfe. Innerhalb jeder Gruppe neueste
   // oben. Ein Entwurf ohne Entscheidung ist der halbe Wert der Seite — er darf
   // nicht ueber einem fertigen Fall stehen.
-  const streitfaelle = [...allStreitfalls].sort((a, b) => {
+  // sichtbareArtikel statt roher Collection (03.09.2026): Streitfaelle tragen
+  // seit heute den Redaktionsvorbehalt (contentlayer.config.ts). In der
+  // Entwicklung bleiben Entwuerfe lesbar, in Produktion nicht — dieselbe
+  // Richtung wie bei /fleischwissen: bei einem Fehler zu wenig zeigen,
+  // nicht ungepruefte KI-Texte.
+  const streitfaelle = sichtbareArtikel(allStreitfalls).sort((a, b) => {
     const aDone = a.entscheidung ? 1 : 0;
     const bDone = b.entscheidung ? 1 : 0;
     if (aDone !== bDone) return bDone - aDone;

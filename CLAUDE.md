@@ -18,13 +18,38 @@
 - `node_modules` in diesem Arbeitsbaum ist eine **Windows-Installation**. Native
   Binaries (esbuild, swc) starten unter Linux nicht. **Im Arbeitsbaum selbst** kann
   eine Linux-Session deshalb nur lesen, aendern und Skripte pruefen.
-  **Bauen und typechecken geht trotzdem — in einer eigenen Kopie (02.09.2026):**
-  `git archive HEAD | tar -x -C /tmp/repo && cd /tmp/repo && npm ci && npx tsc --noEmit && npx next build`
-  (2 CPU: tsc 26 s, Build 2:23 min). E2E dazu: `npx playwright install chromium`,
+  **Bauen und typechecken geht trotzdem — in einer eigenen Kopie (02.09.2026,
+  korrigiert 04.09.2026 aus einem echten Verifier-Lauf in der Cowork-VM):**
+  `git archive HEAD | tar -x -C "$HOME/verify-build" && cd "$HOME/verify-build" && npm ci`,
+  dann `npx contentlayer2 build`, dann `npx tsc --noEmit`, dann `npx next build`
+  (2 CPU: tsc 26 s, Build 2:23 min). Vier Dinge, die den Lauf sonst kosten:
+  **(a) nicht nach `/tmp`** — dort darf die Cowork-VM nicht schreiben/raeumen
+  (`rm: Operation not permitted`); `$HOME/verify-build` funktioniert.
+  **(b) `contentlayer2 build` VOR `tsc`** — in einer frischen Kopie fehlt
+  `contentlayer/generated`, tsc meldet dann ~271 Fehler, von denen keiner echt ist.
+  **(c) `next build` ueberschreitet das 120-Sekunden-Fenster** eines Bash-Aufrufs und
+  endet mit **124** — das ist abgeschnitten, nicht gescheitert: erneut aufrufen, der
+  zweite Lauf nutzt den gefuellten Cache und endet mit 0. Nie als gruen und nie als
+  kaputt werten. **(d) Netz-Egress ist vorhanden** (`git fetch`, `npm ci`, `npm ping`
+  je Exit 0) — die frueher hier und in §4 notierte Aussage "lokale Cowork-VM hat
+  keinen Netz-Egress" gilt so nicht mehr. Ausserdem: `pkill -f "next start"` killt
+  in dieser Sandbox die eigene Shell mit (Exit 143) und verwirft die restliche
+  Ausgabe — Aufraeumen gehoert in einen eigenen, letzten Aufruf.
+  E2E dazu: `npx playwright install chromium`,
   fehlende `libXdamage.so.1` ohne root via `apt-get download libxdamage1` +
   `dpkg-deb -x` + `LD_LIBRARY_PATH`; `next start` und Tests im **selben** Bash-Aufruf
   starten (Hintergrundprozesse ueberleben den Aufruf nicht). Ergebnis dann per
   `cp` in den Arbeitsbaum zurueck. Details: docs/PERF-AUDIT-2026-09-02.md.
+- **Eingeloggte Seiten sind auf einem Preview-Deployment NICHT testbar (04.09.2026).**
+  Der Supabase-Auth-Callback leitet auf die hinterlegte Site-URL, und die zeigt auf die
+  Produktion: Wer sich auf `*-git-*.vercel.app` anmeldet, landet auf steakakademie.de
+  und traegt sein Cookie dort ein — auf der Preview bleibt er ausgeloggt. Der
+  `redirectTo`-Parameter wird dabei ueberschrieben. Anonym pruefbar ist nur, DASS das
+  Zugangstor greift (307 auf `/auth/login`). Fuer den Inhalt hinter dem Tor gilt: am
+  Quelltext beweisen (Bedingung + Datenlage, z. B. `checkoutUrl` ist bei allen
+  Eintraegen `null`, also kann der Zweig nicht rendern) und den Blick auf die
+  Produktion nach dem Merge verschieben — oder das Passwort-Formular der Preview
+  nutzen, das ohne Umleitung auskommt. Nie als "geprueft" ausgeben, was nur gelesen wurde.
 - **Exitcode pruefen, immer.** Ein Befehl, der nichts ausgibt, ist nicht gruen.
   `timeout` liefert Exitcode 124 — das ist ein Abbruch ohne Ergebnis, kein Bestehen.
 - Ein voller Typecheck passt **nicht** in ein 45-Sekunden-Fenster. Nicht anfangen,
@@ -272,6 +297,32 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
 
 ## 3. Agentur-Struktur (Betriebsmodell)
 
+### 3.0 Die FÜNF Abteilungen (Uwe, 10.08.2026 — verbindlich)
+
+Übersicht und aktueller Stand: **`docs/COCKPIT.md`** — das ist die einzige Datei, die
+Uwe anheftet, und der Einstieg in alles Weitere.
+
+| # | Abteilung | Ersetzt | Ordner |
+|---|---|---|---|
+| 1 | **Systems & Ops** | Entwicklung + IT-Betrieb | `src/` `scripts/` `supabase/` `tests/` `tools/` `.github/` |
+| 2 | **Studio** | Video-/Bildproduktion | `video/` `training/` `bild-austausch/` |
+| 3 | **Redaktion** | Content-Team + Fachredaktion | `content/` `data/` |
+| 4 | **Wachstum** | SEO/GEO · Social · Newsletter · Affiliate | `products/` `steakakademie-audit/` |
+| 5 | **Kanzlei** | Recht · Steuern · Behörden | `compliance/` `Existenzgruendung-Jobcenter/` |
+
+**Nicht verhandelbar: Es bleibt bei fünf.** Grund: Fünf ist die Grenze dessen, was ohne
+Nachschlagen im Kopf bleibt — und genau der Überblicksverlust war der Anlass. Jedes neue
+Tool, jeder neue Ordner, jede neue Automatisierung wird **einer der fünf zugeordnet**,
+bevor sie entsteht; die Zuordnung gehört sichtbar in den Commit oder die Abteilungs-Doku.
+Passt etwas in keine Abteilung, ist das ein Signal zum Nachdenken (falsch geschnitten?
+gehört es überhaupt ins Projekt?) — **kein** Grund für eine sechste. Eine sechste
+Abteilung kann nur Uwe selbst eröffnen, mit wörtlichem Zitat und Datum an dieser Stelle.
+
+Die Rollen-/RACI-Struktur unten (CMO, Fach-Rollen, Enabler) bleibt davon unberührt —
+sie beschreibt **wer** arbeitet, die fünf Abteilungen beschreiben **wo** es einsortiert wird.
+
+### 3.1 Rollen & Hierarchie
+
 **Vollständig:** `docs/confluence/04-MARKETING-AGENCY-MODEL.md` (Hierarchie, Prioritäts-
 Logik, Pipeline „wer beginnt/was folgt", RACI je Marketing-Frage, Eskalation).
 
@@ -398,6 +449,15 @@ Analytics & Data · CRM & Monetization.
    noch der Community-Teil.
 4. **Affiliate-Programme anmelden** (Santos, Grillfürst, Ankerkraut, Otto Gourmet) + PA-API.
 5. **Marken-Frist:** Wortmarke „Steakakademie" — Gebühr offen, Frist ~27.08.2026 (KAN-17).
+
+**Manuelle Restpunkte, übernommen aus den gelöschten `STATUS.md`/`ROADMAP.md`
+(Stand dort Mai 2026, seither NICHT nachgeprüft — 03.09.2026):** Digistore24
+Dankeseiten-URLs für 696394/696396/696399 auf `/danke/*` setzen, Widerrufs-Checkbox
+aktivieren, Genehmigung per „Testkauf anlegen" beantragen · `AMAZON_ACCESS_KEY` +
+`AMAZON_SECRET_KEY` in Vercel eintragen, dann `npm run fetch-images` · Google Business
+Profil anlegen und verifizieren · `GA4_MEASUREMENT_ID` + `GA4_API_SECRET` in Vercel.
+Beide Dateien wurden entfernt, weil sie Netlify als Produktion nannten und am 03.09.
+einen Fehlbefund gestützt haben — Statusquelle ist ausschließlich diese Datei.
 
 ---
 

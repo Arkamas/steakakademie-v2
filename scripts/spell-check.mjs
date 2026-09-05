@@ -105,6 +105,11 @@ function extractText (raw) {
     .replace(/^\s*(import|export)\s.+$/gm, ' ')  // MDX-Imports
     .replace(/https?:\/\/\S+/g, ' ')             // nackte URLs
     .replace(/^[|:\-\s|]+$/gm, ' ')              // Tabellen-Trennzeilen
+    // Betonung INNERHALB eines Wortes ("**D**ark, **f**irm, **d**ry") wird
+    // entfernt, nicht durch Leerzeichen ersetzt — sonst meldet der Pruefer
+    // "ark", "irm", "ry" als Tippfehler (Fund 03.09.2026, DFD-Artikel).
+    .replace(/(\S)[*_]{1,2}(\S)/g, '$1$2')
+    .replace(/(\S)[*_]{1,2}(\S)/g, '$1$2')       // zweiter Durchlauf fuer Ketten wie **D**ark **f**
     .replace(/[*_#>|]/g, ' ')                    // Markdown-Zeichen
   return { text: (fmText + text).replace(/[ \t]+/g, ' '), lecks }
 }
@@ -214,6 +219,13 @@ for (const file of files) {
     while (b < ctx.length - 1 && ctx[b] === '-' && /[\wäöüÄÖÜß]/.test(ctx[b + 1] || '')) { b += 2; while (b < ctx.length && /[\wäöüÄÖÜß]/.test(ctx[b])) b++ }
     const wort = ctx.slice(a, b).trim()
     const parts = wort.toLowerCase().split(/[-\s]/)
+    // Der von LanguageTool markierte Kern zaehlt fuer sich (03.09.2026): "IBBQ"
+    // in "IBBQ-4T" stand in der Whitelist und wurde trotzdem gemeldet, weil nur
+    // das ausgedehnte Kompositum und dessen Teile geprueft wurden — und "4T"
+    // kennt die Liste nicht. Ist der markierte Kern selbst bekannt, ist es ein
+    // Fehlalarm, egal was daneben haengt.
+    const kern = ctx.slice(m.context.offset, m.context.offset + m.context.length).trim().toLowerCase()
+    if (kern && whitelist.has(kern)) return false
     if (whitelist.has(wort.toLowerCase()) || parts.every((p) => !p || whitelist.has(p))) return false
     if (m.rule?.id === 'GERMAN_SPELLER_RULE') wortFrequenz[wort] = (wortFrequenz[wort] || 0) + 1
     return true

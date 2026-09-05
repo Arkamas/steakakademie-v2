@@ -7,6 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import BildCredit from '@/components/BildCredit';
 import DiplomCTA from '@/components/mdx/DiplomCTA';
+import AffiliateBox from '@/components/mdx/AffiliateBox';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { getAuthorBySlug } from '@/lib/authors';
 import { serie, teilBySlug, nachbarn } from '@/lib/fleischwissen';
@@ -52,6 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const mdxComponents = {
   DiplomCTA,
+  AffiliateBox,
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
       className="font-serif text-2xl sm:text-3xl font-bold text-text-light mt-12 mb-5 leading-tight pb-3"

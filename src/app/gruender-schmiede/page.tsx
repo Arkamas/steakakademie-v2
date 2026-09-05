@@ -126,11 +126,15 @@ export default async function GruenderSchmiedePage() {
     description:
       'Die echte Methode, KI-gesteuert ein digitales Business aufzubauen — sechs Module vom Chef-Prinzip bis zum täglichen Arbeits-Loop, plus das Gründer-Nachschlagewerk „Das Komplettikon" und ein Arbeitszeit-Planer. Von Tag 1 dokumentiert.',
     brand: { '@type': 'Brand', name: 'Steakakademie' },
+    // Checkout AUS (Uwe, 03.09.2026) — deshalb Discontinued statt InStock und
+    // ohne Preis. Ein Product-Schema mit InStock und Preisangabe ist fuer
+    // Suchmaschinen ein kaufbares Angebot; das waere hier eine strukturierte
+    // Falschangabe, auch wenn die Seite auf noindex steht (Schema wird von
+    // anderen Parsern als Googlebot gelesen). Mit dem Checkout zurueckdrehen.
     offers: {
       '@type': 'Offer',
       priceCurrency: 'EUR',
-      ...(price ? { price } : {}),
-      availability: 'https://schema.org/InStock',
+      availability: 'https://schema.org/Discontinued',
     },
   };
 
@@ -210,18 +214,11 @@ export default async function GruenderSchmiedePage() {
                 ))}
               </div>
 
-              <div className="mt-10">
-                <a
-                  href="#kaufen"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-brand-gold text-ink font-sans font-bold text-sm tracking-[0.08em] uppercase hover:bg-[#b07020] transition-colors"
-                >
-                  {price ? `Jetzt für ${eur(price)} starten` : 'Jetzt starten'}
-                  <ArrowRight size={16} />
-                </a>
-                <p className="mt-3 text-[11px] font-sans text-text-light/40">
-                  Einmalzahlung inkl. MwSt. · Sofortzugang · Sichere Abwicklung über Digistore24
-                </p>
-              </div>
+              {/* Kauf-CTA entfernt (Uwe, 03.09.2026) — siehe Kommentar am
+                  Preis-Abschnitt weiter unten. Ein "Jetzt für X € starten",
+                  das auf einen Abschnitt ohne Kaufmöglichkeit springt, wäre
+                  eine Preiszusage ohne Einlösung. Beim Wiedereinschalten
+                  zusammen mit dem Checkout zurückholen. */}
             </div>
           </div>
         </section>
@@ -461,37 +458,41 @@ export default async function GruenderSchmiedePage() {
             <div className="max-w-content mx-auto">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8">
                 <div>
+                  {/* Preis und "Sofortzugang" entfernt (Uwe, 03.09.2026):
+                      Solange nicht gekauft werden kann, ist beides eine Zusage
+                      ohne Einlösung — Preisangabe plus "Sofortzugang" neben
+                      einem nicht buchbaren Angebot ist irreführende Werbung.
+                      Mit dem Checkout zurückholen, nicht vorher. */}
                   <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-2">
-                    Einmaliger Zugang
+                    Derzeit nicht buchbar
                   </span>
                   <h2 className="font-serif text-3xl font-bold text-text-primary">
                     Gründer-Schmiede
                   </h2>
-                  {price && (
-                    <p className="font-serif text-4xl font-bold text-brand-gold mt-2">
-                      {eur(price)}
-                    </p>
-                  )}
-                  <p className="text-sm font-sans text-text-muted mt-1">
-                    Einmalig · inkl. MwSt. · Sofortzugang · Abgewickelt über Digistore24
-                  </p>
                 </div>
-                <div className="shrink-0">
-                  <a
-                    href="https://www.checkout-ds24.com/product/695894"
-                    rel="nofollow noopener"
-                    className="flex items-center justify-center gap-2 px-8 py-4 bg-brand-gold text-ink font-sans font-bold text-base hover:bg-[#b07020] transition-colors"
-                  >
-                    Jetzt kaufen
-                    <ArrowRight size={18} />
-                  </a>
-                  <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Sichere Abwicklung über Digistore24 · Sofortzugang nach Zahlung
+                {/* Checkout AUS (Uwe, 03.09.2026): "Gründung-Sprint bleibt aus,
+                    dazu haben wir bereits ein anderes Produkt entwickelt."
+                    Der zweite Kaufweg neben /mein-system — beide stillgelegt.
+                    Digistore 695894 bleibt im Konto aktiv und genehmigt, es
+                    wird hier nur nicht mehr verkauft. Der Kaufbutton ist
+                    entfernt statt versteckt: ein per CSS ausgeblendeter Link
+                    bleibt klickbar und im HTML auffindbar.
+                    WIEDEREINSCHALTEN: diesen Block durch den <a>-Button auf
+                    https://www.checkout-ds24.com/product/695894 ersetzen und
+                    checkoutUrl in src/app/mein-system/page.tsx zuruecksetzen —
+                    aber erst, wenn Auslieferung (courses-Zeile +
+                    digistore_products-Mapping) verifiziert ist. */}
+                <div className="shrink-0 max-w-xs">
+                  <p className="font-sans text-sm text-text-muted leading-relaxed">
+                    Dieses Angebot ist derzeit nicht buchbar. Wir haben es durch ein neues
+                    Produkt abgelöst und geben hier Bescheid, sobald es so weit ist.
                   </p>
                 </div>
               </div>
 
-              {/* Werkzeug-Kosten ehrlich offenlegen (Claude Code) — vor dem Kauf */}
+              {/* Werkzeug-Kosten ehrlich offenlegen (Claude Code). Bleibt stehen,
+                  obwohl derzeit nicht gekauft werden kann — die Angabe gehoert
+                  zur Beschreibung des Systems, nicht zum Kaufvorgang. */}
               <div className="mb-6">
                 <WerkzeugHinweis />
               </div>

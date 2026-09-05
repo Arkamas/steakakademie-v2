@@ -29,7 +29,16 @@ const SAULEN = [
     href:        '/gruender-schmiede',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
-    checkoutUrl: 'https://www.digistore24.com/product/695894' as string | null,
+    // Checkout AUS (Uwe, 03.09.2026): "Gründung-Sprint bleibt aus, dazu haben
+    // wir bereits ein anderes Produkt entwickelt." Digistore 695894 bleibt im
+    // Konto aktiv und fuer DS-de genehmigt — nur verkauft wird es hier nicht
+    // mehr. Gleiche Stilllegung wie bei 695900 darunter.
+    //
+    // Anlass: Am 02.09. wurde der Gruender-Bereich deindexiert und aus
+    // Navigation und Footer ausgebaut (63a08d4, 641b346), der Checkout aber
+    // nicht mitgenommen. noindex heisst nur "nicht in Google" — diese Seite
+    // lieferte weiter 200 und war ueber die URL kaufbar.
+    checkoutUrl: null as string | null,
   },
   {
     slug:        'steuer-matrix',
@@ -42,7 +51,11 @@ const SAULEN = [
     href:        '/steuer-matrix',
     toolHref:    '/steuer-matrix/rechner' as string | null,
     toolLabel:   'Rechner öffnen' as string | null,
-    checkoutUrl: 'https://www.digistore24.com/product/695797' as string | null,
+    // Checkout AUS (Uwe, 03.09.2026): "Steuer-Matrix ebenfalls unsichtbar
+    // schalten." Digistore 695797 bleibt im Konto aktiv und genehmigt.
+    // Wer bereits gekauft hat, behaelt seinen Zugang — das laeuft ueber
+    // hasAccess in src/app/steuer-matrix/page.tsx, nicht ueber diese Zeile.
+    checkoutUrl: null as string | null,
   },
   {
     slug:        'agentur-killer-sprint',
@@ -311,13 +324,21 @@ export default async function MeinSystemPage() {
                               className="flex items-center justify-center gap-2 w-full py-2.5 font-sans font-bold text-sm hover:opacity-90 transition-opacity"
                               style={{ background: '#C8882A', color: '#0D0A06' }}
                             >
-                              {price ? `${eur(price)} — Mehr erfahren` : 'Mehr erfahren'}
+                              Mehr erfahren
                               <ChevronRight size={13} />
                             </Link>
                           )}
-                          <p className="text-center text-[10px] font-sans text-text-muted">
-                            Einmalig · Sofortzugang · Digistore24
-                          </p>
+                          {/* Zugangszusage nur am echten Kaufweg (04.09.2026, Verifier-Befund):
+                              Der Absatz lag ausserhalb des checkoutUrl-Ternaers und versprach
+                              "Sofortzugang" auch fuer die drei stillgelegten Saeulen. Preis am
+                              Fallback-Button aus demselben Grund entfernt — kein Preis und keine
+                              Zugangszusage an etwas, das man nicht kaufen kann.
+                              Merksatz: docs/confluence/03-OPERATIONS.md. */}
+                          {saule.checkoutUrl && (
+                            <p className="text-center text-[10px] font-sans text-text-muted">
+                              Einmalig · Sofortzugang · Digistore24
+                            </p>
+                          )}
                         </>
                       )}
                     </div>

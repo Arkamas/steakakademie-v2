@@ -136,9 +136,55 @@ module.exports = {
     const ssrPaths = [
       '/cut-generator', '/steak-beichte', '/mein-protokoll', '/rezepte/community',
     ];
+
+    // 03.09.2026: BBQ-News-Beitraege (/bbq-news/<slug>). Die Detailseiten
+    // rendern per ISR aus Supabase und stehen deshalb nicht im Prerender-
+    // Manifest. Gelesen wird nur status=approved — dieselbe Freigabe-Grenze
+    // wie in src/lib/bbq-news.ts. Die Kategorienliste kommt aus
+    // src/lib/content-routing.ts (per Regex, weil diese Datei CommonJS ist);
+    // eine zweite, handgepflegte Liste wuerde auseinanderlaufen.
+    // Ohne Env oder bei Fehler: leer — die Sitemap bleibt gueltig.
+    const bbqNews = await (async () => {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (!url || !key || typeof fetch !== 'function') return [];
+      let cats = [];
+      try {
+        const src = fs.readFileSync(path.join(__dirname, 'src', 'lib', 'content-routing.ts'), 'utf8');
+        const re = /^\s*'?([a-z0-9-]+)'?\s*:\s*\{\s*route:\s*'\/bbq-news'/gm;
+        let m;
+        while ((m = re.exec(src)) !== null) cats.push(m[1]);
+      } catch { return []; }
+      if (cats.length === 0) return [];
+      try {
+        const q = new URLSearchParams({
+          select: 'slug,generated_at',
+          status: 'eq.approved',
+          category: `in.(${cats.join(',')})`,
+          slug: 'not.is.null',
+          order: 'generated_at.desc',
+          limit: '200',
+        });
+        const res = await fetch(`${url}/rest/v1/content_drafts?${q}`, {
+          headers: { apikey: key, Authorization: `Bearer ${key}` },
+        });
+        if (!res.ok) return [];
+        const rows = await res.json();
+        return rows
+          .filter((r) => r && r.slug)
+          .map((r) => ({
+            loc: `/bbq-news/${r.slug}`,
+            changefreq: 'monthly',
+            priority: 0.7,
+            lastmod: r.generated_at ? new Date(r.generated_at).toISOString() : undefined,
+          }));
+      } catch { return []; }
+    })();
+
     return [
       ...ssrPaths.map((loc) => ({ loc, changefreq: 'weekly', priority: 0.8 })),
       ...stufe1,
+      ...bbqNews,
     ];
   },
   robotsTxtOptions: {

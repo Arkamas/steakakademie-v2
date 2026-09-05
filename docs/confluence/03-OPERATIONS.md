@@ -32,16 +32,118 @@
 
 ## Digistore24-Produkte
 
-| ID | Produkt | Preis | Status |
-|----|---------|-------|--------|
-| 696394 | Steak-Beichte (KI-Diagnose, Credits) | 7€ / 25€ 5er | ✅ liefert (hardcoded Credit) |
-| 696396 | Mein Protokoll (8-Wochen-Plan) | 19€ / 29€ | ✅ verifiziert live 01.06. |
-| 696399 | BBQ-Grundkurs | 79€ / 127€ | „In Vorbereitung" (Substanz fehlt) |
-| 695894 | Gründung-Sprint | — | deaktiviert bis Substanz |
-| 695900 | Agentur-Killer-Sprint | — | deaktiviert bis Substanz |
-| 695797 | Steuer-Matrix | — | live |
+**Stand 03.09.2026, direkt über die Digistore24-API geprüft** (`listProducts`). Die vorherige
+Fassung dieser Tabelle war an drei Stellen falsch — sie führte 695894 und 695900 als
+„deaktiviert bis Substanz". Beide sind im Konto aktiv, 695894 und 695900 sind sogar für
+DS-de **genehmigt**. Wer eine Statusangabe hier ändert, prüft sie vorher gegen die API.
+
+| ID | Produkt | Preis | Digistore: aktiv | Digistore: DS-de | Verkaufsseite | Checkout im Code |
+|----|---------|-------|---|---|---|---|
+| 696394 | Steak-Beichte (KI-Diagnose, Credits) | 7 € / 25 € (5er) | ✅ Y | ✅ genehmigt | `/steak-beichte` (indexiert) | ✅ an |
+| 696396 | Mein Protokoll (8-Wochen-Plan) | 19 € / 29 € | ✅ Y | ⏳ „neu" | `/mein-protokoll` (indexiert) | ✅ an |
+| 696399 | BBQ-Grundkurs | 79 € / 127 € | ✅ Y | ⏳ „neu" | `/bbq-grundkurs` (indexiert) | ❌ keine ID im Code |
+| 695894 | Gründung-Sprint | 99 € | ✅ Y | ✅ genehmigt | `/gruender-schmiede` (**noindex**) | ❌ **aus, 03.09.2026** |
+| 695900 | Agentur-Killer-Sprint | — | ✅ Y | ✅ genehmigt | `/agentur-killer-sprint` (**noindex**) | ❌ bewusst aus |
+| 695797 | Steuer-Matrix | — | ✅ Y | ✅ genehmigt | `/steuer-matrix` (**noindex**) | ❌ **aus, 03.09.2026** |
 
 ⚠️ **Regel:** Jedes Course-Produkt braucht `courses`-Zeile + `digistore_products`-Mapping, sonst kassiert es ohne Auslieferung. Reaktivierung: **erst Substanz, dann Checkout** — nie umgekehrt.
+
+### Gründung-Sprint (695894) — Checkout stillgelegt am 03.09.2026
+
+Die drei Gründer-Seiten wurden am 02.09. deindexiert und aus Navigation und Footer ausgebaut
+(`63a08d4`, `641b346`) — GF3 wird nicht vermarktet, bevor GF1 liefert. **Der Checkout war dabei
+nicht mitgenommen worden.** Live nachgewiesen am 03.09.: `/gruender-schmiede` zeigte einen
+„Jetzt kaufen"-Button auf `checkout-ds24.com/product/695894`, ein „Jetzt für 99 € starten"
+und `availability: InStock` im Product-Schema. `noindex` heißt nur „nicht in Google" — die
+Seite lieferte 200 und war über die URL kaufbar.
+
+**Entscheidung Uwe, 03.09.2026, wörtlich:** „Gründung-Sprint bleibt aus, dazu haben wir bereits
+ein anderes Produkt entwickelt."
+
+Gemeint ist das Konzept **„Zweites Standbein: Websites für Lebensmittelhandwerk"**
+(`Projects\Steakakademie\Zweites-Standbein-Websites-Konzept.md`, Stand 30.08.2026).
+Es benennt diese Abschaltung selbst als Auslöser: *„Das Ehrliche System verschwindet von
+steakakademie.de … Die dort steckende Arbeit wandert in ein eigenes Angebot."*
+
+**Wichtig für die Statusbewertung:** Das Konzept ist ausdrücklich **Konzeptstand, nicht
+validiert** — es gibt dafür weder Code noch Website noch Digistore-Produkt (API-Stand
+03.09.2026: sechs Produkte, alle aus dem Bestand). Der Gründer-Bereich ist also nicht durch
+ein laufendes Angebot abgelöst, sondern vorerst nur stillgelegt. Wer hier später liest: Die
+alten Seiten liegen unverlinkt und auf `noindex` herum — das ist eine Zwischenlösung, kein
+Zielzustand. Sobald das Nachfolgeangebot steht, gehören sie entweder dorthin weitergeleitet
+oder entfernt.
+
+Stillgelegt wurden **beide** Kaufwege, nicht nur einer:
+1. `src/app/mein-system/page.tsx` — `checkoutUrl` auf `null`, wie bei 695900.
+2. `src/app/gruender-schmiede/page.tsx` — Kaufbutton entfernt (nicht per CSS versteckt: ein
+   ausgeblendeter Link bleibt klickbar und im HTML auffindbar), Sprung-CTA „Jetzt für 99 €
+   starten" entfernt, Preis und „Sofortzugang" entfernt (Preisangabe neben einem nicht
+   buchbaren Angebot ist irreführend), Product-Schema von `InStock` auf `Discontinued` ohne
+   Preis. An die Stelle des Buttons tritt ein sachlicher Hinweis, dass das Angebot abgelöst ist.
+
+Das Produkt bleibt in Digistore aktiv und genehmigt — es wird nur nicht mehr angeboten.
+Wiedereinschalten: siehe Kommentare an beiden Stellen im Code, und erst nach verifizierter
+Auslieferung (`courses`-Zeile + `digistore_products`-Mapping).
+
+### Steuer-Matrix (695797) — Checkout stillgelegt am 03.09.2026
+
+**Entscheidung Uwe, 03.09.2026:** „Steuer-Matrix ebenfalls unsichtbar schalten."
+
+- `src/app/mein-system/page.tsx` — `checkoutUrl` auf `null`.
+- `src/app/steuer-matrix/page.tsx` — **zwei** Kauf-CTAs entfernt (Hero und Lock-Overlay über
+  der Ländertabelle), Preis und „sofortiger Zugang" / „Sofortzugang nach Kauf" raus,
+  Product-Schema `InStock` → `Discontinued` ohne Preis, Preisabruf aus Supabase entfernt.
+
+Beide Buttons zeigten ohnehin nur auf den Anker `#kaufen`, dessen `id` am zweiten Button selbst
+hing — ein Kaufversprechen mit Preis, das ins Nichts führte. Der eigentliche Kauf lief allein
+über `/mein-system`.
+
+**Käufer behalten ihren Zugang.** Das läuft über `hasAccess` (Abfrage auf `bookings` +
+`courses.slug = 'steuer-matrix'`) und ist von der Stilllegung unberührt: Wer gekauft hat, sieht
+weiterhin „Zum Rechner", das Lock-Overlay erscheint nur für alle anderen.
+
+✅ **Beantwortet am 04.09.2026 — direkt in der Produktionsdatenbank** (über den
+claude.ai-Supabase-Connector; der lokale MCP antwortet weiterhin `Unauthorized`):
+
+| `courses.slug` | Preis | published | `digistore_products`-Mapping | Bookings |
+|---|---|---|---|---|
+| steuer-matrix | 197 € | ja | 1 | **2** |
+| gruender-schmiede | 99 € | ja | 1 | 1 |
+| mein-protokoll | 0 | nein | 1 | 2 |
+| steak-beichte | 0 | nein | 1 | 1 |
+| bbq-grundkurs | 0 | nein | 1 | 1 |
+
+Beide stillgelegten Produkte **hätten ausgeliefert** — Kurszeile und Mapping sind vorhanden.
+Die Regel „erst Substanz, dann Checkout" war also erfüllt; die frühere Doku-Angabe
+„deaktiviert bis Substanz" war in beiden Fällen falsch. Die Abschaltung bleibt trotzdem
+richtig, aber aus dem Grund, den Uwe genannt hat (Produkt abgelöst), nicht wegen fehlender
+Auslieferung. **Steuer-Matrix hat zwei Buchungen** — deshalb war es richtig, `hasAccess`
+nicht anzufassen: diese Käufer behalten ihren Rechner.
+
+Nebenbefund: `bbq-grundkurs` hat eine Buchung, obwohl `published: false` und Preis 0 — vermutlich
+ein Testkauf aus der Einrichtung (Digistore 696399 steht auf „neu"). Bei Gelegenheit prüfen,
+ob das eine echte Person ist.
+
+### Nebenbefund: `InStock` ohne Kaufweg (03.09.2026 behoben)
+
+Beim Durchgehen aller Gründer-Seiten fiel auf, dass drei weitere Product-Schemas
+`availability: InStock` meldeten, obwohl es dort keinen Kaufweg gibt:
+
+| Seite | vorher | jetzt | Grund |
+|---|---|---|---|
+| `/agentur-killer-sprint` | InStock | `Discontinued` | 695900 existiert, Checkout bewusst aus |
+| `/erste-kunden-sprint` | InStock | `PreOrder` | kein Digistore-Produkt, nie verkauft |
+| `/seo-sprint` | InStock | `PreOrder` | kein Digistore-Produkt, nie verkauft |
+
+Auf den beiden Sprint-Seiten stand zusätzlich je ein „Jetzt kaufen"-Button mit Preis und
+„Sofort verfügbar nach Kauf" — beide zeigten auf `#kaufen` ins Leere. Entfernt.
+`/ehrliches-system` nutzte bereits korrekt `PreOrder`.
+
+**Merksatz:** Sichtbarkeit und Kaufbarkeit sind zwei verschiedene Schalter. Wer einen Bereich
+deindexiert, hat den Verkauf noch nicht abgeschaltet — dazu gehören Checkout-Links, Sprung-CTAs
+mit Preis, die Preisangabe selbst, Zugangsversprechen („Sofortzugang") und `availability` im
+Schema. Und Buttons werden entfernt, nicht per CSS versteckt: ein ausgeblendeter Link bleibt
+klickbar und im HTML auffindbar.
 
 ## Aktive Ops-Blocker (auf Uwe) → Jira
 

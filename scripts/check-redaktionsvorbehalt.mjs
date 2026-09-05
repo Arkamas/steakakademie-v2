@@ -69,7 +69,7 @@ const STRENGE_PFADE = ['artikel']
  * Glossar-Agent committet taeglich ungepruefte Eintraege direkt auf main - ohne
  * Filter waeren sie mit demselben Push live.
  */
-const GESCHUETZTE_COLLECTIONS = ['allArtikels', 'allGlossars']
+const GESCHUETZTE_COLLECTIONS = ['allArtikels', 'allGlossars', 'allStreitfalls']
 
 const STATUS_WERTE = ['draft', 'review', 'published']
 

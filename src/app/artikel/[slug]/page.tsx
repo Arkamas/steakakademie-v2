@@ -7,6 +7,17 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { sichtbareArtikel, istEntwurf } from '@/lib/redaktion';
+// 03.09.2026: Diese Route registrierte bisher NUR HTML-Overrides. Ein MDX mit
+// <DiplomCTA> oder <AffiliateBox> unter content/artikel/ hat den Build mit
+// "Expected component to be defined" gebrochen — aufgefallen an einem
+// Pipeline-Entwurf, der beide Bloecke platziert hatte. /fleischwissen hatte
+// sie laengst, /artikel nicht: derselbe Bezeichner-Fehler wie 7f19d67, nur
+// aus der anderen Richtung (Komponente existiert, Route kennt sie nicht).
+// Das MDX-Gate faengt das NICHT: es prueft gegen die Vereinigung aller
+// bekannten Namen, nicht pro Route (CLAUDE.md §4, MDX-Komponenten-Gate).
+import DiplomCTA from '@/components/mdx/DiplomCTA';
+import AffiliateBox from '@/components/mdx/AffiliateBox';
+import { faqSchema } from '@/lib/schema';
 
 interface Props {
   params: { slug: string };
@@ -64,6 +75,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // ── MDX-Komponenten Override ──────────────────────────────────────────────────
 
 const mdxComponents = {
+  DiplomCTA,
+  AffiliateBox,
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
       className="font-serif text-2xl sm:text-3xl font-bold text-text-primary mt-10 mb-4 leading-tight border-b border-border-subtle pb-3"
@@ -167,6 +180,13 @@ export default function ArtikelDetailPage({ params }: Props) {
         ...(artikel.image && { image: artikel.image }),
       };
 
+  // FAQPage-Schema (03.09.2026). Gleiche Grenze wie beim Article-Schema: ein
+  // Entwurf gehoert nicht in strukturierte Daten. Der sichtbare FAQ-Block
+  // unten steht bewusst NICHT unter dieser Bedingung — beim Korrekturlesen
+  // will Uwe die Fragen sehen, Google soll sie nur nicht auswerten.
+  const faqItems = (artikel.faq as Array<{ question: string; answer: string }> | undefined) ?? [];
+  const faqSch = !entwurf && faqItems.length > 0 ? faqSchema(faqItems) : null;
+
   return (
     <>
       <Header />
@@ -174,6 +194,12 @@ export default function ArtikelDetailPage({ params }: Props) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: ldJson(articleSchema) }}
+        />
+      )}
+      {faqSch && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: ldJson(faqSch) }}
         />
       )}
 
@@ -235,6 +261,26 @@ export default function ArtikelDetailPage({ params }: Props) {
         <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <article className="max-w-content">
             <MDXContent components={mdxComponents} />
+
+            {/* FAQ-Block aus dem Frontmatter (03.09.2026). Wer die Fragen
+                zusaetzlich im MDX ausschreibt, bekommt sie doppelt — der
+                Block hier ist die eine Quelle. Layout wie /fleischwissen,
+                nur auf hellem Grund. */}
+            {faqItems.length > 0 && (
+              <section className="mt-14">
+                <h2 className="font-serif text-2xl font-bold text-text-primary mb-6 pb-3 border-b border-border-subtle">
+                  Häufige Fragen
+                </h2>
+                <dl className="space-y-5">
+                  {faqItems.map((item) => (
+                    <div key={item.question} className="pb-5 border-b border-border-subtle/60">
+                      <dt className="font-sans font-bold text-text-primary mb-2">{item.question}</dt>
+                      <dd className="font-body text-text-secondary leading-relaxed">{item.answer}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            )}
 
             {artikel.tags && artikel.tags.length > 0 && (
               <div className="mt-10 pt-6 border-t border-border-subtle flex flex-wrap gap-2">

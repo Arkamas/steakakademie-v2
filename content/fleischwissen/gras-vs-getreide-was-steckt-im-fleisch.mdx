@@ -17,25 +17,26 @@ readingTime: 10
 tags: ["Grasfütterung", "Weidefleisch", "Omega-3", "CLA", "Nährstoffe", "Siegel"]
 seoTitle: "Grasfütterung vs. Kraftfutter: Omega-3, Vitamine und CLA im Rindfleisch"
 seoDescription: "Weidefleisch oder Getreidemast? Die belegten Unterschiede bei Omega-6:3, Vitamin E, Beta-Carotin und CLA — mit echten Studienzahlen und ohne Gesundheitsversprechen."
-# ── Hero-Bild fehlt noch (Auftrag Punkt 7) ─────────────────────────────
-# Uwe liefert die Motive nach (Nano-Banana-Pipeline). Bis dahin bleiben die
-# Felder auskommentiert: Layout und OG-Bild haben einen Fallback, ein Pfad
-# auf eine nicht existierende Datei haette dagegen eine kaputte Kachel
-# ergeben. Zum Aktivieren: Zeilen entkommentieren, imageAI/imageSource
-# nach dem bestehenden Verfahren (KAN-64) ausfuellen.
-# image: "/images/fleischwissen/gras-vs-getreide-hero.jpg"
-# imageAlt: "Rinder auf einer Weide im Gegenlicht, im Vordergrund frisches Gras"
-# imageSource: ""
-# imageAI: true
+# ── Hero-Bild (03.09.2026) ─────────────────────────────────────────────
+# Erzeugt ueber scripts/hero-images.mjs (fal.ai FLUX + Hausstil-LoRA).
+# Bildstil nach Uwes Ansage vom 30.08.2026: viel Weide, wenig Rind
+# (~20-25 % Sichtpraesenz), Landschaft und goldenes Licht dominieren,
+# kein Fleisch- und kein Theken-Motiv. Der fruehere Alt-Text (Steaks
+# auf Schiefer bzw. Reifekuehlraum) widersprach dieser Ansage und ist
+# ersetzt. Registereintrag: data/bildregister.yaml, status ki.
+image: "/images/fleischwissen/gras-vs-getreide-hero.jpg"
+imageAlt: "Fruehlingsweide im Gegenlicht, hohe Graeser scharf im Vordergrund, Rinder klein und unscharf im Hintergrund"
+imageSource: "KI-generiert (FLUX via fal.ai, Hausstil-LoRA)"
+imageAI: true
 # ── Redaktionsvorbehalt (AI Act Art. 50 Abs. 4) ────────────────────────
-# NOCH NICHT FREIGEGEBEN (Uwe, 30.08.2026). Zwei dokumentierte Faktencheck-
-# Runden am 30.08.2026 (Protokoll im Quellordner) ersetzen die redaktionelle
-# Abnahme nicht. Solange status auf review steht, filtert nurVeroeffentlicht()
-# den Artikel aus Uebersicht, Sitemap und generateStaticParams heraus.
-# Freigabe = status auf published, reviewed auf true und reviewedAt auf das
-# Datum der Abnahme. Ein Pruefdatum, das niemand gesetzt hat, waere ein
-# erfundener Nachweis — deshalb bleibt reviewedAt bis dahin ganz weg.
-status: "review"
+# FREIGEGEBEN (Uwe, 03.09.2026): "Ich hatte die Artikel bereits gelesen, ich
+# gebe sie hiermit frei." Damit ist die redaktionelle Abnahme durch einen
+# Menschen erfolgt — reviewedAt dokumentiert genau dieses Datum, nicht das
+# Datum der Faktenchecks (30.08.2026, Protokoll im Quellordner).
+# Fachliche Verantwortung: Uwe Yendell (src/lib/authors.ts).
+status: "published"
+reviewed: true
+reviewedAt: "2026-09-03"
 faq:
   - question: "Ist grasgefüttertes Rindfleisch gesünder?"
     answer: "Es hat ein messbar anderes Nährstoffprofil: ein günstigeres Omega-6-zu-Omega-3-Verhältnis, etwa dreimal so viel Vitamin E und deutlich mehr Beta-Carotin. Ob daraus ein gesundheitlicher Vorteil für den Menschen folgt, hängt von der Gesamternährung ab und ist über normale Portionsgrößen nicht belegt."
@@ -176,6 +177,13 @@ Und ein letzter Gedanke: Weidefleisch schmeckt nicht nur anders, es **verhält s
 Beides ist großartig. Nur eben nicht dasselbe.
 
 Feuer ist keine Technik. Feuer ist Erinnerung — und die entsteht nicht aus Prozentzahlen, sondern daraus, dass du weißt, womit du es zu tun hast.
+
+<AffiliateBox
+  id="thermapen-one"
+  headline="Weniger Fett, weniger Puffer: Weidefleisch verzeiht keine drei Grad"
+  text="Ein mageres Steak kippt in Sekunden von perfekt zu trocken — das Zeitfenster ist kleiner als beim marmorierten Feedlot-Cut. Wer Weidefleisch am Feuer ernst nimmt, misst die Kerntemperatur, statt sie zu schätzen. Ein Einstichthermometer mit Sekundenanzeige ist das eine Werkzeug, das diesen Artikel in ein Ergebnis verwandelt."
+  cta="Zum Thermometer"
+/>
 
 ---
 

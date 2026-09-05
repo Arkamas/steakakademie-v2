@@ -109,7 +109,7 @@ runs:
         # folgende Warnung erreicht den PR-Text also nur, wenn dieses Setting steht.
         HINWEIS=""
         if [ "$HAT_PAT" != "true" ]; then
-          HINWEIS=$'\n\n> ⚠️ **Ohne BOT_PAT erstellt** — die Pflicht-Checks (build-guard, content-gates) laufen auf diesem PR NICHT an. Entweder Secret `BOT_PAT` anlegen (docs/ci-bot-pat.md) oder die Checks manuell per workflow_dispatch auf diesem Branch starten.'
+          HINWEIS=$'\n\n> ⚠️ **Ohne BOT_PAT erstellt** — die Pflicht-Checks (build-guard, content-gates) laufen auf diesem PR NICHT an (GitHub-Rekursionsschutz: ein von `github.token` erstellter PR löst keine `pull_request`-Workflows aus). Secret `BOT_PAT` anlegen (docs/ci-bot-pat.md) und den Lauf wiederholen; die Checks lassen sich sonst nur manuell per workflow_dispatch auf diesem Branch starten.'
         fi
 
         # RIEGEL (04.09.2026): Der Bot-Branch zweigt vom Checkout-Ref ab. Läuft der
@@ -126,6 +126,14 @@ runs:
           fi
         fi
 
+        # PR anlegen. Zwei bekannte Stolpersteine, wenn OHNE BOT_PAT gearbeitet wird:
+        #   (a) Repo-Setting "Allow GitHub Actions to create and approve pull requests"
+        #       (Settings -> Actions -> General) ist aus -> gh pr create scheitert hart.
+        #   (b) Ist es an, entsteht der PR, aber der Rekursionsschutz laesst die
+        #       Pflicht-Checks nicht anlaufen -> unmergefaehig.
+        # Mit BOT_PAT tritt keiner von beiden Faellen auf. Der Commit liegt in jedem
+        # Fall schon gepusht auf dem Branch — es geht nichts verloren.
+        #
         # FEHLERPFAD (05.09.2026): `gh pr create` kann scheitern, und der Bot-Commit
         # liegt dann bereits gepusht auf $BRANCH. Ohne Behandlung sah der Operator nur
         # die rohe GraphQL-Meldung, das Job-Summary blieb leer (set -e bricht davor ab),

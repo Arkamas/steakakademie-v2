@@ -113,8 +113,21 @@
   Bereiche rendern dabei leer (`content-feed.ts`/`bbq-news.ts` verzweigen auf die
   ANWESENHEIT der Variablen). Er beweist Uebersetzung und Durchlauf, nicht die
   Datenlage. Platzhalter waeren schaedlich — mit erfundenem Wert wuerde zur
-  Bauzeit ein Host angefragt, den es nicht gibt. Ausserdem laeuft er auf Node 22,
-  waehrend Vercel auf 24.x baut.
+  Bauzeit ein Host angefragt, den es nicht gibt.
+- **Node steht seit 05.09.2026 ueberall auf 24** — 21 Pin-Stellen in 20
+  Workflows (auto-fix.yml nutzt kein setup-node) und das Vercel-Projekt
+  (`nodeVersion: 24.x`).
+  Vorher lag der Gate auf 22 und die uebrigen Workflows auf 20, waehrend die
+  Produktion schon auf 24 baute. Ein Gate auf einer anderen Hauptversion als die
+  Produktion kann gruen sein, waehrend der Deploy an etwas scheitert, das erst
+  dort auftritt — der Riegel haette dann genau die Klasse Fehler durchgelassen,
+  fuer die es ihn gibt. Reihenfolge beim Anheben: erst der Gate allein und
+  belegt gruen (`node: v24.20.0` im Lauf-Log, nicht nur `node-version: 24` in
+  der Datei), dann der Rest. Wer die Version wieder aendert, aendert den
+  Cache-Schluessel in build-gate.yml mit (`...-node24-next-...`) — ein Cache aus
+  einer anderen ABI gehoert nicht in den Lauf.
+  NICHT vereinheitlicht: es gibt weder `.nvmrc` noch `engines` in package.json.
+  Lokal entscheidet also weiter die installierte Version.
 - Reihenfolge bleibt **commit → `npm run build` → push**, nur jetzt auf den
   Branch statt auf main. Ohne lokalen Build vorher wird das Preview rot statt
   der Produktion — aber rot bleibt rot: Vier rote Deployments am 26.08. kamen aus

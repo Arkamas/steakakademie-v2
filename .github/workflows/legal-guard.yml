@@ -46,7 +46,7 @@ jobs:
       - name: Node.js einrichten
         uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '24'
 
       # Kein volles `npm ci`: der Guard braucht genau ein Paket, und der Job soll
       # in Sekunden durch sein. Die Version kommt exakt aus package-lock.json, nicht

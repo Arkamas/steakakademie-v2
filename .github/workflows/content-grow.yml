@@ -54,7 +54,7 @@ jobs:
         if: steps.guard.outputs.ready == 'true'
         uses: actions/setup-node@v5
         with:
-          node-version: '22'   # 22+ wegen nativem WebSocket (supabase-js braucht es)
+          node-version: '24'   # >=22 wegen nativem WebSocket (supabase-js braucht es); 24 = Produktionsstand
           cache: 'npm'
 
       - name: Dependencies installieren

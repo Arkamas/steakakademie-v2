@@ -114,9 +114,25 @@
   ANWESENHEIT der Variablen). Er beweist Uebersetzung und Durchlauf, nicht die
   Datenlage. Platzhalter waeren schaedlich — mit erfundenem Wert wuerde zur
   Bauzeit ein Host angefragt, den es nicht gibt.
-- **Node steht seit 05.09.2026 ueberall auf 24** — 21 Pin-Stellen in 20
-  Workflows (auto-fix.yml nutzt kein setup-node) und das Vercel-Projekt
-  (`nodeVersion: 24.x`).
+- **Node hat seit 05.09.2026 genau eine Quelle: `.nvmrc` (Inhalt `24`).** Alle
+  21 setup-node-Stellen in 20 Workflows lesen sie ueber `node-version-file:
+  .nvmrc` (auto-fix.yml nutzt kein setup-node), und `engines` in package.json
+  grenzt sie mit **`>=24 <25`** nach oben ab. Vorher stand die Zahl 21-mal hart
+  im Repo — ein Upgrade haette 21 Dateien angefasst und beim ersten vergessenen
+  Treffer still auseinanderlaufen lassen. Anheben heisst jetzt: `.nvmrc` und die
+  `engines`-Grenze aendern, sonst nichts.
+  **Warum die Obergrenze `<25` und nicht das offene `>=24`:** Vercel waehlt die
+  Node-Version anhand von `engines`. Bliebe die Grenze offen, wuerde die
+  Produktion beim naechsten Major von selbst springen — ohne PR, ohne gruenen
+  Gate, ohne dass jemand es entschieden hat. Mit `<25` bleibt der Sprung eine
+  Aenderung, die durch die Pflicht-Checks muss.
+  `.nvmrc` steht bewusst auf `24` und nicht auf einer Patch-Version: das Vercel-
+  Projekt meldet `nodeVersion: 24.x`, also ebenfalls einen Bereich. Ein fester
+  Patch im Repo wuerde von Vercel wieder abweichen, sobald die dort nachziehen —
+  genau die Spreizung, die hier abgeschafft wurde. Welche Version ein Lauf
+  tatsaechlich zieht, steht im Log (`node: v24.20.0` am 05.09.).
+  Warum ueberhaupt 24: dieselbe Hauptversion wie die Produktion. Ein Gate auf
+  einer anderen Version kann gruen sein, waehrend der Deploy scheitert.
   Vorher lag der Gate auf 22 und die uebrigen Workflows auf 20, waehrend die
   Produktion schon auf 24 baute. Ein Gate auf einer anderen Hauptversion als die
   Produktion kann gruen sein, waehrend der Deploy an etwas scheitert, das erst
@@ -126,8 +142,6 @@
   der Datei), dann der Rest. Wer die Version wieder aendert, aendert den
   Cache-Schluessel in build-gate.yml mit (`...-node24-next-...`) — ein Cache aus
   einer anderen ABI gehoert nicht in den Lauf.
-  NICHT vereinheitlicht: es gibt weder `.nvmrc` noch `engines` in package.json.
-  Lokal entscheidet also weiter die installierte Version.
 - Reihenfolge bleibt **commit → `npm run build` → push**, nur jetzt auf den
   Branch statt auf main. Ohne lokalen Build vorher wird das Preview rot statt
   der Produktion — aber rot bleibt rot: Vier rote Deployments am 26.08. kamen aus

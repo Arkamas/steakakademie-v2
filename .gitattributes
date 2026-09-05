@@ -48,3 +48,4 @@
 *.woff2 binary
 *.tsv   text eol=lf
 .gitignore text eol=lf
+.nvmrc text eol=lf

@@ -14,13 +14,18 @@ name: Build-Gate
 # WAS ER PRUEFT: dass der Baum uebersetzt und alle Seiten durchrendern.
 # WAS ER NICHT PRUEFT: dass sie mit echten Daten rendern — siehe Env-Block unten.
 #
-# NODE-VERSION: 24 — dieselbe Hauptversion, auf der das Vercel-Projekt baut
-# (nodeVersion 24.x). Das ist der Punkt: ein Gate auf einer anderen Version als
-# die Produktion kann gruen sein, waehrend der echte Deploy scheitert. Zuerst
-# stand hier 22 (05.09., wie beauftragt), am selben Tag auf 24 gezogen; die
-# uebrigen Workflows sind im Zug danach nachgeruestet worden.
-# Wer die Version aendert, aendert den Cache-Schluessel unten mit — sonst laedt
-# der Lauf einen Cache, der mit einer anderen ABI gebaut wurde.
+# NODE-VERSION: steht NICHT hier, sondern in `.nvmrc` (05.09.2026). Das ist die
+# einzige Quelle — 21 Stellen in 20 Workflows lesen sie ueber `node-version-file`,
+# package.json grenzt sie mit `engines: >=24 <25` nach oben ab. Vorher stand die
+# Zahl 21-mal hart im Repo; ein Upgrade haette 21 Dateien angefasst und beim
+# ersten vergessenen Treffer still auseinanderlaufen lassen.
+# Warum ueberhaupt 24: dieselbe Hauptversion, auf der das Vercel-Projekt baut
+# (nodeVersion 24.x). Ein Gate auf einer anderen Version als die Produktion kann
+# gruen sein, waehrend der echte Deploy scheitert — dann laesst der Riegel genau
+# die Fehlerklasse durch, fuer die es ihn gibt.
+# Der Cache-Schluessel unten haengt deshalb an `hashFiles('.nvmrc')` und nicht an
+# einer getippten Zahl: aendert sich die Version, faellt der alte Cache von selbst
+# weg, statt eine unter anderer ABI gebaute Kopie in den Lauf zu ziehen.
 
 on:
   pull_request:
@@ -69,7 +74,7 @@ jobs:
       - name: Node.js einrichten
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version-file: .nvmrc
           cache: 'npm'
 
       # Bewusst OHNE --ignore-scripts, anders als in den Nachbar-Workflows: die
@@ -89,10 +94,10 @@ jobs:
           path: |
             .next/cache
             .contentlayer
-          key: ${{ runner.os }}-node24-next-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*.[jt]s', 'src/**/*.[jt]sx', 'content/**/*.mdx', 'contentlayer.config.ts', 'next.config.mjs') }}
+          key: ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-next-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*.[jt]s', 'src/**/*.[jt]sx', 'content/**/*.mdx', 'contentlayer.config.ts', 'next.config.mjs') }}
           restore-keys: |
-            ${{ runner.os }}-node24-next-${{ hashFiles('**/package-lock.json') }}-
-            ${{ runner.os }}-node24-next-
+            ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-next-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-node${{ hashFiles('.nvmrc') }}-next-
 
       # REIHENFOLGE IST ZWINGEND (CLAUDE.md § A): contentlayer VOR tsc. In einer
       # frischen Kopie existiert `contentlayer/generated` noch nicht; tsc meldet

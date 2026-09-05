@@ -40,7 +40,7 @@ export default function Footer() {
           </div>
           <div className="sk-footer__col">
             <span className="sk-footer__head">Tests</span>
-            <Link href="/vergleich/fleischthermometer">Fleischthermometer</Link>
+            <Link href="/relaunch/vergleich/fleischthermometer">Fleischthermometer</Link>
             <Link href="/vergleich">Grills &amp; Smoker</Link>
             <Link href="/ausruestung/messer">Messer</Link>
           </div>
@@ -53,10 +53,10 @@ export default function Footer() {
           </div>
           <div className="sk-footer__col">
             <span className="sk-footer__head">Akademie</span>
-            <Link href="/diplome">Grillmeister-Diplome</Link>
+            <Link href="/relaunch/diplome">Grillmeister-Diplome</Link>
             <Link href="/bbq-grundkurs">BBQ-Grundkurs</Link>
             <Link href="/autoren">Autoren</Link>
-            <Link href="/ueber-uns">Über uns</Link>
+            <Link href="/relaunch/ueber-uns">Über uns</Link>
           </div>
         </nav>
 

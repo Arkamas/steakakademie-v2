@@ -110,6 +110,16 @@ export default function Katalog({ katalog }: { katalog: KatalogTyp }) {
 
 type Row = KatalogEintrag & { nr: string };
 
+/**
+ * Die Katalogdaten tragen die LIVE-URLs (die beim Umschalten gelten). Solange
+ * der Relaunch parallel läuft, bleiben Verweise auf bereits nachgebaute
+ * Vorlagen innerhalb von /relaunch — sonst springt die Vorschau ins alte Design.
+ */
+const IM_RELAUNCH = ['/streitfaelle/', '/rezepte/', '/vergleich/', '/diplome'];
+export function relaunchHref(href: string): string {
+  return IM_RELAUNCH.some((p) => href.startsWith(p)) ? `/relaunch${href}` : href;
+}
+
 /** Raster-Karte. Mit href ein Link, ohne href eine Karte mit „Detailseite folgt". */
 function Karte({ e }: { e: Row }) {
   const inner = (
@@ -129,7 +139,7 @@ function Karte({ e }: { e: Row }) {
     </>
   );
   return e.href
-    ? <Link href={e.href} className="sk-card">{inner}</Link>
+    ? <Link href={relaunchHref(e.href)} className="sk-card">{inner}</Link>
     : <article className="sk-card">{inner}</article>;
 }
 
@@ -146,6 +156,6 @@ function Zeile({ e }: { e: Row }) {
     </>
   );
   return e.href
-    ? <Link href={e.href} className="sk-row">{inner}</Link>
+    ? <Link href={relaunchHref(e.href)} className="sk-row">{inner}</Link>
     : <div className="sk-row">{inner}</div>;
 }

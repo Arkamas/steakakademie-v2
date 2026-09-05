@@ -325,3 +325,154 @@
   .sk { --sk-header-h: 0px; }
   .sk-header { position: static; }
 }
+
+/* ======================================================================
+   Detailseiten (Ansichten 3–8) — Lesetext, Rezept, Lektion, Werkzeug,
+   Diplome, Über uns. Werte aus dem Prototyp.
+   ====================================================================== */
+
+/* Lesetext 760px (Streitfall) */
+.sk-read { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+.sk-read .sk-crumbs { color: var(--sk-light-muted); margin-bottom: 28px; }
+.sk-read .sk-crumbs a { color: var(--sk-light-muted); }
+.sk-read .sk-crumbs a:hover { color: var(--sk-accent); }
+.sk-read .sk-crumbs strong { color: var(--sk-light-muted); }
+.sk-read__h1 { font-weight: 900; font-size: clamp(40px, 6vw, 72px); line-height: .94; text-wrap: balance; }
+.sk-read__lead { margin-top: 22px; font-size: 20px; line-height: 1.5; color: var(--sk-light-body); text-wrap: pretty; }
+.sk-read__meta { margin: 24px 0 32px; padding: 16px 0; border-top: 1px solid var(--sk-light-border); border-bottom: 1px solid var(--sk-light-border); display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--sk-light-muted); }
+.sk-read__img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--sk-r); display: block; background: #2a2420; }
+.sk-pull { margin: 36px 0; padding: 28px 0; border-top: 2px solid var(--sk-light-text); border-bottom: 2px solid var(--sk-light-text); font-family: var(--sk-display); font-weight: 800; font-size: clamp(28px, 3.4vw, 40px); line-height: 1; text-transform: uppercase; }
+.sk-entscheidung { margin-top: 8px; padding: 26px; background: var(--sk-light-card); border: 1px solid var(--sk-light-border); border-radius: var(--sk-r); display: flex; flex-direction: column; gap: 12px; }
+.sk-entscheidung__text { font-size: 20px; line-height: 1.55; }
+.sk-dunkelblock { margin-top: 32px; background: var(--sk-dark-bg); color: var(--sk-dark-text); border-radius: var(--sk-r); padding: 30px; }
+.sk-dunkelblock .sk-text { color: var(--sk-dark-muted); }
+.sk-dunkelblock .sk-meta { color: var(--sk-dark-faint); }
+
+/* Prose — Lesetext auf hell */
+.sk-prose { margin-top: 36px; font-size: 19px; line-height: 1.65; display: flex; flex-direction: column; gap: 22px; }
+.sk-prose__p { margin: 0; text-wrap: pretty; }
+.sk-prose__h2 { font-weight: 800; font-size: 32px; margin-top: 26px; }
+.sk-prose__h3 { font-weight: 800; font-size: 24px; margin-top: 10px; }
+.sk-prose__ul, .sk-prose__ol { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+.sk-prose__quote { margin: 0; padding: 22px 26px; background: var(--sk-light-card); border-left: 3px solid var(--sk-accent); font-style: italic; }
+.sk-prose__strong { font-weight: 600; color: var(--sk-light-text); }
+.sk-prose__hr { border: 0; border-top: 1px solid var(--sk-light-border); margin: 10px 0; }
+.sk-prose__a { color: var(--sk-accent); text-decoration: underline; text-underline-offset: 3px; }
+.sk-prose__tablewrap { overflow-x: auto; border: 1px solid var(--sk-light-border); border-radius: var(--sk-r); background: var(--sk-light-card); }
+.sk-prose__table { border-collapse: collapse; width: 100%; font-size: 16px; }
+.sk-prose__th { text-align: left; padding: 12px 18px; background: var(--sk-light-text); color: var(--sk-dark-text); font-family: var(--sk-display); font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
+.sk-prose__td { padding: 14px 18px; border-top: 1px solid var(--sk-light-border); vertical-align: top; color: var(--sk-light-body); }
+.sk-prose__figure { margin: 0; }
+.sk-prose__img { width: 100%; height: auto; border-radius: var(--sk-r); display: block; }
+.sk-prose__caption { margin-top: 8px; }
+
+/* FAQ */
+.sk-faq { margin-top: 48px; display: flex; flex-direction: column; gap: 18px; }
+.sk-faq dl { margin: 0; display: flex; flex-direction: column; }
+.sk-faq__item { padding: 16px 0; border-bottom: 1px solid var(--sk-light-border); }
+.sk-faq__q { font-weight: 600; font-size: 17px; margin-bottom: 6px; }
+.sk-faq__a { margin: 0; font-size: 16px; line-height: 1.55; color: var(--sk-light-body); }
+
+/* Weiche — genau ein nächster Schritt */
+.sk-weiche { margin-top: 56px; width: 100%; text-align: left; background: var(--sk-dark-bg); border-radius: var(--sk-r); padding: 30px; color: var(--sk-dark-text); display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; transition: background-color .2s; }
+.sk-weiche:hover { background: var(--sk-dark-card); color: var(--sk-dark-text); }
+.sk-weiche__body { display: flex; flex-direction: column; gap: 8px; }
+.sk-weiche__title { font-weight: 800; font-size: clamp(26px, 3vw, 36px); }
+.sk-weiche__text { font-size: 15px; color: var(--sk-dark-muted); }
+.sk-weiche__arrow { font-family: var(--sk-display); font-weight: 900; font-size: 48px; color: var(--sk-accent-hover); }
+
+/* Mittlere Breite 1100px (Rezept, Werkzeug) */
+.sk-mid { max-width: var(--sk-w-mid); margin: 0 auto; padding: 40px 20px 80px; }
+.sk-mid .sk-crumbs { color: var(--sk-light-muted); margin-bottom: 28px; }
+.sk-mid .sk-crumbs a, .sk-mid .sk-crumbs strong { color: var(--sk-light-muted); }
+.sk-mid .sk-crumbs a:hover { color: var(--sk-accent); }
+
+/* Rezept */
+.sk-rezept__kopf { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; align-items: start; }
+.sk-rezept__h1 { font-weight: 900; font-size: clamp(44px, 6vw, 80px); line-height: .92; }
+.sk-kennzahlen { margin-top: 26px; display: flex; gap: 28px; flex-wrap: wrap; }
+.sk-kennzahl { font-family: var(--sk-display); font-weight: 800; font-size: 24px; text-transform: uppercase; }
+.sk-kennzahl--accent { color: var(--sk-accent); }
+.sk-stepper { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
+.sk-stepper__btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--sk-light-text); background: none; color: var(--sk-light-text); font-size: 18px; line-height: 1; }
+.sk-stepper__btn:hover:not(:disabled) { background: var(--sk-light-text); color: var(--sk-dark-text); }
+.sk-stepper__btn:disabled { opacity: .35; cursor: default; }
+.sk-stepper__n { font-family: var(--sk-display); font-weight: 800; font-size: 24px; min-width: 20px; text-align: center; }
+.sk-zutaten { background: var(--sk-light-card); border: 1px solid var(--sk-light-border); border-radius: var(--sk-r); padding: 26px; }
+.sk-zutaten__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; font-size: 17px; }
+.sk-zutaten__row { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--sk-light-border); }
+.sk-zutaten__row:last-child { border-bottom: 0; }
+.sk-zutaten__menge { font-weight: 600; white-space: nowrap; }
+.sk-zutaten__hinweis { margin-top: 18px; padding: 14px 16px; background: var(--sk-dark-bg); color: var(--sk-dark-text); border-radius: 6px; font-size: 14px; line-height: 1.5; }
+.sk-zutaten__hinweis span { color: var(--sk-accent-dark); }
+.sk-rezept__bild { margin: 40px 0 0; }
+.sk-rezept__bild figcaption { margin-top: 8px; }
+.sk-ablauf { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--sk-light-border); }
+.sk-ablauf__step { display: grid; grid-template-columns: 72px 1fr; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--sk-light-border); }
+.sk-ablauf__nr { font-family: var(--sk-display); font-weight: 900; font-size: 48px; line-height: 1; color: var(--sk-accent); }
+@media (max-width: 480px) { .sk-ablauf__step { grid-template-columns: 48px 1fr; } .sk-ablauf__nr { font-size: 36px; } }
+
+/* Lektion 960px */
+.sk-lektion__kopf { max-width: var(--sk-w-lesson); margin: 0 auto; padding: 28px 20px; }
+.sk-lektion__zeile { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center; font-family: var(--sk-display); font-weight: 700; font-size: 14px; letter-spacing: .16em; text-transform: uppercase; }
+.sk-lektion__back { color: var(--sk-accent-dark); }
+.sk-lektion__back:hover { color: var(--sk-accent-hover); }
+.sk-balken { margin-top: 16px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; }
+.sk-balken__seg { height: 4px; background: var(--sk-dark-border); border-radius: 2px; }
+.sk-balken__seg--done { background: var(--sk-accent); }
+.sk-balken__seg--now { background: var(--sk-accent-hover); animation: sk-emberBreathe 2.4s ease-in-out infinite; }
+.sk-lektion { max-width: var(--sk-w-lesson); margin: 0 auto; padding: 40px 20px 80px; }
+.sk-lektion__h1 { font-weight: 900; font-size: clamp(38px, 5.5vw, 64px); line-height: .94; text-wrap: balance; }
+.sk-lektion__done { display: flex; align-items: center; gap: 10px; font-family: var(--sk-display); font-weight: 800; font-size: 19px; letter-spacing: .06em; text-transform: uppercase; color: var(--sk-accent); }
+.sk-btn--outline { background: none; border-color: var(--sk-light-text); color: var(--sk-light-text); padding: 12px 20px; font-weight: 700; }
+.sk-btn--outline:hover { background: var(--sk-light-text); color: var(--sk-dark-text); }
+
+/* Diplome */
+.sk-diplome { max-width: var(--sk-w-mid); margin: 0 auto; padding: 48px 20px 80px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; align-items: start; }
+.sk-diplome__head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.sk-lektionen { list-style: none; margin: 0; padding: 0; border: 1px solid var(--sk-light-border); border-radius: var(--sk-r); overflow: hidden; background: var(--sk-light-card); }
+.sk-lektionen__row { width: 100%; text-align: left; border-bottom: 1px solid var(--sk-light-border); padding: 16px 18px; color: var(--sk-light-text); display: grid; grid-template-columns: 36px 1fr auto; gap: 14px; align-items: center; }
+.sk-lektionen__row:hover { background: var(--sk-light-card-hover); color: var(--sk-light-text); }
+.sk-lektionen li:last-child .sk-lektionen__row { border-bottom: 0; }
+.sk-lektionen__row--pruefung { background: var(--sk-light-text); color: var(--sk-dark-text); }
+.sk-lektionen__row--pruefung:hover { background: var(--sk-dark-card); color: var(--sk-dark-text); }
+.sk-lektionen__title { font-size: 17px; }
+.sk-lektionen__go { font-size: 13px; color: var(--sk-accent); white-space: nowrap; }
+.sk-marker { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--sk-light-faint); box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex: none; }
+.sk-marker--done { background: var(--sk-accent); border-color: var(--sk-accent); color: var(--sk-dark-bg); }
+.sk-marker--now { border: 2px solid var(--sk-accent); }
+.sk-marker--now span { width: 8px; height: 8px; border-radius: 50%; background: var(--sk-accent-hover); animation: sk-emberBreathe 2.4s ease-in-out infinite; }
+.sk-marker--locked { border-color: var(--sk-dark-faint); }
+.sk-pfad { display: flex; flex-direction: column; gap: 12px; }
+.sk-pfad__row { display: grid; grid-template-columns: 56px 1fr; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--sk-light-border); }
+
+/* Werkzeug — Produktkarten */
+.sk-produkte { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: stretch; }
+.sk-produkt { background: var(--sk-light-card); border: 1px solid var(--sk-light-border); border-radius: var(--sk-r); padding: 28px; display: flex; flex-direction: column; gap: 14px; }
+.sk-produkt--sieger { background: var(--sk-dark-bg); color: var(--sk-dark-text); border-color: var(--sk-accent); }
+.sk-produkt--sieger .sk-meta { color: var(--sk-dark-muted); }
+.sk-produkt__top { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-family: var(--sk-display); font-weight: 700; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; }
+.sk-produkt__bild { position: relative; height: 150px; border-radius: 6px; background: #ece3d5; display: flex; align-items: center; justify-content: center; color: var(--sk-light-muted); font-size: 13px; overflow: hidden; }
+.sk-produkt--sieger .sk-produkt__bild { background: var(--sk-dark-card); }
+.sk-produkt__bild img { max-height: 100%; max-width: 100%; object-fit: contain; }
+.sk-produkt__symbol { position: absolute; right: 8px; bottom: 8px; font-family: var(--sk-display); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; background: rgba(21,18,15,.7); color: var(--sk-dark-text-3); padding: 3px 8px; border-radius: 4px; }
+.sk-produkt__pros { margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.6; color: var(--sk-light-body); }
+.sk-produkt--sieger .sk-produkt__pros { color: var(--sk-dark-text-2); }
+.sk-produkt__foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--sk-light-border); }
+.sk-produkt--sieger .sk-produkt__foot { border-top-color: var(--sk-dark-border); }
+.sk-produkt__preis { font-family: var(--sk-display); font-weight: 900; font-size: 36px; }
+
+/* Über uns */
+.sk-ueber-text { max-width: var(--sk-w-narrow); margin: 0 auto; padding: 56px 20px 80px; font-size: 19px; line-height: 1.7; display: flex; flex-direction: column; gap: 26px; }
+.sk-ueber-text h2 { margin: 16px 0 -10px; }
+.sk-ueber-bild { position: relative; border-radius: var(--sk-r); overflow: hidden; background: var(--sk-dark-card); }
+.sk-ueber-bild__hinweis { position: absolute; left: 0; right: 0; bottom: 0; padding: 20px; background: linear-gradient(180deg, rgba(21,18,15,0), rgba(21,18,15,.85)); color: var(--sk-dark-text-3); font-size: 13px; font-family: var(--sk-display); letter-spacing: .14em; text-transform: uppercase; }
+.sk-zitat { margin: 24px 0 0; padding: 32px; background: var(--sk-dark-bg); color: var(--sk-dark-text); border-radius: var(--sk-r); font-family: var(--sk-display); font-weight: 800; font-size: clamp(28px, 3.4vw, 40px); line-height: 1; text-transform: uppercase; }
+.sk-zitat__by { margin-top: 16px; font-family: var(--sk-text); font-weight: 400; font-size: 16px; text-transform: none; color: var(--sk-dark-muted); font-style: italic; }
+.sk-redaktion { margin-top: 24px; border-top: 2px solid var(--sk-light-text); padding-top: 20px; font-size: 15px; line-height: 1.5; }
+.sk-redaktion__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+.sk-redaktion__kreis { width: 64px; height: 64px; border-radius: 50%; background: var(--sk-dark-card); margin-bottom: 10px; }
+
+/* Dunkle Karten in hellen Sektionen: Text-Stufen wie auf der dunklen Ebene */
+.sk-card--dark .sk-text, .sk-weiche .sk-text { color: var(--sk-dark-muted); }
+.sk-card--dark .sk-meta { color: var(--sk-dark-faint); }

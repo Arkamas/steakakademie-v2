@@ -5,9 +5,9 @@ import Rauchring from './Rauchring';
  * Kopfzeile des Relaunch-Designs (Handoff-README, „Kopfzeile und Navigation").
  *
  * Links: Die vier Kataloge führen ins Übersicht-Muster unter /relaunch/[katalog].
- * „Ausrüstung" (/vergleich), „Diplome" und „Über uns" zeigen auf die bestehenden
- * Live-Seiten, weil die Werkzeug-, Diplome- und Über-uns-Ansichten des
- * Relaunches (Handoff Nr. 6–8) noch nicht gebaut sind.
+ * „Diplome" und „Über uns" führen auf die Relaunch-Vorlagen. „Ausrüstung" zeigt
+ * auf die Live-Übersicht /vergleich, weil der Handoff keine Werkzeug-ÜBERSICHT
+ * entwirft — nur die Einzelseite (Ansicht 6), die unter /relaunch/vergleich/[slug] liegt.
  *
  * Kursstatus: Der Zustand „Fortschritt vorhanden" (Stufe 1 · 1/7 mit Glutpunkt)
  * braucht den serverseitigen Kursfortschritt und ist hier noch nicht angebunden.
@@ -32,10 +32,10 @@ export default function Header() {
           <Link href="/relaunch/streitfaelle" className="sk-nav__link">Wissen</Link>
           <Link href="/relaunch/rezepte" className="sk-nav__link">Rezepte</Link>
           <Link href="/vergleich" className="sk-nav__link">Ausrüstung</Link>
-          <Link href="/ueber-uns" className="sk-nav__link sk-nav__link--wide">Über uns</Link>
+          <Link href="/relaunch/ueber-uns" className="sk-nav__link sk-nav__link--wide">Über uns</Link>
         </nav>
         <div className="sk-header__actions">
-          <Link href="/diplome" className="sk-btn sk-btn--ghost">Diplome</Link>
+          <Link href="/relaunch/diplome" className="sk-btn sk-btn--ghost">Diplome</Link>
           <Link href="/auth/login" className="sk-btn sk-btn--primary">Anmelden</Link>
         </div>
       </div>

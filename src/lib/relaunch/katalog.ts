@@ -6,10 +6,12 @@
  * („Fidelity: hifi"). Jeder Eintrag trägt dieselben sechs Felder — genau deshalb
  * trägt EIN Muster (src/app/relaunch/[katalog]) alle vier Kataloge.
  *
- * Fakten-Regel 8c (CLAUDE.md): Temperaturen hier stammen aus dem Handoff-Text,
- * nicht aus data/kerntemperatur-referenz.yaml. Vor dem Umschalten auf Produktion
- * gegen die Referenz abgleichen — siehe Abschnitt „Nicht geprüft" in
- * docs/website-relaunch-2026-09.md.
+ * Fakten-Regel 8c (CLAUDE.md): Kerntemperaturen gegen data/kerntemperatur-referenz.yaml
+ * abgeglichen (05.09.2026). Zwei Werte aus dem Prototyp wurden korrigiert:
+ *  - Schweinefilet 58 → 63 °C (Sicherheits-Minimum Schwein 63 °C, Badge pork_juicy)
+ *  - Ribeye Reverse Sear Ziehtemperatur 50 → 52 °C (Referenz: Medium Rare bei 52–54 °C ziehen)
+ * Alle übrigen Werte (Lamm 56, Short Ribs ≥90, Pulled Pork 94) liegen in den Korridoren.
+ * Grill-/Ofentemperaturen (150/230/800 °C) sind keine Kerntemperaturen und nicht Gegenstand der Referenz.
  *
  * `href` ist ein bewusst kuratierter Verweis auf eine bereits existierende
  * Detailseite der Live-Site. Fehlt er, gibt es die Detailseite noch nicht
@@ -90,7 +92,7 @@ const cuts: Katalog = {
     { titel: 'Roastbeef', filter: 'Rind', meta1: 'Rücken', badge: '€€€', meta2: 'Rückwärts garen', text: 'Am Stück garen, dann tranchieren. Nie in Scheiben vorschneiden.' },
     { titel: 'Schweinenacken', filter: 'Schwein', meta1: 'Nacken', badge: '€', meta2: 'Niedrigtemperatur', text: 'Fett durchzogen, praktisch nicht zu ruinieren. Pulled-Pork-Klassiker.' },
     { titel: 'Kotelett', filter: 'Schwein', meta1: 'Rücken', badge: '€', meta2: 'Kurzgebraten', text: 'Am Knochen kaufen. Ohne wird es trocken, bevor es gar ist.' },
-    { titel: 'Schweinefilet', filter: 'Schwein', meta1: 'Innerer Rücken', badge: '€€', meta2: 'Kurzgebraten', text: 'In acht Minuten fertig, in zehn ruiniert. Kerntemperatur 58 Grad.' },
+    { titel: 'Schweinefilet', filter: 'Schwein', meta1: 'Innerer Rücken', badge: '€€', meta2: 'Kurzgebraten', text: 'In acht Minuten fertig, in zehn ruiniert. Kerntemperatur 63 Grad.' },
     { titel: 'Schäufele', filter: 'Schwein', meta1: 'Schulter', badge: '€', meta2: 'Schmoren', text: 'Mit Schwarte und Schulterblatt. Fränkische Institution.' },
     { titel: 'Schweinebauch', filter: 'Schwein', meta1: 'Bauch', badge: '€', meta2: 'Niedrigtemperatur', text: 'Erst weich garen, dann Schwarte krachen lassen. Zwei Schritte, nie einer.' },
     { titel: 'Spare Ribs', filter: 'Schwein', meta1: 'Bauchrippe', badge: '€', meta2: 'Niedrigtemperatur', text: 'Mehr Fleisch, mehr Fett, mehr Zeit als Baby Back.' },
@@ -138,7 +140,7 @@ const rezepte: Katalog = {
   dim: 'Tierart',
   dims: ['Rind', 'Schwein', 'Lamm'],
   eintraege: [
-    { titel: 'Ribeye, Reverse Sear', filter: 'Rind', meta1: 'Mittel', badge: '45 Min', meta2: 'Rückwärts garen', text: 'Erst indirekt auf 50 Grad, dann 90 Sekunden über die Glut.' },
+    { titel: 'Ribeye, Reverse Sear', filter: 'Rind', meta1: 'Mittel', badge: '45 Min', meta2: 'Rückwärts garen', text: 'Erst indirekt auf 52 Grad, dann 90 Sekunden über die Glut.' },
     { titel: 'Brisket, 12 Stunden', filter: 'Rind', meta1: 'Schwer', badge: '12 Std', meta2: 'Niedrigtemperatur', text: 'Das Plateau bei 68 Grad aussitzen. Wer aufdreht, verliert.' },
     { titel: 'Picanha am Spieß', filter: 'Rind', meta1: 'Leicht', badge: '35 Min', meta2: 'Rückwärts garen', text: 'Fettdeckel nach außen, Salz grob, Scheiben von außen abschneiden.' },
     { titel: 'Flank Steak, Chimichurri', filter: 'Rind', meta1: 'Leicht', badge: '20 Min', meta2: 'Kurz & scharf', text: 'Vier Minuten total, dann quer zur Faser in dünne Streifen.' },

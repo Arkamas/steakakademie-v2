@@ -77,7 +77,7 @@ export default function RelaunchStartseite() {
           </div>
           <div className="sk-grid" style={{ ['--min' as string]: '300px' }}>
             {aufmacher && (
-              <Link href={aufmacher.url} className="sk-card sk-card--media">
+              <Link href={`/relaunch${aufmacher.url}`} className="sk-card sk-card--media">
                 <Image src={aufmacher.image} alt={aufmacher.imageAlt} width={800} height={500} sizes="(min-width: 1240px) 600px, 100vw" />
                 <div className="sk-card__body">
                   <span className="sk-kicker sk-kicker--13 sk-kicker--muted">Wissen &amp; Wissenschaft</span>
@@ -89,7 +89,7 @@ export default function RelaunchStartseite() {
             )}
             <div className="sk-sf-list">
               {reihe.map((s, i) => (
-                <Link key={s.slug} href={s.url} className="sk-sf-row">
+                <Link key={s.slug} href={`/relaunch${s.url}`} className="sk-sf-row">
                   <span className="sk-num">{String(i + 1).padStart(2, '0')}</span>
                   <span className="sk-sf-row__body">
                     <span className="sk-h sk-h--24">{s.title}</span>
@@ -173,7 +173,7 @@ export default function RelaunchStartseite() {
           </div>
           <div className="sk-stufen">
             {STUFEN.map((s) => (
-              <Link key={s.nr} href="/diplome" className={`sk-stufe${s.frei ? ' sk-stufe--frei' : ''}`}>
+              <Link key={s.nr} href="/relaunch/diplome" className={`sk-stufe${s.frei ? ' sk-stufe--frei' : ''}`}>
                 <Siegel nr={s.nr} />
                 <span className="sk-stufe__nr">Stufe {s.nr}{s.frei ? ' · frei' : ''}</span>
                 <span className="sk-h sk-h--card">{s.name}</span>
@@ -182,7 +182,7 @@ export default function RelaunchStartseite() {
             ))}
           </div>
           <div className="sk-cta-row">
-            <Link href="/diplome" className="sk-btn sk-btn--primary sk-btn--big">Stufe 1 jetzt starten — ohne Login</Link>
+            <Link href="/relaunch/diplome" className="sk-btn sk-btn--primary sk-btn--big">Stufe 1 jetzt starten — ohne Login</Link>
             <span className="sk-meta sk-meta--14">Kein Abo. Keine Kreditkarte.</span>
           </div>
         </div>
@@ -213,7 +213,7 @@ export default function RelaunchStartseite() {
             <span className="sk-kicker sk-kicker--warm">Wer hinter der Akademie steht</span>
             <span className="sk-h" style={{ fontWeight: 800, fontSize: 'clamp(28px, 3vw, 40px)' }}>Bevor ein Steak auf den Rost kommt, hat es zwei Jahre gelebt.</span>
             <span className="sk-text sk-text--16">Wir erzählen, wo das Fleisch herkommt — vom Züchter über die Reifung bis zum Handwerk am Feuer. 30 Jahre Lehrerfahrung stecken in der Methodik. Kein Marketing, eine Haltung.</span>
-            <Link href="/ueber-uns" className="sk-more" style={{ marginTop: "auto" }}>Die Geschichte lesen →</Link>
+            <Link href="/relaunch/ueber-uns" className="sk-more" style={{ marginTop: "auto" }}>Die Geschichte lesen →</Link>
           </div>
         </div>
       </section>

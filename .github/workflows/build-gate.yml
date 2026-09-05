@@ -14,10 +14,13 @@ name: Build-Gate
 # WAS ER PRUEFT: dass der Baum uebersetzt und alle Seiten durchrendern.
 # WAS ER NICHT PRUEFT: dass sie mit echten Daten rendern — siehe Env-Block unten.
 #
-# NODE-VERSION: 22, wie beauftragt. Die uebrigen Workflows stehen auf 20, das
-# Vercel-Projekt baut auf 24.x. Der Gate deckt damit keine Abweichung ab, die
-# erst auf 24 auftritt; das ist bewusst in Kauf genommen und gehoert vor jeder
-# Node-Anhebung geprueft.
+# NODE-VERSION: 24 — dieselbe Hauptversion, auf der das Vercel-Projekt baut
+# (nodeVersion 24.x). Das ist der Punkt: ein Gate auf einer anderen Version als
+# die Produktion kann gruen sein, waehrend der echte Deploy scheitert. Zuerst
+# stand hier 22 (05.09., wie beauftragt), am selben Tag auf 24 gezogen; die
+# uebrigen Workflows sind im Zug danach nachgeruestet worden.
+# Wer die Version aendert, aendert den Cache-Schluessel unten mit — sonst laedt
+# der Lauf einen Cache, der mit einer anderen ABI gebaut wurde.
 
 on:
   pull_request:
@@ -66,7 +69,7 @@ jobs:
       - name: Node.js einrichten
         uses: actions/setup-node@v5
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'npm'
 
       # Bewusst OHNE --ignore-scripts, anders als in den Nachbar-Workflows: die
@@ -86,10 +89,10 @@ jobs:
           path: |
             .next/cache
             .contentlayer
-          key: ${{ runner.os }}-node22-next-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*.[jt]s', 'src/**/*.[jt]sx', 'content/**/*.mdx', 'contentlayer.config.ts', 'next.config.mjs') }}
+          key: ${{ runner.os }}-node24-next-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*.[jt]s', 'src/**/*.[jt]sx', 'content/**/*.mdx', 'contentlayer.config.ts', 'next.config.mjs') }}
           restore-keys: |
-            ${{ runner.os }}-node22-next-${{ hashFiles('**/package-lock.json') }}-
-            ${{ runner.os }}-node22-next-
+            ${{ runner.os }}-node24-next-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-node24-next-
 
       # REIHENFOLGE IST ZWINGEND (CLAUDE.md § A): contentlayer VOR tsc. In einer
       # frischen Kopie existiert `contentlayer/generated` noch nicht; tsc meldet

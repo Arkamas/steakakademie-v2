@@ -91,6 +91,11 @@
 - Ein Linux-Zugriff ueber die Ordner-Bruecke darf keine Dateien loeschen. git legt
   bei jedem Index-Zugriff `.git/index.lock` an und kann sie danach nicht raeumen:
   Lock nach `.git/_to_delete/` **verschieben**, dann weiterarbeiten.
+- **Tag `archiv/formulierungen-bot-pat` (05.09.2026):** hält die getrennten Commits
+  22b1a1e und 8a51086 (BOT_PAT-Formulierungen, vor #50 per Squash zu main verschmolzen)
+  dauerhaft erreichbar — ohne den Tag wäre 8a51086 nach dem Entfernen des zugehörigen
+  Worktrees nur ~30 Tage über die Reflog-Frist auffindbar gewesen
+  (gc.reflogExpireUnreachable). Auf origin gepusht, siehe `git tag -l archiv/*`.
 
 **Frischer Klon: erst `supabase link`**
 - `supabase/.temp/` ist seit 02bdb71 (31.08.2026) ignoriert. In einer neuen

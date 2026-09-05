@@ -21,6 +21,22 @@ Alle sechs Workflows nutzen jetzt `.github/actions/pr-statt-push` (eine Composit
 ein Ort für die Logik) und bevorzugen das Secret **`BOT_PAT`**. Mit PAT erstellt = Checks
 laufen = PR mergefähig.
 
+**Ohne `BOT_PAT` funktioniert es nicht verlässlich — `BOT_PAT` ist der Weg, nicht die
+Kür.** Der Rückfall auf `github.token` hat zwei Hürden hintereinander:
+
+1. **Der PR entsteht gar nicht**, solange *Settings → Actions → General → Workflow
+   permissions → „Allow GitHub Actions to create and approve pull requests"* aus ist.
+   `gh pr create` scheitert dann hart. Die Action fängt das ab, schreibt die Ursache ins
+   Job-Summary und weist darauf hin, dass der Commit sicher auf dem Bot-Branch liegt —
+   verloren geht nichts, aber der PR muss von Hand nachgezogen werden.
+2. **Ist die Einstellung an, entsteht der PR — aber ohne Checks.** Der Rekursionsschutz
+   greift, die Pflicht-Checks laufen nicht an, der PR bleibt unmergefähig.
+
+> Diese Einstellung ist **nicht** dasselbe wie „Actions bypass branch protection" (siehe
+> *Was NICHT zu tun ist*). Sie erlaubt Actions lediglich, PRs **anzulegen** — an den Gates
+> vorbei kommt dadurch nichts. Sie zu setzen ist vertretbar, macht `BOT_PAT` aber nicht
+> überflüssig: Ohne PAT bleibt Hürde 2 bestehen.
+
 **Korrektur 04.09.2026 — der Fallback stand hier falsch beschrieben.** Es hieß, ohne PAT
 entstehe der PR trotzdem, nur mit Warnung. Der erste echte Testlauf (`ideen-radar`,
 Run `33927566618`) widerlegte das:
@@ -38,11 +54,6 @@ als `::error::` und schreibt ein Job-Summary mit Branchnamen, Aufräum-Befehl un
 Rohmeldung. **Der Bot-Branch wird bewusst nicht gelöscht** — der Commit ist echte Arbeit
 (Glossarbegriffe, Backlog, Bilder). Nach dem Beheben lässt sich von dort ein PR öffnen,
 oder man räumt ihn mit dem angezeigten `git push origin --delete <branch>` weg.
-
-Ursache ist ein **zweites** Repo-Setting, unabhängig vom PAT: **Settings → Actions →
-General → Workflow permissions → „Allow GitHub Actions to create and approve pull
-requests"**. Das ist **nicht** dasselbe wie das weiter unten abgelehnte „Actions bypass
-branch protection" — es erlaubt nur das Anlegen eines PRs, an den Gates ändert es nichts.
 
 Damit gibt es drei Zustände statt zwei:
 

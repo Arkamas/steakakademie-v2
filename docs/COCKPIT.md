@@ -35,14 +35,18 @@ Sentry-Monitoring, Ops-Alert → Jira (KAN).
 
 **Hängt:** Der Build-Gate baut ohne Env-Variablen — Supabase-gestützte Bereiche rendern
 dabei leer. Er beweist Übersetzung und Durchlauf, nicht die Datenlage; ob das reichen soll,
-ist offen · Node-Spreizung: Gate auf 22, übrige Workflows auf 20, Vercel baut auf 24.x ·
+ist offen · kein `.nvmrc` und kein `engines` in package.json — die CI steht überall auf 24,
+lokal entscheidet weiter die installierte Version ·
 `_content_snap.tgz` / `_fix_sync.tgz` als Müll im Repo-Root (Regel 14).
 
 **Nächster Schritt:** Entscheiden, ob der Build-Gate auch die Datenlage prüfen soll — das
 hieße echte Repo-Secrets für Supabase, bisher liegt keines dafür im Repo. Sonst dabei
 bleiben, dass er Übersetzung und Durchlauf sichert.
 
-*Erledigt 05.09.2026 (abends):* Eigener Build-Riegel `.github/workflows/build-gate.yml`
+*Erledigt 05.09.2026 (abends):* Node überall auf **24** vereinheitlicht — 21 Pin-Stellen in
+20 Workflows plus Vercel (`nodeVersion: 24.x`) auf derselben Hauptversion; vorher Gate 22,
+übrige Workflows 20. Gate zuerst und einzeln belegt (`node: v24.20.0` im
+Lauf-Log) · Eigener Build-Riegel `.github/workflows/build-gate.yml`
 gebaut, Job `Build pruefen` (contentlayer → tsc → `next build`, 2,5–3 min, `.next/cache`
 über `actions/cache`) · als Pflicht-Check eingetragen und **belegt statt behauptet**: mit
 ausstehendem Lauf meldete GitHub an PR #56 `BLOCKED` und verweigerte den Merge, nach grünen

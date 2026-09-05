@@ -35,17 +35,19 @@ Sentry-Monitoring, Ops-Alert → Jira (KAN).
 
 **Hängt:** Der Build-Gate baut ohne Env-Variablen — Supabase-gestützte Bereiche rendern
 dabei leer. Er beweist Übersetzung und Durchlauf, nicht die Datenlage; ob das reichen soll,
-ist offen · kein `.nvmrc` und kein `engines` in package.json — die CI steht überall auf 24,
-lokal entscheidet weiter die installierte Version ·
+ist offen ·
 `_content_snap.tgz` / `_fix_sync.tgz` als Müll im Repo-Root (Regel 14).
 
 **Nächster Schritt:** Entscheiden, ob der Build-Gate auch die Datenlage prüfen soll — das
 hieße echte Repo-Secrets für Supabase, bisher liegt keines dafür im Repo. Sonst dabei
 bleiben, dass er Übersetzung und Durchlauf sichert.
 
-*Erledigt 05.09.2026 (abends):* Node überall auf **24** vereinheitlicht — 21 Pin-Stellen in
-20 Workflows plus Vercel (`nodeVersion: 24.x`) auf derselben Hauptversion; vorher Gate 22,
-übrige Workflows 20. Gate zuerst und einzeln belegt (`node: v24.20.0` im
+*Erledigt 05.09.2026 (abends):* Node-Version auf **eine Quelle** zusammengezogen —
+`.nvmrc` (`24`) ist die Quelle, alle 21 setup-node-Stellen in 20 Workflows lesen sie über
+`node-version-file`, `engines: ">=24 <25"` in package.json grenzt nach oben ab. Die
+Obergrenze ist Absicht: Vercel wählt Node nach `engines`, offen gelassen spränge die
+Produktion beim nächsten Major von allein. Vorher stand die Zahl 21-mal hart im Repo
+(Gate 22, übrige Workflows 20, Vercel 24.x). Gate zuerst und einzeln belegt (`node: v24.20.0` im
 Lauf-Log) · Eigener Build-Riegel `.github/workflows/build-gate.yml`
 gebaut, Job `Build pruefen` (contentlayer → tsc → `next build`, 2,5–3 min, `.next/cache`
 über `actions/cache`) · als Pflicht-Check eingetragen und **belegt statt behauptet**: mit

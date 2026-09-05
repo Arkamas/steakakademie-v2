@@ -31,7 +31,7 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: '24'   # >=22 wegen nativem WebSocket (supabase-js braucht es); 24 = Produktionsstand
+          node-version-file: .nvmrc   # supabase-js braucht natives WebSocket (>=22); die Version selbst kommt aus .nvmrc
           cache: npm
 
       - name: Secrets prüfen

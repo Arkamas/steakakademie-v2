@@ -15,7 +15,7 @@
   --sk-dark-text-2: #d9cfc2;
   --sk-dark-text-3: #c9bfb2;
   --sk-dark-muted: #b3a798;
-  --sk-dark-faint: #7d7166;
+  --sk-dark-faint: #8f8376;    /* Handoff #7d7166 = 3,93:1 auf #15120f — unter AA fuer Meta/Kruemel; 5,0:1 */
   --sk-dark-tab-off: #a89b8c;
   --sk-accent-dark: #ffb35c;
 
@@ -28,12 +28,18 @@
   --sk-light-border-dashed: #d4c8b6;
   --sk-light-text: #1a1613;
   --sk-light-body: #4a413a;
-  --sk-light-muted: #7d7166;
-  --sk-light-faint: #c9bfb2;
+  --sk-light-muted: #6f655a;   /* Handoff #7d7166 = 4,08:1 auf #f4ede3 — unter AA fuer 13-14px; 4,9:1 */
+  --sk-light-faint: #948878;   /* Handoff #c9bfb2 = 1,68:1 (Zaehlnummern) — 3,2:1, Zusatzinformation */
 
   /* Akzent — #e2531f nur auf hell (2,9:1 auf #15120f), #ffb35c auf dunkel */
   --sk-accent: #e2531f;
   --sk-accent-hover: #ff8a3d;
+  /* Akzent als TEXT auf hellem Grund: #e2531f erreicht 3,29:1 — fuer Kicker, Abzeichen,
+     'Ansehen' (13-16px) zu wenig. #bf4210 = 4,5:1, Hover #a33a0d. Knoepfe und
+     Display-Groessen (>= 24px fett) behalten #e2531f. Handoff-Punkt 5 (Kontraste
+     nachholen), Praezedenz /home-b 03.09.2026. */
+  --sk-accent-text: #bf4210;
+  --sk-accent-text-hover: #a33a0d;
 
   /* Schriften — die Variablen setzt next/font im Layout */
   --sk-display: var(--font-big-shoulders), Impact, sans-serif;
@@ -63,8 +69,8 @@
 }
 
 .sk :where(button) { font: inherit; cursor: pointer; }
-.sk :where(a) { color: var(--sk-accent); text-decoration: none; }
-.sk :where(a:hover) { color: var(--sk-accent-hover); }
+.sk :where(a) { color: var(--sk-accent-text); text-decoration: none; }
+.sk :where(a:hover) { color: var(--sk-accent-text-hover); }
 .sk :where(h1, h2, h3, p, blockquote, ul) { margin: 0; }
 .sk :where(img) { max-width: 100%; }
 
@@ -117,7 +123,7 @@
 .sk-kicker { font-family: var(--sk-display); font-weight: 700; font-size: 14px; letter-spacing: .18em; text-transform: uppercase; }
 .sk-kicker--13 { font-size: 13px; letter-spacing: .16em; }
 .sk-kicker--warm { color: var(--sk-accent-dark); }
-.sk-kicker--accent { color: var(--sk-accent); }
+.sk-kicker--accent { color: var(--sk-accent-text); }
 .sk-kicker--muted { color: var(--sk-light-muted); }
 .sk-lead { font-size: 18px; line-height: 1.55; color: var(--sk-light-body); max-width: 58ch; text-wrap: pretty; }
 .sk-lead--xl { font-size: 22px; }
@@ -128,8 +134,8 @@
 .sk-text { font-size: 15px; line-height: 1.5; color: var(--sk-light-body); text-wrap: pretty; }
 .sk-text--16 { font-size: 16px; }
 .sk-d .sk-text { color: var(--sk-dark-muted); }
-.sk-more { color: var(--sk-accent); font-size: 16px; background: none; border: 0; padding: 0; white-space: nowrap; }
-.sk-more:hover { color: var(--sk-accent-hover); }
+.sk-more { color: var(--sk-accent-text); font-size: 16px; background: none; border: 0; padding: 0; white-space: nowrap; }
+.sk-more:hover { color: var(--sk-accent-text-hover); }
 .sk-d .sk-more { color: var(--sk-accent-hover); }
 
 /* ---- Knöpfe, Pillen, Chips --------------------------------------------- */
@@ -263,10 +269,10 @@
 .sk-kat-body { max-width: var(--sk-w); margin: 0 auto; padding: 36px 20px 88px; }
 .sk-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
 .sk-entry__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.sk-entry__badge { flex: none; font-family: var(--sk-display); font-weight: 800; font-size: 15px; letter-spacing: .04em; color: var(--sk-accent); white-space: nowrap; }
+.sk-entry__badge { flex: none; font-family: var(--sk-display); font-weight: 800; font-size: 15px; letter-spacing: .04em; color: var(--sk-accent-text); white-space: nowrap; }
 .sk-entry__meta { display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px; color: var(--sk-light-muted); }
 .sk-entry__foot { margin-top: auto; padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid var(--sk-light-border-strong); font-size: 13px; color: var(--sk-light-muted); }
-.sk-entry__go { color: var(--sk-accent); }
+.sk-entry__go { color: var(--sk-accent-text); }
 .sk-entry__soon { color: var(--sk-light-faint); }
 
 .sk-list { border: 1px solid var(--sk-light-border); border-radius: var(--sk-r); overflow: hidden; background: var(--sk-light-card); }
@@ -276,7 +282,7 @@
 .sk-row__nr { font-family: var(--sk-display); font-weight: 900; font-size: 17px; color: var(--sk-light-faint); }
 .sk-row__meta { font-size: 14px; color: var(--sk-light-muted); }
 .sk-row__text { font-size: 14px; color: var(--sk-light-body); line-height: 1.45; }
-.sk-row__badge { text-align: right; font-family: var(--sk-display); font-weight: 800; font-size: 15px; color: var(--sk-accent); white-space: nowrap; }
+.sk-row__badge { text-align: right; font-family: var(--sk-display); font-weight: 800; font-size: 15px; color: var(--sk-accent-text); white-space: nowrap; }
 @media (max-width: 720px) {
   .sk-row { grid-template-columns: 44px 1fr 90px; }
   .sk-row__meta, .sk-row__text { display: none; }
@@ -299,7 +305,7 @@
 .sk-footer__claim { font-family: var(--sk-display); font-weight: 700; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--sk-dark-faint); margin-left: 14px; }
 .sk-footer__cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 28px; padding: 28px 0 40px; font-size: 14px; }
 .sk-footer__col { display: flex; flex-direction: column; gap: 8px; }
-.sk-footer__col a { color: var(--sk-accent); }
+.sk-footer__col a { color: var(--sk-accent-dark); }
 .sk-footer__col a:hover { color: var(--sk-accent-hover); }
 .sk-footer__head { font-family: var(--sk-display); font-weight: 700; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--sk-accent-dark); margin-bottom: 4px; }
 .sk-footer__legal { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid var(--sk-dark-border); font-size: 13px; color: var(--sk-dark-faint); }
@@ -335,7 +341,7 @@
 .sk-read { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
 .sk-read .sk-crumbs { color: var(--sk-light-muted); margin-bottom: 28px; }
 .sk-read .sk-crumbs a { color: var(--sk-light-muted); }
-.sk-read .sk-crumbs a:hover { color: var(--sk-accent); }
+.sk-read .sk-crumbs a:hover { color: var(--sk-accent-text); }
 .sk-read .sk-crumbs strong { color: var(--sk-light-muted); }
 .sk-read__h1 { font-weight: 900; font-size: clamp(40px, 6vw, 72px); line-height: .94; text-wrap: balance; }
 .sk-read__lead { margin-top: 22px; font-size: 20px; line-height: 1.5; color: var(--sk-light-body); text-wrap: pretty; }
@@ -357,7 +363,7 @@
 .sk-prose__quote { margin: 0; padding: 22px 26px; background: var(--sk-light-card); border-left: 3px solid var(--sk-accent); font-style: italic; }
 .sk-prose__strong { font-weight: 600; color: var(--sk-light-text); }
 .sk-prose__hr { border: 0; border-top: 1px solid var(--sk-light-border); margin: 10px 0; }
-.sk-prose__a { color: var(--sk-accent); text-decoration: underline; text-underline-offset: 3px; }
+.sk-prose__a { color: var(--sk-accent-text); text-decoration: underline; text-underline-offset: 3px; }
 .sk-prose__tablewrap { overflow-x: auto; border: 1px solid var(--sk-light-border); border-radius: var(--sk-r); background: var(--sk-light-card); }
 .sk-prose__table { border-collapse: collapse; width: 100%; font-size: 16px; }
 .sk-prose__th { text-align: left; padding: 12px 18px; background: var(--sk-light-text); color: var(--sk-dark-text); font-family: var(--sk-display); font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
@@ -385,7 +391,7 @@
 .sk-mid { max-width: var(--sk-w-mid); margin: 0 auto; padding: 40px 20px 80px; }
 .sk-mid .sk-crumbs { color: var(--sk-light-muted); margin-bottom: 28px; }
 .sk-mid .sk-crumbs a, .sk-mid .sk-crumbs strong { color: var(--sk-light-muted); }
-.sk-mid .sk-crumbs a:hover { color: var(--sk-accent); }
+.sk-mid .sk-crumbs a:hover { color: var(--sk-accent-text); }
 
 /* Rezept */
 .sk-rezept__kopf { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; align-items: start; }
@@ -423,7 +429,7 @@
 .sk-balken__seg--now { background: var(--sk-accent-hover); animation: sk-emberBreathe 2.4s ease-in-out infinite; }
 .sk-lektion { max-width: var(--sk-w-lesson); margin: 0 auto; padding: 40px 20px 80px; }
 .sk-lektion__h1 { font-weight: 900; font-size: clamp(38px, 5.5vw, 64px); line-height: .94; text-wrap: balance; }
-.sk-lektion__done { display: flex; align-items: center; gap: 10px; font-family: var(--sk-display); font-weight: 800; font-size: 19px; letter-spacing: .06em; text-transform: uppercase; color: var(--sk-accent); }
+.sk-lektion__done { display: flex; align-items: center; gap: 10px; font-family: var(--sk-display); font-weight: 800; font-size: 19px; letter-spacing: .06em; text-transform: uppercase; color: var(--sk-accent-text); }
 .sk-btn--outline { background: none; border-color: var(--sk-light-text); color: var(--sk-light-text); padding: 12px 20px; font-weight: 700; }
 .sk-btn--outline:hover { background: var(--sk-light-text); color: var(--sk-dark-text); }
 
@@ -437,7 +443,7 @@
 .sk-lektionen__row--pruefung { background: var(--sk-light-text); color: var(--sk-dark-text); }
 .sk-lektionen__row--pruefung:hover { background: var(--sk-dark-card); color: var(--sk-dark-text); }
 .sk-lektionen__title { font-size: 17px; }
-.sk-lektionen__go { font-size: 13px; color: var(--sk-accent); white-space: nowrap; }
+.sk-lektionen__go { font-size: 13px; color: var(--sk-accent-text); white-space: nowrap; }
 .sk-marker { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--sk-light-faint); box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex: none; }
 .sk-marker--done { background: var(--sk-accent); border-color: var(--sk-accent); color: var(--sk-dark-bg); }
 .sk-marker--now { border: 2px solid var(--sk-accent); }
@@ -476,3 +482,6 @@
 /* Dunkle Karten in hellen Sektionen: Text-Stufen wie auf der dunklen Ebene */
 .sk-card--dark .sk-text, .sk-weiche .sk-text { color: var(--sk-dark-muted); }
 .sk-card--dark .sk-meta { color: var(--sk-dark-faint); }
+
+.sk-produkt__anzeige { color: var(--sk-light-muted); }
+.sk-produkt--sieger .sk-produkt__anzeige { color: var(--sk-dark-faint); }

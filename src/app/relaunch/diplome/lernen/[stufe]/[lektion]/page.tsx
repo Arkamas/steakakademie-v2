@@ -63,7 +63,7 @@ export default function LektionSeite({ params }: Props) {
         <div className="sk-lektion__kopf">
           <div className="sk-lektion__zeile">
             <Link href="/relaunch/diplome" className="sk-lektion__back">← Stufe {l.stufe} · {stufe.name}</Link>
-            <span style={{ color: '#7d7166' }}>Lektion {l.order} von {geschwister.length}</span>
+            <span style={{ color: 'var(--sk-dark-faint)' }}>Lektion {l.order} von {geschwister.length}</span>
           </div>
           <LektionBalken urls={geschwister.map(url)} aktuell={url(l)} />
         </div>

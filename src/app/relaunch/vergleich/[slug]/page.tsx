@@ -87,7 +87,7 @@ export default function VergleichSeite({ params }: Props) {
               <article key={p.id} className={`sk-produkt${sieger ? ' sk-produkt--sieger' : ''}`}>
                 <div className="sk-produkt__top">
                   <span className={sieger ? 'sk-kicker--warm' : 'sk-kicker--accent'}>{p.badge ?? (sieger ? 'Testsieger' : 'Im Test')}</span>
-                  <span style={{ color: '#7d7166' }}>Anzeige</span>
+                  <span className="sk-produkt__anzeige">Anzeige</span>
                 </div>
                 <div className="sk-produkt__bild">
                   {bild ? (

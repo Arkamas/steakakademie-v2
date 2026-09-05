@@ -11,8 +11,8 @@
 ## A. Umgebung & Verifikation — VOR jeder Arbeit lesen
 
 > Diese Karte steht bewusst ganz oben und ist bewusst kurz. Jede Zeile hier hat
-> mindestens einmal einen halben Arbeitstag gekostet. Sie gehoert NICHT nach
-> memory.md — dort geht sie unter (Stand 27.08.: 55 KB Fliesstext).
+> mindestens einmal einen halben Arbeitstag gekostet. Sie steht hier und nirgends
+> sonst — die frueher dafuer genutzte memory.md ist am 27.08.2026 entfernt (§ 6).
 
 **Bauen und Pruefen**
 - `node_modules` in diesem Arbeitsbaum ist eine **Windows-Installation**. Native
@@ -393,6 +393,23 @@ Analytics & Data · CRM & Monetization.
   und §2 Regel 8 ausdrücklich als *Build*-Gate versteht. `npm run check` darf zusätzlich
   existieren, ersetzt `prebuild` aber nicht: **Vercel führt `check` nie aus.**
 
+- **Bots pushen nie auf main — sie öffnen PRs (04.09.2026).** Seit Branch Protection
+  (01.09.) waren alle sechs Agenten-Workflows stumm: letzter Bot-Commit 27.08., vier Tage
+  unbemerkt. Jetzt läuft jeder Bot-Commit über `.github/actions/pr-statt-push` — ein
+  Ort für die Logik, eigener Branch je Lauf, PR nach main. Reiner Text/Daten (Glossar,
+  Ideen-Radar, LoRA-JSON) mergt automatisch nach grünen Pflicht-Checks; alles mit
+  **KI-Bildern** (Rezepte, Cut-Fotos, Regenerierung) wartet auf Sichtprüfung — Regel 4/8c.
+  **Falle:** Ein PR aus `github.token` löst keine `pull_request`-Checks aus (GitHub-
+  Rekursionsschutz) → unmergefähig. Deshalb Secret **`BOT_PAT`** (fine-grained, nur dieses
+  Repo, Contents+PRs RW), Anleitung `docs/ci-bot-pat.md`. **Zweite Falle, gefunden im
+  ersten echten Testlauf (04.09.):** Ohne PAT entsteht der PR **nicht** einfach mit
+  Warnung — `gh pr create` wird abgewiesen („GitHub Actions is not permitted to create
+  or approve pull requests"), der Schritt bricht ab, und der Bot-Branch bleibt als
+  Leiche stehen. Dafür gibt es ein eigenes Repo-Setting **„Allow GitHub Actions to
+  create and approve pull requests"** — das ist **nicht** dasselbe wie „Actions bypass
+  branch protection". Letzteres **nie**: das wäre der alte ungeprüfte Zustand mit Umweg.
+  Neue Bot-Workflows nutzen die Action, keinen `git push`.
+
 - **Voyage-Vollausbau (22.08.2026):** Zentraler Client `src/lib/voyage/client.ts`
   (Embeddings, Reranker, Kontext-Embeddings, Multimodal; Retry bei 429). Wissenssuche ist
   zweistufig: pgvector-Recall → `rerank-2.5-lite` (abschaltbar: VOYAGE_RERANK=off, Ausfall
@@ -451,14 +468,30 @@ einen Fehlbefund gestützt haben — Statusquelle ist ausschließlich diese Date
   (Supabase-Backups, 2FA + Recovery-Codes offline, lokale Repo-Kopie).
 - Confluence-Spiegel `docs/confluence/` für die menschliche Übersicht aktuell halten.
 
-### Zwei-Dateien-Gedächtnis (Uwe, 25.06.2026)
-- **`CLAUDE.md` = REGELN** (Strategie, Doktrin, Was-gilt) — bewusst gepflegt.
-- **`memory.md` = LERN-ERKENNTNISSE** — was Claude beim Problemlösen lernt; nach jeder Session
-  automatisch ergänzt (Stop-Hook, Haiku-Synthese aus claude-mem). Committet + gepusht = dauerhaft.
-  Repo-Backup des Hooks: `scripts/gf3-lesson.cjs` (aktiv läuft die Kopie in `~/.claude/scripts/`).
-- Transkript-Aufbewahrung auf **3650 Tage** erhöht (war Default 30 → frühe Tage wären gelöscht worden).
+### Drei Orte für Wissen (Uwe, 04.09.2026 — ersetzt „Zwei-Dateien-Gedächtnis" vom 25.06.2026)
 
-@memory.md
+- **Doktrin → diese `CLAUDE.md`.** Regeln, Rolle, Was-gilt. Jede Zeile hier ist eine
+  Anweisung, kein Bericht. Bewusst gepflegt und bewusst kurz.
+- **Fachwissen → `docs/`.** Eine Datei je Sache. Dort stehen das Warum, die Zahlen und
+  die Entscheidung mit Datum — z. B. die Stimm-Abnahme Marco in
+  `docs/video-toolkit-setup.md` § 6.
+- **Stand → `docs/COCKPIT.md`, je Abteilung drei Zeilen** (*läuft · hängt · nächster
+  Schritt*). Nur der aktuelle Stand, keine Historie — die liefert Git.
+
+Passt etwas in keinen der drei Orte, ist es entweder falsch geschnitten oder gehört
+nicht ins Projekt. Eine vierte Ablage wird nicht angelegt.
+
+Zur selben Sicherungslogik gehört: Transkript-Aufbewahrung steht auf **3650 Tage**
+(Default war 30 — die frühen Tage wären längst gelöscht).
+
+**`memory.md` ist am 27.08.2026 entfernt worden** (Commit `9a2f4c4`): 55 KB Altnotizen
+als Fließtext, in dem jede Regel unterging — Empfehlung aus
+`docs/ARCHITEKTUR-AUDIT-2026-08-27.md`. Die Datei wird **nicht** wiederbelebt, auch nicht
+automatisch: der Stop-Hook `scripts/gf3-lesson.cjs` schrieb bis 04.09.2026 nach jedem
+Session-Ende dorthin und hätte sie stillschweigend neu angelegt — dieser Zweig ist
+entfernt. Session-Lektionen liegen weiterhin in `~/.claude/gf3-log.json` und in claude-mem;
+was davon dauerhaft gelten soll, trägt ein Mensch in einen der drei Orte oben ein.
+
 
 ## graphify
 

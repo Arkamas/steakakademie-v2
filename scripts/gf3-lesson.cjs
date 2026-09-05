@@ -23,9 +23,7 @@ const WORKER_PORT      = parseInt(process.env.CLAUDE_MEM_WORKER_PORT || '37777',
 const PROJECT          = 'Uwe';
 const GF3_LOG_FILE     = path.join(os.homedir(), '.claude', 'gf3-log.json');
 const PROJECT_ROOT     = 'C:\\Dev\\steakakademie-v2';
-const MEMORY_MD        = path.join(PROJECT_ROOT, 'memory.md');
 const ENV_LOCAL        = path.join(PROJECT_ROOT, '.env.local');
-const MEMORY_MAX       = 40; // jüngste Einträge in memory.md behalten (Rest in claude-mem + Git-Historie)
 const OBS_LIMIT        = 20;
 
 // API-Key: erst Env, dann sicher aus der gitignored .env.local (nie in Git/Settings).
@@ -75,7 +73,7 @@ async function workerHealthy() {
 // echten Session-Fakten) und reichte ihn als "Observation" an Haiku weiter.
 // Ergebnis: Haiku halluzinierte plausibel klingende, aber frei erfundene
 // GF3-Lektionen (falsche Payment-Provider, erfundene Nutzerzahlen etc.),
-// die dauerhaft in memory.md landeten. Der Fallback ist deshalb entfernt —
+// die dauerhaft im damaligen memory.md landeten. Der Fallback ist deshalb entfernt —
 // ohne echte, konkrete Observations wird lieber NICHTS geschrieben
 // (siehe "Keine Observations — übersprungen" in main()).
 async function getRecentObservations() {
@@ -205,28 +203,14 @@ function saveToLocalLog(lesson, observations) {
   return true;
 }
 
-// ── 4c. Ins committete memory.md schreiben (dauerhaft via Git) ─────────────
-function appendToMemoryMd(lesson) {
-  try {
-    const today = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' });
-    const entry = `## ${today} — Auto-Lektion\n\n${lesson.trim()}`;
-    let content = '';
-    try { content = fs.readFileSync(MEMORY_MD, 'utf-8'); } catch { /* neu */ }
-    const idx = content.indexOf('\n## ');
-    const header = (idx >= 0 ? content.slice(0, idx) : content).replace(/\s+$/, '');
-    const entries = idx >= 0
-      ? content.slice(idx + 1).split(/\n(?=## )/).map((s) => s.trim()).filter(Boolean)
-      : [];
-    entries.push(entry.trim());
-    const kept = entries.slice(-MEMORY_MAX);
-    fs.writeFileSync(MEMORY_MD, header + '\n\n' + kept.join('\n\n') + '\n', 'utf-8');
-    process.stdout.write(`[gf3] ✅ memory.md ergänzt (${MEMORY_MD})\n`);
-    return true;
-  } catch (err) {
-    process.stderr.write(`[gf3] memory.md schreiben fehlgeschlagen: ${err.message}\n`);
-    return false;
-  }
-}
+// ── 4c. memory.md-Schreibzweig entfernt (04.09.2026) ─────────────────────
+// Der Hook hängte die Lektion zusätzlich an memory.md im Hauptrepo an und legte die
+// Datei an, wenn sie fehlte. Genau das war das Problem: memory.md wurde am 27.08.2026
+// bewusst entfernt (Commit 9a2f4c4, 55 KB Altnotizen) — der Schreibzweig hätte sie nach
+// dem nächsten Session-Ende stillschweigend wieder angelegt.
+// Wissen gehört jetzt nach CLAUDE.md (Doktrin), docs/ (Fachwissen) oder docs/COCKPIT.md
+// (Stand je Abteilung) — Ablage-Regel: CLAUDE.md § 6. Die Lektion selbst bleibt in
+// ~/.claude/gf3-log.json und in claude-mem.
 
 // ── 4b. An claude-mem worker posten ────────────────────────────────────────
 async function saveToClaudeMem(lesson) {
@@ -291,9 +275,6 @@ async function main() {
     // Immer lokal speichern
     saveToLocalLog(lesson, observations);
     process.stdout.write(`[gf3] ✅ GF3-Lektion lokal gespeichert (${GF3_LOG_FILE})\n`);
-
-    // Dauerhaft ins committete memory.md (überlebt Rechner-Verlust via Git)
-    appendToMemoryMd(lesson);
 
     // Zusätzlich in claude-mem (Fehler werden ignoriert)
     await saveToClaudeMem(lesson);

@@ -30,6 +30,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   sammeln:
@@ -43,25 +44,23 @@ jobs:
           node-version: 20
 
       - name: Ideen sammeln
+        env:
+          IN_ALLE: ${{ inputs.alle }}
         run: |
-          if [ "${{ inputs.alle }}" = "true" ]; then
+          if [ "$IN_ALLE" = "true" ]; then
             node scripts/ideen-radar.mjs --alle
           else
             node scripts/ideen-radar.mjs
           fi
 
-      - name: Backlog sichern
-        run: |
-          if git diff --quiet -- data/ideen-backlog.json; then
-            echo "Keine neuen Ideen — nichts zu committen."
-            exit 0
-          fi
-          git config user.name  "steakakademie-bot"
-          git config user.email "pitmaster@steakakademie.de"
-          ANZAHL=$(node -e "const b=require('./data/ideen-backlog.json');console.log(b.eintraege.length)")
-          git add data/ideen-backlog.json
-          git commit -m "chore(ideen): Radar-Lauf — Backlog jetzt ${ANZAHL} Eintraege
-
-          Nur Titel/Link/Datum/Kategorien aus oeffentlichen RSS-Feeds.
-          Interner Themenspeicher, kein veroeffentlichter Inhalt."
-          git push
+      - name: Backlog als PR sichern (auto-merge nach grünen Gates)
+        uses: ./.github/actions/pr-statt-push
+        with:
+          pfade: data/ideen-backlog.json
+          branch-prefix: bot/ideen-radar
+          bot-name: ideen-radar
+          commit-message: 'chore(ideen): Radar-Lauf — Backlog aktualisiert'
+          pr-titel: '📡 Ideen-Radar: Backlog aktualisiert'
+          pr-body: 'Nur Titel/Link/Datum aus RSS (data/ideen-backlog.json). Interner Themenspeicher — mergt selbst nach grünen Gates.'
+          auto-merge: 'true'
+          token: ${{ secrets.BOT_PAT || github.token }}

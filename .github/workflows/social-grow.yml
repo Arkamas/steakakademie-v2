@@ -35,7 +35,14 @@ jobs:
       - name: Social Media Senior Director ausführen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: node scripts/social-posts.mjs --limit ${{ github.event.inputs.limit || '5' }}
+          IN_LIMIT: ${{ github.event.inputs.limit }}
+        run: |
+          # Nur Ziffern zulassen — --limit landet direkt in einer Kommandozeile.
+          LIMIT="${IN_LIMIT:-5}"
+          case "$LIMIT" in
+            ''|*[!0-9]*) echo "::warning::Ungueltiges limit '$LIMIT' — nutze 5"; LIMIT=5 ;;
+          esac
+          node scripts/social-posts.mjs --limit "$LIMIT"
 
       - name: Entwürfe als Artifact hochladen (zum Review)
         uses: actions/upload-artifact@v4

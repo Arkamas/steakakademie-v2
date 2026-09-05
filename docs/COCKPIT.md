@@ -32,15 +32,24 @@
 Protection auf `main` mit drei Pflicht-Checks (P0-Gates, Stille Content-Defekte, Vercel),
 16 GitHub-Actions-Workflows, Sentry-Monitoring, Ops-Alert → Jira (KAN).
 
-**Hängt:** **Content-Wachstum steht seit 01.09.** — Branch Protection blockiert die
-Direct-Pushes der sechs Agenten-Workflows, letzter Bot-Commit 27.08. Fix liegt vor
-(Composite Action `pr-statt-push`, alle sechs umgestellt, 04.09.), wird aber erst mit
-**`BOT_PAT`** voll wirksam — ohne PAT lösen Bot-PRs keine Pflicht-Checks aus ·
+**Hängt:** Vercel ist seit 05.09. Pflicht-Check — meldet Vercel einmal nicht (Ignored
+Build Step, pausiertes Projekt, getrennte GitHub-App, Fork-PR), hängt jeder PR unbefristet,
+und `enforce_admins: true` lässt auch Uwe nicht daran vorbei ·
 `_content_snap.tgz` / `_fix_sync.tgz` als Müll im Repo-Root (Regel 14).
 
-**Nächster Schritt (Uwe, 3 Min):** `BOT_PAT` anlegen + „Allow auto-merge" setzen —
-Anleitung `docs/ci-bot-pat.md`. Dann `glossary-grow` manuell starten und prüfen, dass
-der PR Checks bekommt.
+**Nächster Schritt:** Entscheiden, wie der Vercel-Ausfall entschärft wird — eigenes
+Build-Gate in GitHub Actions (`npm run build`) als Pflicht statt Vercel meldet immer und
+gehört dem Repo; Alternativen: `ignoreCommand: "exit 1"` in `vercel.json` oder nur den
+Notausgang dokumentieren. Nichts davon ist gebaut.
+
+*Erledigt 05.09.2026:* `BOT_PAT` gesetzt (Fine-grained, nur dieses Repo, Contents +
+Pull requests RW) — Nachweis an PR #52: Autor `Arkamas` statt `github-actions[bot]`, die
+Pflicht-Checks liefen an, der Fallback-Hinweis „Ohne BOT_PAT erstellt" blieb aus. Damit
+läuft das Content-Wachstum wieder (stand seit 01.09.) · Vercel als dritter Required
+Status Check eingetragen (Commit-Status, Kontext exakt `Vercel` — nicht der Check-Run
+`Vercel Preview Comments`). Bis dahin standen nur zwei Kontexte in der Liste: #52 mergte
+um 14:38:14 UTC, der Vercel-Build startete erst um 14:40:21 UTC — `4057b24` kam ohne
+Vercel-Gate auf main · `can_approve_pull_request_reviews` war bereits `true`, nichts geändert.
 
 *Erledigt 04.09.2026:* PR-Gate für alle Bot-Pushes (Text auto-merge, Bilder Review) ·
 Race durch eigene Branches gelöst · 13 `workflow_dispatch`-Inputs über `env` entschärft
@@ -85,7 +94,15 @@ internen Links, Glossar- und Rezept-Agent (täglich 03:00 / 03:30 UTC), Rechtsch
 **Hängt:** 7 Rind-Cuts mit `52–54 °C` widersprechen der Untergrenze 54 °C in
 `data/kerntemperatur-referenz.yaml` — Fachentscheidung offen, welche Seite recht hat ·
 `content/cuts/pulled-pork.mdx` hat keinen Katalog-Eintrag (Seite existiert, aus dem
-Atlas nicht erreichbar) · `id: 'roastbeef'` ≠ `slug: 'rumpsteak'` (einziger ID/Slug-Bruch).
+Atlas nicht erreichbar) · `id: 'roastbeef'` ≠ `slug: 'rumpsteak'` (einziger ID/Slug-Bruch) ·
+**Ideen-Radar sammelt Altbestand:** 25 der 79 Einträge in `data/ideen-backlog.json` sind älter als ein Jahr
+(23 aus 2024, 2 aus 2025) — der 21-Tage-Frischefilter aus dem BBQ-News-Scout (03.09.,
+`MAX_AGE_DAYS` in `scripts/cron-scout.mjs`) greift hier nicht, `scripts/ideen-radar.mjs`
+kennt keine Altersgrenze. Als reiner Themenspeicher unkritisch; vor dem nächsten
+Pipeline-Ausbau aber entscheiden, ob Altes gefiltert oder bewusst als Evergreen markiert
+wird, sonst geht es unbesehen als „aktuell" in die Content-Pipeline. Geprüft 05.09.2026:
+keine ausgeschlossenen Quellen (bbqingwiththenolands, usa-kulinarisch), keine Duplikate
+in `id`, `link` oder Titel.
 
 **Nächster Schritt:** Rind-Kerntemperaturen entscheiden — Katalog an YAML angleichen
 oder YAML korrigieren. Kein Raten (Regel 8c).

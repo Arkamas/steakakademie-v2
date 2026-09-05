@@ -21,6 +21,16 @@ import { CONSENT_CHANGE_EVENT, hasStatisticsConsent, type ConsentState } from '@
  */
 const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID || 'wv3l573awi';
 
+// Nur auf der Produktionsdomain laden (04.09.2026). Ohne dieses Gate zeichnete
+// Clarity auch Preview-Deployments (*.vercel.app) und lokale Laeufe auf — am
+// 04.09. stand eine Preview-Session mit 18 s LCP zwischen den echten Daten.
+// Preview-Builds sind NODE_ENV=production, das Env-Flag taugt hier also nicht;
+// der Hostname ist das einzige verlaessliche Kriterium im Browser.
+const PROD_HOSTS = new Set(['steakakademie.de', 'www.steakakademie.de']);
+function istProduktionsHost(): boolean {
+  return typeof window !== 'undefined' && PROD_HOSTS.has(window.location.hostname);
+}
+
 let injected = false;
 
 function injectClarity(id: string) {
@@ -44,7 +54,7 @@ function injectClarity(id: string) {
 
 export default function ClarityScript() {
   useEffect(() => {
-    if (!CLARITY_ID) return;
+    if (!CLARITY_ID || !istProduktionsHost()) return;
 
     if (hasStatisticsConsent()) injectClarity(CLARITY_ID);
 

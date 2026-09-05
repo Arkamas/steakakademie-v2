@@ -1,0 +1,109 @@
+name: Build-Gate
+
+# Der eigene Build-Riegel — unabhaengig von Vercel.
+#
+# WARUM ES IHN GIBT (05.09.2026): Bis heute war `Vercel` der einzige Pflicht-Check,
+# der ueberhaupt baut. Ein Fremdanbieter als einziges Bau-Gate hat zwei Seiten:
+# meldet Vercel nicht (Ignored Build Step, pausiertes Projekt, getrennte
+# GitHub-App, Fork-PR), haengt jeder PR unbefristet — und `enforce_admins: true`
+# laesst niemanden daran vorbei. Ob ein Ignored Build Step gesetzt ist, steht nur
+# im Vercel-Dashboard und ist aus dem Repo nicht einsehbar. Dieser Job gehoert dem
+# Repo, meldet immer und ist damit der Kontext, auf den sich die Branch Protection
+# stuetzen kann.
+#
+# WAS ER PRUEFT: dass der Baum uebersetzt und alle Seiten durchrendern.
+# WAS ER NICHT PRUEFT: dass sie mit echten Daten rendern — siehe Env-Block unten.
+#
+# NODE-VERSION: 22, wie beauftragt. Die uebrigen Workflows stehen auf 20, das
+# Vercel-Projekt baut auf 24.x. Der Gate deckt damit keine Abweichung ab, die
+# erst auf 24 auftritt; das ist bewusst in Kauf genommen und gehoert vor jeder
+# Node-Anhebung geprueft.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    # ACHTUNG: Dieser Name ist der Required-Status-Kontext in der Branch
+    # Protection. Umbenennen heisst, dass der alte Kontext nie wieder gruen
+    # gemeldet wird und JEDER PR dauerhaft blockiert — vgl. den Fall vom
+    # 04.09.2026 (leere Required-Liste sah aus wie ein scharfer Riegel).
+    # Wer ihn doch aendert, aendert im selben Zug die Protection.
+    name: Build pruefen
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    # KEINE Platzhalter-Env fuer Supabase & Co. — das waere hier schaedlich, nicht
+    # hilfreich. Der Code verzweigt auf ANWESENHEIT, nicht auf Gueltigkeit:
+    # src/lib/content-feed.ts und src/lib/bbq-news.ts geben ohne
+    # NEXT_PUBLIC_SUPABASE_URL/-ANON_KEY leere Listen zurueck (`if (!url || !key)
+    # return []`). Mit einem erfundenen Wert faenden sie den Schalter "gesetzt",
+    # wuerden waehrend der statischen Generierung tatsaechlich einen Host
+    # anfragen und der Build haengt oder scheitert an etwas, das es nicht gibt.
+    # Ohne Env rendern diese Bereiche leer — der Build beweist dann Uebersetzung
+    # und Durchlauf, nicht die Datenlage. Genau das ist der Zweck dieses Gates.
+    #
+    # Sentry braucht hier nichts: der Upload haengt in next.config.mjs an
+    # VERCEL_ENV === 'production', das in Actions nicht gesetzt ist. Ein
+    # SENTRY_AUTH_TOKEN waere wirkungslos.
+    #
+    # Die werfenden Module (src/lib/voyage/client.ts, src/lib/voyage-retrieval.ts)
+    # haengen ausschliesslich an API-Routen mit `export const dynamic =
+    # 'force-dynamic'` und laufen zur Bauzeit nicht.
+    env:
+      # Nur der Not-Aus, der auch in der Produktion aus ist: ohne ihn wuerde die
+      # Middleware A/B zuteilen und das Ergebnis waere nicht reproduzierbar.
+      AB_HOME_ENABLED: '0'
+      NEXT_TELEMETRY_DISABLED: '1'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # Bewusst OHNE --ignore-scripts, anders als in den Nachbar-Workflows: die
+      # bauen nicht, dieser Job schon. sharp und die uebrigen nativen Pakete
+      # richten sich in ihren Install-Skripten ein; werden die uebersprungen,
+      # scheitert `next build` an fehlenden Binaries statt an echtem Code.
+      - name: Dependencies installieren
+        run: npm ci
+
+      # .next/cache spart den Grossteil der Bauzeit (Webpack-Module, optimierte
+      # Bilder). Der Schluessel haengt am Lockfile UND am Quelltext: aendert sich
+      # Code, wird ein neuer Eintrag geschrieben, die restore-keys liefern dabei
+      # den letzten passenden Stand als Startpunkt.
+      - name: Next-Build-Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+            .contentlayer
+          key: ${{ runner.os }}-node22-next-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*.[jt]s', 'src/**/*.[jt]sx', 'content/**/*.mdx', 'contentlayer.config.ts', 'next.config.mjs') }}
+          restore-keys: |
+            ${{ runner.os }}-node22-next-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-node22-next-
+
+      # REIHENFOLGE IST ZWINGEND (CLAUDE.md § A): contentlayer VOR tsc. In einer
+      # frischen Kopie existiert `contentlayer/generated` noch nicht; tsc meldet
+      # dann rund 271 Fehler, von denen kein einziger echt ist. Wer die beiden
+      # Schritte tauscht, baut sich ein Gate, das immer rot ist.
+      - name: Contentlayer bauen
+        run: npx contentlayer2 build
+
+      - name: Typen pruefen
+        run: npx tsc --noEmit
+
+      # Direkt `npx next build` statt `npm run build`: das Skript haengt
+      # seo-image-optimizer.mjs davor und die prebuild-Gates dahinter — die
+      # laufen bereits als eigene Pflicht-Checks (P0-Gates, Stille
+      # Content-Defekte). Doppelt pruefen kostet hier nur Minuten.
+      - name: Next-Build
+        run: npx next build

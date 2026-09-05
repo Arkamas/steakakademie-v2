@@ -72,20 +72,35 @@
   darunter aber leer ("No required checks"). Ein roter Gate-Lauf haette den
   Merge-Button also nicht aufgehalten, und "Require branches to be up to date"
   war wirkungslos mit — das greift erst ab dem ersten eingetragenen Check.
-  Seitdem sind drei Checks als Pflicht hinterlegt: **P0-Gates pruefen** und
-  **Stille Content-Defekte pruefen** (beide Quelle GitHub Actions) sowie
-  **Vercel** (Quelle Vercel). Bewusst NICHT Pflicht: "Rechtschreibung (nur
-  Bericht)" — der Name ist Programm, er meldet und blockiert nicht.
+  Seit 04.09.2026 stehen zwei Kontexte in der Liste, seit 05.09.2026 drei —
+  die Namen exakt so, wie sie gemeldet werden: `P0-Gates pruefen` und
+  `Stille Content-Defekte prüfen` (beide Quelle GitHub Actions, Check-Runs)
+  sowie `Vercel` (Quelle Vercel, **Commit-Status**, nicht Check-Run — der
+  Check-Run `Vercel Preview Comments` ist etwas anderes und taugt nicht als
+  Gate). Bewusst NICHT Pflicht: "Rechtschreibung (nur Bericht)" — der Name ist
+  Programm, er meldet und blockiert nicht.
   Merke: Ein aktivierter Schutzschalter ohne Inhalt sieht im UI genauso aus wie
   ein scharfer. Wer sich auf einen Riegel verlaesst, sieht einmal nach, ob eine
   Liste dahinter steht.
+- **Vercel wurde erst am 05.09.2026 Pflicht — der Punkt darueber hat es seit
+  dem 04.09. faelschlich behauptet.** Was die Luecke gekostet hat: PR #52
+  (Ideen-Radar, Bot-PR mit Auto-Merge) wurde am 05.09. um 14:38:14 UTC gemergt,
+  der Vercel-Build startete um 14:40:21 UTC — der Auto-Merge hat auf ihn nicht
+  gewartet, weil er nur auf die *eingetragenen* Kontexte schaut. `4057b24` ist
+  so ohne Vercel-Gate auf main gelandet (der Build wurde nachtraeglich gruen).
+  Lehre: Was hier ueber einen Riegel steht, ist eine Behauptung, bis
+  `gh api repos/Arkamas/steakakademie-v2/branches/main/protection` sie belegt.
+  Ein falsch geschriebener Kontext ist dabei die teurere Variante — er wird nie
+  gruen gemeldet und blockiert jeden PR dauerhaft. Deshalb den Namen vor dem
+  Eintragen aus `gh api repos/.../commits/<sha>/status` bzw. `.../check-runs`
+  eines echten PR-Kopfes abschreiben, nie tippen.
 - Reihenfolge bleibt **commit → `npm run build` → push**, nur jetzt auf den
   Branch statt auf main. Ohne lokalen Build vorher wird das Preview rot statt
   der Produktion — aber rot bleibt rot: Vier rote Deployments am 26.08. kamen aus
   genau dieser Vertauschung.
-- Ob die vier Gates als Required Status Checks den Merge-Button sperren oder nur
-  informativ im Preview laufen, ist noch nicht geprueft — vor dem ersten PR
-  dieser Art in `Settings → Branches → main` nachsehen.
+- Die Frage, ob die Gates den Merge-Button sperren oder nur informativ laufen,
+  ist mit dem Punkt oben beantwortet: drei Kontexte sperren, alles andere laeuft
+  informativ mit (Netlify, "Rechtschreibung", "Abmahn-Regressionen").
 - **Nie `git add -A`**, auch nicht auf ein Unterverzeichnis. Immer Pfade einzeln
   nennen — sonst wandert uncommitteter Fremdstand mit (Regel 9).
 - Ein Linux-Zugriff ueber die Ordner-Bruecke darf keine Dateien loeschen. git legt

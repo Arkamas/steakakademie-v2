@@ -32,13 +32,19 @@
 Protection auf `main` mit drei Pflicht-Checks (P0-Gates, Stille Content-Defekte, Vercel),
 16 GitHub-Actions-Workflows, Sentry-Monitoring, Ops-Alert → Jira (KAN).
 
-**Hängt:** `_content_snap.tgz` / `_fix_sync.tgz` als Müll im Repo-Root (Regel 14) ·
-`regenerate-recipe-images.yml` und der Bild-Teil von `recipe-grow.yml` pushen Bilder
-weiterhin ungeprüft auf `main` (gleiche Fehlerklasse wie das behobene Cut-Foto-Problem) ·
-Push-Steps ohne `git pull --rebase` → Race bei überlappenden Läufen.
+**Hängt:** **Content-Wachstum steht seit 01.09.** — Branch Protection blockiert die
+Direct-Pushes der sechs Agenten-Workflows, letzter Bot-Commit 27.08. Fix liegt vor
+(Composite Action `pr-statt-push`, alle sechs umgestellt, 04.09.), wird aber erst mit
+**`BOT_PAT`** voll wirksam — ohne PAT lösen Bot-PRs keine Pflicht-Checks aus ·
+`_content_snap.tgz` / `_fix_sync.tgz` als Müll im Repo-Root (Regel 14).
 
-**Nächster Schritt:** Bild-Push-Wege auf dasselbe PR-Gate umstellen wie
-`generate-cut-images.yml`.
+**Nächster Schritt (Uwe, 3 Min):** `BOT_PAT` anlegen + „Allow auto-merge" setzen —
+Anleitung `docs/ci-bot-pat.md`. Dann `glossary-grow` manuell starten und prüfen, dass
+der PR Checks bekommt.
+
+*Erledigt 04.09.2026:* PR-Gate für alle Bot-Pushes (Text auto-merge, Bilder Review) ·
+Race durch eigene Branches gelöst · 13 `workflow_dispatch`-Inputs über `env` entschärft
+(Script-Injection-Muster) · Guard in `train-pork-lora.yml` (fehlendes Dataset ≠ Fehler).
 
 ---
 
@@ -48,19 +54,25 @@ Push-Steps ohne `git pull --rebase` → Race bei überlappenden Läufen.
 nichts geht ohne Sichtprüfung live. Rezeptbild-Generator (`sa_foodstyle`-LoRA).
 Kräuter-Rotation im Cut-Prompt (6 Kräuter, deterministisch je Slug).
 
-Video-Toolkit (MIT, v0.20.0) seit 10.08. im Repo verankert: `npm run vt:setup:win`,
-Marken-Profil kanonisch in `docs/video-toolkit/brand/`, Setup auf Windows verifiziert
-(10.08.), Modal mit 6/8 Endpunkten (**Qwen3-TTS**, **FLUX2**, Image-Edit, Upscale,
-Musik, SadTalker) — Doku `docs/video-toolkit-setup.md`.
+Video-Toolkit (MIT, v0.20.0) seit 04.09. im Repo verankert (PR #47 gemergt):
+`npm run vt:setup:win`, Marken-Profil kanonisch in `docs/video-toolkit/brand/`,
+Modal mit 6/8 Endpunkten (**Qwen3-TTS**, **FLUX2**, Image-Edit, Upscale, Musik,
+SadTalker) — Doku `docs/video-toolkit-setup.md`.
 
-**Hängt:** **Hörtest Marco steht aus** — Stimme ist deployed, aber nie abgehört ·
+**Marcos Stimme ist abgenommen und eingefroren** (04.09., B3 „warm-erfahren",
+Voice-Design statt Klon). Die Referenz-WAV liegt versioniert im Repo, weil Qwen3-TTS
+**keinen Seed** kennt — löschen und neu generieren ergäbe eine *andere* Stimme.
+Nie löschen, Neu-Abnahme nur mit Freigabe (`docs/video-toolkit-setup.md` §6).
+
+**Hängt:** **R2 fehlt — Pflicht vor der nächsten Generierung** (ohne R2 gehen
+Referenz-Assets an einen öffentlichen Filehoster, Befund 04.09.; Setup-Skripte warnen
+rot; die vier Schlüssel stehen bereits auskommentiert in `tools/video-toolkit/.env`) ·
 16 Cut-Fotos fehlen (Platzhalter greift) · `training/lora-pork/dataset/` fehlt →
-`train-pork-lora.yml` nicht lauffähig · zwei Video-Stacks parallel (OpenMontage +
-Toolkit) — einer zu viel · Regex-Fix im Setup-Skript (PR offen).
+Training läuft nicht (Guard fängt es ab) · zwei Video-Stacks parallel (OpenMontage +
+Toolkit) — einer zu viel.
 
-**Nächster Schritt:** Hörtest (7 Takes, `hoertest-marco.ps1`) → Marco in
-`docs/video-toolkit/brand/voice.json` festschreiben, Beschluss mit Datum nach
-`docs/video-toolkit-setup.md` § 6. Dann OpenMontage stilllegen.
+**Nächster Schritt:** R2 einrichten (`docs/video-toolkit-setup.md` §3, 0 €) → erste
+Lernvideo-Produktion mit Marcos Stimme. Danach OpenMontage stilllegen.
 
 ---
 

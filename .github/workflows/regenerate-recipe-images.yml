@@ -18,6 +18,7 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -33,27 +34,25 @@ jobs:
 
       - name: Bilder generieren (--force)
         env:
+          IN_ONLY: ${{ inputs.only }}
           FAL_KEY: ${{ secrets.FAL_KEY }}
         run: |
           ARGS="--force"
-          if [ -n "${{ inputs.only }}" ]; then ARGS="$ARGS --only ${{ inputs.only }}"; fi
+          if [ -n "$IN_ONLY" ]; then ARGS="$ARGS --only $IN_ONLY"; fi
           echo "Starte: node scripts/recipe-images.mjs $ARGS"
           node scripts/recipe-images.mjs $ARGS
 
-      - name: Geänderte Bilder committen + pushen
-        run: |
-          if [ -z "$(git status --porcelain public/images/rezepte)" ]; then
-            echo "## 🖼 Keine Bildänderungen" >> $GITHUB_STEP_SUMMARY
-            exit 0
-          fi
-          N=$(git status --porcelain public/images/rezepte | grep -cE '\.jpg$' || true)
-          git config user.name  "recipe-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add public/images/rezepte
-          git commit -m "chore(rezepte): ${N} Hero-Bilder neu generiert (neue Prompt-Doktrin)"
-          git push
-          echo "## 🖼 ${N} Bilder neu generiert" >> $GITHUB_STEP_SUMMARY
-          echo "Committet + gepusht → löst Deploy aus." >> $GITHUB_STEP_SUMMARY
+      - name: Geänderte Bilder als PR (Review-Gate, KEIN direkter Push)
+        uses: ./.github/actions/pr-statt-push
+        with:
+          pfade: public/images/rezepte
+          branch-prefix: bot/rezeptbilder
+          bot-name: recipe-bot
+          commit-message: 'chore(rezepte): Hero-Bilder neu generiert (neue Prompt-Doktrin) — zur Prüfung'
+          pr-titel: '🖼 Hero-Bilder neu generiert — bitte jedes Bild prüfen (Regel 8c)'
+          pr-body: 'Manuell ausgelöster --force-Lauf (recipe-images.mjs / FLUX). **Jedes Bild einzeln gegen sein Rezept prüfen**, bevor gemergt wird — vorher gingen Bilder ungeprüft live (gleiche Fehlerklasse wie d6b4077).'
+          auto-merge: 'false'
+          token: ${{ secrets.BOT_PAT || github.token }}
 
       - name: Bei Fehler → Jira-Ticket (KAN)
         if: failure()

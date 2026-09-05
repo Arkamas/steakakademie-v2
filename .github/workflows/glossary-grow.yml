@@ -14,7 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: write       # Für Commit + Push der neuen Begriffe
+      contents: write       # Commit auf Bot-Branch
+      pull-requests: write  # PR nach main (Branch Protection seit 01.09.)
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -33,21 +34,17 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node scripts/glossary-agent.mjs
 
-      - name: Neue Begriffe committen + pushen
-        run: |
-          if [ -z "$(git status --porcelain content/glossar)" ]; then
-            echo "## 📖 Glossar" >> $GITHUB_STEP_SUMMARY
-            echo "Keine neuen Begriffe — Content unverändert." >> $GITHUB_STEP_SUMMARY
-            exit 0
-          fi
-          NEW=$(git status --porcelain content/glossar | grep -cE '\.mdx$' || true)
-          git config user.name  "glossary-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add content/glossar
-          git commit -m "chore(glossar): ${NEW} neue/aktualisierte Begriffe (automatisch)"
-          git push
-          echo "## 📖 Glossar gewachsen" >> $GITHUB_STEP_SUMMARY
-          echo "**${NEW}** neue/aktualisierte Begriffe committet + gepusht → löst Deploy aus." >> $GITHUB_STEP_SUMMARY
+      - name: Neue Begriffe als PR (auto-merge nach grünen Gates)
+        uses: ./.github/actions/pr-statt-push
+        with:
+          pfade: content/glossar
+          branch-prefix: bot/glossar
+          bot-name: glossary-bot
+          commit-message: 'chore(glossar): neue/aktualisierte Begriffe (automatisch)'
+          pr-titel: '📖 Glossar-Agent: neue Begriffe'
+          pr-body: 'Automatisch generiert (scripts/glossary-agent.mjs). Reiner Text — mergt selbst, sobald die Pflicht-Checks grün sind.'
+          auto-merge: 'true'
+          token: ${{ secrets.BOT_PAT || github.token }}
 
       - name: Bei Fehler → Jira-Ticket (KAN)
         if: failure()

@@ -36,12 +36,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Review-Branch anlegen
-        run: |
-          BRANCH="cut-fotos/review-$(date +%Y%m%d-%H%M%S)"
-          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
-          git checkout -b "$BRANCH"
-
       - name: Node.js einrichten
         uses: actions/setup-node@v5
         with:
@@ -53,35 +47,27 @@ jobs:
 
       - name: Cut-Fotos generieren
         env:
+          IN_FORCE: ${{ inputs.force }}
+          IN_ONLY: ${{ inputs.only }}
           FAL_KEY: ${{ secrets.FAL_KEY }}
         run: |
           ARGS=""
-          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
-          if [ -n "${{ inputs.only }}" ]; then ARGS="$ARGS --only ${{ inputs.only }}"; fi
+          if [ "$IN_FORCE" = "true" ]; then ARGS="$ARGS --force"; fi
+          if [ -n "$IN_ONLY" ]; then ARGS="$ARGS --only $IN_ONLY"; fi
           echo "Starte: node scripts/cut-images.mjs $ARGS"
           node scripts/cut-images.mjs $ARGS
 
-      - name: Geänderte Bilder committen + PR öffnen (KEIN direkter Push auf main)
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if [ -z "$(git status --porcelain public/images/cuts)" ]; then
-            echo "## 🥩 Keine Bildänderungen" >> $GITHUB_STEP_SUMMARY
-            exit 0
-          fi
-          N=$(git status --porcelain public/images/cuts | grep -cE '\.jpg$' || true)
-          git config user.name  "cut-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add public/images/cuts
-          git commit -m "chore(cuts): ${N} Cut-Fotos generiert (FLUX, sa_rawcut-LoRA) — zur Prüfung"
-          git push origin "$BRANCH"
-          gh pr create \
-            --title "🥩 ${N} neue Cut-Fotos — bitte gegen Cut-Anatomie prüfen (Regel 8c)" \
-            --body "Automatisch generiert (FLUX.1 + sa_rawcut-LoRA). **Vor dem Mergen jedes Bild einzeln gegen \`visualBrief\` in \`src/lib/cuts-catalog.ts\` prüfen** — stimmt Form/Knochen/Fett mit dem behaupteten Cut überein? Erst nach Freigabe mergen; Merge löst den Deploy aus." \
-            --base main \
-            --head "$BRANCH"
-          echo "## 🥩 ${N} Cut-Fotos generiert — PR zur Prüfung geöffnet" >> $GITHUB_STEP_SUMMARY
-          echo "KEIN Auto-Deploy. Merge erst nach manueller Sichtprüfung." >> $GITHUB_STEP_SUMMARY
+      - name: Geänderte Bilder als PR (Review-Gate, KEIN direkter Push)
+        uses: ./.github/actions/pr-statt-push
+        with:
+          pfade: public/images/cuts
+          branch-prefix: cut-fotos/review
+          bot-name: cut-bot
+          commit-message: 'chore(cuts): Cut-Fotos generiert (FLUX, sa_rawcut-LoRA) — zur Prüfung'
+          pr-titel: '🥩 Neue Cut-Fotos — bitte gegen Cut-Anatomie prüfen (Regel 8c)'
+          pr-body: 'Automatisch generiert (FLUX.1 + sa_rawcut-LoRA). **Vor dem Mergen jedes Bild einzeln gegen `visualBrief` in `src/lib/cuts-catalog.ts` prüfen** — stimmt Form/Knochen/Fett mit dem behaupteten Cut überein? Erst nach Freigabe mergen; Merge löst den Deploy aus.'
+          auto-merge: 'false'
+          token: ${{ secrets.BOT_PAT || github.token }}
 
       - name: Bei Fehler → Jira-Ticket (KAN)
         if: failure()

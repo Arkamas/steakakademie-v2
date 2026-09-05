@@ -150,3 +150,5 @@ Bevor ein neuer Ordner, ein neues Tool oder eine neue Automatisierung entsteht:
 **Zu welcher der fünf gehört es?** Die Antwort steht im Commit oder in der
 Abteilungs-Doku — nicht implizit im Kopf. Findet sich keine Abteilung, ist das ein
 Signal zum Nachdenken, kein Grund für eine sechste.
+
+<!-- Riegel-Test 05.09.2026: belegt, dass "Build pruefen" den Merge sperrt. Wird mit diesem PR wieder entfernt. -->

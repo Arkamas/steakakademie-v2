@@ -154,7 +154,13 @@ runs:
             echo "**Ursache:** $URSACHE"
             echo ""
             echo "**Der Commit ist nicht verloren** — er liegt gepusht auf \`$BRANCH\`."
-            echo "Nach dem Beheben von dort einen PR öffnen, oder den Branch wegräumen:"
+            echo "Nach dem Beheben entweder den PR von Hand nachziehen:"
+            echo ""
+            echo '```'
+            echo "gh pr create --base main --head $BRANCH"
+            echo '```'
+            echo ""
+            echo "…oder den Branch verwerfen:"
             echo ""
             echo '```'
             echo "git push origin --delete $BRANCH"

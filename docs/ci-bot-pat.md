@@ -28,9 +28,16 @@ Run `33927566618`) widerlegte das:
     pull request create failed: GraphQL: GitHub Actions is not permitted to
     create or approve pull requests (createPullRequest)
 
-Der Schritt bricht mit Exit 1 ab, **bevor** irgendeine Warnung geschrieben wird — das
-Job-Summary bleibt leer. Der Bot-Branch ist da bereits gepusht und bleibt als Leiche
-stehen.
+Der Schritt brach mit Exit 1 ab, **bevor** irgendeine Warnung geschrieben wurde — das
+Job-Summary blieb leer, und der bereits gepushte Bot-Branch
+(`bot/ideen-radar-20260904-2257`) blieb unauffindbar liegen und musste von Hand gelöscht
+werden.
+
+**Behoben am 05.09.2026:** Die Action fängt das Scheitern jetzt ab. Sie nennt die Ursache
+als `::error::` und schreibt ein Job-Summary mit Branchnamen, Aufräum-Befehl und der
+Rohmeldung. **Der Bot-Branch wird bewusst nicht gelöscht** — der Commit ist echte Arbeit
+(Glossarbegriffe, Backlog, Bilder). Nach dem Beheben lässt sich von dort ein PR öffnen,
+oder man räumt ihn mit dem angezeigten `git push origin --delete <branch>` weg.
 
 Ursache ist ein **zweites** Repo-Setting, unabhängig vom PAT: **Settings → Actions →
 General → Workflow permissions → „Allow GitHub Actions to create and approve pull
@@ -43,7 +50,7 @@ Damit gibt es drei Zustände statt zwei:
 |---|---|---|
 | ja | egal | PR entsteht, Checks laufen, mergefähig — **Sollzustand** |
 | nein | ja | PR entsteht, Checks laufen **nicht**, Warnung im PR-Text und im Summary |
-| nein | nein | **kein PR**, Schritt rot, Bot-Branch bleibt liegen |
+| nein | nein | **kein PR**, Schritt rot mit benannter Ursache, Bot-Branch bleibt stehen |
 
 | Workflow | Inhalt | Auto-Merge nach grünen Checks? |
 |---|---|---|

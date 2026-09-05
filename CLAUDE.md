@@ -350,9 +350,14 @@ Analytics & Data · CRM & Monetization.
   **KI-Bildern** (Rezepte, Cut-Fotos, Regenerierung) wartet auf Sichtprüfung — Regel 4/8c.
   **Falle:** Ein PR aus `github.token` löst keine `pull_request`-Checks aus (GitHub-
   Rekursionsschutz) → unmergefähig. Deshalb Secret **`BOT_PAT`** (fine-grained, nur dieses
-  Repo, Contents+PRs RW), Anleitung `docs/ci-bot-pat.md`. Ohne PAT entsteht der PR
-  trotzdem, mit sichtbarer Warnung. **Nie** „Actions bypass branch protection" — das
-  wäre der alte Zustand mit Umweg. Neue Bot-Workflows nutzen die Action, keinen `git push`.
+  Repo, Contents+PRs RW), Anleitung `docs/ci-bot-pat.md`. **Zweite Falle, gefunden im
+  ersten echten Testlauf (04.09.):** Ohne PAT entsteht der PR **nicht** einfach mit
+  Warnung — `gh pr create` wird abgewiesen („GitHub Actions is not permitted to create
+  or approve pull requests"), der Schritt bricht ab, und der Bot-Branch bleibt als
+  Leiche stehen. Dafür gibt es ein eigenes Repo-Setting **„Allow GitHub Actions to
+  create and approve pull requests"** — das ist **nicht** dasselbe wie „Actions bypass
+  branch protection". Letzteres **nie**: das wäre der alte ungeprüfte Zustand mit Umweg.
+  Neue Bot-Workflows nutzen die Action, keinen `git push`.
 
 - **Voyage-Vollausbau (22.08.2026):** Zentraler Client `src/lib/voyage/client.ts`
   (Embeddings, Reranker, Kontext-Embeddings, Multimodal; Retry bei 429). Wissenssuche ist

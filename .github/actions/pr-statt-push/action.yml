@@ -101,6 +101,12 @@ runs:
         # Push mit dem übergebenen Token, damit der PR die Checks auslöst.
         git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BRANCH}"
 
+        # Ohne BOT_PAT ist der PR bestenfalls ungeprüft — und im Zweifel gar nicht da:
+        # `gh pr create` mit github.token wird abgewiesen ("GitHub Actions is not
+        # permitted to create or approve pull requests"), solange das Repo-Setting
+        # "Allow GitHub Actions to create and approve pull requests" fehlt. Belegt im
+        # ersten echten Testlauf (04.09.2026, ideen-radar, Run 33927566618). Die
+        # folgende Warnung erreicht den PR-Text also nur, wenn dieses Setting steht.
         HINWEIS=""
         if [ "$HAT_PAT" != "true" ]; then
           HINWEIS=$'\n\n> ⚠️ **Ohne BOT_PAT erstellt** — die Pflicht-Checks (build-guard, content-gates) laufen auf diesem PR NICHT an. Entweder Secret `BOT_PAT` anlegen (docs/ci-bot-pat.md) oder die Checks manuell per workflow_dispatch auf diesem Branch starten.'

@@ -19,8 +19,31 @@ unmergefähig. Das betraf auch das Cut-Foto-Gate vom Juli.
 
 Alle sechs Workflows nutzen jetzt `.github/actions/pr-statt-push` (eine Composite Action,
 ein Ort für die Logik) und bevorzugen das Secret **`BOT_PAT`**. Mit PAT erstellt = Checks
-laufen = PR mergefähig. Ohne PAT fällt die Action auf `github.token` zurück, der PR
-entsteht trotzdem — mit sichtbarer Warnung im PR-Text und im Job-Summary.
+laufen = PR mergefähig.
+
+**Korrektur 04.09.2026 — der Fallback stand hier falsch beschrieben.** Es hieß, ohne PAT
+entstehe der PR trotzdem, nur mit Warnung. Der erste echte Testlauf (`ideen-radar`,
+Run `33927566618`) widerlegte das:
+
+    pull request create failed: GraphQL: GitHub Actions is not permitted to
+    create or approve pull requests (createPullRequest)
+
+Der Schritt bricht mit Exit 1 ab, **bevor** irgendeine Warnung geschrieben wird — das
+Job-Summary bleibt leer. Der Bot-Branch ist da bereits gepusht und bleibt als Leiche
+stehen.
+
+Ursache ist ein **zweites** Repo-Setting, unabhängig vom PAT: **Settings → Actions →
+General → Workflow permissions → „Allow GitHub Actions to create and approve pull
+requests"**. Das ist **nicht** dasselbe wie das weiter unten abgelehnte „Actions bypass
+branch protection" — es erlaubt nur das Anlegen eines PRs, an den Gates ändert es nichts.
+
+Damit gibt es drei Zustände statt zwei:
+
+| `BOT_PAT` | Actions dürfen PRs anlegen | Ergebnis |
+|---|---|---|
+| ja | egal | PR entsteht, Checks laufen, mergefähig — **Sollzustand** |
+| nein | ja | PR entsteht, Checks laufen **nicht**, Warnung im PR-Text und im Summary |
+| nein | nein | **kein PR**, Schritt rot, Bot-Branch bleibt liegen |
 
 | Workflow | Inhalt | Auto-Merge nach grünen Checks? |
 |---|---|---|

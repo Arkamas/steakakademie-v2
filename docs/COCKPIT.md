@@ -29,18 +29,28 @@
 ## 1 · Systems & Ops
 
 **Läuft:** Vercel-Produktion (`steakakademie.de`), Supabase-Auth (Magic Link), Branch
-Protection auf `main` mit drei Pflicht-Checks (P0-Gates, Stille Content-Defekte, Vercel),
-16 GitHub-Actions-Workflows, Sentry-Monitoring, Ops-Alert → Jira (KAN).
+Protection auf `main` mit drei Pflicht-Checks (`P0-Gates pruefen`, `Stille Content-Defekte
+prüfen`, `Build pruefen` — alle aus GitHub Actions), 21 GitHub-Actions-Workflows,
+Sentry-Monitoring, Ops-Alert → Jira (KAN).
 
-**Hängt:** Vercel ist seit 05.09. Pflicht-Check — meldet Vercel einmal nicht (Ignored
-Build Step, pausiertes Projekt, getrennte GitHub-App, Fork-PR), hängt jeder PR unbefristet,
-und `enforce_admins: true` lässt auch Uwe nicht daran vorbei ·
+**Hängt:** Der Build-Gate baut ohne Env-Variablen — Supabase-gestützte Bereiche rendern
+dabei leer. Er beweist Übersetzung und Durchlauf, nicht die Datenlage; ob das reichen soll,
+ist offen · Node-Spreizung: Gate auf 22, übrige Workflows auf 20, Vercel baut auf 24.x ·
 `_content_snap.tgz` / `_fix_sync.tgz` als Müll im Repo-Root (Regel 14).
 
-**Nächster Schritt:** Entscheiden, wie der Vercel-Ausfall entschärft wird — eigenes
-Build-Gate in GitHub Actions (`npm run build`) als Pflicht statt Vercel meldet immer und
-gehört dem Repo; Alternativen: `ignoreCommand: "exit 1"` in `vercel.json` oder nur den
-Notausgang dokumentieren. Nichts davon ist gebaut.
+**Nächster Schritt:** Entscheiden, ob der Build-Gate auch die Datenlage prüfen soll — das
+hieße echte Repo-Secrets für Supabase, bisher liegt keines dafür im Repo. Sonst dabei
+bleiben, dass er Übersetzung und Durchlauf sichert.
+
+*Erledigt 05.09.2026 (abends):* Eigener Build-Riegel `.github/workflows/build-gate.yml`
+gebaut, Job `Build pruefen` (contentlayer → tsc → `next build`, 2,5–3 min, `.next/cache`
+über `actions/cache`) · als Pflicht-Check eingetragen und **belegt statt behauptet**: mit
+ausstehendem Lauf meldete GitHub an PR #56 `BLOCKED` und verweigerte den Merge, nach grünen
+Checks `CLEAN` · erst danach **Vercel aus den Required Checks entfernt** — es baut und
+meldet weiter, blockiert aber nicht mehr. Grund: Vercel war das einzige bauende Gate, und
+ob dort ein Ignored Build Step gesetzt ist, lässt sich aus dem Repo nicht einsehen; damit
+gab es keine Garantie, dass Vercel immer meldet. Der Schutz hängt jetzt an einem Job, der
+dem Repo gehört.
 
 *Erledigt 05.09.2026:* `BOT_PAT` gesetzt (Fine-grained, nur dieses Repo, Contents +
 Pull requests RW) — Nachweis an PR #52: Autor `Arkamas` statt `github-actions[bot]`, die

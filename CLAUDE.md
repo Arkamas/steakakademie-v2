@@ -72,13 +72,12 @@
   darunter aber leer ("No required checks"). Ein roter Gate-Lauf haette den
   Merge-Button also nicht aufgehalten, und "Require branches to be up to date"
   war wirkungslos mit — das greift erst ab dem ersten eingetragenen Check.
-  Seit 04.09.2026 stehen zwei Kontexte in der Liste, seit 05.09.2026 drei —
-  die Namen exakt so, wie sie gemeldet werden: `P0-Gates pruefen` und
-  `Stille Content-Defekte prüfen` (beide Quelle GitHub Actions, Check-Runs)
-  sowie `Vercel` (Quelle Vercel, **Commit-Status**, nicht Check-Run — der
-  Check-Run `Vercel Preview Comments` ist etwas anderes und taugt nicht als
-  Gate). Bewusst NICHT Pflicht: "Rechtschreibung (nur Bericht)" — der Name ist
-  Programm, er meldet und blockiert nicht.
+  **Pflicht sind seit dem Abend des 05.09.2026 diese drei** — die Namen exakt
+  so, wie sie gemeldet werden: `P0-Gates pruefen`, `Stille Content-Defekte
+  prüfen` und `Build pruefen` (alle drei Quelle GitHub Actions, Check-Runs).
+  Bewusst NICHT Pflicht: "Rechtschreibung (nur Bericht)" — der Name ist
+  Programm, er meldet und blockiert nicht — sowie seit dem 05.09. auch
+  **Vercel** (siehe uebernaechster Punkt).
   Merke: Ein aktivierter Schutzschalter ohne Inhalt sieht im UI genauso aus wie
   ein scharfer. Wer sich auf einen Riegel verlaesst, sieht einmal nach, ob eine
   Liste dahinter steht.
@@ -94,6 +93,28 @@
   gruen gemeldet und blockiert jeden PR dauerhaft. Deshalb den Namen vor dem
   Eintragen aus `gh api repos/.../commits/<sha>/status` bzw. `.../check-runs`
   eines echten PR-Kopfes abschreiben, nie tippen.
+- **`Build pruefen` ist seit 05.09.2026 der Bau-Riegel, und Vercel ist wieder
+  optional.** Warum in dieser Reihenfolge: Vercel war der einzige Pflicht-Check,
+  der ueberhaupt baut — ein Fremdanbieter als alleiniges Bau-Gate. Meldet der
+  einmal nicht (Ignored Build Step, pausiertes Projekt, getrennte GitHub-App,
+  Fork-PR), haengt jeder PR unbefristet, und `enforce_admins: true` laesst
+  niemanden vorbei. Ob im Vercel-Dashboard ein Ignored Build Step steht, ist aus
+  dem Repo **nicht einsehbar** (die Vercel-MCP gibt das Feld nicht heraus) — es
+  gab also keine Garantie, dass Vercel immer meldet.
+  `.github/workflows/build-gate.yml` liefert denselben Schutz jetzt repo-eigen:
+  contentlayer → tsc
+  → `next build`, rund 2,5-3 min. Vercel baut weiter und meldet weiter, nur
+  blockiert es nicht mehr.
+  Belegt statt behauptet (05.09.): mit ausstehendem `Build pruefen` meldete
+  GitHub an PR #56 `BLOCKED` und verweigerte den Merge ("the base branch policy
+  prohibits the merge"), nach gruenen Checks `CLEAN`. Erst danach ist Vercel aus
+  der Liste geflogen.
+  Was der Gate NICHT leistet: er baut ohne jede Env-Variable. Supabase-gestuetzte
+  Bereiche rendern dabei leer (`content-feed.ts`/`bbq-news.ts` verzweigen auf die
+  ANWESENHEIT der Variablen). Er beweist Uebersetzung und Durchlauf, nicht die
+  Datenlage. Platzhalter waeren schaedlich — mit erfundenem Wert wuerde zur
+  Bauzeit ein Host angefragt, den es nicht gibt. Ausserdem laeuft er auf Node 22,
+  waehrend Vercel auf 24.x baut.
 - Reihenfolge bleibt **commit → `npm run build` → push**, nur jetzt auf den
   Branch statt auf main. Ohne lokalen Build vorher wird das Preview rot statt
   der Produktion — aber rot bleibt rot: Vier rote Deployments am 26.08. kamen aus

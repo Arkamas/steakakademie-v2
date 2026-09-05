@@ -126,7 +126,42 @@ runs:
           fi
         fi
 
-        URL=$(gh pr create --base main --head "$BRANCH" --title "$TITEL" --body "${BODY}${HINWEIS}${FREMD}")
+        # FEHLERPFAD (05.09.2026): `gh pr create` kann scheitern, und der Bot-Commit
+        # liegt dann bereits gepusht auf $BRANCH. Ohne Behandlung sah der Operator nur
+        # die rohe GraphQL-Meldung, das Job-Summary blieb leer (set -e bricht davor ab),
+        # und der Branch blieb unauffindbar liegen — so passiert am 04.09. mit
+        # bot/ideen-radar-20260904-2257. Der Branch wird bewusst NICHT geloescht: der
+        # Commit ist echte Arbeit. Stattdessen wird er benannt, mit Aufraeum-Befehl.
+        if ! URL=$(gh pr create --base main --head "$BRANCH" --title "$TITEL" --body "${BODY}${HINWEIS}${FREMD}" 2>&1); then
+          MELDUNG="$URL"
+          if printf '%s' "$MELDUNG" | grep -qF 'not permitted to create or approve pull requests'; then
+            URSACHE='Actions duerfen in diesem Repo keine PRs anlegen. Entweder Secret BOT_PAT setzen (empfohlen, siehe docs/ci-bot-pat.md) oder Settings -> Actions -> General -> Workflow permissions -> "Allow GitHub Actions to create and approve pull requests" einschalten. Das ist NICHT "Actions bypass branch protection" — es erlaubt nur das Anlegen.'
+          else
+            URSACHE='gh pr create fehlgeschlagen — Rohmeldung im Job-Summary.'
+          fi
+          echo "::error::Kein PR geoeffnet — $URSACHE"
+          {
+            echo "## ❌ Kein PR geöffnet"
+            echo ""
+            echo "**Ursache:** $URSACHE"
+            echo ""
+            echo "**Der Commit ist nicht verloren** — er liegt gepusht auf \`$BRANCH\`."
+            echo "Nach dem Beheben von dort einen PR öffnen, oder den Branch wegräumen:"
+            echo ""
+            echo '```'
+            echo "git push origin --delete $BRANCH"
+            echo '```'
+            echo ""
+            echo "<details><summary>Rohmeldung</summary>"
+            echo ""
+            echo '```'
+            echo "$MELDUNG"
+            echo '```'
+            echo ""
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 1
+        fi
         echo "url=$URL" >> "$GITHUB_OUTPUT"
 
         if [ "$AUTO" = "true" ]; then

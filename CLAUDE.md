@@ -399,16 +399,17 @@ Analytics & Data · CRM & Monetization.
   Ort für die Logik, eigener Branch je Lauf, PR nach main. Reiner Text/Daten (Glossar,
   Ideen-Radar, LoRA-JSON) mergt automatisch nach grünen Pflicht-Checks; alles mit
   **KI-Bildern** (Rezepte, Cut-Fotos, Regenerierung) wartet auf Sichtprüfung — Regel 4/8c.
-  **Falle:** Ein PR aus `github.token` löst keine `pull_request`-Checks aus (GitHub-
-  Rekursionsschutz) → unmergefähig. Deshalb Secret **`BOT_PAT`** (fine-grained, nur dieses
-  Repo, Contents+PRs RW), Anleitung `docs/ci-bot-pat.md`. **Zweite Falle, gefunden im
-  ersten echten Testlauf (04.09.):** Ohne PAT entsteht der PR **nicht** einfach mit
-  Warnung — `gh pr create` wird abgewiesen („GitHub Actions is not permitted to create
-  or approve pull requests"), der Schritt bricht ab, und der Bot-Branch bleibt als
-  Leiche stehen. Dafür gibt es ein eigenes Repo-Setting **„Allow GitHub Actions to
-  create and approve pull requests"** — das ist **nicht** dasselbe wie „Actions bypass
-  branch protection". Letzteres **nie**: das wäre der alte ungeprüfte Zustand mit Umweg.
-  Neue Bot-Workflows nutzen die Action, keinen `git push`.
+  **`BOT_PAT` ist Voraussetzung, nicht Komfort** (fine-grained, nur dieses Repo,
+  Contents+PRs RW — Anleitung `docs/ci-bot-pat.md`). Ohne PAT scheitert es an zwei
+  Hürden: `gh pr create` mit `github.token` schlägt fehl, solange *Settings → Actions →
+  General → „Allow GitHub Actions to create and approve pull requests"* aus ist; ist die
+  Einstellung an, entsteht der PR zwar, aber der GitHub-Rekursionsschutz lässt die
+  Pflicht-Checks nicht anlaufen → unmergefähig. Die Action fängt beide Fälle mit
+  lesbarer Meldung ab; der Commit liegt dabei immer schon gepusht auf dem Bot-Branch.
+  Diese Einstellung ist **nicht** „Actions bypass branch protection" — sie erlaubt nur
+  das Anlegen. **Bypass bleibt tabu**, das wäre der alte Zustand mit Umweg.
+  Neue Bot-Workflows nutzen die Action, keinen `git push`. Auto-Merge greift nur bei
+  Läufen auf `main` (Riegel gegen Testläufe, die Fremd-Commits mitschleusen).
 
 - **Voyage-Vollausbau (22.08.2026):** Zentraler Client `src/lib/voyage/client.ts`
   (Embeddings, Reranker, Kontext-Embeddings, Multimodal; Retry bei 429). Wissenssuche ist

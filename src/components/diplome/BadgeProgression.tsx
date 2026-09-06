@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { STUFEN } from '@/lib/diplome/stufen';
 
 // ── Parchment scroll (Stufe 5 only) ──────────────────────────────────────────
 function ParchmentScroll() {
@@ -132,54 +133,25 @@ interface BadgeDef {
   isMaster?: boolean;
 }
 
-const BADGES: BadgeDef[] = [
-  {
-    id: 1,
-    stufe: 'Stufe 1',
-    name: 'Der Funke',
-    cert: 'Basis-Zertifikat',
-    size: 122,
-    labelColor: '#B87030',
-    certColor: 'rgba(150,80,25,0.55)',
-  },
-  {
-    id: 2,
-    stufe: 'Stufe 2',
-    name: 'Die Flamme Bezähmen',
-    cert: 'Silber-Zertifikat',
-    size: 132,
-    labelColor: '#BCBCC8',
-    certColor: 'rgba(150,150,165,0.55)',
-  },
-  {
-    id: 3,
-    stufe: 'Stufe 3',
-    name: 'Hitzekontrolle',
-    cert: 'Gold-Zertifikat',
-    size: 142,
-    labelColor: '#D4A800',
-    certColor: 'rgba(180,130,20,0.55)',
-  },
-  {
-    id: 4,
-    stufe: 'Stufe 4',
-    name: 'Präzision & Geschmack',
-    cert: 'Platin-Zertifikat',
-    size: 152,
-    labelColor: '#B8C0D8',
-    certColor: 'rgba(150,158,185,0.55)',
-  },
-  {
-    id: 5,
-    stufe: 'Stufe 5',
-    name: 'Der Vollendete Pitmaster',
-    cert: 'Meister-Diplom',
-    size: 172,
-    isMaster: true,
-    labelColor: '#E8B820',
-    certColor: 'rgba(200,140,20,0.6)',
-  },
-] as const;
+// Name und Zertifikat kommen aus der einen Taxonomie-Quelle (stufen.ts);
+// Groessen und Farben sind Gestaltung dieses Schaustuecks und bleiben hier.
+// Vorher stand hier „Basis-Zertifikat" (Roadmap: „Bronze-Zertifikat") und
+// „Die Flamme Bezähmen" (anderswo klein geschrieben) — Audit R11.
+const BADGE_STYLE: Record<number, Pick<BadgeDef, 'size' | 'labelColor' | 'certColor' | 'isMaster'>> = {
+  1: { size: 122, labelColor: '#B87030', certColor: 'rgba(150,80,25,0.55)' },
+  2: { size: 132, labelColor: '#BCBCC8', certColor: 'rgba(150,150,165,0.55)' },
+  3: { size: 142, labelColor: '#D4A800', certColor: 'rgba(180,130,20,0.55)' },
+  4: { size: 152, labelColor: '#B8C0D8', certColor: 'rgba(150,158,185,0.55)' },
+  5: { size: 172, labelColor: '#E8B820', certColor: 'rgba(200,140,20,0.6)', isMaster: true },
+};
+
+const BADGES: BadgeDef[] = STUFEN.map((st) => ({
+  id: st.nr,
+  stufe: `Stufe ${st.nr}`,
+  name: st.title,
+  cert: st.cert,
+  ...BADGE_STYLE[st.nr],
+}));
 
 // Echte Münz-Renders (Bullenkopf-Design) statt der gezeichneten Gradient-Münzen.
 const TIER_FILE: Record<number, string> = {

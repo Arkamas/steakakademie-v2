@@ -1,10 +1,17 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { adminPasswortGesetzt } from '@/lib/admin-auth'
 
 export async function POST(req: Request) {
   const { password } = await req.json()
 
-  if (password === process.env.ADMIN_PASSWORD) {
+  // Ohne gesetztes ADMIN_PASSWORD gibt es keinen Admin — vorher haette ein
+  // leerer Body (password === undefined) bei fehlender Variable den Cookie gesetzt.
+  if (!adminPasswortGesetzt()) {
+    return NextResponse.json({ error: 'Admin nicht konfiguriert' }, { status: 503 })
+  }
+
+  if (typeof password === 'string' && password.length > 0 && password === process.env.ADMIN_PASSWORD) {
     const cookieStore = cookies()
     cookieStore.set('admin_auth', password, {
       httpOnly: true,

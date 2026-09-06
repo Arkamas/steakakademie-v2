@@ -6,24 +6,16 @@ import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { breadcrumbSchema } from '@/lib/schema';
-import { cookies } from 'next/headers';
 import { ChevronRight, ChevronLeft, ArrowRight, BookOpen, Lightbulb, Lock } from 'lucide-react';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import KontextRail from '@/components/diplome/KontextRail';
-import AnimatedBar from '@/components/diplome/AnimatedBar';
+import LektionFortschritt from '@/components/diplome/LektionFortschritt';
+import { STUFEN, stufeByNr } from '@/lib/diplome/stufen';
+import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
 
 interface Props {
   params: { stufe: string; lektion: string };
 }
-
-// Stufen-Meta (Metall + Titel) — Spiegel von diplome/roadmap stages
-const STUFE_META: Record<number, { cert: string; title: string; color: string }> = {
-  1: { cert: 'Bronze',  title: 'Der Funke',                color: '#CD7F32' },
-  2: { cert: 'Silber',  title: 'Die Flamme bezähmen',     color: '#C0C0C0' },
-  3: { cert: 'Gold',    title: 'Hitzekontrolle',           color: '#FFD700' },
-  4: { cert: 'Platin',  title: 'Präzision & Geschmack',    color: '#E5E4E2' },
-  5: { cert: 'Meister', title: 'Der vollendete Pitmaster', color: '#FF6B35' },
-};
 
 function lessonFrom(params: Props['params']) {
   const stufeNum = Number(params.stufe.replace('stufe-', ''));
@@ -83,32 +75,38 @@ const mdxComponents = {
   Schnelluebersicht, Achtung, ProTipp, TempBox,
 };
 
-export default function DiplomLektionPage({ params }: Props) {
+/**
+ * Aeussere, asynchrone Huelle: entscheidet den Zugang. Die eigentliche Seite
+ * (LektionSeite) bleibt synchron, weil useMDXComponent ein Hook ist und Hooks
+ * in async-Komponenten nicht erlaubt sind.
+ */
+export default async function DiplomLektionPage({ params }: Props) {
   const lektion = lessonFrom(params);
   if (!lektion) notFound();
 
-  const meta = STUFE_META[lektion.stufe] ?? STUFE_META[1];
-  const MDXContent = useMDXComponent(lektion.body.code);
-
   // ── BEZAHLPRODUKT-SCHUTZ (26.08.2026, docs/konzept-diplom-stufe-2-5.md) ──
   // Stufe 1 (Bronze) ist der kostenlose Trichter. Stufe 2-5 sind das
-  // kostenpflichtige Grillmeister-Diplom (99 EUR Gruendungspreis / 149 EUR) —
-  // bis heute standen alle Volltexte oeffentlich im Netz UND im Sitemap.
-  // Oeffentlich bleibt ein Anreisser (Excerpt + Lernziele); der Volltext
-  // oeffnet sich erst mit Kauf-Berechtigung.
-  // TODO Vorverkauf: sobald der Digistore-Webhook Kaeufe in Supabase schreibt
-  // (ab 01.10.2026, Gewerbeanmeldung), hier zusaetzlich das User-Entitlement
-  // pruefen. Bis dahin sieht nur Uwe (Admin-Cookie) die Volltexte.
+  // kostenpflichtige Grillmeister-Diplom (99 EUR Gruendungspreis / 149 EUR).
+  // Oeffentlich bleibt ein Anreisser (Excerpt); der Volltext oeffnet sich mit
+  // Kauf-Berechtigung: Admin-Cookie ODER aktive Buchung des Diplom-Kurses
+  // (src/lib/diplome/zugang.ts — seit dem Audit vom 06.09.2026 angeschlossen,
+  // vorher sah ausschliesslich der Admin-Cookie die Volltexte, ein zahlender
+  // Kunde nichts).
   //
-  // cookies() NUR fuer Bezahlstufen lesen: jeder Aufruf einer dynamischen API
-  // laesst Next das Prerendering dieser Seite abbrechen. Unbedingt aufgerufen
-  // wurden dadurch auch die sieben KOSTENLOSEN Stufe-1-Lektionen dynamisch —
-  // und fielen aus dem statischen Manifest, aus dem next-sitemap seine URLs
-  // liest. Der Trichter verschwand aus dem Sitemap. Jetzt bleibt Stufe 1
-  // statisch, nur Stufe 2-5 rendern pro Anfrage.
-  const isPaidTier = lektion.stufe >= 2;
-  const isAdmin = isPaidTier && cookies().get('admin_auth')?.value === process.env.ADMIN_PASSWORD;
-  const locked = isPaidTier && !isAdmin;
+  // diplomZugang() NUR fuer Bezahlstufen aufrufen: cookies()/auth machen die
+  // Seite dynamisch. Die sieben KOSTENLOSEN Stufe-1-Lektionen muessen statisch
+  // bleiben — sonst fallen sie aus dem Manifest, aus dem next-sitemap seine
+  // URLs liest (ist schon einmal passiert).
+  const isPaidTier = istBezahlstufe(lektion.stufe);
+  const locked = isPaidTier ? !(await diplomZugang()).zugang : false;
+
+  return <LektionSeite lektion={lektion} locked={locked} />;
+}
+
+function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)[number]; locked: boolean }) {
+  const stufe = stufeByNr(lektion.stufe) ?? STUFEN[0];
+  const meta = { cert: stufe.metall, title: stufe.title, color: stufe.color };
+  const MDXContent = useMDXComponent(lektion.body.code);
 
   // Geschwister-Lektionen derselben Stufe, nach order sortiert
   const siblings = allDiplomLektions
@@ -239,6 +237,18 @@ export default function DiplomLektionPage({ params }: Props) {
                   „{lektion.merksatz}&quot;
                 </p>
               </div>
+
+              {/* Lektion abhaken — schreibt lesson_progress (Konto) bzw. localStorage */}
+              <div className="mt-6">
+                <LektionFortschritt
+                  stufe={lektion.stufe}
+                  lektionSlug={lektion.lektionSlug}
+                  alleSlugs={siblings.map((l) => l.lektionSlug)}
+                  color={meta.color}
+                  variant="knopf"
+                  naechsteUrl={next?.url ?? null}
+                />
+              </div>
               </>)}
 
               {/* Prev / Next */}
@@ -271,10 +281,14 @@ export default function DiplomLektionPage({ params }: Props) {
                   </h2>
                 </div>
                 <div className="mb-4">
-                  <AnimatedBar
-                    percent={((idx + 1) / siblings.length) * 100}
+                  {/* Echter Lesestand (lokal + Konto), nicht mehr nur die Position in der Liste */}
+                  <LektionFortschritt
+                    stufe={lektion.stufe}
+                    lektionSlug={lektion.lektionSlug}
+                    alleSlugs={siblings.map((l) => l.lektionSlug)}
                     color={meta.color}
-                    label={`Lektion ${idx + 1} von ${siblings.length}`}
+                    variant="leiste"
+                    gesperrt={locked}
                   />
                 </div>
                 <ol className="space-y-1">

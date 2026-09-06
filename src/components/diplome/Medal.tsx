@@ -3,13 +3,8 @@ import Image from 'next/image';
 // 5 Metall-Tiers — eskalierend über die 10 Diplom-Level (je 2 Level pro Metall).
 export type MedalTier = 'bronze' | 'silber' | 'gold' | 'platin' | 'master';
 
-export function tierForLevel(id: number): MedalTier {
-  if (id <= 2) return 'bronze';
-  if (id <= 4) return 'silber';
-  if (id <= 6) return 'gold';
-  if (id <= 8) return 'platin';
-  return 'master';
-}
+// Zuordnung Level → Stufe kommt aus der einen Taxonomie-Quelle.
+export { tierForLevel } from '@/lib/diplome/stufen';
 
 interface TierStyle {
   hi: string;   // Highlight (Mitte)

@@ -2,6 +2,12 @@ import { allDiplomLektions } from 'contentlayer/generated';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import RoadmapClient, { type LektionenByStufe, type LektionLink } from './RoadmapClient';
+import { diplomZugang } from '@/lib/diplome/zugang';
+
+// Login-/Diplomstatus wird serverseitig ermittelt → die Route ist dynamisch.
+// Der Client nutzt beides nur fuer Hinweise und das Sperrbild der Bezahl-
+// Pruefungen; verbindlich prueft /api/diplome/pruefung bei jedem Versuch.
+export const dynamic = 'force-dynamic';
 
 // Server Component: contentlayer bleibt hier (Build-Zeit, kein Client-Bundle).
 // Der Client bekommt nur den serialisierbaren Ausschnitt, den er wirklich rendert.
@@ -19,12 +25,13 @@ function lektionenNachStufe(): LektionenByStufe {
   return byStufe;
 }
 
-export default function DiplomeRoadmapPage() {
+export default async function DiplomeRoadmapPage() {
   const lektionen = lektionenNachStufe();
+  const zugang = await diplomZugang();
   return (
     <>
       <Header />
-      <RoadmapClient lektionen={lektionen} />
+      <RoadmapClient lektionen={lektionen} eingeloggt={zugang.userId !== null} hatDiplom={zugang.zugang} />
       <Footer />
     </>
   );

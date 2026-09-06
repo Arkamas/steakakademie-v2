@@ -24,7 +24,28 @@ const LEVELS = [
   { id: 10, name: 'Master of Steak',    emoji: '👑', description: 'Das Abschluss-Diplom. Du kennst das Steak von der Weide bis zum Teller.', locked: true },
 ];
 
-export default function DiplomeClient({ puls }: { puls?: PulsData }) {
+export type LektionLink = {
+  lektionSlug: string;
+  title: string;
+  order: number;
+  level: number;
+  url: string;
+};
+
+export default function DiplomeClient({
+  puls,
+  stufe1 = [],
+}: {
+  puls?: PulsData;
+  stufe1?: readonly LektionLink[];
+}) {
+  // Level 1 und 2 bilden zusammen Stufe 1 (Bronze) und sind frei zugaenglich.
+  // Fuer die Level-Karten je Level die erste Lektion als Einsprung.
+  const ersteLektionJeLevel = new Map<number, LektionLink>();
+  for (const l of stufe1) {
+    if (!ersteLektionJeLevel.has(l.level)) ersteLektionJeLevel.set(l.level, l);
+  }
+
   return (
     <>
       <Header />
@@ -85,8 +106,8 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
               className="font-serif text-base sm:text-lg leading-relaxed mx-auto"
               style={{ color: 'rgba(200,136,42,0.75)', maxWidth: '560px' }}
             >
-              Belege dein Fachwissen, bestehe exklusive Pruefungen und werde Teil unserer Elite.
-              Eine Ausbildung in 5 praezisen Stufen.
+              Belege dein Fachwissen, bestehe exklusive Prüfungen und werde Teil unserer Elite.
+              Eine Ausbildung in 5 präzisen Stufen.
             </p>
 
             {/* Decorative rule */}
@@ -110,6 +131,52 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
             </div>
           </div>
         </section>
+
+        {/* Freier Einstieg — Stufe 1 ist fertig, kostenlos und ohne Konto lesbar */}
+        {stufe1.length > 0 && (
+          <section className="border-b border-border-subtle bg-surface-elevated">
+            <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
+              <div className="max-w-3xl mx-auto">
+                <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">
+                  Kostenlos &mdash; ohne Konto, ohne Zahlung
+                </span>
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary mb-3">
+                  Stufe 1 kannst du sofort lesen
+                </h2>
+                <p className="font-body text-text-secondary leading-relaxed mb-8">
+                  {stufe1.length} Lektionen, vollständig ausgearbeitet und frei zugänglich.
+                  Sie sind der Einstieg in die Bronze-Stufe &mdash; und sie stehen schon jetzt bereit.
+                </p>
+
+                <ol className="flex flex-col gap-2 mb-8">
+                  {stufe1.map((l) => (
+                    <li key={l.lektionSlug}>
+                      <Link
+                        href={l.url}
+                        className="flex items-center gap-3 border border-border-subtle bg-surface-card px-4 py-3 hover:border-brand-gold/50 transition-colors"
+                      >
+                        <span className="w-5 shrink-0 text-center text-xs font-sans font-bold text-brand-gold">
+                          {l.order}
+                        </span>
+                        <span className="flex-1 text-sm font-sans font-medium text-text-primary">
+                          {l.title}
+                        </span>
+                        <ChevronRight size={14} className="shrink-0 text-brand-gold" />
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+
+                <Link
+                  href={stufe1[0].url}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                >
+                  Mit Lektion 1 anfangen &rarr;
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
 
         <BadgeProgression />
 
@@ -144,8 +211,8 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
                         Level {level.id}
                       </span>
                       {!level.locked && (
-                        <span className="text-[10px] bg-text-muted/15 text-text-muted px-2 py-0.5 font-sans font-bold uppercase tracking-wider">
-                          In Vorbereitung
+                        <span className="text-[10px] bg-brand-gold/15 text-brand-gold px-2 py-0.5 font-sans font-bold uppercase tracking-wider">
+                          Kostenlos verfügbar
                         </span>
                       )}
                     </div>
@@ -155,10 +222,14 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
                     <p className="text-sm font-body text-text-secondary leading-relaxed">
                       {level.description}
                     </p>
-                    {!level.locked && (
-                      <span className="mt-3 inline-block text-xs font-sans font-medium text-text-muted">
-                        Kursinhalt in Vorbereitung
-                      </span>
+                    {!level.locked && ersteLektionJeLevel.has(level.id) && (
+                      <Link
+                        href={ersteLektionJeLevel.get(level.id)!.url}
+                        className="mt-3 inline-flex items-center gap-1.5 text-xs font-sans font-bold text-brand-fire hover:text-brand-gold transition-colors"
+                      >
+                        Lektionen lesen
+                        <ChevronRight size={12} />
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -236,7 +307,7 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
               ))}
             </div>
             <p className="text-text-light/30 text-xs font-sans mt-4">
-Diplom-System im Aufbau &mdash; Kursinhalte folgen Schritt fuer Schritt
+              Stufe 1 ist frei zugänglich &mdash; die weiteren Stufen folgen Schritt für Schritt
             </p>
           </div>
         </section>

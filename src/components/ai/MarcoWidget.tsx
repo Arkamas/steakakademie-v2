@@ -48,6 +48,27 @@ export default function MarcoWidget() {
     }
   }, [open, send]);
 
+  // Von aussen oeffnen — mit optionaler Frage im Eingabefeld (05.09.2026).
+  //   window.dispatchEvent(new CustomEvent('sk:marco', { detail: { frage: '…' } }))
+  // Anlass: Die Suche braucht einen Weg, den Chat als Auffangnetz anzubieten
+  // ("Nichts gefunden? Frag Marco"). Ein Ereignis statt eines globalen Zustands,
+  // damit das Widget weiterhin nichts ueber den Rest der Seite weiss.
+  useEffect(() => {
+    const auf = (e: Event) => {
+      const frage = (e as CustomEvent<{ frage?: string }>).detail?.frage;
+      if (typeof frage === 'string' && frage.trim()) setInput(frage.trim());
+      if (!open) {
+        setOpen(true);
+        setHasOpened(true);
+        send('OPEN');
+      }
+      // Fokus erst, wenn das Panel gerendert ist
+      window.setTimeout(() => document.getElementById('marco-input')?.focus(), 260);
+    };
+    window.addEventListener('sk:marco', auf as EventListener);
+    return () => window.removeEventListener('sk:marco', auf as EventListener);
+  }, [open, send, setInput]);
+
   // Farewell-Animation beendet → Panel schließen
   const handleAvatarClosed = useCallback(() => {
     send('CLOSED');

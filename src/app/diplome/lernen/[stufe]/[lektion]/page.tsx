@@ -7,6 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { breadcrumbSchema } from '@/lib/schema';
 import { cookies } from 'next/headers';
+import { istAdminPasswort } from '@/lib/admin-auth';
 import { ChevronRight, ChevronLeft, ArrowRight, BookOpen, Lightbulb, Lock } from 'lucide-react';
 import { Schnelluebersicht, Achtung, ProTipp, TempBox } from '@/components/mdx/Callouts';
 import KontextRail from '@/components/diplome/KontextRail';
@@ -107,7 +108,7 @@ export default function DiplomLektionPage({ params }: Props) {
   // liest. Der Trichter verschwand aus dem Sitemap. Jetzt bleibt Stufe 1
   // statisch, nur Stufe 2-5 rendern pro Anfrage.
   const isPaidTier = lektion.stufe >= 2;
-  const isAdmin = isPaidTier && cookies().get('admin_auth')?.value === process.env.ADMIN_PASSWORD;
+  const isAdmin = isPaidTier && istAdminPasswort(cookies().get('admin_auth')?.value);
   const locked = isPaidTier && !isAdmin;
 
   // Geschwister-Lektionen derselben Stufe, nach order sortiert

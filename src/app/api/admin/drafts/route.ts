@@ -4,13 +4,14 @@
 // Auth: admin_auth Cookie === ADMIN_PASSWORD. Schreibt mit Service-Role.
 
 import { NextResponse } from 'next/server';
+import { istAdminPasswort } from '@/lib/admin-auth';
 import { cookies } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
 function authed(): boolean {
-  return cookies().get('admin_auth')?.value === process.env.ADMIN_PASSWORD;
+  return istAdminPasswort(cookies().get('admin_auth')?.value);
 }
 
 function service() {

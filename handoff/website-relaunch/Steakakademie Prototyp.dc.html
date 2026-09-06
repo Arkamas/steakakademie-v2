@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#15120f;color:#1a1613;font-family:'Literata',Georgia,serif;-webkit-font-smoothing:antialiased;}
+a{color:#e2531f;text-decoration:none}a:hover{color:#ff8a3d}
+button{font:inherit;cursor:pointer}
+@keyframes emberBreathe{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes glowIn{0%{color:#ffb35c;text-shadow:0 0 18px rgba(255,138,61,.9)}100%{color:#f4ede3;text-shadow:0 0 0 rgba(255,138,61,0)}}
+@keyframes flicker{0%,100%{opacity:1}92%{opacity:1}94%{opacity:.6}96%{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#f4ede3;display:flex;flex-direction:column">
+
+<!-- HEADER -->
+<header style="background:#15120f;color:#f4ede3;border-bottom:1px solid #332b25;position:sticky;top:0;z-index:20">
+  <div style="max-width:1240px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <button onClick="{{ goStart }}" style="display:flex;align-items:center;gap:10px;background:none;border:0;color:#f4ede3;padding:0">
+      <sc-if value="{{ logoDeckel }}" hint-placeholder-val="{{ false }}">
+        <svg viewBox="0 0 100 100" width="38" height="38" style="color:#e2531f;flex:none"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="4"></circle><circle cx="50" cy="50" r="42.5" fill="none" stroke="currentColor" stroke-width="5" stroke-dasharray="1.4 15.3"></circle><circle cx="50" cy="50" r="39" fill="none" stroke="currentColor" stroke-width="1.5"></circle><g transform="translate(50 44) scale(.52) translate(-50 -47)"><path d="M50 6C58 24 76 34 76 58C76 76 64 88 50 88C36 88 24 76 24 58C24 47 31 41 35 32C38 42 44 45 44 38C44 28 46 18 50 6Z" fill="currentColor"></path><path d="M50 46C55 56 61 60 61 69C61 77 56 82 50 82C44 82 39 77 39 69C39 63 43 59 45 54C46 61 50 58 50 46Z" fill="#15120f"></path></g><text x="50" y="83" text-anchor="middle" font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="900" font-size="15" letter-spacing="1.6" fill="currentColor">STEAK</text></svg>
+      </sc-if>
+      <sc-if value="{{ logoStempel }}" hint-placeholder-val="{{ false }}">
+        <svg viewBox="0 0 100 100" width="38" height="38" style="color:#e2531f;flex:none"><circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="3"></circle><g transform="translate(50 42) scale(.5) translate(-50 -47)"><path d="M50 6C58 24 76 34 76 58C76 76 64 88 50 88C36 88 24 76 24 58C24 47 31 41 35 32C38 42 44 45 44 38C44 28 46 18 50 6Z" fill="currentColor"></path><path d="M50 46C55 56 61 60 61 69C61 77 56 82 50 82C44 82 39 77 39 69C39 63 43 59 45 54C46 61 50 58 50 46Z" fill="#15120f"></path></g><line x1="32" y1="68" x2="68" y2="68" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"></line><line x1="37" y1="76" x2="63" y2="76" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"></line></svg>
+      </sc-if>
+      <sc-if value="{{ logoKruste }}" hint-placeholder-val="{{ false }}">
+        <svg viewBox="0 0 100 100" width="38" height="38" style="color:#f4ede3;flex:none"><defs><clipPath id="hk"><path d="M16 22C16 12 30 10 50 10C72 10 86 14 86 30C86 50 88 70 74 86C60 92 30 90 18 80C10 70 16 40 16 22Z"></path></clipPath></defs><path d="M16 22C16 12 30 10 50 10C72 10 86 14 86 30C86 50 88 70 74 86C60 92 30 90 18 80C10 70 16 40 16 22Z" fill="currentColor"></path><g clip-path="url(#hk)" stroke="#e2531f" stroke-width="8"><line x1="0" y1="62" x2="62" y2="0"></line><line x1="12" y1="92" x2="92" y2="12"></line><line x1="40" y1="118" x2="118" y2="40"></line></g></svg>
+      </sc-if>
+      <sc-if value="{{ logoSchnitt }}" hint-placeholder-val="{{ false }}">
+        <svg viewBox="0 0 100 100" width="38" height="38" style="color:#f4ede3;flex:none"><defs><clipPath id="hs1"><polygon points="0,0 64,0 36,100 0,100"></polygon></clipPath><clipPath id="hs2"><polygon points="64,0 100,0 100,100 36,100"></polygon></clipPath></defs><path d="M16 22C16 12 30 10 50 10C72 10 86 14 86 30C86 50 88 70 74 86C60 92 30 90 18 80C10 70 16 40 16 22Z" fill="#e2531f"></path><g clip-path="url(#hs1)" transform="translate(-4 3)"><path d="M16 22C16 12 30 10 50 10C72 10 86 14 86 30C86 50 88 70 74 86C60 92 30 90 18 80C10 70 16 40 16 22Z" fill="currentColor"></path></g><g clip-path="url(#hs2)" transform="translate(5 -4)"><path d="M16 22C16 12 30 10 50 10C72 10 86 14 86 30C86 50 88 70 74 86C60 92 30 90 18 80C10 70 16 40 16 22Z" fill="currentColor"></path></g></svg>
+      </sc-if>
+      <sc-if value="{{ logoSA }}" hint-placeholder-val="{{ false }}">
+        <svg viewBox="0 0 100 100" width="38" height="38" style="color:#f4ede3;flex:none"><text x="4" y="88" font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="900" font-size="96" letter-spacing="-3" fill="currentColor">SA</text><circle cx="88" cy="22" r="8" fill="none" stroke="#e2531f" stroke-width="6.5"></circle></svg>
+      </sc-if>
+      <sc-if value="{{ logoEisen }}" hint-placeholder-val="{{ false }}">
+        <svg viewBox="0 0 100 100" width="36" height="36" style="color:#e2531f;flex:none" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="square" stroke-linejoin="miter"><path d="M44 22H24Q15 22 15 31V37Q15 46 24 46H36Q45 46 45 55V61Q45 70 36 70H14"></path><path d="M54 70L71 22L88 70"></path><path d="M62 54H80"></path><path d="M14 86H88"></path></svg>
+      </sc-if>
+      <sc-if value="{{ logoRing }}" hint-placeholder-val="{{ true }}">
+        <svg viewBox="0 0 100 100" width="40" height="40" style="color:#f4ede3;flex:none"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#15120f"></path></svg>
+      </sc-if>
+      <sc-if value="{{ logoKern }}" hint-placeholder-val="{{ false }}">
+        <svg viewBox="0 0 100 100" width="36" height="36" style="color:#f4ede3;flex:none"><path d="M50 6L92 94H74L50 40L26 94H8Z" fill="currentColor"></path><circle cx="50" cy="69" r="9" fill="#e2531f"></circle></svg>
+      </sc-if>
+      <sc-if value="{{ logoBrand }}" hint-placeholder-val="{{ false }}">
+        <svg viewBox="0 0 100 100" width="38" height="38" style="color:#e2531f;flex:none"><g transform="translate(50 6) scale(.7) translate(-50 -6)"><path d="M50 6C58 24 76 34 76 58C76 76 64 88 50 88C36 88 24 76 24 58C24 47 31 41 35 32C38 42 44 45 44 38C44 28 46 18 50 6Z" fill="currentColor"></path><path d="M50 46C55 56 61 60 61 69C61 77 56 82 50 82C44 82 39 77 39 69C39 63 43 59 45 54C46 61 50 58 50 46Z" fill="#15120f"></path></g><line x1="16" y1="72" x2="84" y2="72" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"></line><line x1="23" y1="82" x2="77" y2="82" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"></line><line x1="31" y1="92" x2="69" y2="92" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"></line></svg>
+      </sc-if>
+      <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:26px;letter-spacing:.04em;text-transform:uppercase;line-height:1">Steak<span style="font-weight:600">akademie</span></span>
+    </button>
+    <nav style="display:flex;gap:2px;flex-wrap:wrap;flex:1;min-width:0">
+      <button onClick="{{ goTechniken }}" style="background:none;border:0;color:#c9bfb2;padding:8px 9px;font-size:14px;border-radius:4px;white-space:nowrap" style-hover="color:#ffb35c">Grilltechniken</button>
+      <button onClick="{{ goCuts }}" style="background:none;border:0;color:#c9bfb2;padding:8px 9px;font-size:14px;border-radius:4px;white-space:nowrap" style-hover="color:#ffb35c">Cuts</button>
+      <button onClick="{{ goStreitfaelle }}" style="background:none;border:0;color:#c9bfb2;padding:8px 9px;font-size:14px;border-radius:4px;white-space:nowrap" style-hover="color:#ffb35c">Wissen</button>
+      <button onClick="{{ goRezepte }}" style="background:none;border:0;color:#c9bfb2;padding:8px 9px;font-size:14px;border-radius:4px;white-space:nowrap" style-hover="color:#ffb35c">Rezepte</button>
+      <button onClick="{{ goWerkzeug }}" style="background:none;border:0;color:#c9bfb2;padding:8px 9px;font-size:14px;border-radius:4px;white-space:nowrap" style-hover="color:#ffb35c">Ausrüstung</button>
+      <sc-if value="{{ wideNav }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ goUeber }}" style="background:none;border:0;color:#c9bfb2;padding:8px 9px;font-size:14px;border-radius:4px;white-space:nowrap" style-hover="color:#ffb35c">Über uns</button>
+      </sc-if>
+    </nav>
+    <div style="display:flex;align-items:center;gap:10px">
+      <sc-if value="{{ lessonDone }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goDiplome }}" style="display:flex;align-items:center;gap:8px;background:#201b17;border:1px solid #e2531f;color:#ffb35c;padding:7px 12px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase">
+          <span style="width:8px;height:8px;border-radius:50%;background:#ff8a3d;box-shadow:0 0 10px #ff8a3d;animation:emberBreathe 4s ease-in-out infinite"></span>
+          Stufe 1 · 1/7
+        </button>
+      </sc-if>
+      <sc-if value="{{ lessonOpen }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ goDiplome }}" style="background:#201b17;border:1px solid #332b25;color:#f4ede3;padding:7px 14px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase" style-hover="border-color:#e2531f;color:#ffb35c">Diplome</button>
+      </sc-if>
+      <button style="background:#e2531f;border:0;color:#15120f;padding:8px 16px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#ff8a3d">Anmelden</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ START ============ -->
+<sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
+<main data-screen-label="Startseite" style="flex:1">
+
+  <!-- HERO (dunkel · rau) -->
+  <section style="position:relative;background:#15120f;color:#f4ede3;overflow:hidden;min-height:78vh;display:flex;align-items:flex-end">
+    {{ emberCanvas }}
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(21,18,15,.2) 0%,rgba(21,18,15,0) 40%,rgba(21,18,15,.35) 100%);pointer-events:none"></div>
+    <div style="position:relative;max-width:1240px;margin:0 auto;padding:clamp(56px,9vw,120px) 20px 48px;width:100%;box-sizing:border-box">
+      <div style="display:flex;align-items:center;gap:12px;color:#ffb35c;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:15px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:22px">
+        <span style="width:28px;height:2px;background:#e2531f"></span>Die methodisch tiefste BBQ-Plattform auf Deutsch
+      </div>
+      <h1 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:clamp(52px,9vw,136px);line-height:.92;letter-spacing:-.01em;text-transform:uppercase;max-width:14ch;text-wrap:balance">Gutes Fleisch verdient keinen Zufall.</h1>
+      <p style="margin:26px 0 0;font-size:clamp(18px,1.6vw,22px);line-height:1.5;max-width:56ch;color:#d9cfc2;text-wrap:pretty">Du hast Hunger. Du hast ein Stück Fleisch, das einem Tier gehört hat. Was jetzt passiert, entscheidest du — nach Gefühl oder nach Wissen. Hier lernst du das Zweite. Methodisch, geprüft, ohne Bullshit.</p>
+
+      <sc-if value="{{ heroThree }}" hint-placeholder-val="{{ true }}">
+      <div style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
+        <button onClick="{{ goRezept }}" style="text-align:left;background:rgba(32,27,23,.82);backdrop-filter:blur(6px);border:1px solid #332b25;border-radius:8px;padding:22px 22px 20px;color:#f4ede3;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,transform .2s" style-hover="border-color:#ff8a3d;transform:translateY(-2px)">
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c">Jetzt</span>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:30px;line-height:1;text-transform:uppercase">Ich stehe gleich am Grill</span>
+          <span style="font-size:15px;color:#b3a798;line-height:1.45">Kerntemperaturen, ein Rezept, das sitzt — in zwei Minuten am Rost.</span>
+          <span style="margin-top:6px;color:#ff8a3d;font-size:15px">Temperatur-Guide →</span>
+        </button>
+        <button onClick="{{ goDiplome }}" style="text-align:left;background:rgba(32,27,23,.82);backdrop-filter:blur(6px);border:1px solid #332b25;border-radius:8px;padding:22px 22px 20px;color:#f4ede3;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,transform .2s" style-hover="border-color:#ff8a3d;transform:translateY(-2px)">
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c">Akademie</span>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:30px;line-height:1;text-transform:uppercase">Ich will es richtig lernen</span>
+          <span style="font-size:15px;color:#b3a798;line-height:1.45">Fünf Stufen, 35 Lektionen, ein Diplom. Stufe 1 ist frei — ohne Login.</span>
+          <span style="margin-top:6px;color:#ff8a3d;font-size:15px">Mit „Der Funke" starten →</span>
+        </button>
+        <button onClick="{{ goStreitfall }}" style="text-align:left;background:rgba(32,27,23,.82);backdrop-filter:blur(6px);border:1px solid #332b25;border-radius:8px;padding:22px 22px 20px;color:#f4ede3;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,transform .2s" style-hover="border-color:#ff8a3d;transform:translateY(-2px)">
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c">Streitfälle</span>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:30px;line-height:1;text-transform:uppercase">Stimmt das eigentlich?</span>
+          <span style="font-size:15px;color:#b3a798;line-height:1.45">Poren schließen, Holz wässern, Blut im Steak — wir räumen auf.</span>
+          <span style="margin-top:6px;color:#ff8a3d;font-size:15px">Zum ersten Streitfall →</span>
+        </button>
+      </div>
+      </sc-if>
+      <sc-if value="{{ heroFive }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:40px;display:flex;flex-wrap:wrap;gap:10px">
+        <button onClick="{{ goCuts }}" style="background:#201b17;border:1px solid #332b25;color:#f4ede3;padding:12px 20px;border-radius:999px;font-size:16px" style-hover="border-color:#ff8a3d">Cuts & Fleischkunde</button>
+        <button onClick="{{ goTechniken }}" style="background:#201b17;border:1px solid #332b25;color:#f4ede3;padding:12px 20px;border-radius:999px;font-size:16px" style-hover="border-color:#ff8a3d">Grilltechniken</button>
+        <button onClick="{{ goStreitfaelle }}" style="background:#201b17;border:1px solid #332b25;color:#f4ede3;padding:12px 20px;border-radius:999px;font-size:16px" style-hover="border-color:#ff8a3d">Wissen</button>
+        <button onClick="{{ goRezepte }}" style="background:#201b17;border:1px solid #332b25;color:#f4ede3;padding:12px 20px;border-radius:999px;font-size:16px" style-hover="border-color:#ff8a3d">Rezepte</button>
+        <button onClick="{{ goWerkzeug }}" style="background:#201b17;border:1px solid #332b25;color:#f4ede3;padding:12px 20px;border-radius:999px;font-size:16px" style-hover="border-color:#ff8a3d">Ausrüstung</button>
+      </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- STREITFÄLLE (hell · lesen) -->
+  <section style="background:#f4ede3;color:#1a1613;padding:clamp(56px,7vw,96px) 20px">
+    <div style="max-width:1240px;margin:0 auto">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:32px">
+        <div>
+          <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#e2531f;margin-bottom:8px">Streitfälle am Grill</div>
+          <h2 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(36px,4.5vw,60px);line-height:.95;text-transform:uppercase">Was jeder sagt.<br>Und was stimmt.</h2>
+        </div>
+        <button onClick="{{ goStreitfaelle }}" style="background:none;border:0;color:#e2531f;font-size:16px;padding:0" style-hover="color:#ff8a3d">Alle Streitfälle →</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
+        <button onClick="{{ goStreitfall }}" style="grid-column:span 1;text-align:left;background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;overflow:hidden;padding:0;color:#1a1613;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-3px);box-shadow:0 18px 40px rgba(26,22,19,.12)">
+          <img src="https://steakakademie.de/images/streitfaelle/myoglobin.jpg" alt="Rohes Steak auf Schiefer" style="width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:#2a2420">
+          <div style="padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px">
+            <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">Wissen & Wissenschaft</span>
+            <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:30px;line-height:1;text-transform:uppercase">Der rote Saft ist kein Blut — und rosa heißt nicht roh</span>
+            <span style="font-size:16px;line-height:1.5;color:#4a413a">Zwei Irrtümer, die zusammengehören und jedes Jahr Tonnen von Fleisch ruinieren.</span>
+            <span style="font-size:14px;color:#7d7166">Uwe Yendell · 17. August 2026</span>
+          </div>
+        </button>
+        <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid #e3d9c9">
+          <button onClick="{{ goStreitfall }}" style="text-align:left;background:none;border:0;border-bottom:1px solid #e3d9c9;padding:20px 4px;color:#1a1613;display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:start" style-hover="background:#faf6ef">
+            <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:44px;line-height:1;color:#e2531f">01</span>
+            <span style="display:flex;flex-direction:column;gap:6px"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Räucherholz wässern — der Umweg, der nichts bringt</span><span style="font-size:15px;color:#4a413a;line-height:1.45">Holz nimmt in einer halben Stunde kaum Wasser auf. Was danach kommt, ist Dampf.</span></span>
+          </button>
+          <button onClick="{{ goStreitfall }}" style="text-align:left;background:none;border:0;border-bottom:1px solid #e3d9c9;padding:20px 4px;color:#1a1613;display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:start" style-hover="background:#faf6ef">
+            <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:44px;line-height:1;color:#e2531f">02</span>
+            <span style="display:flex;flex-direction:column;gap:6px"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Anbraten schließt die Poren — der zählebigste Mythos</span><span style="font-size:15px;color:#4a413a;line-height:1.45">Steht in jedem zweiten Kochbuch. Ist trotzdem falsch — aus einem Grund, den man sich nur einmal merken muss.</span></span>
+          </button>
+          <button onClick="{{ goStreitfall }}" style="text-align:left;background:none;border:0;border-bottom:1px solid #e3d9c9;padding:20px 4px;color:#1a1613;display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:start" style-hover="background:#faf6ef">
+            <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:44px;line-height:1;color:#e2531f">03</span>
+            <span style="display:flex;flex-direction:column;gap:6px"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Natron auf Rindfleisch — Trick oder Etikettenschwindel?</span><span style="font-size:15px;color:#4a413a;line-height:1.45">In jeder Garküche Standard. Am deutschen Grill hält man es für Betrug am Fleisch.</span></span>
+          </button>
+          <button onClick="{{ goStreitfall }}" style="text-align:left;background:none;border:0;border-bottom:1px solid #e3d9c9;padding:20px 4px;color:#1a1613;display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:start" style-hover="background:#faf6ef">
+            <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:44px;line-height:1;color:#e2531f">04</span>
+            <span style="display:flex;flex-direction:column;gap:6px"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Einmal wenden oder ständig?</span><span style="font-size:15px;color:#4a413a;line-height:1.45">Zwei Ratgeber, zwei Gegenteile — und beide haben ein Stück recht.</span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFEST + IM FEUER (dunkel) -->
+  <section style="background:#15120f;color:#f4ede3;padding:clamp(56px,7vw,96px) 20px;position:relative;overflow:hidden">
+    <div style="max-width:1240px;margin:0 auto;position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:center">
+      <div>
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c;margin-bottom:18px">Manifest</div>
+        <blockquote style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(34px,4vw,56px);line-height:1;text-transform:uppercase;animation:glowIn 3.2s ease-out both">Feuer ist Geduld.<br>Rauch ist Zeit.<br>Das perfekte Steak ist keine Technik — es ist ein Standpunkt.</blockquote>
+        <div style="margin-top:22px;color:#b3a798;font-size:16px;font-style:italic">Marco, der Pitmaster</div>
+      </div>
+      <button onClick="{{ goRezept }}" style="text-align:left;background:#201b17;border:1px solid #332b25;border-radius:8px;padding:0;overflow:hidden;color:#f4ede3;display:flex;flex-direction:column;transition:border-color .2s" style-hover="border-color:#ff8a3d">
+        <div style="padding:26px 26px 0;display:flex;align-items:center;gap:10px;font-family:'Big Shoulders Display',Impact,sans-serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c">
+          <span style="width:8px;height:8px;border-radius:50%;background:#ff8a3d;box-shadow:0 0 12px #ff8a3d;animation:emberBreathe 3s ease-in-out infinite"></span>Im Feuer — diese Woche
+        </div>
+        <div style="padding:14px 26px 8px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:34px;line-height:1;text-transform:uppercase">Oberhitze-Grillen: Was 800 Grad wirklich können</div>
+        <p style="margin:0;padding:0 26px;font-size:16px;line-height:1.5;color:#b3a798">Steakhouse-Kruste in Sekunden — mit Strahlungshitze statt heißer Luft. Für welche Cuts es taugt und wo die Grenzen liegen.</p>
+        <div style="margin:22px 26px 26px;padding:16px 18px;border-top:1px solid #332b25;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+          <span style="font-size:15px;color:#d9cfc2"><span style="color:#7d7166">Dazu das Rezept:</span> Ribeye, Reverse Sear</span>
+          <span style="color:#ff8a3d">→</span>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- CUTS & TECHNIKEN (hell) -->
+  <section style="background:#f4ede3;color:#1a1613;padding:clamp(56px,7vw,96px) 20px">
+    <div style="max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:56px">
+      <div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:24px">
+          <h2 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(32px,3.6vw,48px);line-height:1;text-transform:uppercase">Cuts & Fleischkunde</h2>
+          <button onClick="{{ goCuts }}" style="background:none;border:0;color:#e2531f;font-size:16px;padding:0">40 Cuts im Atlas →</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+          <button onClick="{{ goRezept }}" style="text-align:left;background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:22px;color:#1a1613;display:flex;flex-direction:column;gap:10px;min-height:200px;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-3px);box-shadow:0 18px 40px rgba(26,22,19,.12)">
+            <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:64px;line-height:1;color:#e2531f">Ribeye</span>
+            <span style="font-size:15px;color:#4a413a;line-height:1.45">Vom Longissimus dorsi bis zum Spinalis — was den beliebtesten Premium-Cut ausmacht und wie Marmorierung bewertet wird.</span>
+          </button>
+          <button onClick="{{ goStart }}" style="text-align:left;background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:22px;color:#1a1613;display:flex;flex-direction:column;gap:10px;min-height:200px;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-3px);box-shadow:0 18px 40px rgba(26,22,19,.12)">
+            <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:64px;line-height:1;color:#e2531f">Brisket</span>
+            <span style="font-size:15px;color:#4a413a;line-height:1.45">Der König des Texas BBQ. Wer versteht, was in 12–18 Stunden am Smoker passiert, schlägt jedes Restaurant.</span>
+          </button>
+          <button onClick="{{ goStart }}" style="text-align:left;background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:22px;color:#1a1613;display:flex;flex-direction:column;gap:10px;min-height:200px;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-3px);box-shadow:0 18px 40px rgba(26,22,19,.12)">
+            <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:64px;line-height:1;color:#e2531f">Pulled Pork</span>
+            <span style="font-size:15px;color:#4a413a;line-height:1.45">Das demokratischste Gericht im BBQ: günstig, zugänglich, vergebend — wenn du die Grundlagen verstehst.</span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:24px">
+          <h2 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(32px,3.6vw,48px);line-height:1;text-transform:uppercase">Grilltechniken</h2>
+          <button onClick="{{ goTechniken }}" style="background:none;border:0;color:#e2531f;font-size:16px;padding:0">Alle 10 Techniken →</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:#e3d9c9;border:1px solid #e3d9c9;border-radius:8px;overflow:hidden">
+          <button onClick="{{ goRezept }}" style="text-align:left;background:#f4ede3;border:0;padding:22px;color:#1a1613;display:flex;flex-direction:column;gap:8px" style-hover="background:#faf6ef"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Reverse Sear</span><span style="font-size:14px;color:#7d7166">Warum umgekehrt besser ist</span></button>
+          <button onClick="{{ goStart }}" style="text-align:left;background:#f4ede3;border:0;padding:22px;color:#1a1613;display:flex;flex-direction:column;gap:8px" style-hover="background:#faf6ef"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Smoken — Low & Slow</span><span style="font-size:14px;color:#7d7166">Geduld macht zart</span></button>
+          <button onClick="{{ goStart }}" style="text-align:left;background:#f4ede3;border:0;padding:22px;color:#1a1613;display:flex;flex-direction:column;gap:8px" style-hover="background:#faf6ef"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Plancha & Feuerplatte</span><span style="font-size:14px;color:#7d7166">Grillen mit Kontakthitze</span></button>
+          <button onClick="{{ goStart }}" style="text-align:left;background:#f4ede3;border:0;padding:22px;color:#1a1613;display:flex;flex-direction:column;gap:8px" style-hover="background:#faf6ef"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Rotisserie</span><span style="font-size:14px;color:#7d7166">Gleichmäßig garen am Drehspieß</span></button>
+          <button onClick="{{ goStart }}" style="text-align:left;background:#f4ede3;border:0;padding:22px;color:#1a1613;display:flex;flex-direction:column;gap:8px" style-hover="background:#faf6ef"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Minion-Methode</span><span style="font-size:14px;color:#7d7166">Stundenlange Glut ohne Nachlegen</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIPLOME (dunkel) -->
+  <section style="background:#15120f;color:#f4ede3;padding:clamp(64px,8vw,112px) 20px;border-top:1px solid #332b25;position:relative;overflow:hidden">
+    <div style="max-width:1240px;margin:0 auto;position:relative">
+      <div style="max-width:720px;margin-bottom:48px">
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c;margin-bottom:14px">Deine Reise zum Grillmeister</div>
+        <h2 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:clamp(40px,5.5vw,76px);line-height:.92;text-transform:uppercase">Fünf Stufen.<br>Ein Diplom.<br>Kein Zufall mehr.</h2>
+        <p style="margin:20px 0 0;font-size:18px;line-height:1.5;color:#b3a798;max-width:56ch">35 Lektionen von der ersten Glut bis zum Meister. Stufe 1 liest du ohne Anmeldung — registrieren musst du dich erst, wenn du deinen Fortschritt behalten willst.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px">
+        <button onClick="{{ goDiplome }}" style="text-align:left;background:#201b17;border:1px solid #e2531f;border-radius:8px;padding:22px 18px;color:#f4ede3;display:flex;flex-direction:column;align-items:flex-start;gap:12px;transition:transform .25s" style-hover="transform:translateY(-4px)">
+          <svg viewBox="0 0 100 100" width="80" height="80" style="color:#f4ede3;flex:none"><defs><path id="pS1" d="M50 50m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0"></path></defs><circle cx="50" cy="50" r="48.5" fill="none" stroke="#b8703a" stroke-width="1.6"></circle><text font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="800" font-size="6.6" letter-spacing="1.1" fill="#b8703a"><textPath href="#pS1">STEAKAKADEMIE · STUFE 1 · DER FUNKE ·</textPath></text><circle cx="50" cy="50" r="34.5" fill="none" stroke="#b8703a" stroke-width="1" opacity=".3"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#b8703a" stroke-width="3" stroke-dasharray="43.4 216.8" transform="rotate(-90 50 50)"></circle><g transform="translate(50 50) scale(.44) translate(-50 -51)"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#201b17"></path></g></svg>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#ffb35c">Stufe 1 · frei</span>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:26px;line-height:1;text-transform:uppercase">Der Funke</span>
+          <span style="font-size:14px;color:#7d7166">Basis-Zertifikat · 7 Lektionen</span>
+        </button>
+        <button onClick="{{ goDiplome }}" style="text-align:left;background:#201b17;border:1px solid #332b25;border-radius:8px;padding:22px 18px;color:#f4ede3;display:flex;flex-direction:column;align-items:flex-start;gap:12px;transition:transform .25s" style-hover="transform:translateY(-4px)">
+          <svg viewBox="0 0 100 100" width="80" height="80" style="color:#f4ede3;flex:none"><defs><path id="pS2" d="M50 50m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0"></path></defs><circle cx="50" cy="50" r="48.5" fill="none" stroke="#b9b3a8" stroke-width="1.6"></circle><text font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="800" font-size="6.6" letter-spacing="1.1" fill="#b9b3a8"><textPath href="#pS2">STEAKAKADEMIE · STUFE 2 · DIE FLAMME BEZÄHMEN ·</textPath></text><circle cx="50" cy="50" r="34.5" fill="none" stroke="#b9b3a8" stroke-width="1" opacity=".3"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#b9b3a8" stroke-width="3" stroke-dasharray="86.7 216.8" transform="rotate(-90 50 50)"></circle><g transform="translate(50 50) scale(.44) translate(-50 -51)"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#201b17"></path></g></svg>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">Stufe 2</span>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:26px;line-height:1;text-transform:uppercase">Die Flamme bezähmen</span>
+          <span style="font-size:14px;color:#7d7166">Fortgeschrittenes Zertifikat</span>
+        </button>
+        <button onClick="{{ goDiplome }}" style="text-align:left;background:#201b17;border:1px solid #332b25;border-radius:8px;padding:22px 18px;color:#f4ede3;display:flex;flex-direction:column;align-items:flex-start;gap:12px;transition:transform .25s" style-hover="transform:translateY(-4px)">
+          <svg viewBox="0 0 100 100" width="80" height="80" style="color:#f4ede3;flex:none"><defs><path id="pS3" d="M50 50m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0"></path></defs><circle cx="50" cy="50" r="48.5" fill="none" stroke="#d9a441" stroke-width="1.6"></circle><text font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="800" font-size="6.6" letter-spacing="1.1" fill="#d9a441"><textPath href="#pS3">STEAKAKADEMIE · STUFE 3 · HITZEKONTROLLE ·</textPath></text><circle cx="50" cy="50" r="34.5" fill="none" stroke="#d9a441" stroke-width="1" opacity=".3"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#d9a441" stroke-width="3" stroke-dasharray="130.1 216.8" transform="rotate(-90 50 50)"></circle><g transform="translate(50 50) scale(.44) translate(-50 -51)"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#201b17"></path></g></svg>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">Stufe 3</span>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:26px;line-height:1;text-transform:uppercase">Hitzekontrolle</span>
+          <span style="font-size:14px;color:#7d7166">Profi-Zertifikat</span>
+        </button>
+        <button onClick="{{ goDiplome }}" style="text-align:left;background:#201b17;border:1px solid #332b25;border-radius:8px;padding:22px 18px;color:#f4ede3;display:flex;flex-direction:column;align-items:flex-start;gap:12px;transition:transform .25s" style-hover="transform:translateY(-4px)">
+          <svg viewBox="0 0 100 100" width="80" height="80" style="color:#f4ede3;flex:none"><defs><path id="pS4" d="M50 50m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0"></path></defs><circle cx="50" cy="50" r="48.5" fill="none" stroke="#cfd6d8" stroke-width="1.6"></circle><text font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="800" font-size="6.6" letter-spacing="1.1" fill="#cfd6d8"><textPath href="#pS4">STEAKAKADEMIE · STUFE 4 · PRÄZISION & GESCHMACK ·</textPath></text><circle cx="50" cy="50" r="34.5" fill="none" stroke="#cfd6d8" stroke-width="1" opacity=".3"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#cfd6d8" stroke-width="3" stroke-dasharray="173.4 216.8" transform="rotate(-90 50 50)"></circle><g transform="translate(50 50) scale(.44) translate(-50 -51)"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#201b17"></path></g></svg>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">Stufe 4</span>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:26px;line-height:1;text-transform:uppercase">Präzision & Geschmack</span>
+          <span style="font-size:14px;color:#7d7166">Experten-Zertifikat</span>
+        </button>
+        <button onClick="{{ goDiplome }}" style="text-align:left;background:#201b17;border:1px solid #332b25;border-radius:8px;padding:22px 18px;color:#f4ede3;display:flex;flex-direction:column;align-items:flex-start;gap:12px;transition:transform .25s" style-hover="transform:translateY(-4px)">
+          <svg viewBox="0 0 100 100" width="80" height="80" style="color:#f4ede3;flex:none"><defs><path id="pS5" d="M50 50m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0"></path><filter id="pS5g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4"></feGaussianBlur></filter></defs><circle cx="50" cy="50" r="48.5" fill="none" stroke="#e2531f" stroke-width="1.6"></circle><text font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="800" font-size="6.6" letter-spacing="1.1" fill="#e2531f"><textPath href="#pS5">STEAKAKADEMIE · STUFE 5 · DER VOLLENDETE PITMASTER ·</textPath></text><circle cx="50" cy="50" r="34.5" fill="none" stroke="#e2531f" stroke-width="1" opacity=".3"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#e2531f" stroke-width="4" opacity=".7" filter="url(#pS5g)"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#e2531f" stroke-width="3" stroke-dasharray="216.8 216.8" transform="rotate(-90 50 50)"></circle><g transform="translate(50 50) scale(.44) translate(-50 -51)"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#201b17"></path></g></svg>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">Stufe 5</span>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:26px;line-height:1;text-transform:uppercase">Der vollendete Pitmaster</span>
+          <span style="font-size:14px;color:#7d7166">Offizielles Akademie-Diplom</span>
+        </button>
+      </div>
+      <div style="margin-top:36px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <button onClick="{{ goDiplome }}" style="background:#e2531f;border:0;color:#15120f;padding:16px 28px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#ff8a3d">Stufe 1 jetzt starten — ohne Login</button>
+        <span style="color:#7d7166;font-size:14px">Kein Abo. Keine Kreditkarte.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WERKZEUGE + ÜBER UNS (hell) -->
+  <section style="background:#f4ede3;color:#1a1613;padding:clamp(56px,7vw,96px) 20px">
+    <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:start">
+      <div>
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#e2531f;margin-bottom:12px">Werkzeuge</div>
+        <h2 style="margin:0 0 22px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(32px,3.6vw,48px);line-height:1;text-transform:uppercase">Spiel mit Aromen, Cuts & Rezepten</h2>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button onClick="{{ goStart }}" style="text-align:left;background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:18px 20px;color:#1a1613;display:flex;justify-content:space-between;gap:16px;align-items:center" style-hover="border-color:#e2531f"><span><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:22px;text-transform:uppercase;display:block">Cut-Atlas</span><span style="font-size:14px;color:#7d7166">Lage, Muskel, Marmorierung, Garpunkt — 40 Cuts</span></span><span style="color:#e2531f">→</span></button>
+          <button onClick="{{ goStart }}" style="text-align:left;background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:18px 20px;color:#1a1613;display:flex;justify-content:space-between;gap:16px;align-items:center" style-hover="border-color:#e2531f"><span><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:22px;text-transform:uppercase;display:block">Foodpairing</span><span style="font-size:14px;color:#7d7166">Welche Aromen passen — über geteilte Moleküle</span></span><span style="color:#e2531f">→</span></button>
+          <button onClick="{{ goRezept }}" style="text-align:left;background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:18px 20px;color:#1a1613;display:flex;justify-content:space-between;gap:16px;align-items:center" style-hover="border-color:#e2531f"><span><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:22px;text-transform:uppercase;display:block">Rezept-Schmiede</span><span style="font-size:14px;color:#7d7166">Rezept aus geprüftem Wissen — in deinem Schwierigkeitsgrad</span></span><span style="color:#e2531f">→</span></button>
+        </div>
+      </div>
+      <button onClick="{{ goUeber }}" style="text-align:left;background:#201b17;border:0;border-radius:8px;padding:32px;color:#f4ede3;display:flex;flex-direction:column;gap:14px;min-height:100%;box-sizing:border-box" style-hover="background:#2a2420">
+        <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c">Wer hinter der Akademie steht</span>
+        <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(28px,3vw,40px);line-height:1;text-transform:uppercase">Bevor ein Steak auf den Rost kommt, hat es zwei Jahre gelebt.</span>
+        <span style="font-size:16px;line-height:1.55;color:#b3a798">Wir erzählen, wo das Fleisch herkommt — vom Züchter über die Reifung bis zum Handwerk am Feuer. 30 Jahre Lehrerfahrung stecken in der Methodik. Kein Marketing, eine Haltung.</span>
+        <span style="color:#ff8a3d;margin-top:auto">Die Geschichte lesen →</span>
+      </button>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<!-- ============ ÜBERSICHT · ein Muster für vier Kataloge ============ -->
+<sc-if value="{{ isUebersicht }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Übersicht" style="flex:1;background:#f4ede3;color:#1a1613">
+
+  <div style="background:#15120f;color:#f4ede3">
+    <div style="max-width:1240px;margin:0 auto;padding:40px 20px 0">
+      <div style="display:flex;gap:8px;font-size:14px;color:#7d7166;margin-bottom:22px;flex-wrap:wrap"><button onClick="{{ goStart }}" style="background:none;border:0;color:#7d7166;padding:0;font-size:14px" style-hover="color:#ffb35c">Start</button><span>/</span><span style="color:#c9bfb2">{{ ueLabel }}</span></div>
+      <h1 style="margin:0;max-width:22ch;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:clamp(40px,6vw,80px);line-height:.92;text-transform:uppercase;text-wrap:balance">{{ ueTitel }}</h1>
+      <p style="margin:18px 0 0;font-size:18px;line-height:1.55;color:#b3a798;max-width:58ch;text-wrap:pretty">{{ ueLead }}</p>
+      <div style="margin-top:32px;display:flex;gap:4px;flex-wrap:wrap;overflow-x:auto">
+        <sc-for list="{{ katTabs }}" as="t" hint-placeholder-count="4">
+          <button onClick="{{ t.pick }}" style="background:none;border:0;border-bottom:3px solid {{ t.bd }};color:{{ t.col }};padding:12px 16px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap" style-hover="color:#ffb35c">{{ t.l }}</button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#faf6ef;border-bottom:1px solid #e3d9c9;position:sticky;top:0;z-index:5">
+    <div style="max-width:1240px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">{{ ueDim }}</span>
+        <sc-for list="{{ ueChips }}" as="c" hint-placeholder-count="4">
+          <button onClick="{{ c.pick }}" style="background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }};border-radius:999px;padding:7px 15px;font-size:14px;white-space:nowrap" style-hover="border-color:#e2531f">{{ c.d }}</button>
+        </sc-for>
+      </div>
+      <div style="flex:1"></div>
+      <span style="font-size:14px;color:#7d7166;white-space:nowrap">{{ ueAnzahl }}</span>
+      <div style="display:flex;gap:2px;border:1px solid #e3d9c9;border-radius:6px;padding:2px;background:#f4ede3">
+        <sc-for list="{{ ueSorts }}" as="o" hint-placeholder-count="2">
+          <button onClick="{{ o.pick }}" style="background:{{ o.bg }};color:{{ o.fg }};border:0;border-radius:4px;padding:6px 12px;font-size:13px;white-space:nowrap">{{ o.x }}</button>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:2px;border:1px solid #e3d9c9;border-radius:6px;padding:2px;background:#f4ede3">
+        <sc-for list="{{ ueViews }}" as="o" hint-placeholder-count="2">
+          <button onClick="{{ o.pick }}" style="background:{{ o.bg }};color:{{ o.fg }};border:0;border-radius:4px;padding:6px 12px;font-size:13px;white-space:nowrap">{{ o.x }}</button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1240px;margin:0 auto;padding:36px 20px 88px">
+
+    <sc-if value="{{ vRaster }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+      <sc-for list="{{ ueRows }}" as="r" hint-placeholder-count="9">
+        <button onClick="{{ r.open }}" style="text-align:left;background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:22px;color:#1a1613;display:flex;flex-direction:column;gap:10px;transition:border-color .15s,transform .15s" style-hover="border-color:#e2531f;transform:translateY(-2px)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+            <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:26px;line-height:1;text-transform:uppercase;text-wrap:balance">{{ r.n }}</span>
+            <span style="flex:none;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:15px;letter-spacing:.04em;color:#e2531f;white-space:nowrap">{{ r.badge }}</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:#7d7166">
+            <span>{{ r.dim }}</span><span>·</span><span>{{ r.k1 }}</span>
+          </div>
+          <p style="margin:0;font-size:15px;line-height:1.5;color:#4a413a;text-wrap:pretty">{{ r.m }}</p>
+          <div style="margin-top:auto;padding-top:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #e8ddcb;font-size:13px">
+            <span style="color:#7d7166">{{ r.k2 }}</span><span style="color:#e2531f">Ansehen →</span>
+          </div>
+        </button>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ vListe }}" hint-placeholder-val="{{ false }}">
+    <div style="border:1px solid #e3d9c9;border-radius:8px;overflow:hidden;background:#faf6ef">
+      <sc-for list="{{ ueRows }}" as="r" hint-placeholder-count="8">
+        <button onClick="{{ r.open }}" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #e3d9c9;padding:16px 20px;color:#1a1613;display:grid;grid-template-columns:44px minmax(160px,1.4fr) minmax(120px,1fr) minmax(120px,1fr) minmax(0,2fr) 90px;gap:16px;align-items:center" style-hover="background:#fff8ee">
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:17px;color:#c9bfb2">{{ r.nr }}</span>
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:20px;line-height:1.05;text-transform:uppercase">{{ r.n }}</span>
+          <span style="font-size:14px;color:#7d7166">{{ r.k1 }}</span>
+          <span style="font-size:14px;color:#7d7166">{{ r.k2 }}</span>
+          <span style="font-size:14px;color:#4a413a;line-height:1.45">{{ r.m }}</span>
+          <span style="text-align:right;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:15px;color:#e2531f;white-space:nowrap">{{ r.badge }}</span>
+        </button>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ ueLeer }}" hint-placeholder-val="{{ false }}">
+    <div style="border:1px dashed #d4c8b6;border-radius:8px;padding:56px 28px;text-align:center;background:#faf6ef">
+      <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:28px;line-height:1;text-transform:uppercase;margin-bottom:10px">Nichts in dieser Auswahl</div>
+      <p style="margin:0 0 22px;font-size:16px;line-height:1.5;color:#7d7166">In diesem Katalog gibt es dazu noch keinen Eintrag.</p>
+      <button onClick="{{ ueReset }}" style="background:#1a1613;border:0;color:#f4ede3;padding:12px 22px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#e2531f">Filter zurücksetzen</button>
+    </div>
+    </sc-if>
+
+  </div>
+</main>
+</sc-if>
+
+<!-- ============ STREITFALL ============ -->
+<sc-if value="{{ isStreitfall }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Streitfall" style="flex:1;background:#f4ede3;color:#1a1613">
+  <div style="max-width:760px;margin:0 auto;padding:40px 20px 80px">
+    <div style="display:flex;gap:8px;font-size:14px;color:#7d7166;margin-bottom:28px;flex-wrap:wrap"><button onClick="{{ goStart }}" style="background:none;border:0;color:#7d7166;padding:0;font-size:14px" style-hover="color:#e2531f">Start</button><span>/</span><span>Streitfälle am Grill</span></div>
+    <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#e2531f;margin-bottom:14px">Streitfall Nr. 5 · Wissen & Wissenschaft</div>
+    <h1 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:clamp(40px,6vw,72px);line-height:.94;text-transform:uppercase;text-wrap:balance">Der rote Saft ist kein Blut — und rosa heißt nicht roh</h1>
+    <p style="margin:22px 0 0;font-size:20px;line-height:1.5;color:#4a413a;text-wrap:pretty">Zwei Irrtümer, die zusammengehören und jedes Jahr Tonnen von Fleisch ruinieren. Wer sie loswird, hört auf, nach Farbe zu grillen — und fängt an, nach Temperatur zu grillen.</p>
+    <div style="margin:24px 0 32px;padding:16px 0;border-top:1px solid #e3d9c9;border-bottom:1px solid #e3d9c9;display:flex;gap:20px;flex-wrap:wrap;font-size:14px;color:#7d7166"><span>Uwe Yendell</span><span>17. August 2026</span><span>6 Min. Lesezeit</span></div>
+    <img src="https://steakakademie.de/images/streitfaelle/myoglobin.jpg" alt="Rohes Steak auf dunklem Schiefer mit austretendem rotem Fleischsaft" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;display:block;background:#2a2420">
+    <div style="font-size:19px;line-height:1.65;display:flex;flex-direction:column;gap:22px;margin-top:36px">
+      <p style="margin:0">Der rote Saft, der aus einem Steak läuft, ist Wasser mit Myoglobin darin. Blut ist beim Schlachten längst raus. Myoglobin ist das Protein, das Sauerstoff im Muskel speichert — und je mehr ein Muskel arbeitet, desto mehr davon steckt drin. Deshalb ist Rind dunkler als Schwein, Schwein dunkler als Huhn, und die Keule dunkler als das Filet.</p>
+      <p style="margin:0">Das Protein wechselt mit der Temperatur die Farbe: erst violett-rot, dann hellrot, dann rosa, dann grau-braun. Und hier liegt das Problem. Der Farbwechsel ist unzuverlässig. Ein Steak kann bei 60 Grad noch rosa sein oder bei 55 Grad schon grau — je nach pH-Wert, Alter des Tiers und Verpackung.</p>
+      <div style="padding:28px 0;border-top:2px solid #1a1613;border-bottom:2px solid #1a1613;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1;text-transform:uppercase">Wer nach Farbe grillt, rät. Wer nach Temperatur grillt, weiß.</div>
+      <p style="margin:0">Rosa heißt also nicht roh. Ein Schweinenacken bei 63 Grad Kerntemperatur ist sicher gegart — und rosa. Ein Steak bei 54 Grad ist medium rare und sieht für viele „blutig" aus. Beides ist richtig. Wer stattdessen weitergrillt, bis nichts mehr rot ist, produziert zuverlässig trockenes Fleisch.</p>
+      <p style="margin:0">Der einzige verlässliche Indikator ist die Kerntemperatur. Ein Thermometer kostet weniger als zwei Ribeyes, die du sonst ruinierst.</p>
+    </div>
+
+    <!-- WEICHE: genau ein nächster Schritt -->
+    <button onClick="{{ goLektion }}" style="margin-top:56px;width:100%;text-align:left;background:#15120f;border:0;border-radius:8px;padding:30px;color:#f4ede3;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;transition:background .2s" style-hover="background:#201b17">
+      <span style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c">Nächster Schritt · Akademie Stufe 1, Lektion 3</span>
+        <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(26px,3vw,36px);line-height:1;text-transform:uppercase">Nach Temperatur grillen, nicht nach Farbe</span>
+        <span style="font-size:15px;color:#b3a798">8 Minuten · alle Garstufen für Rind, Schwein, Lamm, Geflügel · ohne Login</span>
+      </span>
+      <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:48px;color:#ff8a3d">→</span>
+    </button>
+  </div>
+</main>
+</sc-if>
+
+<!-- ============ LEKTION ============ -->
+<sc-if value="{{ isLektion }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Lektion" style="flex:1;background:#f4ede3;color:#1a1613">
+  <div style="background:#15120f;color:#f4ede3;border-bottom:1px solid #332b25">
+    <div style="max-width:960px;margin:0 auto;padding:28px 20px">
+      <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.16em;text-transform:uppercase">
+        <button onClick="{{ goDiplome }}" style="background:none;border:0;color:#ffb35c;padding:0;font:inherit;letter-spacing:inherit;text-transform:inherit" style-hover="color:#ff8a3d">← Stufe 1 · Der Funke</button>
+        <span style="color:#7d7166">Lektion 3 von 7</span>
+      </div>
+      <div style="margin-top:16px;display:grid;grid-template-columns:repeat(7,1fr);gap:4px">
+        <span style="height:4px;background:#e2531f;border-radius:2px"></span>
+        <span style="height:4px;background:#e2531f;border-radius:2px"></span>
+        <sc-if value="{{ lessonDone }}" hint-placeholder-val="{{ false }}"><span style="height:4px;background:#e2531f;border-radius:2px"></span></sc-if>
+        <sc-if value="{{ lessonOpen }}" hint-placeholder-val="{{ true }}"><span style="height:4px;background:#ff8a3d;border-radius:2px;animation:emberBreathe 2.4s ease-in-out infinite"></span></sc-if>
+        <span style="height:4px;background:#332b25;border-radius:2px"></span>
+        <span style="height:4px;background:#332b25;border-radius:2px"></span>
+        <span style="height:4px;background:#332b25;border-radius:2px"></span>
+        <span style="height:4px;background:#332b25;border-radius:2px"></span>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:960px;margin:0 auto;padding:40px 20px 80px">
+    <h1 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:clamp(38px,5.5vw,64px);line-height:.94;text-transform:uppercase;text-wrap:balance">Nach Temperatur grillen, nicht nach Farbe</h1>
+    <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+      <div style="background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:22px">
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#e2531f;margin-bottom:10px">Lernziel</div>
+        <p style="margin:0;font-size:17px;line-height:1.5">Du kennst die Garstufen als Kerntemperaturen, weißt, wo ein Thermometer sitzt, und rechnest den Nachzieh-Effekt beim Ruhen ein.</p>
+      </div>
+      <div style="background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:22px">
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#e2531f;margin-bottom:10px">Voraussetzung</div>
+        <p style="margin:0;font-size:17px;line-height:1.5">Lektion 2 „Zonen: direkt & indirekt" — oder du weißt bereits, was eine indirekte Zone ist.</p>
+      </div>
+    </div>
+
+    <h2 style="margin:48px 0 16px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:32px;line-height:1;text-transform:uppercase">1 · Die Garstufen — Rind</h2>
+    <p style="margin:0 0 18px;font-size:17px;line-height:1.55;color:#4a413a">Werte der Pitmaster-Doktrin. Das sind Ziel-Kerntemperaturen <em>nach</em> dem Ruhen. Nimm das Fleisch 3–5 °C früher vom Rost.</p>
+    <div style="border:1px solid #e3d9c9;border-radius:8px;overflow:hidden;background:#faf6ef">
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1.6fr;padding:12px 18px;background:#1a1613;color:#f4ede3;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase"><span>Garstufe</span><span>Kern</span><span>Zustand</span></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1.6fr;padding:14px 18px;border-top:1px solid #e3d9c9;font-size:16px;align-items:center"><span style="font-weight:600">Rare</span><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;color:#e2531f">48–52°</span><span style="color:#4a413a">Kern kühl, tiefrot, weich</span></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1.6fr;padding:14px 18px;border-top:1px solid #e3d9c9;font-size:16px;align-items:center;background:#fff8ee"><span style="font-weight:600">Medium rare</span><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;color:#e2531f">52–56°</span><span style="color:#4a413a">Warm, rot, saftig — die Referenz</span></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1.6fr;padding:14px 18px;border-top:1px solid #e3d9c9;font-size:16px;align-items:center"><span style="font-weight:600">Medium</span><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;color:#e2531f">56–60°</span><span style="color:#4a413a">Rosa, fester, noch saftig</span></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1.6fr;padding:14px 18px;border-top:1px solid #e3d9c9;font-size:16px;align-items:center"><span style="font-weight:600">Medium well</span><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;color:#e2531f">60–65°</span><span style="color:#4a413a">Hauch rosa, deutlich trockener</span></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1.6fr;padding:14px 18px;border-top:1px solid #e3d9c9;font-size:16px;align-items:center"><span style="font-weight:600">Well done</span><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;color:#7d7166">ab 68°</span><span style="color:#4a413a">Grau, fest — hier verzeiht nur Fett</span></div>
+    </div>
+
+    <h2 style="margin:48px 0 16px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:32px;line-height:1;text-transform:uppercase">2 · Drei Regeln fürs Messen</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+      <div style="border-left:0;background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:20px"><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:40px;line-height:1;color:#e2531f">01</div><p style="margin:8px 0 0;font-size:16px;line-height:1.5">Fühler in die dickste Stelle, weg von Knochen und Fettadern. Beides zeigt falsche Werte.</p></div>
+      <div style="background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:20px"><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:40px;line-height:1;color:#e2531f">02</div><p style="margin:8px 0 0;font-size:16px;line-height:1.5">Der Kern zieht beim Ruhen 3–5 °C nach. Dickes Stück, heißer Grill — mehr. Dünnes Steak — weniger.</p></div>
+      <div style="background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:20px"><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:40px;line-height:1;color:#e2531f">03</div><p style="margin:8px 0 0;font-size:16px;line-height:1.5">Farbe ist kein Kriterium. Rosa ist bei Schwein ab 63 °C sicher, bei Geflügel gilt 74 °C — egal wie es aussieht.</p></div>
+    </div>
+
+    <!-- Prüfungsfrage -->
+    <div style="margin-top:48px;background:#15120f;color:#f4ede3;border-radius:8px;padding:30px">
+      <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#ffb35c;margin-bottom:12px">Kontrollfrage</div>
+      <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(24px,3vw,32px);line-height:1;text-transform:uppercase;margin-bottom:22px">Du willst ein 4 cm Ribeye medium rare (54 °C) servieren. Bei welcher Kerntemperatur nimmst du es vom Rost?</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+        <button onClick="{{ answerA }}" style="text-align:left;background:{{ answerBgA }};border:1px solid {{ answerBorderA }};border-radius:6px;padding:16px 18px;color:#f4ede3;font-size:16px;line-height:1.4" style-hover="border-color:#ff8a3d">Bei 54 °C — genau am Ziel.</button>
+        <button onClick="{{ answerB }}" style="text-align:left;background:{{ answerBgB }};border:1px solid {{ answerBorderB }};border-radius:6px;padding:16px 18px;color:#f4ede3;font-size:16px;line-height:1.4" style-hover="border-color:#ff8a3d">Bei 50 °C — es zieht beim Ruhen nach.</button>
+        <button onClick="{{ answerC }}" style="text-align:left;background:{{ answerBgC }};border:1px solid {{ answerBorderC }};border-radius:6px;padding:16px 18px;color:#f4ede3;font-size:16px;line-height:1.4" style-hover="border-color:#ff8a3d">Sobald kein Saft mehr rot ist.</button>
+      </div>
+      <sc-if value="{{ answerCorrect }}" hint-placeholder-val="{{ false }}">
+        <p style="margin:18px 0 0;font-size:16px;line-height:1.5;color:#ffb35c">Richtig. Bei 4 cm und heißem Rost zieht der Kern etwa 4 °C nach — 50 °C runter, 54 °C auf dem Teller.</p>
+      </sc-if>
+      <sc-if value="{{ answerWrong }}" hint-placeholder-val="{{ false }}">
+        <p style="margin:18px 0 0;font-size:16px;line-height:1.5;color:#d9cfc2">Nicht ganz. Denk an Regel 02: Der Kern zieht beim Ruhen nach — und Farbe ist nie das Kriterium.</p>
+      </sc-if>
+    </div>
+
+    <div style="margin-top:32px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+      <sc-if value="{{ lessonOpen }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ completeLesson }}" style="background:#e2531f;border:0;color:#15120f;padding:16px 28px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#ff8a3d">Lektion abschließen</button>
+        <span style="font-size:14px;color:#7d7166">Dein Fortschritt wird lokal gemerkt — speichern kannst du ihn später mit einem kostenlosen Account.</span>
+      </sc-if>
+      <sc-if value="{{ lessonDone }}" hint-placeholder-val="{{ false }}">
+        <span style="display:flex;align-items:center;gap:10px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase;color:#e2531f"><span style="width:10px;height:10px;border-radius:50%;background:#ff8a3d;box-shadow:0 0 12px #ff8a3d"></span>Lektion 3 abgeschlossen</span>
+        <button style="background:none;border:1px solid #1a1613;color:#1a1613;padding:12px 20px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#1a1613;color:#f4ede3">Fortschritt speichern — kostenlos</button>
+      </sc-if>
+    </div>
+
+    <!-- WEICHE -->
+    <button onClick="{{ goRezept }}" style="margin-top:56px;width:100%;text-align:left;background:#15120f;border:0;border-radius:8px;padding:30px;color:#f4ede3;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;transition:background .2s" style-hover="background:#201b17">
+      <span style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c">Jetzt anwenden · Rezept</span>
+        <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(26px,3vw,36px);line-height:1;text-transform:uppercase">Ribeye, Reverse Sear — auf 54 °C, nicht auf Farbe</span>
+        <span style="font-size:15px;color:#b3a798">Schwierigkeit ⭐⭐ · 60 Minuten · genau diese Lektion am Rost</span>
+      </span>
+      <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:48px;color:#ff8a3d">→</span>
+    </button>
+  </div>
+</main>
+</sc-if>
+
+<!-- ============ REZEPT ============ -->
+<sc-if value="{{ isRezept }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Rezept" style="flex:1;background:#f4ede3;color:#1a1613">
+  <div style="max-width:1100px;margin:0 auto;padding:40px 20px 80px">
+    <div style="display:flex;gap:8px;font-size:14px;color:#7d7166;margin-bottom:28px;flex-wrap:wrap"><button onClick="{{ goStart }}" style="background:none;border:0;color:#7d7166;padding:0;font-size:14px" style-hover="color:#e2531f">Start</button><span>/</span><span>Rezepte</span><span>/</span><span>Rind</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:start">
+      <div>
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#e2531f;margin-bottom:14px">Rezept · Rind · Reverse Sear</div>
+        <h1 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:clamp(44px,6vw,80px);line-height:.92;text-transform:uppercase">Ribeye,<br>Reverse Sear</h1>
+        <p style="margin:20px 0 0;font-size:18px;line-height:1.55;color:#4a413a">Erst langsam in der indirekten Zone auf Temperatur bringen, dann kurz über die Glut für die Kruste. Umgekehrt zu dem, was alle machen — und deshalb gleichmäßiger, kontrollierbarer, verzeihender.</p>
+        <div style="margin-top:26px;display:flex;gap:28px;flex-wrap:wrap">
+          <div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">Schwierigkeit</div><div style="font-size:18px">⭐⭐</div></div>
+          <div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">Dauer</div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px">60 Min</div></div>
+          <div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">Ziel-Kern</div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;color:#e2531f">54 °C</div></div>
+          <div>
+            <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">Personen</div>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:2px">
+              <button onClick="{{ fewer }}" style="width:32px;height:32px;border-radius:50%;border:1px solid #1a1613;background:none;color:#1a1613;font-size:18px;line-height:1" style-hover="background:#1a1613;color:#f4ede3">−</button>
+              <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;min-width:20px;text-align:center">{{ servings }}</span>
+              <button onClick="{{ more }}" style="width:32px;height:32px;border-radius:50%;border:1px solid #1a1613;background:none;color:#1a1613;font-size:18px;line-height:1" style-hover="background:#1a1613;color:#f4ede3">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:26px">
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin-bottom:16px">Zutaten</div>
+        <div style="display:flex;flex-direction:column;font-size:17px">
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #e3d9c9"><span>Ribeye, 4 cm dick, gut marmoriert</span><span style="font-weight:600;white-space:nowrap">{{ steaks }} Stk.</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #e3d9c9"><span>Grobes Meersalz</span><span style="font-weight:600;white-space:nowrap">{{ salt }} TL</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #e3d9c9"><span>Schwarzer Pfeffer, frisch</span><span style="font-weight:600;white-space:nowrap">nach dem Grillen</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0"><span>Butter, Knoblauch, Thymian (optional)</span><span style="font-weight:600;white-space:nowrap">{{ butter }} g</span></div>
+        </div>
+        <div style="margin-top:18px;padding:14px 16px;background:#15120f;color:#f4ede3;border-radius:6px;font-size:14px;line-height:1.5"><span style="color:#ffb35c">Aus dem Cut-Atlas:</span> Ribeye = Hochrippe, Longissimus mit Spinalis-Kappe. Die Kappe ist der beste Bissen — nicht wegschneiden.</div>
+      </div>
+    </div>
+
+    <h2 style="margin:56px 0 20px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:36px;line-height:1;text-transform:uppercase">Ablauf</h2>
+    <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid #e3d9c9">
+      <div style="display:grid;grid-template-columns:72px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid #e3d9c9"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:48px;line-height:1;color:#e2531f">1</span><div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin-bottom:8px">Salzen — 45 Minuten vorher</div><p style="margin:0;font-size:17px;line-height:1.55;color:#4a413a">Großzügig von allen Seiten. Das Salz zieht erst Wasser, dann geht es als Sole zurück ins Fleisch. Nicht abtupfen.</p></div></div>
+      <div style="display:grid;grid-template-columns:72px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid #e3d9c9"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:48px;line-height:1;color:#e2531f">2</span><div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin-bottom:8px">Grill auf zwei Zonen — 110 °C indirekt</div><p style="margin:0;font-size:17px;line-height:1.55;color:#4a413a">Kohle auf eine Seite. Deckel zu, Lüftung einregeln. Thermometer-Fühler ins Steak, Steak auf die kalte Seite.</p></div></div>
+      <div style="display:grid;grid-template-columns:72px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid #e3d9c9;background:#fff8ee;margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:48px;line-height:1;color:#e2531f">3</span><div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin-bottom:8px">Ziehen bis 46 °C Kern</div><p style="margin:0;font-size:17px;line-height:1.55;color:#4a413a">Dauert 30–45 Minuten. Nicht nach Uhr, nach Thermometer. Das ist die Lektion: 46 °C jetzt + Searing + Ruhen = 54 °C auf dem Teller.</p></div></div>
+      <div style="display:grid;grid-template-columns:72px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid #e3d9c9"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:48px;line-height:1;color:#e2531f">4</span><div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin-bottom:8px">Searing — 60 Sekunden pro Seite</div><p style="margin:0;font-size:17px;line-height:1.55;color:#4a413a">Direkt über die Glut, Deckel offen. Kruste kommt von Hitze und Trockenheit, nicht von Zeit. Optional Butter, Knoblauch, Thymian in den letzten 30 Sekunden.</p></div></div>
+      <div style="display:grid;grid-template-columns:72px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid #e3d9c9"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:48px;line-height:1;color:#e2531f">5</span><div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin-bottom:8px">Ruhen — auf dem Rost, nicht auf dem Brett</div><p style="margin:0;font-size:17px;line-height:1.55;color:#4a413a">5 Minuten auf einem Gitter, damit die Unterseite nicht im eigenen Saft aufweicht. Dann pfeffern, aufschneiden, Kappe zuerst.</p></div></div>
+    </div>
+
+    <!-- WEICHE -->
+    <button onClick="{{ goWerkzeug }}" style="margin-top:56px;width:100%;text-align:left;background:#15120f;border:0;border-radius:8px;padding:30px;color:#f4ede3;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;transition:background .2s" style-hover="background:#201b17">
+      <span style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c">Dafür brauchst du · Test</span>
+        <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(26px,3vw,36px);line-height:1;text-transform:uppercase">Fleischthermometer im Vergleich 2026</span>
+        <span style="font-size:15px;color:#b3a798">Drei Modelle, selbst getestet — kabellos vs. Kabel, Genauigkeit, App. Affiliate-Links gekennzeichnet.</span>
+      </span>
+      <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:48px;color:#ff8a3d">→</span>
+    </button>
+  </div>
+</main>
+</sc-if>
+
+<!-- ============ WERKZEUG ============ -->
+<sc-if value="{{ isWerkzeug }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Werkzeug" style="flex:1;background:#f4ede3;color:#1a1613">
+  <div style="max-width:1100px;margin:0 auto;padding:40px 20px 80px">
+    <div style="display:flex;gap:8px;font-size:14px;color:#7d7166;margin-bottom:28px;flex-wrap:wrap"><button onClick="{{ goStart }}" style="background:none;border:0;color:#7d7166;padding:0;font-size:14px" style-hover="color:#e2531f">Start</button><span>/</span><span>Ausrüstung</span><span>/</span><span>Tests</span></div>
+    <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#e2531f;margin-bottom:14px">Vergleich 2026 · Selbst getestet</div>
+    <h1 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:clamp(40px,6vw,72px);line-height:.92;text-transform:uppercase;max-width:16ch">Fleischthermometer: Die 3 besten Modelle im Test</h1>
+    <p style="margin:20px 0 0;font-size:18px;line-height:1.55;color:#4a413a;max-width:64ch">Ein Thermometer ist das eine Werkzeug, das aus Raten Wissen macht. Wir haben gemessen, wie genau, wie schnell und wie weit die Geräte funken — am Smoker, nicht am Schreibtisch. <span style="color:#7d7166">Affiliate-Links gekennzeichnet, Preis für dich unverändert.</span></p>
+
+    <div style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:stretch">
+      <div style="background:#15120f;color:#f4ede3;border-radius:8px;padding:28px;display:flex;flex-direction:column;gap:14px;border:1px solid #e2531f">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase"><span style="color:#ffb35c">Testsieger</span><span style="color:#7d7166">Anzeige</span></div>
+        <div style="height:150px;border-radius:6px;background:#201b17;display:flex;align-items:center;justify-content:center;color:#7d7166;font-size:13px">Produktfoto · Symbolbild</div>
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:34px;line-height:1;text-transform:uppercase">MEATER Plus</div>
+        <div style="font-size:14px;color:#b3a798">4.5 · 8.420 Amazon-Bewertungen</div>
+        <ul style="margin:0;padding:0 0 0 18px;font-size:15px;line-height:1.6;color:#d9cfc2"><li>Komplett kabellos — kein Kabel am Smoker</li><li>App führt durch die komplette Garzeit</li><li>WiFi-Reichweite bis 50 m</li></ul>
+        <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #332b25">
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:36px">129 €</span>
+          <button style="background:#e2531f;border:0;color:#15120f;padding:12px 20px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#ff8a3d">Bei Amazon ansehen</button>
+        </div>
+      </div>
+      <div style="background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:28px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase"><span style="color:#e2531f">Preis-Tipp</span><span style="color:#7d7166">Anzeige</span></div>
+        <div style="height:150px;border-radius:6px;background:#ece3d5;display:flex;align-items:center;justify-content:center;color:#7d7166;font-size:13px">Produktfoto · Symbolbild</div>
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:34px;line-height:1;text-transform:uppercase">Kabel-Thermometer, 2 Fühler</div>
+        <div style="font-size:14px;color:#7d7166">Modell aus dem Test · Bewertung folgt</div>
+        <ul style="margin:0;padding:0 0 0 18px;font-size:15px;line-height:1.6;color:#4a413a"><li>Zwei Fühler: Kern + Garraum</li><li>Keine App nötig, keine Akku-Sorgen</li><li>Kabel muss durch den Deckel</li></ul>
+        <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #e3d9c9">
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:36px">ab 40 €</span>
+          <button style="background:none;border:1px solid #1a1613;color:#1a1613;padding:12px 20px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#1a1613;color:#f4ede3">Zum Test</button>
+        </div>
+      </div>
+      <div style="background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:28px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase"><span style="color:#e2531f">Für den Smoker</span><span style="color:#7d7166">Anzeige</span></div>
+        <div style="height:150px;border-radius:6px;background:#ece3d5;display:flex;align-items:center;justify-content:center;color:#7d7166;font-size:13px">Produktfoto · Symbolbild</div>
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:34px;line-height:1;text-transform:uppercase">4-Kanal-Funkthermometer</div>
+        <div style="font-size:14px;color:#7d7166">Modell aus dem Test · Bewertung folgt</div>
+        <ul style="margin:0;padding:0 0 0 18px;font-size:15px;line-height:1.6;color:#4a413a"><li>Vier Fühler für Brisket, Ribs & Garraum</li><li>Alarm bei Zieltemperatur</li><li>Reichweite für die Terrasse, nicht fürs Haus</li></ul>
+        <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #e3d9c9">
+          <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:36px">ab 70 €</span>
+          <button style="background:none;border:1px solid #1a1613;color:#1a1613;padding:12px 20px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#1a1613;color:#f4ede3">Zum Test</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+      <div style="border-top:2px solid #1a1613;padding-top:14px"><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:22px;text-transform:uppercase">So haben wir getestet</div><p style="margin:6px 0 0;font-size:15px;line-height:1.5;color:#4a413a">Eiswasser und kochendes Wasser als Referenz, dann 6 Stunden am Smoker bei 110 °C. Abweichung, Reaktionszeit, Funkabbrüche protokolliert.</p></div>
+      <div style="border-top:2px solid #1a1613;padding-top:14px"><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:22px;text-transform:uppercase">Was zählt</div><p style="margin:6px 0 0;font-size:15px;line-height:1.5;color:#4a413a">±1 °C Genauigkeit ist Pflicht. Alles andere — App, Reichweite, Akku — ist Komfort und bestimmt den Preis.</p></div>
+      <div style="border-top:2px solid #1a1613;padding-top:14px"><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:22px;text-transform:uppercase">Transparenz</div><p style="margin:6px 0 0;font-size:15px;line-height:1.5;color:#4a413a">Wir erhalten eine Provision, wenn du über unsere Links kaufst. Getestet wird trotzdem — und der Preis-Tipp ist nicht der Testsieger.</p></div>
+    </div>
+
+    <!-- Kreis schließen -->
+    <div style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+      <button onClick="{{ goRezept }}" style="text-align:left;background:#faf6ef;border:1px solid #e3d9c9;border-radius:8px;padding:24px;color:#1a1613;display:flex;flex-direction:column;gap:6px" style-hover="border-color:#e2531f"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166">Zurück ans Feuer</span><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:26px;line-height:1;text-transform:uppercase">Ribeye, Reverse Sear</span></button>
+      <button onClick="{{ goDiplome }}" style="text-align:left;background:#15120f;border:0;border-radius:8px;padding:24px;color:#f4ede3;display:flex;flex-direction:column;gap:6px" style-hover="background:#201b17"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#ffb35c">Weiter im Diplom</span><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:26px;line-height:1;text-transform:uppercase">Stufe 1 · Lektion 4: Der Rost</span></button>
+    </div>
+  </div>
+</main>
+</sc-if>
+
+<!-- ============ DIPLOME ============ -->
+<sc-if value="{{ isDiplome }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Diplome" style="flex:1;background:#f4ede3;color:#1a1613">
+  <section style="background:#15120f;color:#f4ede3;padding:clamp(48px,6vw,88px) 20px;position:relative;overflow:hidden">
+    <div style="max-width:1100px;margin:0 auto;position:relative">
+      <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c;margin-bottom:14px">Akademie · Grillmeister-Diplome</div>
+      <h1 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:clamp(44px,6.5vw,88px);line-height:.92;text-transform:uppercase">Vom Funken zum Pitmaster.</h1>
+      <p style="margin:20px 0 0;font-size:18px;line-height:1.5;color:#b3a798;max-width:60ch">Fünf Stufen, 35 Lektionen, je eine Prüfung pro Stufe. Klar strukturiert, auf den Punkt, ohne Füllstoff. Stufe 1 ist frei zugänglich — ein Account speichert deinen Fortschritt, mehr nicht.</p>
+      <sc-if value="{{ lessonDone }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:28px;display:inline-flex;align-items:center;gap:12px;background:#201b17;border:1px solid #e2531f;border-radius:999px;padding:10px 18px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:#ffb35c"><span style="width:8px;height:8px;border-radius:50%;background:#ff8a3d;box-shadow:0 0 10px #ff8a3d"></span>Dein Stand: Stufe 1 · 1 von 7 Lektionen · nicht gespeichert</div>
+      </sc-if>
+    </div>
+  </section>
+
+  <div style="max-width:1100px;margin:0 auto;padding:48px 20px 80px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:start">
+    <!-- Stufe 1 offen -->
+    <div style="grid-column:span 1">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+        <svg viewBox="0 0 100 100" width="72" height="72" style="color:#1a1613;flex:none"><defs><path id="pD1" d="M50 50m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0"></path></defs><circle cx="50" cy="50" r="48.5" fill="none" stroke="#a05a26" stroke-width="1.6"></circle><text font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="800" font-size="6.6" letter-spacing="1.1" fill="#a05a26"><textPath href="#pD1">STEAKAKADEMIE · STUFE 1 · DER FUNKE ·</textPath></text><circle cx="50" cy="50" r="34.5" fill="none" stroke="#a05a26" stroke-width="1" opacity=".3"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#a05a26" stroke-width="3" stroke-dasharray="43.4 216.8" transform="rotate(-90 50 50)"></circle><g transform="translate(50 50) scale(.44) translate(-50 -51)"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#f4ede3"></path></g></svg>
+        <div>
+          <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#e2531f">Stufe 1 · Basis-Zertifikat · frei</div>
+          <h2 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:40px;line-height:1;text-transform:uppercase">Der Funke</h2>
+        </div>
+      </div>
+      <div style="border:1px solid #e3d9c9;border-radius:8px;overflow:hidden;background:#faf6ef">
+        <button onClick="{{ goDiplome }}" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #e3d9c9;padding:16px 18px;color:#1a1613;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center" style-hover="background:#fff8ee"><span style="width:24px;height:24px;border-radius:50%;background:#e2531f;color:#15120f;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">✓</span><span style="font-size:17px">1 · Feuer machen: Kohle, Briketts, Anzünder</span><span style="font-size:13px;color:#7d7166">7 Min</span></button>
+        <button onClick="{{ goDiplome }}" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #e3d9c9;padding:16px 18px;color:#1a1613;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center" style-hover="background:#fff8ee"><span style="width:24px;height:24px;border-radius:50%;background:#e2531f;color:#15120f;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">✓</span><span style="font-size:17px">2 · Zonen: direkt & indirekt</span><span style="font-size:13px;color:#7d7166">9 Min</span></button>
+        <button onClick="{{ goLektion }}" style="width:100%;text-align:left;background:#fff8ee;border:0;border-bottom:1px solid #e3d9c9;padding:16px 18px;color:#1a1613;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center" style-hover="background:#ffefd9">
+          <sc-if value="{{ lessonDone }}" hint-placeholder-val="{{ false }}"><span style="width:24px;height:24px;border-radius:50%;background:#e2531f;color:#15120f;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">✓</span></sc-if>
+          <sc-if value="{{ lessonOpen }}" hint-placeholder-val="{{ true }}"><span style="width:24px;height:24px;border-radius:50%;border:2px solid #e2531f;box-sizing:border-box;display:flex;align-items:center;justify-content:center"><span style="width:8px;height:8px;border-radius:50%;background:#ff8a3d;animation:emberBreathe 2.4s ease-in-out infinite"></span></span></sc-if>
+          <span style="font-size:17px;font-weight:600">3 · Nach Temperatur grillen, nicht nach Farbe</span><span style="font-size:13px;color:#e2531f">8 Min →</span>
+        </button>
+        <button onClick="{{ goDiplome }}" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #e3d9c9;padding:16px 18px;color:#1a1613;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center" style-hover="background:#fff8ee"><span style="width:24px;height:24px;border-radius:50%;border:1px solid #c9bfb2;box-sizing:border-box"></span><span style="font-size:17px">4 · Der Rost: Vorbereiten, Ölen, Reinigen</span><span style="font-size:13px;color:#7d7166">6 Min</span></button>
+        <button onClick="{{ goDiplome }}" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #e3d9c9;padding:16px 18px;color:#1a1613;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center" style-hover="background:#fff8ee"><span style="width:24px;height:24px;border-radius:50%;border:1px solid #c9bfb2;box-sizing:border-box"></span><span style="font-size:17px">5 · Salzen: wann und wie viel</span><span style="font-size:13px;color:#7d7166">7 Min</span></button>
+        <button onClick="{{ goDiplome }}" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #e3d9c9;padding:16px 18px;color:#1a1613;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center" style-hover="background:#fff8ee"><span style="width:24px;height:24px;border-radius:50%;border:1px solid #c9bfb2;box-sizing:border-box"></span><span style="font-size:17px">6 · Ruhen lassen — und worauf</span><span style="font-size:13px;color:#7d7166">5 Min</span></button>
+        <div style="padding:16px 18px;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center;background:#1a1613;color:#f4ede3"><span style="width:24px;height:24px;border-radius:50%;border:1px solid #7d7166;box-sizing:border-box"></span><span style="font-size:17px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.04em">Prüfung Stufe 1 · Der Funke</span><span style="font-size:13px;color:#7d7166">12 Fragen</span></div>
+      </div>
+      <p style="margin:14px 0 0;font-size:14px;color:#7d7166;line-height:1.5">Bestandene Prüfung = Bronze-Zertifikat als PDF und Freischaltung von Stufe 2.</p>
+    </div>
+
+    <!-- Übersicht der Stufen -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166;margin-bottom:4px">Der ganze Pfad</div>
+      <div style="display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #e3d9c9"><svg viewBox="0 0 100 100" width="60" height="60" style="color:#1a1613;flex:none"><defs><path id="pD2" d="M50 50m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0"></path></defs><circle cx="50" cy="50" r="48.5" fill="none" stroke="#7d7166" stroke-width="1.6"></circle><text font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="800" font-size="6.6" letter-spacing="1.1" fill="#7d7166"><textPath href="#pD2">STEAKAKADEMIE · STUFE 2 · DIE FLAMME BEZÄHMEN ·</textPath></text><circle cx="50" cy="50" r="34.5" fill="none" stroke="#7d7166" stroke-width="1" opacity=".3"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#7d7166" stroke-width="3" stroke-dasharray="86.7 216.8" transform="rotate(-90 50 50)"></circle><g transform="translate(50 50) scale(.44) translate(-50 -51)"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#f4ede3"></path></g></svg><div><div style="font-size:13px;color:#7d7166">Stufe 2 · 7 Lektionen</div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Die Flamme bezähmen</div><div style="font-size:14px;color:#4a413a;margin-top:4px">Glutmanagement, Deckel, Lüftung, Minion-Methode</div></div></div>
+      <div style="display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #e3d9c9"><svg viewBox="0 0 100 100" width="60" height="60" style="color:#1a1613;flex:none"><defs><path id="pD3" d="M50 50m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0"></path></defs><circle cx="50" cy="50" r="48.5" fill="none" stroke="#b07f1f" stroke-width="1.6"></circle><text font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="800" font-size="6.6" letter-spacing="1.1" fill="#b07f1f"><textPath href="#pD3">STEAKAKADEMIE · STUFE 3 · HITZEKONTROLLE ·</textPath></text><circle cx="50" cy="50" r="34.5" fill="none" stroke="#b07f1f" stroke-width="1" opacity=".3"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#b07f1f" stroke-width="3" stroke-dasharray="130.1 216.8" transform="rotate(-90 50 50)"></circle><g transform="translate(50 50) scale(.44) translate(-50 -51)"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#f4ede3"></path></g></svg><div><div style="font-size:13px;color:#7d7166">Stufe 3 · 7 Lektionen</div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Hitzekontrolle</div><div style="font-size:14px;color:#4a413a;margin-top:4px">Reverse Sear, Low & Slow, Stall, Rauchring</div></div></div>
+      <div style="display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #e3d9c9"><svg viewBox="0 0 100 100" width="60" height="60" style="color:#1a1613;flex:none"><defs><path id="pD4" d="M50 50m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0"></path></defs><circle cx="50" cy="50" r="48.5" fill="none" stroke="#5f6b70" stroke-width="1.6"></circle><text font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="800" font-size="6.6" letter-spacing="1.1" fill="#5f6b70"><textPath href="#pD4">STEAKAKADEMIE · STUFE 4 · PRÄZISION & GESCHMACK ·</textPath></text><circle cx="50" cy="50" r="34.5" fill="none" stroke="#5f6b70" stroke-width="1" opacity=".3"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#5f6b70" stroke-width="3" stroke-dasharray="173.4 216.8" transform="rotate(-90 50 50)"></circle><g transform="translate(50 50) scale(.44) translate(-50 -51)"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#f4ede3"></path></g></svg><div><div style="font-size:13px;color:#7d7166">Stufe 4 · 7 Lektionen</div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Präzision & Geschmack</div><div style="font-size:14px;color:#4a413a;margin-top:4px">Rubs, Brines, Holzarten, Foodpairing</div></div></div>
+      <div style="display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #e3d9c9"><svg viewBox="0 0 100 100" width="60" height="60" style="color:#1a1613;flex:none"><defs><path id="pD5" d="M50 50m-42 0a42 42 0 1 1 84 0a42 42 0 1 1-84 0"></path><filter id="pD5g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4"></feGaussianBlur></filter></defs><circle cx="50" cy="50" r="48.5" fill="none" stroke="#e2531f" stroke-width="1.6"></circle><text font-family="'Big Shoulders Display',Impact,sans-serif" font-weight="800" font-size="6.6" letter-spacing="1.1" fill="#e2531f"><textPath href="#pD5">STEAKAKADEMIE · STUFE 5 · DER VOLLENDETE PITMASTER ·</textPath></text><circle cx="50" cy="50" r="34.5" fill="none" stroke="#e2531f" stroke-width="1" opacity=".3"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#e2531f" stroke-width="4" opacity=".7" filter="url(#pD5g)"></circle><circle cx="50" cy="50" r="34.5" fill="none" stroke="#e2531f" stroke-width="3" stroke-dasharray="216.8 216.8" transform="rotate(-90 50 50)"></circle><g transform="translate(50 50) scale(.44) translate(-50 -51)"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#f4ede3"></path></g></svg><div><div style="font-size:13px;color:#7d7166">Stufe 5 · 7 Lektionen + Meisterprüfung</div><div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase">Der vollendete Pitmaster</div><div style="font-size:14px;color:#4a413a;margin-top:4px">Brisket, ganzes Tier, Reifung, eigene Doktrin</div></div></div>
+      <div style="margin-top:12px;background:#15120f;color:#f4ede3;border-radius:8px;padding:22px">
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:24px;line-height:1;text-transform:uppercase;margin-bottom:8px">Fortschritt behalten</div>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.5;color:#b3a798">Kostenloser Zugang. Kein Abo, keine Kreditkarte — nur damit deine Lektionen nicht verloren gehen.</p>
+        <button style="background:#e2531f;border:0;color:#15120f;padding:12px 20px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#ff8a3d">Werde SteakAdemiker</button>
+      </div>
+    </div>
+  </div>
+</main>
+</sc-if>
+
+<!-- ============ ÜBER UNS ============ -->
+<sc-if value="{{ isUeber }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Über uns" style="flex:1;background:#f4ede3;color:#1a1613">
+  <section style="background:#15120f;color:#f4ede3;padding:clamp(56px,8vw,120px) 20px;position:relative;overflow:hidden">
+    <div style="max-width:860px;margin:0 auto;position:relative">
+      <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c;margin-bottom:14px">Über uns · Philosophie</div>
+      <h1 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:clamp(44px,6.5vw,88px);line-height:.92;text-transform:uppercase;text-wrap:balance">Bevor ein Steak auf den Rost kommt, hat es zwei Jahre gelebt.</h1>
+    </div>
+  </section>
+  <div style="max-width:760px;margin:0 auto;padding:56px 20px 80px;font-size:19px;line-height:1.7;display:flex;flex-direction:column;gap:26px">
+    <p style="margin:0;font-size:22px;line-height:1.55;color:#4a413a">Wir sind keine Grillseite. Wir sind Leute, die irgendwann aufgehört haben, sich mit „ganz okay" zufriedenzugeben — und angefangen haben, Fragen zu stellen. Beim Metzger. Beim Züchter. Am eigenen Smoker um drei Uhr nachts.</p>
+    <figure style="margin:0"><div style="height:320px;border-radius:8px;overflow:hidden;background:#201b17"><img src="assets/weide-gras-abend.jpg" alt="Rinder auf der Weide im Abendlicht, Gras im Vordergrund" style="width:100%;height:100%;object-fit:cover;object-position:50% 60%;display:block"></div><figcaption style="margin-top:10px;font-size:14px;color:#7d7166;font-style:italic">Spätes Licht, hohes Gras — Zeit ist die erste Zutat.</figcaption></figure>
+    <h2 style="margin:16px 0 -10px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:36px;line-height:1;text-transform:uppercase">Die Weide</h2>
+    <p style="margin:0">Ein gutes Steak beginnt nicht in der Pfanne. Es beginnt damit, ob ein Tier Zeit hatte. Zeit zu wachsen, Zeit, Fett anzusetzen, das später als Marmorierung in der Kruste schmilzt. Wir besuchen die Betriebe, deren Fleisch wir empfehlen, und wir schreiben auf, was wir sehen: Wie lange die Tiere draußen sind. Was sie fressen. Wie der Transport läuft. Das ist keine Romantik — das ist der Unterschied zwischen 52 °C, die zart sind, und 52 °C, die zäh sind.</p>
+    <h2 style="margin:16px 0 -10px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:36px;line-height:1;text-transform:uppercase">Die Reifung</h2>
+    <p style="margin:0">Dann die Kammer. Vier Wochen bei einem Grad und hoher Luftfeuchte, Salzblöcke an der Wand, ein Ventilator, der nie stillsteht. Dry Aging ist Kontrolle über Verlust: Das Fleisch gibt Wasser ab, Enzyme zerlegen Bindegewebe, der Geschmack konzentriert sich. Wer einmal in einer Reifekammer gestanden hat, versteht, warum ein gutes Ribeye kostet, was es kostet — und warum man es nicht durchgaren sollte.</p>
+    <div style="position:relative;height:440px;border-radius:8px;overflow:hidden;background:#201b17"><img src="assets/schwenkgrill-glut.jpg" alt="Schwenkgrill über offener Glut" style="width:100%;height:100%;object-fit:cover;object-position:50% 38%;filter:brightness(1.5) contrast(1.08);display:block"><div style="position:absolute;left:0;right:0;bottom:0;padding:20px;background:linear-gradient(180deg,rgba(21,18,15,0),rgba(21,18,15,.85));color:#c9bfb2;font-size:13px;font-family:'Big Shoulders Display',Impact,sans-serif;letter-spacing:.14em;text-transform:uppercase">Vorläufig · Reifekammer-Motiv folgt</div></div>
+    <h2 style="margin:16px 0 -10px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:36px;line-height:1;text-transform:uppercase">Das Handwerk</h2>
+    <p style="margin:0">Und dann erst das Feuer. Dreißig Jahre Lehrerfahrung stecken in der Methodik der Akademie — nicht am Grill, sondern im Erklären. Wir haben gelernt, dass die meisten Fehler nicht aus Faulheit passieren, sondern aus falschen Regeln, die jemand irgendwann weitergegeben hat. Deshalb die Streitfälle. Deshalb die Temperaturen statt Faustregeln. Deshalb ein Diplom, das man sich verdient.</p>
+    <blockquote style="margin:24px 0 0;padding:32px;background:#15120f;color:#f4ede3;border-radius:8px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1;text-transform:uppercase">Wir verkaufen kein Fleisch. Wir verkaufen nicht mal Kurse. Wir wollen, dass du am Sonntag ein Steak auf den Tisch stellst, für das du dich nicht entschuldigen musst.<div style="margin-top:16px;font-family:'Literata',Georgia,serif;font-weight:400;font-size:16px;text-transform:none;color:#b3a798;font-style:italic">Marco, der Pitmaster</div></blockquote>
+    <div style="margin-top:24px;border-top:2px solid #1a1613;padding-top:20px">
+      <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#7d7166;margin-bottom:14px">Redaktion</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;font-size:15px">
+        <div><div style="width:64px;height:64px;border-radius:50%;background:#201b17;margin-bottom:10px"></div><div style="font-weight:600">Uwe Yendell</div><div style="color:#7d7166">Wissen, Cuts, Streitfälle</div></div>
+        <div><div style="width:64px;height:64px;border-radius:50%;background:#201b17;margin-bottom:10px"></div><div style="font-weight:600">Marco</div><div style="color:#7d7166">Pitmaster, Tests, Texas</div></div>
+        <div><div style="width:64px;height:64px;border-radius:50%;background:#201b17;margin-bottom:10px"></div><div style="font-weight:600">Elena</div><div style="color:#7d7166">USA-Expedition, Carolinas</div></div>
+        <div><div style="width:64px;height:64px;border-radius:50%;background:#201b17;margin-bottom:10px"></div><div style="font-weight:600">Jonas</div><div style="color:#7d7166">USA-Expedition, Memphis</div></div>
+      </div>
+    </div>
+  </div>
+</main>
+</sc-if>
+
+<!-- FOOTER (dunkel) · Spickzettel genau einmal -->
+<footer style="background:#15120f;color:#f4ede3;border-top:1px solid #332b25;position:relative;overflow:hidden">
+  <div style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,80px) 20px 32px;position:relative">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:center;padding-bottom:48px;border-bottom:1px solid #332b25">
+      <div>
+        <div style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:#ffb35c;margin-bottom:12px">Kostenlos · Druckfertig</div>
+        <h2 style="margin:0;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:clamp(30px,3.6vw,48px);line-height:.95;text-transform:uppercase">Der Kerntemperatur-Spickzettel für die Grillstation.</h2>
+        <p style="margin:14px 0 0;font-size:16px;line-height:1.5;color:#b3a798">Rind, Schwein, Lamm, Geflügel, Fisch — die Werte der Pitmaster-Doktrin. Dazu freitags ein Stück BBQ-Wissen. Jederzeit abbestellbar.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input type="email" placeholder="E-Mail-Adresse" style="flex:1;min-width:220px;background:#201b17;border:1px solid #332b25;color:#f4ede3;padding:14px 16px;border-radius:999px;font:inherit;font-size:16px;outline:none">
+        <button style="background:#e2531f;border:0;color:#15120f;padding:14px 24px;border-radius:999px;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:17px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#ff8a3d">Spickzettel sichern</button>
+        <p style="margin:6px 0 0;width:100%;font-size:12px;color:#7d7166;line-height:1.5">Double-Opt-in. Kein Verkauf deiner Daten. Details in der Datenschutzerklärung.</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding-top:40px;color:#f4ede3">
+      <svg viewBox="0 0 100 100" width="44" height="44"><path d="M18 34C24 18 46 12 64 16C82 20 92 36 88 54C84 72 68 86 48 86C28 86 12 74 12 56C12 48 14 42 18 34Z" fill="currentColor"></path><path d="M26 38C31 26 47 21 62 24C76 27 84 40 80 54C77 67 65 78 49 78C33 78 21 69 21 56C21 49 23 44 26 38Z" fill="#e2531f"></path><path d="M34 42C38 34 49 30 60 32C70 34 76 44 73 54C71 63 62 70 50 70C39 70 30 64 30 56C30 51 32 47 34 42Z" fill="#15120f"></path></svg>
+      <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:30px;letter-spacing:.04em;text-transform:uppercase;line-height:1">Steak<span style="font-weight:600">akademie</span></span>
+      <span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#7d7166;margin-left:14px">Methodisch · Geprüft · Ohne Zufall</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:28px;padding:28px 0 40px;font-size:14px">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#ffb35c;margin-bottom:4px">Wissen</span><a href="#">Kerntemperaturen</a><a href="#">Grilltechniken</a><a href="#">BBQ-Lexikon</a><a href="#">Streitfälle</a></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#ffb35c;margin-bottom:4px">Tests</span><a href="#">Fleischthermometer</a><a href="#">Grills & Smoker</a><a href="#">Messer</a></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#ffb35c;margin-bottom:4px">Cuts</span><a href="#">Ribeye</a><a href="#">Brisket</a><a href="#">Pulled Pork</a><a href="#">Cut-Atlas</a></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#ffb35c;margin-bottom:4px">Akademie</span><a href="#">Grillmeister-Diplome</a><a href="#">BBQ-Grundkurs</a><a href="#">Autoren</a><a href="#">Über uns</a></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:20px;border-top:1px solid #332b25;font-size:13px;color:#7d7166">
+      <span>© 2026 Steakakademie · Affiliate-Links gekennzeichnet, Preis für dich unverändert.</span>
+      <span style="display:flex;gap:16px;flex-wrap:wrap"><a href="#" style="color:#7d7166">Impressum</a><a href="#" style="color:#7d7166">Datenschutz</a><a href="#" style="color:#7d7166">AGB</a><a href="#" style="color:#7d7166">KI-Disclaimer</a></span>
+    </div>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;emberLevel&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Ruhig&quot;,&quot;options&quot;:[&quot;Ruhig&quot;,&quot;Lebendig&quot;],&quot;tsType&quot;:&quot;'Ruhig' | 'Lebendig'&quot;,&quot;section&quot;:&quot;Bewegung&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Bewegung&quot;},&quot;sparks&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Bewegung&quot;},&quot;logo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;2b Rauchring&quot;,&quot;options&quot;:[&quot;3a Kruste&quot;,&quot;3b Anschnitt&quot;,&quot;3c SA°&quot;,&quot;2a Brandeisen&quot;,&quot;2b Rauchring&quot;,&quot;2c Kern&quot;,&quot;1a Deckel&quot;,&quot;1b Stempel&quot;,&quot;1c Brandzeichen&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Marke&quot;},&quot;heroVariant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;5 Rubriken&quot;,&quot;options&quot;:[&quot;3 Einstiege&quot;,&quot;5 Rubriken&quot;],&quot;tsType&quot;:&quot;'3 Einstiege' | '5 Rubriken'&quot;,&quot;section&quot;:&quot;Test-Varianten&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 'start', lessonDone: false, answer: null, servings: 2, wideNav: typeof window === 'undefined' || window.innerWidth >= 1040,
+            katalog: 'cuts', tier: 'Alle', sort: 'Beliebt', ansicht: 'Raster' };
+
+  KAT = {
+    cuts: {
+      label: 'Atlas', titel: 'Cuts & Fleischkunde', badge: 'Preisklasse',
+      lead: 'Vierzig Teilstücke, jedes mit Lage am Tier, Preisklasse und der Garart, für die es gebaut ist. Wer den Cut kennt, braucht kein Rezept.',
+      dim: 'Tierart', dims: ['Rind', 'Schwein', 'Lamm'],
+      rows: [
+        ['Ribeye', 'Rind', 'Hohe Rippe', '€€€', 'Kurzgebraten', 'Fettauge in der Mitte, verzeiht Hitze wie kein zweiter Cut.'],
+        ['Rumpsteak', 'Rind', 'Roastbeef', '€€', 'Kurzgebraten', 'Fettdeckel an der Kante — den einschneiden, nicht abschneiden.'],
+        ['Filet', 'Rind', 'Innerer Rücken', '€€€', 'Kurzgebraten', 'Mager und zart, hat wenig Eigengeschmack. Kein Cut für Anfänger.'],
+        ['T-Bone', 'Rind', 'Rücken hinten', '€€€', 'Kurzgebraten', 'Filet und Roastbeef am Knochen — zwei Garzeiten auf einem Teller.'],
+        ['Porterhouse', 'Rind', 'Rücken hinten', '€€€', 'Kurzgebraten', 'Wie T-Bone, nur mit dem dicken Ende des Filets.'],
+        ['Tomahawk', 'Rind', 'Hohe Rippe', '€€€', 'Rückwärts garen', 'Ribeye mit langer Rippe. Optik kostet, Geschmack ist derselbe.'],
+        ['Flank Steak', 'Rind', 'Bauchlappen', '€€', 'Kurz & scharf', 'Grobe Faser, quer aufschneiden — sonst zäh, egal wie gut gegart.'],
+        ['Skirt Steak', 'Rind', 'Zwerchrippe', '€€', 'Kurz & scharf', 'Der Geschmackssieger. Braucht Marinade und zwei Minuten pro Seite.'],
+        ['Hanger Steak', 'Rind', 'Nierenzapfen', '€€', 'Kurz & scharf', 'Nur eines pro Tier. Mittelsehne raus, dann Metzgerstück.'],
+        ['Flat Iron', 'Rind', 'Schulter', '€€', 'Kurzgebraten', 'Zart wie Filet, kostet ein Drittel. Der am meisten unterschätzte Cut.'],
+        ['Tri Tip', 'Rind', 'Hüfte', '€€', 'Rückwärts garen', 'Faserrichtung wechselt mitten im Stück — vor dem Schneiden ansehen.'],
+        ['Picanha', 'Rind', 'Hüftdeckel', '€€', 'Rückwärts garen', 'Fettdeckel nach oben, Salz und nichts weiter. Brasiliens Standard.'],
+        ['Brisket', 'Rind', 'Brust', '€€', 'Niedrigtemperatur', 'Zwölf Stunden, zwei Muskeln, ein Plateau bei 68 Grad. Geduldsprobe.'],
+        ['Short Ribs', 'Rind', 'Brustrippe', '€€', 'Niedrigtemperatur', 'Massiv marmoriert. Unter 90 Grad Kern bleibt das Bindegewebe hart.'],
+        ['Beef Ribs', 'Rind', 'Hohe Rippe', '€€', 'Niedrigtemperatur', 'Die Dinosaurier-Rippe. Fleisch oben drauf statt dazwischen.'],
+        ['Denver Cut', 'Rind', 'Nacken', '€€', 'Kurzgebraten', 'Aus dem Nacken geschnitten, überraschend marmoriert und günstig.'],
+        ['Bavette', 'Rind', 'Bauchlappen', '€€', 'Kurz & scharf', 'Franzosen-Cut, lose Faser, saugt Marinade wie ein Schwamm.'],
+        ['Onglet', 'Rind', 'Nierenzapfen', '€€', 'Kurz & scharf', 'Hanger auf Französisch. Innereien-Note, die man mag oder nicht.'],
+        ['Rinderbacke', 'Rind', 'Kopf', '€', 'Schmoren', 'Reines Bindegewebe. Vier Stunden Schmoren macht daraus Samt.'],
+        ['Ochsenschwanz', 'Rind', 'Schwanz', '€€', 'Schmoren', 'Gelatine pur. Die Basis für jede Sauce, die kleben soll.'],
+        ['Beinscheibe', 'Rind', 'Hinterbein', '€', 'Schmoren', 'Mit Knochenmark in der Mitte — das gehört mit in den Topf.'],
+        ['Hüftsteak', 'Rind', 'Hüfte', '€€', 'Kurzgebraten', 'Der ehrliche Alltagscut. Wenig Fett, klare Faser, gutes Preis-Verhältnis.'],
+        ['Chuck Roll', 'Rind', 'Nacken', '€', 'Niedrigtemperatur', 'Pulled Beef kommt hier her, nicht aus der Schulter.'],
+        ['Roastbeef', 'Rind', 'Rücken', '€€€', 'Rückwärts garen', 'Am Stück garen, dann tranchieren. Nie in Scheiben vorschneiden.'],
+        ['Schweinenacken', 'Schwein', 'Nacken', '€', 'Niedrigtemperatur', 'Fett durchzogen, praktisch nicht zu ruinieren. Pulled-Pork-Klassiker.'],
+        ['Kotelett', 'Schwein', 'Rücken', '€', 'Kurzgebraten', 'Am Knochen kaufen. Ohne wird es trocken, bevor es gar ist.'],
+        ['Schweinefilet', 'Schwein', 'Innerer Rücken', '€€', 'Kurzgebraten', 'In acht Minuten fertig, in zehn ruiniert. Kerntemperatur 58 Grad.'],
+        ['Schäufele', 'Schwein', 'Schulter', '€', 'Schmoren', 'Mit Schwarte und Schulterblatt. Fränkische Institution.'],
+        ['Schweinebauch', 'Schwein', 'Bauch', '€', 'Niedrigtemperatur', 'Erst weich garen, dann Schwarte krachen lassen. Zwei Schritte, nie einer.'],
+        ['Spare Ribs', 'Schwein', 'Bauchrippe', '€', 'Niedrigtemperatur', 'Mehr Fleisch, mehr Fett, mehr Zeit als Baby Back.'],
+        ['Baby Back Ribs', 'Schwein', 'Rückenrippe', '€€', 'Niedrigtemperatur', 'Kürzer, magerer, schneller fertig. Silberhaut muss runter.'],
+        ['Presa', 'Schwein', 'Schulterspitze', '€€', 'Kurzgebraten', 'Iberico-Stück, marmoriert wie Rind. Medium servieren, nicht durch.'],
+        ['Secreto', 'Schwein', 'Unter der Schulter', '€€', 'Kurz & scharf', 'Das versteckte Stück. Flach, fettdurchzogen, zwei Minuten pro Seite.'],
+        ['Pluma', 'Schwein', 'Rückenende', '€€', 'Kurzgebraten', 'Federförmig, zart, klein. Vom Grill direkt aufs Brett.'],
+        ['Haxe', 'Schwein', 'Hinterbein', '€', 'Niedrigtemperatur', 'Erst garen, dann grillen. Die Schwarte entscheidet über alles.'],
+        ['Lammkarree', 'Lamm', 'Rücken', '€€€', 'Kurzgebraten', 'Fettdeckel scoren, Knochen parieren. 56 Grad, keinesfalls mehr.'],
+        ['Lammkeule', 'Lamm', 'Hinterbein', '€€', 'Rückwärts garen', 'Am Knochen aromatischer, ohne leichter zu tranchieren.'],
+        ['Lammschulter', 'Lamm', 'Schulter', '€', 'Schmoren', 'Sechs Stunden bei 140 Grad. Dann zerfällt sie unter der Gabel.'],
+        ['Lammlachs', 'Lamm', 'Rücken ausgelöst', '€€€', 'Kurz & scharf', 'Der Filetstrang vom Rücken. Vier Minuten, dann ruhen.'],
+        ['Lammhaxe', 'Lamm', 'Vorderbein', '€€', 'Schmoren', 'Klein, sehnig, dankbar. Rotwein und Zeit.'],
+      ],
+    },
+    streitfaelle: {
+      label: 'Streitfälle', titel: 'Was jeder sagt. Und was stimmt.', badge: 'Urteil',
+      lead: 'Regeln, die weitergegeben werden, weil sie plausibel klingen. Wir prüfen sie nach — mit Messwerten, nicht mit Meinung.',
+      dim: 'Urteil', dims: ['Falsch', 'Halb richtig', 'Stimmt'],
+      rows: [
+        ['Anbraten schließt die Poren', 'Falsch', 'Nr. 1', 'Falsch', 'Physik', 'Fleisch hat keine Poren. Die Kruste ist Geschmack, keine Abdichtung.'],
+        ['Salzen entzieht Wasser', 'Halb richtig', 'Nr. 2', 'Halb richtig', 'Chemie', 'Kurzfristig ja, nach 40 Minuten kehrt sich der Effekt um.'],
+        ['Der rote Saft ist Blut', 'Falsch', 'Nr. 5', 'Falsch', 'Biologie', 'Es ist Myoglobin. Blut ist beim Schlachten raus.'],
+        ['Nach Zeit grillen funktioniert', 'Falsch', 'Nr. 7', 'Falsch', 'Methodik', 'Dicke, Starttemperatur und Grill schwanken zu stark.'],
+        ['Ruhen lassen ist Pflicht', 'Stimmt', 'Nr. 9', 'Stimmt', 'Messung', 'Fünf Minuten kosten zwei Grad und retten den halben Saft.'],
+        ['Marinade zieht ins Fleisch ein', 'Halb richtig', 'Nr. 12', 'Halb richtig', 'Chemie', 'Zwei Millimeter tief. Alles darüber ist Wunschdenken.'],
+        ['Dry Aging macht zart', 'Halb richtig', 'Nr. 14', 'Halb richtig', 'Reifung', 'Es macht aromatischer. Zart wird es durch Enzyme, nicht durch Trocknung.'],
+        ['Gasgrill schmeckt nicht nach Grill', 'Halb richtig', 'Nr. 18', 'Halb richtig', 'Technik', 'Ohne Tropffett kein Raucharoma — mit Umlenkblech kommt es zurück.'],
+      ],
+    },
+    rezepte: {
+      label: 'Rezepte', titel: 'Rezepte, die eine Methode lehren', badge: 'Dauer',
+      lead: 'Kein Rezept ohne Grund. Jedes steht für eine Technik, die danach auf zwanzig andere Stücke passt.',
+      dim: 'Tierart', dims: ['Rind', 'Schwein', 'Lamm'],
+      rows: [
+        ['Ribeye, Reverse Sear', 'Rind', 'Mittel', '45 Min', 'Rückwärts garen', 'Erst indirekt auf 50 Grad, dann 90 Sekunden über die Glut.'],
+        ['Brisket, 12 Stunden', 'Rind', 'Schwer', '12 Std', 'Niedrigtemperatur', 'Das Plateau bei 68 Grad aussitzen. Wer aufdreht, verliert.'],
+        ['Picanha am Spieß', 'Rind', 'Leicht', '35 Min', 'Rückwärts garen', 'Fettdeckel nach außen, Salz grob, Scheiben von außen abschneiden.'],
+        ['Flank Steak, Chimichurri', 'Rind', 'Leicht', '20 Min', 'Kurz & scharf', 'Vier Minuten total, dann quer zur Faser in dünne Streifen.'],
+        ['Pulled Pork vom Nacken', 'Schwein', 'Mittel', '10 Std', 'Niedrigtemperatur', 'Bis 94 Grad Kern. Vorher zieht nichts auseinander.'],
+        ['Krustenbraten, zwei Phasen', 'Schwein', 'Mittel', '3 Std', 'Niedrigtemperatur', 'Erst feucht bei 150, dann trocken bei 230 für die Schwarte.'],
+        ['Secreto, zwei Minuten', 'Schwein', 'Leicht', '10 Min', 'Kurz & scharf', 'Volle Hitze, kein Öl, nur Salz. Medium, nicht durch.'],
+        ['Lammkarree, 56 Grad', 'Lamm', 'Mittel', '30 Min', 'Kurzgebraten', 'Fettdeckel anrösten, indirekt hochziehen, im Ganzen ruhen.'],
+      ],
+    },
+    techniken: {
+      label: 'Techniken', titel: 'Zehn Techniken, alles andere sind Varianten', badge: 'Zone',
+      lead: 'Wer die Hitzeführung versteht, braucht keine Anleitung mehr — nur ein Thermometer.',
+      dim: 'Hitze', dims: ['Direkt', 'Indirekt', 'Kombiniert'],
+      rows: [
+        ['Direktes Grillen', 'Direkt', '250–350 °C', 'Direkt', 'Bis 3 cm', 'Über der Glut, Deckel offen. Alles, was in acht Minuten fertig ist.'],
+        ['Indirektes Grillen', 'Indirekt', '120–160 °C', 'Indirekt', 'Ab 3 cm', 'Glut an die Seite, Deckel zu. Der Grill wird zum Ofen.'],
+        ['Rückwärts garen', 'Kombiniert', '110 °C + Vollgas', 'Kombiniert', 'Ab 4 cm', 'Langsam auf Kern, dann kurz für die Kruste. Der beste Kompromiss.'],
+        ['Vorwärts garen', 'Kombiniert', 'Vollgas + 110 °C', 'Kombiniert', '2–4 cm', 'Kruste zuerst, dann ziehen lassen. Schneller, weniger präzise.'],
+        ['Niedrigtemperatur', 'Indirekt', '95–120 °C', 'Indirekt', 'Große Stücke', 'Stunden statt Minuten. Bindegewebe wird zu Gelatine.'],
+        ['Oberhitze', 'Direkt', '700–800 °C', 'Direkt', 'Bis 4 cm', 'Strahlungshitze von oben. Kruste in 60 Sekunden, Kern bleibt kühl.'],
+        ['Sizzle Zone', 'Direkt', '400–500 °C', 'Direkt', 'Bis 3 cm', 'Gusseisen im Grill. Flächenkontakt statt Rostabdruck.'],
+        ['Räuchern', 'Indirekt', '90–110 °C', 'Indirekt', 'Große Stücke', 'Rauch bindet in den ersten drei Stunden. Danach nur noch Wärme.'],
+        ['Schmoren', 'Indirekt', '140–160 °C', 'Indirekt', 'Zähe Stücke', 'Mit Flüssigkeit im geschlossenen Topf. Kein Grillverfahren, aber nötig.'],
+        ['Direkte Zone am Kohlekorb', 'Kombiniert', 'Zwei Zonen', 'Kombiniert', 'Alles', 'Halber Rost heiß, halber kalt. Die wichtigste Grundeinstellung.'],
+      ],
+    },
+  };
+  componentDidMount() {
+    this._onResize = () => {
+      if (this._resizeRaf) return;
+      this._resizeRaf = requestAnimationFrame(() => {
+        this._resizeRaf = 0;
+        const wide = window.innerWidth >= 1040;
+        if (wide !== this.state.wideNav) this.setState({ wideNav: wide });
+      });
+    };
+    window.addEventListener('resize', this._onResize);
+  }
+  go(screen) { return () => { this.setState({ screen }); window.scrollTo(0, 0); }; }
+  goKat(katalog) { return () => { this.setState({ screen: 'uebersicht', katalog, tier: 'Alle', sort: 'Beliebt' }); window.scrollTo(0, 0); }; }
+  uebersicht() {
+    const s = this.state, K = this.KAT[s.katalog] || this.KAT.cuts;
+    const alle = ['Alle'].concat(K.dims);
+    const tabs = [['cuts', 'Cuts'], ['streitfaelle', 'Streitfälle'], ['rezepte', 'Rezepte'], ['techniken', 'Techniken']].map(([k, l]) => {
+      const on = s.katalog === k;
+      return { k, l, on, col: on ? '#f4ede3' : '#a89b8c', bd: on ? '#e2531f' : 'transparent', pick: this.goKat(k) };
+    });
+    const chips = alle.map(d => {
+      const on = s.tier === d;
+      return { d, on, bg: on ? '#1a1613' : '#faf6ef', fg: on ? '#f4ede3' : '#4a413a', bd: on ? '#1a1613' : '#e3d9c9',
+               pick: () => this.setState({ tier: d }) };
+    });
+    const sorts = ['Beliebt', 'A–Z'].map(x => {
+      const on = s.sort === x;
+      return { x, on, bg: on ? '#e8ddcb' : 'transparent', fg: on ? '#1a1613' : '#7d7166', pick: () => this.setState({ sort: x }) };
+    });
+    const views = ['Raster', 'Liste'].map(x => {
+      const on = s.ansicht === x;
+      return { x, on, bg: on ? '#e8ddcb' : 'transparent', fg: on ? '#1a1613' : '#7d7166', pick: () => this.setState({ ansicht: x }) };
+    });
+    let rows = K.rows
+      .filter(r => s.tier === 'Alle' || r[1] === s.tier)
+      .map((r, i) => ({ n: r[0], dim: r[1], k1: r[2], badge: r[3], k2: r[4], m: r[5], nr: String(i + 1).padStart(2, '0'),
+                        open: this.go(s.katalog === 'rezepte' ? 'rezept' : s.katalog === 'streitfaelle' ? 'streitfall' : 'lektion') }));
+    if (s.sort === 'A–Z') rows = rows.slice().sort((a, b) => a.n.localeCompare(b.n, 'de'));
+    return { K, tabs, chips, sorts, views, rows, alle };
+  }
+  _engines = {};
+  emberMount = (key, opts) => (canvas) => {
+    const prev = this._engines[key];
+    if (prev && prev.canvas === canvas) return;
+    if (prev) { cancelAnimationFrame(prev.raf); delete this._engines[key]; }
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const st = { raf: 0, parts: (prev && prev.parts) || [], w: 0, h: 0, t: (prev && prev.t) || 0, canvas, vis: true, grad: null, gw: 0, last: 0 };
+    this._engines[key] = st;
+    const MAXW = 900;
+    const resize = () => {
+      const r = canvas.getBoundingClientRect();
+      st.scale = Math.min(1, MAXW / Math.max(1, r.width));
+      st.cssw = Math.max(1, r.width);
+      st.w = canvas.width = Math.max(1, Math.round(r.width * st.scale));
+      st.h = canvas.height = Math.max(1, Math.round(r.height * st.scale));
+      st.grad = null;
+    };
+    resize();
+    if (window.IntersectionObserver) {
+      st.io = new IntersectionObserver((es) => { st.vis = es[es.length - 1].isIntersecting; }, { rootMargin: '120px' });
+      st.io.observe(canvas);
+    }
+    // Vorgerenderter Funken-Schein statt shadowBlur pro Partikel
+    const sprite = document.createElement('canvas');
+    sprite.width = sprite.height = 32;
+    const sctx = sprite.getContext('2d');
+    const sg = sctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    sg.addColorStop(0, 'rgba(255,255,255,1)');
+    sg.addColorStop(0.25, 'rgba(255,190,110,.85)');
+    sg.addColorStop(1, 'rgba(255,138,61,0)');
+    sctx.fillStyle = sg; sctx.fillRect(0, 0, 32, 32);
+    const spawn = (lively) => {
+      const w = st.w, h = st.h;
+      // Glutnest unten Mitte, nach außen dünner
+      const u = Math.random(), sk = (u + Math.random()) / 2;
+      const big = Math.random() < 0.07;
+      st.parts.push({
+        x: w * (0.08 + sk * 0.84), y: h + 4, px: 0, py: 0,
+        vx: (Math.random() - .5) * (lively ? .34 : .16),
+        vy: -(lively ? (0.55 + Math.random() * 0.85) : (0.28 + Math.random() * 0.42)),
+        r: big ? 0.95 + Math.random() * 0.55 : 0.3 + Math.random() * 0.5,
+        ph: Math.random() * 628, sw: 0.4 + Math.random() * 1.2,
+        fk: 0.55 + Math.random() * 0.45,
+        life: 0, max: (lively ? 150 : 260) + Math.random() * (lively ? 190 : 300),
+      });
+    };
+    const draw = (now) => {
+      if (!canvas.isConnected) { if (st.io) st.io.disconnect(); delete this._engines[key]; return; }
+      st.raf = requestAnimationFrame(draw);
+      if (!st.vis) return;
+      if (now - st.last < 32) return;   // ~30 fps statt jedem Tick
+      st.last = now;
+      if (++st.chk % 30 === 0 && Math.abs(canvas.getBoundingClientRect().width - st.cssw) > 2) resize();
+      const w = st.w, h = st.h;
+      st.t += 1;
+      ctx.clearRect(0, 0, w, h);
+      const motion = (this.props.motion ?? true) && !reduce;
+      const lively = (this.props.emberLevel ?? 'Ruhig') === 'Lebendig';
+      const breathe = motion ? 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(st.t / 140)) : 0.8;
+      if (opts.glow) {
+        if (!st.grad || st.gw !== w) {   // Verläufe einmal bauen, nicht pro Bild
+          const g = ctx.createRadialGradient(w * .5, h * 1.06, 0, w * .5, h * 1.06, Math.max(w, h) * .46);
+          g.addColorStop(0, 'rgba(255,138,61,.52)');
+          g.addColorStop(0.35, 'rgba(226,83,31,.24)');
+          g.addColorStop(1, 'rgba(21,18,15,0)');
+          const g2 = ctx.createLinearGradient(0, h, 0, h * .76);
+          g2.addColorStop(0, 'rgba(255,179,92,.32)'); g2.addColorStop(1, 'rgba(255,179,92,0)');
+          st.grad = [g, g2]; st.gw = w;
+        }
+        ctx.globalAlpha = breathe;
+        ctx.fillStyle = st.grad[0]; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = st.grad[1]; ctx.fillRect(0, h * .76, w, h * .24);
+        ctx.globalAlpha = 1;
+      }
+      if (motion && (this.props.sparks ?? true)) {
+        const dens = opts.density ?? 1;
+        const cap = Math.round((lively ? 90 : 34) * dens);
+        const rate = (lively ? 0.7 : 0.22) * dens;
+        if (st.parts.length < cap && Math.random() < rate) spawn(lively);
+        ctx.globalCompositeOperation = 'lighter';
+        for (let i = st.parts.length - 1; i >= 0; i--) {
+          const p = st.parts[i];
+          p.px = p.x; p.py = p.y;
+          p.life++;
+          const fl = p.life / p.max;
+          // Auftrieb sinkt mit der Abkühlung, Luftwiderstand bremst die Seitwärtsdrift
+          p.vy = p.vy * 0.995 - 0.0075 * (1 - fl) * (lively ? 1 : 0.6);
+          const turb = Math.sin((st.t + p.ph) / 46) * 0.30 * p.sw
+                     + Math.sin((st.t + p.ph) / 121) * 0.20
+                     + Math.sin((st.t * 0.37 + p.ph) / 17) * 0.07 * p.sw;
+          p.vx *= 0.985;
+          p.x += p.vx + turb * (lively ? 1 : 0.65);
+          p.y += p.vy;
+          // Temperatur: kurz weißglühend, dann orange, am Ende tiefrot
+          const temp = Math.pow(Math.max(0, 1 - fl), 1.6);
+          const fade = Math.min(1, Math.max(0, 1 - fl) * 2.2) * (0.35 + 0.65 * temp);
+          const flick = 1 - p.fk * 0.42 * (0.5 + 0.5 * Math.sin((st.t * 1.7 + p.ph) / 3.1));
+          const a = Math.min(1, fade * flick) * 0.92;
+          const g = Math.round(90 + 145 * temp), b = Math.round(24 + 150 * Math.pow(temp, 3.4));
+          const col = `rgba(255,${g},${b},${a})`;
+          const gr = p.r * 3.4;
+          ctx.globalAlpha = a * 0.5;
+          ctx.drawImage(sprite, p.x - gr, p.y - gr, gr * 2, gr * 2);
+          ctx.globalAlpha = 1;
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = col; ctx.fill();
+          if (p.life > p.max || p.y < -12) st.parts.splice(i, 1);
+        }
+        ctx.globalCompositeOperation = 'source-over';
+      }
+    };
+    st.chk = 0;
+    st.raf = requestAnimationFrame(draw);
+  };
+  _refs = {};
+  emberEl = (key, opts) => React.createElement('canvas', {
+    key, ref: (this._refs[key] || (this._refs[key] = this.emberMount(key, opts))), 'aria-hidden': true,
+    style: { position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block', pointerEvents: 'none' },
+  });
+  componentWillUnmount() { Object.values(this._engines).forEach(e => { cancelAnimationFrame(e.raf); if (e.io) e.io.disconnect(); }); if (this._resizeRaf) cancelAnimationFrame(this._resizeRaf); if (this._onResize) window.removeEventListener('resize', this._onResize); }
+  renderVals() {
+    const s = this.state, v = this.props.heroVariant ?? '5 Rubriken', L = this.props.logo ?? '2b Rauchring';
+    const ans = s.answer, pick = (k) => () => this.setState({ answer: k });
+    const U = this.uebersicht();
+    const bg = (k) => ans === k ? (k === 'B' ? 'rgba(226,83,31,.35)' : 'rgba(255,255,255,.08)') : '#201b17';
+    const bd = (k) => ans === k ? (k === 'B' ? '#ff8a3d' : '#7d7166') : '#332b25';
+    const n = s.servings;
+    return {
+      isStart: s.screen === 'start', isStreitfall: s.screen === 'streitfall', isLektion: s.screen === 'lektion',
+      isRezept: s.screen === 'rezept', isWerkzeug: s.screen === 'werkzeug', isDiplome: s.screen === 'diplome', isUeber: s.screen === 'ueber',
+      goStart: this.go('start'), goStreitfall: this.go('streitfall'), goLektion: this.go('lektion'), goRezept: this.go('rezept'),
+      goWerkzeug: this.go('werkzeug'), goDiplome: this.go('diplome'), goUeber: this.go('ueber'),
+      heroThree: v !== '5 Rubriken', heroFive: v === '5 Rubriken',
+      wideNav: s.wideNav,
+      logoDeckel: L.startsWith('1a'), logoStempel: L.startsWith('1b'), logoBrand: L.startsWith('1c'), logoEisen: L.startsWith('2a'), logoRing: !/^(1[abc]|2[ac]|3[abc])/.test(L), logoKern: L.startsWith('2c'), logoKruste: L.startsWith('3a'), logoSchnitt: L.startsWith('3b'), logoSA: L.startsWith('3c'),
+      lessonDone: s.lessonDone, lessonOpen: !s.lessonDone,
+      completeLesson: () => this.setState({ lessonDone: true }),
+      answerA: pick('A'), answerB: pick('B'), answerC: pick('C'),
+      answerBgA: bg('A'), answerBgB: bg('B'), answerBgC: bg('C'), answerBorderA: bd('A'), answerBorderB: bd('B'), answerBorderC: bd('C'),
+      answerCorrect: ans === 'B', answerWrong: ans === 'A' || ans === 'C',
+      servings: n, steaks: Math.ceil(n / 2), salt: Math.ceil(n / 2) * 2, butter: Math.ceil(n / 2) * 30,
+      fewer: () => this.setState(st => ({ servings: Math.max(1, st.servings - 1) })),
+      more: () => this.setState(st => ({ servings: Math.min(12, st.servings + 1) })),
+      isUebersicht: s.screen === 'uebersicht',
+      goCuts: this.goKat('cuts'), goStreitfaelle: this.goKat('streitfaelle'), goRezepte: this.goKat('rezepte'), goTechniken: this.goKat('techniken'),
+      ueLabel: U.K.label, ueTitel: U.K.titel, ueLead: U.K.lead, ueBadge: U.K.badge, ueDim: U.K.dim,
+      katTabs: U.tabs, ueChips: U.chips, ueSorts: U.sorts, ueViews: U.views, ueRows: U.rows,
+      ueAnzahl: U.rows.length + ' von ' + U.K.rows.length,
+      vRaster: s.ansicht === 'Raster' && U.rows.length > 0,
+      vListe: s.ansicht === 'Liste' && U.rows.length > 0,
+      ueLeer: U.rows.length === 0,
+      ueReset: () => this.setState({ tier: 'Alle' }),
+      emberCanvas: s.screen === 'start' ? this.emberEl('hero', { glow: true, density: 1 }) : null
+    };
+  }
+}
+</script>
+</body>
+</html>

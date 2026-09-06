@@ -3,12 +3,13 @@
 // GET /api/admin/fal-check  (Auth: admin_auth Cookie === ADMIN_PASSWORD)
 
 import { NextResponse } from 'next/server';
+import { istAdminPasswort } from '@/lib/admin-auth';
 import { cookies } from 'next/headers';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  if (cookies().get('admin_auth')?.value !== process.env.ADMIN_PASSWORD) {
+  if (!istAdminPasswort(cookies().get('admin_auth')?.value)) {
     return NextResponse.json({ error: 'Unauthorized — erst /admin/login' }, { status: 401 });
   }
   const k = process.env.FAL_KEY ?? '';

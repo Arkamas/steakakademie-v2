@@ -38,9 +38,20 @@ dabei leer. Er beweist Übersetzung und Durchlauf, nicht die Datenlage; ob das r
 ist offen ·
 `_content_snap.tgz` / `_fix_sync.tgz` als Müll im Repo-Root (Regel 14).
 
-**Nächster Schritt:** Entscheiden, ob der Build-Gate auch die Datenlage prüfen soll — das
-hieße echte Repo-Secrets für Supabase, bisher liegt keines dafür im Repo. Sonst dabei
-bleiben, dass er Übersetzung und Durchlauf sichert.
+**Nächster Schritt:** Branch `relaunch/2026-09` pushen, PR, Vercel-Preview unter
+`/relaunch` ansehen (Doku `docs/website-relaunch-2026-09.md`). Entwürfe nachliefern:
+Mobile-Nav, Login/Registrierung, Cut-Detailseite — ohne die kein Umschalten.
+Build-Gate-Datenlage: bleibt bei Übersetzung + Durchlauf, keine Supabase-Secrets im Repo (Entscheidung 05.09.).
+
+*Erledigt 05.09.2026 (Relaunch):* Alt-Site archiviert (Tag `archiv/website-v1-2026-09`,
+Branch `archiv/website-v1` — beide auf origin, Bundle + Abbild in `C:\Dev\_archiv\`,
+Build-Probe grün) · Relaunch parallel unter `/relaunch`: **alle acht Handoff-Ansichten**
+(Startseite, Übersicht ×4, Streitfall, Rezept mit Portionsrechner, Lektion, Werkzeug,
+Diplome, Über uns), Kontraste auf AA, Kerntemperaturen gegen Referenz, 10 E2E-Tests ·
+Template-Kopie von `/` und `/home-b` fürs zweite Standbein in
+`Projects\Steakakademie\Archiv-Website-v1\` · **Admin-Härtung** `src/lib/admin-auth.ts`:
+ohne gesetztes `ADMIN_PASSWORD` gab es an sechs Stellen `undefined === undefined` — jeder
+Besucher wäre Admin gewesen (Preview ohne Env-Scope!). Jetzt eine Stelle, ohne Passwort kein Admin.
 
 *Erledigt 05.09.2026 (abends):* Node-Version auf **eine Quelle** zusammengezogen —
 `.nvmrc` (`24`) ist die Quelle, alle 21 setup-node-Stellen in 20 Workflows lesen sie über

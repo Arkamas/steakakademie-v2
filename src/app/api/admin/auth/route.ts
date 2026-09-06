@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { istAdminPasswort } from '@/lib/admin-auth'
 
 export async function POST(req: Request) {
   const { password } = await req.json()
 
-  if (password === process.env.ADMIN_PASSWORD) {
+  if (istAdminPasswort(password)) {
     const cookieStore = cookies()
     cookieStore.set('admin_auth', password, {
       httpOnly: true,

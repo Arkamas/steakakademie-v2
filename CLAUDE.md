@@ -169,6 +169,14 @@
   `postgresql://user@host:port/db` und enthaelt **kein** Passwort (in der History
   nachgeprueft, das Repository ist oeffentlich).
 
+**Admin-Erkennung (05.09.2026)**
+- Der Vergleich mit `ADMIN_PASSWORD` steht NUR in `src/lib/admin-auth.ts`
+  (`istAdminPasswort`). Nie wieder `cookie === process.env.ADMIN_PASSWORD` inline:
+  fehlt die Variable, ist `undefined === undefined` wahr und jeder Besucher Admin —
+  /admin, /api/admin/*, /api/pm-agent/*, Volltexte der Bezahl-Lektionen. Sechs solche
+  Stellen sind am 05.09. auf die Funktion gezogen worden. Ob `ADMIN_PASSWORD` auch im
+  Vercel-**Preview**-Scope gesetzt ist, ist aus dem Repo nicht einsehbar — nachsehen.
+
 **Deployment-Status ohne Raten**
 - Vercel `projectId: prj_h30tTBcRtSAiIjluBXn8lu5xRUMg`,
   `teamId: team_tEPqF2rHcoOrrPEGRD7Q4hl8` — damit liefert die Vercel-MCP
@@ -179,6 +187,13 @@
   Texas-Monthly-Layout). Die Middleware teilt nur zu, wenn **`AB_HOME_ENABLED === '1'`**.
   Steht der Schalter anders, bekommt **jeder** Besucher A — auch Uwe. Wer eine
   Aussage ueber „die neue Startseite" trifft, prueft vorher diesen Schalter.
+- **Relaunch 2026-09 laeuft PARALLEL unter `/relaunch` (seit 05.09.2026, noindex).**
+  Neues Design aus `handoff/website-relaunch/` (README dort ist verbindlich). Die
+  Alt-Site ist archiviert, nie geloescht: Tag `archiv/website-v1-2026-09`, Branch
+  `archiv/website-v1`, Abbild `C:\Dev\_archiv\`. Umschalten erst, wenn die Kriterien
+  in `docs/website-relaunch-2026-09.md` gruen sind — Mobile-Nav, Login und
+  Cut-Detailseite sind laut Handoff bewusst NICHT entworfen und werden nicht erfunden.
+  Launch 01.10.2026 bleibt mit dem alten Stand.
 
 **Playwright: Consent-Banner zuerst (Uwe, 02.09.2026)**
 - Das DSGVO-Banner liegt `fixed` unten und faengt Klicks/Hover im unteren Viewport

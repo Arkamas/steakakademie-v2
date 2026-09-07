@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
 import MeineEinreichungen from './MeineEinreichungen';
 import KontoLoeschen from './KontoLoeschen';
+import MeineMedaillen from './MeineMedaillen';
 
 type State = 'loading' | 'anon' | 'ready' | 'saving';
 
@@ -183,6 +184,9 @@ export default function ProfilClient() {
               </div>
             </div>
           )}
+
+          {/* Die Seite versprach „eine eigene Profil-Seite mit deinen Medaillen" und zeigte keine (Audit). */}
+          {state === 'ready' && <MeineMedaillen />}
 
           {state === 'ready' && <MeineEinreichungen />}
 

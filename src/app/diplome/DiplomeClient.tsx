@@ -7,24 +7,37 @@ import { ChevronRight, Lock } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import BadgeProgression from '@/components/diplome/BadgeProgression';
-import Medal, { tierForLevel } from '@/components/diplome/Medal';
+import Medal from '@/components/diplome/Medal';
 import PlattformPuls from '@/components/home/PlattformPuls';
 import type { PulsData } from '@/lib/plattform-puls';
+import { LEVELS as LEVEL_QUELLE, ERSTE_BEZAHLSTUFE, tierForLevel } from '@/lib/diplome/stufen';
 
-const LEVELS = [
-  { id: 1,  name: 'Glut-Lehrling',      emoji: '🔥', description: 'Grundlagen des Grillens: Temperaturzonen, direktes vs. indirektes Grillen, Sicherheit.', locked: false },
-  { id: 2,  name: 'Marinier-Meister',   emoji: '🧂', description: 'Die Kunst der Wuerzung: Dry Rubs, Marinaden, Salzen und Timing.', locked: false },
-  { id: 3,  name: 'Onglet-Kenner',      emoji: '🥩', description: 'Cuts & Anatomie: Welche Fleischteile sind was - und warum?', locked: true },
-  { id: 4,  name: 'Dry-Ager',           emoji: '🧊', description: 'Reifung & Lagerung: Wet Aging vs. Dry Aging, optimale Bedingungen.', locked: true },
-  { id: 5,  name: 'Flammen-Virtuose',   emoji: '🎯', description: 'Praezisions-Grillen: Kerntemperaturen, Reverse Sear, die perfekte Kruste.', locked: true },
-  { id: 6,  name: 'Cuts-Experte',       emoji: '🗺️', description: 'Weltreise der Cuts: Wagyu, Angus, Iberico - Herkunft & Eigenschaften.', locked: true },
-  { id: 7,  name: 'Smoke-Artist',       emoji: '💨', description: 'Low & Slow: Smoker, Holzarten, Smoke Rings und BBQ-Wissenschaft.', locked: true },
-  { id: 8,  name: 'Thermometer-Profi',  emoji: '🌡️', description: 'Die Physik des Steaks: Maillard-Reaktion, Proteinstruktur, Saftigkeit.', locked: true },
-  { id: 9,  name: 'Wagyu-Sommelier',    emoji: '🏅', description: 'Premium-Klasse: Marmorierung, BMS-Score, Verkostung wie ein Profi.', locked: true },
-  { id: 10, name: 'Master of Steak',    emoji: '👑', description: 'Das Abschluss-Diplom. Du kennst das Steak von der Weide bis zum Teller.', locked: true },
-];
+// Taxonomie aus der einen Quelle (src/lib/diplome/stufen.ts). `locked` ist
+// abgeleitet, nicht mehr von Hand gepflegt: Level 1–2 = Stufe 1 = frei.
+const LEVELS = LEVEL_QUELLE.map((l) => ({ ...l, locked: l.stufe >= ERSTE_BEZAHLSTUFE }));
 
-export default function DiplomeClient({ puls }: { puls?: PulsData }) {
+export type LektionLink = {
+  lektionSlug: string;
+  title: string;
+  order: number;
+  level: number;
+  url: string;
+};
+
+export default function DiplomeClient({
+  puls,
+  stufe1 = [],
+}: {
+  puls?: PulsData;
+  stufe1?: readonly LektionLink[];
+}) {
+  // Level 1 und 2 bilden zusammen Stufe 1 (Bronze) und sind frei zugaenglich.
+  // Fuer die Level-Karten je Level die erste Lektion als Einsprung.
+  const ersteLektionJeLevel = new Map<number, LektionLink>();
+  for (const l of stufe1) {
+    if (!ersteLektionJeLevel.has(l.level)) ersteLektionJeLevel.set(l.level, l);
+  }
+
   return (
     <>
       <Header />
@@ -85,8 +98,8 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
               className="font-serif text-base sm:text-lg leading-relaxed mx-auto"
               style={{ color: 'rgba(200,136,42,0.75)', maxWidth: '560px' }}
             >
-              Belege dein Fachwissen, bestehe exklusive Pruefungen und werde Teil unserer Elite.
-              Eine Ausbildung in 5 praezisen Stufen.
+              Belege dein Fachwissen, bestehe exklusive Prüfungen und werde Teil unserer Elite.
+              Eine Ausbildung in 5 präzisen Stufen.
             </p>
 
             {/* Decorative rule */}
@@ -111,12 +124,68 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
           </div>
         </section>
 
+        {/* Freier Einstieg — Stufe 1 ist fertig, kostenlos und ohne Konto lesbar */}
+        {stufe1.length > 0 && (
+          <section className="border-b border-border-subtle bg-surface-elevated">
+            <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-14">
+              <div className="max-w-3xl mx-auto">
+                <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-3">
+                  Kostenlos &mdash; ohne Konto, ohne Zahlung
+                </span>
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary mb-3">
+                  Stufe 1 kannst du sofort lesen
+                </h2>
+                <p className="font-body text-text-secondary leading-relaxed mb-8">
+                  {stufe1.length} Lektionen, vollständig ausgearbeitet und frei zugänglich.
+                  Sie sind der Einstieg in die Bronze-Stufe &mdash; und sie stehen schon jetzt bereit.
+                </p>
+
+                <ol className="flex flex-col gap-2 mb-8">
+                  {stufe1.map((l) => (
+                    <li key={l.lektionSlug}>
+                      <Link
+                        href={l.url}
+                        className="flex items-center gap-3 border border-border-subtle bg-surface-card px-4 py-3 hover:border-brand-gold/50 transition-colors"
+                      >
+                        <span className="w-5 shrink-0 text-center text-xs font-sans font-bold text-brand-gold">
+                          {l.order}
+                        </span>
+                        <span className="flex-1 text-sm font-sans font-medium text-text-primary">
+                          {l.title}
+                        </span>
+                        <ChevronRight size={14} className="shrink-0 text-brand-gold" />
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+
+                <Link
+                  href={stufe1[0].url}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-fire/90 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
+                >
+                  Mit Lektion 1 anfangen &rarr;
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
+
         <BadgeProgression />
 
         {puls && <PlattformPuls data={puls} />}
 
         {/* Level Grid */}
         <section className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Fünf Stufen und zehn Level standen vorher unerklärt nebeneinander (Audit R14). */}
+          <div className="max-w-4xl mx-auto mb-8">
+            <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-2">
+              So hängen Stufen und Level zusammen
+            </span>
+            <p className="font-body text-text-secondary leading-relaxed">
+              Fünf Stufen, jede mit zwei Leveln. Level 1 und 2 bilden Stufe 1 (Bronze) und sind kostenlos;
+              Level 3 bis 10 gehören zu Stufe 2 bis 5 und sind Teil des Grillmeister-Diploms.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
             {LEVELS.map((level, index) => (
               <motion.div
@@ -141,11 +210,11 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <span className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire">
-                        Level {level.id}
+                        Stufe {level.stufe} · Level {level.id}
                       </span>
                       {!level.locked && (
-                        <span className="text-[10px] bg-text-muted/15 text-text-muted px-2 py-0.5 font-sans font-bold uppercase tracking-wider">
-                          In Vorbereitung
+                        <span className="text-[10px] bg-brand-gold/15 text-brand-gold px-2 py-0.5 font-sans font-bold uppercase tracking-wider">
+                          Kostenlos verfügbar
                         </span>
                       )}
                     </div>
@@ -155,10 +224,14 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
                     <p className="text-sm font-body text-text-secondary leading-relaxed">
                       {level.description}
                     </p>
-                    {!level.locked && (
-                      <span className="mt-3 inline-block text-xs font-sans font-medium text-text-muted">
-                        Kursinhalt in Vorbereitung
-                      </span>
+                    {!level.locked && ersteLektionJeLevel.has(level.id) && (
+                      <Link
+                        href={ersteLektionJeLevel.get(level.id)!.url}
+                        className="mt-3 inline-flex items-center gap-1.5 text-xs font-sans font-bold text-brand-fire hover:text-brand-gold transition-colors"
+                      >
+                        Lektionen lesen
+                        <ChevronRight size={12} />
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -236,7 +309,7 @@ export default function DiplomeClient({ puls }: { puls?: PulsData }) {
               ))}
             </div>
             <p className="text-text-light/30 text-xs font-sans mt-4">
-Diplom-System im Aufbau &mdash; Kursinhalte folgen Schritt fuer Schritt
+              Stufe 1 ist frei zugänglich &mdash; die weiteren Stufen folgen Schritt für Schritt
             </p>
           </div>
         </section>

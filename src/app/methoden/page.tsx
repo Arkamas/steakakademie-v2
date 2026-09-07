@@ -54,13 +54,13 @@ export default function MethodenIndexPage() {
             </nav>
             <div className="max-w-2xl">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Methoden & Techniken
+                Methoden &amp; Techniken
               </span>
               <h1 className="font-serif text-4xl lg:text-5xl font-bold text-text-light leading-tight mb-5">
                 Grilltechniken für Meister
               </h1>
               <p className="font-body text-lg text-text-light/70 leading-relaxed">
-                Ob Reverse Sear, Low & Slow Smoken oder die perfekte Kombination aus indirekter
+                Ob Reverse Sear, Low &amp; Slow Smoken oder die perfekte Kombination aus indirekter
                 Vorgarung und direktem Finish — jede Methode folgt physikalischen Gesetzen.
                 Wer sie versteht, beherrscht den Grill.
               </p>

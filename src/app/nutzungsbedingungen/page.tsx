@@ -33,7 +33,7 @@ export default function NutzungsbedingungenPage() {
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
             <section>
-              <h2 className={h2Class}>§ 1 Geltungsbereich & Anbieter</h2>
+              <h2 className={h2Class}>§ 1 Geltungsbereich &amp; Anbieter</h2>
               <p>
                 Diese Nutzungsbedingungen gelten für die Community-Funktionen von steakakademie.de —
                 insbesondere für die Erstellung eines Nutzerkontos sowie das Einreichen und
@@ -103,7 +103,7 @@ export default function NutzungsbedingungenPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 6 Moderation & KI-Prüfung</h2>
+              <h2 className={h2Class}>§ 6 Moderation &amp; KI-Prüfung</h2>
               <p>
                 Eingereichte Inhalte werden vor einer Veröffentlichung geprüft — automatisiert
                 (KI-gestützt) und/oder manuell. Es besteht kein Anspruch auf Veröffentlichung. Wir
@@ -114,14 +114,14 @@ export default function NutzungsbedingungenPage() {
             </section>
 
             <section id="melden" className="scroll-mt-24">
-              <h2 className={h2Class}>§ 7 Melde- & Abhilfeverfahren (DSA)</h2>
+              <h2 className={h2Class}>§ 7 Melde- &amp; Abhilfeverfahren (DSA)</h2>
               <p className="mb-3">
                 Du kannst uns rechtswidrige oder gegen diese Bedingungen verstoßende Inhalte jederzeit
                 melden. Wir prüfen jede Meldung und entfernen oder sperren betroffene Inhalte, soweit
-                erforderlich (Notice-&-Action gemäß Art. 16 VO (EU) 2022/2065 — DSA).
+                erforderlich (Notice-&amp;-Action gemäß Art. 16 VO (EU) 2022/2065 — DSA).
               </p>
               <p>
-                <strong className="text-text-primary">Meldungen & Kontaktstelle (Art. 11/12 DSA):</strong>{' '}
+                <strong className="text-text-primary">Meldungen &amp; Kontaktstelle (Art. 11/12 DSA):</strong>{' '}
                 <a href="mailto:pitmaster@steakakademie.de?subject=Inhaltsmeldung" className={linkClass}>
                   pitmaster@steakakademie.de
                 </a>{' '}
@@ -141,7 +141,7 @@ export default function NutzungsbedingungenPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>§ 9 Sperrung & Kündigung</h2>
+              <h2 className={h2Class}>§ 9 Sperrung &amp; Kündigung</h2>
               <p>
                 Bei Verstößen gegen diese Nutzungsbedingungen können wir Inhalte entfernen und das
                 Nutzerkonto vorübergehend oder dauerhaft sperren. Du kannst dein Konto jederzeit durch

@@ -79,7 +79,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>4. CDN & DNS (Cloudflare)</h2>
+              <h2 className={h2Class}>4. CDN &amp; DNS (Cloudflare)</h2>
               <p className="mb-3">
                 Wir nutzen Cloudflare Inc., 101 Townsend St., San Francisco, CA 94107, USA als
                 DNS-Anbieter und Content Delivery Network (CDN). Dabei werden Anfragen über
@@ -122,7 +122,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>6. Heatmaps & Sitzungs-Analyse (Microsoft Clarity)</h2>
+              <h2 className={h2Class}>6. Heatmaps &amp; Sitzungs-Analyse (Microsoft Clarity)</h2>
               <p className="mb-3">
                 Zur Verbesserung von Benutzerfreundlichkeit und Inhalten setzen wir – <strong className="text-text-primary">ausschließlich
                 mit deiner Einwilligung</strong> – Microsoft Clarity ein, einen Dienst der Microsoft Ireland
@@ -297,7 +297,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>9. Nutzerkonten & Kursdaten (Supabase)</h2>
+              <h2 className={h2Class}>9. Nutzerkonten &amp; Kursdaten (Supabase)</h2>
               <p className="mb-3">
                 Für die Nutzung von kostenpflichtigen Inhalten (Kurse, Steuer-Matrix-Rechner,
                 digitale Produkte) ist ein Nutzerkonto erforderlich. Kontodaten werden bei
@@ -489,7 +489,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>12. Cookies & lokale Speicherung</h2>
+              <h2 className={h2Class}>12. Cookies &amp; lokale Speicherung</h2>
               <p className="mb-3">
                 <strong className="text-text-primary">Technisch notwendige Speichermechanismen</strong>{' '}
                 (keine Einwilligung erforderlich, § 25 Abs. 2 TDDDG):
@@ -517,7 +517,7 @@ export default function DatenschutzPage() {
             </section>
 
             <section>
-              <h2 className={h2Class}>13. Externe Links & Affiliate-Links</h2>
+              <h2 className={h2Class}>13. Externe Links &amp; Affiliate-Links</h2>
               <p className="mb-3">
                 Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte
                 wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets

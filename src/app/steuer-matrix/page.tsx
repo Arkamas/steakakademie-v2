@@ -262,7 +262,7 @@ export default async function SteuerMatrixPage() {
                   Säule I: Gründer-Schmiede
                 </Link>
                 <Link href="/ehrliches-system#saule-iii" className="text-sm font-sans text-text-muted hover:text-brand-fire transition-colors">
-                  Säule III: Agentur-Killer-Sprint
+                  Säule III: Eigenregie
                 </Link>
               </div>
             </div>

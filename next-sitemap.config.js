@@ -78,7 +78,7 @@ module.exports = {
     '/steuer-matrix/*',
     '/steuer-matrix-live',
     '/seo-sprint',
-    '/agentur-killer-sprint',
+    '/eigenregie',
     '/erste-kunden-sprint',
     '/mein-system',
     '/meine-kurse',
@@ -130,7 +130,7 @@ module.exports = {
     })();
 
     // 02.09.2026: Gruender-Routen (gruender-schmiede, ehrliches-system, steuer-matrix,
-    // agentur-killer-sprint, erste-kunden-sprint, seo-sprint) hier entfernt — siehe
+    // eigenregie, erste-kunden-sprint, seo-sprint) hier entfernt — siehe
     // exclude oben. Sie wurden explizit nachgetragen, weil SSR sie aus dem Manifest
     // haelt; ohne diese Zeile fallen sie von allein weg.
     const ssrPaths = [

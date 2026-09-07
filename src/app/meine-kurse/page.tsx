@@ -36,7 +36,10 @@ const COURSE_ROUTES: Record<string, string> = {
   'gruender-schmiede': '/gruender-schmiede',
   'gruendung-sprint': '/gruender-schmiede', // Legacy-Slug (Migration 006)
   'steuer-matrix': '/steuer-matrix',
-  'agentur-killer-sprint': '/agentur-killer-sprint',
+  'eigenregie': '/eigenregie',
+  // Legacy-Slug: Kaeufe vor der Umbenennung (07.09.2026) koennen den alten
+  // Wert noch tragen, falls die Migration nicht gelaufen ist.
+  'agentur-killer-sprint': '/eigenregie',
 };
 
 /** Route zu einem Kurs; Fallback: Konvention Top-Level-Route = Slug. */

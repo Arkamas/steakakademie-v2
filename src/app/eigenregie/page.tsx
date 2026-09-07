@@ -12,15 +12,15 @@ export const metadata: Metadata = {
   // Uwe, 02.09.2026: noindex — Gruender-Bereich ist aus der Steakakademie ausgebaut
   // (Nav/Footer seit 641b346, Sitemap seit heute). CLAUDE.md Abschnitt 10.
   robots: { index: false, follow: false },
-  title: 'Agentur-Killer-Sprint: Full-Ownership in 72h',
+  title: 'Eigenregie: Full-Ownership in 72h',
   description:
     'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel + GitHub in 72 Stunden. Einmal aufgesetzt — für immer unabhängig.',
-  alternates: { canonical: 'https://steakakademie.de/agentur-killer-sprint' },
+  alternates: { canonical: 'https://steakakademie.de/eigenregie' },
   openGraph: {
-    title: 'Agentur-Killer-Sprint — Full-Ownership in 72 Stunden',
+    title: 'Eigenregie — Dein Business „KOMPLETT" in Eigenregie.',
     description:
-      'Raus aus der Agentur-Abhängigkeit. Vollständige Migration zu eigenem GitHub-Repo, Next.js und Vercel. Kein Wartungsvertrag mehr, keine monatlichen Gebühren.',
-    url: 'https://steakakademie.de/agentur-killer-sprint',
+      'Raus aus der Abhängigkeit. Vollständige Migration zu eigenem GitHub-Repo, Next.js und Vercel. Kein Wartungsvertrag mehr, keine monatlichen Gebühren.',
+    url: 'https://steakakademie.de/eigenregie',
     type: 'website',
   },
 };
@@ -77,7 +77,7 @@ const FAQ = [
   },
   {
     q: 'Wie lange dauert die Migration wirklich?',
-    a: 'Bei einem normalen Business-Auftritt (5–15 Seiten) drei fokussierte Arbeitstage. Komplexere Shops oder Portale dauern länger — der Sprint deckt die Infrastruktur und Basisseiten.',
+    a: 'Bei einem normalen Business-Auftritt (5–15 Seiten) drei fokussierte Arbeitstage. Komplexere Shops oder Portale dauern länger — Eigenregie deckt die Infrastruktur und Basisseiten.',
   },
   {
     q: 'Mein Hosting-Vertrag läuft noch — was tue ich?',
@@ -85,15 +85,15 @@ const FAQ = [
   },
   {
     q: 'Was ist mit WordPress-Seiten?',
-    a: 'WordPress-Inhalte lassen sich exportieren und in Next.js überführen. Der Sprint hat einen klaren Fokus auf statische und semi-dynamische Unternehmenswebsites — kein komplexes LMS oder Membership-System.',
+    a: 'WordPress-Inhalte lassen sich exportieren und in Next.js überführen. Eigenregie hat einen klaren Fokus auf statische und semi-dynamische Unternehmenswebsites — kein komplexes LMS oder Membership-System.',
   },
   {
-    q: 'Gibt es Support nach dem Sprint?',
+    q: 'Gibt es Support nach der Umstellung?',
     a: 'Direkter E-Mail-Kontakt über info@steakakademie.de. Du bekommst außerdem Zugang zum vollständigen Übergabe-Protokoll — damit du bei zukünftigen Fragen eigenständig agieren kannst.',
   },
 ];
 
-export default async function AgenturKillerSprintPage() {
+export default async function EigenregiePage() {
   // Preisabruf und eur() entfernt (04.09.2026): Seit die Preisangabe raus ist,
   // hat die Supabase-Abfrage keinen Abnehmer mehr und lief pro Aufruf ins Leere.
   // Gleiches Vorgehen wie bei /erste-kunden-sprint und /seo-sprint (2f27717).
@@ -111,7 +111,7 @@ export default async function AgenturKillerSprintPage() {
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: 'Agentur-Killer-Sprint',
+    name: 'Eigenregie',
     description:
       'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel in 72 Stunden.',
     brand: { '@type': 'Brand', name: 'Steakakademie' },
@@ -137,7 +137,7 @@ export default async function AgenturKillerSprintPage() {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Startseite', item: 'https://steakakademie.de' },
       { '@type': 'ListItem', position: 2, name: 'Das Ehrliche System', item: 'https://steakakademie.de/ehrliches-system' },
-      { '@type': 'ListItem', position: 3, name: 'Agentur-Killer-Sprint', item: 'https://steakakademie.de/agentur-killer-sprint' },
+      { '@type': 'ListItem', position: 3, name: 'Eigenregie', item: 'https://steakakademie.de/eigenregie' },
     ],
   };
 
@@ -172,20 +172,21 @@ export default async function AgenturKillerSprintPage() {
                 Das Ehrliche System
               </Link>
               <ChevronRight size={12} />
-              <span className="text-text-light/65">Agentur-Killer-Sprint</span>
+              <span className="text-text-light/65">Eigenregie</span>
             </nav>
 
             <div className="max-w-3xl">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Säule III — Agentur-Killer-Sprint
+                Säule III — Eigenregie
               </span>
               <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold text-text-light leading-tight mb-6">
-                Deine Website. Dein Code.<br className="hidden lg:block" />
-                Unabhängig in 72 Stunden.
+                Dein Business „KOMPLETT"<br className="hidden lg:block" />
+                in Eigenregie.
               </h1>
               <p className="font-serif text-xl lg:text-2xl text-text-light/80 leading-relaxed mb-4">
-                Kein Wartungsvertrag mehr. Keine monatlichen Gebühren. Keine Agentur,
-                die dir deinen eigenen Code verweigert.
+                Deine Website. Dein Code. Unabhängig in 72 Stunden. Kein Wartungsvertrag
+                mehr, keine monatlichen Gebühren, keine Agentur, die dir deinen eigenen
+                Code verweigert.
               </p>
               <p className="font-body text-base text-text-light/55 leading-relaxed mb-10 max-w-2xl">
                 Full-Ownership-Migration zu GitHub, Next.js und Vercel. Einmal aufgesetzt —
@@ -241,7 +242,7 @@ export default async function AgenturKillerSprintPage() {
                   <p>
                     Das muss nicht so sein. Moderne Infrastruktur — GitHub, Next.js, Vercel —
                     kostet null Euro im Monat und gibt dir die vollständige Kontrolle.
-                    Der Sprint zeigt dir wie.
+                    Eigenregie zeigt dir wie.
                   </p>
                 </div>
               </div>
@@ -257,7 +258,7 @@ export default async function AgenturKillerSprintPage() {
                 Der Unterschied
               </span>
               <h2 className="font-serif text-3xl font-bold text-text-light mb-8">
-                Mit Agentur vs. Nach dem Sprint
+                Mit Agentur vs. in Eigenregie
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -268,7 +269,7 @@ export default async function AgenturKillerSprintPage() {
                         <span className="text-red-400/70">Mit Agentur</span>
                       </th>
                       <th className="text-left py-3 text-xs font-sans font-bold tracking-[0.12em] uppercase text-text-muted w-1/3">
-                        <span className="text-green-400/70">Nach dem Sprint</span>
+                        <span className="text-green-400/70">In Eigenregie</span>
                       </th>
                     </tr>
                   </thead>
@@ -298,7 +299,7 @@ export default async function AgenturKillerSprintPage() {
                 Sechs Module. Ein Ergebnis: Unabhängigkeit.
               </h2>
               <p className="font-body text-text-secondary max-w-xl">
-                Jedes Modul schließt mit einem greifbaren Ergebnis. Am Ende des Sprints
+                Jedes Modul schließt mit einem greifbaren Ergebnis. Am Ende der drei Tage
                 bist du Administrator deiner eigenen digitalen Infrastruktur.
               </p>
             </div>
@@ -379,7 +380,7 @@ export default async function AgenturKillerSprintPage() {
                     </p>
                     <p>
                       Ich habe eine Eventküche verloren, eine Domain verloren, Systeme verloren —
-                      weil sie nicht in meiner Hand lagen. Der Agentur-Killer-Sprint ist die
+                      weil sie nicht in meiner Hand lagen. Eigenregie ist die
                       Konsequenz aus diesen Erfahrungen: ein System, das dir gehört.
                     </p>
                     <p>
@@ -407,7 +408,7 @@ export default async function AgenturKillerSprintPage() {
                     Einmaliger Zugang
                   </span>
                   <h2 className="font-serif text-3xl font-bold text-text-primary">
-                    Agentur-Killer-Sprint
+                    Eigenregie
                   </h2>
                   {/* Preis und "Sofortzugang" entfernt (04.09.2026, Verifier-Befund):
                       Der Checkout fuer 695900 ist aus, die Seite sagt selbst "In
@@ -427,7 +428,7 @@ export default async function AgenturKillerSprintPage() {
                     In Vorbereitung
                   </span>
                   <p className="text-center text-[10px] font-sans text-text-muted mt-2">
-                    Dieser Sprint wird derzeit fertiggestellt — bald buchbar.
+                    Eigenregie wird derzeit fertiggestellt — bald buchbar.
                   </p>
                 </div>
               </div>
@@ -479,7 +480,7 @@ export default async function AgenturKillerSprintPage() {
                 {[
                   { label: 'Säule I — Gründer-Schmiede', href: '/gruender-schmiede', active: false },
                   { label: 'Säule II — Steuer-Matrix', href: '/steuer-matrix', active: false },
-                  { label: 'Säule III — Agentur-Killer-Sprint', href: '/agentur-killer-sprint', active: true },
+                  { label: 'Säule III — Eigenregie', href: '/eigenregie', active: true },
                 ].map(({ label, href, active }) => (
                   <Link
                     key={href}

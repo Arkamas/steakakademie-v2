@@ -121,7 +121,7 @@ const NAV_CATEGORIES = [
   //   sub: [
   //     { label: 'Gründer-Schmiede', href: '/gruender-schmiede' },
   //     { label: 'Steuer-Matrix', href: '/steuer-matrix' },
-  //     { label: 'Agentur-Killer-Sprint', href: '/ehrliches-system#saule-iii' },
+  //     { label: 'Eigenregie', href: '/ehrliches-system#saule-iii' },
   //     { label: 'Mein Zugang', href: '/mein-system' },
   //   ],
   // },

@@ -416,7 +416,7 @@ export default async function ErsteKundenSprintPage() {
                 {[
                   { label: 'Säule I — Gründer-Schmiede', href: '/gruender-schmiede', active: false },
                   { label: 'Säule II — Steuer-Matrix', href: '/steuer-matrix', active: false },
-                  { label: 'Säule III — Agentur-Killer-Sprint', href: '/agentur-killer-sprint', active: false },
+                  { label: 'Säule III — Eigenregie', href: '/eigenregie', active: false },
                   { label: 'Erste-Kunden-Sprint', href: '/erste-kunden-sprint', active: true },
                 ].map(({ label, href, active }) => (
                   <Link

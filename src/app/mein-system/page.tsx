@@ -58,14 +58,14 @@ const SAULEN = [
     checkoutUrl: null as string | null,
   },
   {
-    slug:        'agentur-killer-sprint',
+    slug:        'eigenregie',
     nummer:      'III',
-    titel:       'Agentur-Killer-Sprint',
+    titel:       'Eigenregie',
     untertitel:  'Deine Website raus aus der Agentur-Abhängigkeit.',
     beschreibung:
       'Migration in eigene Infrastruktur: Next.js, Vercel, GitHub. Full-Ownership-Modell. KI-gesteuert. 0 % Plattform-Abzug.',
     Icon:        Zap,
-    href:        '/agentur-killer-sprint',
+    href:        '/eigenregie',
     toolHref:    null as string | null,
     toolLabel:   null as string | null,
     // 695900 steht laut Reaktivierungs-Checkliste auf „In Vorbereitung" (kein Kurs/DB-Mapping

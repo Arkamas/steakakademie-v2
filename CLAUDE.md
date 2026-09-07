@@ -686,6 +686,30 @@ gehört nach https://github.com/Graphify-Labs/graphify/issues. Reproduktion:
 graphify update .   # Warnung "3 file(s) had syntax errors" in der Ausgabe
 ```
 
+### MCP-Server (07.09.2026)
+
+Der Graph hängt als MCP-Server in Claude Code: `.mcp.json` im Projekt startet
+`graphify-mcp graphify-out/graph.json` über stdio. Damit fragt der Assistent den
+Graphen mit Werkzeugen ab, statt `GRAPH_REPORT.md` zu lesen — verfügbar sind
+`query_graph`, `get_node`, `get_neighbors`, `get_community`, `god_nodes`,
+`graph_stats`, `shortest_path`, `list_prs`, `get_pr_impact`, `triage_prs`.
+
+**Voraussetzung ist das `mcp`-Extra** (zieht `mcp` und `starlette`). Es fehlte in
+der Installation vom 07.09., deshalb einmalig:
+
+```powershell
+uv tool install "graphifyy[sql,openai,mcp]@latest" --force
+```
+
+Wieder gilt: alle Extras in **einem** Befehl, sonst fliegen die anderen raus.
+
+Geprüft am 07.09.2026 gegen den echten Graphen (in einem Linux-Container mit
+derselben Paketversion): Server meldet sich als `graphify 1.27.0`, listet die
+zehn Werkzeuge, `graph_stats` liefert 5384 Knoten / 7921 Kanten / 657
+Communities. Der Server liest `graph.json` beim Start — **nach jedem
+`graphify update .` muss Claude Code neu gestartet werden**, sonst antwortet er
+aus dem alten Stand.
+
 ### Git-Wartung
 
 `gc.auto=0`, `gc.autoDetach=false` und `maintenance.auto=false` sind in

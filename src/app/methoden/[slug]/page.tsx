@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import AutorHinweis from '@/components/AutorHinweis';
 import { allMethodes } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
@@ -214,9 +215,10 @@ export default function MethodePage({ params }: Props) {
                     <Link href={`/autoren/${methode.authorSlug}`} className="font-sans font-bold text-sm text-[#1C140D] hover:text-brand-fire transition-colors">
                       {methode.author}
                     </Link>
-                    <p className="text-xs font-sans text-[#6B5A48] mt-1 leading-relaxed">
-                      Steakakademie-Autor. Jeder Artikel basiert auf eigener Praxiserfahrung und methodisch belegten Angaben.
-                    </p>
+                    <AutorHinweis
+                      authorSlug={methode.authorSlug}
+                      className="text-xs font-sans text-[#6B5A48] mt-1 leading-relaxed"
+                    />
                   </div>
                 </div>
               </article>

@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import { getAuthorBySlug } from '@/lib/authors';
 import StreitfallUmfrage from '@/components/streitfaelle/StreitfallUmfrage';
+import AutorHinweis from '@/components/AutorHinweis';
 // 03.09.2026: siehe Kommentar in src/app/artikel/[slug]/page.tsx — dieselbe
 // Luecke. Bewusst nur AffiliateBox, KEIN DiplomCTA: ein Streitfall ist kurz,
 // und die Seite spielt aus dem Frontmatter schon Merksatz-, Entscheidungs-
@@ -301,6 +302,12 @@ export default function StreitfallPage({ params }: Props) {
                 </dl>
               </section>
             )}
+
+            {/* KI-Kennzeichnung (Art. 50 KI-VO) — siehe Kommentar in der
+                Relaunch-Vorlage. */}
+            <div className="mt-10 pt-6 border-t border-border-subtle">
+              <AutorHinweis authorSlug={doc.authorSlug} />
+            </div>
 
             <div className="mt-12">
               <Link

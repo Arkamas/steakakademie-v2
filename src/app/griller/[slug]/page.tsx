@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { STUFEN } from '@/lib/diplome/stufen';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,13 +12,8 @@ export const dynamic = 'force-dynamic';
 
 interface Props { params: { slug: string } }
 
-const STAGES = [
-  { stufe: 1, tier: 'bronze', cert: 'Bronze',  name: 'Der Funke',                color: '#CD7F32' },
-  { stufe: 2, tier: 'silber', cert: 'Silber',  name: 'Die Flamme bezähmen',     color: '#C0C0C0' },
-  { stufe: 3, tier: 'gold',   cert: 'Gold',    name: 'Hitzekontrolle',           color: '#F5C842' },
-  { stufe: 4, tier: 'platin', cert: 'Platin',  name: 'Präzision & Geschmack',    color: '#E5E4E2' },
-  { stufe: 5, tier: 'master', cert: 'Meister', name: 'Der vollendete Pitmaster', color: '#FF6B35' },
-] as const;
+// Taxonomie aus der einen Quelle — vorher stand hier Gold #F5C842 gegen #FFD700 anderswo.
+const STAGES = STUFEN.map((s) => ({ stufe: s.nr, tier: s.tier, cert: s.metall, name: s.title, color: s.color }));
 
 async function loadProfile(slug: string) {
   try {

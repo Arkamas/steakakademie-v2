@@ -6,24 +6,29 @@ import { ChevronRight, ArrowLeft } from 'lucide-react';
 import MedalCeremony, { type CeremonyData } from '@/components/diplome/MedalCeremony';
 import KontextRail from '@/components/diplome/KontextRail';
 import { createClient } from '@/lib/supabase/client';
+import {
+  STUFEN,
+  STUFEN_ORDER,
+  ERSTE_BEZAHLSTUFE,
+  QUIZ_BESTEHENSGRENZE,
+  levelsOfStufe,
+  pruefungsText,
+  type StufeKey,
+} from '@/lib/diplome/stufen';
+import { FRAGEN, FLASHCARDS, type QuizFrage, type Flashcard } from '@/lib/diplome/fragen';
 
-// Fortschritt in Supabase persistieren (nur wenn eingeloggt). Graceful:
-// kein Login oder Tabelle fehlt → still scheitern, localStorage bleibt Fallback.
-async function syncDiplomProgress(modul: string, stufe: number, score: number, badge: string) {
-  try {
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    await supabase.from('course_progress').upsert(
-      { user_id: user.id, modul, stufe, status: 'bestanden', quiz_score: score, badge, updated_at: new Date().toISOString() },
-      { onConflict: 'user_id,modul' },
-    );
-  } catch { /* localStorage bleibt Fallback */ }
-}
+// Das Pruefungsergebnis stellt seit dem Audit vom 06.09.2026 ausschliesslich
+// der Server fest (/api/diplome/pruefung) und schreibt es mit service_role.
+// Vorher bewertete diese Datei selbst und schrieb per supabase-js
+// `status: 'bestanden'` — unabhaengig vom Ergebnis, und die RLS liess jedes
+// Konto beliebige Zeilen eintragen. Lesen des eigenen Fortschritts (Merge
+// beim Laden) bleibt clientseitig erlaubt.
 
 // ═══════════════════════════════════════════════════════════════════════════
 // TYPES
 // ═══════════════════════════════════════════════════════════════════════════
+
+type Lernmethode = { icon: string; label: string; desc: string; vorhanden: boolean };
 
 type Stage = {
   id: number;
@@ -36,12 +41,12 @@ type Stage = {
   levelNames: string[];
   tagline: string;
   kompetenzen: string[];
-  lernmethoden: { icon: string; label: string; desc: string }[];
+  lernmethoden: Lernmethode[];
   pruefung: string;
   badge: string;
 };
 
-type ModuleKey = 'bronze' | 'anatomie' | 'thermometer' | 'holz' | 'kcbs';
+type ModuleKey = StufeKey;
 type ViewKey   = 'roadmap' | ModuleKey;
 type TabKey    = 'lerninhalte' | 'quiz' | 'flashcards';
 type ExpandKey = 'komp' | 'learn' | 'pruef' | null;
@@ -58,14 +63,7 @@ type ModuleMeta = {
   requires?: ModuleKey;
 };
 
-type QuizQuestion = {
-  q: string;
-  options: string[];
-  correct: number;
-  explain?: string;
-};
-
-type Flashcard = { front: string; back: string };
+type QuizQuestion = QuizFrage;
 
 type FeuerzoneItem = {
   id: string;
@@ -121,18 +119,18 @@ const T = {
 
 // ═══════════════════════════════════════════════════════════════════════════
 // DATA — Stages (Roadmap)
+// Identitaet (Nummer, Name, Zertifikat, Farbe, Badge, Level) kommt aus
+// src/lib/diplome/stufen.ts — der einen Quelle. Hier steht nur der Inhalt,
+// den ausschliesslich die Roadmap braucht: Tagline, Kompetenzen, Lernmethoden.
 // ═══════════════════════════════════════════════════════════════════════════
 
-const stages: Stage[] = [
-  {
-    id: 1,
-    cert: 'Bronze-Zertifikat',
-    title: 'Der Funke',
-    emoji: '🔥',
-    color: '#CD7F32',
-    glow: 'rgba(205,127,50,0.4)',
-    levels: [1, 2],
-    levelNames: ['Glut-Lehrling', 'Marinier-Meister'],
+type StageContent = { tagline: string; kompetenzen: string[]; lernmethoden: Lernmethode[] };
+
+// `vorhanden` sagt ehrlich, ob die Methode heute existiert. Vorher standen
+// zwanzig Formate als Versprechen nebeneinander, von denen drei gebaut waren
+// (Quiz, Flashcards, Feuerzonen-Spiel). Audit 06.09.2026, R8.
+const STAGE_CONTENT: Record<StufeKey, StageContent> = {
+  bronze: {
     tagline: 'Feuer machen kann jeder. Feuer beherrschen ist die Kunst.',
     kompetenzen: [
       'Grillarten verstehen: Holzkohle, Gas, Pellet, Keramik',
@@ -147,23 +145,13 @@ const stages: Stage[] = [
       'Timing beim Würzen verstehen',
     ],
     lernmethoden: [
-      { icon: '🎮', label: 'Drag & Drop',     desc: 'Kohle-Zonen auf dem Rost korrekt platzieren' },
-      { icon: '⏱️', label: 'Timer-Challenge', desc: 'Wie lange darf ein Rub einziehen? Raten & testen' },
-      { icon: '🎯', label: 'Matching-Quiz',   desc: 'Gewürze den richtigen Fleischsorten zuordnen' },
-      { icon: '📹', label: 'Marco erklärt',   desc: '2-Min-Video: Kohle richtig anzünden' },
+      { icon: '🎮', label: 'Feuerzonen-Spiel', desc: 'Grillgut den richtigen Zonen auf dem Rost zuordnen', vorhanden: true },
+      { icon: '🃏', label: 'Flashcards',       desc: 'Die Kernbegriffe der Stufe in 60 Sekunden', vorhanden: true },
+      { icon: '⏱️', label: 'Timer-Challenge',  desc: 'Wie lange darf ein Rub einziehen? Raten & testen', vorhanden: false },
+      { icon: '📹', label: 'Marco erklärt',    desc: '2-Min-Video: Kohle richtig anzünden', vorhanden: false },
     ],
-    pruefung: '10 Multiple-Choice-Fragen · Bestehensgrenze: 70% · Wiederholung nach 24h',
-    badge: 'Glut-Lehrling Zertifikat',
   },
-  {
-    id: 2,
-    cert: 'Silber-Zertifikat',
-    title: 'Die Flamme Bezähmen',
-    emoji: '🌡️',
-    color: '#C0C0C0',
-    glow: 'rgba(192,192,192,0.4)',
-    levels: [3, 4],
-    levelNames: ['Onglet-Kenner', 'Dry-Ager'],
+  anatomie: {
     tagline: 'Du weißt, was auf den Grill kommt — und warum.',
     kompetenzen: [
       'Fleischanatomie: Muskelgruppen & Schnitte',
@@ -175,23 +163,13 @@ const stages: Stage[] = [
       'Fleischqualität beim Einkauf beurteilen',
     ],
     lernmethoden: [
-      { icon: '🗺️', label: 'Anatomie-Map',      desc: 'Klick auf das Rind: Welcher Cut kommt woher?' },
-      { icon: '🔬', label: 'Zoom-Karte',         desc: 'Marmorierung mikroskopisch erkennen — gut vs. schlecht' },
-      { icon: '🃏', label: 'Flashcards',         desc: 'Cut-Name → Charakteristik → Garmethode in 60 Sek.' },
-      { icon: '📊', label: 'Vergleichs-Slider',  desc: 'Wet Aged vs. Dry Aged: Textur, Geschmack, Preis' },
+      { icon: '🃏', label: 'Flashcards',        desc: 'Cut-Name → Charakteristik → Garmethode in 60 Sek.', vorhanden: true },
+      { icon: '🗺️', label: 'Anatomie-Map',      desc: 'Klick auf das Rind: Welcher Cut kommt woher?', vorhanden: false },
+      { icon: '🔬', label: 'Zoom-Karte',        desc: 'Marmorierung mikroskopisch erkennen — gut vs. schlecht', vorhanden: false },
+      { icon: '📊', label: 'Vergleichs-Slider', desc: 'Wet Aged vs. Dry Aged: Textur, Geschmack, Preis', vorhanden: false },
     ],
-    pruefung: '15 Fragen inkl. Bildidentifikation von Cuts · Bestehensgrenze: 75%',
-    badge: 'Fleischkenner Zertifikat',
   },
-  {
-    id: 3,
-    cert: 'Gold-Zertifikat',
-    title: 'Hitzekontrolle',
-    emoji: '🎯',
-    color: '#FFD700',
-    glow: 'rgba(255,215,0,0.4)',
-    levels: [5, 6],
-    levelNames: ['Flammen-Virtuose', 'Cuts-Experte'],
+  thermometer: {
     tagline: 'Präzision trennt den Hobbykoch vom Profi.',
     kompetenzen: [
       'Kerntemperaturen für alle Fleischarten beherrschen',
@@ -204,23 +182,13 @@ const stages: Stage[] = [
       'Rasse, Fütterung & Haltung als Qualitätsfaktoren',
     ],
     lernmethoden: [
-      { icon: '🌡️', label: 'Thermometer-Simulator', desc: 'Virtuelle Sonde: Richtige Einstichstelle wählen' },
-      { icon: '🌍', label: 'World-Tour Quiz',        desc: 'Cut aus Herkunftsland und Rasse identifizieren' },
-      { icon: '⚗️', label: 'Reaktions-Labor',         desc: 'Maillard-Animation: Was passiert bei 140°C?' },
-      { icon: '🏆', label: 'Streak-Challenge',        desc: '5 Kerntemperaturen in Folge korrekt = Bonus-Badge' },
+      { icon: '🃏', label: 'Flashcards',            desc: 'Die Kerntemperaturen aller Fleischarten', vorhanden: true },
+      { icon: '🌡️', label: 'Thermometer-Simulator', desc: 'Virtuelle Sonde: Richtige Einstichstelle wählen', vorhanden: false },
+      { icon: '🌍', label: 'World-Tour Quiz',       desc: 'Cut aus Herkunftsland und Rasse identifizieren', vorhanden: false },
+      { icon: '⚗️', label: 'Reaktions-Labor',        desc: 'Maillard-Animation: Was passiert bei 140 °C?', vorhanden: false },
     ],
-    pruefung: '20 Fragen + 1 Praxis-Fallstudie: Garplan für ein 4-Gang-BBQ-Menü erstellen',
-    badge: 'Präzisions-Griller Zertifikat',
   },
-  {
-    id: 4,
-    cert: 'Platin-Zertifikat',
-    title: 'Präzision & Geschmack',
-    emoji: '💨',
-    color: '#E5E4E2',
-    glow: 'rgba(229,228,226,0.5)',
-    levels: [7, 8],
-    levelNames: ['Smoke-Artist', 'Thermometer-Profi'],
+  holz: {
     tagline: 'Low & Slow ist eine Philosophie, kein Rezept.',
     kompetenzen: [
       'Smoker bedienen: Offset, Kettle, Pellet, Keramik',
@@ -234,23 +202,13 @@ const stages: Stage[] = [
       'Planung, Kühlketten-Logistik & Großmengen bei Events',
     ],
     lernmethoden: [
-      { icon: '🌲', label: 'Holz-Wheel',  desc: 'Spin & Match: Welches Holz für welches Fleisch?' },
-      { icon: '📈', label: 'Stall-Kurve', desc: 'Interaktives Diagramm: Temperatur über Zeit tracken' },
-      { icon: '🔊', label: 'Audio-Guide', desc: 'Hör den Smoker: Wann ist das Holz zu nass?' },
-      { icon: '📋', label: 'Event-Planer', desc: 'Simuliere: Catering für 50 Personen kalkulieren' },
+      { icon: '🃏', label: 'Flashcards',  desc: 'Acht Holzarten und ihre Aromen', vorhanden: true },
+      { icon: '🌲', label: 'Holz-Wheel',  desc: 'Spin & Match: Welches Holz für welches Fleisch?', vorhanden: false },
+      { icon: '📈', label: 'Stall-Kurve', desc: 'Interaktives Diagramm: Temperatur über Zeit tracken', vorhanden: false },
+      { icon: '📋', label: 'Event-Planer', desc: 'Simuliere: Catering für 50 Personen kalkulieren', vorhanden: false },
     ],
-    pruefung: '25 Fragen + Smoke-Protokoll ausfüllen + Zeitplan für ein BBQ-Event erstellen',
-    badge: 'BBQ-Scientist Zertifikat',
   },
-  {
-    id: 5,
-    cert: 'Meister-Diplom',
-    title: 'Der vollendete Pitmaster',
-    emoji: '👑',
-    color: '#FF6B35',
-    glow: 'rgba(255,107,53,0.5)',
-    levels: [9, 10],
-    levelNames: ['Wagyu-Sommelier', 'Master of Steak'],
+  kcbs: {
     tagline: 'Du kennst das Steak von der Weide bis zum Teller.',
     kompetenzen: [
       'Wagyu-Sensorik: BMS-Score, Marmorierung verkosten',
@@ -264,197 +222,59 @@ const stages: Stage[] = [
       'Eigene Kurse & Events konzipieren und leiten',
     ],
     lernmethoden: [
-      { icon: '👁️', label: 'Wagyu-Loupe',     desc: 'Marmorierungs-Stufen im Detail per Zoom erkennen' },
-      { icon: '🍷', label: 'Pairing-Lab',      desc: 'Interaktives Matching: Steak + Wein + Beilage' },
-      { icon: '🏅', label: 'KCBS-Simulator',   desc: 'Bewerte 5 virtuelle Briskets nach Wettbewerbsregeln' },
-      { icon: '🎤', label: 'Kurs-Creator',     desc: 'Entwickle dein eigenes Mini-Modul: erkläre es Marco' },
+      { icon: '🃏', label: 'Flashcards',     desc: 'KCBS-Kategorien, Turn-In-Zeiten, Bewertung', vorhanden: true },
+      { icon: '👁️', label: 'Wagyu-Loupe',    desc: 'Marmorierungs-Stufen im Detail per Zoom erkennen', vorhanden: false },
+      { icon: '🍷', label: 'Pairing-Lab',    desc: 'Interaktives Matching: Steak + Wein + Beilage', vorhanden: false },
+      { icon: '🏅', label: 'KCBS-Simulator', desc: 'Bewerte 5 virtuelle Briskets nach Wettbewerbsregeln', vorhanden: false },
     ],
-    pruefung: '30 Fragen + mündliche Videoprüfung: 5-Min-Erklärung zu einem Profi-Thema + Peer-Bewertung',
-    badge: 'Meister-Diplom (postfähige Urkunde)',
-  },
-];
-
-// ═══════════════════════════════════════════════════════════════════════════
-// DATA — Module Meta
-// ═══════════════════════════════════════════════════════════════════════════
-
-const moduleMeta: Record<ModuleKey, ModuleMeta> = {
-  bronze: {
-    title:       'Feuerzone',
-    emoji:       '🔥',
-    color:       '#CD7F32',
-    glow:        'rgba(205,127,50,0.4)',
-    stage:       1,
-    badge:       'Glut-Lehrling',
-    description: 'Kohle, Temperaturzonen, Sicherheit — die Grundlagen am Feuer.',
-  },
-  anatomie: {
-    title:       'Anatomie & Cuts',
-    emoji:       '🥩',
-    color:       '#C0C0C0',
-    glow:        'rgba(192,192,192,0.4)',
-    stage:       2,
-    badge:       'Fleischkenner',
-    description: 'Welcher Cut kommt woher und wie wird er gegart?',
-  },
-  thermometer: {
-    title:       'Kerntemperatur',
-    emoji:       '🌡️',
-    color:       '#FFD700',
-    glow:        'rgba(255,215,0,0.4)',
-    stage:       3,
-    badge:       'Präzisions-Griller',
-    description: 'Die exakte Temperatur für jedes Fleisch.',
-    requires:    'anatomie',
-  },
-  holz: {
-    title:       'Holz & Smoke',
-    emoji:       '🌲',
-    color:       '#E5E4E2',
-    glow:        'rgba(229,228,226,0.5)',
-    stage:       4,
-    badge:       'BBQ-Scientist',
-    description: 'Welches Holz für welches Aroma — Smoker beherrschen.',
-    requires:    'thermometer',
-  },
-  kcbs: {
-    title:       'KCBS-Wettbewerb',
-    emoji:       '🏅',
-    color:       '#FF6B35',
-    glow:        'rgba(255,107,53,0.5)',
-    stage:       5,
-    badge:       'Master of Steak',
-    description: 'Bewertungs-Standards der Wettbewerbsgrills.',
-    requires:    'holz',
   },
 };
 
-const moduleOrder: ModuleKey[] = ['bronze', 'anatomie', 'thermometer', 'holz', 'kcbs'];
+const stages: Stage[] = STUFEN.map((s) => ({
+  id: s.nr,
+  cert: s.cert,
+  title: s.title,
+  emoji: s.emoji,
+  color: s.color,
+  glow: s.glow,
+  levels: [...s.levels],
+  levelNames: levelsOfStufe(s.nr).map((l) => l.name),
+  badge: s.nr === 5 ? `${s.cert} (postfähige Urkunde)` : `${s.badge} Zertifikat`,
+  // Der Pruefungssatz kommt aus den Konstanten — vorher versprach er
+  // 10/15/20/25/30 Fragen, Fallstudien und eine Videopruefung, die es nicht gab.
+  pruefung: pruefungsText(),
+  ...STAGE_CONTENT[s.key],
+}));
 
 // ═══════════════════════════════════════════════════════════════════════════
-// DATA — Quizzes (5 Fragen pro Modul)
+// DATA — Module Meta (aus stufen.ts abgeleitet, inkl. Freischaltkette)
 // ═══════════════════════════════════════════════════════════════════════════
 
-const quizzes: Record<ModuleKey, QuizQuestion[]> = {
-  bronze: [
+const moduleMeta: Record<ModuleKey, ModuleMeta> = Object.fromEntries(
+  STUFEN.map((s) => [
+    s.key,
     {
-      q: 'Wann ist Holzkohle bereit zum Grillen?',
-      options: ['Sobald die Flammen lodern', 'Wenn schwarze Kohlen glühen', 'Sobald ein grauer Aschefilm sichtbar ist', 'Nach genau 5 Minuten'],
-      correct: 2,
-      explain: 'Grauer Aschefilm zeigt: gleichmäßige Glut, ideale Temperatur.',
-    },
-    {
-      q: 'Welche Temperatur hat die direkte Hitze-Zone?',
-      options: ['100-150 °C', '160-200 °C', '230-290 °C', '300-400 °C'],
-      correct: 2,
-      explain: '230-290 °C ist die Searing-Zone für die Maillard-Reaktion.',
-    },
-    {
-      q: 'Wofür nutzt man indirekte Hitze (150–180 °C)?',
-      options: ['Schnelles Anbraten', 'Große Stücke schonend durchgaren', 'Maillard-Reaktion', 'Scharfes Angrillen'],
-      correct: 1,
-      explain: 'Indirekt = schonend fertig garen (Geflügel, Gemüse, Braten). Echtes Low & Slow für Brisket läuft noch kühler: 100–130 °C.',
-    },
-    {
-      q: 'Was verhindert ein gefährliches Aufflackern?',
-      options: ['Mehr Holzkohle nachlegen', 'Deckel schließen', 'Wasser drauf spritzen', 'Fett vom Fleisch schneiden'],
-      correct: 1,
-      explain: 'Sauerstoffmangel durch geschlossenen Deckel erstickt Flammen.',
-    },
-    {
-      q: 'Mindest-Abstand Kohle zu Rost?',
-      options: ['2-5 cm', '5-8 cm', '10-15 cm', '20-25 cm'],
-      correct: 2,
-      explain: '10-15 cm — sonst verbrennt das Fleisch außen, bevor es innen gar ist.',
-    },
-  ],
-  anatomie: [
-    { q: 'Aus welchem Teilstück ist ein Ribeye?', options: ['Bauch', 'Hohe Rippe', 'Hüfte', 'Schulter'], correct: 1, explain: 'Ribeye = Kern der hohen Rippe, stark marmoriert.' },
-    { q: 'Wie heißt der Brustkern auf Englisch?', options: ['Sirloin', 'Brisket', 'Chuck', 'Flank'], correct: 1, explain: 'Brisket = Rinderbrust, der König der Low-&-Slow-Cuts.' },
-    { q: 'Welcher Cut ist besonders stark marmoriert?', options: ['Filet', 'Onglet', 'Ribeye', 'Hüfte'], correct: 2, explain: 'Ribeye trägt das meiste intramuskuläre Fett — Geschmacks-Champion.' },
-    { q: 'Dry-Aging-Dauer minimal für spürbaren Effekt?', options: ['3 Tage', '7 Tage', '21 Tage', '60 Tage'], correct: 2, explain: 'Ab 21 Tagen entstehen die typischen nussigen Aromen.' },
-    { q: 'Optimale Fleisch-Lagertemperatur?', options: ['-2 bis 0 °C', '0 bis 2 °C', '2 bis 4 °C', '4 bis 6 °C'], correct: 1, explain: '0-2 °C maximiert Haltbarkeit ohne Gewebeschaden.' },
-  ],
-  thermometer: [
-    { q: 'Kerntemperatur medium-rare beim Rind?', options: ['48-50 °C', '52-55 °C', '58-62 °C', '65-68 °C'], correct: 1, explain: '52-55 °C: rosa Kern, warm, juicy.' },
-    { q: 'Hähnchenbrust sichere Endtemperatur?', options: ['62 °C', '68 °C', '72-75 °C', '85 °C'], correct: 2, explain: 'Ab 72 °C ist Salmonellen-Risiko gebannt — und noch saftig.' },
-    { q: 'Schweinefilet ideal?', options: ['54 °C', '58-62 °C', '70 °C', '78 °C'], correct: 1, explain: 'Rosa Kern bei Schwein ist seit 2011 lebensmittel-rechtlich okay.' },
-    { q: 'Was passiert ab 140 °C an der Fleischoberfläche?', options: ['Saftverlust', 'Maillard-Reaktion', 'Kollagenabbau', 'Verkohlung'], correct: 1, explain: 'Maillard = die Bräunungs-Reaktion, Aromen-Explosion.' },
-    { q: 'Reverse Sear: Welche Reihenfolge?', options: ['Sear → Niedrig garen', 'Niedrig garen → Sear', 'Nur Sear', 'Nur niedrig garen'], correct: 1, explain: 'Erst sanft auf Kerntemperatur, dann scharf für die Kruste.' },
-  ],
-  holz: [
-    { q: 'Hickory passt am besten zu?', options: ['Lachs', 'Geflügel zart', 'Brisket', 'Käse'], correct: 2, explain: 'Hickory ist robust — perfekt für Brisket und Pulled Pork.' },
-    { q: 'Apfelholz-Aroma?', options: ['Stark, würzig', 'Mild, leicht süß', 'Bitter, scharf', 'Erdig, kräftig'], correct: 1, explain: 'Apfel ist sanft — ideal für Geflügel und Schwein.' },
-    { q: 'Was ist ein Smoke Ring?', options: ['Werbe-Logo', 'Rosa Ring unter der Kruste', 'Rauch-Tornado im Smoker', 'Werkzeug'], correct: 1, explain: 'Stickstoff-Reaktion: rosa Verfärbung unter der Kruste, Zeichen guten Smokes.' },
-    { q: 'Die Stall-Phase tritt typisch auf bei?', options: ['65-75 °C', '50-60 °C', '85-95 °C', '40-50 °C'], correct: 0, explain: 'Bei 65-75 °C verdunstet Wasser und kühlt die Oberfläche — Geduld!' },
-    { q: 'Optimale Holz-Feuchtigkeit zum Räuchern?', options: ['0-5 %', '15-20 %', '30-35 %', '50-60 %'], correct: 1, explain: '15-20 % gibt sauberen Rauch ohne Bitterkeit.' },
-  ],
-  kcbs: [
-    { q: 'Wie viele Hähnchenstücke kommen in die KCBS-Box?', options: ['1 ganzes Tier', '4 Brüste', '6 gleiche Stücke', '8 Schenkel'], correct: 2, explain: '6 einheitliche Stücke — Optik zählt.' },
-    { q: 'KCBS-Brisket-Wettkampfgewicht typisch?', options: ['1-2 kg', '3-4 kg', '6-7 kg', '12-15 kg'], correct: 2, explain: 'Packer-Brisket mit Flat + Point, 6-7 kg sind Standard.' },
-    { q: 'KCBS-Bewertungsskala pro Kriterium?', options: ['1-5', '1-10', '2-9', '6-9 + Disqualifikation'], correct: 3, explain: '6=durchschnittlich, 9=exzellent. Unter 6 = Disqualifikation.' },
-    { q: 'Was zählt zum "Appearance"-Score?', options: ['Geschmack', 'Konsistenz', 'Optik in der Turn-In-Box', 'Geruch'], correct: 2, explain: 'Box-Layout, Farbe, Glanz — der erste Eindruck zählt.' },
-    { q: 'Standard-KCBS-Turn-In-Box?', options: ['Eigene Box', 'Styropor, weiß, 9×9 inch', 'Holzkiste', 'Glasdose'], correct: 1, explain: 'Weiße Styropor-Box, einheitlich 9×9 inch.' },
-  ],
-};
+      title:       s.modulTitle,
+      emoji:       s.modulEmoji,
+      color:       s.color,
+      glow:        s.glow,
+      stage:       s.nr,
+      badge:       s.badge,
+      description: s.modulDescription,
+      // Vorher fehlte `requires` bei Stufe 2 — sie war nicht hinter Stufe 1 gesperrt.
+      requires:    s.requires ?? undefined,
+    } satisfies ModuleMeta,
+  ]),
+) as Record<ModuleKey, ModuleMeta>;
+
+const moduleOrder: readonly ModuleKey[] = STUFEN_ORDER;
 
 // ═══════════════════════════════════════════════════════════════════════════
-// DATA — Flashcards (8 Karten pro Modul)
+// DATA — Quizzes & Flashcards: src/lib/diplome/fragen.ts (mit Lektionsbezug)
 // ═══════════════════════════════════════════════════════════════════════════
 
-const flashcards: Record<ModuleKey, Flashcard[]> = {
-  bronze: [
-    { front: 'Direkte Hitze',          back: '230-290 °C · Maillard, schnelles Anbraten' },
-    { front: 'Indirekte Hitze',        back: '150-180 °C · schonend durchgaren, große Stücke & Geflügel' },
-    { front: 'Aschefilm',              back: 'Grauer Belag = Kohle ist bereit, gleichmäßige Glut' },
-    { front: 'Maillard-Reaktion',      back: 'Bräunung & Aromen · startet ab ~140 °C' },
-    { front: 'Reverse Sear',           back: 'Erst niedrig garen, dann kurz scharf für Kruste' },
-    { front: 'Deckel zu',              back: 'Erstickt Aufflackern, hält Temperatur konstant' },
-    { front: 'Abstand Rost zu Kohle',  back: '10-15 cm · Standard für gleichmäßiges Garen' },
-    { front: 'Salz-Timing',            back: 'Direkt vor dem Grillen oder ≥40 Min davor' },
-  ],
-  anatomie: [
-    { front: 'Ribeye',     back: 'Hohe Rippe · Direkt grillen, medium-rare' },
-    { front: 'Brisket',    back: 'Rinderbrust · Low & Slow, 12-16 h smoken' },
-    { front: 'Onglet',     back: 'Zwerchfellpfeiler · scharf anbraten, rare bis medium-rare' },
-    { front: 'Tomahawk',   back: 'Ribeye mit langem Knochen · Reverse Sear, ~600 g pro Person' },
-    { front: 'Picanha',    back: 'Tafelspitz (Sirloin Cap) · BR-BBQ, mit Fettkappe' },
-    { front: 'Flank Steak',back: 'Bauchlappen · marinieren, quer zur Faser schneiden' },
-    { front: 'Hanger Steak',back:'Onglet-Verwandter · hängt am Zwerchfell, intensiv im Geschmack' },
-    { front: 'Wagyu A5',   back: 'Japan-Top · BMS 8-12, sehr dünn aufgeschnitten kurz braten' },
-  ],
-  thermometer: [
-    { front: 'Rind rare',         back: '48-52 °C · roter Kern, weich' },
-    { front: 'Rind medium-rare',  back: '52-55 °C · rosa Kern, juicy' },
-    { front: 'Rind medium',       back: '55-60 °C · rosa-grau, fester' },
-    { front: 'Rind well-done',    back: '65+ °C · durch, deutlicher Saftverlust' },
-    { front: 'Schwein Filet',     back: '58-62 °C · zart-rosa Kern (seit 2011 erlaubt)' },
-    { front: 'Hähnchen Brust',    back: '72-75 °C · weiß, sicher, noch saftig' },
-    { front: 'Lachs',             back: '52-55 °C · mi-cuit, glasig opak' },
-    { front: 'Lamm Rücken',       back: '58-62 °C · medium-rare, rosé' },
-  ],
-  holz: [
-    { front: 'Hickory',  back: 'Stark würzig · Brisket, Pulled Pork, Ribs' },
-    { front: 'Apfel',    back: 'Mild, leicht süß · Geflügel, Schwein, Fisch' },
-    { front: 'Kirsche',  back: 'Süßlich, färbt rot · Geflügel, Lamm' },
-    { front: 'Mesquite', back: 'Sehr intensiv, erdig · Beef, kurze Sessions' },
-    { front: 'Buche',    back: 'Mittel, neutral · Allrounder, Fisch' },
-    { front: 'Walnuss',  back: 'Stark, kann bitter werden · Wild, Rind sparsam' },
-    { front: 'Ahorn',    back: 'Süß, mild · Geflügel, Schinken' },
-    { front: 'Pekan',    back: 'Süßlich-nussig · Schwein, Geflügel' },
-  ],
-  kcbs: [
-    { front: 'Chicken',     back: '6 gleiche Stücke · Turn-In 12:00' },
-    { front: 'Pork Ribs',   back: 'St. Louis oder Baby Back · Turn-In 12:30' },
-    { front: 'Pork',        back: 'Schulter/Butt 4-6 kg · Turn-In 13:00' },
-    { front: 'Brisket',     back: 'Flat oder Point, 6-7 kg · Turn-In 13:30' },
-    { front: 'Appearance',  back: 'Score 6-9 · Box-Layout, Farbe, Glanz' },
-    { front: 'Taste',       back: 'Score 6-9 · der wichtigste Faktor' },
-    { front: 'Tenderness',  back: 'Score 6-9 · zart, aber nicht zerfallend' },
-    { front: 'DQ-Gründe',   back: 'Falsche Garnitur, Box-Sticker fehlt, Sauce-Pool' },
-  ],
-};
-
+const quizzes: Record<ModuleKey, readonly QuizQuestion[]> = FRAGEN;
+const flashcards: Record<ModuleKey, readonly Flashcard[]> = FLASHCARDS;
 // ═══════════════════════════════════════════════════════════════════════════
 // DATA — Feuerzonen-Spiel
 // ═══════════════════════════════════════════════════════════════════════════
@@ -601,7 +421,7 @@ function useProgress() {
       const meta = moduleMeta[key];
       if (!meta.requires) return true;
       const reqScore = progress.quiz_scores[meta.requires] ?? 0;
-      return reqScore >= 4;
+      return reqScore >= QUIZ_BESTEHENSGRENZE;
     },
     [progress.quiz_scores],
   );
@@ -631,7 +451,26 @@ function useBanner(): [BannerMsg, (msg: BannerMsg) => void] {
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════
 
-export default function RoadmapClient({ lektionen }: { lektionen: LektionenByStufe }) {
+/** Serverseitig festgestelltes Pruefungsergebnis (siehe /api/diplome/pruefung). */
+export type PruefungsErgebnis = {
+  score: number;
+  bestanden: boolean;
+  badge: string | null;
+  gespeichert: boolean;
+  hinweis?: string;
+};
+
+export default function RoadmapClient({
+  lektionen,
+  eingeloggt,
+  hatDiplom,
+}: {
+  lektionen: LektionenByStufe;
+  /** Vom Server ermittelt — steuert nur Hinweise, nicht die Sicherheit. */
+  eingeloggt: boolean;
+  /** Admin oder aktive Diplom-Buchung — der Server prueft das bei jeder Pruefung erneut. */
+  hatDiplom: boolean;
+}) {
   const [view, setView] = useState<ViewKey>('roadmap');
   const prog = useProgress();
   const [banner, setBanner] = useBanner();
@@ -668,13 +507,17 @@ export default function RoadmapClient({ lektionen }: { lektionen: LektionenByStu
     setView(key);
   }
 
-  function handleQuizComplete(key: ModuleKey, score: number) {
-    const badge = prog.completeModule(key, score);
+  // Bestanden wird nur, was der Server als bestanden festgestellt hat.
+  // Vorher wurde hier jedes Ergebnis verbucht — auch 0 von 5 (Audit R1).
+  function handleQuizComplete(key: ModuleKey, ergebnis: PruefungsErgebnis) {
+    if (!ergebnis.bestanden) return;
+    const badge = prog.completeModule(key, ergebnis.score);
     const meta = moduleMeta[key];
-    const tier = (['bronze', 'silber', 'gold', 'platin', 'master'] as const)[meta.stage - 1];
     const stage = stages[meta.stage - 1];
-    setCeremony({ tier, badge, name: stage?.title ?? meta.title, color: meta.color, stufe: meta.stage });
-    void syncDiplomProgress(key, meta.stage, score, badge);
+    setCeremony({ tier: STUFEN[meta.stage - 1].tier, badge, name: stage?.title ?? meta.title, color: meta.color, stufe: meta.stage });
+    if (!ergebnis.gespeichert && ergebnis.hinweis) {
+      setBanner({ text: `ℹ️ ${ergebnis.hinweis}`, color: T.gold });
+    }
   }
 
   function handleStreakHit() {
@@ -732,6 +575,17 @@ export default function RoadmapClient({ lektionen }: { lektionen: LektionenByStu
               >Fortschritt zurücksetzen</button>
             )}
           </nav>
+          {/* Ohne Konto bleibt der Fortschritt auf diesem Geraet — das wurde vorher nirgends gesagt (Audit R9). */}
+          {!eingeloggt && (
+            <p className="mt-4 text-xs font-sans text-text-light/50 leading-relaxed">
+              Du bist nicht angemeldet: Dein Fortschritt bleibt auf diesem Gerät und wird nicht als
+              bestanden eingetragen.{' '}
+              <Link href="/auth/login?redirectTo=/diplome/roadmap" className="underline hover:text-brand-gold transition-colors">
+                Anmelden
+              </Link>
+              , damit er mitkommt.
+            </p>
+          )}
         </div>
 
         {view === 'roadmap' ? (
@@ -744,8 +598,9 @@ export default function RoadmapClient({ lektionen }: { lektionen: LektionenByStu
           <ModuleView
             moduleKey={view}
             lektionen={lektionen[moduleMeta[view].stage] ?? []}
+            hatDiplom={hatDiplom}
             onBack={() => setView('roadmap')}
-            onQuizComplete={(score) => handleQuizComplete(view, score)}
+            onQuizComplete={(ergebnis) => handleQuizComplete(view, ergebnis)}
             onStreakHit={handleStreakHit}
             onStreakBreak={prog.resetStreak}
             streakCount={prog.progress.streak_count}
@@ -938,14 +793,21 @@ function RoadmapView({
             onToggle={() => setExpanded(expanded === 'learn' ? null : 'learn')}
             icon="🎮"
             title="Spielerische Lernmethoden"
-            subtitle="Interaktiv · KI-gestützt · Gamified"
+            subtitle={`${s.lernmethoden.filter((m) => m.vorhanden).length} verfügbar · ${s.lernmethoden.filter((m) => !m.vorhanden).length} geplant`}
             color={s.color}
           >
             <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {s.lernmethoden.map((m, i) => (
-                <div key={i} className="rounded-xl p-3" style={{ background: `${s.color}10`, border: `1px solid ${s.color}25` }}>
+                <div
+                  key={i}
+                  className="rounded-xl p-3"
+                  style={{ background: `${s.color}10`, border: `1px solid ${s.color}25`, opacity: m.vorhanden ? 1 : 0.55 }}
+                >
                   <div className="text-xl mb-1.5">{m.icon}</div>
-                  <div className="text-xs font-sans font-bold mb-1" style={{ color: s.color }}>{m.label}</div>
+                  <div className="text-xs font-sans font-bold mb-1" style={{ color: s.color }}>
+                    {m.label}
+                    {!m.vorhanden && <span className="ml-2 text-[9px] uppercase tracking-wider" style={{ color: T.textDim }}>geplant</span>}
+                  </div>
                   <div className="text-[11px] font-sans leading-snug" style={{ color: T.textMuted }}>{m.desc}</div>
                 </div>
               ))}
@@ -1073,6 +935,7 @@ function RoadmapView({
 function ModuleView({
   moduleKey,
   lektionen,
+  hatDiplom,
   onBack,
   onQuizComplete,
   onStreakHit,
@@ -1083,8 +946,9 @@ function ModuleView({
 }: {
   moduleKey: ModuleKey;
   lektionen: readonly LektionLink[];
+  hatDiplom: boolean;
   onBack: () => void;
-  onQuizComplete: (score: number) => void;
+  onQuizComplete: (ergebnis: PruefungsErgebnis) => void;
   onStreakHit: () => void;
   onStreakBreak: () => void;
   streakCount: number;
@@ -1172,12 +1036,36 @@ function ModuleView({
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {tab === 'lerninhalte' && <LerninhalteTab moduleKey={moduleKey} stage={stage} lektionen={lektionen} />}
         {tab === 'quiz' && (
-          <Quiz
-            moduleKey={moduleKey}
-            onComplete={onQuizComplete}
-            onStreakHit={onStreakHit}
-            onStreakBreak={onStreakBreak}
-          />
+          meta.stage >= ERSTE_BEZAHLSTUFE && !hatDiplom ? (
+            // Die Pruefungen der Bezahlstufen gehoeren zum Diplom — vorher waren
+            // sie frei, waehrend der Lernstoff gesperrt war (Audit R4). Der
+            // Server lehnt den Versuch ohnehin ab; das hier erspart den Umweg.
+            <div className="rounded-2xl p-8 text-center" style={{ background: T.panel, border: `1px solid ${meta.color}40` }}>
+              <div className="text-4xl mb-3">🔒</div>
+              <div className="font-serif text-xl font-bold text-text-primary mb-2">
+                Prüfung gehört zum Grillmeister-Diplom
+              </div>
+              <p className="text-sm font-sans mb-5 max-w-md mx-auto" style={{ color: T.textMuted }}>
+                Stufe {meta.stage} ({stage.cert}) ist Teil der kostenpflichtigen Ausbildung.
+                Stufe 1 mit Prüfung ist frei — dort kannst du sofort anfangen.
+              </p>
+              <Link
+                href="/diplome"
+                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-sans font-bold text-[12px] tracking-wider uppercase"
+                style={{ background: `linear-gradient(135deg, ${meta.color}, ${meta.color}cc)`, color: T.bg }}
+              >
+                Zur Ausbildung <ChevronRight size={14} />
+              </Link>
+            </div>
+          ) : (
+            <Quiz
+              moduleKey={moduleKey}
+              lektionen={lektionen}
+              onComplete={onQuizComplete}
+              onStreakHit={onStreakHit}
+              onStreakBreak={onStreakBreak}
+            />
+          )
         )}
         {tab === 'flashcards' && <Flashcards moduleKey={moduleKey} />}
       </div>
@@ -1249,9 +1137,16 @@ function LerninhalteTab({
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {stage.lernmethoden.map((m, i) => (
-            <div key={i} className="rounded-xl p-3" style={{ background: `${meta.color}10`, border: `1px solid ${meta.color}25` }}>
+            <div
+              key={i}
+              className="rounded-xl p-3"
+              style={{ background: `${meta.color}10`, border: `1px solid ${meta.color}25`, opacity: m.vorhanden ? 1 : 0.55 }}
+            >
               <div className="text-xl mb-1.5">{m.icon}</div>
-              <div className="text-xs font-sans font-bold mb-1" style={{ color: meta.color }}>{m.label}</div>
+              <div className="text-xs font-sans font-bold mb-1" style={{ color: meta.color }}>
+                {m.label}
+                {!m.vorhanden && <span className="ml-2 text-[9px] uppercase tracking-wider" style={{ color: T.textDim }}>geplant</span>}
+              </div>
               <div className="text-[11px] font-sans leading-snug" style={{ color: T.textMuted }}>{m.desc}</div>
             </div>
           ))}
@@ -1510,23 +1405,32 @@ function FeuerzoneSpiel({ color }: { color: string }) {
 
 function Quiz({
   moduleKey,
+  lektionen,
   onComplete,
   onStreakHit,
   onStreakBreak,
 }: {
   moduleKey: ModuleKey;
-  onComplete: (score: number) => void;
+  lektionen: readonly LektionLink[];
+  onComplete: (ergebnis: PruefungsErgebnis) => void;
   onStreakHit: () => void;
   onStreakBreak: () => void;
 }) {
   const questions = quizzes[moduleKey];
-  const color     = moduleMeta[moduleKey].color;
+  const meta      = moduleMeta[moduleKey];
+  const color     = meta.color;
 
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [answers, setAnswers]   = useState<{ chosen: number; correct: boolean }[]>([]);
   const [showExplain, setShowExplain] = useState(false);
   const [finished, setFinished] = useState(false);
+  const [einreichen, setEinreichen] = useState<'idle' | 'laeuft' | 'fertig' | 'fehler'>('idle');
+  const [ergebnis, setErgebnis] = useState<PruefungsErgebnis | null>(null);
+  const [fehlerText, setFehlerText] = useState<string>('');
+
+  const lektionTitel = (slug: string) => lektionen.find((l) => l.lektionSlug === slug)?.title ?? 'Lektion';
+  const lektionUrl   = (slug: string) => lektionen.find((l) => l.lektionSlug === slug)?.url ?? `/diplome/lernen/stufe-${meta.stage}/${slug}`;
 
   function choose(idx: number) {
     if (selected !== null) return;
@@ -1539,11 +1443,49 @@ function Quiz({
     else         onStreakBreak();
   }
 
+  // Das Ergebnis stellt der Server fest. Der Browser zeigt nur an, was
+  // zurueckkommt — vorher wurde hier `onComplete(score)` ohne jede Bedingung
+  // aufgerufen und das Modul auch bei 0 von 5 als bestanden verbucht.
+  async function einreichenAnServer(antworten: number[]) {
+    setEinreichen('laeuft');
+    setFehlerText('');
+    try {
+      const res = await fetch('/api/diplome/pruefung', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ modul: moduleKey, antworten }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const err = typeof data?.error === 'string' ? data.error : '';
+        setFehlerText(
+          err === 'diplom_erforderlich'
+            ? 'Diese Prüfung gehört zum Grillmeister-Diplom.'
+            : err || 'Die Prüfung konnte nicht ausgewertet werden. Bitte später erneut versuchen.',
+        );
+        setEinreichen('fehler');
+        return;
+      }
+      const e: PruefungsErgebnis = {
+        score: Number(data.score) || 0,
+        bestanden: Boolean(data.bestanden),
+        badge: typeof data.badge === 'string' ? data.badge : null,
+        gespeichert: Boolean(data.gespeichert),
+        hinweis: typeof data.hinweis === 'string' ? data.hinweis : undefined,
+      };
+      setErgebnis(e);
+      setEinreichen('fertig');
+      onComplete(e);
+    } catch {
+      setFehlerText('Keine Verbindung — die Prüfung wurde nicht ausgewertet.');
+      setEinreichen('fehler');
+    }
+  }
+
   function next() {
     if (current + 1 >= questions.length) {
-      const score = answers.filter(a => a.correct).length;
       setFinished(true);
-      onComplete(score);
+      void einreichenAnServer(answers.map((a) => a.chosen));
     } else {
       setCurrent(c => c + 1);
       setSelected(null);
@@ -1557,20 +1499,85 @@ function Quiz({
     setAnswers([]);
     setShowExplain(false);
     setFinished(false);
+    setEinreichen('idle');
+    setErgebnis(null);
+    setFehlerText('');
   }
 
   if (finished) {
-    const score = answers.filter(a => a.correct).length;
-    const passed = score >= 4;
+    const lokalScore = answers.filter(a => a.correct).length;
+    const falsch = questions
+      .map((q, i) => ({ q, i, richtig: answers[i]?.correct ?? false }))
+      .filter((x) => !x.richtig);
+
+    if (einreichen === 'laeuft' || einreichen === 'idle') {
+      return (
+        <div className="rounded-2xl p-8 text-center" style={{ background: T.panel, border: `1px solid ${color}40` }}>
+          <div className="text-4xl mb-3">⏳</div>
+          <div className="font-serif text-xl font-bold text-text-primary mb-2">Prüfung wird ausgewertet …</div>
+          <div className="text-sm font-sans" style={{ color: T.textMuted }}>{lokalScore} von {questions.length} sahen richtig aus — der Server hat das letzte Wort.</div>
+        </div>
+      );
+    }
+
+    if (einreichen === 'fehler' || !ergebnis) {
+      return (
+        <div className="rounded-2xl p-8 text-center" style={{ background: T.panel, border: `1px solid ${T.error}40` }}>
+          <div className="text-4xl mb-3">⚠️</div>
+          <div className="font-serif text-xl font-bold text-text-primary mb-2">Nicht ausgewertet</div>
+          <p className="text-sm font-sans mb-5 max-w-md mx-auto" style={{ color: T.textMuted }}>{fehlerText}</p>
+          <button
+            onClick={() => { void einreichenAnServer(answers.map((a) => a.chosen)); }}
+            className="rounded-full px-5 py-2.5 font-sans font-bold text-[12px] tracking-wider uppercase mr-3"
+            style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)`, color: T.bg }}
+          >
+            Erneut senden
+          </button>
+          <button
+            onClick={restart}
+            className="rounded-full px-5 py-2.5 font-sans font-bold text-[12px] tracking-wider uppercase"
+            style={{ background: T.panelAlt, color: T.text, border: `1px solid ${T.borderMuted}` }}
+          >
+            Von vorn
+          </button>
+        </div>
+      );
+    }
+
+    const passed = ergebnis.bestanden;
     return (
       <div className="rounded-2xl p-8 text-center" style={{ background: T.panel, border: `1px solid ${color}40` }}>
         <div className="text-5xl mb-3">{passed ? '🏅' : '📚'}</div>
         <div className="font-serif text-2xl font-bold text-text-primary mb-2">
-          {passed ? 'Modul bestanden!' : 'Knapp daneben'}
+          {passed ? 'Modul bestanden!' : 'Noch nicht bestanden'}
         </div>
-        <div className="text-sm font-sans mb-4" style={{ color: T.textMuted }}>
-          {score} von {questions.length} richtig{passed ? '' : ' — du brauchst mindestens 4'}.
+        <div className="text-sm font-sans mb-2" style={{ color: T.textMuted }}>
+          {ergebnis.score} von {questions.length} richtig{passed ? '' : ` — du brauchst mindestens ${QUIZ_BESTEHENSGRENZE}`}.
         </div>
+        {ergebnis.hinweis && (
+          <div className="text-[12px] font-sans mb-4" style={{ color: T.textDim }}>{ergebnis.hinweis}</div>
+        )}
+
+        {/* Nachlesen: jede falsche Frage zeigt auf die Lektion, in der die Antwort steht (Audit R12). */}
+        {falsch.length > 0 && (
+          <div className="text-left rounded-xl p-4 mb-5" style={{ background: T.panelAlt, border: `1px solid ${T.borderMuted}` }}>
+            <div className="text-[11px] font-sans uppercase tracking-wider mb-2" style={{ color }}>
+              Nachlesen
+            </div>
+            <ul className="flex flex-col gap-1.5">
+              {falsch.map(({ q, i }) => (
+                <li key={i} className="text-[13px] font-sans" style={{ color: T.textMuted }}>
+                  <span style={{ color: T.text }}>Frage {i + 1}</span>
+                  {' · '}
+                  <Link href={lektionUrl(q.lektionSlug)} className="underline hover:opacity-80" style={{ color }}>
+                    {lektionTitel(q.lektionSlug)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <div className="flex gap-3 justify-center">
           <button
             onClick={restart}

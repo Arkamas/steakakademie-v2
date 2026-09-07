@@ -3,6 +3,104 @@
 > Wöchentlicher Status-Check gegen die Audit-Baseline vom 07.07.2026.
 > Neuester Eintrag oben. Erhebung via US-basierter WebSearch → DE-SERP kann abweichen (Caveat je Zeile).
 
+## KW37 — 07.09.2026
+
+> Vorwoche = **KW36 (31.08.)**, direkt darunter. Abstand 7 Tage, sauberer Wochenrhythmus.
+> Queries diesmal wörtlich wie im Auftrag — also 1:1 vergleichbar mit KW36.
+
+### Rankings (US-basierte WebSearch — Trefferliste, KEINE deutsche SERP-Position)
+
+| Keyword | steakakademie.de in der Trefferliste? | Wer erscheint (Top 3) | Δ KW36 | Δ Baseline |
+|---|---|---|---|---|
+| „Kerntemperatur Steak" | ❌ **nein** (Liste mit 5 Treffern) | lecker.de · shop.block-house.de · grillfuerst.de | 🔴 **Rückfall** (KW36: Rang 5) | = (Baseline: nicht in Top 10) |
+| „Ribeye" | ❌ nein — trotz eigenem Ribeye-Guide | Kansas City Steaks · meatnbone.com · 44steaks.com | = | = |
+| „Reverse Sear" | ❌ nein — trotz eigener Methoden-Seite | nocrumbsleft.net · theglamorousgourmet.com · jessicagavin.com | = (Top 3 **identisch** mit KW36) | = |
+| „Brisket Anleitung" | ❌ nein — trotz eigenem Brisket-Guide | bbqpit.de · ofen.de · grillkameraden.de | = (Top 3 **identisch** mit KW36) | = |
+| „Steakakademie" (Brand) | ✅ **ja — Rang 3** (`steakakademie.de/`) | Instagram @steakakademie · Facebook Steakakademie (Bochum, fremd) · **steakakademie.de** | = (KW36 ebenfalls Rang 3) | 🔴 schlechter (Baseline: Platz 1) |
+
+⚠️ **Methodik-Caveats:**
+- Werkzeug ist US-basiert. Laut `docs/geo-baseline.md` (Messung 3) ist die Trefferliste
+  **keine deutsche SERP-Position** — sie überschätzt vermutlich. Leitmessung bleibt der
+  manuelle DE-Inkognito-Check durch Uwe; der ist **auch diese Woche nicht erhoben**.
+- „Ribeye" und „Reverse Sear" lieferten erneut eine **rein US/EN-SERP** (US-Händler,
+  US-Foodblogs, kein DE-Ergebnis). Für DACH ist das faktisch der **falsche Markt** —
+  als „nicht gefunden" gewertet, aber ohne Aussagekraft.
+- Der Rückfall bei „Kerntemperatur Steak" ist bei diesem Werkzeug **nicht sicher ein
+  Ranking-Verlust**. Rang 5 (KW36) → nicht gelistet (KW37) kann Listen-Rauschen sein.
+  Die Query war diesmal identisch, also kein Query-Effekt — das macht es zwar
+  belastbarer als letzte Woche, aber immer noch nicht zu einer Positionsaussage.
+
+**Befund:** Der einzige generische Lichtblick der Vorwoche ist weg. Bei drei von vier
+Sach-Keywords sind sogar die Top 3 **identisch** mit KW36 — das Feld bewegt sich nicht,
+und wir bewegen uns nicht hinein. Brand-Query stabil auf Rang 3, davor weiterhin die
+eigenen Social-Kanäle plus die fremde Bochumer Steakakademie.
+
+### Off-Page-Delta
+
+Query `"steakakademie.de" -site:steakakademie.de`: **weiterhin 0 echte externe
+Erwähnungen/Backlinks.** Alle Treffer sind Namensvettern oder fremde Kursanbieter,
+keiner verlinkt auf unsere Domain:
+
+- https://www.facebook.com/steakakademie/ (Steakakademie Bochum — fremd)
+- https://smokefire-grillakademie.de/products/grillkurs-steak-akademie-4-0-das-perfekte-steak-1 (**neu in der Liste**, fremder Kursanbieter, kein Link auf uns)
+- https://www.grillkonzept.de/kurstermin/steakakademie-100-bestes-fleisch-2024-01-05/
+- https://beisser.de/fleischerei/steakakademie/
+- Wikipedia „Nordakademie" (themenfremd)
+
+**Δ KW36 (0) und Δ Baseline (0): unverändert 0 — jetzt 9 Wochen.**
+
+### Technik-Status
+
+| Check | Ergebnis | Status | Δ KW36 |
+|---|---|---|---|
+| www → non-www Redirect | `https://www.steakakademie.de/` → `https://steakakademie.de/`, Seite lädt vollständig, Canonical `https://steakakademie.de` | 🟢 ok | = |
+| `/llms.txt` erreichbar | vollständig ausgeliefert (`text/plain`): Kern-Referenzen, Weitere Inhalte, Über | 🟢 ok | = (4. Woche in Folge sauber) |
+| `/robots.txt` endet mit Sitemap-Zeile | `Sitemap: https://steakakademie.de/sitemap.xml` als letzte Zeile; AI-Crawler (GPTBot, ClaudeBot, PerplexityBot u. a.) weiterhin ausdrücklich erlaubt | 🟢 ok | = |
+
+### Offene Punkte / GEO
+
+- Wikidata **Q140455747** in `src/lib/schema.ts` (`sameAs`, Zeile 35) ✅ weiterhin verdrahtet — nichts offen.
+- **AI-Abfragen-Tabelle `docs/geo-baseline.md`: Messung 4 (01.09.) ist komplett leer**
+  (ChatGPT, Perplexity, Google AIO — alle drei Zeilen „nicht erhoben"), Messung 2 (04.08.)
+  ebenfalls. Der turnusmäßige 4-Wochen-Re-Check war für **~06.09. fällig — seit gestern
+  überfällig**. Nur manuell durch Uwe erhebbar (~15 Min für alle drei).
+  Folge: Die Kernfrage aus Messung 3 — **bleibt der Perplexity-Treffer vom 09.08. stabil?** —
+  ist jetzt seit einem Monat unbeantwortet. Der einzige belegte GEO-Erfolg des Projekts
+  gilt damit weiter als *einmalig beobachtet*, nicht als Ranking.
+- **Backlinks = 0** bleibt der strukturelle Engpass — jetzt 9 Wochen unverändert.
+  Die Handlungsempfehlung aus KW36 (Foren-Referenzen) ist **nicht umgesetzt worden**.
+
+**Nebenbefund (nicht Teil des SEO-Auftrags, nur beobachtet):** Die Live-Startseite zeigt
+bei Streitfällen, Grilltechniken und Cuts durchgängig „Uwe Yendell" als Autor. Laut
+Memory-Stand ist der Autorenwechsel (Marco/Elena/Jonas, Commit `89761d9`, 06.09.) noch
+nicht auf main/Produktion — passt zusammen, ist also **kein Defekt**, sondern nur der
+Hinweis, dass der Commit noch aussteht. Nicht geprüft: Git-Stand.
+
+### Ampeln
+
+- Rankings: 🔴 (von 🟡 zurück — der einzige generische Treffer ist weg, 4 von 5 Keywords ohne Sichtbarkeit; Brand-Query stabil, aber unter den eigenen Social-Kanälen)
+- Off-Page: 🔴 (9 Wochen 0 Backlinks — Ursache Nr. 1, unverändert)
+- Technik: 🟢 (alle drei Checks sauber, vierte Woche in Folge)
+
+### Handlungsempfehlung (max. 1)
+
+**Diese Woche einen einzigen Backlink erzeugen — nicht drei bis fünf.** Die
+KW36-Empfehlung („3–5 Foren") ist unerledigt geblieben, das ist typisch für zu große
+Pakete. Reduzierter Auftrag: **eine** Frage in **einem** deutschen BBQ-Forum
+(Grillsportverein oder BBQPit-Community), bei der die Kerntemperatur-Tabelle die
+gestellte Frage tatsächlich beantwortet, sachlich beantworten und `/temperatur-guide`
+als Beleg verlinken. 15 Minuten. Regel 5 (kein Spam) gilt: nur dort posten, wo die
+Antwort ohne Link auch schon hilfreich wäre. Alles andere im SEO-Bereich ist nachrangig,
+solange die Autoritätsseite bei null steht.
+
+### Trend vs. Vorwoche
+
+Rückschritt: Der Kopf-Keyword-Treffer aus KW36 ist verschwunden, die Konkurrenz-Top-3
+sind bei drei Keywords buchstäblich identisch — es bewegt sich nichts, weil an der
+einzigen wirksamen Stellschraube (Backlinks) neun Wochen lang nichts passiert ist.
+
+---
+
 ## KW36 — 31.08.2026
 
 > Vorwoche = **KW35 (28.08.)**, direkt darunter. Abstand 3 Tage (Montag statt Freitag erhoben) —

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel + GitHub in 72 Stunden. Einmal aufgesetzt — für immer unabhängig.',
   alternates: { canonical: 'https://steakakademie.de/eigenregie' },
   openGraph: {
-    title: 'Eigenregie — Dein Business „KOMPLETT" in Eigenregie.',
+    title: 'Eigenregie — Dein Business „KOMPLETT“ in Eigenregie.',
     description:
       'Raus aus der Abhängigkeit. Vollständige Migration zu eigenem GitHub-Repo, Next.js und Vercel. Kein Wartungsvertrag mehr, keine monatlichen Gebühren.',
     url: 'https://steakakademie.de/eigenregie',
@@ -180,7 +180,7 @@ export default async function EigenregiePage() {
                 Säule III — Eigenregie
               </span>
               <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold text-text-light leading-tight mb-6">
-                Dein Business „KOMPLETT"<br className="hidden lg:block" />
+                Dein Business „KOMPLETT“<br className="hidden lg:block" />
                 in Eigenregie.
               </h1>
               <p className="font-serif text-xl lg:text-2xl text-text-light/80 leading-relaxed mb-4">

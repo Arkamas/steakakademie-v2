@@ -3,7 +3,7 @@
 -- Grund: Der alte Name wertet den Wettbewerb ab und verstoesst damit gegen die
 -- eigene Marken-Doktrin (CLAUDE.md §2 Regel 3, "keine abwertenden Aussagen ...
 -- ueber Wettbewerber"). Neuer Name: Eigenregie, Claim auf der Seite:
--- „Dein Business „KOMPLETT" in Eigenregie."
+-- „Dein Business „KOMPLETT“ in Eigenregie.“
 --
 -- WAS DIESE MIGRATION NICHT ANFASST — und warum das richtig ist:
 --   digistore_products verknuepft ueber course_id (UUID), nicht ueber den Slug.

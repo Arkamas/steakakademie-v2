@@ -1,7 +1,29 @@
 import type { Metadata } from 'next';
-import DiplomeClient from './DiplomeClient';
+import { allDiplomLektions } from 'contentlayer/generated';
+import DiplomeClient, { type LektionLink } from './DiplomeClient';
 import { getPlattformPuls } from '@/lib/plattform-puls';
 import { courseSchema, breadcrumbSchema } from '@/lib/schema';
+
+// Server Component: contentlayer bleibt hier (Build-Zeit, kein Client-Bundle).
+// Der Client bekommt nur den serialisierbaren Ausschnitt, den er rendert —
+// dasselbe Muster wie in /diplome/roadmap.
+//
+// Warum ueberhaupt: Stufe 1 ist fertig und oeffentlich (isPaidTier = stufe >= 2
+// in der Lektionsseite), war von dieser Seite aus aber nur ueber Roadmap →
+// Stufe anklicken → Tab „Lerninhalte" erreichbar — vier Schritte tief, waehrend
+// die Seite darueber „in Vorbereitung" behauptete.
+function stufeEinsLektionen(): LektionLink[] {
+  return allDiplomLektions
+    .filter((l) => l.stufe === 1)
+    .map((l) => ({
+      lektionSlug: l.lektionSlug,
+      title: l.title,
+      order: l.order,
+      level: l.level,
+      url: l.url,
+    }))
+    .sort((a, b) => a.order - b.order);
+}
 
 export const metadata: Metadata = {
   title: 'Grillmeister-Diplom: 10 Level BBQ-Ausbildung',
@@ -36,7 +58,7 @@ export default function DiplomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSch) }}
       />
-      <DiplomeClient puls={getPlattformPuls()} />
+      <DiplomeClient puls={getPlattformPuls()} stufe1={stufeEinsLektionen()} />
     </>
   );
 }

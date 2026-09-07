@@ -1,28 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { m as motion } from 'framer-motion';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { createClient } from '@/lib/supabase/client';
+import { LEVELS, STUFEN, stufeByNr } from '@/lib/diplome/stufen';
 
-const DIPLOMA_LEVELS = [
-  { level: 1, name: 'Glut-Lehrling', emoji: '🔥' },
-  { level: 2, name: 'Marinier-Meister', emoji: '🧂' },
-  { level: 3, name: 'Onglet-Kenner', emoji: '🥩' },
-  { level: 4, name: 'Dry-Ager', emoji: '🧊' },
-  { level: 5, name: 'Flammen-Virtuose', emoji: '🎯' },
-  { level: 6, name: 'Cuts-Experte', emoji: '🗺️' },
-  { level: 7, name: 'Smoke-Artist', emoji: '💨' },
-  { level: 8, name: 'Thermometer-Profi', emoji: '🌡️' },
-  { level: 9, name: 'Wagyu-Sommelier', emoji: '🏅' },
-  { level: 10, name: 'Master of Steak', emoji: '👑' },
-];
+/**
+ * Gedruckte Urkunde — Audit 06.09.2026, R5.
+ *
+ * Vorher: handleSubmit wartete 1,2 Sekunden, meldete „Urkunde bestellt!" und
+ * tat nichts — kein Request, kein Datensatz, keine Mail. Das Level waehlte der
+ * Besucher frei aus zehn Optionen, ohne Bezug zum Fortschritt.
+ *
+ * Jetzt: Die Bestellung geht ueber /api/kontakt (Betreff „urkunde"), wird in
+ * kontaktanfragen gespeichert und per Loops an pitmaster@ zugestellt — genau
+ * die Strecke, die schon fuer das Kontaktformular gilt (KAN-70, inkl.
+ * Einwilligung). Bestellbar sind nur Level, deren Stufe im Konto als bestanden
+ * steht; ohne Konto gibt es keine Bestellung, nur die Vorschau.
+ */
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error';
+type Konto = { userId: string; email: string; bestandeneStufen: Set<number> } | null | 'laedt';
 
-export default function UrkudePage() {
+const CONSENT_TEXT =
+  'Ich bin einverstanden, dass meine Angaben zur Bearbeitung dieser Bestellung gespeichert und per E-Mail an die Steakakademie übermittelt werden.';
+
+export default function UrkundePage() {
   const [form, setForm] = useState({
     name: '',
     level: '',
@@ -31,20 +38,91 @@ export default function UrkudePage() {
     city: '',
     country: 'Deutschland',
   });
+  const [consent, setConsent] = useState(false);
   const [state, setState] = useState<FormState>('idle');
+  const [fehler, setFehler] = useState('');
+  const [konto, setKonto] = useState<Konto>('laedt');
 
-  const selected = DIPLOMA_LEVELS.find(d => d.level === Number(form.level));
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user || cancelled) { if (!cancelled) setKonto(null); return; }
+        const { data } = await supabase
+          .from('course_progress')
+          .select('stufe, status')
+          .eq('user_id', user.id);
+        const bestanden = new Set<number>(
+          (data ?? []).filter((r) => r.status === 'bestanden' && typeof r.stufe === 'number').map((r) => r.stufe as number),
+        );
+        if (!cancelled) setKonto({ userId: user.id, email: user.email ?? '', bestandeneStufen: bestanden });
+      } catch {
+        if (!cancelled) setKonto(null);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const waehlbareLevel = konto && konto !== 'laedt'
+    ? LEVELS.filter((l) => konto.bestandeneStufen.has(l.stufe))
+    : [];
+  const selected = LEVELS.find((d) => d.id === Number(form.level));
+  const selectedStufe = selected ? stufeByNr(selected.stufe) : undefined;
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.name || !form.level || !form.street || !form.zip || !form.city) return;
+    if (!konto || konto === 'laedt') return;
+    if (!form.name || !form.level || !form.street || !form.zip || !form.city || !consent) return;
+    if (!selected || !konto.bestandeneStufen.has(selected.stufe)) {
+      setFehler('Dieses Level steht in deinem Konto nicht als bestanden.');
+      setState('error');
+      return;
+    }
     setState('submitting');
-    await new Promise(r => setTimeout(r, 1200));
-    setState('success');
+    setFehler('');
+    const message = [
+      `Bestellung gedruckte Urkunde (9,99 € + 4,99 € Porto)`,
+      ``,
+      `Name auf der Urkunde: ${form.name}`,
+      `Level: ${selected.id} — ${selected.name} (Stufe ${selected.stufe}, ${selectedStufe?.cert ?? ''})`,
+      `Konto: ${konto.userId}`,
+      ``,
+      `Versandadresse:`,
+      form.street,
+      `${form.zip} ${form.city}`,
+      form.country,
+    ].join('\n');
+    try {
+      const res = await fetch('/api/kontakt', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          email: konto.email,
+          subject: 'urkunde',
+          message,
+          consent: true,
+          consent_text: CONSENT_TEXT,
+          website: '',
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setFehler(typeof data?.error === 'string' ? data.error : 'Die Bestellung konnte nicht übermittelt werden.');
+        setState('error');
+        return;
+      }
+      setState('success');
+    } catch {
+      setFehler('Keine Verbindung — die Bestellung wurde nicht übermittelt.');
+      setState('error');
+    }
   }
 
   const inputClass = 'w-full bg-surface-dark border border-brand-gold/20 px-4 py-3 text-text-light text-sm font-body focus:border-brand-gold/60 transition-colors placeholder:text-text-light/20';
@@ -88,7 +166,6 @@ export default function UrkudePage() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="relative border-2 border-brand-gold/30 bg-gradient-to-br from-brand-gold/5 to-transparent p-10 md:p-16 text-center overflow-hidden"
           >
-            {/* Decorative corners */}
             <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-brand-gold/30" />
             <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-brand-gold/30" />
             <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-brand-gold/30" />
@@ -106,7 +183,7 @@ export default function UrkudePage() {
               {selected ? `${selected.emoji} ${selected.name}` : <span className="text-text-light/20 italic">Level wählen</span>}
             </p>
             <p className="text-text-light/30 text-sm font-body mb-8">
-              erfolgreich abgelegt und das Diplom-Level {form.level || '—'} der Steakakademie erreicht hat.
+              erfolgreich abgelegt und {selectedStufe ? `das ${selectedStufe.cert}` : 'das Diplom-Level —'} der Steakakademie erreicht hat.
             </p>
             <div className="flex items-center justify-center gap-8 text-text-light/20 text-xs font-sans">
               <div className="text-center">
@@ -122,25 +199,59 @@ export default function UrkudePage() {
           </motion.div>
         </section>
 
-        {/* Order Form */}
+        {/* Bestellung */}
         <section className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-          {state === 'success' ? (
+          {konto === 'laedt' && (
+            <p className="text-center text-sm font-sans text-text-light/40">Konto wird geprüft …</p>
+          )}
+
+          {konto === null && (
+            <div className="text-center border border-brand-gold/20 bg-surface-elevated p-10">
+              <h2 className="font-serif text-2xl font-bold text-text-light mb-3">Für die Bestellung brauchst du dein Konto</h2>
+              <p className="font-body text-text-light/60 leading-relaxed mb-6 max-w-md mx-auto">
+                Gedruckt wird nur, was in deinem Konto als bestanden steht. Melde dich an —
+                oder fang mit Stufe 1 an, sie ist kostenlos.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link href="/auth/login?redirectTo=/diplome/urkunde" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold uppercase text-sm tracking-[0.08em]">
+                  Anmelden <ChevronRight size={15} />
+                </Link>
+                <Link href="/diplome/lernen/stufe-1/grillarten" className="inline-flex items-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold uppercase text-sm tracking-[0.08em]">
+                  Stufe 1 lesen
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {konto && konto !== 'laedt' && waehlbareLevel.length === 0 && state !== 'success' && (
+            <div className="text-center border border-brand-gold/20 bg-surface-elevated p-10">
+              <h2 className="font-serif text-2xl font-bold text-text-light mb-3">Noch keine bestandene Stufe</h2>
+              <p className="font-body text-text-light/60 leading-relaxed mb-6 max-w-md mx-auto">
+                Sobald eine Stufenprüfung in deinem Konto als bestanden steht, kannst du hier die
+                gedruckte Urkunde dafür bestellen.
+              </p>
+              <Link href="/diplome/roadmap" className="inline-flex items-center gap-2 px-6 py-3 bg-brand-fire text-text-light font-sans font-bold uppercase text-sm tracking-[0.08em]">
+                Zur Roadmap <ChevronRight size={15} />
+              </Link>
+            </div>
+          )}
+
+          {state === 'success' && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-16 border border-brand-gold/20 bg-surface-elevated p-12"
             >
-              <div className="text-6xl mb-6">🎉</div>
-              <h2 className="font-serif text-3xl font-bold text-text-light mb-4">Urkunde bestellt!</h2>
+              <div className="text-6xl mb-6">📬</div>
+              <h2 className="font-serif text-3xl font-bold text-text-light mb-4">Bestellung ist angekommen</h2>
               <p className="font-body text-text-light/60 leading-relaxed mb-4">
-                Wir schicken dir deine persönliche, gedruckte Urkunde innerhalb von
-                5–7 Werktagen per Post zu.
-              </p>
-              <p className="text-brand-gold text-sm font-sans">
-                Betrag 9,99 € + 4,99 € Porto (gesamt 14,98 €) wird separat per PayPal / Überweisung angefragt.
+                Wir melden uns per E-Mail an {konto && konto !== 'laedt' ? konto.email : 'deine Adresse'} wegen
+                der Zahlung (9,99 € + 4,99 € Porto = 14,98 €). Danach geht die Urkunde in den Druck und per Post zu dir.
               </p>
             </motion.div>
-          ) : (
+          )}
+
+          {konto && konto !== 'laedt' && waehlbareLevel.length > 0 && state !== 'success' && (
             <motion.form
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -159,16 +270,18 @@ export default function UrkudePage() {
               </div>
 
               <div>
-                <label className={labelClass}>Erreichtes Diplom-Level</label>
-                <select name="level" value={form.level} onChange={handleChange} required
-                  className={inputClass}>
+                <label className={labelClass}>Bestandenes Level</label>
+                <select name="level" value={form.level} onChange={handleChange} required className={inputClass}>
                   <option value="">Level wählen…</option>
-                  {DIPLOMA_LEVELS.map(d => (
-                    <option key={d.level} value={d.level}>
-                      Level {d.level} — {d.emoji} {d.name}
+                  {waehlbareLevel.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      Level {d.id} — {d.emoji} {d.name} (Stufe {d.stufe}, {STUFEN[d.stufe - 1]?.cert})
                     </option>
                   ))}
                 </select>
+                <p className="mt-1.5 text-[11px] font-sans text-text-light/40">
+                  Angezeigt werden nur Level aus Stufen, die in deinem Konto als bestanden stehen.
+                </p>
               </div>
 
               <div>
@@ -195,16 +308,31 @@ export default function UrkudePage() {
                 <input name="country" value={form.country} onChange={handleChange} className={inputClass} />
               </div>
 
-              <p className="text-text-light/30 text-xs font-body leading-relaxed pt-2">
+              <label className="flex items-start gap-3 pt-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  required
+                  className="mt-1 h-5 w-5 shrink-0 accent-brand-fire"
+                />
+                <span className="text-text-light/50 text-xs font-body leading-relaxed">{CONSENT_TEXT}</span>
+              </label>
+
+              <p className="text-text-light/30 text-xs font-body leading-relaxed">
                 Die digitale Urkunde bleibt kostenlos. Für die gedruckte Variante nehmen wir nach dem
-                Absenden Kontakt zur Zahlung auf (9,99 € + 4,99 € Porto = 14,98 €).
+                Absenden per E-Mail Kontakt zur Zahlung auf (9,99 € + 4,99 € Porto = 14,98 €).
                 Deine Adresse wird ausschließlich für den Versand verwendet.
                 Gemäß § 19 UStG (Kleinunternehmerregelung) wird keine Umsatzsteuer ausgewiesen.
               </p>
 
+              {state === 'error' && fehler && (
+                <p className="text-sm font-sans text-brand-fire">{fehler}</p>
+              )}
+
               <button
                 type="submit"
-                disabled={state === 'submitting'}
+                disabled={state === 'submitting' || !consent}
                 className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-[background-color,opacity] duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {state === 'submitting' ? 'Wird gesendet…' : 'Gedruckte Urkunde bestellen — 14,98 € →'}

@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { cookies } from 'next/headers';
-import { istAdminPasswort } from '@/lib/admin-auth';
+import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
 import { allDiplomLektions } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import { STUFEN } from '@/components/relaunch/Siegel';
@@ -43,15 +42,22 @@ export function generateMetadata({ params }: Props): Metadata {
   return { title: l.seoTitle ?? l.title, description: l.seoDescription ?? l.excerpt };
 }
 
-export default function LektionSeite({ params }: Props) {
+/**
+ * Async-Huelle entscheidet den Zugang (Admin ODER aktive Diplom-Buchung —
+ * src/lib/diplome/zugang.ts, Audit 06.09.2026 R3); der Kern bleibt synchron,
+ * weil useMDXComponent ein Hook ist. diplomZugang() nur fuer Bezahlstufen,
+ * damit Stufe 1 statisch bleibt.
+ */
+export default async function LektionSeite({ params }: Props) {
   const l = finde(params);
   if (!l) notFound();
+  const gesperrt = istBezahlstufe(l.stufe) ? !(await diplomZugang()).zugang : false;
+  return <LektionInhalt l={l} gesperrt={gesperrt} />;
+}
+
+function LektionInhalt({ l, gesperrt }: { l: NonNullable<ReturnType<typeof finde>>; gesperrt: boolean }) {
   const stufe = STUFEN[l.stufe - 1];
   const MDXContent = useMDXComponent(l.body.code);
-
-  const bezahlt = l.stufe >= 2;
-  const admin = bezahlt && istAdminPasswort(cookies().get('admin_auth')?.value);
-  const gesperrt = bezahlt && !admin;
 
   const geschwister = allDiplomLektions.filter((x) => x.stufe === l.stufe).sort((a, b) => a.order - b.order);
   const idx = geschwister.findIndex((x) => x.lektionSlug === l.lektionSlug);

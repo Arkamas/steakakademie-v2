@@ -201,23 +201,49 @@ eingriff          id, mandant, ausloeser, aenderung_json, wirksam_ab
 
 ## 12 · Fahrplan
 
-27 Tage bis Kampagnenstart, und die Website hat Vorrang. Die Reihenfolge folgt
-dem **Risiko**: was ohne Aufsicht Schaden anrichten kann, kommt zuerst.
+> **Korrektur 05.09.2026 — der harte Terminkonflikt.** Die erste Fassung plante für
+> den 30.09. „automatische Veröffentlichung". Das ist nicht erreichbar, und zwar aus
+> einem Grund, den keine Arbeitsgeschwindigkeit auflöst:
+>
+> **Die Gewerbeanmeldung erfolgt am 01.10.2026 — am Tag des Kampagnenstarts.**
+> Sie darf **nicht vorgezogen werden**: Das Einstiegsgeld (§16b SGB II) muss vor
+> Aufnahme der Tätigkeit beantragt *und bewilligt* sein, und die Gewerbeanmeldung
+> gilt als Aufnahme. Wer sie vorzieht, um früher an Plattform-Verifizierungen zu
+> kommen, riskiert die Förderung. Das ist ein schlechtes Geschäft: ein pünktlicher
+> Instagram-Autopost gegen die Finanzierung der Aufbauphase.
+>
+> Daraus folgt eine **Zwei-Wellen-Struktur**: Die Kampagne startet am 01.10.
+> pünktlich — mit Prüf-Tor und Produktion, aber mit **von Hand veröffentlichten**
+> Beiträgen. Die Automatisierung der letzten Meile wächst danach kanalweise nach.
+
+**Welche Kanäle wann können** (Recherchestand 05.09.2026):
+
+| Kanal | Gewerbe nötig? | Echter Engpass |
+|---|---|---|
+| **YouTube** | nein | OAuth auf den eigenen Kanal. „Testing"-Modus lässt Refresh-Token nach ~7 Tagen verfallen — lästig, kein Blocker. **Welle 1 möglich.** |
+| **TikTok** | nein (kein Dokument-Upload) | **Der Audit.** Bis er durch ist, sind alle API-Posts `SELF_ONLY`, also für niemanden sichtbar. Nachweis ist ein Demo-Video des Ablaufs — **kann ohne Gewerbe vorbereitet werden**, Audit läuft parallel zur Bewilligung. |
+| **Instagram / Facebook** | faktisch ja | Meta Business Verification für Advanced Access. Erst nach Gewerbeanmeldung → **frühestens Mitte/Ende Oktober**. Welche Dokumente Meta von deutschen Einzelunternehmern genau verlangt, ist ungeprüft. |
+| **Pinterest** | vermutlich Business-Konto | nicht recherchiert |
+
+**Fahrplan:**
 
 | Zeitraum | Was fertig wird |
 |---|---|
 | **bis 14.09.** | **Das Prüf-Tor allein.** CLI-Werkzeug, das ein fertiges Video prüft und ein Protokoll schreibt. Läuft zuerst im Handbetrieb neben Uwe — so zeigt sich, ob es die richtigen Dinge findet, bevor es entscheidet. |
-| **bis 21.09.** | **Datenmodell + Disponent.** Vorgänge in Supabase, Upload und Terminierung für die 3 wichtigsten Kanäle. Vorrat für die ersten 3 Kampagnenwochen von Hand gefüllt — nicht vom Kundschafter. |
-| **bis 30.09.** | **Intendant, Wochenbericht, Notbremse.** Kampagnenstart mit vorgefülltem Plan, echtem Prüf-Tor, automatischer Veröffentlichung. Kundschafter und Auswerter laufen mit, aber nur beobachtend. |
-| **Oktober** | Kundschafter bekommt Entscheidungsrecht, Auswerter darf Gewichte verschieben. Restliche Kanäle dazu. Erst jetzt ist der Kreis geschlossen. |
+| **bis 21.09.** | **Datenmodell + Disponent.** Vorgänge in Supabase, Terminierung. Vorrat für die ersten 3 Kampagnenwochen von Hand gefüllt — nicht vom Kundschafter. Parallel, **ohne Gewerbe möglich:** YouTube-OAuth einrichten, TikTok-Developer-Account anlegen und das Audit-Demo-Video produzieren. |
+| **bis 30.09.** | **Intendant, Wochenbericht, Notbremse.** Der Disponent stellt Beiträge fertig **bereit** (Datei + Text + Kennzeichnung, freigegeben durch das Prüf-Tor); veröffentlicht wird von Hand. Kundschafter und Auswerter laufen mit, nur beobachtend. |
+| **01.10.** | **Kampagnenstart** — pünktlich, mit hartem Prüf-Tor, ohne eine einzige Plattform-API. **Und: Gewerbeanmeldung**, sobald der ESG-Antrag bewilligt ist. |
+| **Oktober, Welle 1** | YouTube automatisiert; TikTok, sobald der Audit durch ist. Erst danach Meta-Verifizierung beantragen. |
+| **Oktober, Welle 2** | Instagram/Facebook automatisiert (nach Verifizierung). Kundschafter bekommt Entscheidungsrecht, Auswerter darf Gewichte verschieben. Erst jetzt ist der Kreis geschlossen. |
 | **November** | Zweiter Mandant als Datei, nicht als Umbau. Wenn §9 eingehalten wurde: ein Tag Arbeit. |
 
-> **Ehrlicher Hinweis:** Ein vollständig autonomer Orchestrator in 27 Tagen —
-> neben dem Website-Abschluss — ist nicht realistisch. Realistisch ist ein
-> **hartes Prüf-Tor plus automatische Veröffentlichung eines von Hand gefüllten
-> Plans**. Das nimmt ab Tag eins die Arbeit ab, die am 1. Oktober tatsächlich
-> blockiert, und lässt die Autonomie im Oktober nachwachsen, während die
-> Kampagne läuft.
+> **Ehrlicher Hinweis:** Ein vollständig autonomer Orchestrator bis zum 01.10. —
+> neben dem Website-Abschluss — war schon ohne den Termin­konflikt nicht realistisch.
+> Mit ihm ist er es sicher nicht. Realistisch ist ein **hartes Prüf-Tor plus
+> Produktion**, dessen letzte Meile zunächst ein Mensch geht. Das nimmt ab Tag eins
+> die Arbeit ab, die tatsächlich Zeit frisst (Themenwahl, Skript, Stimme, Schnitt,
+> Prüfung) — Hochladen dauert Minuten. Die Autonomie wächst im Oktober nach,
+> während die Kampagne bereits läuft.
 
 ## 13 · Offene Punkte (Entscheidung durch Uwe)
 
@@ -228,9 +254,15 @@ dem **Risiko**: was ohne Aufsicht Schaden anrichten kann, kommt zuerst.
 3. **Wer gibt gesperrte Werke frei**, wenn Uwe im Project-Director-Modus ist?
    Bleibt es bei ihm, ist das der einzige Punkt, an dem das System auf einen
    Menschen wartet.
-4. **Zugänge:** Meta Graph (Instagram/Facebook), TikTok Content Posting API,
-   YouTube Data API, Pinterest API, Loops.so. Freischaltungen dauern teils Tage
-   — **der wahrscheinlichste Grund, warum der 1. Oktober rutscht.**
+4. **Zugänge — Ursache geklärt (05.09.2026), Entscheidung entfällt.**
+   Die erste Fassung nannte die Freischaltungen als „wahrscheinlichsten Grund,
+   warum der 1. Oktober rutscht". Der Grund ist inzwischen bekannt und nicht
+   verhandelbar: **Meta verlangt Business Verification, die eine Gewerbeanmeldung
+   voraussetzt — und die erfolgt erst am 01.10.**, weil sie sonst das Einstiegsgeld
+   gefährdet (siehe §12). Der 1. Oktober rutscht damit nicht; er wird nur ohne
+   Plattform-APIs bestritten. Zu tun bleibt: YouTube-OAuth und der TikTok-Audit,
+   beides **ohne Gewerbe möglich** und deshalb Aufgabe im September.
+   Pinterest ist noch nicht recherchiert. Loops.so ist unabhängig davon nutzbar.
 5. **Zweiter Geschäftsbereich** — grobe Richtung genügt. Ob er dieselben Kanäle
    bespielt, ändert den Zuschnitt des Disponenten.
 

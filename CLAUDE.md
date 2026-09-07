@@ -274,6 +274,17 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    Referenz `data/kerntemperatur-referenz.yaml`. Genauigkeit = stärkster Burggraben.
 3. **Marken-DNA** (`marketing_agent.txt`): Ton, Farben (#C8882A/#E85018/#120C07),
    **kein persönlicher Auftritt von Uwe** (Avatar-System Marco/Jonas/Elena).
+   **Uwe ist auch keine Autorenstimme (Uwe, 06.09.2026: „Uwe Yendell als Sprachstimme raus").**
+   Fachartikel zeichnen die Personas: Marco (Technik, Cuts, Kerntemperaturen),
+   Elena (Food Science, Fleischkunde, Fonds), Jonas (Einsteiger, Equipment, Rubs).
+   Uwe bleibt **sichtbar als fachlich Verantwortlicher** — das ist Pflicht
+   (Art. 50 KI-VO) und das einzige E-E-A-T-Signal eines echten Menschen; ohne ihn
+   stünden 145 Artikel von KI-Personas ohne Mensch dahinter. Konkret: `author`/
+   `authorSlug` im Frontmatter nie `uwe-yendell`, aber jede Persona-Seite trägt
+   „KI-Persona · fachlich verantwortet von Uwe Yendell", und unter Cut-, Methoden-,
+   Rezept- und Streitfall-Texten steht `<AutorHinweis>` (src/components/). Der Satz
+   „basiert auf eigener Praxiserfahrung" gilt nur für `realPerson: true` — bei einer
+   Persona wäre er eine Falschaussage.
 4. **Human-gated:** Agenten produzieren Entwürfe, **Uwe gibt frei**. Kein Auto-Posting.
 5. **No black-hat:** kein Spam, Mass-Follow, Fake-Entities.
 6. **Rechtssicherheit → autonom fixen (Uwe, 01.07.2026).** Was Claude bei einem Audit

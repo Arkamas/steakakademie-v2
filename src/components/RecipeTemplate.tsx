@@ -1,6 +1,7 @@
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
+import AutorHinweis from '@/components/AutorHinweis';
 import { Clock, Flame, Users, Calendar, ChevronRight, Zap, Timer, Sparkles } from 'lucide-react';
 import PortionCalculator from './recipe/PortionCalculator';
 import AromaPairing from './recipe/AromaPairing';
@@ -341,9 +342,7 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
                 >
                   {recipe.author}
                 </Link>
-                <p className="text-xs font-sans text-text-muted mt-1 leading-relaxed">
-                  Steakakademie-Autor. Alle Rezepte basieren auf eigener Praxiserfahrung und werden mehrfach am Grill getestet, bevor sie veröffentlicht werden.
-                </p>
+                <AutorHinweis authorSlug={recipe.authorSlug} variante="rezept" />
               </div>
             </div>
           </div>

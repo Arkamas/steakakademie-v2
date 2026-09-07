@@ -141,7 +141,9 @@ export default function AutorenIndexPage() {
         <section className="border-t border-border-subtle">
           <div className="max-w-editorial mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
             <p className="font-body text-sm text-text-muted max-w-xl mx-auto leading-relaxed">
-              Alle Inhalte der Steakakademie basieren auf eigener Praxiserfahrung und werden vor Veröffentlichung auf Richtigkeit geprüft.
+              Alle Inhalte der Steakakademie fußen auf der Praxis von Gründer Uwe Yendell und werden vor
+              Veröffentlichung auf Richtigkeit geprüft. Artikel unter den Namen Marco, Jonas und Elena
+              entstehen KI-unterstützt und werden fachlich von ihm verantwortet.
               Affiliate-Links sind klar gekennzeichnet —{' '}
               <Link href="/affiliate-disclosure" className="text-brand-gold hover:text-brand-fire transition-colors underline underline-offset-2">
                 Offenlegung

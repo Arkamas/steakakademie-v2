@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import type { Katalog as KatalogTyp, KatalogEintrag } from '@/lib/relaunch/katalog';
+import { relaunchHref } from '@/lib/relaunch/href';
 
 /**
  * Übersicht-Muster: Filterleiste + Raster/Liste + Leer-Zustand.
@@ -110,15 +111,6 @@ export default function Katalog({ katalog }: { katalog: KatalogTyp }) {
 
 type Row = KatalogEintrag & { nr: string };
 
-/**
- * Die Katalogdaten tragen die LIVE-URLs (die beim Umschalten gelten). Solange
- * der Relaunch parallel läuft, bleiben Verweise auf bereits nachgebaute
- * Vorlagen innerhalb von /relaunch — sonst springt die Vorschau ins alte Design.
- */
-const IM_RELAUNCH = ['/streitfaelle/', '/rezepte/', '/vergleich/', '/diplome'];
-export function relaunchHref(href: string): string {
-  return IM_RELAUNCH.some((p) => href.startsWith(p)) ? `/relaunch${href}` : href;
-}
 
 /** Raster-Karte. Mit href ein Link, ohne href eine Karte mit „Detailseite folgt". */
 function Karte({ e }: { e: Row }) {

@@ -39,6 +39,7 @@
 | Werkzeug (Ansicht 6) | `src/app/relaunch/vergleich/[slug]/page.tsx` | 7 Vergleiche; Produktkarten aus der Registry mit „Anzeige" vor dem Klick, `/go/[id]` rel=sponsored |
 | Über uns (Ansicht 8) | `src/app/relaunch/ueber-uns/page.tsx` | Prototyp-Text, Weide-Bild (KI, gekennzeichnet), Reifekammer-Platzhalter mit Hinweis, Redaktion mit Persona-Label |
 | Lesetext-MDX | `src/components/relaunch/Prose.tsx` | alle MDX-Komponenten der Alt-Seiten (Callouts, AffiliateBox, ProductCard, ComparisonTable, BuyingGuide, BBQPairing) + helle Prose-Stile |
+| Suche (Nachtrag 06.09.) | `src/app/relaunch/suche/page.tsx`, `src/components/relaunch/{SucheFeld,MarcoStarter}.tsx`, `src/lib/{suche.ts,relaunch/href.ts}` | Feld in der Kopfzeile, Ergebnisseite mit Bereichs-Filter, Marco als Auffangnetz — dieselbe Suchquelle wie `/suche` |
 
 **Alle acht Handoff-Ansichten sind damit gebaut.** Die Kopfzeile verlinkt Diplome und Über uns
 auf die Relaunch-Vorlagen; „Ausrüstung" auf die Live-Übersicht `/vergleich`, weil der Handoff
@@ -50,6 +51,39 @@ als `cookie === process.env.ADMIN_PASSWORD`. Fehlt die Variable (Preview ohne En
 lokale Kopie, Build-Gate), ist `undefined === undefined` wahr — jeder Besucher wäre Admin,
 inklusive Volltext der Bezahl-Lektionen. Jetzt eine Stelle: `src/lib/admin-auth.ts`, ohne
 Passwort kein Admin. Aufgefallen, weil in der Cowork-VM Stufe 2 lesbar war.
+
+## Nachtrag 06.09.2026: Suche (im Handoff nicht entworfen)
+
+Auftrag Uwe: *„Was in der neuen Seite fehlt sind die Shop-Produkte und eine Suche. Es gibt
+eigentlich eine Suche in Form von der KI Marco. Die Frage ist aber ob die User das checken."*
+Die Frage ist berechtigt und die Antwort lautet nein: Ein Chat-Widget unten rechts wird als
+Support gelesen, nicht als Suchfeld. Wer „Tomahawk" sucht, sucht ein Feld mit einer Lupe.
+
+**Rollenteilung statt Ersatz.** Die Suche beantwortet *„wo ist X"* — navigierend, exakt,
+ohne Wartezeit und ohne Token-Kosten. Marco beantwortet *„was nehme ich für Y"* — beratend,
+unscharf. Marco steht deshalb **unter** den Treffern und **an ihrer Stelle**, wenn es keine
+gibt; der Knopf öffnet den Chat mit einer vorbereiteten Frage, **schickt sie aber nicht ab**
+(kein API-Aufruf ohne Zutun des Besuchers).
+
+**Eine Suchquelle, nicht zwei.** `search()` wurde aus `src/app/suche/page.tsx` nach
+`src/lib/suche.ts` gehoben; Alt-Seite und Relaunch nutzen dieselbe Funktion. Zwei Sammel-
+Logiken wären zwei Wahrheiten darüber, was auffindbar ist — und der Redaktionsvorbehalt
+(`nurVeroeffentlicht`, Art. 50 KI-VO: Entwürfe bleiben unsichtbar) ist genau die Sorte
+Regel, die man nicht zweimal pflegen will. Ein E2E-Test vergleicht die Trefferzahl beider
+Seiten und schlägt an, wenn sie auseinanderlaufen.
+
+**Gelernt (gehört in § A):** `relaunchHref()` stand in `Katalog.tsx`, einer
+`'use client'`-Datei. Ein Server-Bauteil, das eine gewöhnliche Funktion von dort importiert,
+bekommt keine Funktion, sondern einen Client-Verweis — die Seite starb zur Laufzeit mit
+`(0 , c.s) is not a function`. Im `next build` **unsichtbar**, weil die Suchseite dynamisch
+ist und erst beim Aufruf rendert; erst Playwright hat es gefunden. Gemeinsam genutzte Logik
+gehört nicht in ein `'use client'`-Modul — sie liegt jetzt in `src/lib/relaunch/href.ts`.
+Merksatz: Ein grüner Build beweist bei dynamischen Routen nur die Übersetzung, nicht den Lauf.
+
+**Offen (Uwe):** Die Shop-Produkte aus derselben Nachricht — die Ausrüstungs-*Übersicht*
+hat keine Handoff-Vorlage und wartet auf Uwes Blick („außer die Ausrüstungsübersicht, die
+ich mir angucken muss"). Bis dahin zeigt „Ausrüstung" in der Kopfzeile weiter auf die
+Live-Übersicht `/vergleich`.
 
 ## Bewusste Abweichungen vom Prototyp — mit Grund
 
@@ -125,6 +159,13 @@ Passwort kein Admin. Aufgefallen, weil in der Cowork-VM Stufe 2 lesbar war.
 - **Bezahlschutz mit gesetztem ADMIN_PASSWORD + Cookie** (Admin sieht Volltext) nicht
   durchgespielt — nur der Fall „kein Admin → nur Anreißer".
 - **Safari/iOS** nicht gesehen — nur Chromium headless, 1400px und 390px.
+- **Suche (06.09.):** geprüft sind tsc, lint, `npm run check`, legal-guard, `next build`,
+  vitest 96/96, Playwright **41/41** (7 neu), 6 Bildschirmfotos ohne Konsolenfehler,
+  10 neue Farbpaare rechnerisch AA (4,61–17,05:1). **Nicht** geprüft: Rechtschreibprüfung
+  über die neuen Texte (`spell:check` braucht die LanguageTool-API), Verhalten mit
+  Tastatur-Kürzel „/" auf Safari, Suche mit sehr langen Anfragen jenseits 80 Zeichen
+  (abgeschnitten, nicht getestet), und ob Marco die vorbereitete Frage brauchbar
+  beantwortet (kein API-Schlüssel in der VM).
 
 ## Umschalt-Kriterien (alle grün, sonst kein Umschalten)
 

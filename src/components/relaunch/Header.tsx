@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Rauchring from './Rauchring';
+import SucheFeld from './SucheFeld';
 
 /**
  * Kopfzeile des Relaunch-Designs (Handoff-README, „Kopfzeile und Navigation").
@@ -15,6 +16,11 @@ import Rauchring from './Rauchring';
  *
  * Mobile Navigation: laut Handoff bewusst NICHT entworfen (offener Punkt 2).
  * Unter 1040px fällt „Über uns" aus der Leiste, mehr nicht — genau wie im Prototyp.
+ *
+ * Suchfeld: im Handoff ebenfalls nicht entworfen, am 05.09.2026 von Uwe
+ * beauftragt. Es steht links neben den Knöpfen, weil dort die Blickrichtung
+ * endet — und weil es damit nicht mit der Navigation um dieselbe Zeile
+ * konkurriert. Begründung im Kopf von SucheFeld.tsx.
  */
 export default function Header() {
   return (
@@ -35,6 +41,7 @@ export default function Header() {
           <Link href="/relaunch/ueber-uns" className="sk-nav__link sk-nav__link--wide">Über uns</Link>
         </nav>
         <div className="sk-header__actions">
+          <SucheFeld />
           <Link href="/relaunch/diplome" className="sk-btn sk-btn--ghost">Diplome</Link>
           <Link href="/auth/login" className="sk-btn sk-btn--primary">Anmelden</Link>
         </div>

@@ -47,6 +47,11 @@ DO $$ BEGIN
   END IF;
 END $$;
 
+-- Rechte ausdruecklich setzen — Migration 20260603131833 musste genau das fuer
+-- course_progress/profiles nachreichen, die Standardrechte reichten dort nicht.
+GRANT SELECT, INSERT, DELETE ON lesson_progress TO authenticated;
+GRANT ALL ON lesson_progress TO service_role;
+
 -- ── 3. Der Diplom-Kurs als Buchungsziel
 -- Der Digistore-Webhook ordnet Kaeufe ueber digistore_products einem Kurs-Slug
 -- zu und ruft grant_course_access auf. Ohne diese Zeile gibt es nichts, worauf

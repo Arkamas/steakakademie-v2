@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'SEO-Sprint — Google-Sichtbarkeit in 72h',
     description:
-      'Der logische nächste Schritt nach dem Agentur-Killer-Sprint: deine fertige Website auf Google sichtbar machen. Schritt-für-Schritt, ohne Agentur.',
+      'Der logische nächste Schritt nach Eigenregie: deine fertige Website auf Google sichtbar machen. Schritt-für-Schritt, ohne Agentur.',
     url: 'https://steakakademie.de/seo-sprint',
     type: 'website',
   },
@@ -60,7 +60,7 @@ const DELIVERABLES = [
 
 const FAQ = [
   {
-    q: 'Muss ich den Agentur-Killer-Sprint gemacht haben?',
+    q: 'Muss ich Eigenregie gemacht haben?',
     a: 'Nein. Der SEO-Sprint funktioniert mit jeder bestehenden Website — egal ob du sie selbst gebaut hast, von einer Agentur hast bauen lassen oder über WordPress, Squarespace oder Next.js betreibst.',
   },
   {
@@ -132,7 +132,7 @@ export default async function SeoSprintPage() {
 
             <div className="max-w-3xl">
               <span className="inline-block text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-brand-fire mb-4">
-                Folgeprodukt zum Agentur-Killer-Sprint
+                Folgeprodukt zu Eigenregie
               </span>
               <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold text-text-light leading-tight mb-6">
                 Website live.<br className="hidden lg:block" />
@@ -408,7 +408,7 @@ export default async function SeoSprintPage() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {[
-                  { label: 'Agentur-Killer-Sprint', href: '/agentur-killer-sprint', note: 'Voraussetzung empfohlen' },
+                  { label: 'Eigenregie', href: '/eigenregie', note: 'Voraussetzung empfohlen' },
                   { label: 'Gründer-Schmiede', href: '/gruender-schmiede', note: 'Von der Idee zur Anmeldung' },
                   { label: 'Erste-Kunden-Sprint', href: '/erste-kunden-sprint', note: 'Erste Aufträge in 72h' },
                   { label: 'Steuer-Matrix', href: '/steuer-matrix', note: '23 Länder im Netto-Vergleich' },

@@ -544,7 +544,7 @@ export default async function GruenderSchmiedePage() {
                 {[
                   { label: 'Säule I — Gründer-Schmiede', href: '/gruender-schmiede', active: true },
                   { label: 'Säule II — Steuer-Matrix', href: '/steuer-matrix', active: false },
-                  { label: 'Säule III — Agentur-Killer-Sprint', href: '/agentur-killer-sprint', active: false },
+                  { label: 'Säule III — Eigenregie', href: '/eigenregie', active: false },
                 ].map(({ label, href, active }) => (
                   <Link
                     key={href}

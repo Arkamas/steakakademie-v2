@@ -43,7 +43,7 @@ DS-de **genehmigt**. Wer eine Statusangabe hier ändert, prüft sie vorher gegen
 | 696396 | Mein Protokoll (8-Wochen-Plan) | 19 € / 29 € | ✅ Y | ⏳ „neu" | `/mein-protokoll` (indexiert) | ✅ an |
 | 696399 | BBQ-Grundkurs | 79 € / 127 € | ✅ Y | ⏳ „neu" | `/bbq-grundkurs` (indexiert) | ❌ keine ID im Code |
 | 695894 | Gründung-Sprint | 99 € | ✅ Y | ✅ genehmigt | `/gruender-schmiede` (**noindex**) | ❌ **aus, 03.09.2026** |
-| 695900 | Agentur-Killer-Sprint | — | ✅ Y | ✅ genehmigt | `/agentur-killer-sprint` (**noindex**) | ❌ bewusst aus |
+| 695900 | Eigenregie (bis 07.09.2026 „Agentur-Killer-Sprint") | — | ✅ Y | ✅ genehmigt | `/eigenregie` (**noindex**) | ❌ bewusst aus |
 | 695797 | Steuer-Matrix | — | ✅ Y | ✅ genehmigt | `/steuer-matrix` (**noindex**) | ❌ **aus, 03.09.2026** |
 
 ⚠️ **Regel:** Jedes Course-Produkt braucht `courses`-Zeile + `digistore_products`-Mapping, sonst kassiert es ohne Auslieferung. Reaktivierung: **erst Substanz, dann Checkout** — nie umgekehrt.
@@ -131,7 +131,7 @@ Beim Durchgehen aller Gründer-Seiten fiel auf, dass drei weitere Product-Schema
 
 | Seite | vorher | jetzt | Grund |
 |---|---|---|---|
-| `/agentur-killer-sprint` | InStock | `Discontinued` | 695900 existiert, Checkout bewusst aus |
+| `/eigenregie` (damals `/agentur-killer-sprint`) | InStock | `Discontinued`, seit 04.09.2026 `PreOrder` | 695900 existiert, Checkout bewusst aus |
 | `/erste-kunden-sprint` | InStock | `PreOrder` | kein Digistore-Produkt, nie verkauft |
 | `/seo-sprint` | InStock | `PreOrder` | kein Digistore-Produkt, nie verkauft |
 

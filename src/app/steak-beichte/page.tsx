@@ -422,7 +422,7 @@ export default function SteakBeichtePage() {
                 {[
                   { label: 'Steuer-Matrix', href: '/steuer-matrix' },
                   { label: 'Gründer-Schmiede', href: '/gruender-schmiede' },
-                  { label: 'Agentur-Killer-Sprint', href: '/agentur-killer-sprint' },
+                  { label: 'Eigenregie', href: '/eigenregie' },
                   { label: 'Erste-Kunden-Sprint', href: '/erste-kunden-sprint' },
                 ].map(({ label, href }) => (
                   <Link

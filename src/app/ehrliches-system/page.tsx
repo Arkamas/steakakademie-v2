@@ -55,10 +55,10 @@ const PILLARS = [
     audience: 'Solo-Selbstständige, die Steuer-Entscheidungen rational treffen wollen',
   },
   {
-    slug: 'agentur-killer-sprint',
+    slug: 'eigenregie',
     number: 'III',
     icon: '⚡',
-    label: 'Agentur-Killer-Sprint',
+    label: 'Eigenregie',
     kicker: 'Full-Ownership in 72h',
     tagline: 'Befreiung von Drittanbieter-Abhängigkeiten. Website-Migration zu Next.js + Vercel.',
     bullets: [
@@ -116,7 +116,7 @@ export default async function EhrlichesSystemPage() {
     const { data } = await supabase
       .from('courses')
       .select('slug, price, published')
-      .in('slug', ['gruender-schmiede', 'steuer-matrix', 'agentur-killer-sprint']);
+      .in('slug', ['gruender-schmiede', 'steuer-matrix', 'eigenregie']);
     if (data) {
       courseData = Object.fromEntries(data.map((c) => [c.slug, c]));
     }

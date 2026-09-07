@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { istAdminPasswort } from '@/lib/admin-auth';
 import { updateSession } from '@/lib/supabase/middleware';
 
 const IS_CRAWLER =
@@ -57,7 +58,7 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith('/admin')) {
     if (pathname !== '/admin/login') {
       const auth = request.cookies.get('admin_auth');
-      if (auth?.value !== process.env.ADMIN_PASSWORD) {
+      if (!istAdminPasswort(auth?.value)) {
         return NextResponse.redirect(new URL('/admin/login', request.url));
       }
     }
@@ -70,7 +71,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/api/pm-agent')
   ) {
     const auth = request.cookies.get('admin_auth');
-    if (auth?.value !== process.env.ADMIN_PASSWORD) {
+    if (!istAdminPasswort(auth?.value)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     return NextResponse.next();

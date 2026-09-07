@@ -31,7 +31,7 @@ const DOWNGRADES = [
   { from: 'g',  to: 'mg', factor: 1000 },
 ] as const;
 
-function smartConvert(amount: number, unit: string): { amount: number; unit: string } {
+export function smartConvert(amount: number, unit: string): { amount: number; unit: string } {
   for (const c of UPGRADES) {
     if (unit === c.from && amount >= c.threshold)
       return smartConvert(amount / c.factor, c.to);
@@ -51,7 +51,7 @@ const FRACS: [number, string][] = [
   [0.5,   '½'], [0.667, '⅔'], [0.75,  '¾'],
 ];
 
-function fmt(raw: number): string {
+export function fmt(raw: number): string {
   if (raw <= 0) return '0';
   if (raw < 1) {
     for (const [v, s] of FRACS)
@@ -70,7 +70,7 @@ function fmt(raw: number): string {
   return String(Math.round(raw * 10) / 10);
 }
 
-const NO_CONVERT = new Set(['Prise', 'n.B.', 'etwas']);
+export const NO_CONVERT = new Set(['Prise', 'n.B.', 'etwas']);
 
 export default function PortionCalculator({ basePortions, ingredients }: Props) {
   const [portions, setPortions] = useState(basePortions);

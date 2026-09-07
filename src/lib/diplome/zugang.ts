@@ -1,6 +1,7 @@
 import 'server-only';
 import { createClient } from '@/lib/supabase/server';
-import { isAdminCookie } from '@/lib/admin-auth';
+import { cookies } from 'next/headers';
+import { istAdminPasswort } from '@/lib/admin-auth';
 import { DIPLOM_COURSE_SLUG, ERSTE_BEZAHLSTUFE } from './stufen';
 
 export type DiplomZugang = {
@@ -25,7 +26,7 @@ export type DiplomZugang = {
  * lernen/[stufe]/[lektion]/page.tsx.
  */
 export async function diplomZugang(): Promise<DiplomZugang> {
-  const admin = isAdminCookie();
+  const admin = istAdminPasswort(cookies().get('admin_auth')?.value);
 
   // Ohne Supabase-Umgebung (Build-Gate, frische Preview) gibt es keine
   // Buchungspruefung — dann zaehlt nur der Admin-Cookie. Nie werfen: die

@@ -1,26 +1,14 @@
-import 'server-only';
-import { cookies } from 'next/headers';
-
 /**
- * Admin-Erkennung ueber den `admin_auth`-Cookie — die EINE sichere Fassung.
+ * Admin-Erkennung — EINE Stelle für den Vergleich mit ADMIN_PASSWORD.
  *
- * Vorher stand an drei Stellen der rohe Vergleich
- * `cookies().get('admin_auth')?.value === process.env.ADMIN_PASSWORD`.
- * Ist ADMIN_PASSWORD nicht gesetzt (Preview-Scope, frische Umgebung), ergibt
- * das `undefined === undefined` — und JEDER Besucher ist Admin, inklusive
- * Umgehung der Diplom-Paywall. Audit 06.09.2026.
- *
- * Fuer Route Handler mit `Request` gibt es das Gegenstueck
- * `isAdminRequest()` in src/lib/api/guard.ts; diese Funktion hier ist fuer
- * Server Components und Routen, die `cookies()` nutzen.
+ * Haertung 05.09.2026: Bis dahin stand an sechs Stellen
+ * `cookie === process.env.ADMIN_PASSWORD`. Ist die Variable in einer Umgebung
+ * nicht gesetzt (Preview-Deployment ohne Scope, lokale Kopie, Build-Gate),
+ * vergleicht das `undefined === undefined` — und JEDER Besucher ist Admin:
+ * /admin, /api/admin/*, /api/pm-agent/* und die Volltexte der Bezahl-Lektionen
+ * stehen dann offen. Ohne gesetztes Passwort gibt es ab jetzt keinen Admin.
  */
-export function adminPasswortGesetzt(): boolean {
+export function istAdminPasswort(value: string | null | undefined): boolean {
   const pw = process.env.ADMIN_PASSWORD;
-  return typeof pw === 'string' && pw.length >= 8;
-}
-
-export function isAdminCookie(): boolean {
-  if (!adminPasswortGesetzt()) return false;
-  const value = cookies().get('admin_auth')?.value;
-  return typeof value === 'string' && value.length > 0 && value === process.env.ADMIN_PASSWORD;
+  return typeof pw === 'string' && pw.length > 0 && typeof value === 'string' && value === pw;
 }

@@ -180,6 +180,29 @@ bilder:
     namensnennung: false
     erworben_am: 2026-09-03
     hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft
+  # Relaunch 2026-09 (handoff/website-relaunch/assets). Weide-Motiv: eigene
+  # KI-Pipeline (Uwe, 05.09.2026 — dieselbe wie die Fleischwissen-Heroes, nicht
+  # byteidentisch). Modell und Prompt sind NICHT dokumentiert; nachtragen, sobald
+  # bekannt. Kennzeichnung auf der Seite: "KI-Symbolbild" im Alt-Text und in der
+  # Bildunterschrift (/relaunch/ueber-uns).
+  images/relaunch/weide-gras-abend.jpg:
+    status: ki
+    quelle: Eigene KI-Bildpipeline (Modell nicht dokumentiert), Handoff Website-Relaunch 04.09.2026
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-04
+    hinweis: Prompt und Modell nachtragen; C2PA-Marker nicht geprueft; keine Personen, keine Marken (gesichtet 05.09.2026)
+  # Pexels-Lizenz, kommerzielle Nutzung ohne Namensnennung (handoff/website-relaunch/bildlizenzen.md).
+  # Repo-Kopie auf 2400px/q85 verkleinert, Original im OneDrive-Handoff.
+  images/relaunch/schwenkgrill-glut.jpg:
+    status: lizenz
+    quelle: Pexels
+    urheber: Domi Hattenberger
+    lizenz: Pexels-Lizenz
+    lizenz_url: https://www.pexels.com/license/
+    namensnennung: false
+    erworben_am: 2026-09-04
+    hinweis: Platzhalter auf /relaunch/ueber-uns bis ein Reifekammer-Motiv vorliegt (Handoff, offener Punkt 6); Downloadseite als Screenshot noch nicht gesichert
   images/methode-kamado.jpg: { status: offen }
   images/methode-smoker.jpg: { status: offen }
   images/methoden/direktes-grillen.jpg:

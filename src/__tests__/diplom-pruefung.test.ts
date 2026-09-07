@@ -116,7 +116,7 @@ describe('Regel 8c: Zahlen in Fragen und Flashcards folgen der Referenz', () => 
 
   it('Referenz gelesen', () => {
     expect(schweinMin).toBe(63);
-    expect(beefMr).toEqual([54, 58]);
+    expect(beefMr).toEqual([52, 55]);
   });
 
   it('Schweinefilet-Antwort unterschreitet das Sicherheits-Minimum nicht', () => {

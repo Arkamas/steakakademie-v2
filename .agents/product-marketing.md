@@ -94,6 +94,8 @@
 **Style:** „High-Tech & Smoke" — Bourbon-Dunkel #120C07, Whiskey-Gold #C8882A, Glut-Orange #E85018 (CTAs). Referenz Texas Monthly.
 **Personality:** Drei Avatare, kein persönlicher Auftritt von Uwe: **Marco** (Meister — Guides, Temperaturen, Chat), **Jonas** (Enthusiast — Social, Community, Einsteiger), **Elena** (Stimme — Reportagen, USA, Terroir). Newsletter: persönlich, „aus der Küche", keine Corporate-Prosa.
 
+**Zweites Register — Kraftausdruck als Claim (Uwe, 07.09.2026):** „Geiler Scheiss" wird bewusst zur Marke gemacht, nicht als Einzelstück behandelt — „es kommen noch mehr in die Richtung". Damit gilt: Für kurze Social-Hooks (TikTok/Instagram, Reel-Pointen) ist ein Kraftausdruck als Payoff-Line zulässig, WENN er — wie im Reel „Geiler Scheiss" — auf gezeigtem Fachwissen aufbaut (die Pointe kommt erst nach den Fachbegriffen, nicht statt ihnen). Das ist ein zweites Register neben dem Standard-Ton oben, kein Ersatz dafür. Es gilt NICHT für: B2B-Copy (Gastro/Events), Diplom-/Lektionstexte, Newsletter-Betreffzeilen, Werbeanzeigen (Meta/TikTok prüfen Kraftausdrücke in Ads restriktiver als organisch — vor Anzeigen-Einsatz einzeln prüfen), und nicht für Marco (Guides/Chat bleiben sachlich). Schreibweise in eigenen Texten: „Scheiß" (deutsch), nicht „Scheiss" (schweizerisch) — Ausnahme: wörtliches Zitat des Reel-Claims in Versalien, wo „ß"→„SS" ohnehin browserseitig erzwungen ist.
+
 ## Proof Points
 **Metrics:** [offen] — Traffic/Liste/Umsatz nicht in der Doku belegt. Verkaufsfähigkeit 52 % (interner Score, Stand 04.06.2026).
 **Customers:** [offen]
@@ -119,4 +121,5 @@
 
 ## Changelog
 *Newest first. One line per revision: what changed and why.*
+- v1.1 (2026-09-07) — Brand Voice: zweites Register „Kraftausdruck als Claim" ergänzt (Uwe-Entscheidung zu Reel „Geiler Scheiss", weitere Reels dieser Art angekündigt). Scope klar begrenzt: Social-Hooks ja, B2B/Diplom/Newsletter/Marco nein.
 - v1 (2026-09-05) — Erstentwurf aus Repo-Doku; [offen]-Felder markiert, keine Kundendaten/Metriken belegt.

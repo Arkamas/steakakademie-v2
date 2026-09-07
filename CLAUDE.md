@@ -50,6 +50,15 @@
   Eintraegen `null`, also kann der Zweig nicht rendern) und den Blick auf die
   Produktion nach dem Merge verschieben — oder das Passwort-Formular der Preview
   nutzen, das ohne Umleitung auskommt. Nie als "geprueft" ausgeben, was nur gelesen wurde.
+- **Ein gruener `next build` beweist bei DYNAMISCHEN Routen nichts ueber den Lauf
+  (06.09.2026).** `/relaunch/suche` liest `searchParams`, wird also erst beim Aufruf
+  gerendert. Der Build war gruen, die Seite lieferte trotzdem 500:
+  `(0 , c.s) is not a function`. Ursache: eine gewoehnliche Funktion (`relaunchHref`)
+  lag in einer `'use client'`-Datei; ein Server-Bauteil bekommt von dort keine Funktion,
+  sondern einen Client-Verweis. Zwei Regeln daraus: **gemeinsam genutzte Logik nie in
+  ein `'use client'`-Modul legen** (eigene Datei unter `src/lib/`), und **jede mit `f`
+  markierte Route im Build-Report einmal wirklich aufrufen** (`curl -o /dev/null -w
+  '%{http_code}'`), bevor sie als geprueft gilt.
 - **Exitcode pruefen, immer.** Ein Befehl, der nichts ausgibt, ist nicht gruen.
   `timeout` liefert Exitcode 124 — das ist ein Abbruch ohne Ergebnis, kein Bestehen.
 - Ein voller Typecheck passt **nicht** in ein 45-Sekunden-Fenster. Nicht anfangen,

@@ -163,6 +163,18 @@
 - Ein Linux-Zugriff ueber die Ordner-Bruecke darf keine Dateien loeschen. git legt
   bei jedem Index-Zugriff `.git/index.lock` an und kann sie danach nicht raeumen:
   Lock nach `.git/_to_delete/` **verschieben**, dann weiterarbeiten.
+- **`git reset --hard` (und vermutlich `git pull`/`git checkout <ref>` mit vielen
+  geaenderten Dateien) NIE ueber die Ordner-Bruecke (07.09.2026).** Reset versucht,
+  jede Tracked-Datei per unlink+neu zu schreiben — das scheitert im Mount fuer
+  praktisch die gesamte Datei-Liste ("unable to unlink old ..."), bricht mit
+  `fatal: Could not reset index file` ab, OHNE den Arbeitsbaum sichtbar zu
+  beschaedigen (git haelt Index/HEAD dabei konsistent zum letzten Commit — mit
+  `git status`/`git diff --stat HEAD` bestaetigt, keine echte Korruption). Trotzdem:
+  Schreck und Zeitverlust vermeidbar. Um lokal `main` wieder an `origin/main`
+  anzugleichen, wenn mehrere Dateien abweichen: **Uwe selbst in PowerShell**
+  (`git fetch && git reset --hard origin/main`) — dort ist es ein normaler,
+  schneller Vorgang ohne Mount-Beschraenkung. Einzelne Dateien (`git checkout --
+  <pfad>`) und der Lock-Workaround oben bleiben ueber die Bruecke unproblematisch.
 - **Tag `archiv/formulierungen-bot-pat` (05.09.2026):** hält die getrennten Commits
   22b1a1e und 8a51086 (BOT_PAT-Formulierungen, vor #50 per Squash zu main verschmolzen)
   dauerhaft erreichbar — ohne den Tag wäre 8a51086 nach dem Entfernen des zugehörigen

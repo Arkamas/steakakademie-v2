@@ -40,10 +40,11 @@ const CSP = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://*.clarity.ms",
   "font-src 'self' data:",
-  // *.ingest.de.sentry.io: Fehler- und Performance-Meldungen (EU-Region).
-  // Fehlt der Host hier, blockiert der Browser jeden Event-Versand STILL —
-  // Sentry bleibt leer und niemand merkt es.
-  "connect-src 'self' https://plausible.io https://*.clarity.ms https://*.supabase.co https://*.ingest.de.sentry.io",
+  // Sentry steht hier NICHT mehr: seit 08.09.2026 laeuft kein Sentry-Client
+  // mehr im Browser (Bundle-Entscheidung, siehe src/lib/fehler-melden.ts).
+  // Fehler- und Messmeldungen gehen an eigene Routen unter 'self'; das
+  // Server-Sentry sendet vom Server und faellt nicht unter die CSP.
+  "connect-src 'self' https://plausible.io https://*.clarity.ms https://*.supabase.co",
   "frame-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self'",
@@ -59,15 +60,6 @@ const nextConfig = {
   // die Datei bleibt die Telemetrie im Marco-Chat wirkungslos (No-op-Tracer).
   // Ab Next 15 ist der Hook stabil und die Zeile entfaellt.
   experimental: { instrumentationHook: true },
-  webpack(config, { isServer, webpack }) {
-    if (!isServer) {
-      // Browser-Tracing des Sentry-SDK aus dem Client-Bundle entfernen
-      // (Perf-Audit 02.09.2026, Begruendung in sentry.client.config.ts).
-      // Nur Client: der Server behaelt Tracing fuer das Agent-Monitoring.
-      config.plugins.push(new webpack.DefinePlugin({ __SENTRY_TRACING__: false }));
-    }
-    return config;
-  },
   images: {
     formats: ['image/avif', 'image/webp'],
     // Optimierte Bilder einen Tag lang cachen (Standard: 60 s). Live gemessen
@@ -219,19 +211,17 @@ export default withSentryConfig(withContentlayer(nextConfig), {
   widenClientFileUpload: true,
   hideSourceMaps: true,
 
-  // Bundle-Deckel (Perf-Audit 02.09.2026): Der Sentry-Browser-Client lag mit
-  // ~108 kB (komprimiert) als groesster Einzelchunk in JEDEM First-Load-Bundle.
-  // Replay ist per Config aus (Sample-Rate 0, siehe sentry.client.config.ts),
-  // Browser-Tracing wird bewusst nicht mehr genutzt (dort ebenfalls entfernt),
-  // Debug-Statements gehoeren nicht in die Produktion. Diese Schalter lassen
-  // den Bundler den zugehoerigen Code komplett wegwerfen statt ihn nur nicht
-  // aufzurufen. Fehler-Erfassung (Exceptions, unhandled rejections, Breadcrumbs)
-  // bleibt vollstaendig erhalten.
-  // excludeTracing steht hier BEWUSST NICHT: der Schalter wirkt auf alle
-  // Kompilate, auch den Server — dort ist Tracing die Grundlage des
-  // Agent-Monitorings der KI-Routen (sentry.server.config.ts). Das Browser-
-  // Tracing wird stattdessen client-seitig ueber __SENTRY_TRACING__ im
-  // webpack-Block von nextConfig abgeschaltet.
+  // Stand 08.09.2026: Im Browser laeuft KEIN Sentry mehr. Der gebuendelte
+  // Client lag nach dem Tracing-Ausbau immer noch mit 61,7 kB (gzip) in jeder
+  // Seite — gut die Haelfte des gemeinsamen Bundles, auch auf reinen
+  // Inhaltsseiten. Browser-Fehler erfasst jetzt src/lib/fehler-melden.ts in
+  // rund 1 kB (Entscheidung Uwe, Abwaegung dort dokumentiert).
+  // Sentry bleibt fuer den SERVER: API-Routen, SSR und das Agent-Monitoring
+  // der KI-Routen (sentry.server.config.ts / sentry.edge.config.ts). Dort
+  // kostet die SDK kein Byte im Browser, deshalb steht excludeTracing hier
+  // weiterhin bewusst NICHT.
+  // Die Schalter unten wirken damit nur noch auf Server-Kompilate; sie bleiben
+  // stehen, weil Debug-Code auch dort nichts zu suchen hat.
   bundleSizeOptimizations: {
     excludeDebugStatements: true,
     excludeReplayIframe: true,

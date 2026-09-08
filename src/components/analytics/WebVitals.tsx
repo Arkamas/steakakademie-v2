@@ -52,6 +52,13 @@ export default function WebVitals() {
   useReportWebVitals((metric) => {
     // Nur echte Besucher zaehlen; lokale Entwicklung wuerde die Werte verzerren.
     if (process.env.NODE_ENV !== 'production') return;
+    // ... und nur die echte Domain. Ein lokal gestarteter Produktions-Build
+    // (`npm run build && npm start`) hat ebenfalls NODE_ENV=production und
+    // schrieb bis 08.09.2026 in dieselbe Tabelle: 34 Zeilen an einem Tag, alle
+    // auf `/`, alle mit TTFB 3,7-5,7 s, weil dort ohne CDN und ueber die
+    // Hausleitung gerendert wird. Solche Werte verderben jedes p75. Dasselbe
+    // gilt fuer Preview-Deployments unter *.vercel.app.
+    if (!/(^|\.)steakakademie\.de$/.test(window.location.hostname)) return;
     if (!['LCP', 'CLS', 'INP', 'FCP', 'TTFB'].includes(metric.name)) return;
 
     const istLadezeit = LADEZEIT_METRIKEN.has(metric.name);

@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { BarChart3, Check } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
 
 export interface UmfrageOption {
   key: string;
@@ -39,10 +38,11 @@ export default function StreitfallUmfrage({ slug, frage, optionen }: Props) {
   const [fehler, setFehler] = useState<string | null>(null);
 
   useEffect(() => {
-    const supabase = createClient();
     let abgebrochen = false;
 
     (async () => {
+      const { createClient } = await import('@/lib/supabase/client');
+      const supabase = createClient();
       const [{ data: summen }, { data: sitzung }] = await Promise.all([
         // RPC statt View: streitfall_votes ist RLS-geschuetzt (nur eigene Stimme);
         // die SECURITY-DEFINER-Funktion liefert ausschliesslich Summen.
@@ -77,6 +77,7 @@ export default function StreitfallUmfrage({ slug, frage, optionen }: Props) {
     setLaeuft(true);
     setFehler(null);
 
+    const { createClient } = await import('@/lib/supabase/client');
     const supabase = createClient();
     const { data: sitzung } = await supabase.auth.getUser();
     const nutzer = sitzung?.user;

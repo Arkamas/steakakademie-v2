@@ -3,7 +3,6 @@
 import { useState, Suspense }  from 'react';
 import Link                    from 'next/link';
 import { useSearchParams }     from 'next/navigation';
-import { createClient }        from '@/lib/supabase/client';
 import { ArrowRight, Mail, Flame, Lock } from 'lucide-react';
 
 // ── Inner component — reads URL params (must be inside <Suspense>) ─────────────
@@ -25,6 +24,7 @@ function LoginForm() {
     if (!email.trim()) return;
 
     setStatus('loading');
+    const { createClient } = await import('@/lib/supabase/client');
     const supabase = createClient();
 
     const { error } = await supabase.auth.signInWithOtp({
@@ -47,6 +47,7 @@ function LoginForm() {
     e.preventDefault();
     if (!email.trim() || !password) return;
     setStatus('loading');
+    const { createClient } = await import('@/lib/supabase/client');
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     if (error) {
@@ -69,6 +70,7 @@ function LoginForm() {
       setStatus('error'); setMessage('Passwort muss mindestens 8 Zeichen haben.'); return;
     }
     setStatus('loading');
+    const { createClient } = await import('@/lib/supabase/client');
     const supabase = createClient();
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),

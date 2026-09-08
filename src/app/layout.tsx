@@ -7,6 +7,7 @@ import LayoutExtras from '@/components/layout/LayoutExtras';
 import EmberGlow from '@/components/ui/EmberGlow';
 import PlausibleScript from '@/components/analytics/PlausibleScript';
 import ClarityScript from '@/components/analytics/ClarityScript';
+import WebVitals from '@/components/analytics/WebVitals';
 import ConsentBanner from '@/components/analytics/ConsentBanner';
 import MotionProvider from '@/components/layout/MotionProvider';
 import { organizationSchema, websiteSchema } from '@/lib/schema';
@@ -116,6 +117,9 @@ export default function RootLayout({
           <LayoutExtras />
           {/* Plausible: cookieless, ohne Einwilligung (§ 25 Abs. 2 TDDDG) — läuft immer. */}
           <PlausibleScript />
+          {/* Core Web Vitals in die eigene Datenbank — cookieless, ohne IP,
+              ohne neuen Auftragsverarbeiter (siehe /api/web-vitals). */}
+          <WebVitals />
           {/* Microsoft Clarity: einwilligungspflichtig — lädt nur nach Opt-in über den Banner. */}
           <ClarityScript />
           <ConsentBanner />

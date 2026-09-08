@@ -70,9 +70,9 @@ function betreffTag(subject: string): string {
  */
 function hinweisText(subject: string): string {
   if (subject === 'urkunde') {
-    return 'Deine Urkunden-Anfrage ist notiert. Bezahlt hast du damit noch nichts — '
-      + 'wir melden uns mit den Zahlungsdaten (9,99 € + 4,99 € Porto = 14,98 €). '
-      + 'Erst nach dem Zahlungseingang geht die Urkunde in den Druck und per Post zu dir.';
+    return 'Deine Vormerkung für die gedruckte Urkunde ist notiert. Es entstehen dir dadurch '
+      + 'keine Kosten — sie ist unverbindlich. Sobald die gedruckte Urkunde fertig ist, melden '
+      + 'wir uns mit Preis, Zahlungsweg und der Frage nach deiner Anschrift.';
   }
   return 'Wir schauen uns deine Nachricht an und melden uns so bald wie möglich zurück.';
 }

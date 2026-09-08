@@ -26,7 +26,7 @@ export default function DatenschutzPage() {
           </nav>
 
           <h1 className="font-serif text-3xl font-bold text-text-primary mb-2">Datenschutzerklärung</h1>
-          <p className="text-sm font-sans text-text-muted mb-10">Stand: August 2026</p>
+          <p className="text-sm font-sans text-text-muted mb-10">Stand: September 2026</p>
 
           <div className="max-w-content space-y-8 font-body text-text-secondary leading-relaxed">
 
@@ -118,6 +118,29 @@ export default function DatenschutzPage() {
                 <a href="https://plausible.io/privacy" target="_blank" rel="noopener noreferrer" className={linkClass}>
                   plausible.io/privacy
                 </a>
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>5a. Ladezeit-Messung (eigene Erhebung)</h2>
+              <p className="mb-3">
+                Zur technischen Optimierung erhebt diese Website die sogenannten Core Web Vitals
+                (unter anderem Ladezeit des größten Inhaltselements, Layout-Stabilität,
+                Reaktionszeit auf die erste Eingabe, Server-Antwortzeit). Die Messung erfolgt im
+                Browser und wird an unseren eigenen Server übermittelt; ein externer
+                Dienstleister ist nicht beteiligt.
+              </p>
+              <p className="mb-3">
+                Gespeichert werden ausschließlich: der aufgerufene Pfad ohne Suchparameter, Name
+                und Wert der Messgröße, deren Bewertung, die Art des Seitenaufrufs, die
+                Geräteklasse (Touch- oder Zeigegerät) und die Versionsnummer der Website. Es
+                werden keine IP-Adresse, keine Browserkennung, keine Nutzerkennung, keine Cookies und
+                keine Daten in Ihrem Endgerät gespeichert oder ausgelesen. Ein Personenbezug ist
+                damit nicht herstellbar; eine Einwilligung nach § 25 TDDDG ist nicht erforderlich.
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer
+                schnellen und stabilen Website).
               </p>
             </section>
 

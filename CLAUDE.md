@@ -286,6 +286,17 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    Referenz `data/kerntemperatur-referenz.yaml`. Genauigkeit = stärkster Burggraben.
 3. **Marken-DNA** (`marketing_agent.txt`): Ton, Farben (#C8882A/#E85018/#120C07),
    **kein persönlicher Auftritt von Uwe** (Avatar-System Marco/Jonas/Elena).
+   **Uwe ist auch keine Autorenstimme (Uwe, 06.09.2026: „Uwe Yendell als Sprachstimme raus").**
+   Fachartikel zeichnen die Personas: Marco (Technik, Cuts, Kerntemperaturen),
+   Elena (Food Science, Fleischkunde, Fonds), Jonas (Einsteiger, Equipment, Rubs).
+   Uwe bleibt **sichtbar als fachlich Verantwortlicher** — das ist Pflicht
+   (Art. 50 KI-VO) und das einzige E-E-A-T-Signal eines echten Menschen; ohne ihn
+   stünden 145 Artikel von KI-Personas ohne Mensch dahinter. Konkret: `author`/
+   `authorSlug` im Frontmatter nie `uwe-yendell`, aber jede Persona-Seite trägt
+   „KI-Persona · fachlich verantwortet von Uwe Yendell", und unter Cut-, Methoden-,
+   Rezept- und Streitfall-Texten steht `<AutorHinweis>` (src/components/). Der Satz
+   „basiert auf eigener Praxiserfahrung" gilt nur für `realPerson: true` — bei einer
+   Persona wäre er eine Falschaussage.
 4. **Human-gated:** Agenten produzieren Entwürfe, **Uwe gibt frei**. Kein Auto-Posting.
 5. **No black-hat:** kein Spam, Mass-Follow, Fake-Entities.
 6. **Rechtssicherheit → autonom fixen (Uwe, 01.07.2026).** Was Claude bei einem Audit
@@ -608,48 +619,108 @@ Rules:
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
 
-### Betrieb (Stand 31.08.2026)
+### Betrieb (Stand 07.09.2026)
 
 **Die Auto-Hooks sind entfernt.** `post-commit` und `post-checkout` stießen bei
 jedem Commit bzw. Branch-Wechsel einen vollen Rebuild an. Weil ein Label-Lauf
 länger braucht als der Abstand zwischen zwei Commits, wurde er regelmäßig von
 der nächsten Runde überholt — deshalb veralteten die Community-Labels ständig.
-Sicherungskopien liegen unter `_to_delete/graphify-hooks/`. Wieder einspielen
-ginge mit `graphify hook install`; das ist aber genau der Zustand, den wir
-verlassen haben.
+Sicherungskopien lagen unter `_to_delete/graphify-hooks/` (am 05.09. gelöscht;
+wieder einspielen ginge mit `graphify hook install` — das ist aber genau der
+Zustand, den wir verlassen haben).
 
-Der Graph wird ab jetzt **von Hand** aktualisiert, in dieser Reihenfolge:
-
-```powershell
-graphify update .                                      # AST-Struktur, keine API-Kosten
-graphify label . --max-concurrency=1 --batch-size=200  # semantische Labels
-```
-
-Die beiden Flags sind nicht optional: Ohne sie läuft der Label-Lauf in das
-Rate-Limit des Gemini-Free-Tiers und bricht mittendrin ab. Mit ihnen läuft er
-langsam, aber durch.
-
-**Offener Rückstand:** 927 der 1313 Dateien im Manifest (70 %) haben
-`semantic_hash: ""`, sind also nie gelabelt worden — darunter alle vier
-Rechtstexte (`agb`, `datenschutz`, `impressum`, `nutzungsbedingungen`). Sie
-stehen mit ihrer AST-Struktur im Graphen, aber ohne semantische Beschreibung.
-Ein vollständiger Label-Lauf mit den obigen Flags arbeitet das ab.
-
-**Bekannter Defekt:** `src/app/datenschutz/page.tsx` liefert als einzige der 103
-Seiten unter `src/app/` keinen einzigen Symbol-Knoten, nur den Datei-Knoten.
-Die strukturgleichen Nachbarn (`nutzungsbedingungen`, `impressum`, `agb`)
-liefern je drei. Ausgeschlossen wurden: Syntaxfehler (der TypeScript-Parser
-meldet 0 parseDiagnostics und findet 5 Imports, `metadata` und
-`DatenschutzPage`), Dateigröße (eine 84-KB-Datei liefert 47 Knoten) und ein
-veralteter Cache (der AST-Cache enthält nur Dokumente, keine Code-Dateien).
-Die Ursache liegt damit im Symbol-Extraktor von graphify selbst und ist von
-außen nicht weiter eingrenzbar. Reproduktion:
+Der Graph wird **von Hand** aktualisiert, in dieser Reihenfolge, aus PowerShell:
 
 ```powershell
-graphify update .
-python -c "import json,collections; g=json.load(open('graphify-out/graph.json')); c=collections.Counter(n['source_file'] for n in g['nodes'] if n.get('source_file')); print(c['src/app/datenschutz/page.tsx'], c['src/app/nutzungsbedingungen/page.tsx'])"
-# erwartet 3 3 - tatsaechlich 1 3
+graphify update .                                     # AST-Struktur, keine API-Kosten
+graphify label . --max-concurrency=1 --batch-size=50  # semantische Community-Namen
 ```
+
+**`--batch-size=50`, nicht 200 (07.09.2026, aus einem echten Lauf).** Mit 200
+hängte sich der Label-Lauf auf: vier LLM-Aufrufe, eine Stunde ohne jede Ausgabe
+und ohne Schreibvorgang, Abbruch nur per Strg+C. Derselbe Graph mit 50 lief in
+Sekunden durch und benannte 651 der 657 Communities sprechend. `--max-concurrency=1`
+bleibt Pflicht (Gemini-Free-Tier).
+
+**Installation über uv, Extras vollständig angeben (07.09.2026).** Das Paket
+heißt `graphifyy`, liegt unter `%APPDATA%\uv\tools\graphifyy\` und war auf
+0.9.50 gepinnt — `uv tool upgrade` aktualisiert dann nur Abhängigkeiten, nicht
+das Tool. Richtig ist:
+
+```powershell
+uv tool install "graphifyy[sql,openai]@latest" --force
+```
+
+**Beide Extras in einem Befehl**, denn `uv tool install` *ersetzt* die Extras,
+statt sie zu ergänzen: Eine Installation mit nur `[sql]` warf `openai` hinaus,
+worauf jeder Label-Lauf mit „the 'openai' package is required for this backend"
+scheiterte und die Communities mechanisch nach ihrem Hub benannte
+(`TaxCalculator.tsx` statt „Tax and AE Calculator"). Ohne `[sql]` wiederum
+tragen die 37 Supabase-Migrationen **nichts** zum Graphen bei — mit dem Extra
+sind es 95 Knoten samt Tabellen und Triggern.
+
+**Stand nach dem Lauf vom 07.09.2026:** graphify 0.9.56, Graph auf Commit
+`c55ac3d`, 5384 Knoten / 7921 Kanten / 657 Communities (651 mit LLM-Namen).
+Sicherungskopien des Vorzustands legt graphify selbst unter
+`graphify-out/<datum>/` ab.
+
+**Überschreib-Schutz:** Liefert ein neuer Lauf weniger Knoten als der
+gespeicherte Graph, bricht graphify mit „Refusing to overwrite" ab und ändert
+nichts. Das ist eine Sicherung, kein Fehler — meist fehlt ein Extra (siehe oben).
+Erst wenn geklärt ist, warum die Zahl fällt, mit `--force` übergehen.
+
+**`semantic_hash` füllt `label` nicht (07.09.2026).** 1093 der 1361
+Manifest-Dateien haben weiterhin `semantic_hash: ""`. Das ist kein Rückstand
+des Label-Laufs: Code parst graphify lokal per tree-sitter ohne LLM, während
+Dokumente, PDFs und Bilder einen semantischen Durchgang brauchen, den **der
+KI-Assistent** fährt — `/graphify --update` in Claude Code, nicht die CLI.
+Voraussetzung dafür ist die Claude-Code-Integration (`graphify claude install`),
+die in diesem Repo bewusst nicht aktiv ist: `.claude/hooks/graphify-guard.sh`
+liegt zwar bereit (sucht graphify zur Laufzeit statt mit absolutem Pfad), ist in
+`.claude/settings.json` aber nicht als PreToolUse-Hook verdrahtet — dort steht
+nur `SessionStart`.
+
+**Bekannter Defekt, unverändert in 0.9.56 (07.09.2026):** Drei Seiten unter
+`src/app/` melden Syntaxfehler und liefern kaum Symbole —
+`datenschutz/page.tsx` (Fehler ab Zeile 1, **0** Symbole),
+`methoden/page.tsx` (Zeile 57, 3 Symbole), `nutzungsbedingungen/page.tsx`
+(Zeile 17, 2 Symbole). Der Code ist in Ordnung: TypeScript kompiliert die
+Dateien, der Vercel-Build ist grün. Ausgeschlossen wurden außerdem BOM
+(alle drei beginnen mit `imp`, sauberes UTF-8), JSX-Fragmente (`<>` nutzen 127
+andere `.tsx` fehlerfrei) und ein nacktes `&` im JSX-Text (49 andere Dateien).
+**Heiße Spur:** `tree-sitter-typescript==0.23.2` läuft gegen
+`tree-sitter==0.25.2` — die TSX-Grammatik ist zwei Generationen älter als der
+Parser-Kern, während JavaScript und Python bereits bei 0.25 stehen; 0.23.2 ist
+zugleich die neueste veröffentlichte Version dieser Grammatik. Ein Bugreport
+gehört nach https://github.com/Graphify-Labs/graphify/issues. Reproduktion:
+
+```powershell
+graphify update .   # Warnung "3 file(s) had syntax errors" in der Ausgabe
+```
+
+### MCP-Server (07.09.2026)
+
+Der Graph hängt als MCP-Server in Claude Code: `.mcp.json` im Projekt startet
+`graphify-mcp graphify-out/graph.json` über stdio. Damit fragt der Assistent den
+Graphen mit Werkzeugen ab, statt `GRAPH_REPORT.md` zu lesen — verfügbar sind
+`query_graph`, `get_node`, `get_neighbors`, `get_community`, `god_nodes`,
+`graph_stats`, `shortest_path`, `list_prs`, `get_pr_impact`, `triage_prs`.
+
+**Voraussetzung ist das `mcp`-Extra** (zieht `mcp` und `starlette`). Es fehlte in
+der Installation vom 07.09., deshalb einmalig:
+
+```powershell
+uv tool install "graphifyy[sql,openai,mcp]@latest" --force
+```
+
+Wieder gilt: alle Extras in **einem** Befehl, sonst fliegen die anderen raus.
+
+Geprüft am 07.09.2026 gegen den echten Graphen (in einem Linux-Container mit
+derselben Paketversion): Server meldet sich als `graphify 1.27.0`, listet die
+zehn Werkzeuge, `graph_stats` liefert 5384 Knoten / 7921 Kanten / 657
+Communities. Der Server liest `graph.json` beim Start — **nach jedem
+`graphify update .` muss Claude Code neu gestartet werden**, sonst antwortet er
+aus dem alten Stand.
 
 ### Git-Wartung
 

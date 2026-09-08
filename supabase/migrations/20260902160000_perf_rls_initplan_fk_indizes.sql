@@ -31,13 +31,21 @@ alter policy "service_full_access" on public.content_drafts
 alter policy "service_full_access_runs" on public.pipeline_runs
   using ((select auth.role()) = 'service_role');
 
-alter policy "users_insert_own_progress" on public.course_progress
-  with check (user_id = (select auth.uid()));
+-- users_insert_own_progress / users_update_own_progress gibt es seit
+-- 20260906190000 nicht mehr (Diplom-Pruefung schreibt serverseitig). Auf einer
+-- Datenbank, die diese Migration NACH der 20260906er anwendet, wuerde ein
+-- nacktes ALTER POLICY hier abbrechen — deshalb nur, wenn die Policy existiert.
+-- Auf der Produktion angewendet am 07.09.2026 (ohne die beiden Policies).
+do $$ begin
+  if exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'course_progress' and policyname = 'users_insert_own_progress') then
+    execute 'alter policy "users_insert_own_progress" on public.course_progress with check (user_id = (select auth.uid()))';
+  end if;
+  if exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'course_progress' and policyname = 'users_update_own_progress') then
+    execute 'alter policy "users_update_own_progress" on public.course_progress using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()))';
+  end if;
+end $$;
 alter policy "users_select_own_progress" on public.course_progress
   using (user_id = (select auth.uid()));
-alter policy "users_update_own_progress" on public.course_progress
-  using (user_id = (select auth.uid()))
-  with check (user_id = (select auth.uid()));
 
 alter policy "Authenticated users view own purchased courses" on public.courses
   using (exists (

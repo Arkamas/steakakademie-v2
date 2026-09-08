@@ -172,6 +172,31 @@ export default function AutorPage({ params }: Props) {
                 ))}
               </div>
             </div>
+          ) : isFounder ? (
+            /* Seit 06.09.2026 zeichnet Uwe keine Fachartikel mehr als Autor — die
+               Redaktionspersonas sprechen, er verantwortet (Entscheidung Uwe).
+               Ohne diesen Zweig stuende hier "Noch keine veroeffentlichten
+               Artikel", was den Gruender wie einen inaktiven Nebenautor aussehen
+               liesse. Die fachliche Verantwortung ist der Punkt, nicht die Zahl. */
+            <div className="border-t-2 border-text-primary pt-6">
+              <h2 className="font-sans font-bold text-lg text-text-primary mb-3">
+                Fachliche Verantwortung statt Autorenzeile
+              </h2>
+              <p className="font-body text-base text-text-secondary leading-relaxed mb-4">
+                Uwe Yendell schreibt die Fachinhalte der Steakakademie nicht unter eigenem
+                Namen. Er legt die Fakten fest, prüft sie und verantwortet sie — geschrieben
+                werden sie von den Redaktionspersonas{' '}
+                <Link href="/autoren/marco" className="underline hover:text-brand-fire">Marco</Link>,{' '}
+                <Link href="/autoren/jonas" className="underline hover:text-brand-fire">Jonas</Link> und{' '}
+                <Link href="/autoren/elena" className="underline hover:text-brand-fire">Elena</Link>.
+                Jede ihrer Seiten trägt den Hinweis „KI-Persona · fachlich verantwortet von
+                Uwe Yendell&ldquo;.
+              </p>
+              <p className="font-body text-base text-text-secondary leading-relaxed">
+                Wie das im Einzelnen geregelt ist, steht im{' '}
+                <Link href="/ki-disclaimer" className="underline hover:text-brand-fire">KI-Disclaimer</Link>.
+              </p>
+            </div>
           ) : (
             <p className="font-body text-text-secondary">Noch keine veröffentlichten Artikel.</p>
           )}

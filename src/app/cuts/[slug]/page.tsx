@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import AutorHinweis from '@/components/AutorHinweis';
 import { allCuts } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer2/hooks';
 import Header from '@/components/layout/Header';
@@ -263,9 +264,7 @@ export default function CutPage({ params }: Props) {
                   >
                     {cut.author}
                   </Link>
-                  <p className="text-xs font-sans text-text-muted mt-1 leading-relaxed">
-                    Steakakademie-Autor. Jeder Artikel basiert auf eigener Praxiserfahrung und methodisch belegten Angaben.
-                  </p>
+                  <AutorHinweis authorSlug={cut.authorSlug} />
                 </div>
               </div>
             </article>

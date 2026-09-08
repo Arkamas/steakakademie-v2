@@ -152,6 +152,16 @@ const nextConfig = {
         destination: '/glossar/smoker-temperatur',
         permanent: true,
       },
+      // Produktumbenennung (Uwe, 07.09.2026): "Agentur-Killer-Sprint" heisst jetzt
+      // "Eigenregie" — der alte Name war eine Abwertung des Wettbewerbs und damit
+      // ein Verstoss gegen die eigene Marken-Doktrin (CLAUDE.md §2 Regel 3).
+      // Die alte URL war noindex und nirgends verlinkt; der Redirect steht
+      // trotzdem, weil sie in Digistore, Mails und Lesezeichen liegen kann.
+      {
+        source: '/agentur-killer-sprint',
+        destination: '/eigenregie',
+        permanent: true,
+      },
     ];
   },
 };

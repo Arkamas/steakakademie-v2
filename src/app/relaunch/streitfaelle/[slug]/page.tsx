@@ -8,6 +8,7 @@ import { getAuthorBySlug } from '@/lib/authors';
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
 import StreitfallUmfrage from '@/components/streitfaelle/StreitfallUmfrage';
 import { skMdx, Crumbs, Weiche, Faq, lesezeit } from '@/components/relaunch/Prose';
+import AutorHinweis from '@/components/AutorHinweis';
 import { KATALOGE } from '@/lib/relaunch/katalog';
 
 /**
@@ -118,6 +119,17 @@ export default function StreitfallSeite({ params }: Props) {
       )}
 
       <Faq items={faqItems} />
+
+      {/* KI-Kennzeichnung (Art. 50 KI-VO). Bis 06.09.2026 trugen die Streitfaelle
+          Uwe als Autor, seither eine Redaktionspersona — ohne diesen Satz stuende
+          hier nur ein Vorname ohne Herkunft. Die Entscheidungs-Box zeigt das
+          statsLabel nur, wenn eine Entscheidung gefaellt ist; bei den offenen
+          Streitfaellen fehlte die Kennzeichnung damit ganz. */}
+      <AutorHinweis
+        authorSlug={doc.authorSlug}
+        className="sk-meta sk-meta--14"
+        linkClassName="sk-more"
+      />
 
       <Weiche
         kicker="Nächster Schritt · Akademie Stufe 1"

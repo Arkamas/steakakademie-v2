@@ -38,10 +38,15 @@ dabei leer. Er beweist Übersetzung und Durchlauf, nicht die Datenlage; ob das r
 ist offen ·
 `_content_snap.tgz` / `_fix_sync.tgz` als Müll im Repo-Root (Regel 14).
 
-**Nächster Schritt:** Branch `relaunch/2026-09` pushen, PR, Vercel-Preview unter
-`/relaunch` ansehen (Doku `docs/website-relaunch-2026-09.md`). Entwürfe nachliefern:
-Mobile-Nav, Login/Registrierung, Cut-Detailseite — ohne die kein Umschalten.
-Build-Gate-Datenlage: bleibt bei Übersetzung + Durchlauf, keine Supabase-Secrets im Repo (Entscheidung 05.09.).
+**Nächster Schritt (07.09.):** Relaunch (#62) und Diplom-Audit (#63) sind auf `main` und live;
+Suche (#65), Autorenstimmen (#66), Migrations-Härtung + YAML (#67) liegen als grüne PRs zum Merge.
+Danach: Supabase-CLI auf Uwes Rechner installieren + `supabase link` — bis dahin laufen
+Migrationen nur über den claude.ai-Connector (07.09. so angewendet: 20260902160000 und
+20260906190000, Ledger stimmt). Relaunch-Umschalten weiter erst nach Mobile-Nav, Login,
+Cut-Detailseite. Build-Gate-Datenlage: bleibt bei Übersetzung + Durchlauf (Entscheidung 05.09.).
+*Diplom seit 07.09.:* Prüfung serverseitig (`/api/diplome/pruefung`), Nutzer ohne Schreibrecht auf
+`course_progress`, Kauf → Zugang über `courses.slug = grillmeister-diplom` — **Digistore-Produkt dafür
+existiert noch nicht** (6 Produkte gelistet, keins fürs Diplom); `AUDIT-Ausbildungssystem-2026-09-06.md`.
 
 *Erledigt 05.09.2026 (Relaunch):* Alt-Site archiviert (Tag `archiv/website-v1-2026-09`,
 Branch `archiv/website-v1` — beide auf origin, Bundle + Abbild in `C:\Dev\_archiv\`,
@@ -132,7 +137,15 @@ keine ausgeschlossenen Quellen (bbqingwiththenolands, usa-kulinarisch), keine Du
 in `id`, `link` oder Titel.
 
 **Nächster Schritt:** Rind-Kerntemperaturen entscheiden — Katalog an YAML angleichen
-oder YAML korrigieren. Kein Raten (Regel 8c).
+oder YAML korrigieren. Kein Raten (Regel 8c). *Hinweis 07.09.:* `meta.ziehtemperatur` in der
+YAML erklärt 52–54 °C ausdrücklich als Ziehwert — die 7 Cuts sind möglicherweise kein
+Widerspruch, sondern nur unbeschriftet (Zieh- statt Serviertemperatur). Vor dem Angleichen
+lesen, wie die Zahl im Katalog beschriftet ist.
+*07.09.:* Diplom-Lektionen an die Referenz angeglichen (Rind MR 54–58 serviert, Schwein 63–65,
+Warmhalten ≥ 63, Brisket 90–96); „Gefahrenzone" nur noch HACCP; YAML `pork_juicy` auf [63,65];
+Garstufen-Skala Rind liegt als `garstufen_rind_vorschlag` (bestätigt: false) — **Uwe bestätigt
+oder verwirft**, dann wandert sie unter `badges` oder die drei Fundstellen werden angepasst.
+Audit-Rest R15 (Elemente ab Stufe 2, 0 Bilder in 35 Lektionen) braucht ein Regel-8b-Konzept.
 
 *Erledigt 10.08.2026:* 7 Schwein-Cuts lagen unter dem Sicherheitsminimum 63 °C
 (presa/pluma erreichten es nie) → auf `63–65 °C` korrigiert.
@@ -152,6 +165,13 @@ Newsletter-Versand seit 10.08. nur noch manuell nach Vorschau-Freigabe.
 
 **Nächster Schritt:** Affiliate-Programme anmelden — der einzige Monetarisierungs-Hebel
 mit 0 € Startkosten (CLAUDE.md §5, Blocker 4).
+*07.09.:* Verteilplan für Reel 1 liegt (`Projects/Steakakademie/Marketing/VERTEILPLAN-Reel-1-2026-09-06.md`,
+0 €, TikTok + Instagram ernst, Rest Zweitverwertung). Microsoft Clarity läuft live (~30 Suchsitzungen/Woche,
+>80 % mobil), Vercel Web Analytics nicht aktiviert, GA4 offen. Live-Site hat keine Social-Links.
+**Offen, nur Uwe:** Claim „Geiler Scheiss" — Reel als Einzelstück oder Marke (Befund liegt); Digistore-
+Produkt fürs Diplom anlegen und in `digistore_products` auf `grillmeister-diplom` mappen. **Nebenbefund:**
+Digistore-Produkt 695900 (Agentur-Killer-Sprint, aktiv, approved) hat keine Zeile in `digistore_products`
+und keinen Kurs — ein Kauf dort würde derzeit nichts freischalten.
 
 ---
 

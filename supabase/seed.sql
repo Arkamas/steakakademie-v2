@@ -22,9 +22,9 @@ VALUES
     'steuer-matrix'
   ),
   (
-    'Der Agentur-Killer-Sprint',
+    'Eigenregie',
     'Befreiung von Drittanbieter-Abhängigkeiten durch Full-Ownership in 72h. Website-Migration zu Next.js + Vercel, GitHub-Ownership, Claude Code als dein Werkzeug. Einmal aufgesetzt, für immer unabhängig.',
     497.00,
-    'agentur-killer-sprint'
+    'eigenregie'
   )
 ON CONFLICT (slug) DO NOTHING;

@@ -621,6 +621,26 @@ Rules:
 
 ### Betrieb (Stand 07.09.2026)
 
+**`graphify claude install` NICHT ausführen (08.09.2026, belegt).** Der Befehl
+löscht diese Betriebssektion aus CLAUDE.md, setzt zwei PreToolUse-Hooks in
+`.claude/settings.json` (`Bash|Grep` → `hook-guard search`, `Read|Glob` →
+`hook-guard read`), zerstört die Datei-Endzeile und legt
+`.claude/settings.json.graphify-bak` als untracked Datei ab — beide Dateien sind
+git-getrackt im öffentlichen Repo. Dasselbe gilt für `graphify install --platform
+claude`. Rückbau, falls doch gelaufen: `git checkout -- CLAUDE.md
+.claude/settings.json` plus Backup-Datei löschen. Die Hooks selbst wären nicht
+blockierend gewesen (`hook-guard read` und `hook-guard search` liefern beide
+ExitCode 0, blockierend wäre 2) — der Ablehnungsgrund ist die Doku-Zerstörung,
+nicht Loop-Gefahr.
+
+**Semantische Ebene.** `graphify update .` macht per Definition nur AST ohne LLM,
+Doku-, Paper- und Bilddateien bleiben dabei außen vor — das ist kein Defekt. Der
+Lauf, der `semantic_hash` füllt, ist `graphify extract . --backend gemini
+--max-concurrency 1`. Vorher immer `graphify check-update .` fragen: keine
+Ausgabe = keine Re-Extraktion fällig (08.09.2026 der Fall), dann den teuren Lauf
+sparen. Gegenprobe danach: `graphify query "datenschutz"` muss echte Symbole
+liefern (`DatenschutzPage()` mit Zeilennummer), nicht nur den Dateinamen.
+
 **Die Auto-Hooks sind entfernt.** `post-commit` und `post-checkout` stießen bei
 jedem Commit bzw. Branch-Wechsel einen vollen Rebuild an. Weil ein Label-Lauf
 länger braucht als der Abstand zwischen zwei Commits, wurde er regelmäßig von

@@ -32,7 +32,7 @@ const FAQ_ITEMS = [
   {
     question: 'Was ist die ideale Kerntemperatur für ein medium-rare Steak?',
     answer:
-      '54–56 °C Kerntemperatur ergibt ein perfektes medium-rare Steak. Bei dieser Temperatur sind die Muskelfasern noch zart und saftig, während das Fleisch innen warm und gleichmäßig rosa ist.',
+      '52–55 °C Kerntemperatur ergibt ein perfektes medium-rare Steak — die Steakakademie empfiehlt 54 °C, den oberen Rand dieses Korridors. Bei dieser Temperatur sind die Muskelfasern noch zart und saftig, während das Fleisch innen warm und gleichmäßig rosa ist.',
   },
   {
     question: 'Wie messe ich die Kerntemperatur richtig?',
@@ -47,7 +47,7 @@ const FAQ_ITEMS = [
   {
     question: 'Was ist der Unterschied zwischen Ziel-Kerntemperatur und Ruhephase?',
     answer:
-      'Beim Ruhen des Fleisches steigt die Kerntemperatur noch um 3–5 °C nach (Carryover Cooking). Für medium-rare nimmt man das Fleisch daher bereits bei 51–52 °C vom Grill. Während der Ruhephase (5–10 Minuten unter Alufolie) verteilt sich der Fleischsaft gleichmäßig.',
+      'Beim Ruhen des Fleisches steigt die Kerntemperatur noch um 3–5 °C nach (Carryover Cooking). Für medium-rare nimmt man das Fleisch daher bereits bei 50–51 °C vom Grill. Während der Ruhephase (5–10 Minuten unter Alufolie) verteilt sich der Fleischsaft gleichmäßig.',
   },
   {
     question: 'Gilt die Kerntemperatur-Tabelle auch für den Backofen?',
@@ -256,35 +256,35 @@ export default function TemperaturGuidePage() {
                   {[
                     {
                       grade: 'Rare / Blutig',
-                      temp: '48–52 °C',
+                      temp: '45–49 °C',
                       color: 'Außen grau, innen tiefrot, kühl im Kern, sehr saftig',
                       rec: 'Tatar-Temperatur, Carpaccio, Beef Tataki — nur bei geprüftem Fleisch',
                       highlight: false,
                     },
                     {
                       grade: 'Medium Rare',
-                      temp: '54–57 °C',
+                      temp: '52–55 °C',
                       color: 'Außen gebräunt, innen durchgehend warm rosa, saftig',
-                      rec: 'Ribeye, Entrecôte, T-Bone — der ideale Genussgrad für Premiumcuts',
+                      rec: 'Ribeye, Entrecôte, T-Bone — Steakakademie-Standard 54 °C, oberer Rand',
                       highlight: true,
                     },
                     {
                       grade: 'Medium',
-                      temp: '58–62 °C',
+                      temp: '55–60 °C',
                       color: 'Rosa Mitte, leichter Fleischsaftverlust, vollständig warm',
                       rec: 'Rumpsteak, Hüfte, Hanger Steak — guter Kompromiss',
                       highlight: false,
                     },
                     {
                       grade: 'Medium Well',
-                      temp: '63–67 °C',
+                      temp: '60–65 °C',
                       color: 'Leicht rosa Kern, kaum Fleischsaft, deutlich fester',
                       rec: 'Brisket-Vorstufe, Braten, Tafelspitz',
                       highlight: false,
                     },
                     {
                       grade: 'Well Done',
-                      temp: '68–72 °C',
+                      temp: '70+ °C',
                       color: 'Grau-braun durchgehend, trocken, Textur fest',
                       rec: 'Nur für Burger-Patties aus Hackfleisch (Pflicht: 70 °C+)',
                       highlight: false,
@@ -914,9 +914,9 @@ export default function TemperaturGuidePage() {
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {[
-                  { label: 'Ziel: Medium Rare', pull: '51–52 °C', final: '54–56 °C' },
-                  { label: 'Ziel: Medium', pull: '55–57 °C', final: '58–62 °C' },
-                  { label: 'Ziel: Medium Well', pull: '60–62 °C', final: '63–67 °C' },
+                  { label: 'Ziel: Medium Rare', pull: '50–51 °C', final: '52–55 °C' },
+                  { label: 'Ziel: Medium', pull: '53–55 °C', final: '55–60 °C' },
+                  { label: 'Ziel: Medium Well', pull: '57–60 °C', final: '60–65 °C' },
                 ].map((item) => (
                   <div key={item.label} className="text-center p-4 bg-surface-base border border-border-subtle">
                     <p className="text-[10px] font-sans font-bold tracking-[0.12em] uppercase text-text-muted mb-2">{item.label}</p>

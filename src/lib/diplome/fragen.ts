@@ -7,10 +7,13 @@
  * und bei einer falschen Antwort kann direkt dorthin verwiesen werden.
  *
  * Temperaturen folgen data/kerntemperatur-referenz.yaml (Regel 8c). Korrigiert
- * am 06.09.2026: Rind medium rare 54–58 °C (vorher 52–55), Schweinefilet
- * 63–65 °C (vorher 58–62, unter dem Sicherheits-Minimum 63 °C), Lachs 48–52 °C,
- * Lamm 54–57 °C. Die fruehere Formulierung „seit 2011 lebensmittelrechtlich
- * okay" ist entfernt — Regel 10, keine juristischen Aussagen.
+ * am 06.09.2026: Schweinefilet 63–65 °C (vorher 58–62, unter dem
+ * Sicherheits-Minimum 63 °C), Lachs 48–52 °C, Lamm 54–57 °C. Die fruehere
+ * Formulierung „seit 2011 lebensmittelrechtlich okay" ist entfernt — Regel 10,
+ * keine juristischen Aussagen. Am 07.09.2026 die komplette Rind-Garstufen-Skala
+ * auf die von Uwe bestaetigte Referenztabelle umgestellt: rare 45–49, medium
+ * rare 52–55 (Standard 54, oberer Rand — vorher 54–58), medium 55–60 (vorher
+ * 58–63), well done 70+ (vorher 68+).
  */
 
 import { QUIZ_BESTEHENSGRENZE, type StufeKey } from './stufen';
@@ -73,7 +76,7 @@ export const FRAGEN: Record<StufeKey, readonly QuizFrage[]> = {
     { q: 'Optimale Fleisch-Lagertemperatur?', options: ['−2 bis 0 °C', '0 bis 2 °C', '2 bis 4 °C', '4 bis 6 °C'], correct: 1, explain: '0–2 °C maximiert Haltbarkeit ohne Gewebeschaden.', lektionSlug: 'fleisch-lagern' },
   ],
   thermometer: [
-    { q: 'Kerntemperatur medium rare beim Rind (serviert)?', options: ['48–52 °C', '54–58 °C', '60–64 °C', '66–70 °C'], correct: 1, explain: '54–58 °C serviert: rosa Kern, warm, saftig. Bei 52–54 °C vom Grill nehmen — das Nachziehen macht den Rest.', lektionSlug: 'kerntemperaturen' },
+    { q: 'Kerntemperatur medium rare beim Rind (serviert)?', options: ['45–49 °C', '52–55 °C', '60–64 °C', '66–70 °C'], correct: 1, explain: '52–55 °C serviert: rosa Kern, warm, saftig — Steakakademie-Standard 54 °C, oberer Rand. Bei 50–51 °C vom Grill nehmen — das Nachziehen macht den Rest.', lektionSlug: 'kerntemperaturen' },
     { q: 'Hähnchenbrust sichere Endtemperatur?', options: ['62 °C', '68 °C', '72–75 °C', '85 °C'], correct: 2, explain: 'Ab 72 °C ist Geflügel sicher — und bei 72–75 °C noch saftig.', lektionSlug: 'kerntemperaturen' },
     { q: 'Schweinefilet saftig und sicher?', options: ['54 °C', '63–65 °C', '70 °C', '78 °C'], correct: 1, explain: '63 °C ist das Sicherheits-Minimum für Schwein — darüber bleibt das Filet saftig, darunter geht es nicht.', lektionSlug: 'kerntemperaturen' },
     { q: 'Was passiert ab 140 °C an der Fleischoberfläche?', options: ['Saftverlust', 'Maillard-Reaktion', 'Kollagenabbau', 'Verkohlung'], correct: 1, explain: 'Maillard = die Bräunungs-Reaktion, Aromen-Explosion.', lektionSlug: 'maillard-kruste' },
@@ -117,10 +120,10 @@ export const FLASHCARDS: Record<StufeKey, readonly Flashcard[]> = {
     { front: 'Wagyu A5',     back: 'Japan-Top · BMS 8–12, sehr dünn aufgeschnitten kurz braten' },
   ],
   thermometer: [
-    { front: 'Rind rare',         back: '50–54 °C · roter Kern, weich' },
-    { front: 'Rind medium rare',  back: '54–58 °C · rosa Kern, saftig (bei 52–54 °C ziehen)' },
-    { front: 'Rind medium',       back: '58–63 °C · rosa-grau, fester' },
-    { front: 'Rind well done',    back: '68+ °C · durch, deutlicher Saftverlust' },
+    { front: 'Rind rare',         back: '45–49 °C · roter Kern, weich' },
+    { front: 'Rind medium rare',  back: '52–55 °C · rosa Kern, saftig — Standard 54 °C (bei 50–51 °C ziehen)' },
+    { front: 'Rind medium',       back: '55–60 °C · rosa-grau, fester' },
+    { front: 'Rind well done',    back: '70+ °C · durch, deutlicher Saftverlust' },
     { front: 'Schwein Filet',     back: '63–65 °C · zart, saftig — 63 °C ist das Minimum' },
     { front: 'Hähnchen Brust',    back: '72–75 °C · weiß, sicher, noch saftig' },
     { front: 'Lachs',             back: '48–52 °C · glasig, mi-cuit' },

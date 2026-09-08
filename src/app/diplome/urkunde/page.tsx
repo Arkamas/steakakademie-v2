@@ -7,7 +7,7 @@ import { ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
-import { LEVELS, STUFEN, stufeByNr } from '@/lib/diplome/stufen';
+import { LEVELS, STUFEN, stufeByNr, gradMitTraeger, DIPLOM_HINWEIS } from '@/lib/diplome/stufen';
 
 /**
  * Gedruckte Urkunde — Audit 06.09.2026, R5.
@@ -147,8 +147,8 @@ export default function UrkundePage() {
               <span className="text-brand-gold">Auf Papier.</span>
             </h1>
             <p className="font-body text-lg text-text-light/60 max-w-xl leading-relaxed">
-              Eine echte Urkunde im Stil des 19. Jahrhunderts — mit deinem Namen
-              und deinem Level. Unten siehst du, wie sie aussieht.
+              Eine echte Urkunde — klar und modern gestaltet, mit deinem Namen, deinem
+              Grad und deinem Level. Unten siehst du, wie sie aufgebaut ist.
               Die <strong className="text-text-light/80">gedruckte Variante ist noch in Vorbereitung</strong> —
               du kannst dich hier unverbindlich dafür vormerken lassen.
             </p>
@@ -179,8 +179,11 @@ export default function UrkundePage() {
             <p className="text-2xl font-serif font-bold text-brand-gold mb-6 min-h-[1.4em]">
               {selected ? `${selected.emoji} ${selected.name}` : <span className="text-text-light/20 italic">Level wählen</span>}
             </p>
-            <p className="text-text-light/30 text-sm font-body mb-8">
-              erfolgreich abgelegt und {selectedStufe ? `das ${selectedStufe.cert}` : 'das Diplom-Level —'} der Steakakademie erreicht hat.
+            <p className="text-text-light/30 text-sm font-body mb-2">
+              erfolgreich abgelegt hat und den Grad
+            </p>
+            <p className="text-lg font-serif font-bold text-text-light/80 mb-8 min-h-[1.4em]">
+              {selectedStufe ? gradMitTraeger(selectedStufe) : <span className="text-text-light/20 italic">Grillmeister — · Steakakademie</span>}
             </p>
             <div className="flex items-center justify-center gap-8 text-text-light/20 text-xs font-sans">
               <div className="text-center">
@@ -193,6 +196,11 @@ export default function UrkundePage() {
                 <span>Steakakademie</span>
               </div>
             </div>
+            {/* Pflichtzeile (Rahmenlehrplan §1): haelt den Grad von der Kammer-Qualifikation
+                „Zertifizierter Grillmeister" auseinander — auf jeder Urkunde, auch der digitalen. */}
+            <p className="mt-8 text-[10px] font-sans tracking-[0.14em] uppercase text-text-light/25">
+              {DIPLOM_HINWEIS}
+            </p>
           </motion.div>
         </section>
 

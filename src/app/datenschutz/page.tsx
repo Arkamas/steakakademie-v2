@@ -638,9 +638,17 @@ export default function DatenschutzPage() {
                 erfolgt im Regelbetrieb nicht.
               </p>
               <p className="mb-3">
-                Tritt ein Fehler auf, wird ein technischer Bericht übermittelt: Fehlermeldung,
-                Programmzeile, aufgerufene Seite, Browser- und Gerätetyp sowie Zeitpunkt.
-                Sentry setzt hierfür <strong className="text-text-primary">keine Cookies</strong>.
+                Erfasst werden ausschließlich Fehler <strong className="text-text-primary">auf
+                unseren Servern</strong> — in den Programmierschnittstellen, beim Seitenaufbau
+                und in den KI-Funktionen. Übermittelt wird ein technischer Bericht:
+                Fehlermeldung, Programmzeile, betroffener Pfad und Zeitpunkt. Sentry setzt
+                hierfür <strong className="text-text-primary">keine Cookies</strong>.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Seit dem 08.09.2026 läuft im Browser
+                kein Sentry mehr.</strong> Fehler, die im Browser auftreten, erfassen wir
+                selbst — siehe Abschnitt 13b. An Sentry wird aus dem Browser nichts mehr
+                gesendet.
               </p>
               <p className="mb-3">
                 <strong className="text-text-primary">Was wir bewusst nicht übertragen:</strong>{' '}
@@ -665,6 +673,30 @@ export default function DatenschutzPage() {
                 <a href="https://sentry.io/privacy/" target="_blank" rel="noopener noreferrer" className={linkClass}>
                   sentry.io/privacy
                 </a>.
+              </p>
+            </section>
+
+            <section>
+              <h2 className={h2Class}>13b. Browser-Fehler (eigene Erfassung)</h2>
+              <p className="mb-3">
+                Fehler, die im Browser auftreten — etwa wenn eine Schaltfläche nicht reagiert
+                oder eine Ansicht nicht lädt —, erfassen wir seit dem 08.09.2026 selbst. Die
+                Meldung wird im Browser erzeugt und an unseren eigenen Server übermittelt; ein
+                externer Dienstleister ist daran nicht beteiligt.
+              </p>
+              <p className="mb-3">
+                Gespeichert werden ausschließlich: die Fehlermeldung und der technische
+                Aufrufverlauf so, wie der Browser sie liefert, der aufgerufene Pfad ohne
+                Suchparameter, die Browser-Familie (etwa Chrome oder Safari), die
+                Geräteklasse und die Versionsnummer der Website. Es werden keine IP-Adresse,
+                kein vollständiger Browser-Kennungstext, keine Nutzerkennung, keine Cookies
+                und keine Daten in Ihrem Endgerät gespeichert oder ausgelesen. Eingaben in
+                Formulare oder an den KI-Assistenten sind nicht Teil der Meldung.
+              </p>
+              <p>
+                Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am
+                fehlerfreien und sicheren Betrieb der Website). Eine Einwilligung nach
+                § 25 TDDDG ist nicht erforderlich.
               </p>
             </section>
 

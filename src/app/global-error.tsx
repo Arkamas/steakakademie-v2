@@ -4,13 +4,13 @@
  * Faengt Render-Fehler ab, die das Root-Layout zerlegen. Ohne diese Datei
  * sieht der Besucher die nackte Next-Fehlerseite und Sentry erfaehrt nichts.
  */
-import * as Sentry from '@sentry/nextjs';
+import { meldeJsFehler } from '@/lib/fehler-melden';
 import NextError from 'next/error';
 import { useEffect } from 'react';
 
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
   useEffect(() => {
-    Sentry.captureException(error);
+    meldeJsFehler({ kind: 'render', message: error.message, stack: error.stack, digest: error.digest });
   }, [error]);
 
   return (

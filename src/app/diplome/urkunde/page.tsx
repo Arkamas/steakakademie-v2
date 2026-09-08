@@ -243,10 +243,15 @@ export default function UrkundePage() {
               className="text-center py-16 border border-brand-gold/20 bg-surface-elevated p-12"
             >
               <div className="text-6xl mb-6">📬</div>
-              <h2 className="font-serif text-3xl font-bold text-text-light mb-4">Bestellung ist angekommen</h2>
+              <h2 className="font-serif text-3xl font-bold text-text-light mb-4">Anfrage ist angekommen</h2>
               <p className="font-body text-text-light/60 leading-relaxed mb-4">
-                Wir melden uns per E-Mail an {konto && konto !== 'laedt' ? konto.email : 'deine Adresse'} wegen
-                der Zahlung (9,99 € + 4,99 € Porto = 14,98 €). Danach geht die Urkunde in den Druck und per Post zu dir.
+                <strong className="text-text-light/80">Bezahlt hast du noch nichts.</strong> Wir melden uns
+                per E-Mail an {konto && konto !== 'laedt' ? konto.email : 'deine Adresse'} mit den Zahlungsdaten
+                (9,99 € + 4,99 € Porto = 14,98 €). Erst danach geht die Urkunde in den Druck und per Post zu dir.
+              </p>
+              <p className="font-body text-text-light/40 text-sm leading-relaxed">
+                Eine Eingangsbestätigung liegt gleich in deinem Postfach. Kommt innerhalb von zwei
+                Werktagen nichts, schreib uns an pitmaster@steakakademie.de.
               </p>
             </motion.div>
           )}
@@ -260,7 +265,7 @@ export default function UrkundePage() {
               className="space-y-4 border border-brand-gold/15 bg-surface-elevated p-8"
             >
               <h2 className="font-serif text-2xl font-bold text-text-light mb-6 text-center">
-                Gedruckte Urkunde bestellen — 9,99 € + 4,99 € Porto
+                Gedruckte Urkunde anfordern — 9,99 € + 4,99 € Porto
               </h2>
 
               <div>
@@ -320,8 +325,9 @@ export default function UrkundePage() {
               </label>
 
               <p className="text-text-light/30 text-xs font-body leading-relaxed">
-                Die digitale Urkunde bleibt kostenlos. Für die gedruckte Variante nehmen wir nach dem
-                Absenden per E-Mail Kontakt zur Zahlung auf (9,99 € + 4,99 € Porto = 14,98 €).
+                Die digitale Urkunde bleibt kostenlos. <strong className="text-text-light/50">Mit dem Absenden
+                entsteht noch kein zahlungspflichtiger Vertrag</strong> — für die gedruckte Variante nehmen wir
+                danach per E-Mail Kontakt zur Zahlung auf (9,99 € + 4,99 € Porto = 14,98 €).
                 Deine Adresse wird ausschließlich für den Versand verwendet.
                 Gemäß § 19 UStG (Kleinunternehmerregelung) wird keine Umsatzsteuer ausgewiesen.
               </p>
@@ -335,7 +341,7 @@ export default function UrkundePage() {
                 disabled={state === 'submitting' || !consent}
                 className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-[background-color,opacity] duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {state === 'submitting' ? 'Wird gesendet…' : 'Gedruckte Urkunde bestellen — 14,98 € →'}
+                {state === 'submitting' ? 'Wird gesendet…' : 'Urkunde anfordern — Zahlung folgt per E-Mail →'}
               </button>
             </motion.form>
           )}

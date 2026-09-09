@@ -54,6 +54,12 @@ module.exports = {
   sitemapSize: 5000,
   exclude: [
     '/home-b',        // A/B-Variante (Editorial Ember) — noindex, Canonical auf /
+    // BBQ-Grundkurs eingestellt (Uwe, 09.09.2026): Die URL leitet dauerhaft auf
+    // /diplome. Eine weitergeleitete URL gehoert nicht in die Sitemap — das ist
+    // ein widerspruechliches Signal an Google. Solange die Seitendateien noch im
+    // Repo liegen, wuerde next-sitemap sie sonst aus dem Manifest ziehen.
+    '/bbq-grundkurs',
+    '/danke/bbq-grundkurs',
     // Bezahlprodukt-Schutz (26.08.2026): Stufe 2-5 sind Teil des kostenpflichtigen
     // Grillmeister-Diploms. Oeffentlich bleibt nur der Anreisser auf der Seite
     // selbst — die Volltexte gehoeren nicht in den Index. Stufe 1 (Bronze,

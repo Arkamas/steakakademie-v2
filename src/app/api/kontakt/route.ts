@@ -24,9 +24,26 @@
  * Env:
  *   NEXT_PUBLIC_SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY
  *   LOOPS_API_KEY · LOOPS_KONTAKT_TEMPLATE_ID
+ *   LOOPS_BESTAETIGUNG_TEMPLATE_ID (optional, siehe unten)
  *
  * Graceful: Fehlt das Loops-Template, wird trotzdem gespeichert und bestaetigt —
  * die Nachricht ist dann in der Tabelle und geht nicht verloren.
+ *
+ * EINGANGSBESTAETIGUNG AN DEN ABSENDER (08.09.2026)
+ * -------------------------------------------------
+ * Anlass war ein realer Fall: Ein Mitglied hat am 08.09. eine gedruckte Urkunde
+ * angefordert, nie eine Rueckmeldung gesehen und dann per Mail nachgefragt, wo
+ * seine Bestaetigung bleibt. Bis dahin ging aus diesem Endpunkt AUSSCHLIESSLICH
+ * eine Mail an das eigene Postfach — der Absender bekam nichts, auch keinen
+ * Hinweis, dass die Zahlung noch aussteht. Aus seiner Sicht: abgeschickt, Stille.
+ *
+ * Die Bestaetigung ist bewusst zweitrangig: Sie laeuft NACH der internen Mail und
+ * ihr Scheitern aendert die Antwort an den Browser nicht. Lieber eine Anfrage
+ * ohne Bestaetigung als eine verlorene Anfrage.
+ *
+ * Fehlt LOOPS_BESTAETIGUNG_TEMPLATE_ID, passiert an dieser Stelle nichts (mit
+ * Log-Zeile) — der Rest laeuft unveraendert weiter. Das Template braucht die
+ * Variablen: name, thema, datum, zeit, nachricht, hinweis.
  */
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -43,6 +60,21 @@ function betreffTag(subject: string): string {
     case 'urkunde':     return '[Urkunde]';      // Bestellung gedruckte Urkunde (/diplome/urkunde)
     default:            return '[Allgemein]';   // diplom, feedback, sonstiges, leer
   }
+}
+
+/**
+ * Was der Absender in seiner Eingangsbestaetigung als naechsten Schritt liest.
+ * Bei der Urkunde steht die Zahlung ausdruecklich drin: Das Formular nimmt kein
+ * Geld entgegen, und wer das nicht schwarz auf weiss liest, haelt sich fuer
+ * einen zahlenden Kunden (genau der Fall vom 08.09.2026).
+ */
+function hinweisText(subject: string): string {
+  if (subject === 'urkunde') {
+    return 'Deine Vormerkung für die gedruckte Urkunde ist notiert. Es entstehen dir dadurch '
+      + 'keine Kosten — sie ist unverbindlich. Sobald die gedruckte Urkunde fertig ist, melden '
+      + 'wir uns mit Preis, Zahlungsweg und der Frage nach deiner Anschrift.';
+  }
+  return 'Wir schauen uns deine Nachricht an und melden uns so bald wie möglich zurück.';
 }
 
 export async function POST(req: Request) {
@@ -153,6 +185,43 @@ export async function POST(req: Request) {
     }
   } else {
     console.warn('[kontakt] LOOPS_API_KEY oder LOOPS_KONTAKT_TEMPLATE_ID fehlt — nur gespeichert.');
+  }
+
+  // 2b) Eingangsbestaetigung an den Absender. Zweitrangig: Ein Fehler hier
+  //     aendert weder die Antwort an den Browser noch mail_sent (das steht fuer
+  //     die INTERNE Zustellung — sonst waere die Tabelle nicht mehr lesbar).
+  const bestaetigungId = process.env.LOOPS_BESTAETIGUNG_TEMPLATE_ID;
+  if (apiKey && bestaetigungId) {
+    try {
+      const d = new Date(receivedAt);
+      const datum = d.toLocaleDateString('de-DE', { timeZone: 'Europe/Berlin' });
+      const zeit  = d.toLocaleTimeString('de-DE', { timeZone: 'Europe/Berlin', hour: '2-digit', minute: '2-digit' });
+      const hinweis = hinweisText(subject);
+      const resp = await fetch('https://app.loops.so/api/v1/transactional', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          transactionalId: bestaetigungId,
+          email,                       // hier ist der Absender der Empfaenger
+          // Loops-Variablennamen sind case-sensitive → beide Schreibweisen.
+          dataVariables: {
+            name,                      Name: name,
+            thema: subject || '—',     Thema: subject || '—',
+            datum,                     Datum: datum,
+            zeit,                      Zeit: zeit,
+            nachricht: message,        Nachricht: message,
+            hinweis,                   Hinweis: hinweis,
+          },
+        }),
+      });
+      if (!resp.ok) {
+        console.error('[kontakt] bestaetigung', resp.status, (await resp.text()).slice(0, 300));
+      }
+    } catch (e) {
+      console.error('[kontakt] bestaetigung error', e);
+    }
+  } else if (apiKey) {
+    console.warn('[kontakt] LOOPS_BESTAETIGUNG_TEMPLATE_ID fehlt — keine Eingangsbestaetigung an den Absender.');
   }
 
   // Versand-Status nachtragen, damit die Tabelle zeigt, was noch offen ist.

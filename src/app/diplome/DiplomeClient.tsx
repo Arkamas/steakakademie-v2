@@ -248,6 +248,11 @@ export default function DiplomeClient({
               Roadmap &mdash; Was du in jeder Stufe lernst &rarr;
             </Link>
             <p className="font-body text-text-muted text-sm">
+              Was ein Grillmeister k&ouml;nnen muss, steht im{' '}
+              <Link href="/diplome/rahmenlehrplan" className="underline hover:text-brand-gold transition-colors">Rahmenlehrplan</Link>
+              {' '}&mdash; f&uuml;nf Stufen, jedes Lernziel als &uuml;berpr&uuml;fbare F&auml;higkeit.
+            </p>
+            <p className="font-body text-text-muted text-sm">
               Erstelle dein kostenloses Konto und speichere deinen Fortschritt.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -261,7 +266,7 @@ export default function DiplomeClient({
                 href="/diplome/urkunde"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-brand-gold/50 text-brand-gold font-sans font-bold tracking-[0.08em] uppercase text-sm hover:bg-brand-gold/10 transition duration-200 ease-out active:scale-[0.98] motion-reduce:active:scale-100"
               >
-                Urkunde per Post &mdash; 9,99 &euro; + Porto
+                Gedruckte Urkunde &mdash; vormerken
               </Link>
               <Link
                 href="/diplome/profil"

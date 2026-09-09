@@ -7,22 +7,34 @@ import { ChevronRight, GraduationCap } from 'lucide-react';
 // Aufruf aus content/: <DiplomCTA modul="fleischkunde" headline="…" text="…"
 // cta="Modul ansehen" />
 //
-// WOHIN VERLINKT WIRD, und warum nicht auf die Modulseite:
-// Es gibt keine. Unter /diplome/lernen existiert ausschliesslich
-// [stufe]/[lektion] — eine Landingpage je Stufe ist nicht gebaut. Ein Link auf
-// /diplome/lernen/stufe-3 waere ein toter Link und haette check-links.mjs
-// zurecht rot gesetzt. Bis es Modulseiten gibt, zeigt der Block deshalb den
-// Stufennamen als Label und verlinkt auf die Diplom-Uebersicht. Sobald eine
-// Stufenseite existiert, aendert sich hier genau ein `href`.
+// WOHIN VERLINKT WIRD:
+// Unter /diplome/lernen existiert nur [stufe]/[lektion] — eine Landingpage je
+// Stufe gibt es weiterhin nicht. Seit 08.09.2026 gibt es aber
+// /diplome/rahmenlehrplan mit Ankern #stufe-1 … #stufe-5 (id am <section>).
+// Dorthin verlinkt der Block: ein echtes Ziel, das die Stufe samt Lernzielen
+// erklaert, statt der unspezifischen Uebersicht.
 //
-// Unbekanntes `modul` faellt ebenfalls auf /diplome — ein Tippfehler im
-// Frontmatter soll den Block nicht verschwinden lassen, sondern ihn nur
-// unspezifischer machen.
+// KORREKTUR 09.09.2026: Die Labels nannten Stufe 3 bzw. 4 und die Abzeichen
+// „Onglet-Kenner" / „Dry-Ager". Beide Abzeichen gehoeren laut ABZEICHEN in
+// stufen.ts zu **Stufe 2** — der Block hat Lesern also die falsche Stufe
+// genannt. Ausserdem fehlte die Klassifizierung (Grillmeister Bronze …
+// Meisterklasse), die am 08.09. eingefuehrt wurde. Wer hier etwas aendert,
+// prueft die Zuordnung gegen STUFEN und ABZEICHEN in
+// src/lib/diplome/stufen.ts — nicht aus dem Gedaechtnis.
+//
+// Unbekanntes `modul` faellt auf /diplome — ein Tippfehler im Frontmatter soll
+// den Block nicht verschwinden lassen, sondern ihn nur unspezifischer machen.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const MODULE: Record<string, { label: string; href: string }> = {
-  fleischkunde: { label: 'Stufe 3 · Onglet-Kenner — Cuts & Anatomie', href: '/diplome' },
-  reifung: { label: 'Stufe 4 · Dry-Ager — Reifung & Lagerung', href: '/diplome' },
+  fleischkunde: {
+    label: 'Stufe 2 · Grillmeister Silber — Cuts & Anatomie',
+    href: '/diplome/rahmenlehrplan#stufe-2',
+  },
+  reifung: {
+    label: 'Stufe 2 · Grillmeister Silber — Reifung & Lagerung',
+    href: '/diplome/rahmenlehrplan#stufe-2',
+  },
 };
 
 interface DiplomCTAProps {

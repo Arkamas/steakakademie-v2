@@ -718,29 +718,106 @@ gehört nach https://github.com/Graphify-Labs/graphify/issues. Reproduktion:
 graphify update .   # Warnung "3 file(s) had syntax errors" in der Ausgabe
 ```
 
-### MCP-Server (07.09.2026)
+### MCP-Server (07.09.2026, Cowork-Teil ergaenzt 09.09.2026)
 
-Der Graph hängt als MCP-Server in Claude Code: `.mcp.json` im Projekt startet
-`graphify-mcp graphify-out/graph.json` über stdio. Damit fragt der Assistent den
-Graphen mit Werkzeugen ab, statt `GRAPH_REPORT.md` zu lesen — verfügbar sind
-`query_graph`, `get_node`, `get_neighbors`, `get_community`, `god_nodes`,
-`graph_stats`, `shortest_path`, `list_prs`, `get_pr_impact`, `triage_prs`.
+Der Graph haengt als MCP-Server an zwei Stellen — **die beiden Konfigurationen
+sind getrennt und wissen nichts voneinander**:
 
-**Voraussetzung ist das `mcp`-Extra** (zieht `mcp` und `starlette`). Es fehlte in
-der Installation vom 07.09., deshalb einmalig:
+| Client | Konfigurationsdatei | Pfad zur graph.json |
+|---|---|---|
+| Claude Code (CLI, im Repo) | `.mcp.json` im Projekt | relativ (`graphify-out/graph.json`) |
+| Cowork / Claude Desktop | Konfiguration der Desktop-App | **absolut** |
+
+Verfuegbare Werkzeuge in beiden Faellen: `query_graph`, `get_node`,
+`get_neighbors`, `get_community`, `god_nodes`, `graph_stats`, `shortest_path`,
+`list_prs`, `get_pr_impact`, `triage_prs`.
+
+**Warum die Cowork-Seite eine eigene Einrichtung braucht (09.09.2026).** Die
+`.mcp.json` im Repo ist Claude Codes *projektbezogene* Konfiguration; die
+Desktop-App liest sie nicht. Ausserdem startet Claude Code im Projektordner, die
+Desktop-App nicht — deshalb waere der relative Pfad dort falsch. Eintrag fuer die
+Desktop-App:
+
+```json
+{
+  "mcpServers": {
+    "graphify": {
+      "command": "C:\\Users\\Uwe\\.local\\bin\\graphify-mcp.exe",
+      "args": ["C:\\Dev\\steakakademie-v2\\graphify-out\\graph.json"]
+    }
+  }
+}
+```
+
+**Der absolute Pfad ist Pflicht, nicht Notloesung (09.09.2026, belegt).** Die
+Desktop-App loest Kommandos nicht ueber den PATH auf — sichtbar am
+digistore24-Eintrag derselben Datei, der `C:\\Program Files\\nodejs\\npx.cmd`
+statt `npx` verwendet. Mit `"command": "graphify-mcp"` startet der Server nicht.
+
+**Die Datei NICHT von Hand editieren (09.09.2026, zweimal schiefgegangen).**
+Beim Einfuegen per Editor landete der Block neben statt in dem bestehenden
+Objekt; die Datei war danach kein gueltiges JSON, und die App startete
+daraufhin **keinen einzigen** Server mehr — auch die vier funktionierenden
+nicht. Ein kaputtes Komma nimmt also alles mit. Sicherer Weg aus PowerShell,
+er legt vorher eine Sicherung an und prueft am Ende:
+
+```powershell
+$p   = "$env:APPDATA\Claude\claude_desktop_config.json"
+$exe = (Get-Command graphify-mcp).Source
+Copy-Item $p "$p.bak" -Force
+$j = Get-Content $p -Raw | ConvertFrom-Json
+$g = [pscustomobject]@{ command = $exe; args = @("C:\Dev\steakakademie-v2\graphify-out\graph.json") }
+$j.mcpServers | Add-Member -NotePropertyName graphify -NotePropertyValue $g -Force
+[System.IO.File]::WriteAllText($p, ($j | ConvertTo-Json -Depth 20), (New-Object System.Text.UTF8Encoding($false)))
+(Get-Content $p -Raw | ConvertFrom-Json).mcpServers | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name
+```
+
+`WriteAllText` mit `UTF8Encoding($false)` schreibt **ohne BOM** —
+`Set-Content -Encoding UTF8` setzt unter Windows PowerShell eines davor, und
+daran scheitert ein JSON-Parser genauso zuverlaessig wie an einem Komma.
+
+Nach dem Schreiben: App ueber das Tray beenden und neu starten. **Der Neustart
+loest alle in der App verbundenen Ordner** — die muessen anschliessend wieder
+verbunden werden, sonst kommt eine Cowork-Sitzung nicht mehr ans Repo.
+
+**`uvx` ist die schlechtere Variante, gemessen (09.09.2026).** Empfohlen wurde
+extern `"command": "uvx", "args": ["--from", "graphifyy[mcp]", "graphify-mcp",
+"<pfad>"]`. Das funktioniert — aber `uvx` baut eine EIGENE, fluechtige Umgebung
+neben der installierten und laedt beim allerersten Start 58 Pakete inklusive
+saemtlicher tree-sitter-Grammatiken. Gemessen in einem Linux-Container mit
+demselben Paket: erster Start > 10 Minuten (nach 10 min abgebrochen), jeder
+weitere Start 1,2 s. Der bereits installierte Shim antwortet in 0,9 s, ohne
+Netzzugriff. Ein MCP-Client, der beim Start ein Zeitlimit hat, faellt in den
+ersten Fall — deshalb den Shim direkt aufrufen.
+
+**Nicht existierende Pakete (09.09.2026 geprueft, gegen Halluzinationen).**
+`npm view @graphify/mcp` → E404, `pypi.org/pypi/graphify-mcp` → HTTP 404. Beides
+kursiert als Konfigurationsvorschlag und ist falsch. Das Paket heisst
+**`graphifyy`** (PyPI, aktuell 0.9.57) und liefert die zwei ausfuehrbaren
+Dateien `graphify` und `graphify-mcp`.
+
+**Voraussetzung ist das `mcp`-Extra** (zieht `mcp` und `starlette`). Wieder
+gilt: alle Extras in **einem** Befehl, sonst fliegen die anderen raus.
 
 ```powershell
 uv tool install "graphifyy[sql,openai,mcp]@latest" --force
 ```
 
-Wieder gilt: alle Extras in **einem** Befehl, sonst fliegen die anderen raus.
+**Der Server liest `graph.json` beim START.** Nach jedem `graphify update .`
+muss der Client neu gestartet werden — Claude Code beenden und neu oeffnen bzw.
+die Desktop-App ueber das Tray-Symbol vollstaendig beenden, nicht nur das
+Fenster schliessen. Sonst antwortet der Server stillschweigend aus dem alten
+Graphen; das sieht aus wie ein veralteter Code-Stand und kostet Stunden Suche.
 
-Geprüft am 07.09.2026 gegen den echten Graphen (in einem Linux-Container mit
-derselben Paketversion): Server meldet sich als `graphify 1.27.0`, listet die
-zehn Werkzeuge, `graph_stats` liefert 5384 Knoten / 7921 Kanten / 657
-Communities. Der Server liest `graph.json` beim Start — **nach jedem
-`graphify update .` muss Claude Code neu gestartet werden**, sonst antwortet er
-aus dem alten Stand.
+Geprueft am 09.09.2026, zweimal: erst in einem Linux-Container gegen die echte
+`graph.json` vom 08.09. (5,3 MB) — Handshake ok, `graphify 0.9.57`, zehn
+Werkzeuge —, danach **live aus einer Cowork-Sitzung heraus**: die App meldet
+`graphify` als `announced`, `graph_stats` liefert **5412 Knoten / 7965 Kanten /
+678 Communities** (98 % EXTRACTED, 2 % INFERRED), und `query_graph` gibt echte
+Symbole mit Zeilennummern zurueck (z. B. `POST()` in
+`src/app/api/js-errors/route.ts` L40, Community „Analytics and Guard Routes").
+Die Werte im Abschnitt darueber (5384/7921/657) stammen vom 07.09. und sind
+damit ueberholt.
 
 ### Git-Wartung
 

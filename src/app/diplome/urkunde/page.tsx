@@ -8,35 +8,46 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
 import { LEVELS, STUFEN, stufeByNr } from '@/lib/diplome/stufen';
+import {
+  URKUNDE_CONSENT_TEXT,
+  URKUNDE_LAENDER,
+  urkundePreisMitVersand,
+  urkundePreisText,
+} from '@/lib/urkunde/preis';
 
 /**
- * Gedruckte Urkunde — Audit 06.09.2026, R5.
+ * Gedruckte Urkunde — Bestellseite.
  *
- * Vorher: handleSubmit wartete 1,2 Sekunden, meldete „Urkunde bestellt!" und
- * tat nichts — kein Request, kein Datensatz, keine Mail. Das Level waehlte der
- * Besucher frei aus zehn Optionen, ohne Bezug zum Fortschritt.
+ * Audit 06.09.2026, R5: Davor wartete handleSubmit 1,2 Sekunden, meldete
+ * „Urkunde bestellt!" und tat nichts.
  *
- * Jetzt: Die Bestellung geht ueber /api/kontakt (Betreff „urkunde"), wird in
- * kontaktanfragen gespeichert und per Loops an pitmaster@ zugestellt — genau
- * die Strecke, die schon fuer das Kontaktformular gilt (KAN-70, inkl.
- * Einwilligung). Bestellbar sind nur Level, deren Stufe im Konto als bestanden
- * steht; ohne Konto gibt es keine Bestellung, nur die Vorschau.
+ * Danach ging die Bestellung als Freitext ueber /api/kontakt — eine Mail an
+ * pitmaster@, mehr nicht. Gedruckt und kuvertiert wurde von Hand.
+ *
+ * Seit 10.09.2026 geht sie an /api/urkunde/bestellen und wird eine Zeile in
+ * urkunden_bestellungen. Nach Freigabe unter /admin/urkunden rendert der
+ * Server die Urkunde und beauftragt die Druckerei.
+ *
+ * Deshalb steht hier jetzt eine vollstaendige Versandadresse mit getrenntem
+ * Vor- und Nachnamen und einem Land zur Auswahl: Genau so verlangt es die
+ * Gelato-Order-API. Der Name auf der Urkunde ist ein eigenes Feld — er muss
+ * nicht der Name des Empfaengers sein (Geschenk).
  */
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error';
 type Konto = { userId: string; email: string; bestandeneStufen: Set<number> } | null | 'laedt';
 
-const CONSENT_TEXT =
-  'Ich bin einverstanden, dass meine Angaben zur Bearbeitung dieser Bestellung gespeichert und per E-Mail an die Steakakademie übermittelt werden.';
-
 export default function UrkundePage() {
   const [form, setForm] = useState({
-    name: '',
+    nameAufUrkunde: '',
     level: '',
-    street: '',
-    zip: '',
-    city: '',
-    country: 'Deutschland',
+    vorname: '',
+    nachname: '',
+    strasse: '',
+    adresszusatz: '',
+    plz: '',
+    ort: '',
+    land: 'DE',
   });
   const [consent, setConsent] = useState(false);
   const [state, setState] = useState<FormState>('idle');
@@ -78,38 +89,25 @@ export default function UrkundePage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!konto || konto === 'laedt') return;
-    if (!form.name || !form.level || !form.street || !form.zip || !form.city || !consent) return;
-    if (!selected || !konto.bestandeneStufen.has(selected.stufe)) {
-      setFehler('Dieses Level steht in deinem Konto nicht als bestanden.');
-      setState('error');
-      return;
-    }
+    if (!selected) { setFehler('Bitte ein Level wählen.'); setState('error'); return; }
+
     setState('submitting');
     setFehler('');
-    const message = [
-      `Bestellung gedruckte Urkunde (9,99 € + 4,99 € Porto)`,
-      ``,
-      `Name auf der Urkunde: ${form.name}`,
-      `Level: ${selected.id} — ${selected.name} (Stufe ${selected.stufe}, ${selectedStufe?.cert ?? ''})`,
-      `Konto: ${konto.userId}`,
-      ``,
-      `Versandadresse:`,
-      form.street,
-      `${form.zip} ${form.city}`,
-      form.country,
-    ].join('\n');
     try {
-      const res = await fetch('/api/kontakt', {
+      const res = await fetch('/api/urkunde/bestellen', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          name: form.name,
-          email: konto.email,
-          subject: 'urkunde',
-          message,
+          levelId: selected.id,
+          nameAufUrkunde: form.nameAufUrkunde.trim(),
+          vorname: form.vorname.trim(),
+          nachname: form.nachname.trim(),
+          strasse: form.strasse.trim(),
+          adresszusatz: form.adresszusatz.trim() || undefined,
+          plz: form.plz.trim(),
+          ort: form.ort.trim(),
+          land: form.land,
           consent: true,
-          consent_text: CONSENT_TEXT,
-          website: '',
         }),
       });
       if (!res.ok) {
@@ -152,8 +150,9 @@ export default function UrkundePage() {
             </h1>
             <p className="font-body text-lg text-text-light/60 max-w-xl leading-relaxed">
               Eine echte Urkunde im Stil des 19. Jahrhunderts — mit deinem Namen
-              und deinem Level. Die <strong className="text-text-light/80">digitale Urkunde ist kostenlos</strong>;
-              die gedruckte, postfähige Variante kommt für 9,99 € (zzgl. 4,99 € Porto) direkt zu dir nach Hause.
+              und deinem Level, gedruckt auf 250 g/m² seidenmattem Papier.
+              Die <strong className="text-text-light/80">digitale Urkunde ist kostenlos</strong>;
+              die gedruckte kommt für {urkundePreisMitVersand()} direkt zu dir nach Hause.
             </p>
           </div>
         </section>
@@ -176,7 +175,7 @@ export default function UrkundePage() {
             </p>
             <p className="text-text-light/40 text-sm font-body mb-4">Diese Urkunde bestätigt, dass</p>
             <p className="text-3xl md:text-5xl font-serif font-bold text-text-light mb-4 min-h-[1.4em]">
-              {form.name || <span className="text-text-light/20 italic">Dein Name</span>}
+              {form.nameAufUrkunde || <span className="text-text-light/20 italic">Dein Name</span>}
             </p>
             <p className="text-text-light/40 text-sm font-body mb-2">die Prüfung zum</p>
             <p className="text-2xl font-serif font-bold text-brand-gold mb-6 min-h-[1.4em]">
@@ -246,7 +245,7 @@ export default function UrkundePage() {
               <h2 className="font-serif text-3xl font-bold text-text-light mb-4">Bestellung ist angekommen</h2>
               <p className="font-body text-text-light/60 leading-relaxed mb-4">
                 Wir melden uns per E-Mail an {konto && konto !== 'laedt' ? konto.email : 'deine Adresse'} wegen
-                der Zahlung (9,99 € + 4,99 € Porto = 14,98 €). Danach geht die Urkunde in den Druck und per Post zu dir.
+                der Zahlung ({urkundePreisMitVersand()}). Danach geht die Urkunde in den Druck und per Post zu dir.
               </p>
             </motion.div>
           )}
@@ -260,18 +259,18 @@ export default function UrkundePage() {
               className="space-y-4 border border-brand-gold/15 bg-surface-elevated p-8"
             >
               <h2 className="font-serif text-2xl font-bold text-text-light mb-6 text-center">
-                Gedruckte Urkunde bestellen — 9,99 € + 4,99 € Porto
+                Gedruckte Urkunde bestellen — {urkundePreisMitVersand()}
               </h2>
 
               <div>
-                <label className={labelClass}>Dein vollständiger Name (erscheint auf der Urkunde)</label>
-                <input name="name" value={form.name} onChange={handleChange} required
-                  placeholder="z. B. Max Mustermann" className={inputClass} />
+                <label className={labelClass} htmlFor="nameAufUrkunde">Name, wie er auf der Urkunde stehen soll</label>
+                <input id="nameAufUrkunde" name="nameAufUrkunde" value={form.nameAufUrkunde} onChange={handleChange} required
+                  maxLength={60} placeholder="z. B. Max Mustermann" className={inputClass} />
               </div>
 
               <div>
-                <label className={labelClass}>Bestandenes Level</label>
-                <select name="level" value={form.level} onChange={handleChange} required className={inputClass}>
+                <label className={labelClass} htmlFor="level">Bestandenes Level</label>
+                <select id="level" name="level" value={form.level} onChange={handleChange} required className={inputClass}>
                   <option value="">Level wählen…</option>
                   {waehlbareLevel.map((d) => (
                     <option key={d.id} value={d.id}>
@@ -284,28 +283,57 @@ export default function UrkundePage() {
                 </p>
               </div>
 
+              <div className="pt-2 border-t border-brand-gold/10">
+                <p className="text-[10px] font-sans font-bold tracking-[0.18em] uppercase text-text-light/40 mb-3 mt-3">
+                  Versandadresse
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={labelClass} htmlFor="vorname">Vorname</label>
+                  <input id="vorname" name="vorname" value={form.vorname} onChange={handleChange} required
+                    maxLength={25} autoComplete="given-name" placeholder="Max" className={inputClass} />
+                </div>
+                <div>
+                  <label className={labelClass} htmlFor="nachname">Nachname</label>
+                  <input id="nachname" name="nachname" value={form.nachname} onChange={handleChange} required
+                    maxLength={25} autoComplete="family-name" placeholder="Mustermann" className={inputClass} />
+                </div>
+              </div>
+
               <div>
-                <label className={labelClass}>Straße & Hausnummer</label>
-                <input name="street" value={form.street} onChange={handleChange} required
-                  placeholder="Musterstraße 42" className={inputClass} />
+                <label className={labelClass} htmlFor="strasse">Straße &amp; Hausnummer</label>
+                <input id="strasse" name="strasse" value={form.strasse} onChange={handleChange} required
+                  maxLength={35} autoComplete="address-line1" placeholder="Musterstraße 42" className={inputClass} />
+              </div>
+
+              <div>
+                <label className={labelClass} htmlFor="adresszusatz">Adresszusatz (optional)</label>
+                <input id="adresszusatz" name="adresszusatz" value={form.adresszusatz} onChange={handleChange}
+                  maxLength={35} autoComplete="address-line2" placeholder="c/o, Wohnung, Firma" className={inputClass} />
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className={labelClass}>PLZ</label>
-                  <input name="zip" value={form.zip} onChange={handleChange} required
-                    placeholder="12345" className={inputClass} />
+                  <label className={labelClass} htmlFor="plz">PLZ</label>
+                  <input id="plz" name="plz" value={form.plz} onChange={handleChange} required
+                    maxLength={15} autoComplete="postal-code" placeholder="12345" className={inputClass} />
                 </div>
                 <div className="col-span-2">
-                  <label className={labelClass}>Stadt</label>
-                  <input name="city" value={form.city} onChange={handleChange} required
-                    placeholder="Berlin" className={inputClass} />
+                  <label className={labelClass} htmlFor="ort">Stadt</label>
+                  <input id="ort" name="ort" value={form.ort} onChange={handleChange} required
+                    maxLength={30} autoComplete="address-level2" placeholder="Berlin" className={inputClass} />
                 </div>
               </div>
 
               <div>
-                <label className={labelClass}>Land</label>
-                <input name="country" value={form.country} onChange={handleChange} className={inputClass} />
+                <label className={labelClass} htmlFor="land">Land</label>
+                <select id="land" name="land" value={form.land} onChange={handleChange} required className={inputClass}>
+                  {URKUNDE_LAENDER.map((l) => (
+                    <option key={l.code} value={l.code}>{l.name}</option>
+                  ))}
+                </select>
               </div>
 
               <label className="flex items-start gap-3 pt-2 cursor-pointer">
@@ -316,13 +344,14 @@ export default function UrkundePage() {
                   required
                   className="mt-1 h-5 w-5 shrink-0 accent-brand-fire"
                 />
-                <span className="text-text-light/50 text-xs font-body leading-relaxed">{CONSENT_TEXT}</span>
+                <span className="text-text-light/50 text-xs font-body leading-relaxed">{URKUNDE_CONSENT_TEXT}</span>
               </label>
 
               <p className="text-text-light/30 text-xs font-body leading-relaxed">
                 Die digitale Urkunde bleibt kostenlos. Für die gedruckte Variante nehmen wir nach dem
-                Absenden per E-Mail Kontakt zur Zahlung auf (9,99 € + 4,99 € Porto = 14,98 €).
-                Deine Adresse wird ausschließlich für den Versand verwendet.
+                Absenden per E-Mail Kontakt zur Zahlung auf ({urkundePreisText()}, Versand inklusive).
+                Deine Adresse wird ausschließlich für Druck und Versand verwendet und dafür an unseren
+                Druckdienstleister Gelato übermittelt.
                 Gemäß § 19 UStG (Kleinunternehmerregelung) wird keine Umsatzsteuer ausgewiesen.
               </p>
 
@@ -335,7 +364,7 @@ export default function UrkundePage() {
                 disabled={state === 'submitting' || !consent}
                 className="w-full py-4 border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-sans font-bold tracking-[0.1em] uppercase text-sm hover:bg-brand-gold/20 transition-[background-color,opacity] duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {state === 'submitting' ? 'Wird gesendet…' : 'Gedruckte Urkunde bestellen — 14,98 € →'}
+                {state === 'submitting' ? 'Wird gesendet…' : `Gedruckte Urkunde bestellen — ${urkundePreisText()} →`}
               </button>
             </motion.form>
           )}

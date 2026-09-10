@@ -59,7 +59,18 @@ const nextConfig = {
   // Ohne diesen Schalter laedt Next 14 src/instrumentation.ts nicht, und ohne
   // die Datei bleibt die Telemetrie im Marco-Chat wirkungslos (No-op-Tracer).
   // Ab Next 15 ist der Hook stabil und die Zeile entfaellt.
-  experimental: { instrumentationHook: true },
+  experimental: {
+    instrumentationHook: true,
+    // Die Urkunden-Vorlagen (300-dpi-PNG je Stufe) und die beiden Schriften
+    // liest src/lib/urkunde/render.ts zur Laufzeit von der Platte. Next
+    // verfolgt nur Importe — was per fs.readFile geoeffnet wird, muss hier
+    // stehen, sonst fehlt es im Deploy und die Freigabe scheitert erst in der
+    // Produktion mit ENOENT.
+    outputFileTracingIncludes: {
+      '/api/admin/urkunden': ['./src/lib/urkunde/vorlagen/**', './src/lib/urkunde/schriften/**'],
+      '/api/admin/urkunden/vorschau': ['./src/lib/urkunde/vorlagen/**', './src/lib/urkunde/schriften/**'],
+    },
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     // Optimierte Bilder einen Tag lang cachen (Standard: 60 s). Live gemessen

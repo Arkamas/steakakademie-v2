@@ -1,0 +1,556 @@
+{
+  "dpi": 300,
+  "skalierung": 3.125,
+  "stufen": {
+    "1": {
+      "1z": {
+        "seite": {
+          "breite": 1145.1875,
+          "hoehe": 816.375
+        },
+        "felder": {
+          "name": {
+            "grundlinie": 342.59375,
+            "grundlinieLetzte": 342.59375,
+            "zeilenabstand": 61.0133,
+            "textLinks": 480.0625,
+            "textBreite": 620.234375,
+            "kastenLinks": 503.875,
+            "kastenRechts": 1076.484375,
+            "schriftgroesse": 58.6667,
+            "schriftfamilie": "\"Playfair Display\", Georgia, serif",
+            "schriftschnitt": "600",
+            "laufweite": -0.293333,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "datum": {
+            "grundlinie": 677.90625,
+            "grundlinieLetzte": 677.90625,
+            "zeilenabstand": null,
+            "textLinks": 559.75,
+            "textBreite": 96.671875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 712.3125,
+            "schriftgroesse": 15.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 0,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "nr": {
+            "grundlinie": 743.640625,
+            "grundlinieLetzte": 743.640625,
+            "zeilenabstand": null,
+            "textLinks": 503.875,
+            "textBreite": 186.046875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 689.921875,
+            "schriftgroesse": 11.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 1.36,
+            "ausrichtung": "left",
+            "farbe": "rgb(107, 88, 71)"
+          }
+        },
+        "zeilenIst": 1
+      },
+      "2z": {
+        "seite": {
+          "breite": 1145.1875,
+          "hoehe": 816.375
+        },
+        "felder": {
+          "name": {
+            "grundlinie": 322.265625,
+            "grundlinieLetzte": 383.28125,
+            "zeilenabstand": 61.0133,
+            "textLinks": 637.640625,
+            "textBreite": 305.078125,
+            "kastenLinks": 503.875,
+            "kastenRechts": 1076.484375,
+            "schriftgroesse": 58.6667,
+            "schriftfamilie": "\"Playfair Display\", Georgia, serif",
+            "schriftschnitt": "600",
+            "laufweite": -0.293333,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "datum": {
+            "grundlinie": 677.9375,
+            "grundlinieLetzte": 677.9375,
+            "zeilenabstand": null,
+            "textLinks": 559.75,
+            "textBreite": 96.671875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 712.3125,
+            "schriftgroesse": 15.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 0,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "nr": {
+            "grundlinie": 743.671875,
+            "grundlinieLetzte": 743.671875,
+            "zeilenabstand": null,
+            "textLinks": 503.875,
+            "textBreite": 186.046875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 689.921875,
+            "schriftgroesse": 11.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 1.36,
+            "ausrichtung": "left",
+            "farbe": "rgb(107, 88, 71)"
+          }
+        },
+        "zeilenIst": 2
+      }
+    },
+    "2": {
+      "1z": {
+        "seite": {
+          "breite": 1145.1875,
+          "hoehe": 816.375
+        },
+        "felder": {
+          "name": {
+            "grundlinie": 342.59375,
+            "grundlinieLetzte": 342.59375,
+            "zeilenabstand": 61.0133,
+            "textLinks": 480.0625,
+            "textBreite": 620.234375,
+            "kastenLinks": 503.875,
+            "kastenRechts": 1076.484375,
+            "schriftgroesse": 58.6667,
+            "schriftfamilie": "\"Playfair Display\", Georgia, serif",
+            "schriftschnitt": "600",
+            "laufweite": -0.293333,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "datum": {
+            "grundlinie": 677.90625,
+            "grundlinieLetzte": 677.90625,
+            "zeilenabstand": null,
+            "textLinks": 559.75,
+            "textBreite": 96.671875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 712.3125,
+            "schriftgroesse": 15.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 0,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "nr": {
+            "grundlinie": 743.640625,
+            "grundlinieLetzte": 743.640625,
+            "zeilenabstand": null,
+            "textLinks": 503.875,
+            "textBreite": 186.046875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 689.921875,
+            "schriftgroesse": 11.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 1.36,
+            "ausrichtung": "left",
+            "farbe": "rgb(107, 88, 71)"
+          }
+        },
+        "zeilenIst": 1
+      },
+      "2z": {
+        "seite": {
+          "breite": 1145.1875,
+          "hoehe": 816.375
+        },
+        "felder": {
+          "name": {
+            "grundlinie": 322.265625,
+            "grundlinieLetzte": 383.28125,
+            "zeilenabstand": 61.0133,
+            "textLinks": 637.640625,
+            "textBreite": 305.078125,
+            "kastenLinks": 503.875,
+            "kastenRechts": 1076.484375,
+            "schriftgroesse": 58.6667,
+            "schriftfamilie": "\"Playfair Display\", Georgia, serif",
+            "schriftschnitt": "600",
+            "laufweite": -0.293333,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "datum": {
+            "grundlinie": 677.9375,
+            "grundlinieLetzte": 677.9375,
+            "zeilenabstand": null,
+            "textLinks": 559.75,
+            "textBreite": 96.671875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 712.3125,
+            "schriftgroesse": 15.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 0,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "nr": {
+            "grundlinie": 743.671875,
+            "grundlinieLetzte": 743.671875,
+            "zeilenabstand": null,
+            "textLinks": 503.875,
+            "textBreite": 186.046875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 689.921875,
+            "schriftgroesse": 11.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 1.36,
+            "ausrichtung": "left",
+            "farbe": "rgb(107, 88, 71)"
+          }
+        },
+        "zeilenIst": 2
+      }
+    },
+    "3": {
+      "1z": {
+        "seite": {
+          "breite": 1145.1875,
+          "hoehe": 816.375
+        },
+        "felder": {
+          "name": {
+            "grundlinie": 342.59375,
+            "grundlinieLetzte": 342.59375,
+            "zeilenabstand": 61.0133,
+            "textLinks": 480.0625,
+            "textBreite": 620.234375,
+            "kastenLinks": 503.875,
+            "kastenRechts": 1076.484375,
+            "schriftgroesse": 58.6667,
+            "schriftfamilie": "\"Playfair Display\", Georgia, serif",
+            "schriftschnitt": "600",
+            "laufweite": -0.293333,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "datum": {
+            "grundlinie": 677.90625,
+            "grundlinieLetzte": 677.90625,
+            "zeilenabstand": null,
+            "textLinks": 559.75,
+            "textBreite": 96.671875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 712.3125,
+            "schriftgroesse": 15.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 0,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "nr": {
+            "grundlinie": 743.640625,
+            "grundlinieLetzte": 743.640625,
+            "zeilenabstand": null,
+            "textLinks": 503.875,
+            "textBreite": 186.046875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 689.921875,
+            "schriftgroesse": 11.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 1.36,
+            "ausrichtung": "left",
+            "farbe": "rgb(107, 88, 71)"
+          }
+        },
+        "zeilenIst": 1
+      },
+      "2z": {
+        "seite": {
+          "breite": 1145.1875,
+          "hoehe": 816.375
+        },
+        "felder": {
+          "name": {
+            "grundlinie": 322.265625,
+            "grundlinieLetzte": 383.28125,
+            "zeilenabstand": 61.0133,
+            "textLinks": 637.640625,
+            "textBreite": 305.078125,
+            "kastenLinks": 503.875,
+            "kastenRechts": 1076.484375,
+            "schriftgroesse": 58.6667,
+            "schriftfamilie": "\"Playfair Display\", Georgia, serif",
+            "schriftschnitt": "600",
+            "laufweite": -0.293333,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "datum": {
+            "grundlinie": 677.9375,
+            "grundlinieLetzte": 677.9375,
+            "zeilenabstand": null,
+            "textLinks": 559.75,
+            "textBreite": 96.671875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 712.3125,
+            "schriftgroesse": 15.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 0,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "nr": {
+            "grundlinie": 743.671875,
+            "grundlinieLetzte": 743.671875,
+            "zeilenabstand": null,
+            "textLinks": 503.875,
+            "textBreite": 186.046875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 689.921875,
+            "schriftgroesse": 11.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 1.36,
+            "ausrichtung": "left",
+            "farbe": "rgb(107, 88, 71)"
+          }
+        },
+        "zeilenIst": 2
+      }
+    },
+    "4": {
+      "1z": {
+        "seite": {
+          "breite": 1145.1875,
+          "hoehe": 816.375
+        },
+        "felder": {
+          "name": {
+            "grundlinie": 342.59375,
+            "grundlinieLetzte": 342.59375,
+            "zeilenabstand": 61.0133,
+            "textLinks": 480.0625,
+            "textBreite": 620.234375,
+            "kastenLinks": 503.875,
+            "kastenRechts": 1076.484375,
+            "schriftgroesse": 58.6667,
+            "schriftfamilie": "\"Playfair Display\", Georgia, serif",
+            "schriftschnitt": "600",
+            "laufweite": -0.293333,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "datum": {
+            "grundlinie": 677.90625,
+            "grundlinieLetzte": 677.90625,
+            "zeilenabstand": null,
+            "textLinks": 559.75,
+            "textBreite": 96.671875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 712.3125,
+            "schriftgroesse": 15.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 0,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "nr": {
+            "grundlinie": 743.640625,
+            "grundlinieLetzte": 743.640625,
+            "zeilenabstand": null,
+            "textLinks": 503.875,
+            "textBreite": 186.046875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 689.921875,
+            "schriftgroesse": 11.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 1.36,
+            "ausrichtung": "left",
+            "farbe": "rgb(107, 88, 71)"
+          }
+        },
+        "zeilenIst": 1
+      },
+      "2z": {
+        "seite": {
+          "breite": 1145.1875,
+          "hoehe": 816.375
+        },
+        "felder": {
+          "name": {
+            "grundlinie": 322.265625,
+            "grundlinieLetzte": 383.28125,
+            "zeilenabstand": 61.0133,
+            "textLinks": 637.640625,
+            "textBreite": 305.078125,
+            "kastenLinks": 503.875,
+            "kastenRechts": 1076.484375,
+            "schriftgroesse": 58.6667,
+            "schriftfamilie": "\"Playfair Display\", Georgia, serif",
+            "schriftschnitt": "600",
+            "laufweite": -0.293333,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "datum": {
+            "grundlinie": 677.9375,
+            "grundlinieLetzte": 677.9375,
+            "zeilenabstand": null,
+            "textLinks": 559.75,
+            "textBreite": 96.671875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 712.3125,
+            "schriftgroesse": 15.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 0,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "nr": {
+            "grundlinie": 743.671875,
+            "grundlinieLetzte": 743.671875,
+            "zeilenabstand": null,
+            "textLinks": 503.875,
+            "textBreite": 186.046875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 689.921875,
+            "schriftgroesse": 11.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 1.36,
+            "ausrichtung": "left",
+            "farbe": "rgb(107, 88, 71)"
+          }
+        },
+        "zeilenIst": 2
+      }
+    },
+    "5": {
+      "1z": {
+        "seite": {
+          "breite": 1145.1875,
+          "hoehe": 816.375
+        },
+        "felder": {
+          "name": {
+            "grundlinie": 342.59375,
+            "grundlinieLetzte": 342.59375,
+            "zeilenabstand": 61.0133,
+            "textLinks": 480.0625,
+            "textBreite": 620.234375,
+            "kastenLinks": 503.875,
+            "kastenRechts": 1076.484375,
+            "schriftgroesse": 58.6667,
+            "schriftfamilie": "\"Playfair Display\", Georgia, serif",
+            "schriftschnitt": "600",
+            "laufweite": -0.293333,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "datum": {
+            "grundlinie": 677.90625,
+            "grundlinieLetzte": 677.90625,
+            "zeilenabstand": null,
+            "textLinks": 559.75,
+            "textBreite": 96.671875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 712.3125,
+            "schriftgroesse": 15.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 0,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "nr": {
+            "grundlinie": 743.640625,
+            "grundlinieLetzte": 743.640625,
+            "zeilenabstand": null,
+            "textLinks": 503.875,
+            "textBreite": 186.046875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 689.921875,
+            "schriftgroesse": 11.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 1.36,
+            "ausrichtung": "left",
+            "farbe": "rgb(107, 88, 71)"
+          }
+        },
+        "zeilenIst": 1
+      },
+      "2z": {
+        "seite": {
+          "breite": 1145.1875,
+          "hoehe": 816.375
+        },
+        "felder": {
+          "name": {
+            "grundlinie": 322.265625,
+            "grundlinieLetzte": 383.28125,
+            "zeilenabstand": 61.0133,
+            "textLinks": 637.640625,
+            "textBreite": 305.078125,
+            "kastenLinks": 503.875,
+            "kastenRechts": 1076.484375,
+            "schriftgroesse": 58.6667,
+            "schriftfamilie": "\"Playfair Display\", Georgia, serif",
+            "schriftschnitt": "600",
+            "laufweite": -0.293333,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "datum": {
+            "grundlinie": 677.9375,
+            "grundlinieLetzte": 677.9375,
+            "zeilenabstand": null,
+            "textLinks": 559.75,
+            "textBreite": 96.671875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 712.3125,
+            "schriftgroesse": 15.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 0,
+            "ausrichtung": "center",
+            "farbe": "rgb(18, 12, 7)"
+          },
+          "nr": {
+            "grundlinie": 743.671875,
+            "grundlinieLetzte": 743.671875,
+            "zeilenabstand": null,
+            "textLinks": 503.875,
+            "textBreite": 186.046875,
+            "kastenLinks": 503.875,
+            "kastenRechts": 689.921875,
+            "schriftgroesse": 11.3333,
+            "schriftfamilie": "\"DM Sans\", system-ui, sans-serif",
+            "schriftschnitt": "400",
+            "laufweite": 1.36,
+            "ausrichtung": "left",
+            "farbe": "rgb(107, 88, 71)"
+          }
+        },
+        "zeilenIst": 2
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
  "hinweis": "Nur Titel/Link/Datum/Kategorien. Kein fremder Fliesstext, keine Bilder. Interner Themenspeicher, nicht zur Veroeffentlichung.",
- "aktualisiert": "2026-09-07T10:15:43.779Z",
+ "aktualisiert": "2026-09-10T09:42:31.574Z",
  "eintraege": [
   {
    "id": "heygrillhey:smoked-cornbread-chili-casserole",
@@ -1688,6 +1688,30 @@
     "Tips & Tricks"
    ],
    "gesehen": "2026-09-05",
+   "status": "neu"
+  },
+  {
+   "id": "heygrillhey:easy-lemon-rice",
+   "quelle": "heygrillhey",
+   "quelleName": "Hey Grill Hey",
+   "quelleUrl": "https://heygrillhey.com/",
+   "eignung": [
+    "rezept",
+    "artikel"
+   ],
+   "schwerpunkt": "Pellet-Grill, Familienküche, Feiertage, Saucen und Rubs",
+   "titel": "Easy Lemon Rice",
+   "link": "https://heygrillhey.com/easy-lemon-rice/",
+   "datum": "Mon, 07 Sep 2026 14:00:00 +0000",
+   "kategorien": [
+    "Everything Else",
+    "Hot Sides",
+    "Recipes",
+    "Sides",
+    "Best of Sides",
+    "Everything BBQ Sauce"
+   ],
+   "gesehen": "2026-09-10",
    "status": "neu"
   }
  ]

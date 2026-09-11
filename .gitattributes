@@ -46,6 +46,11 @@
 *.ico   binary
 *.woff  binary
 *.woff2 binary
+# Ergaenzt 10.09.2026: Die Urkunden-Schriften liegen als TTF im Repo
+# (src/lib/urkunde/schriften). Ohne Regel entscheidet Git per Heuristik —
+# eine falsch normalisierte Schriftdatei waere unbrauchbar.
+*.ttf   binary
+*.otf   binary
 *.tsv   text eol=lf
 .gitignore text eol=lf
 .nvmrc text eol=lf

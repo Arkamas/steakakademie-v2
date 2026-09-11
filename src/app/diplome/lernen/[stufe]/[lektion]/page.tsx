@@ -12,6 +12,7 @@ import KontextRail from '@/components/diplome/KontextRail';
 import LektionFortschritt from '@/components/diplome/LektionFortschritt';
 import { STUFEN, stufeByNr } from '@/lib/diplome/stufen';
 import { diplomZugang, istBezahlstufe } from '@/lib/diplome/zugang';
+import { urkundePreisMitVersand } from '@/lib/urkunde/preis';
 
 interface Props {
   params: { stufe: string; lektion: string };
@@ -197,9 +198,16 @@ function LektionSeite({ lektion, locked }: { lektion: (typeof allDiplomLektions)
                       kostenpflichtigen Grillmeister-Diploms. Stufe 1 mit sieben
                       vollständigen Lektionen ist frei zugänglich.
                     </p>
-                    <p className="font-sans text-xs text-text-muted mb-6">
+                    <p className="font-sans text-xs text-text-muted mb-3">
                       Verkaufsstart 01.10.2026 — Gründungs-Preis 99&nbsp;€ für die ersten 100,
                       danach 149&nbsp;€.
+                    </p>
+                    <p className="font-sans text-xs text-text-muted mb-6">
+                      Nach bestandener Prüfung optional dazu bestellbar: die{' '}
+                      <Link href="/diplome/urkunde" className="underline decoration-dotted hover:opacity-80" style={{ color: meta.color }}>
+                        gedruckte Urkunde
+                      </Link>{' '}
+                      auf Papier für {urkundePreisMitVersand()}.
                     </p>
                     <div className="flex flex-wrap items-center justify-center gap-3">
                       <Link

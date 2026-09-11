@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+</helmet>
+
+<div style="position:relative;width:46mm;height:46mm;display:grid;place-items:center">
+  <div style="position:absolute;inset:-5mm;border-radius:50%;border:0.2mm solid #C8882A;opacity:0.2"></div>
+  <div style="position:absolute;inset:-2.6mm;border-radius:50%;border:0.2mm solid #C8882A;opacity:0.38"></div>
+
+  <div style="position:absolute;inset:0;border-radius:50%;padding:1.2mm;box-sizing:border-box;background:linear-gradient(145deg,#F2D79A 0%,#C8882A 26%,#8E5A11 52%,#E3B863 74%,#A96E17 100%);box-shadow:0 0 0 0.2mm rgba(18,12,7,0.25)">
+    <div style="position:relative;width:100%;height:100%;border-radius:50%;background:#120C07;overflow:hidden;display:grid;place-items:center">
+
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:3.1mm;padding:0 1mm">
+        <div style="height:0.85mm;border-radius:0.5mm;background:linear-gradient(90deg,rgba(200,136,42,0.15),#C8882A 22%,#F0D28C 50%,#C8882A 78%,rgba(200,136,42,0.15))"></div>
+        <div style="height:0.85mm;border-radius:0.5mm;background:linear-gradient(90deg,rgba(200,136,42,0.15),#C8882A 22%,#F0D28C 50%,#C8882A 78%,rgba(200,136,42,0.15))"></div>
+        <div style="height:0.85mm;border-radius:0.5mm;background:linear-gradient(90deg,rgba(200,136,42,0.15),#C8882A 22%,#F0D28C 50%,#C8882A 78%,rgba(200,136,42,0.15))"></div>
+        <div style="height:0.85mm;border-radius:0.5mm;background:linear-gradient(90deg,rgba(200,136,42,0.15),#C8882A 22%,#F0D28C 50%,#C8882A 78%,rgba(200,136,42,0.15))"></div>
+        <div style="height:0.85mm;border-radius:0.5mm;background:linear-gradient(90deg,rgba(200,136,42,0.15),#C8882A 22%,#F0D28C 50%,#C8882A 78%,rgba(200,136,42,0.15))"></div>
+        <div style="height:0.85mm;border-radius:0.5mm;background:linear-gradient(90deg,rgba(200,136,42,0.15),#C8882A 22%,#F0D28C 50%,#C8882A 78%,rgba(200,136,42,0.15))"></div>
+      </div>
+
+      <div style="position:absolute;left:50%;bottom:-6mm;width:26mm;height:14mm;margin-left:-13mm;border-radius:50%;background:radial-gradient(ellipse at 50% 100%,rgba(232,80,24,0.85) 0%,rgba(232,80,24,0) 72%)"></div>
+
+      <div style="position:relative;width:64%;height:64%;border-radius:50%;background:#120C07;border:0.3mm solid #C8882A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.9mm;box-shadow:0 0 3mm 2mm rgba(18,12,7,0.95)">
+        <div style="font:600 27pt 'Playfair Display',Georgia,serif;color:#EFD9A6;line-height:0.92;letter-spacing:0.02em">{{ roman }}</div>
+        <div style="width:5mm;height:0.2mm;background:#C8882A"></div>
+        <div style="font:500 7.5pt 'DM Sans',system-ui,sans-serif;color:#C8882A;letter-spacing:0.24em;text-transform:uppercase;white-space:nowrap">{{ metall }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:260,&quot;height&quot;:260},&quot;roman&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;I&quot;,&quot;II&quot;,&quot;III&quot;,&quot;IV&quot;,&quot;V&quot;],&quot;default&quot;:&quot;V&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;metall&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Meister&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      roman: this.props.roman ?? 'V',
+      metall: this.props.metall ?? 'Meister',
+    };
+  }
+}
+</script>
+</body>
+</html>

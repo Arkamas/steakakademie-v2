@@ -53,12 +53,18 @@ export async function GET(req: Request) {
   // Ausgeliefert werden die Bytes, NICHT eine Weiterleitung auf die signierte
   // Supabase-URL. Bis 11.09.2026 stand hier NextResponse.redirect(): Die
   // Vorschau haengt in /admin/urkunden an einem <img src="/api/…/vorschau">,
-  // und die Content-Security-Policy aus next.config.mjs erlaubt bei img-src
-  // nur 'self', data:, blob: und *.clarity.ms. Der Browser folgt der
-  // Weiterleitung zwar, blockt die Ziel-Herkunft *.supabase.co dann aber —
+  // und die img-src-Liste der Content-Security-Policy (next.config.mjs, dort
+  // die massgebliche Fassung) fuehrt den Supabase-Host nicht. Der Browser
+  // folgt der Weiterleitung zwar, blockt die fremde Ziel-Herkunft dann aber —
   // still, ohne Fehlermeldung auf der Seite. Ausgerechnet der Fall, auf den
   // es ankommt (die tatsaechlich an Gelato geschickte Datei), blieb so leer.
   // Der Umweg ueber diese Route haelt ausserdem die signierte URL serverseitig.
+  //
+  // Die erlaubten Hosts stehen hier bewusst NICHT ausgeschrieben: Eine Kopie
+  // der Liste veraltet, und `scripts/legal-guard.mjs` sucht im rohen Dateitext
+  // nach Tracker-Namen — ohne Kommentare auszuklammern. Diese Datei hat den
+  // Gate am 11.09.2026 genau so rot gesetzt („Tracker ohne Consent"), obwohl
+  // sie keine Zeile Tracking enthaelt.
   if (data.druck_datei) {
     const { data: datei, error: ladeFehler } = await db.storage.from('urkunden').download(data.druck_datei);
     if (datei) {

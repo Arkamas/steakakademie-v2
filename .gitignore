@@ -173,3 +173,17 @@ supabase/.temp/
 # Bildherkunft fehl am Platz. Seit 02.09.2026 nur noch lokal (aus dem Index
 # genommen, Dateien bleiben auf der Platte).
 training/cut-review/
+
+# Gelieferte Ausgaben aus Claude-Sitzungen: die zehn Urkunden-PDFs, zwei
+# Beispielbilder, das Schriften-Vergleichsbild. 4f4a8ae hatte sie bewusst
+# ausgelassen ("Regenerierbare Ausgabe, gehoert nicht in die Versionierung")
+# und den Eintrag hier vorgeschlagen — am 11.09.2026 nachgeholt, weil der
+# Ordner seitdem bei jedem `git status` stand und damit die Gefahr barg, bei
+# einem `git add .` mitzuwandern (Regel 9).
+#
+# ZWEI Muster, mit Absicht: Der Ordner heisst "Claude outputs" MIT Leerzeichen.
+# gitignore vergleicht ganze Pfadsegmente, ein blosses `outputs/` traefe ihn
+# also nicht. Das zweite Muster deckt kuenftige Ausgabeordner ohne Praefix ab;
+# es kollidiert mit nichts — kein getrackter Pfad enthaelt "outputs".
+Claude outputs/
+outputs/

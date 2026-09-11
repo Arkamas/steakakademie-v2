@@ -24,7 +24,30 @@ declare module 'opentype.js' {
   }
 
   export function parse(buffer: ArrayBuffer): Font;
-
-  const opentype: { parse: typeof parse };
-  export default opentype;
 }
+
+/**
+ * Hier stand bis 11.09.2026 zusaetzlich ein `export default opentype`, und
+ * render.ts importierte darueber. Das hat getypt, aber `next build` warnte:
+ *
+ *   Attempted import error: 'opentype.js' does not contain a default export
+ *
+ * Zu Recht. Das Paket hat zwei Einstiegspunkte, und nur einer kennt einen
+ * Default:
+ *   main   → dist/opentype.js   UMD, haengt per Footer `'default': opentype`
+ *                               an die Exporte — der Default existiert.
+ *   module → dist/opentype.mjs  reines ESM, exportiert NUR benannt
+ *                               (parse, Font, Path, …) — kein Default.
+ *
+ * Gebuendelt wird derzeit die UMD-Fassung, deshalb lief es trotz der Warnung
+ * (nachgeprueft im Kompilat: `l.default.parse(...)`, und der Aufruf klappt).
+ * Verlassen sollte man sich darauf nicht: Wer die Aufloesung verschiebt —
+ * Turbopack, ein Next-Upgrade, ein `exports`-Feld beim naechsten
+ * opentype.js-Release — bekommt `undefined.parse` und damit einen Fehler
+ * erst zur Laufzeit, in der Freigabe, nach dem Deploy.
+ *
+ * Der benannte Import funktioniert gegen BEIDE Fassungen. Damit der Default
+ * nicht versehentlich zurueckkehrt, ist er hier nicht mehr deklariert: Ein
+ * `import opentype from 'opentype.js'` ist jetzt ein Typfehler und faellt im
+ * Typecheck auf, nicht in der Produktion.
+ */

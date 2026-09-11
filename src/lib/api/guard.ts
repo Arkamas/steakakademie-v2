@@ -20,6 +20,7 @@
 
 import { createServerClient } from '@supabase/ssr';
 import type { z } from 'zod';
+import { istAdminPasswort } from '@/lib/admin-auth';
 
 // ─── Typen ───────────────────────────────────────────────────────────────────
 
@@ -160,12 +161,22 @@ function parseCookies(header: string | null): { name: string; value: string }[] 
   });
 }
 
-/** Admin-Cookie-Schema wie in /api/admin/*: admin_auth === ADMIN_PASSWORD. */
+/**
+ * Admin-Cookie-Schema wie in /api/admin/*: admin_auth === ADMIN_PASSWORD.
+ *
+ * Der Vergleich selbst steht in src/lib/admin-auth.ts und NUR dort
+ * (CLAUDE.md, Abschnitt „Admin-Erkennung"). Bis 11.09.2026 lag hier eine
+ * zweite, eigene Fassung. Sie war nicht offen — das `if (!expected) return
+ * false` fing den `undefined === undefined`-Fall ab —, aber sie war die
+ * siebte Stelle einer Regel, die genau eine haben soll: Wer die Pruefung
+ * spaeter haertet, haette sie hier uebersehen.
+ *
+ * istAdminPasswort liest nur process.env und laeuft damit auch im
+ * Edge-Runtime — die Zusage im Kopf dieser Datei bleibt gueltig.
+ */
 export function isAdminRequest(req: Request): boolean {
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) return false;
   const cookie = parseCookies(req.headers.get('cookie')).find((c) => c.name === 'admin_auth');
-  return cookie?.value === expected;
+  return istAdminPasswort(cookie?.value);
 }
 
 /** Eingeloggter Supabase-Nutzer aus den Request-Cookies (read-only, kein Refresh-Write). */

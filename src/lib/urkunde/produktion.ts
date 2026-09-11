@@ -64,6 +64,17 @@ export async function produziere(
 
   const jetzt = new Date();
 
+  // Der Zustand VOR der Reservierung — gebraucht wird er nur von der Probe,
+  // die ihn hinterher wiederherstellt. Die Reservierung unten kann ihn nicht
+  // liefern: Ihr `.select('*')` ist ein UPDATE ... RETURNING und gibt die
+  // NEUEN Werte zurueck, also bereits 'gesendet' samt gesetztem
+  // freigegeben_am. Wer damit "zuruecksetzt", schreibt 'gesendet' erneut.
+  const { data: vorZustand } = await db
+    .from('urkunden_bestellungen')
+    .select('status, freigegeben_am')
+    .eq('id', bestellungId)
+    .maybeSingle();
+
   // Zustand wechseln, BEVOR bei Gelato bestellt wird. Zwei gleichzeitige
   // Klicks auf „Freigeben" koennen so nicht zwei Druckauftraege ausloesen:
   // Der zweite findet die Zeile nicht mehr im freigabefaehigen Zustand.
@@ -135,12 +146,25 @@ export async function produziere(
     // echte Freigabe steht noch aus. Nummer und Druckdatei bleiben erhalten —
     // die echte Freigabe benutzt beide weiter, es entsteht keine Luecke in der
     // Nummernfolge und die geprüfte Datei ist genau die, die gedruckt wird.
+    //
+    // Zurueckgesetzt wird auf `vorZustand`, NICHT auf `bestellung`: Letzteres
+    // ist die Antwort der Reservierung und traegt schon 'gesendet'. Bis
+    // 11.09.2026 stand hier `bestellung.status` — eine Probe schrieb damit
+    // 'gesendet' fest, und die anschliessende echte Freigabe scheiterte an
+    // ihrem eigenen `.in('status', ['neu','bezahlt','fehler'])` mit 409
+    // „bereits in Produktion". Die Probe hat also genau das verhindert,
+    // wofuer es sie gibt.
     await db.from('urkunden_bestellungen').update({
       druck_datei: pfad,
       gelato_order_id: ergebnis.id,
       gelato_antwort: ergebnis.rohdaten as object,
       aktualisiert_am: new Date().toISOString(),
-      ...(optionen.entwurf ? { status: bestellung.status, freigegeben_am: bestellung.freigegeben_am } : {}),
+      ...(optionen.entwurf
+        ? {
+            status: (vorZustand?.status as Bestellung['status'] | undefined) ?? 'neu',
+            freigegeben_am: (vorZustand?.freigegeben_am as string | null | undefined) ?? null,
+          }
+        : {}),
     }).eq('id', bestellung.id);
 
     return { ok: true, urkundeNr, gelatoOrderId: ergebnis.id, druckDatei: pfad, entwurf: Boolean(optionen.entwurf) };

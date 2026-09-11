@@ -6,7 +6,7 @@ import { guardRequest, jsonError, isAdminRequest, userIdFromRequest } from '@/li
 import { stufeOfLevel, LEVELS } from '@/lib/diplome/stufen';
 import { dienstClient } from '@/lib/urkunde/produktion';
 import { meldeBestellung } from '@/lib/urkunde/benachrichtigung';
-import { URKUNDE_CONSENT_TEXT, URKUNDE_PREIS_CENTS, urkundePreisText } from '@/lib/urkunde/preis';
+import { URKUNDE_CONSENT_TEXT, URKUNDE_LAND_CODES, URKUNDE_PREIS_CENTS, urkundePreisText } from '@/lib/urkunde/preis';
 
 /**
  * POST /api/urkunde/bestellen — Bestellung einer gedruckten Urkunde.
@@ -25,8 +25,6 @@ import { URKUNDE_CONSENT_TEXT, URKUNDE_PREIS_CENTS, urkundePreisText } from '@/l
  * scheitern zu lassen.
  */
 
-const LAENDER = ['DE', 'AT', 'CH', 'LU', 'BE', 'NL', 'DK', 'FR', 'IT', 'ES', 'PL', 'CZ'] as const;
-
 const Body = z.object({
   levelId: z.number().int().min(1).max(10),
   nameAufUrkunde: z.string().trim().min(2).max(60),
@@ -36,7 +34,7 @@ const Body = z.object({
   adresszusatz: z.string().trim().max(35).optional(),
   plz: z.string().trim().min(1).max(15),
   ort: z.string().trim().min(1).max(30),
-  land: z.enum(LAENDER),
+  land: z.enum(URKUNDE_LAND_CODES),
   consent: z.literal(true),
 });
 

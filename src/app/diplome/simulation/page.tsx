@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
+import { urkundePreisMitVersand } from '@/lib/urkunde/preis';
 import {
   Flame, ChevronRight, Lock, Check, X,
   BookOpen, Award, ArrowRight, Trophy,
@@ -434,7 +435,7 @@ export default function DiplomSimulation() {
                 </h2>
                 <p className="font-body text-text-light/55 text-sm mb-10 max-w-md mx-auto leading-relaxed">
                   Nach dem Abschluss-Test erhältst du dein Bronze-Zertifikat —
-                  digital zum Teilen kostenlos, auf Wunsch gedruckt per Post (9,99 € + 4,99 € Porto).
+                  digital zum Teilen kostenlos, auf Wunsch gedruckt per Post ({urkundePreisMitVersand()}).
                 </p>
 
                 {/* Animated diploma */}

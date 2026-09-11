@@ -1,7 +1,10 @@
 import 'server-only';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import opentype, { type Font } from 'opentype.js';
+// Benannter Import, NICHT der Default. Beide Einstiegspunkte des Pakets
+// koennen `parse`; einen Default hat nur einer von beiden. Details in
+// src/types/opentype.d.ts.
+import { parse as parseSchrift, type Font } from 'opentype.js';
 import sharp from 'sharp';
 import boxenJson from './vorlagen/boxen.json';
 
@@ -63,7 +66,7 @@ function schrift(datei: string): Promise<Font> {
   let p = schriftCache.get(datei);
   if (!p) {
     p = fs.readFile(path.join(SCHRIFTEN_ORDNER, datei)).then((buf) =>
-      opentype.parse(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer),
+      parseSchrift(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer),
     );
     schriftCache.set(datei, p);
   }

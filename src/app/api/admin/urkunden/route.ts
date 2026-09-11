@@ -1,5 +1,26 @@
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+/**
+ * 90 s, wie bei den anderen schweren Routen (admin/rezepte, rezept-bild,
+ * kochwissen/generieren). Ohne diese Zeile greift der Deckel aus vercel.json
+ * — `"src/app/api/**": { "maxDuration": 30 }` gilt fuer JEDE Route, die nichts
+ * eigenes sagt. Die Freigabe braucht in einem Zug: Vorlage und zwei Schriften
+ * von der Platte, ein 300-dpi-Rendering durch sharp (A4 sind 3508x2480 Pixel),
+ * rund 1,5 MB Upload in den Bucket und den Gelato-Aufruf, bei dem Gelato die
+ * Datei seinerseits herunterlaedt. Kommt ein Kaltstart mit dem sharp-Binary
+ * dazu, sind 30 s knapp.
+ *
+ * Warum das mehr als eine Unbequemlichkeit waere: Laeuft die Funktion in den
+ * Deckel, wird sie abgeschnitten — das catch in produziere() laeuft dann NICHT
+ * mehr. Die Zeile steht zu diesem Zeitpunkt bereits auf 'gesendet' (die
+ * Reservierung gegen Doppelklicks), aber ohne gelato_order_id und ohne
+ * fehler_text. Sie sieht damit aus wie erledigt, ist es nicht, und laesst sich
+ * ueber die Oberflaeche auch nicht wiederholen: Jede Aktion dort verlangt
+ * status in ('neu','bezahlt','fehler').
+ *
+ * Die Route-Segment-Angabe hat Vorrang vor vercel.json.
+ */
+export const maxDuration = 90;
 
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';

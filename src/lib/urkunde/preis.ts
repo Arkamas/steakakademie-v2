@@ -33,8 +33,21 @@ export const URKUNDE_CONSENT_TEXT =
   'gespeichert und für Druck und Versand an unseren Druckdienstleister Gelato ' +
   'übermittelt werden.';
 
-/** Länder, in die bestellt werden kann (ISO 3166-1 alpha-2). */
-export const URKUNDE_LAENDER: readonly { code: string; name: string }[] = [
+/**
+ * Länder, in die bestellt werden kann (ISO 3166-1 alpha-2).
+ *
+ * EINE Liste für beide Seiten: Das Auswahlfeld auf /diplome/urkunde rendert
+ * sie, und das Zod-Schema in /api/urkunde/bestellen prüft gegen
+ * URKUNDE_LAND_CODES darunter. Bis 11.09.2026 stand im Route-Handler eine
+ * zweite, handgepflegte Kopie derselben zwölf Codes — inhaltsgleich, aber
+ * ohne Kopplung: Ein hier ergänztes Land wäre im Formular wählbar gewesen
+ * und hätte serverseitig einen unverständlichen 400er erzeugt.
+ *
+ * Bewusst ohne `: readonly { code: string; name: string }[]` — die
+ * Annotation hätte die Literaltypen verbreitert, und dann wäre aus dem
+ * Zod-Enum unten wieder ein beliebiges `string` geworden.
+ */
+export const URKUNDE_LAENDER = [
   { code: 'DE', name: 'Deutschland' },
   { code: 'AT', name: 'Österreich' },
   { code: 'CH', name: 'Schweiz' },
@@ -48,3 +61,11 @@ export const URKUNDE_LAENDER: readonly { code: string; name: string }[] = [
   { code: 'PL', name: 'Polen' },
   { code: 'CZ', name: 'Tschechien' },
 ] as const;
+
+export type UrkundeLandCode = (typeof URKUNDE_LAENDER)[number]['code'];
+
+/** Dieselben Codes als Tupel — die Form, die z.enum() im Route-Handler braucht. */
+export const URKUNDE_LAND_CODES = URKUNDE_LAENDER.map((l) => l.code) as unknown as [
+  UrkundeLandCode,
+  ...UrkundeLandCode[],
+];

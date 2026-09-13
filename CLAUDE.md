@@ -210,6 +210,10 @@
   Was bis zum 13.09.2026 noch auf Netlify zeigte, waren ausschliesslich Kommentare
   und Doku-Saetze — sie sind in diesem Zug auf Vercel korrigiert worden. Wer
   „Netlify" im Repo findet, findet damit eine historische Notiz, keine Mechanik.
+  Eine Ausnahme ist offen geblieben: der Kommentar in
+  `.github/workflows/build-guard.yml` („blockiert NICHT den Vercel/Netlify-Deploy")
+  — Workflow-Dateien sind gegen Schreibzugriffe aus der Cowork-Bruecke gesperrt,
+  das aendert Uwe von Hand oder Claude Code lokal.
 - Die Netlify-Checks an PRs (Redirect rules, Header rules, Pages changed,
   deploy-preview) stammen aus der **Netlify-GitHub-App plus der Site-Konfiguration
   im Netlify-Dashboard**, nicht aus dem Repo. Sie verschwinden erst, wenn die

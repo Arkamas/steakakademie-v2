@@ -9,7 +9,8 @@ import { bestand } from '@/lib/hoefe/db';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Hofladen-Radar: Fleisch direkt vom Erzeuger finden | Steakakademie',
+  // Kein "| Steakakademie" — das haengt das title.template im Root-Layout an.
+  title: 'Hofladen-Radar: Fleisch direkt vom Erzeuger finden',
   description:
     'Hofläden und Direktvermarkter in deiner Nähe — mit Umkreissuche nach Ort oder PLZ. Rind, Schwein, Lamm, Geflügel direkt vom Hof, Bio-Höfe markiert.',
   alternates: { canonical: 'https://steakakademie.de/hoefe' },

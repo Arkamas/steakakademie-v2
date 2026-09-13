@@ -38,13 +38,15 @@ const CSP = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://plausible.io https://*.clarity.ms`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://*.clarity.ms",
+  // api.maptiler.com: Kartenkacheln des Hofladen-Radars (/hoefe) — geladen erst
+  // nach Klick des Besuchers (Klick-zum-Laden), siehe HofladenRadar.tsx.
+  "img-src 'self' data: blob: https://*.clarity.ms https://api.maptiler.com",
   "font-src 'self' data:",
   // Sentry steht hier NICHT mehr: seit 08.09.2026 laeuft kein Sentry-Client
   // mehr im Browser (Bundle-Entscheidung, siehe src/lib/fehler-melden.ts).
   // Fehler- und Messmeldungen gehen an eigene Routen unter 'self'; das
   // Server-Sentry sendet vom Server und faellt nicht unter die CSP.
-  "connect-src 'self' https://plausible.io https://*.clarity.ms https://*.supabase.co",
+  "connect-src 'self' https://plausible.io https://*.clarity.ms https://*.supabase.co https://api.maptiler.com",
   "frame-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self'",
@@ -120,7 +122,9 @@ const nextConfig = {
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=()' },
+          // geolocation=(self): „Meinen Standort verwenden" im Hofladen-Radar (/hoefe),
+          // nur auf Klick, nur first-party; Drittanbieter-Frames bleiben ausgeschlossen.
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self), payment=()' },
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
         ],
       },

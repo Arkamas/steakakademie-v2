@@ -207,6 +207,10 @@ export default function RelaunchStartseite() {
                 <span><span className="sk-h sk-h--22">Rezepte nach Methode</span><span className="sk-meta sk-meta--14">Acht Rezepte, acht Techniken — jedes lehrt eine</span></span>
                 <span className="sk-entry__go">→</span>
               </Link>
+              <Link href="/hoefe" className="sk-card sk-card--row">
+                <span><span className="sk-h sk-h--22">Hofladen-Radar</span><span className="sk-meta sk-meta--14">Fleisch direkt vom Erzeuger — Umkreissuche nach Ort oder PLZ</span></span>
+                <span className="sk-entry__go">→</span>
+              </Link>
             </div>
           </div>
           <div className="sk-ueber">

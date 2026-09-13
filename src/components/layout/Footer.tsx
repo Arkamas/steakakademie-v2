@@ -22,6 +22,7 @@ const FOOTER_LINKS = {
     { label: 'Brisket', href: '/cuts/brisket' },
     { label: 'Pulled Pork', href: '/cuts/pulled-pork' },
     { label: 'Alle Cuts', href: '/cuts' },
+    { label: 'Hofladen-Radar', href: '/hoefe' },
   ],
   Akademie: [
     { label: 'Grillmeister-Diplome', href: '/diplome' },

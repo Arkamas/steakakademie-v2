@@ -410,3 +410,26 @@ nav a, header button, .nav-sharp {
     transform: none;
   }
 }
+
+/* ── HOFLADEN-RADAR (Leaflet) ────────────────────────────────────────────
+   Marker als DivIcons in Markenfarben — keine PNGs von Dritt-CDNs (CSP).
+   Popup-Farben passen die Leaflet-Defaults (weiss) an die dunkle Flaeche an. */
+.hof-marker { background: transparent; border: 0; }
+.hof-marker__punkt {
+  display: block; width: 100%; height: 100%; border-radius: 9999px;
+  background: #C8882A; border: 2px solid #F0E8D8;
+  box-shadow: 0 0 0 2px rgba(23, 16, 11, 0.6);
+}
+.hof-marker--fleisch .hof-marker__punkt { background: #E85018; }
+.hof-marker--mitte .hof-marker__punkt { background: #F0E8D8; border-color: #E85018; }
+.leaflet-container { background: #0F0A06; font-family: inherit; }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { background: #1E1410; color: #E6D5C3; box-shadow: 0 4px 16px rgba(0,0,0,.5); }
+.leaflet-popup-content { margin: 12px 14px; line-height: 1.4; }
+.leaflet-popup-close-button { color: #C4A882 !important; }
+.hof-popup { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.hof-popup strong { color: #F0E8D8; font-size: 14px; }
+.hof-popup a { color: #E85018; font-weight: 700; }
+.leaflet-control-attribution { background: rgba(15, 10, 6, .85) !important; color: #947D6C !important; font-size: 10px; }
+.leaflet-control-attribution a { color: #C4A882 !important; }
+.leaflet-bar a { background: #1E1410 !important; color: #E6D5C3 !important; border-color: #3A2A1E !important; }
+.theme-ember .leaflet-container { background: #F1EDE4; }

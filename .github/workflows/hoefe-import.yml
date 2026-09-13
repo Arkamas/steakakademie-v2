@@ -1,0 +1,71 @@
+name: Hofladen-Radar importieren (OSM → Supabase)
+
+# Woechentlicher Import aller Hoflaeden (shop=farm) in Deutschland aus
+# OpenStreetMap nach Supabase (Tabelle hoefe) via scripts/hoefe-import.mjs.
+# Schreibt NUR nach Supabase – keine Dateiaenderungen, kein Commit.
+#
+# Beanspruchte Hoefe (beansprucht = true) werden vom Import nicht ueberschrieben
+# (hoefe_import_upsert). Lizenz der Daten: ODbL, Attribution auf der Website.
+#
+# Benoetigte GitHub-Secrets: NEXT_PUBLIC_SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY
+# Voraussetzung: Migration supabase/migrations/20260913120000_hoefe.sql eingespielt.
+on:
+  schedule:
+    - cron: '30 3 * * 1'   # montags 03:30 UTC — Overpass ist nachts am wenigsten ausgelastet
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Trockenlauf? (nur zaehlen, keine DB-Schreibvorgaenge)'
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  group: hoefe-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    name: Hoefe importieren
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Dependencies installieren
+        run: npm ci --ignore-scripts
+
+      - name: Importieren (→ Supabase)
+        env:
+          IN_DRY_RUN: ${{ inputs.dry_run }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          ARGS=""
+          if [ "$IN_DRY_RUN" = "true" ]; then ARGS="--dry-run"; fi
+          node scripts/hoefe-import.mjs $ARGS | tee import.log
+          echo "## 🥩 Hofladen-Radar Import" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat import.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Bei Fehler → Jira-Ticket (KAN)
+        if: failure()
+        env:
+          JIRA_BASE_URL: https://steakakademie.atlassian.net
+          JIRA_PROJECT_KEY: KAN
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          ALERT_SUMMARY: '🔴 Hofladen-Radar-Import fehlgeschlagen'
+          ALERT_DESCRIPTION: 'Der Wochenimport (hoefe-import → Supabase) ist abgebrochen. Run-Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          ALERT_LABELS: 'ops,ci,agent-tech-automation-engineer'
+          ALERT_ISSUETYPE: 'Bug'
+          ALERT_DEDUP_LABEL: 'ops-hoefe-import-failed'
+        run: node scripts/ops-alert-to-jira.mjs

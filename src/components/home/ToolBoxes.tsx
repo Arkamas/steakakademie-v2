@@ -2,7 +2,7 @@
 
 /**
  * Drei Werkzeug-Boxen im Head-Bereich der Startseite (User-Magnete):
- *   🔥 Cut-Generator · 🧪 Foodpairing · 🍳 Rezept-Schmiede (⭐-Stufen)
+ *   🔥 Cut-Generator · 🧪 Foodpairing · 🍳 Rezept-Schmiede (⭐-Stufen) · 📍 Hofladen-Radar
  *
  * „Jetzt mit Fallback": Foodpairing & Rezept-Schmiede rufen ihre Endpoints
  * (/api/foodpairing, /api/kochwissen/generieren) live auf. Solange die
@@ -12,7 +12,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2, Users, Plus, Minus } from 'lucide-react';
+import { Flame, FlaskConical, ChefHat, ChevronRight, Search, Loader2, Users, Plus, Minus, Radar } from 'lucide-react';
 import LazyMarkdown from '@/components/ui/LazyMarkdown';
 
 type Pairing = { partner: string; category: string | null; shared: number; shared_examples: string[] | null };
@@ -424,7 +424,7 @@ export default function ToolBoxes() {
           </h2>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {/* Cut-Generator → bestehende Cut-Welt */}
           <Link
             href="/cuts"
@@ -446,6 +446,23 @@ export default function ToolBoxes() {
             onSeedRezept={(z, p) => setSeed({ auftrag: `${z} mit ${p}`, nonce: Date.now() })}
           />
           <RezeptSchmiedeBox seed={seed} />
+
+          {/* Hofladen-Radar → Fleisch direkt vom Erzeuger (/hoefe) */}
+          <Link
+            href="/hoefe"
+            className="group flex flex-col rounded-xl border border-brand-gold/25 bg-surface-card p-5 hover:border-brand-gold transition-colors"
+          >
+            <div className="flex items-center gap-2 mb-1.5 text-brand-fire">
+              <Radar size={18} />
+              <h3 className="font-serif text-lg font-bold text-text-light">Hofladen-Radar</h3>
+            </div>
+            <p className="text-xs text-text-secondary mb-4">
+              Fleisch direkt vom Erzeuger — Höfe in deiner Nähe, Fleischangebot und Bio auf einen Blick.
+            </p>
+            <span className="mt-auto inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-brand-gold group-hover:gap-2 transition-[gap]">
+              Höfe finden <ChevronRight size={14} />
+            </span>
+          </Link>
         </div>
       </div>
     </section>

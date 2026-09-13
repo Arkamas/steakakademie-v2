@@ -48,6 +48,12 @@ Cut-Detailseite. Build-Gate-Datenlage: bleibt bei Übersetzung + Durchlauf (Ents
 `course_progress`, Kauf → Zugang über `courses.slug = grillmeister-diplom` — **Digistore-Produkt dafür
 existiert noch nicht** (6 Produkte gelistet, keins fürs Diplom); `AUDIT-Ausbildungssystem-2026-09-06.md`.
 
+*Hofladen-Radar 13.09.2026 (Branch `feat/hofladen-radar`, PR offen):* `/hoefe` + `/hoefe/[slug]`,
+Umkreissuche (SQL-Haversine, kein PostGIS), OSM-Wochenimport als Actions-Cron, Karte per
+Klick-zum-Laden (MapTiler). **Uwe:** Migration `20260913120000_hoefe.sql` einspielen, Workflow
+„Hofladen-Radar importieren" einmal starten, `NEXT_PUBLIC_MAPTILER_KEY` in Vercel — Konzept und
+Abweichungen vom Briefing in `docs/hofladen-radar.md`.
+
 *Erledigt 05.09.2026 (Relaunch):* Alt-Site archiviert (Tag `archiv/website-v1-2026-09`,
 Branch `archiv/website-v1` — beide auf origin, Bundle + Abbild in `C:\Dev\_archiv\`,
 Build-Probe grün) · Relaunch parallel unter `/relaunch`: **alle acht Handoff-Ansichten**

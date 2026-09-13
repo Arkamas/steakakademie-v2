@@ -14,6 +14,7 @@ import { authorSchemaRef } from '@/lib/schema';
 import type { RecipeIngredient } from './recipe/PortionCalculator';
 import type { RecipeStep } from './recipe/CookCoach';
 import RecipeSubmitModal from './recipe/RecipeSubmitModal';
+import HofladenHinweis from './hoefe/HofladenHinweis';
 
 // ── Hilfsfunktionen ──────────────────────────────────────────────────────────
 
@@ -301,6 +302,9 @@ export default function RecipeTemplate({ recipe, hardwareProducts }: RecipeTempl
 
             {/* Cut → Premium-Fleisch bestellen (Otto Gourmet / Albers) */}
             <CutBestellen cut={recipe.meatType} kategorie={recipe.kategorie} />
+
+            {/* Hofladen-Radar: regionale Direktvermarkter (kein Affiliate, keine Kennzeichnung noetig) */}
+            {recipe.kategorie === 'fleisch' && <HofladenHinweis cut={recipe.meatType} variante="inline" />}
 
             {/* MDX-Artikel (Einleitung, Wissenschaft, Tipps) */}
             <article className="max-w-content">

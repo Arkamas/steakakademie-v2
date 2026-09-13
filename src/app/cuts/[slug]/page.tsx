@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { Clock, Calendar, ChevronRight, RotateCcw } from 'lucide-react';
 import BBQPairing from '@/components/article/BBQPairing';
 import BildCredit from '@/components/BildCredit';
+import HofladenHinweis from '@/components/hoefe/HofladenHinweis';
 
 interface Props {
   params: { slug: string };
@@ -314,6 +315,9 @@ export default function CutPage({ params }: Props) {
               {relatedProducts[0] && (
                 <ProductCard product={relatedProducts[0]} variant="sidebar" />
               )}
+
+              {/* Hofladen-Radar: Cut direkt vom Erzeuger (kein Affiliate) */}
+              <HofladenHinweis cut={cut.title.split(':')[0].trim()} />
 
               {/* Verwandte Guides */}
               <div className="bg-surface-elevated border border-border-subtle p-5">

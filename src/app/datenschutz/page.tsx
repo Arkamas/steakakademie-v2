@@ -189,6 +189,40 @@ export default function DatenschutzPage() {
               </p>
             </section>
 
+            {/* Hofladen-Radar (13.09.2026): Karte nur nach Klick (Klick-zum-Laden),
+                Geocoding serverseitig, Standort nur auf Klick, lokaler Merker. */}
+            <section id="hofladen-radar">
+              <h2 className={h2Class}>6a. Hofladen-Radar (Karte: MapTiler, Daten: OpenStreetMap)</h2>
+              <p className="mb-3">
+                Unter <Link href="/hoefe" className={linkClass}>/hoefe</Link> findest du Hofläden und
+                Direktvermarkter in deiner Nähe. Die Hof-Daten stammen aus OpenStreetMap
+                (Lizenz ODbL) und liegen auf unserem eigenen Server (Supabase, Abschnitt 9);
+                bei einer Suche werden nur der eingegebene Ort bzw. die gewählten Koordinaten
+                verarbeitet, um Treffer zu berechnen. Die Umwandlung eines Ortsnamens in
+                Koordinaten führt <strong className="text-text-primary">unser Server</strong> durch –
+                dein Browser sendet dabei nichts an Dritte.
+              </p>
+              <p className="mb-3">
+                <strong className="text-text-primary">Kartenansicht – nur nach Klick:</strong> Die
+                Kartenkacheln liefert MapTiler AG, Zugerstrasse 22, 6314 Unterägeri, Schweiz (Angemessenheitsbeschluss
+                der EU-Kommission). Die Karte wird erst geladen, wenn du auf „Karte laden“ klickst;
+                dann überträgt dein Browser deine IP-Adresse und die angeforderten Kartenausschnitte
+                an MapTiler (Art. 6 Abs. 1 lit. a DSGVO). Wählst du „Immer laden“, merken wir uns
+                das ausschließlich in deinem Browser (localStorage, Schlüssel <code>sa-karte-v1</code>,
+                keine Übertragung an uns); den Widerruf findest du direkt unter der Karte.
+                Datenschutzerklärung von MapTiler:{' '}
+                <a href="https://www.maptiler.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className={linkClass}>
+                  maptiler.com/privacy-policy
+                </a>
+              </p>
+              <p>
+                <strong className="text-text-primary">„Meinen Standort verwenden“:</strong> Nur auf
+                deinen Klick fragt der Browser nach deinem Standort. Die Koordinaten werden einmalig
+                an unseren Server gesendet, um Höfe im Umkreis zu berechnen, und nicht gespeichert.
+                Ohne Freigabe funktioniert die Suche über Ort oder Postleitzahl.
+              </p>
+            </section>
+
             {/* Rechts-Audit 28.08.2026 — vollständig ersetzt.
                 Behobene Mängel: falsche Rechtsperson („Loops Software Inc." statt
                 Astrodon Corporation), fehlender Drittlandhinweis USA samt Garantie

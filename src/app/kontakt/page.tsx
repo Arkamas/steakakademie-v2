@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight, Mail, MessageSquare, Award } from 'lucide-react';
 import Header from '@/components/layout/Header';
@@ -35,6 +35,18 @@ const CONTACT_OPTIONS = [
 
 export default function KontaktPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '', consent: false, website: '' });
+  // Vorbelegung aus der URL (z. B. /kontakt?betreff=hofladen&hof=<slug> aus dem
+  // Hofladen-Radar): Betreff und ein Nachrichten-Anfang, damit der Hof-Bezug
+  // nicht verloren geht. Nach dem Mount, damit Server- und Client-HTML gleich
+  // bleiben (Hydration). Nur bekannte Betreff-Werte werden uebernommen.
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    const b = p.get('betreff') ?? '';
+    if (!['diplom', 'rezept', 'kooperation', 'feedback', 'presse', 'sonstiges', 'hofladen'].includes(b)) return;
+    const hof = (p.get('hof') ?? '').replace(/[^a-z0-9-]/g, '').slice(0, 80);
+    const message = b === 'hofladen' && hof ? `Hof: steakakademie.de/hoefe/${hof}\n\n` : '';
+    setForm((f) => ({ ...f, subject: b, message: f.message || message }));
+  }, []);
   // Der Zustand startet aus der URL: Ohne JavaScript landet der Nutzer nach dem
   // nativen POST auf /kontakt?gesendet=1 bzw. ?fehler=… zurueck.
   const [state, setState] = useState<FormState>(() => {
@@ -169,6 +181,7 @@ export default function KontaktPage() {
                     <option value="rezept">Rezept-Idee einreichen</option>
                     <option value="kooperation">Kooperationsanfrage</option>
                     <option value="feedback">Feedback zur Website</option>
+                    <option value="hofladen">Hofladen-Radar: Hof melden / bestätigen</option>
                     <option value="presse">Presse / Media</option>
                     <option value="sonstiges">Sonstiges</option>
                   </select>

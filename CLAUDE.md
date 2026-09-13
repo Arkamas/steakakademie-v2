@@ -298,6 +298,15 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    „basiert auf eigener Praxiserfahrung" gilt nur für `realPerson: true` — bei einer
    Persona wäre er eine Falschaussage.
 4. **Human-gated:** Agenten produzieren Entwürfe, **Uwe gibt frei**. Kein Auto-Posting.
+   *Präzisierung Rezepte (Uwe, 13.09.2026):* Bei `content/rezepte/` **ist der PR-Merge
+   die Freigabe**. `recipe-grow` läuft mit `auto-merge: false`; ein Rezept kann `main`
+   nicht erreichen, ohne dass Uwe den PR von Hand mergt, und der Merge-Commit ist der
+   datierte Prüfnachweis, an dem der Redaktionsvorbehalt hängt (Art. 50 Abs. 4 KI-VO).
+   Deshalb schreibt der Agent `status: published` / `reviewed: true` — beides wird erst
+   mit dem Merge wahr. **Ungeprüft durchwinken macht diese Zeilen zur Falschaussage und
+   zieht der KI-Kennzeichnungsbefreiung den Boden weg.** `reviewedAt` setzt weiterhin
+   nur Uwe von Hand. Für `content/artikel/`, Streitfälle und Glossar gilt das NICHT —
+   dort bleibt der getrennte Freigabeschritt (`nurVeroeffentlicht()`-Filter).
 5. **No black-hat:** kein Spam, Mass-Follow, Fake-Entities.
 6. **Rechtssicherheit → autonom fixen (Uwe, 01.07.2026).** Was Claude bei einem Audit
    feststellt und was **zu mehr Rechtssicherheit führt, wird SOFORT autonom umgesetzt**

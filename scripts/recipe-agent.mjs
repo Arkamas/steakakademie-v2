@@ -376,7 +376,16 @@ function buildMdx(data) {
     `author: ${yamlStr(data.author)}`,
     `authorSlug: ${yamlStr(data.authorSlug)}`,
     `image: ${yamlStr(data.image)}`,
+    `imageAI: true`,
+    `imageSource: ${yamlStr(IMAGE_SOURCE)}`,
     `imageAlt: ${yamlStr(data.imageAlt)}`,
+    // Redaktionsvorbehalt (Art. 50 Abs. 4 KI-VO, compliance/ai-act-einstufung.md).
+    // Entscheidung Uwe 13.09.2026: Bei Rezepten IST der PR-Merge die Freigabe.
+    // Auto-Merge ist in recipe-grow.yml ausdruecklich aus — ein Rezept kann main
+    // nicht erreichen, ohne dass Uwe den PR von Hand mergt; der Merge-Commit ist
+    // der datierte Pruefnachweis. `reviewedAt` setzt weiterhin NUR Uwe von Hand.
+    `status: "published"`,
+    `reviewed: true`,
     `prepTime: ${yamlStr(data.prepTime)}`,
     `cookTime: ${yamlStr(data.cookTime)}`,
     `totalTime: ${yamlStr(data.totalTime)}`,
@@ -571,7 +580,11 @@ Wichtig: Keine Markdown-Formatierung innerhalb der Felder. Kein JSON. Kein Komme
   })
 
   const data = parseStructuredText(metaResp.text)
-  data.image     = `/images/articles/${seed.slug}.webp`
+  // Muss der Konvention des Bestands folgen UND dem, was scripts/recipe-images.mjs
+  // erzeugt (public/images/rezepte/<slug>.jpg). Vorher stand hier
+  // /images/articles/<slug>.webp — ein Pfad, den nichts erzeugt. Der
+  // Frontmatter-Validator haette jedes neue Rezept deshalb hart abgelehnt.
+  data.image     = `/images/rezepte/${seed.slug}.jpg`
   data.kategorie = seed.kategorie
   data.meatType  = seed.meatType
   data.cookingMethod = seed.cookingMethod
@@ -606,8 +619,20 @@ Mindestens 500 Wörter. Kein Titel als erster Satz. Keine Floskeln wie "In diese
 
 // ─── VALIDIERUNG ──────────────────────────────────────────────────────────────
 
+/**
+ * KI-Kennzeichnung des Hero-Bildes. `imageAI` und `imageSource` sind seit dem
+ * Stichtag 18.08.2026 harte Pflichtfelder (scripts/validate-frontmatter.mjs) und
+ * zugleich die Offenlegung nach Art. 50 KI-VO. Der Agent hat sie nie gesetzt —
+ * jedes neu erzeugte Rezept waere am Content-Gate gescheitert.
+ *
+ * Bewusst NICHT "C2PA-belegt" wie beim geprueften Altbestand: Diese Zusage stammt
+ * aus einem Metadaten-Scan (docs/bild-audit-rezepte-2026-08-18.md), der hier nicht
+ * laeuft. Wir nennen, was wir wissen — nicht, was plausibel klingt.
+ */
+const IMAGE_SOURCE = 'KI-generiert (FLUX.1 dev via fal.ai, scripts/recipe-images.mjs)'
+
 const REQUIRED = ['title', 'description', 'author', 'authorSlug', 'image', 'imageAlt',
-  'prepTime', 'cookTime', 'totalTime', 'servings', 'kategorie',
+  'land', 'prepTime', 'cookTime', 'totalTime', 'servings', 'kategorie',
   'meatType', 'cookingMethod', 'difficulty', 'ingredients', 'steps']
 
 const VALID_KATEGORIEN = new Set(['fleisch', 'fisch', 'beilagen', 'saucen-rubs', 'desserts', 'wine-spirits'])

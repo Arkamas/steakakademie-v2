@@ -49,7 +49,7 @@ test.describe('Hofladen-Radar', () => {
     await expect(page.getByRole('link', { name: /Hofladen-Radar öffnen/ })).toHaveAttribute('href', '/hoefe');
 
     await page.goto('/');
-    await expect(page.getByRole('link', { name: /Hofladen-Radar.*Höfe finden/s })).toHaveAttribute('href', '/hoefe');
+    await expect(page.getByRole('link', { name: /Hofladen-Radar[\s\S]*Höfe finden/ })).toHaveAttribute('href', '/hoefe');
     await expect(page.locator('footer').getByRole('link', { name: 'Hofladen-Radar' })).toHaveAttribute('href', '/hoefe');
 
     await page.goto('/relaunch');

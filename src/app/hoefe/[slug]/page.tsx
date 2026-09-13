@@ -16,10 +16,11 @@ type Props = { params: { slug: string } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const hof = await hofPerSlug(params.slug);
-  if (!hof) return { title: 'Hof nicht gefunden | Steakakademie', robots: { index: false, follow: false } };
+  // Kein "| Steakakademie" in den Titeln — das haengt das title.template im Root-Layout an.
+  if (!hof) return { title: 'Hof nicht gefunden', robots: { index: false, follow: false } };
   const ort = hof.ort ? ` in ${hof.ort}` : '';
   return {
-    title: `${hof.name}${ort} — Hofladen | Steakakademie`,
+    title: `${hof.name}${ort} — Hofladen`,
     description: `${hof.name}${ort}: Hofladen und Direktvermarkter${hof.verkauft_fleisch ? ' mit Fleischangebot' : ''}${hof.bio ? ', Bio' : ''}. Adresse, Öffnungszeiten und Höfe in der Nähe im Hofladen-Radar.`,
     alternates: { canonical: `https://steakakademie.de/hoefe/${hof.slug}` },
     // Unbestaetigte OSM-Profile sind duenn (Name + Adresse) — erst indexieren,

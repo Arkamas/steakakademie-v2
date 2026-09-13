@@ -20,7 +20,7 @@
 import { anthropic } from '@ai-sdk/anthropic'
 import { generateText } from 'ai'
 import { readFile, writeFile, mkdir, access } from 'fs/promises'
-import { existsSync, appendFileSync } from 'fs'
+import { existsSync, appendFileSync, readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
@@ -29,6 +29,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT       = join(__dirname, '..')
 const REZEPTE    = join(ROOT, 'content', 'rezepte')
 const CACHE_FILE = join(REZEPTE, '.recipe-cache.json')
+// Nachschub-Liste: wird von scripts/recipe-seeds.mjs gepflegt und liegt bewusst
+// als Daten-Datei im Repo — die fest verdrahtete SEED_RECIPES-Liste unten war am
+// 26.08.2026 abgearbeitet, danach lief recipe-grow 17 Tage grün und ohne Ergebnis.
+const NACHSCHUB   = join(ROOT, 'data', 'rezept-seeds.json')
 
 dotenv.config({ path: join(ROOT, '.env.local') })
 
@@ -274,6 +278,50 @@ const SEED_RECIPES = [
   { slug: 'maple-glazed-spareribs-kanada', kategorie: 'fleisch', title: 'Maple-Glazed Spareribs — Kanadische Ahornsirup-Ribs', meatType: 'Schweinerippchen', cookingMethod: 'Indirekt, low & slow', difficulty: 'Fortgeschritten', concept: 'Kanadas BBQ-Signatur: Spareribs niedrig und langsam indirekt gegart, in den letzten 30 Minuten mit echtem kanadischem Ahornsirup glasiert. Suesser Karamell-Abschluss, der mit dem Rauch harmoniert. Herkunft: Kanada.' },
   { slug: 'smoked-arctic-char-kanada', kategorie: 'fisch', title: 'Smoked Arctic Char — Kanadischer Geraeucherter Seesaibling', meatType: 'Seesaibling', cookingMethod: 'Kaltrauch + Heissrauch', difficulty: 'Fortgeschritten', concept: 'Kanadas arktischer Edelfisch: Seesaibling erst kalt geraeuchert unter 30 Grad, dann heiss bei 65-70 Grad bis Kern 62 Grad. Lachs-aehnlicher Geschmack, rosaes Fleisch, eleganter Rauchgeschmack. Herkunft: Kanada.' },
 ]
+
+/**
+ * Seed-Liste = fest verdrahtete Startliste + Nachschub aus data/rezept-seeds.json.
+ * Der Nachschub wird von scripts/recipe-seeds.mjs aufgefuellt und durchlaeuft
+ * denselben PR-Review wie die Rezepte selbst. Kaputte oder unvollstaendige
+ * Eintraege werden uebersprungen statt den Lauf abzubrechen.
+ */
+const SEED_PFLICHT = ['slug', 'kategorie', 'title', 'meatType', 'cookingMethod', 'difficulty', 'concept']
+
+function ladeNachschub() {
+  if (!existsSync(NACHSCHUB)) return []
+  let roh
+  try {
+    roh = JSON.parse(readFileSync(NACHSCHUB, 'utf-8'))
+  } catch (err) {
+    console.warn(`  ⚠ data/rezept-seeds.json ist kein gueltiges JSON (${err.message}) — Nachschub ignoriert.`)
+    return []
+  }
+  if (!Array.isArray(roh)) {
+    console.warn('  ⚠ data/rezept-seeds.json enthaelt kein Array — Nachschub ignoriert.')
+    return []
+  }
+  const ok = []
+  for (const eintrag of roh) {
+    const fehlend = SEED_PFLICHT.filter(f => !eintrag?.[f])
+    if (fehlend.length) {
+      console.warn(`  ⚠ Nachschub-Seed uebersprungen (fehlt: ${fehlend.join(', ')}): ${eintrag?.slug ?? '???'}`)
+      continue
+    }
+    ok.push(eintrag)
+  }
+  return ok
+}
+
+function alleSeeds() {
+  const gesehen = new Set()
+  const zusammen = []
+  for (const seed of [...SEED_RECIPES, ...ladeNachschub()]) {
+    if (gesehen.has(seed.slug)) continue
+    gesehen.add(seed.slug)
+    zusammen.push(seed)
+  }
+  return zusammen
+}
 
 // ─── CACHE ────────────────────────────────────────────────────────────────────
 
@@ -600,7 +648,7 @@ async function main() {
   if (!DRY_RUN) await mkdir(REZEPTE, { recursive: true })
 
   const cache   = await loadCache()
-  let seeds = SEED_RECIPES
+  let seeds = alleSeeds()
 
   if (SLUG_ONLY) {
     seeds = seeds.filter(s => s.slug === SLUG_ONLY)
@@ -621,8 +669,11 @@ async function main() {
 
   // Seed-Liste trockengelaufen → Signal für CI-Benachrichtigung (Jira),
   // damit Uwe neue Cuts nachlegt. Nur im echten Wachstums-Lauf (nicht --force/--slug).
-  if (!FORCE && !SLUG_ONLY && pendingTotal === 0 && process.env.GITHUB_OUTPUT) {
-    appendFileSync(process.env.GITHUB_OUTPUT, 'seeds_exhausted=true\n')
+  if (!FORCE && !SLUG_ONLY && process.env.GITHUB_OUTPUT) {
+    // pendingTotal = wie viele Seeds noch unerledigt sind. Wird im Workflow zur
+    // Vorwarnung genutzt — nicht erst bei null, sondern schon bei knappem Vorrat.
+    appendFileSync(process.env.GITHUB_OUTPUT, `seeds_remaining=${pendingTotal}\n`)
+    if (pendingTotal === 0) appendFileSync(process.env.GITHUB_OUTPUT, 'seeds_exhausted=true\n')
   }
 
   console.log(`  ${seeds.length} Rezepte in Seed-Liste`)
@@ -677,6 +728,13 @@ async function main() {
   if (success > 0) console.log(c.green(`  ✓ ${success} Rezept(e) generiert`))
   if (failed  > 0) console.log(c.red(  `  ✗ ${failed} Fehler`))
   console.log()
+
+  // Kein einziges Rezept durchgekommen, obwohl welche anstanden → das ist ein
+  // Ausfall, kein Normalzustand. Vorher endete der Lauf hier gruen und still.
+  if (success === 0 && failed > 0) {
+    console.error(c.red(`  Alle ${failed} Generierungen fehlgeschlagen — Lauf wird als Fehler gewertet.`))
+    process.exitCode = 1
+  }
 }
 
 main().catch(err => {

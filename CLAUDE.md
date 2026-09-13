@@ -408,6 +408,23 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    - Wenn nur ein Teil der Antwort sicher ist, nur diesen Teil ausgeben.
    - Vor der finalen Antwort kurz prüfen: plausibel, konsistent, vollständig?
 
+10. **Grün ist kein Ergebnis (13.09.2026).** Ein Workflow ist grün, wenn er ohne
+   Fehler endet — nicht, wenn er etwas produziert hat. `recipe-grow` lief vom
+   27.08. bis 13.09.2026 jede Nacht grün in 48 Sekunden durch und erzeugte kein
+   einziges Rezept: die Seed-Liste war abgearbeitet, das war kein Fehlerfall.
+   Siebzehn Tage Stillstand, kein Signal. Daraus folgt verbindlich:
+   - **Jeder Agenten-Workflow muss messbar liefern.** Wer nichts liefern konnte,
+     schreibt das ins Job-Summary — mit Zahl, nicht mit Prosa.
+   - **Läuft ein Agent aus Vorrat (Seeds, Quellen, Warteschlangen), braucht er
+     Nachschub-Automatik**, nicht nur eine Meldung beim Leerlaufen.
+     Beispiel: `scripts/recipe-seeds.mjs` füllt `data/rezept-seeds.json` auf.
+   - **Der Wächter prüft Ergebnisse, nicht Läufe.** `ops-heartbeat` (täglich
+     09:00 UTC) fragt je Bereich: *Wann kam zuletzt etwas heraus?* Fristen in
+     `data/ops-heartbeat.json`. Neue Automation → dort eintragen, sonst kann sie
+     unbemerkt sterben.
+   - **Scheitern alle Einzelschritte, ist der Lauf rot.** Ein Skript, das jeden
+     Durchgang verliert und trotzdem mit 0 endet, lügt.
+
 ---
 
 ## 3. Agentur-Struktur (Betriebsmodell)

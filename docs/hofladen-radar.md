@@ -69,12 +69,34 @@ Technik → Wissen → Rezepte → Ausrüstung ab, aber nirgends Bezug. Deshalb:
   bestätigt" heißt nur „keine Angabe" — die Texte sagen das ausdrücklich (Regel 7).
   Öffnungszeiten sind der rohe `opening_hours`-String.
 
+## Angewendet auf der Produktion (13.09.2026)
+
+Migration `20260913120000_hoefe` liegt auf der echten Instanz (`bbgdrzhlellxzggbbqcm`,
+PG 17.6) — angewendet über den claude.ai-Supabase-Connector nach Uwes Freigabe.
+Belegt, nicht behauptet:
+
+- Tabelle, View, beide Funktionen, 6 Indizes vorhanden, RLS aktiv.
+- `anon` darf `name` lesen, `email` **nicht** (`has_column_privilege` je geprüft);
+  `hoefe_import_upsert` ist für `anon` nicht ausführbar, `hoefe_im_umkreis` schon.
+- Haversine gegengerechnet: 51,27/7,19 → 51,29/7,21 liefert 2,623 km, unabhängige
+  Rechnung 2,62 km.
+- Ende-zu-Ende über die Live-Seite mit einer Probe-Zeile: Geocoding (Nominatim,
+  kein MapTiler-Key) → RPC → Trefferliste mit Entfernung. Probe-Zeile danach
+  gelöscht, Tabelle steht wieder auf 0.
+- `/api/hoefe` direkt aufgerufen antwortet `{"error":"Nur same-origin"}`.
+
+Offener Nachtrag: `20260913140000_hoefe_touch_search_path.sql` — der Supabase-Linter
+meldete `hoefe_touch_geaendert()` als einzige der drei Funktionen ohne festes
+`search_path`. Datei liegt im Repo, **noch nicht angewendet**.
+
 ## Nicht geprüft (13.09.2026)
 
-- Migration gegen die **echte** Supabase-Instanz (nur lokal PG 16 mit Rollen-Stubs).
+- Der Import gegen die echte Instanz (nur lokaler Trockenlauf gegen Overpass und
+  lokaler Upsert gegen PG 16). Die Tabelle ist noch leer — bis der Workflow
+  einmal läuft, findet die Suche nichts.
 - MapTiler-Kacheln und Geocoding **mit Key** — kein Key in der Session; Stil-ID
   `streets-v2-dark` und Geocoding-Antwortformat sind aus der Doku, nicht aus einem Lauf.
 - Playwright-E2E für `/hoefe` (Seite braucht Supabase-Env für Zahlen; Formular und
   Consent-Overlay rendern auch ohne). Vitest: 12 Tests grün.
-- Verhalten des Import-Workflows in Actions (nur lokaler Trockenlauf + lokaler
+- Verhalten des Import-Workflows in GitHub Actions (nur lokaler Trockenlauf +
   Upsert gegen PG 16 mit den 5.974 echten Zeilen).

@@ -1,5 +1,21 @@
 [
   {
+    "name": "Website erreichbar",
+    "typ": "http",
+    "basis": "https://steakakademie.de",
+    "pfade": [
+      "/",
+      "/rezepte",
+      "/diplome",
+      "/cuts"
+    ],
+    "erlaubt": [
+      200
+    ],
+    "maxTage": 0,
+    "hinweis": "Die Live-Seite antwortet nicht mit 200. Am 14.09.2026 waren das stundenlang HTTP 402 / DEPLOYMENT_DISABLED — der Vercel-Account war wegen Zahlung gesperrt, alle Deployments abgeschaltet. Zuerst im Vercel-Dashboard Billing und Account-Status prüfen, danach erst den Code. Notbehelf: steakakademie-de.netlify.app liefert noch aus (Stand vor 13.08.2026)."
+  },
+  {
     "name": "Rezept-Produktion",
     "typ": "git",
     "pfad": "content/rezepte",
@@ -34,7 +50,10 @@
     "tabelle": "content_drafts",
     "spalte": "updated_at",
     "filter": "status=neq.draft",
-    "wennLeer": { "spalte": "created_at", "filter": "status=in.(draft,review)" },
+    "wennLeer": {
+      "spalte": "created_at",
+      "filter": "status=in.(draft,review)"
+    },
     "maxTage": 21,
     "hinweis": "Es wurde seit Langem kein Entwurf freigegeben oder verworfen (bzw. noch nie, und der älteste Entwurf wartet länger als die Frist). Die Pipeline produziert, aber niemand entscheidet — der Stau ist in /admin/review sichtbar."
   },

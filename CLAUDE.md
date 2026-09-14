@@ -298,6 +298,15 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
    „basiert auf eigener Praxiserfahrung" gilt nur für `realPerson: true` — bei einer
    Persona wäre er eine Falschaussage.
 4. **Human-gated:** Agenten produzieren Entwürfe, **Uwe gibt frei**. Kein Auto-Posting.
+   *Präzisierung Rezepte (Uwe, 13.09.2026):* Bei `content/rezepte/` **ist der PR-Merge
+   die Freigabe**. `recipe-grow` läuft mit `auto-merge: false`; ein Rezept kann `main`
+   nicht erreichen, ohne dass Uwe den PR von Hand mergt, und der Merge-Commit ist der
+   datierte Prüfnachweis, an dem der Redaktionsvorbehalt hängt (Art. 50 Abs. 4 KI-VO).
+   Deshalb schreibt der Agent `status: published` / `reviewed: true` — beides wird erst
+   mit dem Merge wahr. **Ungeprüft durchwinken macht diese Zeilen zur Falschaussage und
+   zieht der KI-Kennzeichnungsbefreiung den Boden weg.** `reviewedAt` setzt weiterhin
+   nur Uwe von Hand. Für `content/artikel/`, Streitfälle und Glossar gilt das NICHT —
+   dort bleibt der getrennte Freigabeschritt (`nurVeroeffentlicht()`-Filter).
 5. **No black-hat:** kein Spam, Mass-Follow, Fake-Entities.
 6. **Rechtssicherheit → autonom fixen (Uwe, 01.07.2026).** Was Claude bei einem Audit
    feststellt und was **zu mehr Rechtssicherheit führt, wird SOFORT autonom umgesetzt**
@@ -407,6 +416,23 @@ Ich (Claude) bin der **Projekt-Director** der Steakakademie. Oberste operative I
      oder Zitate erfinden.
    - Wenn nur ein Teil der Antwort sicher ist, nur diesen Teil ausgeben.
    - Vor der finalen Antwort kurz prüfen: plausibel, konsistent, vollständig?
+
+10. **Grün ist kein Ergebnis (13.09.2026).** Ein Workflow ist grün, wenn er ohne
+   Fehler endet — nicht, wenn er etwas produziert hat. `recipe-grow` lief vom
+   27.08. bis 13.09.2026 jede Nacht grün in 48 Sekunden durch und erzeugte kein
+   einziges Rezept: die Seed-Liste war abgearbeitet, das war kein Fehlerfall.
+   Siebzehn Tage Stillstand, kein Signal. Daraus folgt verbindlich:
+   - **Jeder Agenten-Workflow muss messbar liefern.** Wer nichts liefern konnte,
+     schreibt das ins Job-Summary — mit Zahl, nicht mit Prosa.
+   - **Läuft ein Agent aus Vorrat (Seeds, Quellen, Warteschlangen), braucht er
+     Nachschub-Automatik**, nicht nur eine Meldung beim Leerlaufen.
+     Beispiel: `scripts/recipe-seeds.mjs` füllt `data/rezept-seeds.json` auf.
+   - **Der Wächter prüft Ergebnisse, nicht Läufe.** `ops-heartbeat` (täglich
+     09:00 UTC) fragt je Bereich: *Wann kam zuletzt etwas heraus?* Fristen in
+     `data/ops-heartbeat.json`. Neue Automation → dort eintragen, sonst kann sie
+     unbemerkt sterben.
+   - **Scheitern alle Einzelschritte, ist der Lauf rot.** Ein Skript, das jeden
+     Durchgang verliert und trotzdem mit 0 endet, lügt.
 
 ---
 
@@ -838,6 +864,11 @@ Symbole mit Zeilennummern zurueck (z. B. `POST()` in
 `src/app/api/js-errors/route.ts` L40, Community „Analytics and Guard Routes").
 Die Werte im Abschnitt darueber (5384/7921/657) stammen vom 07.09. und sind
 damit ueberholt.
+
+### GRAPHIFY PROTECTED
+
+- DO NOT create, modify, overwrite, or delete any files in `graphify-out/` or `graphify.json`.
+- Always query the existing graph in `graphify-out/graph.json` via the graphify tool instead of rescanning raw codebase files.
 
 ### Git-Wartung
 

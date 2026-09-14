@@ -13,6 +13,8 @@
     "recipes": "node scripts/recipe-agent.mjs",
     "recipes:force": "node scripts/recipe-agent.mjs --force",
     "recipes:dry": "node scripts/recipe-agent.mjs --dry-run",
+    "seeds": "node scripts/recipe-seeds.mjs",
+    "seeds:dry": "node scripts/recipe-seeds.mjs --dry-run",
     "seo-images": "node scripts/seo-image-optimizer.mjs",
     "seo-images:dry": "node scripts/seo-image-optimizer.mjs --dry-run",
     "bild-ingest": "node scripts/bild-ingest.mjs",
@@ -64,7 +66,8 @@
     "cache:selftest:opus": "node scripts/cache-selftest.mjs --model claude-opus-5",
     "wip": "node scripts/wip-autosave.mjs",
     "spell:check": "node scripts/spell-check.mjs",
-    "spell:check:full": "node scripts/spell-check.mjs --force"
+    "spell:check:full": "node scripts/spell-check.mjs --force",
+    "heartbeat": "node scripts/ops-heartbeat.mjs --nur-bericht"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",

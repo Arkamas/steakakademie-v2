@@ -223,7 +223,12 @@ async function generate(prompt, scale = 0.9, size = 'landscape_4_3') {
 
 async function main() {
   console.log(c.d('\n🖼  Recipe Image Generator (FLUX.1 dev)\n'))
-  if (!DRY && !FAL_KEY) { console.log(c.r('⚠ FAL_KEY fehlt — Abbruch.')); process.exit(0) }
+  // exit 1, nicht 0 (13.09.2026): Ohne Bild landet ein frisch erzeugtes Rezept mit
+  // einem image-Pfad im PR, zu dem keine Datei existiert. Frueher endete der Lauf
+  // hier still und gruen — der Defekt fiel erst am Content-Gate auf, ohne dass
+  // irgendwo stand, warum. Dieses Skript wird nur aus Workflows gerufen; ein
+  // fehlender Key ist dort ein Ausfall, kein Normalzustand.
+  if (!DRY && !FAL_KEY) { console.log(c.r('⚠ FAL_KEY fehlt — Abbruch.')); process.exit(1) }
   await mkdir(IMG_DIR, { recursive: true })
 
   const files = (await readdir(REZEPTE)).filter(f => f.endsWith('.mdx'))
@@ -269,6 +274,10 @@ async function main() {
   }
 
   console.log(`\n${c.g(`✓ ${done} generiert`)} · ${c.d(`${skipped} vorhanden`)} · ${failed ? c.r(`${failed} Fehler`) : '0 Fehler'}\n`)
+
+  // Ein fehlgeschlagenes Bild ist ein fehlendes Bild. Vorher lief der Schritt
+  // trotzdem gruen weiter und der PR trug einen toten Bildpfad.
+  if (failed > 0) process.exitCode = 1
 }
 
 main().catch(e => { console.error(c.r(e.stack || e.message)); process.exit(1) })

@@ -1,0 +1,177 @@
+#!/usr/bin/env node
+/**
+ * Steakakademie — Ops-Heartbeat (Totmannschalter für die Automation)
+ *
+ * Das Problem, das dieses Skript loest:
+ * Ein GitHub-Workflow ist gruen, wenn er ohne Fehler endet — nicht, wenn er etwas
+ * geleistet hat. recipe-grow lief vom 27.08. bis 13.09.2026 jeden Tag durch, gruen,
+ * in 48 Sekunden, und erzeugte kein einziges Rezept. Die Seed-Liste war leer. Kein
+ * Fehler, kein Alarm, siebzehn Tage Stillstand. Dieselbe Falle steht hinter jedem
+ * anderen Agenten: „laeuft" und „liefert" sind zwei verschiedene Dinge.
+ *
+ * Der Heartbeat prueft deshalb nicht Laeufe, sondern ERGEBNISSE:
+ *   typ "git"       — wann wurde dieser Pfad zuletzt veraendert?
+ *   typ "supabase"  — wie alt ist der neueste Datensatz in dieser Tabelle?
+ *   typ "workflow"  — wann ist dieser Workflow zuletzt ueberhaupt gestartet?
+ *                     (GitHub schaltet geplante Workflows in ruhigen Repos ab.)
+ *
+ * Ist irgendein Punkt ueberfaellig, endet das Skript mit exit 1. Der Workflow wird
+ * rot, GitHub verschickt die Fehlermail, und der aufrufende Workflow legt zusaetzlich
+ * ein Jira-Ticket an. Ein stiller Ausfall ist damit kein stiller Ausfall mehr.
+ *
+ * Aufruf:
+ *   node scripts/ops-heartbeat.mjs
+ *   node scripts/ops-heartbeat.mjs --nur-bericht   # nie exit 1, nur Ausgabe
+ */
+
+import { execFileSync } from 'node:child_process'
+import { readFileSync, existsSync, appendFileSync } from 'node:fs'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const ROOT   = join(__dirname, '..')
+const CONFIG = join(ROOT, 'data', 'ops-heartbeat.json')
+
+const NUR_BERICHT = process.argv.includes('--nur-bericht')
+
+const c = {
+  green:  s => `\x1b[32m${s}\x1b[0m`,
+  yellow: s => `\x1b[33m${s}\x1b[0m`,
+  red:    s => `\x1b[31m${s}\x1b[0m`,
+  bold:   s => `\x1b[1m${s}\x1b[0m`,
+  dim:    s => `\x1b[2m${s}\x1b[0m`,
+}
+
+const JETZT = Date.now()
+const tageSeit = iso => (JETZT - new Date(iso).getTime()) / 86_400_000
+
+// ─── PRUEFER ──────────────────────────────────────────────────────────────────
+
+/** Letzte Aenderung eines Pfades. Braucht volle Historie (actions/checkout fetch-depth: 0). */
+function letzteGitAenderung(pfad) {
+  const iso = execFileSync('git', ['log', '-1', '--format=%cI', '--', pfad],
+    { cwd: ROOT, encoding: 'utf-8' }).trim()
+  if (!iso) throw new Error(`kein Commit fuer "${pfad}" gefunden — flacher Checkout? (fetch-depth: 0 noetig)`)
+  return iso
+}
+
+/** Neuester Datensatz einer Supabase-Tabelle ueber die REST-Schnittstelle. */
+async function letzterSupabaseDatensatz({ tabelle, spalte, filter }) {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) return { uebersprungen: 'NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY fehlen' }
+
+  const ziel = new URL(`${url.replace(/\/$/, '')}/rest/v1/${tabelle}`)
+  ziel.searchParams.set('select', spalte)
+  ziel.searchParams.set('order', `${spalte}.desc`)
+  ziel.searchParams.set('limit', '1')
+  const roh = filter ? `${ziel}&${filter}` : ziel.toString()
+
+  const res = await fetch(roh, { headers: { apikey: key, Authorization: `Bearer ${key}` } })
+  if (!res.ok) throw new Error(`Supabase ${res.status}: ${(await res.text()).slice(0, 200)}`)
+  const zeilen = await res.json()
+  if (!Array.isArray(zeilen) || zeilen.length === 0) {
+    return { leer: `Tabelle ${tabelle} liefert keine Zeile${filter ? ` (Filter: ${filter})` : ''}` }
+  }
+  return { iso: zeilen[0][spalte] }
+}
+
+/** Letzter Start eines Workflows — deckt auf, wenn GitHub den Cron abgeschaltet hat. */
+async function letzterWorkflowLauf(datei) {
+  const repo  = process.env.GITHUB_REPOSITORY
+  const token = process.env.GITHUB_TOKEN
+  if (!repo || !token) return { uebersprungen: 'GITHUB_REPOSITORY / GITHUB_TOKEN fehlen (läuft nur in Actions)' }
+
+  const res = await fetch(
+    `https://api.github.com/repos/${repo}/actions/workflows/${datei}/runs?per_page=1`,
+    { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } })
+  if (!res.ok) throw new Error(`GitHub API ${res.status}: ${(await res.text()).slice(0, 200)}`)
+  const daten = await res.json()
+  const lauf  = daten.workflow_runs?.[0]
+  if (!lauf) return { leer: `Workflow ${datei} hat noch nie gelaufen` }
+  return { iso: lauf.created_at }
+}
+
+// ─── HAUPTLAUF ────────────────────────────────────────────────────────────────
+
+async function pruefe(eintrag) {
+  const basis = { name: eintrag.name, maxTage: eintrag.maxTage, hinweis: eintrag.hinweis }
+  try {
+    let ergebnis
+    if (eintrag.typ === 'git')            ergebnis = { iso: letzteGitAenderung(eintrag.pfad) }
+    else if (eintrag.typ === 'supabase')  ergebnis = await letzterSupabaseDatensatz(eintrag)
+    else if (eintrag.typ === 'workflow')  ergebnis = await letzterWorkflowLauf(eintrag.datei)
+    else return { ...basis, status: 'fehler', text: `unbekannter Typ "${eintrag.typ}"` }
+
+    if (ergebnis.uebersprungen) return { ...basis, status: 'uebersprungen', text: ergebnis.uebersprungen }
+    if (ergebnis.leer)          return { ...basis, status: 'ueberfaellig', text: ergebnis.leer, alter: null }
+
+    const alter = tageSeit(ergebnis.iso)
+    return {
+      ...basis,
+      status: alter > eintrag.maxTage ? 'ueberfaellig' : 'ok',
+      alter,
+      iso: ergebnis.iso,
+      text: `zuletzt vor ${alter.toFixed(1)} Tagen (${ergebnis.iso.slice(0, 10)}), erlaubt: ${eintrag.maxTage}`,
+    }
+  } catch (err) {
+    return { ...basis, status: 'fehler', text: err.message }
+  }
+}
+
+async function main() {
+  if (!existsSync(CONFIG)) {
+    console.error(c.red(`  data/ops-heartbeat.json fehlt.`))
+    process.exit(1)
+  }
+  const eintraege = JSON.parse(readFileSync(CONFIG, 'utf-8'))
+
+  console.log(c.bold('\n  Steakakademie — Ops-Heartbeat\n'))
+
+  const ergebnisse = []
+  for (const e of eintraege) ergebnisse.push(await pruefe(e))
+
+  const symbol = { ok: c.green('OK   '), ueberfaellig: c.red('STILL'), fehler: c.red('FEHL '), uebersprungen: c.dim('SKIP ') }
+  for (const r of ergebnisse) console.log(`  ${symbol[r.status]} ${r.name.padEnd(34)} ${c.dim(r.text)}`)
+
+  const kaputt = ergebnisse.filter(r => r.status === 'ueberfaellig' || r.status === 'fehler')
+
+  // Job-Summary — die Tabelle, die man im Actions-Tab sofort sieht.
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    const zeichen = { ok: '✅', ueberfaellig: '🔴', fehler: '⚠️', uebersprungen: '⏭️' }
+    const zeilen = [
+      `## ${kaputt.length ? '🔴 Automation steht' : '✅ Automation lebt'}`, '',
+      '| | Bereich | Befund |', '| --- | --- | --- |',
+      ...ergebnisse.map(r => `| ${zeichen[r.status]} | ${r.name} | ${r.text} |`),
+    ]
+    if (kaputt.length) {
+      zeilen.push('', '### Was jetzt zu tun ist', '')
+      for (const r of kaputt) zeilen.push(`**${r.name}** — ${r.text}`, '', `> ${r.hinweis ?? ''}`, '')
+    }
+    appendFileSync(process.env.GITHUB_STEP_SUMMARY, zeilen.join('\n') + '\n')
+  }
+
+  // Kurzfassung für den Jira-/Issue-Schritt im Workflow.
+  if (process.env.GITHUB_OUTPUT) {
+    const text = kaputt.map(r => `${r.name}: ${r.text}${r.hinweis ? ` — ${r.hinweis}` : ''}`).join(' | ')
+    appendFileSync(process.env.GITHUB_OUTPUT,
+      `still=${kaputt.length}\nbetroffen=${kaputt.map(r => r.name).join(', ')}\nbericht=${text.replace(/\n/g, ' ')}\n`)
+  }
+
+  if (kaputt.length === 0) {
+    console.log(c.green('\n  Alle Bereiche liefern.\n'))
+    return
+  }
+
+  console.log(c.red(`\n  ${kaputt.length} Bereich(e) ohne Ergebnis:`))
+  for (const r of kaputt) console.log(c.red(`   • ${r.name}`) + (r.hinweis ? c.dim(`\n     ${r.hinweis}`) : ''))
+  console.log()
+
+  if (!NUR_BERICHT) process.exit(1)
+}
+
+main().catch(err => {
+  console.error(c.red(`\n  Heartbeat selbst fehlgeschlagen: ${err.message}\n`))
+  process.exit(1)
+})

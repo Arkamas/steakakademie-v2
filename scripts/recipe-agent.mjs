@@ -22,7 +22,7 @@ import { generateText } from 'ai'
 import { readFile, writeFile, mkdir, access } from 'fs/promises'
 import { existsSync, appendFileSync, readFileSync } from 'fs'
 import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath, pathToFileURL } from 'url'
 import dotenv from 'dotenv'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -493,15 +493,24 @@ function parseStructuredText(text) {
     }
 
     // Schritte: N. Titel | Dauer | Beschreibung | Tipp(optional)
-    if (/^\d+\./.test(line) && section === 'steps') {
-      const withoutNum = line.replace(/^\d+\.\s*/, '')
-      const parts = withoutNum.split(' | ')
+    //
+    // Trennung an '|' OHNE erzwungene Leerzeichen (14.09.2026). Vorher stand hier
+    // split(' | '): schrieb das Modell 'Titel|Dauer|Text' statt 'Titel | Dauer | Text',
+    // ergab das EIN Teil, der Schritt fiel weg und die Validierung brach mit
+    // „Zu wenige Schritte" ab — Lauf #100 genau daran gescheitert. Die Zutaten
+    // daneben wurden schon immer mit split('|') gelesen und kamen deshalb durch;
+    // dieselbe Datei, zwei Strenge-Grade, ein stiller Ausfall.
+    // Ebenfalls erlaubt: '1)' statt '1.'. Ein '|' im Tipp bleibt erhalten, weil
+    // alles ab dem vierten Teil wieder zusammengefügt wird.
+    if (/^\d+[.)]/.test(line) && section === 'steps') {
+      const withoutNum = line.replace(/^\d+[.)]\s*/, '')
+      const parts = withoutNum.split('|').map(t => t.trim())
       if (parts.length >= 3) {
         data.steps.push({
-          title:       parts[0].trim(),
-          duration:    parts[1].trim(),
-          description: parts[2].trim(),
-          tip:         parts[3]?.trim() || undefined,
+          title:       parts[0],
+          duration:    parts[1],
+          description: parts[2],
+          tip:         parts.slice(3).join(' | ').trim() || undefined,
         })
       }
       continue
@@ -580,6 +589,11 @@ Wichtig: Keine Markdown-Formatierung innerhalb der Felder. Kein JSON. Kein Komme
   })
 
   const data = parseStructuredText(metaResp.text)
+  // Rohantwort mitführen: Scheitert die Validierung, stand im Log bisher nur
+  // „Zu wenige Schritte" — ohne die Modellantwort war nicht zu sehen, ob das
+  // Modell gepatzt hat oder der Parser. Wird nie ins MDX geschrieben
+  // (buildMdx liest ausschließlich benannte Felder).
+  data.__rohantwort = metaResp.text
   // Muss der Konvention des Bestands folgen UND dem, was scripts/recipe-images.mjs
   // erzeugt (public/images/rezepte/<slug>.jpg). Vorher stand hier
   // /images/articles/<slug>.webp — ein Pfad, den nichts erzeugt. Der
@@ -712,23 +726,46 @@ async function main() {
 
   let success = 0, failed = 0
 
+  // Zwei Anläufe je Seed. Das Modell ist nicht deterministisch: Lauf #100
+  // (14.09.2026) scheiterte an einer einzelnen Antwort, die das Schritt-Format
+  // verfehlte — und damit fiel die Tagesproduktion komplett aus. Ein zweiter
+  // Versuch kostet ein paar Sekunden und rettet genau diesen Fall.
+  const VERSUCHE = 2
+
   for (const seed of toGenerate) {
-    process.stdout.write(`  Generiere: ${c.bold(seed.slug)}... `)
+    let data = null
+    let letzteFehler = []
 
-    let data
-    try {
-      data = await generateRecipe(seed)
-    } catch (err) {
-      console.log(c.red('FEHLER'))
-      console.error(c.dim(`    ${err.message}`))
-      failed++
-      continue
-    }
+    for (let versuch = 1; versuch <= VERSUCHE; versuch++) {
+      const anlauf = versuch > 1 ? c.dim(` (Versuch ${versuch}/${VERSUCHE})`) : ''
+      process.stdout.write(`  Generiere: ${c.bold(seed.slug)}${anlauf}... `)
 
-    const errors = validate(data, seed)
-    if (errors.length > 0) {
+      let kandidat
+      try {
+        kandidat = await generateRecipe(seed)
+      } catch (err) {
+        console.log(c.red('FEHLER'))
+        console.error(c.dim(`    ${err.message}`))
+        letzteFehler = [err.message]
+        continue
+      }
+
+      const errors = validate(kandidat, seed)
+      if (errors.length === 0) { data = kandidat; break }
+
       console.log(c.yellow('VALIDIERUNGSFEHLER'))
       errors.forEach(e => console.error(c.dim(`    ✗ ${e}`)))
+      letzteFehler = errors
+      // Nur beim letzten Anlauf ausgeben — sonst flutet es das Log.
+      if (versuch === VERSUCHE) {
+        console.error(c.dim('    ── Rohantwort des Modells (gekürzt) ──'))
+        console.error(c.dim((kandidat.__rohantwort ?? '(keine)').slice(0, 1500)))
+        console.error(c.dim('    ──────────────────────────────────────'))
+      }
+    }
+
+    if (!data) {
+      console.error(c.red(`  ✗ ${seed.slug} nach ${VERSUCHE} Versuchen aufgegeben: ${letzteFehler.join('; ')}`))
       failed++
       continue
     }
@@ -762,7 +799,14 @@ async function main() {
   }
 }
 
-main().catch(err => {
-  console.error(c.red(`\n  Agent-Fehler: ${err.message}\n`))
-  process.exit(1)
-})
+// Nur beim direkten Aufruf laufen lassen — sonst startet schon der Import im Test
+// einen echten Generierungslauf. Gleiches Muster wie scripts/ops-alert-to-jira.mjs.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch(err => {
+    console.error(c.red(`\n  Agent-Fehler: ${err.message}\n`))
+    process.exit(1)
+  })
+}
+
+// Für scripts/recipe-agent.test.mjs. Reine Funktionen, keine Nebenwirkungen.
+export { parseStructuredText, validate, alleSeeds }

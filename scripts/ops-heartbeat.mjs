@@ -102,6 +102,53 @@ async function letzterSupabaseDatensatz({ tabelle, spalte, filter, wennLeer }) {
   return { iso: aeltester, bezug: `noch nie — ältester wartender Datensatz (${wennLeer.filter})` }
 }
 
+/**
+ * Antwortet die Live-Seite?
+ *
+ * Nachgeruestet am 14.09.2026: An diesem Tag lieferte steakakademie.de ueber
+ * Stunden HTTP 402 (x-vercel-error: DEPLOYMENT_DISABLED) — der Vercel-Account war
+ * gesperrt, samtliche Deployments abgeschaltet. Der Heartbeat prueft bis dahin nur,
+ * ob Inhalte NACHWACHSEN, nicht ob sie noch ERREICHBAR sind. Der Ausfall fiel
+ * deshalb nur zufaellig auf, als ein roter Vercel-Check an einem Pull Request
+ * auftauchte. Ein Waechter, der die Content-Produktion ueberwacht, aber nicht
+ * merkt, dass die Website weg ist, hat die falsche Reihenfolge.
+ *
+ * Zweiter Anlauf vor dem Alarm: Einzelne Routen antworten nach einem Kaltstart
+ * gelegentlich gar nicht (am 14.09. bei /hoefe beobachtet — erster Versuch
+ * abgebrochen, zweiter 200 in 0,6 s). Ein Waechter, der bei jedem Zucken
+ * anschlaegt, wird nach drei Fehlalarmen ignoriert.
+ */
+async function pruefeErreichbarkeit({ basis, pfade = ['/'], erlaubt = [200] }) {
+  const kaputt = []
+
+  for (const pfad of pfade) {
+    const url = new URL(pfad, basis).toString()
+    let letzter = null
+
+    for (let versuch = 1; versuch <= 2; versuch++) {
+      try {
+        const res = await fetch(url, {
+          redirect: 'follow',
+          headers: { 'user-agent': 'steakakademie-ops-heartbeat' },
+          signal: AbortSignal.timeout(20_000),
+        })
+        if (erlaubt.includes(res.status)) { letzter = null; break }
+        // Der Fehlercode-Header von Vercel benennt die Ursache direkt.
+        const grund = res.headers.get('x-vercel-error')
+        letzter = `HTTP ${res.status}${grund ? ` (${grund})` : ''}`
+      } catch (err) {
+        letzter = err.name === 'TimeoutError' ? 'Zeitueberschreitung (20 s)' : err.message
+      }
+      if (versuch === 1) await new Promise(r => setTimeout(r, 3000))
+    }
+
+    if (letzter) kaputt.push(`${pfad}: ${letzter}`)
+  }
+
+  if (kaputt.length) return { unerreichbar: `${basis} — ${kaputt.join(' · ')}` }
+  return { erreichbar: `${pfade.length} Route(n) antworten mit ${erlaubt.join('/')}` }
+}
+
 /** Letzter Start eines Workflows — deckt auf, wenn GitHub den Cron abgeschaltet hat. */
 async function letzterWorkflowLauf(datei) {
   const repo  = process.env.GITHUB_REPOSITORY
@@ -127,11 +174,15 @@ async function pruefe(eintrag) {
     if (eintrag.typ === 'git')            ergebnis = { iso: letzteGitAenderung(eintrag.pfad) }
     else if (eintrag.typ === 'supabase')  ergebnis = await letzterSupabaseDatensatz(eintrag)
     else if (eintrag.typ === 'workflow')  ergebnis = await letzterWorkflowLauf(eintrag.datei)
+    else if (eintrag.typ === 'http')      ergebnis = await pruefeErreichbarkeit(eintrag)
     else return { ...basis, status: 'fehler', text: `unbekannter Typ "${eintrag.typ}"` }
 
     if (ergebnis.uebersprungen) return { ...basis, status: 'uebersprungen', text: ergebnis.uebersprungen }
     if (ergebnis.leer)          return { ...basis, status: 'ueberfaellig', text: ergebnis.leer, alter: null }
     if (ergebnis.nichtsOffen)   return { ...basis, status: 'ok', text: ergebnis.nichtsOffen, alter: null }
+    // Erreichbarkeit kennt kein Alter — die Seite ist da oder sie ist weg.
+    if (ergebnis.erreichbar)    return { ...basis, status: 'ok', text: ergebnis.erreichbar, alter: null }
+    if (ergebnis.unerreichbar)  return { ...basis, status: 'ueberfaellig', text: ergebnis.unerreichbar, alter: null }
 
     const alter = tageSeit(ergebnis.iso)
     const wann  = ergebnis.bezug ? `${ergebnis.bezug}: vor` : 'zuletzt vor'

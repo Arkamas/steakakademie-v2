@@ -502,8 +502,14 @@ function parseStructuredText(text) {
     // dieselbe Datei, zwei Strenge-Grade, ein stiller Ausfall.
     // Ebenfalls erlaubt: '1)' statt '1.'. Ein '|' im Tipp bleibt erhalten, weil
     // alles ab dem vierten Teil wieder zusammengefügt wird.
-    if (/^\d+[.)]/.test(line) && section === 'steps') {
-      const withoutNum = line.replace(/^\d+[.)]\s*/, '')
+    // Lauf #101 (14.09.2026) scheiterte erneut an „Zu wenige Schritte", obwohl der
+    // Trennzeichen-Fix drin war. Deshalb haengt die Erkennung jetzt NICHT mehr an
+    // der Nummerierung: Innerhalb der STEPS-Sektion gilt jede Zeile mit mindestens
+    // zwei Pipes als Schritt — ob sie mit '1.', '1)', '- ', '*' oder gar nichts
+    // beginnt. Das Format, das das Modell waehlt, darf die Produktion nicht mehr
+    // entscheiden.
+    if (section === 'steps' && line.split('|').length >= 3) {
+      const withoutNum = line.replace(/^\s*(?:\d+[.)]|[-*•])\s*/, '')
       const parts = withoutNum.split('|').map(t => t.trim())
       if (parts.length >= 3) {
         data.steps.push({
@@ -583,7 +589,10 @@ Wichtig: Keine Markdown-Formatierung innerhalb der Felder. Kein JSON. Kein Komme
 
   const metaResp = await generateText({
     model:    anthropic('claude-haiku-4-5-20251001'),
-    maxTokens: 2000,
+    // 4000 statt 2000 (14.09.2026): Der Block endet mit STEPS. Reisst der Deckel
+    // vorher, fehlt genau der Teil, den die Validierung braucht — die teuerste
+    // Stelle fuer eine Kuerzung. Ausgeschoepft wird das Budget ohnehin nicht.
+    maxTokens: 4000,
     system:   SYSTEM,
     messages: [{ role: 'user', content: metaPrompt }],
   })
@@ -594,6 +603,7 @@ Wichtig: Keine Markdown-Formatierung innerhalb der Felder. Kein JSON. Kein Komme
   // Modell gepatzt hat oder der Parser. Wird nie ins MDX geschrieben
   // (buildMdx liest ausschließlich benannte Felder).
   data.__rohantwort = metaResp.text
+  data.__finishReason = metaResp.finishReason
   // Muss der Konvention des Bestands folgen UND dem, was scripts/recipe-images.mjs
   // erzeugt (public/images/rezepte/<slug>.jpg). Vorher stand hier
   // /images/articles/<slug>.webp — ein Pfad, den nichts erzeugt. Der
@@ -758,9 +768,15 @@ async function main() {
       letzteFehler = errors
       // Nur beim letzten Anlauf ausgeben — sonst flutet es das Log.
       if (versuch === VERSUCHE) {
-        console.error(c.dim('    ── Rohantwort des Modells (gekürzt) ──'))
-        console.error(c.dim((kandidat.__rohantwort ?? '(keine)').slice(0, 1500)))
-        console.error(c.dim('    ──────────────────────────────────────'))
+        // Der Kopf der Antwort half bei Lauf #101 nicht weiter: Die 1500 Zeichen
+        // waren nach dem Metadaten-Block aufgebraucht, und genau das Ende — wo
+        // STEPS steht — fehlte. Deshalb: Abbruchgrund, Laenge, und das ENDE.
+        const roh = kandidat.__rohantwort ?? ''
+        console.error(c.dim(`    ── Modellantwort: ${roh.length} Zeichen, finishReason=${kandidat.__finishReason ?? '?'} ──`))
+        console.error(c.dim(`    Enthält "STEPS:": ${roh.includes('STEPS:')}`))
+        console.error(c.dim('    ── letzte 1800 Zeichen ──'))
+        console.error(c.dim(roh.slice(-1800) || '(keine)'))
+        console.error(c.dim('    ─────────────────────────'))
       }
     }
 

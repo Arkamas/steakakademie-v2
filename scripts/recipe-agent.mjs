@@ -429,6 +429,17 @@ Sprache: Deutsch. Fachbegriffe englisch wenn üblich (Bark, Stall, Sear etc.).`
 // ─── STRUKTURIERTES TEXT-FORMAT PARSER ───────────────────────────────────────
 // Kein JSON-Parsing — Schlüssel:Wert-Format ist 100% zuverlässig
 
+/** Aufzaehlungs-Praefixe und Fettmarkierung am Titelanfang entfernen — wiederholt. */
+function entnummeriere(titel) {
+  let t = titel
+  for (let i = 0; i < 4; i++) {
+    const vorher = t
+    t = t.replace(/^\s*(?:\*\*|__)?\s*(?:\d+[.)]|[-*•])\s*(?:\*\*|__)?\s*/, '')
+    if (t === vorher) break
+  }
+  return t.replace(/^(?:\*\*|__)/, '').replace(/(?:\*\*|__)$/, '').trim()
+}
+
 function parseStructuredText(text) {
   const data = {
     author: 'Marco', authorSlug: 'marco',
@@ -509,8 +520,13 @@ function parseStructuredText(text) {
     // beginnt. Das Format, das das Modell waehlt, darf die Produktion nicht mehr
     // entscheiden.
     if (section === 'steps' && line.split('|').length >= 3) {
-      const withoutNum = line.replace(/^\s*(?:\d+[.)]|[-*•])\s*/, '')
-      const parts = withoutNum.split('|').map(t => t.trim())
+      const parts = line.split('|').map(t => t.trim())
+      // Lauf #102 (14.09.2026), das erste gelieferte Rezept: vier von fuenf
+      // Schritt-Titeln kamen als "2. Spiesse bestuecken" an — die Nummer klebte am
+      // Titel, und CookCoach.tsx setzt davor noch "Schritt 2". Also: Praefixe so
+      // lange abstreifen, bis keins mehr da ist (auch "- 2." oder "**3.**"), und
+      // zwar nur am Titel — in Beschreibung und Tipp sind Zahlen Inhalt.
+      parts[0] = entnummeriere(parts[0])
       if (parts.length >= 3) {
         data.steps.push({
           title:       parts[0],

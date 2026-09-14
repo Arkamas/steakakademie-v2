@@ -55,6 +55,17 @@ describe('parseStructuredText — Schritte', () => {
     })
   }
 
+  // Lauf #102: vier von fuenf Titeln kamen als "2. Spiesse bestuecken" an.
+  it('streift Nummern und Fettmarkierung vom Titel — auch mehrfach', () => {
+    const daten = parseStructuredText(KOPF +
+      '1. Tare | 15 Min | Einkochen.\n' +
+      '- 2. Spiesse | 10 Min | Aufziehen.\n' +
+      '3. **3. Grillen** | 6 Min | Wenden.\n' +
+      '**4.** Ruhen | 2 Min | Warten. | Tipp mit 5 Minuten')
+    expect(daten.steps.map(s => s.title)).toEqual(['Tare', 'Spiesse', 'Grillen', 'Ruhen'])
+    expect(daten.steps[3].tip).toBe('Tipp mit 5 Minuten')
+  })
+
   it('haelt ein | im Tipp zusammen, statt es abzuschneiden', () => {
     const daten = parseStructuredText(KOPF + '1. Tare | 15 Min | Einkochen. | Variante A | Variante B\n2. Spiesse | 10 Min | Aufziehen.')
     expect(daten.steps[0].tip).toBe('Variante A | Variante B')

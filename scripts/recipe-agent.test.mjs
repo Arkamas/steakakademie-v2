@@ -11,6 +11,7 @@ import { parseStructuredText, validate } from './recipe-agent.mjs'
 const KOPF = `TITLE: Yakitori Negima
 DESCRIPTION: Testbeschreibung fuer den Parser
 IMAGE_ALT: Spiesse ueber Glut
+IMAGE_PROMPT: Yakitori skewers of chicken thigh cubes alternating with leek on bamboo sticks over glowing binchotan charcoal. Not: whole chicken legs, no bones.
 LAND: Japan
 PREP_TIME: PT25M
 COOK_TIME: PT10M
@@ -88,6 +89,12 @@ describe('validate', () => {
     daten.difficulty = SEED.difficulty
     // Zweiter Schritt reicht der Mindestanforderung; mehr braucht validate nicht.
     expect(validate(daten, SEED)).toEqual([])
+  })
+
+  it('meldet fehlendes imagePrompt — ohne Briefing malt FLUX den Protein-Anker (Lauf #102)', () => {
+    const daten = parseStructuredText(KOPF.replace(/^IMAGE_PROMPT:.*\n/m, '') + SCHRITT_FORMATE['ohne Leerzeichen'])
+    daten.image = '/images/rezepte/x.jpg'
+    expect(validate(daten, SEED)).toContain('Pflichtfeld fehlt: imagePrompt')
   })
 
   it('meldet fehlendes land — Pflichtfeld seit Stichtag 18.08.2026', () => {

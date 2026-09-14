@@ -379,6 +379,13 @@ function buildMdx(data) {
     `imageAI: true`,
     `imageSource: ${yamlStr(IMAGE_SOURCE)}`,
     `imageAlt: ${yamlStr(data.imageAlt)}`,
+    // Bild-Briefing fuer scripts/recipe-images.mjs — dort Prioritaet 1, vor dem
+    // Protein-Anker. Ohne dieses Feld gewinnt der Anker: Lauf #102 (14.09.2026)
+    // lieferte fuer Yakitori (meatType "Haehnchenschenkel") ein Bild ganzer
+    // gegrillter Haehnchenkeulen — der Alt-Text sprach von Spiessen, das Bild
+    // zeigte keinen einzigen. 85 der 113 Bestandsrezepte tragen das Feld; der
+    // Agent hat es bis heute nie gesetzt.
+    data.imagePrompt ? `imagePrompt: ${yamlStr(data.imagePrompt)}` : null,
     // Redaktionsvorbehalt (Art. 50 Abs. 4 KI-VO, compliance/ai-act-einstufung.md).
     // Entscheidung Uwe 13.09.2026: Bei Rezepten IST der PR-Merge die Freigabe.
     // Auto-Merge ist in recipe-grow.yml ausdruecklich aus — ein Rezept kann main
@@ -467,7 +474,7 @@ function parseStructuredText(text) {
     if (kv && section !== 'body') {
       const key = kv[1], val = kv[2].trim()
       const map = {
-        TITLE: 'title', DESCRIPTION: 'description', IMAGE_ALT: 'imageAlt', LAND: 'land',
+        TITLE: 'title', DESCRIPTION: 'description', IMAGE_ALT: 'imageAlt', IMAGE_PROMPT: 'imagePrompt', LAND: 'land',
         PREP_TIME: 'prepTime', COOK_TIME: 'cookTime', TOTAL_TIME: 'totalTime',
         SERVINGS: 'servings', CALORIES: 'calories',
         SEO_TITLE: 'seoTitle', SEO_DESCRIPTION: 'seoDescription',
@@ -555,6 +562,7 @@ Antworte EXAKT in diesem Format (Groß-/Kleinschreibung beachten):
 TITLE: [Titel max. 70 Zeichen]
 DESCRIPTION: [Meta-Beschreibung 120-155 Zeichen]
 IMAGE_ALT: [Was auf dem Bild zu sehen ist, max. 80 Zeichen]
+IMAGE_PROMPT: [ENGLISCH, 1-2 Sätze für den Bildgenerator: das FERTIGE Gericht — Form (Spieße? Scheiben? ganzes Stück?), Anrichtung, Garzustand, typische Beilage. Danach zwingend "Not:" + was NICHT zu sehen sein darf (z. B. "Not: whole chicken legs, no bones visible"). Konkret, keine Stimmung.]
 LAND: [Herkunftsland/Region des Gerichts, z.B. "USA · Texas", "Spanien", "Argentinien", "Italien" — bei deutschem Standard "Deutschland"]
 PREP_TIME: [ISO8601, z.B. PT20M]
 COOK_TIME: [ISO8601]
@@ -672,7 +680,7 @@ Mindestens 500 Wörter. Kein Titel als erster Satz. Keine Floskeln wie "In diese
 const IMAGE_SOURCE = 'KI-generiert (FLUX.1 dev via fal.ai, scripts/recipe-images.mjs)'
 
 const REQUIRED = ['title', 'description', 'author', 'authorSlug', 'image', 'imageAlt',
-  'land', 'prepTime', 'cookTime', 'totalTime', 'servings', 'kategorie',
+  'land', 'imagePrompt', 'prepTime', 'cookTime', 'totalTime', 'servings', 'kategorie',
   'meatType', 'cookingMethod', 'difficulty', 'ingredients', 'steps']
 
 const VALID_KATEGORIEN = new Set(['fleisch', 'fisch', 'beilagen', 'saucen-rubs', 'desserts', 'wine-spirits'])

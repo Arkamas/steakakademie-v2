@@ -32,6 +32,11 @@ const SCHRITT_FORMATE = {
   'ohne Leerzeichen':          '1. Tare|15 Min|Einkochen bis sirupartig.|Rest aufheben\n2. Spiesse|10 Min|Abwechselnd aufziehen.|Wassern',
   'gemischte Abstaende':       '1. Tare |15 Min| Einkochen bis sirupartig.  |Rest aufheben\n2. Spiesse   |  10 Min |Abwechselnd aufziehen.',
   'Klammer-Nummerierung':      '1) Tare | 15 Min | Einkochen bis sirupartig.\n2) Spiesse | 10 Min | Abwechselnd aufziehen.',
+  // Lauf #101: „Zu wenige Schritte" trotz Trennzeichen-Fix. Seitdem entscheidet
+  // nicht mehr die Nummerierung, ob eine Zeile ein Schritt ist, sondern die Pipes.
+  'Spiegelstriche':            '- Tare | 15 Min | Einkochen bis sirupartig.\n- Spiesse | 10 Min | Abwechselnd aufziehen.',
+  'Sternchen':                 '* Tare | 15 Min | Einkochen bis sirupartig.\n* Spiesse | 10 Min | Abwechselnd aufziehen.',
+  'ganz ohne Aufzaehlung':     'Tare | 15 Min | Einkochen bis sirupartig.\nSpiesse | 10 Min | Abwechselnd aufziehen.',
 }
 
 const SEED = {

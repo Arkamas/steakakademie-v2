@@ -379,6 +379,13 @@ function buildMdx(data) {
     `imageAI: true`,
     `imageSource: ${yamlStr(IMAGE_SOURCE)}`,
     `imageAlt: ${yamlStr(data.imageAlt)}`,
+    // Bild-Briefing fuer scripts/recipe-images.mjs — dort Prioritaet 1, vor dem
+    // Protein-Anker. Ohne dieses Feld gewinnt der Anker: Lauf #102 (14.09.2026)
+    // lieferte fuer Yakitori (meatType "Haehnchenschenkel") ein Bild ganzer
+    // gegrillter Haehnchenkeulen — der Alt-Text sprach von Spiessen, das Bild
+    // zeigte keinen einzigen. 85 der 113 Bestandsrezepte tragen das Feld; der
+    // Agent hat es bis heute nie gesetzt.
+    data.imagePrompt ? `imagePrompt: ${yamlStr(data.imagePrompt)}` : null,
     // Redaktionsvorbehalt (Art. 50 Abs. 4 KI-VO, compliance/ai-act-einstufung.md).
     // Entscheidung Uwe 13.09.2026: Bei Rezepten IST der PR-Merge die Freigabe.
     // Auto-Merge ist in recipe-grow.yml ausdruecklich aus — ein Rezept kann main
@@ -429,6 +436,17 @@ Sprache: Deutsch. Fachbegriffe englisch wenn üblich (Bark, Stall, Sear etc.).`
 // ─── STRUKTURIERTES TEXT-FORMAT PARSER ───────────────────────────────────────
 // Kein JSON-Parsing — Schlüssel:Wert-Format ist 100% zuverlässig
 
+/** Aufzaehlungs-Praefixe und Fettmarkierung am Titelanfang entfernen — wiederholt. */
+function entnummeriere(titel) {
+  let t = titel
+  for (let i = 0; i < 4; i++) {
+    const vorher = t
+    t = t.replace(/^\s*(?:\*\*|__)?\s*(?:\d+[.)]|[-*•])\s*(?:\*\*|__)?\s*/, '')
+    if (t === vorher) break
+  }
+  return t.replace(/^(?:\*\*|__)/, '').replace(/(?:\*\*|__)$/, '').trim()
+}
+
 function parseStructuredText(text) {
   const data = {
     author: 'Marco', authorSlug: 'marco',
@@ -456,7 +474,7 @@ function parseStructuredText(text) {
     if (kv && section !== 'body') {
       const key = kv[1], val = kv[2].trim()
       const map = {
-        TITLE: 'title', DESCRIPTION: 'description', IMAGE_ALT: 'imageAlt', LAND: 'land',
+        TITLE: 'title', DESCRIPTION: 'description', IMAGE_ALT: 'imageAlt', IMAGE_PROMPT: 'imagePrompt', LAND: 'land',
         PREP_TIME: 'prepTime', COOK_TIME: 'cookTime', TOTAL_TIME: 'totalTime',
         SERVINGS: 'servings', CALORIES: 'calories',
         SEO_TITLE: 'seoTitle', SEO_DESCRIPTION: 'seoDescription',
@@ -509,8 +527,13 @@ function parseStructuredText(text) {
     // beginnt. Das Format, das das Modell waehlt, darf die Produktion nicht mehr
     // entscheiden.
     if (section === 'steps' && line.split('|').length >= 3) {
-      const withoutNum = line.replace(/^\s*(?:\d+[.)]|[-*•])\s*/, '')
-      const parts = withoutNum.split('|').map(t => t.trim())
+      const parts = line.split('|').map(t => t.trim())
+      // Lauf #102 (14.09.2026), das erste gelieferte Rezept: vier von fuenf
+      // Schritt-Titeln kamen als "2. Spiesse bestuecken" an — die Nummer klebte am
+      // Titel, und CookCoach.tsx setzt davor noch "Schritt 2". Also: Praefixe so
+      // lange abstreifen, bis keins mehr da ist (auch "- 2." oder "**3.**"), und
+      // zwar nur am Titel — in Beschreibung und Tipp sind Zahlen Inhalt.
+      parts[0] = entnummeriere(parts[0])
       if (parts.length >= 3) {
         data.steps.push({
           title:       parts[0],
@@ -539,6 +562,7 @@ Antworte EXAKT in diesem Format (Groß-/Kleinschreibung beachten):
 TITLE: [Titel max. 70 Zeichen]
 DESCRIPTION: [Meta-Beschreibung 120-155 Zeichen]
 IMAGE_ALT: [Was auf dem Bild zu sehen ist, max. 80 Zeichen]
+IMAGE_PROMPT: [ENGLISCH, 1-2 Sätze für den Bildgenerator: das FERTIGE Gericht — Form (Spieße? Scheiben? ganzes Stück?), Anrichtung, Garzustand, typische Beilage. Danach zwingend "Not:" + was NICHT zu sehen sein darf (z. B. "Not: whole chicken legs, no bones visible"). Konkret, keine Stimmung.]
 LAND: [Herkunftsland/Region des Gerichts, z.B. "USA · Texas", "Spanien", "Argentinien", "Italien" — bei deutschem Standard "Deutschland"]
 PREP_TIME: [ISO8601, z.B. PT20M]
 COOK_TIME: [ISO8601]
@@ -656,7 +680,7 @@ Mindestens 500 Wörter. Kein Titel als erster Satz. Keine Floskeln wie "In diese
 const IMAGE_SOURCE = 'KI-generiert (FLUX.1 dev via fal.ai, scripts/recipe-images.mjs)'
 
 const REQUIRED = ['title', 'description', 'author', 'authorSlug', 'image', 'imageAlt',
-  'land', 'prepTime', 'cookTime', 'totalTime', 'servings', 'kategorie',
+  'land', 'imagePrompt', 'prepTime', 'cookTime', 'totalTime', 'servings', 'kategorie',
   'meatType', 'cookingMethod', 'difficulty', 'ingredients', 'steps']
 
 const VALID_KATEGORIEN = new Set(['fleisch', 'fisch', 'beilagen', 'saucen-rubs', 'desserts', 'wine-spirits'])

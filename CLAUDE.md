@@ -865,6 +865,11 @@ Symbole mit Zeilennummern zurueck (z. B. `POST()` in
 Die Werte im Abschnitt darueber (5384/7921/657) stammen vom 07.09. und sind
 damit ueberholt.
 
+### GRAPHIFY PROTECTED
+
+- DO NOT create, modify, overwrite, or delete any files in `graphify-out/` or `graphify.json`.
+- Always query the existing graph in `graphify-out/graph.json` via the graphify tool instead of rescanning raw codebase files.
+
 ### Git-Wartung
 
 `gc.auto=0`, `gc.autoDetach=false` und `maintenance.auto=false` sind in

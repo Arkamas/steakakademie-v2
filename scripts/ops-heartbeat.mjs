@@ -56,25 +56,50 @@ function letzteGitAenderung(pfad) {
   return iso
 }
 
-/** Neuester Datensatz einer Supabase-Tabelle ueber die REST-Schnittstelle. */
-async function letzterSupabaseDatensatz({ tabelle, spalte, filter }) {
+/** Ein Zeitstempel aus einer Supabase-Tabelle ueber die REST-Schnittstelle (neuester oder aeltester). */
+async function supabaseZeitstempel({ tabelle, spalte, filter, richtung = 'desc' }) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!url || !key) return { uebersprungen: 'NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY fehlen' }
 
   const ziel = new URL(`${url.replace(/\/$/, '')}/rest/v1/${tabelle}`)
   ziel.searchParams.set('select', spalte)
-  ziel.searchParams.set('order', `${spalte}.desc`)
+  ziel.searchParams.set('order', `${spalte}.${richtung}`)
   ziel.searchParams.set('limit', '1')
   const roh = filter ? `${ziel}&${filter}` : ziel.toString()
 
   const res = await fetch(roh, { headers: { apikey: key, Authorization: `Bearer ${key}` } })
   if (!res.ok) throw new Error(`Supabase ${res.status}: ${(await res.text()).slice(0, 200)}`)
   const zeilen = await res.json()
-  if (!Array.isArray(zeilen) || zeilen.length === 0) {
-    return { leer: `Tabelle ${tabelle} liefert keine Zeile${filter ? ` (Filter: ${filter})` : ''}` }
+  return Array.isArray(zeilen) && zeilen.length > 0 ? zeilen[0][spalte] : null
+}
+
+/**
+ * Neuester Datensatz einer Supabase-Tabelle.
+ *
+ * `wennLeer` (optional): Liefert der Filter noch nie eine Zeile — etwa weil noch nie
+ * ein Entwurf freigegeben wurde —, zaehlt stattdessen das Alter des AELTESTEN Datensatzes
+ * aus `wennLeer.filter`. Vorher galt „keine Zeile" sofort als ueberfaellig, unabhaengig
+ * von maxTage: Beim ersten Live-Lauf (14.09.2026) schlug „Content-Freigaben" an, obwohl
+ * der aelteste wartende Entwurf erst 8 Tage alt war (Frist 21). Die Frist soll ab dem
+ * Moment laufen, ab dem es etwas zu entscheiden gibt. Wartet nichts, gibt es auch
+ * keinen Stau.
+ */
+async function letzterSupabaseDatensatz({ tabelle, spalte, filter, wennLeer }) {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return { uebersprungen: 'NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY fehlen' }
   }
-  return { iso: zeilen[0][spalte] }
+
+  const iso = await supabaseZeitstempel({ tabelle, spalte, filter })
+  if (iso) return { iso }
+
+  const keineZeile = `Tabelle ${tabelle} liefert keine Zeile${filter ? ` (Filter: ${filter})` : ''}`
+  if (!wennLeer) return { leer: keineZeile }
+
+  const aeltester = await supabaseZeitstempel({
+    tabelle, spalte: wennLeer.spalte, filter: wennLeer.filter, richtung: 'asc',
+  })
+  if (!aeltester) return { nichtsOffen: `${keineZeile}, aber auch nichts wartend (${wennLeer.filter})` }
+  return { iso: aeltester, bezug: `noch nie — ältester wartender Datensatz (${wennLeer.filter})` }
 }
 
 /** Letzter Start eines Workflows — deckt auf, wenn GitHub den Cron abgeschaltet hat. */
@@ -106,14 +131,16 @@ async function pruefe(eintrag) {
 
     if (ergebnis.uebersprungen) return { ...basis, status: 'uebersprungen', text: ergebnis.uebersprungen }
     if (ergebnis.leer)          return { ...basis, status: 'ueberfaellig', text: ergebnis.leer, alter: null }
+    if (ergebnis.nichtsOffen)   return { ...basis, status: 'ok', text: ergebnis.nichtsOffen, alter: null }
 
     const alter = tageSeit(ergebnis.iso)
+    const wann  = ergebnis.bezug ? `${ergebnis.bezug}: vor` : 'zuletzt vor'
     return {
       ...basis,
       status: alter > eintrag.maxTage ? 'ueberfaellig' : 'ok',
       alter,
       iso: ergebnis.iso,
-      text: `zuletzt vor ${alter.toFixed(1)} Tagen (${ergebnis.iso.slice(0, 10)}), erlaubt: ${eintrag.maxTage}`,
+      text: `${wann} ${alter.toFixed(1)} Tagen (${ergebnis.iso.slice(0, 10)}), erlaubt: ${eintrag.maxTage}`,
     }
   } catch (err) {
     return { ...basis, status: 'fehler', text: err.message }

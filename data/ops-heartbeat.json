@@ -34,8 +34,9 @@
     "tabelle": "content_drafts",
     "spalte": "updated_at",
     "filter": "status=neq.draft",
+    "wennLeer": { "spalte": "created_at", "filter": "status=in.(draft,review)" },
     "maxTage": 21,
-    "hinweis": "Es wurde seit Langem kein Entwurf freigegeben oder verworfen. Die Pipeline produziert, aber niemand entscheidet — der Stau ist in /admin/review sichtbar."
+    "hinweis": "Es wurde seit Langem kein Entwurf freigegeben oder verworfen (bzw. noch nie, und der älteste Entwurf wartet länger als die Frist). Die Pipeline produziert, aber niemand entscheidet — der Stau ist in /admin/review sichtbar."
   },
   {
     "name": "Ideen-Radar",

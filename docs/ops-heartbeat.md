@@ -34,6 +34,11 @@ kaputten `npm ci` scheitert, ist keiner.
   Braucht `fetch-depth: 0`, sonst findet `git log` nichts.
 - **`supabase`** — wie alt ist der neueste Datensatz? (`content_drafts`)
   Optionaler `filter` in PostgREST-Syntax, z. B. `status=neq.draft`.
+  Optionales `wennLeer`: Liefert der Filter **noch nie** eine Zeile, zählt das
+  Alter des **ältesten** Datensatzes aus `wennLeer.filter` gegen `maxTage`. Wartet
+  auch dort nichts, ist der Punkt grün. Ohne `wennLeer` gilt „keine Zeile" sofort
+  als überfällig. (Ergänzt 14.09.2026: „Content-Freigaben" schlug beim ersten
+  Live-Lauf an, obwohl der älteste Entwurf erst 8 von 21 Tagen wartete.)
 - **`workflow`** — wann ist ein Workflow zuletzt überhaupt gestartet?
   Deckt den Fall ab, dass **GitHub geplante Workflows in ruhigen Repos nach
   60 Tagen ohne Aktivität abschaltet** — dann läuft nichts mehr, und nichts
@@ -59,6 +64,7 @@ Dann gehört sie in `data/ops-heartbeat.json`. Felder:
   "pfad": "content/…",            // typ git
   "tabelle": "…", "spalte": "…",  // typ supabase
   "filter": "status=neq.draft",   // typ supabase, optional
+  "wennLeer": { "spalte": "created_at", "filter": "status=in.(draft,review)" },  // typ supabase, optional
   "datei": "name.yml",            // typ workflow
   "maxTage": 7,
   "hinweis": "Was zu tun ist, wenn das hier anschlägt."

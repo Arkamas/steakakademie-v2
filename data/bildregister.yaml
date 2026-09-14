@@ -502,3 +502,10 @@ bilder:
   images/vergleich/premium-fleischthermometer.jpg: { status: offen }
   images/vergleich/premium-fleischthermometer.webp: { status: offen }
   images/wine-spirits-hero.webp: { status: offen }
+  images/rezepte/yakitori-negima.jpg:
+    status: ki
+    quelle: fal.ai (FLUX.1 dev), Prompt aus imagePrompt in content/rezepte/yakitori-negima.mdx, scripts/recipe-images.mjs
+    urheber: Steakakademie (Uwe Yendell)
+    namensnennung: false
+    erworben_am: 2026-09-14
+    hinweis: Kommerzielle Nutzung ueber den fal.ai-Tarif; C2PA-Marker nicht geprueft

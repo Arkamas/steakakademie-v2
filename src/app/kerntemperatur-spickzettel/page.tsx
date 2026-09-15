@@ -57,6 +57,7 @@ const GRUPPEN: { titel: string; rows: { key: string; was: string }[] }[] = [
     titel: 'Lamm',
     rows: [
       { key: 'lamb_mr', was: 'Karree, Koteletts' },
+      { key: 'lamb_rosa', was: 'Lammkeule rosa' },
       { key: 'lamb_done', was: 'Keule' },
     ],
   },

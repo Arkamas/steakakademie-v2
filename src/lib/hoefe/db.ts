@@ -12,7 +12,19 @@ function client() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return null;
-  return createClient(url, key, { auth: { persistSession: false } });
+  return createClient(url, key, {
+    auth: { persistSession: false },
+    // Next.js patcht das globale fetch() und cached es standardmaessig --
+    // das gilt auch fuer Bibliotheks-interne Aufrufe wie die von supabase-js.
+    // hoefe_im_umkreis() ist die erste RPC (POST) in diesem Modul: sie wurde
+    // in Produktion nie neu ausgefuehrt und lieferte eine (vermutlich leere)
+    // gecachte Antwort -- Supabase-Edge-Logs zeigten dafuer ueberhaupt keine
+    // eingehende Anfrage von Vercel mehr, obwohl der Request-Handler lief.
+    // explizit no-store erzwingen, damit jede Anfrage wirklich rausgeht.
+    global: {
+      fetch: (input, init) => fetch(input, { ...init, cache: 'no-store' }),
+    },
+  });
 }
 
 export async function hofPerSlug(slug: string): Promise<Hof | null> {

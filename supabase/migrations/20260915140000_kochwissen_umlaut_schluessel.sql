@@ -1,3 +1,11 @@
+-- ANGEWENDET am 15.09.2026 auf Projekt bbgdrzhlellxzggbbqcm — NICHT per apply_migration (kein
+-- Eintrag im Migrations-Ledger), sondern die UPDATEs dieser Datei unveraendert ueber die
+-- Supabase-API ausgefuehrt (je id + alter titel_key + alter quelle_key abgesichert), um die
+-- 367 Werte nicht abschreiben zu muessen. Ergebnis: 367 geaendert, 0 ohne Treffer, 0 Fehler.
+-- Danach geprueft: kochwissen-rekey.mjs meldet 0 ausstehende Aenderungen; 730 Zeilen,
+-- 0 doppelte (source, titel_key), 0 ungueltige Schluessel; alle titel_key aus den 11
+-- CSV-Lieferungen existieren in der DB (naechster Ingest legt keine Dubletten an).
+--
 -- Kochwissen: titel_key/quelle_key mit korrigierter Umlaut-Normalisierung neu berechnet.
 -- Erzeugt von scripts/kochwissen-rekey.mjs am 2026-09-15T13:03:59.772Z aus 730 Zeilen.
 -- 367 UPDATEs, je abgesichert ueber id + alten Schluessel (wiederholbar ohne Wirkung).

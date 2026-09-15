@@ -1,6 +1,10 @@
--- NOCH NICHT ANGEWENDET. Muss auf der Produktion laufen, BEVOR der zugehoerige
--- Webhook-Code (src/app/api/webhooks/digistore24/route.ts) gemergt wird — sonst
--- ruft der Webhook zwei RPCs, die es nicht gibt, und jede Zustellung endet in 500.
+-- ANGEWENDET am 15.09.2026 auf Projekt bbgdrzhlellxzggbbqcm (per MCP apply_migration),
+-- Ledger-Version 20260915072704. Geprueft danach: Spalte + beide Funktionen vorhanden,
+-- SECURITY DEFINER mit festem search_path, EXECUTE nur service_role (anon/authenticated
+-- false), find_user_id_by_email findet ein bekanntes Konto trotz Gross-/Leerzeichen und
+-- liefert NULL fuer eine unbekannte Adresse; Security-Advisor ohne neuen Befund.
+-- Musste VOR dem Merge des Webhook-Codes (route.ts) laufen — sonst ruft der Webhook zwei
+-- RPCs, die es nicht gibt, und jede Zustellung endet in 500.
 -- Wiederholbar (CREATE OR REPLACE / IF NOT EXISTS).
 --
 -- ANLASS 1 — Bestandskunden ab Nutzer 201 unauffindbar:

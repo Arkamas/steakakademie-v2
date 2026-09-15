@@ -82,17 +82,17 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Neue Rezepte + Bilder als PR (Review-Gate)
-        id: pr 
+        id: pr
         uses: ./.github/actions/pr-statt-push
         with:
-          pfade: content/rezepte public/images/rezepte data/rezept-seeds.json data/bildregister.yaml        
+          pfade: content/rezepte public/images/rezepte data/rezept-seeds.json data/bildregister.yaml
           branch-prefix: bot/rezept
           bot-name: recipe-bot
           commit-message: 'chore(rezepte): neue Rezepte + Hero-Bilder (automatisch) — zur Prüfung'
           pr-titel: '🍖 Rezept-Agent: neues Rezept + Hero-Bild — Merge = Freigabe, bitte prüfen'
           pr-body: |
             Automatisch generiert (`recipe-agent.mjs` + `recipe-images.mjs` / FLUX).
-            
+
             ## ⚠️ Dieser Merge ist die redaktionelle Freigabe
 
             Das Rezept trägt bereits `status: published` und `reviewed: true`. **Beides wird erst durch deinen Merge wahr** — der Merge-Commit ist der datierte Prüfnachweis, an dem der Redaktionsvorbehalt nach Art. 50 Abs. 4 KI-VO hängt (CLAUDE.md Regel 4, Präzisierung 13.09.2026). Ungeprüft mergen macht diese Felder zur Falschaussage. `reviewedAt` setzt weiterhin nur Uwe von Hand.

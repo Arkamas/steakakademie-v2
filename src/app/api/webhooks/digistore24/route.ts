@@ -356,11 +356,14 @@ async function handleCreditProduct(
     if (event === 'payment' || event === 'rebill' || event === 'rebill_resumed') {
       const userId = await ensureUser(supabase, email, courseSlug);
 
-      const { error: grantErr } = await supabase.rpc('grant_diagnose_credits', {
-        p_user_id: userId,
-        p_amount:  creditAmount,
+      // Je Order genau einmal: scheitert danach die Mail und Digistore stellt erneut zu,
+      // schreibt der zweite Lauf nichts mehr gut (grant_diagnose_credits allein addiert).
+      const { error: grantErr } = await supabase.rpc('grant_order_credits', {
+        p_order_id: orderRow.id,
+        p_user_id:  userId,
+        p_amount:   creditAmount,
       });
-      if (grantErr) throw new Error(`grant_diagnose_credits failed: ${grantErr.message}`);
+      if (grantErr) throw new Error(`grant_order_credits failed: ${grantErr.message}`);
 
       await sendMagicLink(supabase, email, courseSlug, courseTitle ?? 'deiner Steak-Beichte');
 
@@ -525,10 +528,15 @@ async function sendVoucherEmail(email: string, code: string, courseTitle: string
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
+/**
+ * Konto per E-Mail direkt in auth.users (RPC). NICHT listUsers: das liefert eine Seite,
+ * und jeder Bestandskunde ausserhalb davon galt als neu (Kauf → email_exists → 500,
+ * Refund → Zugang blieb). Ein Lesefehler wirft — lieber 500 und Retry als ein Doppelkonto.
+ */
 async function findUserId(supabase: SupabaseClient, email: string): Promise<string | null> {
-  const { data } = await supabase.auth.admin.listUsers({ page: 1, perPage: 200 });
-  const found    = data?.users?.find((u) => u.email?.toLowerCase() === email);
-  return found?.id ?? null;
+  const { data, error } = await supabase.rpc('find_user_id_by_email', { p_email: email });
+  if (error) throw new Error(`find_user_id_by_email failed: ${error.message}`);
+  return (data as string | null) ?? null;
 }
 
 async function ensureUser(
